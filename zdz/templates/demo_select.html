@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+
+</head>
+<body>
+ <form action="#">
+ <select id="test">
+ <option value="1">VsCode</option>
+  <option value="2">Atorm</option>
+ </select>
+ <input type="button" value="测试" onclick="t1()">
+ </form>
+ <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+ <script>
+ function t1(){
+   var options=$("#test option:selected");
+   alert(options.val());//获取value
+   alert(options.text());//获取文本
+}
+ </script>
+
+</body>
+</html>
