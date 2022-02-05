@@ -21,6 +21,7 @@ urlpatterns = [
 
     url(r'index_kb',views.index_kb),
     url(r'post_data',views.post_data),
+    url(r'url_data',views.url_data),
 
 
 ]

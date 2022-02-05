@@ -73,6 +73,11 @@ def post_data(request):
     return render(request,'demo_02.html',context)
 
 
+from django.shortcuts import redirect
+def url_data(request):
+    # 处理点击数据时链接url显示单站数据
+    print("链接url")
+    return redirect('https://www.baidu.com/')
 
 
 
