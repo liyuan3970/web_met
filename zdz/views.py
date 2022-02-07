@@ -17,6 +17,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
+import json
 def post_data(request):
 
 
@@ -56,6 +57,11 @@ def post_data(request):
     ims = imb.decode()
     imd = "data:image/png;base64,"+ims
     ## 所需数据
+    # 读取台州的json数据
+    with open('static/json/taizhou.json', encoding='utf-8') as f:
+        line = f.readline()
+        tz_json = json.loads(line)
+        f.close()
     sum_RR = {
         "data":[]
     }
@@ -64,6 +70,7 @@ def post_data(request):
     }
     context = {
         'img': imd,
+        'taizhou':tz_json,
     }
 
     #返回所需数据
