@@ -121,6 +121,57 @@ def post_data(request):
 ]
 
 
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # 2. 气温模块
+    # 最低气温的面分布和散点分布
+    # 最高气温的面分布和散点分布
+    # 指标站的时序图
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+    # 最低气温
+    tmp_min_County = [
+        {"name": '仙居县', "value": 100},
+        {"name": '椒江区', "value": 200},
+        {"name": '黄岩区', "value": 300},
+        {"name": '路桥区', "value": 400},
+        {"name": '三门县', "value": 500},
+        {"name": '天台县', "value": 600},
+        {"name": '温岭市', "value": 700},
+        {"name": '临海市', "value": 800},
+        {"name": '玉环市', "value": 900}
+    ]
+    # 散点最低气温
+    tmp_min_scatter = [{ "value": [121.5, 28.5, 80], "url": "url_data" }]
+
+    # 最低气温
+    tmp_max_County = [
+        {"name": '仙居县', "value": 100},
+        {"name": '椒江区', "value": 200},
+        {"name": '黄岩区', "value": 300},
+        {"name": '路桥区', "value": 400},
+        {"name": '三门县', "value": 500},
+        {"name": '天台县', "value": 600},
+        {"name": '温岭市', "value": 700},
+        {"name": '临海市', "value": 800},
+        {"name": '玉环市', "value": 900}
+    ]
+    # 散点最低气温
+    tmp_max_scatter = [{ "value": [121.5, 28.5, 80], "url": "url_data" }]
+
+    # 指标站的时序图
+    tmp_station_bar = [
+        ['product', '气温时序'],
+        ['市局', 43.3],
+        ['天台', 83.1],
+        ['仙居', 86.4],
+        ['三门', 72.4],
+        ['临海', 72.4],
+        ['椒江', 72.4],
+        ['黄岩', 72.4],
+        ['路桥', 72.4],
+        ['温岭', 72.4],
+        ['玉环', 72.4],
+    ]
+
     context = {
         'img': imd,
         'taizhou':json.dumps(tz_json),
@@ -128,6 +179,12 @@ def post_data(request):
         'RR_sum':RR_station_sum,
         'RR_rank':RR_station_rank,
         'RR_bar':RR_station_bar,
+        'tn':json.dumps(tmp_min_County),
+        'tn_scatter':tmp_min_scatter,
+        'tx':json.dumps(tmp_min_County),
+        'tx_scatter':tmp_min_scatter,
+        'tmp_bar':tmp_station_bar,
+
     }
 
     #返回所需数据
@@ -136,7 +193,7 @@ def post_data(request):
 
     return render(request,'demo_02.html',context)
 
-
+# 这里处理显示单站数据页面
 from django.shortcuts import redirect
 def url_data(request):
     # 处理点击数据时链接url显示单站数据
