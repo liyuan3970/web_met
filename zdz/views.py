@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
 import json
+import pandas as pd
 def post_data(request):
 
 
@@ -37,8 +38,14 @@ def post_data(request):
         'city':city,
     }
     print(dicr)
-
-
+    ## 读取数据
+    station_Mws = pd.read_csv("static/data/Mws2022.csv", keep_default_na=-9999)
+    station_Aws = pd.read_csv("static/data/Aws2022.csv", keep_default_na=-9999)
+    station_all = pd.concat([station_Aws,station_Mws])
+    station_58665 = station_all[station_all['IIiii']==58665]
+    data_hj = station_58665['RR'].values.tolist()
+    print(data_hj[0:10])
+    
     # 处理数据过程(分为降水模块、气温模块、能见度模块、风力模块)
 
 
@@ -59,17 +66,27 @@ def post_data(request):
 
     # 2.sql计算面雨
     RR_County = [
-        {"name":'仙居县',"value":100},
-        {"name":'椒江区',"value":200},
-        {"name":'黄岩区',"value":300},
-        {"name":'路桥区',"value":400},
-        {"name":'三门县',"value":500},
-        {"name":'天台县',"value":600},
+        {"name":'仙居县',"value":data_hj[0]},
+        {"name":'椒江区',"value":data_hj[0]},
+        {"name":'黄岩区',"value":data_hj[0]},
+        {"name":'路桥区',"value":data_hj[0]},
+        {"name":'三门县',"value":data_hj[0]},
+        {"name":'天台县',"value":900},
         {"name":'温岭市',"value":700},
         {"name":'临海市',"value":800},
-        {"name":'玉环市',"value":900}
+        {"name":'玉环市',"value":-900}
     ]
-
+    # RR_County = [
+    #     {"name":'仙居县',"value":100},
+    #     {"name":'椒江区',"value":200},
+    #     {"name":'黄岩区',"value":300},
+    #     {"name":'路桥区',"value":400},
+    #     {"name":'三门县',"value":500},
+    #     {"name":'天台县',"value":600},
+    #     {"name":'温岭市',"value":700},
+    #     {"name":'临海市',"value":800},
+    #     {"name":'玉环市',"value":900}
+    # ]
 
 
     # matplotlib绘制降水分布数据
@@ -117,7 +134,7 @@ def post_data(request):
         ['黄岩', 72.4, 53.9],
         ['路桥', 72.4, 53.9],
         ['温岭', 72.4, 53.9],
-        ['玉环', 72.4, 53.9],
+        ['玉环', 72.4, 53.9]
 ]
 
 
@@ -140,7 +157,7 @@ def post_data(request):
         {"name": '玉环市', "value": 900}
     ]
     # 散点最低气温
-    tmp_min_scatter = [{ "value": [121.5, 28.5, 80], "url": "url_data" }]
+    tmp_min_scatter = [{ "value": [121.5, 28.5, 80], "url": "station/58667" }]
 
     # 最低气温
     tmp_max_County = [
@@ -184,6 +201,7 @@ def post_data(request):
         'tx':json.dumps(tmp_min_County),
         'tx_scatter':tmp_min_scatter,
         'tmp_bar':tmp_station_bar,
+        'testdata':json.dumps(data_hj),
 
     }
 
@@ -199,6 +217,11 @@ def url_data(request):
     # 处理点击数据时链接url显示单站数据
     print("链接url")
     return redirect('https://www.baidu.com/')
+
+# 单站请求数据的URl
+#http://127.0.0.1:8000/station/k8505/
+def station_view(request,station_name):
+    return HttpResponse("The station_name is : " + station_name)
 
 
 

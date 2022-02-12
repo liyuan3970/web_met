@@ -70,7 +70,7 @@
                 var city = options.text()
 
                 $.ajax({
-                    url: "/post_data/",  // 请求的地址
+                    url: "/post_data",  // 请求的地址
                     type: "post",  // 请求方式
                     // 请求时传递过去的数据
                     data: {
@@ -196,13 +196,13 @@
                                                 }
                                             },
                                             visualMap: {
-                                                min: 100,
+                                                min: -1000,
                                                 max: 1000,
                                                 text: ['High', 'Low'],
                                                 realtime: false,
                                                 calculable: true,
                                                 inRange: {
-                                                    color: ['lightskyblue', 'yellow', 'orangered']
+                                                    color: ['lightskyblue', 'green', 'orangered']
                                                 }
                                             },
 
@@ -488,29 +488,20 @@
                                             <script>
                                                 var bardiv2 = echarts.init(document.getElementById('bar2'));
                                                 option2 = {
-                                                    legend: {},
-                                                    tooltip: {},
-                                                    dataset: {
-                                                        // 提供一份数据。
-                                                        source: [
-                                                            ['product', '2015', '2016', '2017'],
-                                                            ['Matcha Latte', 43.3, 85.8, 93.7],
-                                                            ['Milk Tea', 89.1, 73.4, 55.1],
-                                                            ['Cheese Cocoa', 86.4, 65.2, 82.5],
-                                                            ['Walnut Brownie', 72.4, 53.9, 39.1]
-                                                        ]
+                                                    xAxis: {
+                                                        type: 'category',
+                                                        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
                                                     },
-                                                    // 声明一个 X 轴，类目轴（category）。默认情况下，类目轴对应到 dataset 第一列。
-                                                    xAxis: { type: 'category' },
-                                                    // 声明一个 Y 轴，数值轴。
-                                                    yAxis: {},
-                                                    // 声明多个 bar 系列，默认情况下，每个系列会自动对应到 dataset 的每一列。
+                                                    yAxis: {
+                                                        type: 'value'
+                                                    },
                                                     series: [
-                                                        { type: 'bar' },
-                                                        { type: 'bar' },
-                                                        { type: 'bar' }
+                                                        {
+                                                            data: [120, 200, 150, 80, 70, 110, 130],
+                                                            type: 'bar'
+                                                        }
                                                     ]
-                                                }
+                                                };
                                                 bardiv2.setOption(option2);
                                             </script>
                                         </div>
@@ -694,7 +685,7 @@
                                         }
                                     },
                                     visualMap: {
-                                        min: 100,
+                                        min: -1000,
                                         max: 1000,
                                         text: ['High', 'Low'],
                                         realtime: false,
@@ -758,7 +749,14 @@
                                     }]
                                 });
                                 map_tmp_max2.on("click", function (e) {
-                                    window.open(e.data.url);
+                                    $("#modal-content").text("修改模块内容")
+                                    $("#modal-one").modal({
+                                        backdrop: false, // 相当于data-backdrop
+                                        keyboard: false, // 相当于data-keyboard
+                                        show: true, // 相当于data-show
+                                        remote: "" // 相当于a标签作为触发器的href
+                                    });
+                                    // window.open(e.data.url);
                                 });
                             </script>
                         </div>
@@ -809,8 +807,30 @@
     </div>
 
 
+    <!-- 遮罩窗体的设计 -->
 
 
+
+    <div class="modal fade" id="modal-one" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        标题
+                    </h4>
+                </div>
+                <div class="modal-body" id = "modal-content">
+                    内容...
+                </div>
+                <div class="modal-footer">
+                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> <button type="button" class="btn btn-primary">保存</button>
+                </div>
+            </div>
+            
+        </div>
+        
+    </div>
 
 
 
@@ -838,7 +858,8 @@
                             <div id="map_vue" style="height: 500%;overflow: auto;"></div>
                             <script>
                                 var map_vue = echarts.init(document.getElementById('map_vue'), 'dark');
-                                // console.log("666")
+                                console.log("666")
+                                console.log({{ testdata| safe}})
                                 var taizhou = {{ context.taizhou }}
                                 echarts.registerMap('taizhou', taizhou, {});
                                 // console.log("666")
@@ -960,6 +981,7 @@
             </div>
         </div>
     </div>
+
 
 
 
