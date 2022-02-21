@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse
+from . import func
 # Create your views here.
 
 def kuaibao(request):
@@ -20,6 +21,10 @@ import base64
 import json
 import pandas as pd
 import numpy as np
+
+
+
+
 
 def post_data(request):
 
