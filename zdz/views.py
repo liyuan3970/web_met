@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse
 from . import func
+from . import data_class
 # Create your views here.
 
 def kuaibao(request):
