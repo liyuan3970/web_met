@@ -290,17 +290,17 @@
                                                     </thead>
                                                     <tbody id="sum_rr">
 
-                                                        <tr>
+                                                        <!-- <tr>
                                                             <td>001</td>
                                                             <td>Rammohan </td>
                                                             <td>Reddy</td>
                                                             <td>A+</td>
-                                                        </tr>
+                                                        </tr> -->
                                                         {% for R in RR_sum %}
                                                         <tr>
                                                             <td>{{R.index}}</td>
                                                             <td>{{R.IIiii}}</td>
-                                                            <td>{{R.name}}</td>
+                                                            <td>{{R.county}}</td>
                                                             <td>{{R.town}}</td>
                                                             <td>{{R.value}}</td>
 
@@ -894,8 +894,8 @@
 
                                         symbolSize: 5,
                                         coordinateSystem: 'geo',
-
-                                        data: [{ value: [121.5, 28.5, 80], url: "url_data" }]
+                                        data :{{vv_scatter| safe}}
+                                        // data: [{ value: [121.5, 28.5, 80], url: "url_data" }]
                                     }]
                                 });
                                 map_vue.on("click", function (e) {
@@ -952,29 +952,23 @@
                         <script>
                             var bar_vue = echarts.init(document.getElementById('bar_vue'));
                             option_tmp2 = {
-                                legend: {},
-                                tooltip: {},
-                                dataset: {
-                                    // 提供一份数据。
-                                    source: [
-                                        ['product', '2015', '2016', '2017'],
-                                        ['Matcha Latte', 43.3, 85.8, 93.7],
-                                        ['Milk Tea', 89.1, 73.4, 55.1],
-                                        ['Cheese Cocoa', 86.4, 65.2, 82.5],
-                                        ['Walnut Brownie', 72.4, 53.9, 39.1]
-                                    ]
+                                xAxis: {
+                                    type: 'category',
+                                    // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                                    data: {{vv_time|safe}}
                                 },
-                                // 声明一个 X 轴，类目轴（category）。默认情况下，类目轴对应到 dataset 第一列。
-                                xAxis: { type: 'category' },
-                                // 声明一个 Y 轴，数值轴。
-                                yAxis: {},
-                                // 声明多个 bar 系列，默认情况下，每个系列会自动对应到 dataset 的每一列。
+                                yAxis: {
+                                    type: 'value'
+                                },
                                 series: [
-                                    { type: 'bar' },
-                                    { type: 'bar' },
-                                    { type: 'bar' }
+                                    {
+                                        // data: [820, 932, 901, 934, 1290, 1330, 1320],
+                                        data: {{vv_value|safe}},
+                                        type: 'line',
+                                        smooth: true
+                                    }
                                 ]
-                            }
+                            };
                             bar_vue.setOption(option_tmp2);
                         </script>
                     </div>
@@ -1044,7 +1038,7 @@
                                         symbolSize: 5,
                                         coordinateSystem: 'geo',
 
-                                        data: {{ tx_scatter| safe}},
+                                        data: {{ fy_scatter| safe}},
                                     }]
                                 });
                                 map_fy.on("click", function (e) {
