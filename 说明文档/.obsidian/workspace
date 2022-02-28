@@ -1,0 +1,89 @@
+{
+  "main": {
+    "id": "e7dd86500fdd8f52",
+    "type": "split",
+    "children": [
+      {
+        "id": "91a50eff20c683b0",
+        "type": "leaf",
+        "state": {
+          "type": "graph",
+          "state": {}
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "5bb706193d0ed1ec",
+    "type": "split",
+    "children": [
+      {
+        "id": "3e5883c8ffa27162",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "800cce27b98cfa5d",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "5039320e69bf5337",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "eb1970e03c76523e",
+    "type": "split",
+    "children": [
+      {
+        "id": "2896566b9748bd74",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "bc76afd7398dd235",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": true,
+                "unlinkedCollapsed": true
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "active": "91a50eff20c683b0",
+  "lastOpenFiles": [
+    "说明.md",
+    "未命名.md"
+  ]
+}

@@ -92,14 +92,8 @@ def post_data(request):
         'fy_scatter':fFy_wind7up_scatter,
         'vv_time':vv_time,
         'vv_value':vv_value,
-
-
     }
-
     #返回所需数据
-
-
-
     return render(request,'demo_02.html',context)
 
 # 这里处理显示单站数据页面

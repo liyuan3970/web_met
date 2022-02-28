@@ -153,7 +153,7 @@ class sql_data:
                     station_VV_more =  station_VV_more+1 
             # 大风分级  
             if not isnan(data['fFy'].max()):
-                if data['fFy'].max() > 13.8:
+                if data['fFy'].max() > 138:
                     fFy_scater_list.append(str(data['IIiii'].iloc[0]))
                 fFy_data =  data['fFy'].max()     
                 if fFy_data> 13.8 and fFy_data<=17.1 :
@@ -295,7 +295,7 @@ class sql_data:
         fFy_county= []
         fFy_town = []
         fFy_value = []
-        
+        symbol_ffy = ['path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z']
         for i in fFy_scater_list:
             dic_fFy = {"value":[],"url":""}
             fFy_name.append(self.station_dot_comput[str(i)]['IIiii'])
@@ -305,11 +305,13 @@ class sql_data:
             dic_fFy['value'].append(self.station_dot_comput[str(i)]['lon'])
             dic_fFy['value'].append(self.station_dot_comput[str(i)]['lat'])
             dic_fFy['value'].append(self.station_dot_comput[str(i)]['fFy'])
-            dic_fFy['value'].append(self.station_dot_comput[str(i)]['dFy'])
+
+            dic_fFy['symbol'] = str(symbol_ffy[0])
+            dic_fFy['symbolRotate'] = self.station_dot_comput[str(i)]['dFy']
             dic_fFy['url'] ="station/"+str(self.station_dot_comput[str(i)]['IIiii'])
             dic_fFy['name'] = str(self.station_dot_comput[str(i)]['StationName'])
-            fFy_wind7up_scatter.append(dic_VV_min) 
-        # 按照累计降水进行排序
+            fFy_wind7up_scatter.append(dic_fFy) 
+        # 按照级大风进行排序
         data_fFy =  pd.DataFrame()
         data_fFy['name'] = fFy_name 
         data_fFy['county'] = fFy_county

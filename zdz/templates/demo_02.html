@@ -196,8 +196,8 @@
                                                 }
                                             },
                                             visualMap: {
-                                                min: -1000,
-                                                max: 1000,
+                                                min: 80,//
+                                                max: 120,//
                                                 text: ['High', 'Low'],
                                                 realtime: false,
                                                 calculable: true,
@@ -246,6 +246,79 @@
                                     <p>
                                         这里是第三块的内容(地图)
                                     </p>
+                                    <div id="map_rr_county" style="height: 550%;overflow: auto;"></div>
+                                    <script>
+                                        var map_rr_county = echarts.init(document.getElementById('map_rr_county'), 'dark');
+                                        // console.log("666")
+                                        var taizhou = {{ taizhou| safe}};
+                                        echarts.registerMap('taizhou', taizhou);
+                                        // console.log("666")
+                                        //console.log({{context.tz_json}})
+                                        // console.log(taizhou)
+                                        map_rr_county.setOption({
+                                            title: {
+                                                text: '',
+                                                textStyle: { fontSize: 50 },
+                                            },
+                                            // tooltip: {
+                                            //     trigger: 'item',
+                                            //     formatter: '{b}<br/>{c} (p / km2)'
+                                            // },
+                                            // geo: {
+                                            //     map: 'taizhou',
+
+
+                                            // },
+                                            toolbox: {
+                                                show: true,
+                                                orient: 'vertical',
+                                                left: 'right',
+                                                top: 'center',
+                                                feature: {
+                                                    dataView: { readOnly: false },
+                                                    restore: {},
+                                                    saveAsImage: {}
+                                                }
+                                            },
+                                            visualMap: {
+                                                min: 80,//
+                                                max: 120,//
+                                                text: ['High', 'Low'],
+                                                realtime: false,
+                                                calculable: true,
+                                                inRange: {
+                                                    color: ['lightskyblue', 'green', 'orangered']
+                                                }
+                                            },
+
+                                            series: [{
+                                                name: '台州市各县市面雨量',
+                                                type: 'map',
+                                                map: 'taizhou',
+
+
+
+
+                                                // data: [{ value: [121.5, 28.5, 80], url: "url_data" }]
+                                                data: {{ RR_County| safe }},
+                                                // data: [
+                                                //     { name: '仙居县', value:{{xianju}}},
+                                                //     { name: '椒江区', value:200.1 },
+                                                //     { name: '黄岩区', value:300 },
+                                                //     { name: '路桥区', value:400 },
+                                                //     { name: '三门县', value: 500 },
+                                                //     { name: '天台县', value: 600 },
+                                                //     { name: '温岭市', value: 700 },
+                                                //     { name: '临海市', value: 800 },
+                                                //     { name: '玉环市', value: 900 },
+                                                // ],
+                                            }]
+                                        });
+                                        // map_rr_county.on("click", function (e) {
+                                        //     window.open(e.data.url);
+                                        // });
+
+                                    </script>
 
                                 </div>
                                 <div class="tab-pane " id="panel-4">
@@ -281,11 +354,11 @@
                                                 <table id="userTable">
                                                     <thead>
                                                         <tr>
-                                                            <th>序号</th>
-                                                            <th>站号</th>
-                                                            <th>站名</th>
-                                                            <th>乡镇</th>
-                                                            <th>降水</th>
+                                                            <th style="width: 25%;overflow: auto;">序号</th>
+                                                            <th style="width: 25%;overflow: auto;">站号</th>
+                                                            <th style="width: 25%;overflow: auto;">站名</th>
+                                                            <th style="width: 25%;overflow: auto;">乡镇</th>
+                                                            <th style="width: 25%;overflow: auto;">降水</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="sum_rr">
@@ -315,7 +388,7 @@
                                             <p>
                                                 按照单站强度进行排序
                                             </p>
-                                            <div class="panel-footer" style="height: 250px;overflow: auto;">
+                                            <div class="panel-footer" style="height: 100%;overflow: auto;">
                                                 <table id="userTable">
                                                     <thead>
                                                         <tr>
@@ -401,25 +474,24 @@
                             </div>
                             <div class="col-md-6 column">
                                 <p>站点分布</p>
-                                <div id="pie" style="width: 100%;height: 250px;margin: 0 auto"></div>
+                                <div id="bar_rr" style="width: 100%;height: 250%;margin: 0 auto"></div>
 
                                 <script>
-                                    // var piediv = document.getElementById('pie');
-                                    var piediv = echarts.init(document.getElementById('pie'));
-                                    piediv.setOption({
+                                    // var bar_rrdiv = document.getElementById('bar_rr');
+                                    var bar_rrdiv = echarts.init(document.getElementById('bar_rr'));
+                                    bar_rrdiv.setOption({
+                                        xAxis: {
+                                            type: 'category',
+                                            data: ['小雨', '中雨', '大雨', '暴雨', '大暴雨', '特大暴雨']
+                                        },
+                                        yAxis: {
+                                            type: 'value'
+                                        },
                                         series: [
                                             {
-                                                name: '访问来源',
-                                                type: 'pie',    // 设置图表类型为饼图
-                                                radius: '55%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
-                                                data: {{ RR_rank| safe}},
-                                                // data: [          // 数据数组，name 为数据项名称，value 为数据项值
-                                                //     { value: 235, name: '暴雨（50mm）' },
-                                                //     { value: 274, name: '大雨（35mm）' },
-                                                //     { value: 310, name: '中雨（20mm）' },
-                                                //     { value: 335, name: '小-中雨（15mm）' },
-                                                //     { value: 400, name: '小雨（10mm）' }
-                                                // ]
+                                                data: [120, 200, 150, 80, 70, 110],
+                                                center:[125,170],
+                                                type: 'bar'
                                             }
                                         ]
                                     })
@@ -572,8 +644,8 @@
                                         }
                                     },
                                     visualMap: {
-                                        min: 100,
-                                        max: 1000,
+                                        min: -25,
+                                        max: 0,
                                         text: ['High', 'Low'],
                                         realtime: false,
                                         calculable: true,
@@ -614,10 +686,17 @@
                                     },
                                     tooltip: {
                                         trigger: 'item',
-                                        formatter: '{b}<br/>{c} (p / km2)'
+                                        formatter: function (params) {
+                                            // do some thing
+                                            return params.name + ":" + params.value[2]
+                                        }
                                     },
                                     geo: {
                                         map: 'taizhou',
+                                        itemStyle: {
+                                            color: 'white'
+                                            // areaColor = '#333',
+                                        }
 
 
                                     },
@@ -625,6 +704,10 @@
                                         show: true,
                                         color: "rgba(50, 44, 44, 1)",
                                         //formatter: '{c}[2]'
+                                        formatter: function (params) {
+                                            // do some thing
+                                            return params.name
+                                        }
                                     },
                                     series: [{
                                         name: ' ',
@@ -685,8 +768,8 @@
                                         }
                                     },
                                     visualMap: {
-                                        min: -1000,
-                                        max: 1000,
+                                        min: 0,
+                                        max: 40,
                                         text: ['High', 'Low'],
                                         realtime: false,
                                         calculable: true,
@@ -816,21 +899,22 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     <h4 class="modal-title" id="myModalLabel">
                         标题
                     </h4>
                 </div>
-                <div class="modal-body" id = "modal-content">
+                <div class="modal-body" id="modal-content">
                     内容...
                 </div>
                 <div class="modal-footer">
-                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> <button type="button" class="btn btn-primary">保存</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> <button type="button"
+                        class="btn btn-primary">保存</button>
                 </div>
             </div>
-            
+
         </div>
-        
+
     </div>
 
 
@@ -876,7 +960,10 @@
                                     },
                                     tooltip: {
                                         trigger: 'item',
-                                        formatter: '{b}<br/>{c} (p / km2)'
+                                        formatter: function (params) {
+                                            // do some thing
+                                            return params.name + ":" + params.value[2]
+                                        }
                                     },
                                     geo: {
                                         map: 'taizhou',
@@ -886,15 +973,18 @@
                                     label: {
                                         show: true,
                                         color: "rgba(50, 44, 44, 1)",
-                                        //formatter: '{c}[2]'
+                                        formatter: function (params) {
+                                            // do some thing
+                                            return params.name
+                                        }
                                     },
                                     series: [{
                                         name: '？？？',
-                                        type: 'effectScatter',
+                                        type: 'scatter',
 
                                         symbolSize: 5,
                                         coordinateSystem: 'geo',
-                                        data :{{vv_scatter| safe}}
+                                        data: {{ vv_scatter| safe}}
                                         // data: [{ value: [121.5, 28.5, 80], url: "url_data" }]
                                     }]
                                 });
@@ -955,17 +1045,25 @@
                                 xAxis: {
                                     type: 'category',
                                     // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-                                    data: {{vv_time|safe}}
+                                    data: {{ vv_time | safe }}
                                 },
-                                yAxis: {
-                                    type: 'value'
-                                },
+                            yAxis: {
+                                type: 'value'
+                            },
+                            dataZoom: [
+                                {
+                                    type: 'inside',
+                                    start: 0,
+                                    end: 24
+                                }
+
+                            ],
                                 series: [
                                     {
                                         // data: [820, 932, 901, 934, 1290, 1330, 1320],
-                                        data: {{vv_value|safe}},
-                                        type: 'line',
-                                        smooth: true
+                                        data: {{ vv_value| safe}},
+                                    type: 'line',
+                                    smooth: true
                                     }
                                 ]
                             };
@@ -993,7 +1091,7 @@
                 <div class="tabbable" id="tabs-285011">
                     <ul class="nav nav-tabs">
                         <li class="active">
-                            <a href="#panel-786570" data-toggle="tab">能见度</a>
+                            <a href="#panel-786570" data-toggle="tab">极大风</a>
                         </li>
                         <li>
                             <a href="#panel-615445" data-toggle="tab">预警</a>
@@ -1019,23 +1117,35 @@
                                     },
                                     tooltip: {
                                         trigger: 'item',
-                                        formatter: '{b}<br/>{c} (p / km2)'
+                                        formatter: function (params) {
+                                            // do some thing
+                                            return params.name + ":" + params.value[2]
+                                        }
                                     },
                                     geo: {
                                         map: 'taizhou',
+                                        roam: true,
+                                        // tooltip:{borderColor = '#333'}
+                                        itemStyle: {
+                                            color: 'white'
+                                            // areaColor = '#333',
+                                        }
 
 
                                     },
                                     label: {
                                         show: true,
                                         color: "rgba(50, 44, 44, 1)",
-                                        //formatter: '{c}[2]'
+                                        formatter: function (params) {
+                                            // do some thing
+                                            return params.name
+                                        }
                                     },
                                     series: [{
                                         name: ' ',
-                                        type: 'effectScatter',
+                                        type: 'scatter',
 
-                                        symbolSize: 5,
+                                        symbolSize: 15,
                                         coordinateSystem: 'geo',
 
                                         data: {{ fy_scatter| safe}},
@@ -1072,26 +1182,19 @@
                             <table id="userTable">
                                 <thead>
                                     <tr>
-                                        <th>序号</th>
-                                        <th>站号</th>
-                                        <th>站名</th>
-                                        <th>乡镇</th>
-                                        <th>降水</th>
+                                        <th style="width: 25%;overflow: auto;">序号</th>
+                                        <th style="width: 25%;overflow: auto;">站号</th>
+                                        <th style="width: 25%;overflow: auto;">站名</th>
+                                        <th style="width: 25%;overflow: auto;">乡镇</th>
+                                        <th style="width: 25%;overflow: auto;">降水</th>
                                     </tr>
                                 </thead>
                                 <tbody id="sum_rr">
-
-                                    <tr>
-                                        <td>001</td>
-                                        <td>Rammohan </td>
-                                        <td>Reddy</td>
-                                        <td>A+</td>
-                                    </tr>
                                     {% for R in RR_sum %}
                                     <tr>
                                         <td>{{R.index}}</td>
                                         <td>{{R.IIiii}}</td>
-                                        <td>{{R.name}}</td>
+                                        <td>{{R.county}}</td>
                                         <td>{{R.town}}</td>
                                         <td>{{R.value}}</td>
 
