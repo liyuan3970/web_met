@@ -193,6 +193,12 @@ class sql_data:
             self.station_dot_comput[str(i)] = dic 
 #         print(lat)
         #排序数据
+        rain_max = max(rr)
+        rain_min = min(rr)
+        level_rain = np.linspace(start = rain_min, stop = rain_max, num = 9)
+        print(level_rain)
+        
+
         data_rx =  pd.DataFrame()
         data_rx['name'] = name 
         data_rx['county'] = county
@@ -343,4 +349,4 @@ class sql_data:
         data_fFymax['fFy']= self.station_dot_comput[max_fFy_station]['fFyList'] 
         data_fFymax['dFy']= self.station_dot_comput[max_fFy_station]['dFyList']  
         print(data_fFy_all,max_fFy_station)
-        return RR_rx ,RR_sum,RR_station_rank,RR_station_bar,tmp_station_bar,tmp_min_scatter,tmp_max_scatter,data_vvmin,VV_min_scatter,VV_station_rank,data_fFy,fFy_wind7up_scatter 
+        return level_rain,RR_rx ,RR_sum,RR_station_rank,RR_station_bar,tmp_station_bar,tmp_min_scatter,tmp_max_scatter,data_vvmin,VV_min_scatter,VV_station_rank,data_fFy,fFy_wind7up_scatter 

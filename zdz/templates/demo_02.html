@@ -186,70 +186,65 @@
                                                     // console.log("666")
                                                     //console.log({{context.tz_json}})
                                                     // console.log(taizhou)
-                                                    map1.setOption({
-                                                        title: {
-                                                            text: '',
-                                                            textStyle: { fontSize: 50 },
-                                                        },
-                                                        // tooltip: {
-                                                        //     trigger: 'item',
-                                                        //     formatter: '{b}<br/>{c} (p / km2)'
-                                                        // },
-                                                        // geo: {
-                                                        //     map: 'taizhou',
+                                                        map1.setOption({
+                                                            title: {
+                                                                text: '',
+                                                                textStyle: { fontSize: 50 },
+                                                            },
+                                                            tooltip: {
+                                                                trigger: 'item',
+                                                                formatter: function (params) {
+                                                                    // do some thing
+                                                                    return params.name + ":" + params.value[2]
+                                                                }
+                                                            },
+                                                            geo: {
+                                                                map: 'taizhou',
+                                                                roam: true,
+                                                                itemStyle: {
+                                                                    color: 'gray'
+                                                                    // areaColor = '#333',
+                                                                }
 
 
-                                                        // },
-                                                        toolbox: {
-                                                            show: true,
-                                                            orient: 'vertical',
-                                                            left: 'right',
-                                                            top: 'center',
-                                                            feature: {
-                                                                dataView: { readOnly: false },
-                                                                restore: {},
-                                                                saveAsImage: {}
-                                                            }
-                                                        },
-                                                        visualMap: {
-                                                            min: 80,//
-                                                            max: 120,//
-                                                            text: ['High', 'Low'],
-                                                            realtime: false,
-                                                            calculable: true,
-                                                            inRange: {
-                                                                color: ['lightskyblue', 'green', 'orangered']
-                                                            }
-                                                        },
-
-                                                        series: [{
-                                                            name: '台州市各县市面雨量',
-                                                            type: 'map',
-                                                            map: 'taizhou',
+                                                            },
+                                                            visualMap: {
+                                                                type: "piecewise",
 
 
+                                                                pieces: [
+                                                                    { max: {{level_rain.8}}, min: {{level_rain.7}}, label: Math.floor({{level_rain.7 }}) +"~"+ Math.floor({{level_rain.8 }}), color: '#FF0000' },
+                                                                    { max: {{level_rain.7}}, min: {{level_rain.6}}, label: Math.floor({{level_rain.6 }}) +"~"+ Math.floor({{level_rain.7 }}), color: '#662200' },// 不指定 max，表示 max 为无限大（Infinity）。
+                                                                    { max: {{level_rain.6}}, min: {{level_rain.5}}, label: Math.floor({{level_rain.5 }}) +"~"+ Math.floor({{level_rain.6 }}), color: '#EE0099' },
+                                                                    { max: {{level_rain.5}}, min: {{level_rain.4}}, label: Math.floor({{level_rain.4 }}) +"~"+ Math.floor({{level_rain.5 }}), color: '#0000FF' },
+                                                                    { max: {{level_rain.4}}, min: {{level_rain.3}}, label: Math.floor({{level_rain.3 }}) +"~"+ Math.floor({{level_rain.4 }}), color: '#00FFFF' },
+                                                                    { max: {{level_rain.3}}, min: {{level_rain.2}}, label: Math.floor({{level_rain.2 }}) +"~"+ Math.floor({{level_rain.3 }}), color: '#008833' },
+                                                                    { max: {{level_rain.2}}, min: {{level_rain.1}}, label: Math.floor({{level_rain.1 }}) +"~"+ Math.floor({{level_rain.2 }}), color: '#00EE55' },    // 不指定 min，表示 min 为无限大（-Infinity）。
+                                                                    { max: {{level_rain.1}}, label: Math.floor({{level_rain.0 }}) +"~"+ Math.floor({{level_rain.1 }}), color: '#FFFFFF' }
+                                                                ],
+                                                            },
+                                                            label: {
+                                                                show: true,
+                                                                color: "rgba(50, 44, 44, 1)",
+                                                                //formatter: '{c}[2]'
+                                                                formatter: function (params) {
+                                                                    // do some thing
+                                                                    return params.name
+                                                                }
+                                                            },
+                                                            series: [{
+                                                                name: ' ',
+                                                                type: 'scatter',
+
+                                                                symbolSize: 8,
+                                                                coordinateSystem: 'geo',
+
+                                                                data: {{ RR_sum| safe}}
+                                    }]
+                                });
 
 
-                                                            // data: [{ value: [121.5, 28.5, 80], url: "url_data" }]
-                                                            data: {{ RR_County| safe }},
-                                                            // data: [
-                                                            //     { name: '仙居县', value:{{xianju}}},
-                                                            //     { name: '椒江区', value:200.1 },
-                                                            //     { name: '黄岩区', value:300 },
-                                                            //     { name: '路桥区', value:400 },
-                                                            //     { name: '三门县', value: 500 },
-                                                            //     { name: '天台县', value: 600 },
-                                                            //     { name: '温岭市', value: 700 },
-                                                            //     { name: '临海市', value: 800 },
-                                                            //     { name: '玉环市', value: 900 },
-                                                            // ],
-                                                        }]
-                                                    });
-                                                    // map1.on("click", function (e) {
-                                                    //     window.open(e.data.url);
-                                                    // });
-
-                                                </script>
+                                                    </script>
 
                                             </div>
                                             <div class="tab-pane" id="panel-2">
@@ -447,7 +442,7 @@
 
                                             <script>
                                                 // var bar_rrdiv = document.getElementById('bar_rr');
-                                                var bar_rrdiv = echarts.init(document.getElementById('bar_rr'),'dark');
+                                                var bar_rrdiv = echarts.init(document.getElementById('bar_rr'), 'dark');
                                                 bar_rrdiv.setOption({
                                                     xAxis: {
                                                         type: 'category',
@@ -458,9 +453,9 @@
                                                     },
                                                     series: [
                                                         {
-                                                            data: {{RR_rank}},
-                                                            center: [125, 170],
-                                                            type: 'bar'
+                                                            data: {{ RR_rank }},
+                                                    center: [125, 170],
+                                                    type: 'bar'
                                                         }
                                                     ]
                                                 })
@@ -486,7 +481,7 @@
                                                         </p>
                                                         <div id="bar1" style="height: 250px;overflow: auto;"></div>
                                                         <script>
-                                                            var bardiv1 = echarts.init(document.getElementById('bar1'),'dark');
+                                                            var bardiv1 = echarts.init(document.getElementById('bar1'), 'dark');
                                                             option1 = {
                                                                 legend: {},
                                                                 tooltip: {},
@@ -527,7 +522,7 @@
                                                         </p>
                                                         <div id="bar2" style="height: 250px;overflow: auto;"></div>
                                                         <script>
-                                                            var bardiv2 = echarts.init(document.getElementById('bar2'),'dark');
+                                                            var bardiv2 = echarts.init(document.getElementById('bar2'), 'dark');
                                                             option2 = {
                                                                 xAxis: {
                                                                     type: 'category',

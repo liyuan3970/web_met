@@ -73,7 +73,7 @@ def post_data(request):
 
     sql = "test"
     RR_County,tmp_max_County,tmp_min_County =  data_class.sql_data(sql).comput_county() 
-    RR_rx ,RR_sum,RR_station_rank ,RR_station_bar,tmp_station_bar,tmp_min_scatter,tmp_max_scatter,data_vvmin,VV_min_scatter,VV_station_rank,data_fFy,fFy_wind7up_scatter = data_class.sql_data(sql).comput_IIiii()
+    level_rain,RR_rx ,RR_sum,RR_station_rank ,RR_station_bar,tmp_station_bar,tmp_min_scatter,tmp_max_scatter,data_vvmin,VV_min_scatter,VV_station_rank,data_fFy,fFy_wind7up_scatter = data_class.sql_data(sql).comput_IIiii()
     vv_time = data_vvmin['tTime'].tolist()
     vv_value = data_vvmin['VV'].tolist()
     context = {
@@ -82,6 +82,7 @@ def post_data(request):
         'RR_County':json.dumps(RR_County),
         'RR_sum':RR_sum,
         'RR_rx':RR_rx,
+        'level_rain':level_rain,
         'RR_rank':RR_station_rank,
         'RR_bar':RR_station_bar,
         'tn':json.dumps(tmp_min_County),
