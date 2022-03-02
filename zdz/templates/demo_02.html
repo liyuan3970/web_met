@@ -27,6 +27,7 @@
     <script type="text/javascript" src="static/js/dataTool.min.js"></script>
     <script type="text/javascript" src="static/js/china.js"></script>
     <script type="text/javascript" src="static/js/world.js"></script>
+    <script type="text/javascript" src="static/js/theme.js"></script>
     <!-- 解决bootstrap选项卡和echart代码显示冲突的bug -->
     <link rel="stylesheet" type="text/css" href="static/css/bootcss.css" />
 
@@ -131,477 +132,1091 @@
         </div>
     </div>
     <!-- 正文数据 -->
-
-    <!-- 降水模块 -->
-    {% csrf_token %}
-    <div class="container-fiuled" style="padding-right: 30px; padding-left: 30px;">
-        <legend>降水统计</legend>
-        <div class="row clearfix">
-            <div class="col-md-12 column">
-                <div class="row clearfix">
-                    <div class="col-md-6 column">
-                        <div class="tabbable" id="tabs-373474">
-                            <ul class="nav nav-tabs">
-                                <li class="active">
-                                    <a href="#panel-1" data-toggle="tab">累计降水</a>
-                                </li>
-                                <li>
-                                    <a href="#panel-2" data-toggle="tab">散点分布</a>
-                                </li>
-                                <li>
-                                    <a href="#panel-3" data-toggle="tab">数据分布</a>
-                                </li>
-                                <li>
-                                    <a href="#panel-4" data-toggle="tab">流域降水</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="panel-1">
-                                    <!-- <p>
-                                        这里是第一块的内容
-                                    </p> -->
-                                    <!-- <img src="{{ img }}"> -->
-                                    <div id="map1" style="height: 550%;overflow: auto;"></div>
-                                    <script>
-                                        var map1 = echarts.init(document.getElementById('map1'), 'light');
-                                        // console.log("666")
-                                        var taizhou = {{ taizhou| safe}};
-                                        echarts.registerMap('taizhou', taizhou);
-                                        // console.log("666")
-                                        //console.log({{context.tz_json}})
-                                        // console.log(taizhou)
-                                        map1.setOption({
-                                            title: {
-                                                text: '',
-                                                textStyle: { fontSize: 50 },
-                                            },
-                                            // tooltip: {
-                                            //     trigger: 'item',
-                                            //     formatter: '{b}<br/>{c} (p / km2)'
-                                            // },
-                                            // geo: {
-                                            //     map: 'taizhou',
-
-
-                                            // },
-                                            toolbox: {
-                                                show: true,
-                                                orient: 'vertical',
-                                                left: 'right',
-                                                top: 'center',
-                                                feature: {
-                                                    dataView: { readOnly: false },
-                                                    restore: {},
-                                                    saveAsImage: {}
-                                                }
-                                            },
-                                            visualMap: {
-                                                min: 80,//
-                                                max: 120,//
-                                                text: ['High', 'Low'],
-                                                realtime: false,
-                                                calculable: true,
-                                                inRange: {
-                                                    color: ['lightskyblue', 'green', 'orangered']
-                                                }
-                                            },
-
-                                            series: [{
-                                                name: '台州市各县市面雨量',
-                                                type: 'map',
-                                                map: 'taizhou',
+    <div class="tabbable" id="tabs-53066">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#panel-a1" data-toggle="tab">降水</a>
+            </li>
+            <li>
+                <a href="#panel-a2" data-toggle="tab">气温</a>
+            </li>
+            <li>
+                <a href="#panel-a3" data-toggle="tab">能见度</a>
+            </li>
+            <li>
+                <a href="#panel-a4" data-toggle="tab">大风</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <!-- 降水模块 -->
+            <div class="tab-pane active" id="panel-a1">
+                <div class="container-fiuled" style="padding-right: 30px; padding-left: 30px;">
+                    <legend>降水统计</legend>
+                    <div class="row clearfix">
+                        <div class="col-md-12 column">
+                            <div class="row clearfix">
+                                <div class="col-md-6 column">
+                                    <div class="tabbable" id="tabs-373474">
+                                        <ul class="nav nav-tabs">
+                                            <li class="active">
+                                                <a href="#panel-1" data-toggle="tab">累计降水</a>
+                                            </li>
+                                            <li>
+                                                <a href="#panel-2" data-toggle="tab">散点分布</a>
+                                            </li>
+                                            <li>
+                                                <a href="#panel-3" data-toggle="tab">数据分布</a>
+                                            </li>
+                                            <li>
+                                                <a href="#panel-4" data-toggle="tab">流域降水</a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div class="tab-pane active" id="panel-1">
+                                                <!-- <p>
+                                                    这里是第一块的内容
+                                                </p> -->
+                                                <!-- <img src="{{ img }}"> -->
+                                                <div id="map1" style="height: 550%;overflow: auto;"></div>
+                                                <script>
+                                                    var map1 = echarts.init(document.getElementById('map1'), 'dark');
+                                                    // console.log("666")
+                                                    var taizhou = {{ taizhou| safe}};
+                                                    echarts.registerMap('taizhou', taizhou);
+                                                    // console.log("666")
+                                                    //console.log({{context.tz_json}})
+                                                    // console.log(taizhou)
+                                                    map1.setOption({
+                                                        title: {
+                                                            text: '',
+                                                            textStyle: { fontSize: 50 },
+                                                        },
+                                                        // tooltip: {
+                                                        //     trigger: 'item',
+                                                        //     formatter: '{b}<br/>{c} (p / km2)'
+                                                        // },
+                                                        // geo: {
+                                                        //     map: 'taizhou',
 
 
+                                                        // },
+                                                        toolbox: {
+                                                            show: true,
+                                                            orient: 'vertical',
+                                                            left: 'right',
+                                                            top: 'center',
+                                                            feature: {
+                                                                dataView: { readOnly: false },
+                                                                restore: {},
+                                                                saveAsImage: {}
+                                                            }
+                                                        },
+                                                        visualMap: {
+                                                            min: 80,//
+                                                            max: 120,//
+                                                            text: ['High', 'Low'],
+                                                            realtime: false,
+                                                            calculable: true,
+                                                            inRange: {
+                                                                color: ['lightskyblue', 'green', 'orangered']
+                                                            }
+                                                        },
 
-
-                                                // data: [{ value: [121.5, 28.5, 80], url: "url_data" }]
-                                                data: {{ RR_County| safe }},
-                                                // data: [
-                                                //     { name: '仙居县', value:{{xianju}}},
-                                                //     { name: '椒江区', value:200.1 },
-                                                //     { name: '黄岩区', value:300 },
-                                                //     { name: '路桥区', value:400 },
-                                                //     { name: '三门县', value: 500 },
-                                                //     { name: '天台县', value: 600 },
-                                                //     { name: '温岭市', value: 700 },
-                                                //     { name: '临海市', value: 800 },
-                                                //     { name: '玉环市', value: 900 },
-                                                // ],
-                                            }]
-                                        });
-                                        // map1.on("click", function (e) {
-                                        //     window.open(e.data.url);
-                                        // });
-
-                                    </script>
-
-                                </div>
-                                <div class="tab-pane" id="panel-2">
-                                    <p>
-                                        这里是第二块的内容
-                                    </p>
-                                    <img src="{{ img }}" style="height: 550%;overflow: auto;">
-                                </div>
-                                <div class="tab-pane" id="panel-3">
-                                    <p>
-                                        这里是第三块的内容(地图)
-                                    </p>
-                                    <div id="map_rr_county" style="height: 550%;overflow: auto;"></div>
-                                    <script>
-                                        var map_rr_county = echarts.init(document.getElementById('map_rr_county'), 'dark');
-                                        // console.log("666")
-                                        var taizhou = {{ taizhou| safe}};
-                                        echarts.registerMap('taizhou', taizhou);
-                                        // console.log("666")
-                                        //console.log({{context.tz_json}})
-                                        // console.log(taizhou)
-                                        map_rr_county.setOption({
-                                            title: {
-                                                text: '',
-                                                textStyle: { fontSize: 50 },
-                                            },
-                                            // tooltip: {
-                                            //     trigger: 'item',
-                                            //     formatter: '{b}<br/>{c} (p / km2)'
-                                            // },
-                                            // geo: {
-                                            //     map: 'taizhou',
-
-
-                                            // },
-                                            toolbox: {
-                                                show: true,
-                                                orient: 'vertical',
-                                                left: 'right',
-                                                top: 'center',
-                                                feature: {
-                                                    dataView: { readOnly: false },
-                                                    restore: {},
-                                                    saveAsImage: {}
-                                                }
-                                            },
-                                            visualMap: {
-                                                min: 80,//
-                                                max: 120,//
-                                                text: ['High', 'Low'],
-                                                realtime: false,
-                                                calculable: true,
-                                                inRange: {
-                                                    color: ['lightskyblue', 'green', 'orangered']
-                                                }
-                                            },
-
-                                            series: [{
-                                                name: '台州市各县市面雨量',
-                                                type: 'map',
-                                                map: 'taizhou',
+                                                        series: [{
+                                                            name: '台州市各县市面雨量',
+                                                            type: 'map',
+                                                            map: 'taizhou',
 
 
 
 
-                                                // data: [{ value: [121.5, 28.5, 80], url: "url_data" }]
-                                                data: {{ RR_County| safe }},
-                                                // data: [
-                                                //     { name: '仙居县', value:{{xianju}}},
-                                                //     { name: '椒江区', value:200.1 },
-                                                //     { name: '黄岩区', value:300 },
-                                                //     { name: '路桥区', value:400 },
-                                                //     { name: '三门县', value: 500 },
-                                                //     { name: '天台县', value: 600 },
-                                                //     { name: '温岭市', value: 700 },
-                                                //     { name: '临海市', value: 800 },
-                                                //     { name: '玉环市', value: 900 },
-                                                // ],
-                                            }]
-                                        });
-                                        // map_rr_county.on("click", function (e) {
-                                        //     window.open(e.data.url);
-                                        // });
+                                                            // data: [{ value: [121.5, 28.5, 80], url: "url_data" }]
+                                                            data: {{ RR_County| safe }},
+                                                            // data: [
+                                                            //     { name: '仙居县', value:{{xianju}}},
+                                                            //     { name: '椒江区', value:200.1 },
+                                                            //     { name: '黄岩区', value:300 },
+                                                            //     { name: '路桥区', value:400 },
+                                                            //     { name: '三门县', value: 500 },
+                                                            //     { name: '天台县', value: 600 },
+                                                            //     { name: '温岭市', value: 700 },
+                                                            //     { name: '临海市', value: 800 },
+                                                            //     { name: '玉环市', value: 900 },
+                                                            // ],
+                                                        }]
+                                                    });
+                                                    // map1.on("click", function (e) {
+                                                    //     window.open(e.data.url);
+                                                    // });
 
-                                    </script>
+                                                </script>
 
-                                </div>
-                                <div class="tab-pane " id="panel-4">
-                                    <p>
-                                        这里是第四块的内容
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-md-12 column">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 column">
-                        <div class="row clearfix">
-                            <div class="col-md-6 column">
-                                <div class="tabbable" id="tabs-530669">
-                                    <ul class="nav nav-tabs">
-                                        <li class="active">
-                                            <a href="#panel-l1" data-toggle="tab">累计降水</a>
-                                        </li>
-                                        <li>
-                                            <a href="#panel-l2" data-toggle="tab">单站强度</a>
-                                        </li>
-                                    </ul>
-                                    <div class="tab-content">
-                                        <div class="tab-pane active" id="panel-l1">
-                                            <p>
-                                                按照累计降水强度进行排序
-                                            </p>
-                                            <div class="panel-footer" style="height: 250px;overflow: auto;">
-                                                <table id="userTable">
-                                                    <thead>
-                                                        <tr>
-                                                            <th style="width: 25%;overflow: auto;">序号</th>
-                                                            <th style="width: 25%;overflow: auto;">站号</th>
-                                                            <th style="width: 25%;overflow: auto;">站名</th>
-                                                            <th style="width: 25%;overflow: auto;">乡镇</th>
-                                                            <th style="width: 25%;overflow: auto;">降水</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="sum_rr">
-
-                                                        <!-- <tr>
-                                                            <td>001</td>
-                                                            <td>Rammohan </td>
-                                                            <td>Reddy</td>
-                                                            <td>A+</td>
-                                                        </tr> -->
-                                                        {% for R in RR_sum %}
-                                                        <tr>
-                                                            <td>{{R.index}}</td>
-                                                            <td>{{R.IIiii}}</td>
-                                                            <td>{{R.county}}</td>
-                                                            <td>{{R.town}}</td>
-                                                            <td>{{R.value}}</td>
-
-                                                        </tr>
-                                                        {% endfor %}
-
-                                                    </tbody>
-                                                </table>
                                             </div>
-                                        </div>
-                                        <div class="tab-pane" id="panel-l2">
-                                            <p>
-                                                按照单站强度进行排序
-                                            </p>
-                                            <div class="panel-footer" style="height: 100%;overflow: auto;">
-                                                <table id="userTable">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Student-ID</th>
-                                                            <th>First Name</th>
-                                                            <th>Last Name</th>
-                                                            <th>Grade</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>001</td>
-                                                            <td>Rammohan </td>
-                                                            <td>Reddy</td>
-                                                            <td>A+</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>002</td>
-                                                            <td>Smita</td>
-                                                            <td>Pallod</td>
-                                                            <td>A</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>003</td>
-                                                            <td>Rabindranath</td>
-                                                            <td>Sen</td>
-                                                            <td>A+</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>003</td>
-                                                            <td>Rabindranath</td>
-                                                            <td>Sen</td>
-                                                            <td>A+</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>003</td>
-                                                            <td>Rabindranath</td>
-                                                            <td>Sen</td>
-                                                            <td>A+</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>003</td>
-                                                            <td>Rabindranath</td>
-                                                            <td>Sen</td>
-                                                            <td>A+</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>003</td>
-                                                            <td>Rabindranath</td>
-                                                            <td>Sen</td>
-                                                            <td>A+</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>003</td>
-                                                            <td>Rabindranath</td>
-                                                            <td>Sen</td>
-                                                            <td>A+</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>003</td>
-                                                            <td>Rabindranath</td>
-                                                            <td>Sen</td>
-                                                            <td>A+</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>003</td>
-                                                            <td>Rabindranath</td>
-                                                            <td>Sen</td>
-                                                            <td>A+</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>003</td>
-                                                            <td>Rabindranath</td>
-                                                            <td>Sen</td>
-                                                            <td>A+</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                            <div class="tab-pane" id="panel-2">
+                                                <p>
+                                                    这里是第二块的内容
+                                                </p>
+                                                <img src="{{ img }}" style="height: 550%;overflow: auto;">
+                                            </div>
+                                            <div class="tab-pane" id="panel-3">
+                                                <p>
+                                                    这里是第三块的内容(地图)
+                                                </p>
+                                                <div id="map_rr_county" style="height: 550%;overflow: auto;"></div>
+                                                <script>
+                                                    var map_rr_county = echarts.init(document.getElementById('map_rr_county'), 'dark');
+                                                    // console.log("666")
+                                                    var taizhou = {{ taizhou| safe}};
+                                                    echarts.registerMap('taizhou', taizhou);
+                                                    // console.log("666")
+                                                    //console.log({{context.tz_json}})
+                                                    // console.log(taizhou)
+                                                    map_rr_county.setOption({
+                                                        title: {
+                                                            text: '',
+                                                            textStyle: { fontSize: 50 },
+                                                        },
+                                                        // tooltip: {
+                                                        //     trigger: 'item',
+                                                        //     formatter: '{b}<br/>{c} (p / km2)'
+                                                        // },
+                                                        // geo: {
+                                                        //     map: 'taizhou',
+
+
+                                                        // },
+                                                        toolbox: {
+                                                            show: true,
+                                                            orient: 'vertical',
+                                                            left: 'right',
+                                                            top: 'center',
+                                                            feature: {
+                                                                dataView: { readOnly: false },
+                                                                restore: {},
+                                                                saveAsImage: {}
+                                                            }
+                                                        },
+                                                        visualMap: {
+                                                            min: 80,//
+                                                            max: 120,//
+                                                            text: ['High', 'Low'],
+                                                            realtime: false,
+                                                            calculable: true,
+                                                            inRange: {
+                                                                color: ['lightskyblue', 'green', 'orangered']
+                                                            }
+                                                        },
+
+                                                        series: [{
+                                                            name: '台州市各县市面雨量',
+                                                            type: 'map',
+                                                            map: 'taizhou',
+
+
+
+
+                                                            // data: [{ value: [121.5, 28.5, 80], url: "url_data" }]
+                                                            data: {{ RR_County| safe }},
+                                                            // data: [
+                                                            //     { name: '仙居县', value:{{xianju}}},
+                                                            //     { name: '椒江区', value:200.1 },
+                                                            //     { name: '黄岩区', value:300 },
+                                                            //     { name: '路桥区', value:400 },
+                                                            //     { name: '三门县', value: 500 },
+                                                            //     { name: '天台县', value: 600 },
+                                                            //     { name: '温岭市', value: 700 },
+                                                            //     { name: '临海市', value: 800 },
+                                                            //     { name: '玉环市', value: 900 },
+                                                            // ],
+                                                        }]
+                                                    });
+                                                    // map_rr_county.on("click", function (e) {
+                                                    //     window.open(e.data.url);
+                                                    // });
+
+                                                </script>
+
+                                            </div>
+                                            <div class="tab-pane " id="panel-4">
+                                                <p>
+                                                    这里是第四块的内容
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 column">
-                                <p>站点分布</p>
-                                <div id="bar_rr" style="width: 100%;height: 250%;margin: 0 auto"></div>
-
-                                <script>
-                                    // var bar_rrdiv = document.getElementById('bar_rr');
-                                    var bar_rrdiv = echarts.init(document.getElementById('bar_rr'));
-                                    bar_rrdiv.setOption({
-                                        xAxis: {
-                                            type: 'category',
-                                            data: ['小雨', '中雨', '大雨', '暴雨', '大暴雨', '特大暴雨']
-                                        },
-                                        yAxis: {
-                                            type: 'value'
-                                        },
-                                        series: [
-                                            {
-                                                data: [120, 200, 150, 80, 70, 110],
-                                                center:[125,170],
-                                                type: 'bar'
-                                            }
-                                        ]
-                                    })
-                                    // piediv.setOption(option);
-                                </script>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-md-12 column">
-                                <div class="tabbable" id="tabs-977128">
-                                    <ul class="nav nav-tabs">
-                                        <li class="active">
-                                            <a href="#panel-ld1" data-toggle="tab">市县降水</a>
-                                        </li>
-                                        <li>
-                                            <a href="#panel-ld2" data-toggle="tab">流域降水</a>
-                                        </li>
-                                    </ul>
-                                    <div class="tab-content">
-                                        <div class="tab-pane active" id="panel-ld1">
-                                            <p>
-                                                市县降水的分布
-                                            </p>
-                                            <div id="bar1" style="height: 250px;overflow: auto;"></div>
-                                            <script>
-                                                var bardiv1 = echarts.init(document.getElementById('bar1'));
-                                                option1 = {
-                                                    legend: {},
-                                                    tooltip: {},
-                                                    dataset: {
-                                                        // 提供一份数据。
-                                                        source: {{ RR_bar | safe }}
-                                                        // source: [
-                                                        //     ['product', '市县降水', '流域降水'],
-                                                        //     ['市局', 43.3, 85.8],
-                                                        //     ['天台', 83.1, 73.4],
-                                                        //     ['仙居', 86.4, 65.2],
-                                                        //     ['三门', 72.4, 53.9],
-                                                        //     ['临海', 72.4, 53.9],
-                                                        //     ['椒江', 72.4, 53.9],
-                                                        //     ['黄岩', 72.4, 53.9],
-                                                        //     ['路桥', 72.4, 53.9],
-                                                        //     ['温岭', 72.4, 53.9],
-                                                        //     ['玉环', 72.4, 53.9],
-                                                        // ]
-                                                    },
-                                                // 声明一个 X 轴，类目轴（category）。默认情况下，类目轴对应到 dataset 第一列。
-                                                xAxis: { type: 'category' },
-                                                // 声明一个 Y 轴，数值轴。
-                                                yAxis: { },
-                                                // 声明多个 bar 系列，默认情况下，每个系列会自动对应到 dataset 的每一列。
-                                                series: [
-                                                    { type: 'bar' },
-                                                    { type: 'bar' }
-                                                ]
-                                                }
-                                                bardiv1.setOption(option1);
-
-                                            </script>
+                                    <div class="row clearfix">
+                                        <div class="col-md-12 column">
                                         </div>
-                                        <div class="tab-pane " id="panel-ld2">
-                                            <p>
-                                                流域降水的分布
-                                            </p>
-                                            <div id="bar2" style="height: 250px;overflow: auto;"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 column">
+                                    <div class="row clearfix">
+                                        <div class="col-md-6 column">
+                                            <div class="tabbable" id="tabs-530669">
+                                                <ul class="nav nav-tabs">
+                                                    <li class="active">
+                                                        <a href="#panel-l1" data-toggle="tab">累计降水</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#panel-l2" data-toggle="tab">单站强度</a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div class="tab-pane active" id="panel-l1">
+                                                        <p>
+                                                            按照累计降水强度进行排序
+                                                        </p>
+                                                        <div class="panel-footer" style="height: 250px;overflow: auto;">
+                                                            <table id="userTable">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th style="width: 25%;overflow: auto;">序号</th>
+                                                                        <th style="width: 25%;overflow: auto;">站号</th>
+                                                                        <th style="width: 25%;overflow: auto;">站名</th>
+                                                                        <th style="width: 25%;overflow: auto;">乡镇</th>
+                                                                        <th style="width: 25%;overflow: auto;">降水</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="sum_rr">
+
+                                                                    <!-- <tr>
+                                                                        <td>001</td>
+                                                                        <td>Rammohan </td>
+                                                                        <td>Reddy</td>
+                                                                        <td>A+</td>
+                                                                    </tr> -->
+                                                                    {% for R in RR_sum %}
+                                                                    <tr>
+                                                                        <td>{{R.index}}</td>
+                                                                        <td>{{R.IIiii}}</td>
+                                                                        <td>{{R.county}}</td>
+                                                                        <td>{{R.town}}</td>
+                                                                        <td>{{R.data}}</td>
+
+                                                                    </tr>
+                                                                    {% endfor %}
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tab-pane" id="panel-l2">
+                                                        <p>
+                                                            按照单站强度进行排序
+                                                        </p>
+                                                        <div class="panel-footer" style="height: 250px;overflow: auto;">
+                                                            <table id="userTable">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th style="width: 25%;overflow: auto;">序号</th>
+                                                                        <th style="width: 25%;overflow: auto;">站号</th>
+                                                                        <th style="width: 25%;overflow: auto;">站名</th>
+                                                                        <th style="width: 25%;overflow: auto;">乡镇</th>
+                                                                        <th style="width: 25%;overflow: auto;">降水</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="sum_rr">
+
+                                                                    <!-- <tr>
+                                                                        <td>001</td>
+                                                                        <td>Rammohan </td>
+                                                                        <td>Reddy</td>
+                                                                        <td>A+</td>
+                                                                    </tr> -->
+                                                                    {% for R in RR_rx %}
+                                                                    <tr>
+                                                                        <td>{{R.index}}</td>
+                                                                        <td>{{R.IIiii}}</td>
+                                                                        <td>{{R.county}}</td>
+                                                                        <td>{{R.town}}</td>
+                                                                        <td>{{R.data}}</td>
+
+                                                                    </tr>
+                                                                    {% endfor %}
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 column">
+                                            <p>站点分布</p>
+                                            <div id="bar_rr" style="width: 100%;height: 250%;margin: 0 auto"></div>
+
                                             <script>
-                                                var bardiv2 = echarts.init(document.getElementById('bar2'));
-                                                option2 = {
+                                                // var bar_rrdiv = document.getElementById('bar_rr');
+                                                var bar_rrdiv = echarts.init(document.getElementById('bar_rr'),'dark');
+                                                bar_rrdiv.setOption({
                                                     xAxis: {
                                                         type: 'category',
-                                                        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                                                        data: ['小雨', '中雨', '大雨', '暴雨', '大暴雨', '特大暴雨']
                                                     },
                                                     yAxis: {
                                                         type: 'value'
                                                     },
                                                     series: [
                                                         {
-                                                            data: [120, 200, 150, 80, 70, 110, 130],
+                                                            data: {{RR_rank}},
+                                                            center: [125, 170],
                                                             type: 'bar'
                                                         }
                                                     ]
-                                                };
-                                                bardiv2.setOption(option2);
+                                                })
+                                                // piediv.setOption(option);
                                             </script>
                                         </div>
+                                    </div>
+                                    <div class="row clearfix">
+                                        <div class="col-md-12 column">
+                                            <div class="tabbable" id="tabs-977128">
+                                                <ul class="nav nav-tabs">
+                                                    <li class="active">
+                                                        <a href="#panel-ld1" data-toggle="tab">市县降水</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#panel-ld2" data-toggle="tab">流域降水</a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div class="tab-pane active" id="panel-ld1">
+                                                        <p>
+                                                            市县降水的分布
+                                                        </p>
+                                                        <div id="bar1" style="height: 250px;overflow: auto;"></div>
+                                                        <script>
+                                                            var bardiv1 = echarts.init(document.getElementById('bar1'),'dark');
+                                                            option1 = {
+                                                                legend: {},
+                                                                tooltip: {},
+                                                                dataset: {
+                                                                    // 提供一份数据。
+                                                                    source: {{ RR_bar | safe }}
+                                                                    // source: [
+                                                                    //     ['product', '市县降水', '流域降水'],
+                                                                    //     ['市局', 43.3, 85.8],
+                                                                    //     ['天台', 83.1, 73.4],
+                                                                    //     ['仙居', 86.4, 65.2],
+                                                                    //     ['三门', 72.4, 53.9],
+                                                                    //     ['临海', 72.4, 53.9],
+                                                                    //     ['椒江', 72.4, 53.9],
+                                                                    //     ['黄岩', 72.4, 53.9],
+                                                                    //     ['路桥', 72.4, 53.9],
+                                                                    //     ['温岭', 72.4, 53.9],
+                                                                    //     ['玉环', 72.4, 53.9],
+                                                                    // ]
+                                                                },
+                                                            // 声明一个 X 轴，类目轴（category）。默认情况下，类目轴对应到 dataset 第一列。
+                                                            xAxis: { type: 'category' },
+                                                            // 声明一个 Y 轴，数值轴。
+                                                            yAxis: { },
+                                                            // 声明多个 bar 系列，默认情况下，每个系列会自动对应到 dataset 的每一列。
+                                                            series: [
+                                                                { type: 'bar' },
+                                                                { type: 'bar' }
+                                                            ]
+                                                            }
+                                                            bardiv1.setOption(option1);
+
+                                                        </script>
+                                                    </div>
+                                                    <div class="tab-pane " id="panel-ld2">
+                                                        <p>
+                                                            流域降水的分布
+                                                        </p>
+                                                        <div id="bar2" style="height: 250px;overflow: auto;"></div>
+                                                        <script>
+                                                            var bardiv2 = echarts.init(document.getElementById('bar2'),'dark');
+                                                            option2 = {
+                                                                xAxis: {
+                                                                    type: 'category',
+                                                                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                                                                },
+                                                                yAxis: {
+                                                                    type: 'value'
+                                                                },
+                                                                series: [
+                                                                    {
+                                                                        data: [120, 200, 150, 80, 70, 110, 130],
+                                                                        type: 'bar'
+                                                                    }
+                                                                ]
+                                                            };
+                                                            bardiv2.setOption(option2);
+                                                        </script>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-md-12 column">
+                                    <blockquote>
+                                        <p>
+                                            降水统计
+                                        </p> <small>昨天08时到今天，全是降水80毫米 <cite>面雨量最大的城市主要集中在台州的中北部</cite></small>
+                                    </blockquote>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="panel-a2">
+                <!-- 气温模块 -->
+                <div class="container-fiuled" style="padding-right: 30px; padding-left: 30px;">
+                    <legend>气温统计</legend>
+                    <div class="row clearfix">
+                        <div class="col-md-6 column">
+                            <div class="tabbable" id="tabs-781671">
+                                <ul class="nav nav-tabs">
+                                    <li>
+                                        <a href="#panel-932232" data-toggle="tab">最低气温</a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="#panel-214106" data-toggle="tab">单站最低气温</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="panel-932232">
+                                        <p>
+                                            最低气温
+                                        </p>
+                                        <div id="map_tmp_min1" style="height: 550%;overflow: auto;"></div>
+                                        <script>
+                                            var map_tmp_min1 = echarts.init(document.getElementById('map_tmp_min1'), 'light');
+
+                                            var taizhou = {{ taizhou| safe}};
+                                            echarts.registerMap('taizhou', taizhou);
+
+                                            map_tmp_min1.setOption({
+                                                title: {
+                                                    text: '',
+                                                    textStyle: { fontSize: 50 },
+                                                },
+
+                                                toolbox: {
+                                                    show: true,
+                                                    orient: 'vertical',
+                                                    left: 'right',
+                                                    top: 'center',
+                                                    feature: {
+                                                        dataView: { readOnly: false },
+                                                        restore: {},
+                                                        saveAsImage: {}
+                                                    }
+                                                },
+                                                visualMap: {
+                                                    min: -25,
+                                                    max: 0,
+                                                    text: ['High', 'Low'],
+                                                    realtime: false,
+                                                    calculable: true,
+                                                    inRange: {
+                                                        color: ['lightskyblue', 'yellow', 'orangered']
+                                                    }
+                                                },
+
+                                                series: [{
+                                                    name: '台州市各县市面雨量',
+                                                    type: 'map',
+                                                    map: 'taizhou',
+                                                    data: {{ tn| safe }},
+
+                                    }]
+                                });
+
+
+                                        </script>
+
+                                    </div>
+                                    <div class="tab-pane " id="panel-214106">
+                                        <p>
+                                            最低气温
+                                        </p>
+                                        <div id="map_tmp_min2" style="height: 550%;overflow: auto;"></div>
+                                        <script>
+                                            var map_tmp_min2 = echarts.init(document.getElementById('map_tmp_min2'), 'theme');
+                                            // console.log("666")
+                                            var taizhou = {{ taizhou| safe}};
+                                            echarts.registerMap('taizhou', taizhou, {});
+                                            // console.log("666")
+                                            // console.log(taizhou)
+                                            map_tmp_min2.setOption({
+                                                title: {
+                                                    text: '',
+                                                    textStyle: { fontSize: 50 },
+                                                },
+                                                tooltip: {
+                                                    trigger: 'item',
+                                                    formatter: function (params) {
+                                                        // do some thing
+                                                        return params.name + ":" + params.value[2]
+                                                    }
+                                                },
+                                                geo: {
+                                                    map: 'taizhou',
+                                                    itemStyle: {
+                                                        color: 'white'
+                                                        // areaColor = '#333',
+                                                    }
+
+
+                                                },
+                                                label: {
+                                                    show: true,
+                                                    color: "rgba(50, 44, 44, 1)",
+                                                    //formatter: '{c}[2]'
+                                                    formatter: function (params) {
+                                                        // do some thing
+                                                        return params.name
+                                                    }
+                                                },
+                                                series: [{
+                                                    name: ' ',
+                                                    type: 'effectScatter',
+
+                                                    symbolSize: 5,
+                                                    coordinateSystem: 'geo',
+
+                                                    data: {{ tn_scatter| safe}}
+                                    }]
+                                });
+                                            map_tmp_min2.on("click", function (e) {
+                                                window.open(e.data.url);
+                                            });
+                                        </script>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 column">
+                            <div class="tabbable" id="tabs-366988">
+                                <ul class="nav nav-tabs">
+                                    <li class="active">
+                                        <a href="#panel-299667" data-toggle="tab">最高气温</a>
+                                    </li>
+                                    <li>
+                                        <a href="#panel-713925" data-toggle="tab">单站最高气温</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="panel-299667">
+                                        <p>
+                                            最高气温
+                                        </p>
+                                        <div id="map_tmp_max1" style="height: 550%;overflow: auto;"></div>
+                                        <script>
+                                            var map_tmp_max1 = echarts.init(document.getElementById('map_tmp_max1'), 'theme');
+
+                                            var taizhou = {{ taizhou| safe}};
+                                            echarts.registerMap('taizhou', taizhou);
+
+                                            map_tmp_max1.setOption({
+                                                title: {
+                                                    text: '',
+                                                    textStyle: { fontSize: 50 },
+                                                },
+
+                                                toolbox: {
+                                                    show: true,
+                                                    orient: 'vertical',
+                                                    left: 'right',
+                                                    top: 'center',
+                                                    feature: {
+                                                        dataView: { readOnly: false },
+                                                        restore: {},
+                                                        saveAsImage: {}
+                                                    }
+                                                },
+                                                visualMap: {
+                                                    min: 0,
+                                                    max: 40,
+                                                    text: ['High', 'Low'],
+                                                    realtime: false,
+                                                    calculable: true,
+                                                    inRange: {
+                                                        color: ['lightskyblue', 'yellow', 'orangered']
+                                                    }
+                                                },
+
+                                                series: [{
+                                                    name: '台州市各县市面雨量',
+                                                    type: 'map',
+                                                    map: 'taizhou',
+                                                    data: {{ tx| safe }},
+
+                                    }]
+                                });
+
+
+                                        </script>
+                                    </div>
+                                    <div class="tab-pane" id="panel-713925">
+                                        <p>
+                                            最高气温
+                                        </p>
+                                        <div id="map_tmp_max2" style="height: 550%;overflow: auto;"></div>
+                                        <script>
+                                            var map_tmp_max2 = echarts.init(document.getElementById('map_tmp_max2'), 'theme');
+                                            // console.log("666")
+                                            var taizhou = {{ taizhou| safe}};
+                                            echarts.registerMap('taizhou', taizhou, {});
+                                            // console.log("666")
+                                            // console.log(taizhou)
+                                            map_tmp_max2.setOption({
+                                                title: {
+                                                    text: '',
+                                                    textStyle: { fontSize: 50 },
+                                                },
+                                                tooltip: {
+                                                    trigger: 'item',
+                                                    formatter: '{b}<br/>{c} (p / km2)'
+                                                },
+                                                geo: {
+                                                    map: 'taizhou',
+
+
+                                                },
+                                                label: {
+                                                    show: true,
+                                                    color: "rgba(50, 44, 44, 1)",
+                                                    //formatter: '{c}[2]'
+                                                },
+                                                series: [{
+                                                    name: ' ',
+                                                    type: 'effectScatter',
+
+                                                    symbolSize: 5,
+                                                    coordinateSystem: 'geo',
+
+                                                    data: {{ tx_scatter| safe}},
+                                    }]
+                                });
+                                            map_tmp_max2.on("click", function (e) {
+                                                $("#modal-content").text("修改模块内容")
+                                                $("#modal-one").modal({
+                                                    backdrop: false, // 相当于data-backdrop
+                                                    keyboard: false, // 相当于data-keyboard
+                                                    show: true, // 相当于data-show
+                                                    remote: "" // 相当于a标签作为触发器的href
+                                                });
+                                                // window.open(e.data.url);
+                                            });
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-md-12 column">
+                            <div class="tabbable" id="tabs-294640">
+                                <ul class="nav nav-tabs">
+                                    <li class="active">
+                                        <a href="#panel-131393" data-toggle="tab">时序图</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="panel-131393">
+                                        <p>
+                                            市气温
+                                        </p>
+                                        <div id="bar_tmp1" style="height: 250px;overflow: auto;"></div>
+                                        <script>
+                                            var bar_tmpdiv1 = echarts.init(document.getElementById('bar_tmp1'));
+                                            option_tmp1 = {
+                                                legend: {},
+                                                tooltip: {},
+                                                dataset: {
+                                                    // 提供一份数据。
+                                                    source: {{ tmp_bar | safe }}
+                                                    },
+                                            // 声明一个 X 轴，类目轴（category）。默认情况下，类目轴对应到 dataset 第一列。
+                                            xAxis: { type: 'category' },
+                                            // 声明一个 Y 轴，数值轴。
+                                            yAxis: { },
+                                            // 声明多个 bar 系列，默认情况下，每个系列会自动对应到 dataset 的每一列。
+                                            series: [
+                                                { type: 'bar' },
+                                                { type: 'bar' },
+                                            ]
+                                                }
+                                            bardiv1.setOption(option1);
+                                            bar_tmpdiv1.setOption(option_tmp1);
+                                        </script>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row clearfix">
-                    <div class="col-md-12 column">
-                        <blockquote>
-                            <p>
-                                降水统计
-                            </p> <small>昨天08时到今天，全是降水80毫米 <cite>面雨量最大的城市主要集中在台州的中北部</cite></small>
-                        </blockquote>
+            </div>
+            <div class="tab-pane" id="panel-a3">
+                <!-- 能见度模块 -->
+                <div class="container-fiuled" style="padding-right: 30px; padding-left: 30px;">
+                    <legend>能见度统计</legend>
+                    <div class="row clearfix">
+                        <div class="col-md-6 column">
+                            <div class="tabbable" id="tabs-285011">
+                                <ul class="nav nav-tabs">
+                                    <li class="active">
+                                        <a href="#panel-786570" data-toggle="tab">能见度</a>
+                                    </li>
+                                    <li>
+                                        <a href="#panel-615445" data-toggle="tab">预警</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="panel-786570">
+                                        <p>
+                                            这是能见度的图.
+                                        </p>
+                                        <div id="map_vue" style="height: 500%;overflow: auto;"></div>
+                                        <script>
+                                            var map_vue = echarts.init(document.getElementById('map_vue'), 'dark');
+                                            console.log("666")
+                                            console.log({{ testdata| safe}})
+                                            var taizhou = {{ context.taizhou }}
+                                            echarts.registerMap('taizhou', taizhou, {});
+                                            // console.log("666")
+                                            // console.log(taizhou)
+                                            var data = {
+                                                'month': [4300, 10000, 28000, 35000, 35000, 50000, 19000],
+                                                'history': [5000, 14000, 28000, 31000, 31000, 42000, 21000],
+                                            }
+                                            map_vue.setOption({
+                                                title: {
+                                                    text: '',
+                                                    textStyle: { fontSize: 50 },
+                                                },
+                                                tooltip: {
+                                                    trigger: 'item',
+                                                    formatter: function (params) {
+                                                        // do some thing
+                                                        return params.name + ":" + params.value[2]
+                                                    }
+                                                },
+                                                geo: {
+                                                    map: 'taizhou',
+
+
+                                                },
+                                                label: {
+                                                    show: true,
+                                                    color: "rgba(50, 44, 44, 1)",
+                                                    formatter: function (params) {
+                                                        // do some thing
+                                                        return params.name
+                                                    }
+                                                },
+                                                series: [{
+                                                    name: '？？？',
+                                                    type: 'scatter',
+
+                                                    symbolSize: 5,
+                                                    coordinateSystem: 'geo',
+                                                    data: {{ vv_scatter| safe}}
+                                                    // data: [{ value: [121.5, 28.5, 80], url: "url_data" }]
+                                                }]
+                                            });
+                                            map_vue.on("click", function (e) {
+                                                window.open(e.data.url);
+                                            });
+                                        </script>
+
+                                    </div>
+                                    <div class="tab-pane" id="panel-615445">
+                                        <p>
+                                            这是目前已知的预警.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 column">
+                            <div class="row clearfix">
+                                <div class="col-md-12 column">
+                                    <p>
+                                        站点统计
+                                    </p>
+                                    <div id="pie_vue" style="width: 100%;height: 250px;margin: 0 auto"></div>
+
+                                    <script>
+                                        // var piediv = document.getElementById('pie');
+                                        var pie_vue = echarts.init(document.getElementById('pie_vue'));
+                                        pie_vue.setOption({
+                                            series: [
+                                                {
+                                                    name: '访问来源',
+                                                    type: 'pie',    // 设置图表类型为饼图
+                                                    radius: '55%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+                                                    data: [          // 数据数组，name 为数据项名称，value 为数据项值
+                                                        { value: 235, name: '暴雨（50mm）' },
+                                                        { value: 274, name: '大雨（35mm）' },
+                                                        { value: 310, name: '中雨（20mm）' },
+                                                        { value: 335, name: '小-中雨（15mm）' },
+                                                        { value: 400, name: '小雨（10mm）' }
+                                                    ]
+                                                }
+                                            ]
+                                        })
+                                        // pie_vue.setOption(option);
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-md-12 column">
+                                    <p>
+                                        柱状图
+                                    </p>
+                                    <div id="bar_vue" style="height: 250px;overflow: auto;"></div>
+                                    <script>
+                                        var bar_vue = echarts.init(document.getElementById('bar_vue'));
+                                        option_tmp2 = {
+                                            xAxis: {
+                                                type: 'category',
+                                                // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                                                data: {{ vv_time | safe }}
+                                            },
+                                        yAxis: {
+                                            type: 'value'
+                                        },
+                                        dataZoom: [
+                                            {
+                                                type: 'inside',
+                                                start: 0,
+                                                end: 24
+                                            }
+
+                                        ],
+                                            series: [
+                                                {
+                                                    // data: [820, 932, 901, 934, 1290, 1330, 1320],
+                                                    data: {{ vv_value| safe}},
+                                                type: 'line',
+                                                smooth: true
+                                                }
+                                            ]
+                                        };
+                                        bar_vue.setOption(option_tmp2);
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="panel-a4">
+                <!-- 大风 -->
+                <div class="container-fiuled" style="padding-right: 30px; padding-left: 30px;">
+                    <legend>级大风统计</legend>
+                    <div class="row clearfix">
+                        <div class="col-md-6 column">
+                            <div class="tabbable" id="tabs-285011">
+                                <ul class="nav nav-tabs">
+                                    <li class="active">
+                                        <a href="#panel-786570" data-toggle="tab">极大风</a>
+                                    </li>
+                                    <li>
+                                        <a href="#panel-615445" data-toggle="tab">预警</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="panel-786570">
+                                        <p>
+                                            这是级大风的图.
+                                        </p>
+                                        <div id="map_fy" style="height: 500%;overflow: auto;"></div>
+                                        <script>
+                                            var map_fy = echarts.init(document.getElementById('map_fy'), 'light');
+                                            // console.log("666")
+                                            var taizhou = {{ taizhou| safe}};
+                                            echarts.registerMap('taizhou', taizhou, {});
+                                            // console.log("666")
+                                            // console.log(taizhou)
+                                            map_fy.setOption({
+                                                title: {
+                                                    text: '',
+                                                    textStyle: { fontSize: 50 },
+                                                },
+                                                tooltip: {
+                                                    trigger: 'item',
+                                                    formatter: function (params) {
+                                                        // do some thing
+                                                        return params.name + ":" + params.value[2]
+                                                    }
+                                                },
+                                                geo: {
+                                                    map: 'taizhou',
+                                                    roam: true,
+                                                    // tooltip:{borderColor = '#333'}
+                                                    itemStyle: {
+                                                        color: 'white'
+                                                        // areaColor = '#333',
+                                                    }
+
+
+                                                },
+                                                label: {
+                                                    show: true,
+                                                    color: "rgba(50, 44, 44, 1)",
+                                                    formatter: function (params) {
+                                                        // do some thing
+                                                        return params.name
+                                                    }
+                                                },
+                                                series: [{
+                                                    name: ' ',
+                                                    type: 'scatter',
+
+                                                    symbolSize: 15,
+                                                    coordinateSystem: 'geo',
+
+                                                    data: {{ fy_scatter| safe}},
+                                                }]
+                                            });
+                                            map_fy.on("click", function (e) {
+                                                $("#modal-content").text("修改模块内容")
+                                                $("#modal-one").modal({
+                                                    backdrop: false, // 相当于data-backdrop
+                                                    keyboard: false, // 相当于data-keyboard
+                                                    show: true, // 相当于data-show
+                                                    remote: "" // 相当于a标签作为触发器的href
+                                                });
+                                                // window.open(e.data.url);
+                                            });
+                                        </script>
+
+                                    </div>
+                                    <div class="tab-pane" id="panel-615445">
+                                        <p>
+                                            这是目前已知的预警.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 column">
+                            <div class="row clearfix">
+                                <div class="col-md-6 column">
+                                    <p>
+                                        柱状图
+                                    </p>
+                                    <div class="panel-footer" style="height: 250px;overflow: auto;">
+                                        <table id="userTable">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 25%;overflow: auto;">序号</th>
+                                                    <th style="width: 25%;overflow: auto;">站号</th>
+                                                    <th style="width: 25%;overflow: auto;">站名</th>
+                                                    <th style="width: 25%;overflow: auto;">乡镇</th>
+                                                    <th style="width: 25%;overflow: auto;">降水</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="sum_rr">
+                                                {% for R in RR_sum %}
+                                                <tr>
+                                                    <td>{{R.index}}</td>
+                                                    <td>{{R.IIiii}}</td>
+                                                    <td>{{R.county}}</td>
+                                                    <td>{{R.town}}</td>
+                                                    <td>{{R.data}}</td>
+
+                                                </tr>
+                                                {% endfor %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 column">
+                                    <p>
+                                        站点统计
+                                    </p>
+                                    <div id="pie_fy" style="width: 100%;height: 250px;margin: 0 auto"></div>
+
+                                    <script>
+                                        // var piediv = document.getElementById('pie');
+                                        var pie_fy = echarts.init(document.getElementById('pie_fy'));
+                                        pie_fy.setOption({
+                                            series: [
+                                                {
+                                                    name: '访问来源',
+                                                    type: 'pie',    // 设置图表类型为饼图
+                                                    radius: '55%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+                                                    data: [          // 数据数组，name 为数据项名称，value 为数据项值
+                                                        { value: 235, name: '暴雨（50mm）' },
+                                                        { value: 274, name: '大雨（35mm）' },
+                                                        { value: 310, name: '中雨（20mm）' },
+                                                        { value: 335, name: '小-中雨（15mm）' },
+                                                        { value: 400, name: '小雨（10mm）' }
+                                                    ]
+                                                }
+                                            ]
+                                        })
+                                        // pie_fy.setOption(option);
+                                    </script>
+                                </div>
+
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-md-12 column">
+                                    <p>
+                                        柱状图
+                                    </p>
+                                    <div id="bar_ffy" style="height: 250px;overflow: auto;"></div>
+                                    <script>
+                                        var bar_ffy = echarts.init(document.getElementById('bar_ffy'));
+                                        option_tmp2 = {
+                                            legend: {},
+                                            tooltip: {},
+                                            dataset: {
+                                                // 提供一份数据。
+                                                source: [
+                                                    ['product', '2015', '2016', '2017'],
+                                                    ['Matcha Latte', 43.3, 85.8, 93.7],
+                                                    ['Milk Tea', 89.1, 73.4, 55.1],
+                                                    ['Cheese Cocoa', 86.4, 65.2, 82.5],
+                                                    ['Walnut Brownie', 72.4, 53.9, 39.1]
+                                                ]
+                                            },
+                                            // 声明一个 X 轴，类目轴（category）。默认情况下，类目轴对应到 dataset 第一列。
+                                            xAxis: { type: 'category' },
+                                            // 声明一个 Y 轴，数值轴。
+                                            yAxis: {},
+                                            // 声明多个 bar 系列，默认情况下，每个系列会自动对应到 dataset 的每一列。
+                                            series: [
+                                                { type: 'bar' },
+                                                { type: 'bar' },
+                                                { type: 'bar' }
+                                            ]
+                                        }
+                                        bar_ffy.setOption(option_tmp2);
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- 降水模块 -->
+    {% csrf_token %}
+
+
 
 
 
 
     <!-- 气温模块 -->
-    <div class="container-fiuled" style="padding-right: 30px; padding-left: 30px;">
+    <!-- <div class="container-fiuled" style="padding-right: 30px; padding-left: 30px;">
         <legend>气温统计</legend>
         <div class="row clearfix">
             <div class="col-md-6 column">
@@ -888,7 +1503,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
 
     <!-- 遮罩窗体的设计 -->
@@ -922,7 +1537,7 @@
 
     <!-- 能见度模块 -->
 
-    <div class="container-fiuled" style="padding-right: 30px; padding-left: 30px;">
+    <!-- <div class="container-fiuled" style="padding-right: 30px; padding-left: 30px;">
         <legend>能见度统计</legend>
         <div class="row clearfix">
             <div class="col-md-6 column">
@@ -1073,7 +1688,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
 
 
@@ -1084,7 +1699,7 @@
     <!-- 极大风模块（暂定和能见度模式基本一致） -->
 
 
-    <div class="container-fiuled" style="padding-right: 30px; padding-left: 30px;">
+    <!-- <div class="container-fiuled" style="padding-right: 30px; padding-left: 30px;">
         <legend>级大风统计</legend>
         <div class="row clearfix">
             <div class="col-md-6 column">
@@ -1196,7 +1811,7 @@
                                         <td>{{R.IIiii}}</td>
                                         <td>{{R.county}}</td>
                                         <td>{{R.town}}</td>
-                                        <td>{{R.value}}</td>
+                                        <td>{{R.data}}</td>
 
                                     </tr>
                                     {% endfor %}
@@ -1273,7 +1888,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
 
 

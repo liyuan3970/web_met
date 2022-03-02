@@ -198,18 +198,35 @@ class sql_data:
         data_rx['county'] = county
         data_rx['town'] = town
         data_rx['rx'] = rx 
-#         print(data_rx.sort_values(by =['rx'],ascending = [False]))
+        data_rx['lat'] = lat
+        data_rx['lon'] = lon
+        data_rx['index']=data_rx['rx'].rank(ascending=0,method='dense')
+        data_rr_rx = data_rx.sort_values(by =['rx'],ascending = [False])
+        RR_rx = []
+        for row in data_rr_rx.itertuples():
+            dic_rr = {'index':int(getattr(row, 'index')),'IIiii':str(getattr(row, 'name')),
+            'county':getattr(row, 'county'),'town':getattr(row, 'town'),'data':getattr(row, 'rx'),
+            'value':[getattr(row, 'lon'),getattr(row, 'lat'),getattr(row, 'rx')],
+            'url':"station/"+str(getattr(row, 'name'))}
+            RR_rx.append(dic_rr)
+
         # 按照累计降水进行排序
         data_rsum =  pd.DataFrame()
         data_rsum['name'] = name 
         data_rsum['county'] = county
         data_rsum['town'] = town
         data_rsum['rsum'] = rr 
+        data_rsum['lat'] = lat
+        data_rsum['lon'] = lon
+
         data_rsum['index']=data_rsum['rsum'].rank(ascending=0,method='dense')
         data_rr_sum = data_rsum.sort_values(by =['rsum'],ascending = [False])
         RR_sum = []
         for row in data_rr_sum.itertuples():
-            dic_rr = {'index':int(getattr(row, 'index')),'IIiii':str(getattr(row, 'name')),'county':getattr(row, 'county'),'town':getattr(row, 'town'),'value':getattr(row, 'rsum')}
+            dic_rr = {'index':int(getattr(row, 'index')),'IIiii':str(getattr(row, 'name')),
+            'county':getattr(row, 'county'),'town':getattr(row, 'town'),'data':getattr(row, 'rsum'),
+            'value':[getattr(row, 'lon'),getattr(row, 'lat'),getattr(row, 'rsum')],
+            'url':"station/"+str(getattr(row, 'name'))}
             RR_sum.append(dic_rr)
 #         data_rsum['index'] = [a for i in ]
 #         print(data_rx.sort_values(by =['rx'],ascending = [False]))
@@ -221,14 +238,15 @@ class sql_data:
         data_vvmin['VV']= self.station_dot_comput[data_vv]['VList']
         #print("data:",data_vvmin)
         # 降水分级
-        RR_station_rank = [
-            { "value": station_RR_small, "name": '小雨' },
-            { "value": station_RR_mid, "name": '中雨' },
-            { "value": station_RR_big, "name": '大雨' },
-            { "value": station_RR_huge, "name": '暴雨' },
-            { "value": station_RR_bighuge, "name": '大暴雨' },
-            { "value": station_RR_more, "name": '特大暴雨' }
-        ]
+        # RR_station_rank = [
+        #     { "value": station_RR_small, "name": '小雨' },
+        #     { "value": station_RR_mid, "name": '中雨' },
+        #     { "value": station_RR_big, "name": '大雨' },
+        #     { "value": station_RR_huge, "name": '暴雨' },
+        #     { "value": station_RR_bighuge, "name": '大暴雨' },
+        #     { "value": station_RR_more, "name": '特大暴雨' }
+        # ]
+        RR_station_rank = [station_RR_small,station_RR_mid,station_RR_big,station_RR_huge,station_RR_bighuge,station_RR_more]
         tmp_station_bar = []
         tmp_station_bar.append(['product', '最高气温','最低气温'])
         RR_station_bar = []
@@ -325,4 +343,4 @@ class sql_data:
         data_fFymax['fFy']= self.station_dot_comput[max_fFy_station]['fFyList'] 
         data_fFymax['dFy']= self.station_dot_comput[max_fFy_station]['dFyList']  
         print(data_fFy_all,max_fFy_station)
-        return RR_sum,RR_station_rank,RR_station_bar,tmp_station_bar,tmp_min_scatter,tmp_max_scatter,data_vvmin,VV_min_scatter,VV_station_rank,data_fFy,fFy_wind7up_scatter 
+        return RR_rx ,RR_sum,RR_station_rank,RR_station_bar,tmp_station_bar,tmp_min_scatter,tmp_max_scatter,data_vvmin,VV_min_scatter,VV_station_rank,data_fFy,fFy_wind7up_scatter 
