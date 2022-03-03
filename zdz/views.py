@@ -73,7 +73,8 @@ def post_data(request):
 
     sql = "test"
     RR_County,tmp_max_County,tmp_min_County =  data_class.sql_data(sql).comput_county() 
-    level_rain,RR_rx ,RR_sum,RR_station_rank ,RR_station_bar,tmp_station_bar,tmp_min_scatter,tmp_max_scatter,data_vvmin,VV_min_scatter,VV_station_rank,data_fFy,fFy_wind7up_scatter = data_class.sql_data(sql).comput_IIiii()
+    level_rain,RR_rx ,RR_sum,RR_station_rank ,RR_station_bar,tmp_station_bar,tmp_min_scatter,tmp_max_scatter,tmp_event_scatter,data_vvmin,VV_min_scatter,VV_station_rank,data_fFy,fFy_wind7up_scatter = data_class.sql_data(sql).comput_IIiii()
+    print("能见度排序：",data_vvmin.sort_values(by = 'tTime'))
     vv_time = data_vvmin['tTime'].tolist()
     vv_value = data_vvmin['VV'].tolist()
     context = {
@@ -88,7 +89,8 @@ def post_data(request):
         'tn':json.dumps(tmp_min_County),
         'tn_scatter':tmp_min_scatter,
         'tx':json.dumps(tmp_max_County),
-        'tx_scatter':tmp_min_scatter,
+        'tx_scatter':tmp_max_scatter,
+        'tmp_event':tmp_event_scatter,
         'tmp_bar':tmp_station_bar,
         'vv_scatter':VV_min_scatter,
         'fy_scatter':fFy_wind7up_scatter,

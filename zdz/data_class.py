@@ -83,6 +83,8 @@ class sql_data:
         fFy_name_list = []
         dFy_scater_list = []
         fFy_scater_list = []
+        # 温度站点
+        temp_event_list = []
         nation_station = ['58660','58666','K8505','K8206','58665','58559','58655','K8271','58662','58653']
         temp_scatter_list = ['58559','K8705','K8706','58652','K8903','58568','K8818','58662','K8821','58660',
                              '58653','K8609','K8505','58667','58664','K8413','58655','K8282','K8217','K8201','K8301','58665']
@@ -136,6 +138,9 @@ class sql_data:
                     station_RR_RR_bighuge =  station_RR_bighuge+1 
                 else:
                     station_RR_more =  station_RR_more+1
+            # 气温警报分级统计
+            if dic['Tx']>35.0 or dic['Tn']<3.0 :
+                temp_event_list.append(str(data['IIiii'].iloc[0]))
             # 能见度分级别  
             if not isnan(data['VV'].min()):
                 VV_scatter_list.append(data['IIiii'].iloc[0])
@@ -147,7 +152,7 @@ class sql_data:
                     station_VV_mid =  station_VV_mid+1   
                 elif value_VV >=200 and value_VV <500:
                     station_VV_big =  station_VV_big +1   
-                elif value_VV >=500 and value_VV <1000:
+                elif value_VV >=500 and value_VV <5000:
                     station_VV_huge =  station_VV_huge+1   
                 else: 
                     station_VV_more =  station_VV_more+1 
@@ -271,6 +276,7 @@ class sql_data:
             dic_temp_max['value'].append(self.station_dot_comput[i]['lat'])
             dic_temp_max['value'].append(self.station_dot_comput[i]['Tx'])
             dic_temp_max['url'] ="station/"+str(self.station_dot_comput[i]['IIiii'])
+            dic_temp_max['label'] =str(self.station_dot_comput[i]['Tx'])
             dic_temp_max['name'] = str(self.station_dot_comput[i]['StationName'])
             dic_temp_min = {"value":[],"url":""}
             dic_temp_min['value'].append(self.station_dot_comput[i]['lon'])
@@ -278,9 +284,22 @@ class sql_data:
             dic_temp_min['value'].append(self.station_dot_comput[i]['Tn'])
             dic_temp_min['url'] ="station/"+str(self.station_dot_comput[i]['IIiii'])
             dic_temp_min['name'] = str(self.station_dot_comput[i]['StationName'])
+            dic_temp_min['label'] =str(self.station_dot_comput[i]['Tn'])
             tmp_max_scatter.append(dic_temp_max)
             tmp_min_scatter.append(dic_temp_min)
-#         print("能见度",VV_scatter_list)
+        # 返回气温警报数据
+        tmp_event_scatter = []
+        for i in temp_event_list:
+            tmp_event = {"value":[],"url":""}
+            tmp_event['value'].append(self.station_dot_comput[i]['lon'])
+            tmp_event['value'].append(self.station_dot_comput[i]['lat'])
+            if self.station_dot_comput[i]['Tx']>350:
+                tmp_event['value'].append(self.station_dot_comput[i]['Tx'])
+            elif self.station_dot_comput[i]['Tn']<40:
+                tmp_event['value'].append(self.station_dot_comput[i]['Tn'])
+            tmp_event['url'] ="station/tmp/"+str(self.station_dot_comput[i]['IIiii'])
+            tmp_event['name'] = str(self.station_dot_comput[i]['StationName'])
+            tmp_event_scatter.append(tmp_event)      
         # 返回站点能见度数据
         VV_min_scatter = []
         for i in VV_scatter_list:
@@ -348,5 +367,5 @@ class sql_data:
         data_fFymax['tTime']= self.station_dot_comput[max_fFy_station]['tTime']
         data_fFymax['fFy']= self.station_dot_comput[max_fFy_station]['fFyList'] 
         data_fFymax['dFy']= self.station_dot_comput[max_fFy_station]['dFyList']  
-        print(data_fFy_all,max_fFy_station)
-        return level_rain,RR_rx ,RR_sum,RR_station_rank,RR_station_bar,tmp_station_bar,tmp_min_scatter,tmp_max_scatter,data_vvmin,VV_min_scatter,VV_station_rank,data_fFy,fFy_wind7up_scatter 
+        # print(data_fFy_all,max_fFy_station)
+        return level_rain,RR_rx ,RR_sum,RR_station_rank,RR_station_bar,tmp_station_bar,tmp_min_scatter,tmp_max_scatter,tmp_event_scatter,data_vvmin.sort_values(by = 'tTime'),VV_min_scatter,VV_station_rank,data_fFy,fFy_wind7up_scatter 
