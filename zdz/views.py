@@ -46,16 +46,16 @@ def post_data(request):
 
 
     # matplotlib绘制降水分布数据
-    matplotlib.rcParams['font.sans-serif'] = ['SimHei']  # 用黑体显示中文
-    x = [1, 2, 3, 4]
-    y = [10, 50, 20, 100]
-    plt.plot(x, y, "r", marker='*', ms=10, label="a")
-    buffer = BytesIO()
-    plt.savefig(buffer)  
-    plot_data = buffer.getvalue()
-    imb = base64.b64encode(plot_data)  # 对plot_data进行编码
-    ims = imb.decode()
-    imd = "data:image/png;base64,"+ims
+    # matplotlib.rcParams['font.sans-serif'] = ['SimHei']  # 用黑体显示中文
+    # x = [1, 2, 3, 4]
+    # y = [10, 50, 20, 100]
+    # plt.plot(x, y, "r", marker='*', ms=10, label="a")
+    # buffer = BytesIO()
+    # plt.savefig(buffer)  
+    # plot_data = buffer.getvalue()
+    # imb = base64.b64encode(plot_data)  # 对plot_data进行编码
+    # ims = imb.decode()
+    # imd = "data:image/png;base64,"+ims
     # static数据
     # 读取台州的json数据
     with open('static/json/taizhou.json', encoding='utf-8') as f:
@@ -73,8 +73,16 @@ def post_data(request):
 
     sql = "test"
     RR_County,tmp_max_County,tmp_min_County =  data_class.sql_data(sql).comput_county() 
-    level_rain,RR_rx ,RR_sum,RR_station_rank ,RR_station_bar,tmp_station_bar,tmp_min_scatter,tmp_max_scatter,tmp_event_scatter,data_vvmin,VV_min_scatter,VV_station_rank,data_fFy,fFy_wind7up_scatter = data_class.sql_data(sql).comput_IIiii()
-    print("能见度排序：",data_vvmin.sort_values(by = 'tTime'))
+    data_rr_plot,level_rain,RR_rx ,RR_sum,RR_station_rank ,RR_station_bar,tmp_station_bar,tmp_min_scatter,tmp_max_scatter,tmp_event_scatter,data_vvmin,VV_min_scatter,VV_station_rank,data_fFy,fFy_wind7up_scatter = data_class.sql_data(sql).comput_IIiii()
+    # 绘图
+    func.plot_image(data_rr_plot[0],data_rr_plot[1],data_rr_plot[2])
+    buffer = BytesIO()
+    plt.savefig(buffer,bbox_inches='tight')  
+    plot_data = buffer.getvalue()
+    imb = base64.b64encode(plot_data)  # 对plot_data进行编码
+    ims = imb.decode()
+    imd = "data:image/png;base64,"+ims
+    
     vv_time = data_vvmin['tTime'].tolist()
     vv_value = data_vvmin['VV'].tolist()
     context = {

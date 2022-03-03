@@ -229,7 +229,7 @@ class sql_data:
         data_rsum['rsum'] = rr 
         data_rsum['lat'] = lat
         data_rsum['lon'] = lon
-
+        data_rr_plot = [lat,lon,rr] 
         data_rsum['index']=data_rsum['rsum'].rank(ascending=0,method='dense')
         data_rr_sum = data_rsum.sort_values(by =['rsum'],ascending = [False])
         RR_sum = []
@@ -368,4 +368,4 @@ class sql_data:
         data_fFymax['fFy']= self.station_dot_comput[max_fFy_station]['fFyList'] 
         data_fFymax['dFy']= self.station_dot_comput[max_fFy_station]['dFyList']  
         # print(data_fFy_all,max_fFy_station)
-        return level_rain,RR_rx ,RR_sum,RR_station_rank,RR_station_bar,tmp_station_bar,tmp_min_scatter,tmp_max_scatter,tmp_event_scatter,data_vvmin.sort_values(by = 'tTime'),VV_min_scatter,VV_station_rank,data_fFy,fFy_wind7up_scatter 
+        return data_rr_plot,level_rain,RR_rx ,RR_sum,RR_station_rank,RR_station_bar,tmp_station_bar,tmp_min_scatter,tmp_max_scatter,tmp_event_scatter,data_vvmin.sort_values(by = 'tTime'),VV_min_scatter,VV_station_rank,data_fFy,fFy_wind7up_scatter 
