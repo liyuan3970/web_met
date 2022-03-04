@@ -73,7 +73,7 @@ def post_data(request):
 
     sql = "test"
     RR_County,tmp_max_County,tmp_min_County =  data_class.sql_data(sql).comput_county() 
-    data_rr_plot,level_rain,RR_rx ,RR_sum,RR_station_rank ,RR_station_bar,tmp_station_bar,tmp_min_scatter,tmp_max_scatter,tmp_event_scatter,data_vvmin,VV_min_scatter,VV_station_rank,data_fFy,fFy_wind7up_scatter = data_class.sql_data(sql).comput_IIiii()
+    data_rr_plot,level_rain,RR_rx ,RR_sum,RR_station_rank ,RR_station_bar,tmp_station_bar,tmp_min_scatter,tmp_max_scatter,tmp_event_scatter,data_vvmin,VV_min_scatter,VV_station_rank,data_fFy_list,fFy_wind7up_scatter = data_class.sql_data(sql).comput_IIiii()
     # 绘图
     func.plot_image(data_rr_plot[0],data_rr_plot[1],data_rr_plot[2])
     buffer = BytesIO()
@@ -104,6 +104,8 @@ def post_data(request):
         'fy_scatter':fFy_wind7up_scatter,
         'vv_time':vv_time,
         'vv_value':vv_value,
+        'fy_list':data_fFy_list,
+
     }
     #返回所需数据
     return render(request,'demo_02.html',context)

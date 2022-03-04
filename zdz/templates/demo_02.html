@@ -110,14 +110,14 @@
                     <div class="col-md-8 column">
                         <div class="row clearfix">
                             <div class="col-md-6 column">
-                                起始时间：<input id="datetimepicker1" type="text">
+                                起始时间:<input id="datetimepicker1" type="text">
                                 <script>
                                     $('#datetimepicker1').datetimepicker();
                                 </script>
 
                             </div>
                             <div class="col-md-6 column">
-                                结束时间：<input id="datetimepicker2" type="text">
+                                结束时间:<input id="datetimepicker2" type="text">
                                 <script>
                                     $('#datetimepicker2').datetimepicker();
                                 </script>
@@ -1057,6 +1057,17 @@
                                                         return params.name + ":" + params.value[2]
                                                     }
                                                 },
+                                                visualMap: {
+                                                    type: "piecewise",
+
+
+                                                    pieces: [
+                                                        { min: 207, label: '9级以上大风', color: 'red' },
+                                                        { max: 207, min: 171, label: '8级大风', color: 'orange' },
+                                                        { max: 171, min: 138, label: '7级大风', color: 'blue' }   // 不指定 min，表示 min 为无限大（-Infinity）。
+                                                        // { max: 50, min: 0, label: '强浓雾', color: 'red' }
+                                                    ],
+                                                },
                                                 geo: {
                                                     map: 'taizhou',
                                                     roam: true,
@@ -1109,7 +1120,7 @@
                         </div>
                         <div class="col-md-6 column">
                             <div class="row clearfix">
-                                <div class="col-md-6 column">
+                                <div class="col-md-12 column">
                                     <p>
                                         柱状图
                                     </p>
@@ -1121,17 +1132,17 @@
                                                     <th style="width: 25%;overflow: auto;">站号</th>
                                                     <th style="width: 25%;overflow: auto;">站名</th>
                                                     <th style="width: 25%;overflow: auto;">乡镇</th>
-                                                    <th style="width: 25%;overflow: auto;">降水</th>
+                                                    <th style="width: 25%;overflow: auto;">极大风</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="sum_rr">
-                                                {% for R in RR_sum %}
+                                                {% for fy in fy_list %}
                                                 <tr>
-                                                    <td>{{R.index}}</td>
-                                                    <td>{{R.IIiii}}</td>
-                                                    <td>{{R.county}}</td>
-                                                    <td>{{R.town}}</td>
-                                                    <td>{{R.data}}</td>
+                                                    <td>{{fy.index}}</td>
+                                                    <td>{{fy.IIiii}}</td>
+                                                    <td>{{fy.county}}</td>
+                                                    <td>{{fy.town}}</td>
+                                                    <td>{{fy.data}}</td>
 
                                                 </tr>
                                                 {% endfor %}
@@ -1140,34 +1151,7 @@
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col-md-6 column">
-                                    <p>
-                                        站点统计
-                                    </p>
-                                    <div id="pie_fy" style="width: 100%;height: 250px;margin: 0 auto"></div>
 
-                                    <script>
-                                        // var piediv = document.getElementById('pie');
-                                        var pie_fy = echarts.init(document.getElementById('pie_fy'));
-                                        pie_fy.setOption({
-                                            series: [
-                                                {
-                                                    name: '访问来源',
-                                                    type: 'pie',    // 设置图表类型为饼图
-                                                    radius: '55%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
-                                                    data: [          // 数据数组，name 为数据项名称，value 为数据项值
-                                                        { value: 235, name: '暴雨（50mm）' },
-                                                        { value: 274, name: '大雨（35mm）' },
-                                                        { value: 310, name: '中雨（20mm）' },
-                                                        { value: 335, name: '小-中雨（15mm）' },
-                                                        { value: 400, name: '小雨（10mm）' }
-                                                    ]
-                                                }
-                                            ]
-                                        })
-                                                    // pie_fy.setOption(option);
-                                    </script>
-                                </div>
 
                             </div>
                             <div class="row clearfix">
@@ -1175,35 +1159,13 @@
                                     <p>
                                         柱状图
                                     </p>
-                                    <div id="bar_ffy" style="height: 250px;overflow: auto;"></div>
-                                    <script>
-                                        var bar_ffy = echarts.init(document.getElementById('bar_ffy'));
-                                        option_tmp2 = {
-                                            legend: {},
-                                            tooltip: {},
-                                            dataset: {
-                                                // 提供一份数据。
-                                                source: [
-                                                    ['product', '2015', '2016', '2017'],
-                                                    ['Matcha Latte', 43.3, 85.8, 93.7],
-                                                    ['Milk Tea', 89.1, 73.4, 55.1],
-                                                    ['Cheese Cocoa', 86.4, 65.2, 82.5],
-                                                    ['Walnut Brownie', 72.4, 53.9, 39.1]
-                                                ]
-                                            },
-                                            // 声明一个 X 轴，类目轴（category）。默认情况下，类目轴对应到 dataset 第一列。
-                                            xAxis: { type: 'category' },
-                                            // 声明一个 Y 轴，数值轴。
-                                            yAxis: {},
-                                            // 声明多个 bar 系列，默认情况下，每个系列会自动对应到 dataset 的每一列。
-                                            series: [
-                                                { type: 'bar' },
-                                                { type: 'bar' },
-                                                { type: 'bar' }
-                                            ]
-                                        }
-                                        bar_ffy.setOption(option_tmp2);
-                                    </script>
+                                    <blockquote>
+                                        <p>
+                                            极大风统计
+                                        </p> <small>昨天08时到今天，全是降水80毫米 <cite>面雨量最大的城市主要集中在台州的中北部</cite></small>
+                                    </blockquote>
+                                    
+
                                 </div>
                             </div>
                         </div>

@@ -115,7 +115,7 @@ def plot_image(lat,lon,value):
     #以下是核心api,实质为调用Cmaps基类的listmap()方法
     cmaps = Cmaps('ncl_default',self_define_list).listmap()
     # plt.rcParams.update({'font.size': 20})
-    fig = plt.figure(figsize=[9,15]) 
+    fig = plt.figure(figsize=[12,16]) 
     
     ax = fig.add_subplot(111)
     # plt.subplots_adjust(top=1,bottom=0,left=0,right=1,hspace=0,wspace=0)
@@ -143,12 +143,6 @@ def plot_image(lat,lon,value):
             if not isnan(awash_da.data[j,i]):
                 plt.text(x0,y0,str(int(awash_da.data[j,i])),fontsize= 7,fontweight = 800 ,color ="black")
     basemask(cs, ax, m, filepath+'taizhou')  
-
-
-
-
-
-
 
 
 

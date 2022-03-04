@@ -362,10 +362,16 @@ class sql_data:
         data_fFy['fFy'] = fFy_value
         data_fFy['index']=data_fFy['fFy'].rank(ascending=0,method='dense')
         data_fFy_all = data_fFy.sort_values(by =['fFy'],ascending = [False])  
+        data_fFy_list = []
+        for row in data_fFy_all.itertuples():
+            dic_ffy = {'index':int(getattr(row, 'index')),'IIiii':str(getattr(row, 'name')),
+            'county':getattr(row, 'county'),'town':getattr(row, 'town'),'data':getattr(row, 'fFy')}
+            data_fFy_list.append(dic_ffy)
+
         max_fFy_station = data_fFy_all['name'].iloc[0] 
         data_fFymax =  pd.DataFrame()
         data_fFymax['tTime']= self.station_dot_comput[max_fFy_station]['tTime']
         data_fFymax['fFy']= self.station_dot_comput[max_fFy_station]['fFyList'] 
         data_fFymax['dFy']= self.station_dot_comput[max_fFy_station]['dFyList']  
         # print(data_fFy_all,max_fFy_station)
-        return data_rr_plot,level_rain,RR_rx ,RR_sum,RR_station_rank,RR_station_bar,tmp_station_bar,tmp_min_scatter,tmp_max_scatter,tmp_event_scatter,data_vvmin.sort_values(by = 'tTime'),VV_min_scatter,VV_station_rank,data_fFy,fFy_wind7up_scatter 
+        return data_rr_plot,level_rain,RR_rx ,RR_sum,RR_station_rank,RR_station_bar,tmp_station_bar,tmp_min_scatter,tmp_max_scatter,tmp_event_scatter,data_vvmin.sort_values(by = 'tTime'),VV_min_scatter,VV_station_rank,data_fFy_list,fFy_wind7up_scatter 
