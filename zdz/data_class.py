@@ -348,6 +348,7 @@ class sql_data:
             dic_fFy['value'].append(self.station_dot_comput[str(i)]['lon'])
             dic_fFy['value'].append(self.station_dot_comput[str(i)]['lat'])
             dic_fFy['value'].append(self.station_dot_comput[str(i)]['fFy'])
+            dic_fFy['value'].append(self.station_dot_comput[str(i)]['StationName'])
 
             dic_fFy['symbol'] = str(symbol_ffy[0])
             dic_fFy['symbolRotate'] = self.station_dot_comput[str(i)]['dFy']
