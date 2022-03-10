@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import shapefile
 from matplotlib.font_manager import FontProperties
-import netCDF4 as nc
+# import netCDF4 as nc
 # from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
 import matplotlib
 from math import isnan

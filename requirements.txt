@@ -1,3 +1,7 @@
 Django==1.11.8
 matplotlib==3.5.1
+<<<<<<< HEAD
 cesdhi
+=======
+test
+>>>>>>> wrf

@@ -5,8 +5,8 @@ from math import isnan
 class sql_data:
     def __init__(self, sql):
         self.sql = sql# 传进来的参数
-        station_Mws = pd.read_csv("static/data/Mws2022.csv")
-        station_Aws = pd.read_csv("static/data/Aws2022.csv")
+        station_Mws = pd.read_csv("static/data/Mws_15.csv")
+        station_Aws = pd.read_csv("static/data/Aws_15.csv")
         self.station_all = pd.concat([station_Aws,station_Mws])
         # 数据
         self.grouped_county = self.station_all.groupby('county')
@@ -348,6 +348,7 @@ class sql_data:
             dic_fFy['value'].append(self.station_dot_comput[str(i)]['lon'])
             dic_fFy['value'].append(self.station_dot_comput[str(i)]['lat'])
             dic_fFy['value'].append(self.station_dot_comput[str(i)]['fFy'])
+            dic_fFy['value'].append(self.station_dot_comput[str(i)]['StationName'])
 
             dic_fFy['symbol'] = str(symbol_ffy[0])
             dic_fFy['symbolRotate'] = self.station_dot_comput[str(i)]['dFy']
