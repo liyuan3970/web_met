@@ -41,50 +41,15 @@ def post_data(request):
         'crf': crf,
         'city': city,
     }
-    print(dicr)
-
-
-
-    # matplotlib绘制降水分布数据
-    # matplotlib.rcParams['font.sans-serif'] = ['SimHei']  # 用黑体显示中文
-    # x = [1, 2, 3, 4]
-    # y = [10, 50, 20, 100]
-    # plt.plot(x, y, "r", marker='*', ms=10, label="a")
-    # buffer = BytesIO()
-    # plt.savefig(buffer)  
-    # plot_data = buffer.getvalue()
-    # imb = base64.b64encode(plot_data)  # 对plot_data进行编码
-    # ims = imb.decode()
-    # imd = "data:image/png;base64,"+ims
-    # static数据
-    # 读取台州的json数据
-    with open('static/json/taizhou.json', encoding='utf-8') as f:
-        line = f.readline()
-        tz_json = json.loads(line)
-        tz_json = json.dumps(tz_json)
-        # print("json的类型：",type(tz_json))
-        f.close()
-    
-    # 单站降水量的排序
-    # RR_station_sum = [
-    #     {"index":1,"IIiii":"K8515","name":"临海站","town":"食堂","value":125},
-    #     {"index":1,"IIiii":"K8515","name":"临海站","town":"食堂","value":125}
-    # ]
+    print(dicr,"月份:",start[0:3])
+    #
 
     sql = "test"
-    RR_County,tmp_max_County,tmp_min_County =  data_class.sql_data(sql).comput_county() 
-    data_rr_plot,level_rain,RR_rx ,RR_sum,RR_station_rank ,RR_station_bar,tmp_station_bar,tmp_min_scatter,tmp_max_scatter,tmp_event_scatter,data_vvmin,VV_min_scatter,VV_station_rank,data_fFy_list,fFy_wind7up_scatter = data_class.sql_data(sql).comput_IIiii()
-    # 绘图
-    func.plot_image(data_rr_plot[0],data_rr_plot[1],data_rr_plot[2])
-    buffer = BytesIO()
-    plt.savefig(buffer,bbox_inches='tight')  
-    plot_data = buffer.getvalue()
-    imb = base64.b64encode(plot_data)  # 对plot_data进行编码
-    ims = imb.decode()
-    imd = "data:image/png;base64,"+ims
-    
-    vv_time = data_vvmin['tTime'].tolist()
-    vv_value = data_vvmin['VV'].tolist()
+    sql_worker = data_class.sql_data(sql)
+    RR_County,tmp_max_County,tmp_min_County =  sql_worker.comput_county() 
+    sql_worker.comput_IIiii()
+    imd,tz_json,RR_sum ,RR_rx,level_rain,RR_station_rank,RR_station_bar,tmp_min_scatter,tmp_max_scatter,tmp_event_scatter,tmp_station_bar,VV_min_scatter,fFy_wind7up_scatter,vv_time,vv_value,data_fFy_list = sql_worker.data_output()
+    print(RR_station_rank)
     context = {
         'img': imd,
         'taizhou':json.dumps(tz_json),
@@ -108,7 +73,7 @@ def post_data(request):
 
     }
     #返回所需数据
-    return render(request,'demo_02.html',context)
+    return render(request,'post_data.html',context)
 
 # 这里处理显示单站数据页面
 from django.shortcuts import redirect

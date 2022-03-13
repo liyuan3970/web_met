@@ -609,7 +609,8 @@
                                                     trigger: 'item',
                                                     formatter: function (params) {
                                                         // do some thing
-                                                        return params.name + ":" + params.value[2]
+                                                        // return params.name + ":" + params.value[2]
+                                                        return  params.value[6]
                                                     }
                                                 },
                                                 geo: {
@@ -625,7 +626,7 @@
                                                         var res = 123
                                                         if (params.value != null){
                                                             // console.log(params.value)
-                                                            res = params.value[2]
+                                                            res = params.value[6]
                                                         }
                                                         // console.log("测试")
                                                         // console.log(params.value)
@@ -677,7 +678,7 @@
                                                     trigger: 'item',
                                                     formatter: function (params) {
                                                         // do some thing
-                                                        return params.name + ":" + params.value[2]
+                                                        return params.name + ":" + params.value[7]
                                                     }
                                                 },
                                                 geo: {
@@ -696,7 +697,7 @@
                                                     formatter: function (params) {
                                                         var res = 123
                                                         if (params.value != null){
-                                                            res = params.value[2]
+                                                            res = params.value[7]
                                                         }                   
                                                         return res
                                                     }
@@ -905,11 +906,12 @@
                                                     trigger: 'item',
                                                     formatter: function (params) {
                                                         // do some thing
-                                                        return params.name + ":" + params.value[2]
+                                                        return params.name + ":" + params.value[4]
                                                     }
                                                 },
                                                 visualMap: {
                                                     type: "piecewise",
+                                                    dimension:4,
 
 
                                                     pieces: [
@@ -936,7 +938,7 @@
                                                 series: [{
                                                     // name: ' ',
                                                     type: 'scatter',
-
+                                                    Symbol:'circle',
                                                     symbolSize: 10,
                                                     coordinateSystem: 'geo',
                                                     data: {{ vv_scatter| safe}}
@@ -1063,9 +1065,9 @@
 
 
                                                     pieces: [
-                                                        { min: 207, label: '9级以上大风', color: 'red' },
-                                                        { max: 207, min: 171, label: '8级大风', color: 'orange' },
-                                                        { max: 171, min: 138, label: '7级大风', color: 'blue' }   // 不指定 min，表示 min 为无限大（-Infinity）。
+                                                        { min: 20.7, label: '9级以上大风', color: 'red' },
+                                                        { max: 20.7, min: 17.1, label: '8级大风', color: 'orange' },
+                                                        { max: 17.1, min: 13.8, label: '7级大风', color: 'blue' }   // 不指定 min，表示 min 为无限大（-Infinity）。
                                                         // { max: 50, min: 0, label: '强浓雾', color: 'red' }
                                                     ],
                                                 },
