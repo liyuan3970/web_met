@@ -12,7 +12,7 @@ def kuaibao(request):
 # demo_02是气象快报的核心代码主要用来统计数据
 def index_kb(request):
     ## print(this is a index)
-    return render(request,'demo_02.html',locals())
+    return render(request,'post_data.html',locals())
 
 
 import matplotlib
@@ -88,6 +88,12 @@ def station_view(request,station_name):
     return HttpResponse("The station_name is : " + station_name)
 
 
+## 决策服务操作平台
+def index_main(request):
+    context = {
+        'data':[123]
+    }
+    return render(request,'main.html',context)
 
 
 

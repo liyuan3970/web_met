@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>决策材料操作平台</title>
+</head>
+<body>
+    <div class="container-fiuled" style="padding-right: 30px; padding-left: 30px;">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <ul class="nav nav-pills">
+                    <li class="active">
+                         <a href="#">一周天气预测</a>
+                    </li>
+                    <li>
+                         <a href="#">气象信息快报</a>
+                    </li>
+                    <li >
+                         <a href="#">重要气象报告</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-md-6 column" style=" height:900px; overflow:auto">
+                <div class="row clearfix">
+                    <div class="col-md-12 column">
+                        <!-- 这里是文件头 -->
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" class="form-control" id="exampleInputPassword1" />
+                       </div>
+                       
+                    </div>
+                </div>
+                <div class="row clearfix">
+                    <div class="col-md-12 column">
+                        <label for="file">点击此处触发上传</label>				
+                        <input type="file" id="file" style="display: none" />
+                        这里是文件内容
+                        <textarea class="form-control" rows="3"></textarea>
+                        <table class="table-bordered">
+                            <thead>
+                              <tr>
+                                <th><input type="text"></input></th>
+                                <th><input type="text"></input></th>
+                                <th><input type="text"></input></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>
+                                    <input type="text"></input>
+                                </td>
+                                <td>
+                                    <input type="text"></input>
+                                </td>
+                                <td>
+                                    <input type="text"></input>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    <input type="text"></input>
+                                </td>
+                                <td>
+                                    <input type="text"></input>
+                                </td>
+                                <td>
+                                    <input type="text"></input>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                    </div>
+                    <script>
+                        function add() {
+                                var html = "<div class='col-sm-4'><div class='panel panel-info'><div class='panel-heading'><i class='fa fa-times'></i></div><div class='panel-body' style='text-align: center;'><div class='row'><div class='col-sm-12 col-md-12'><img class='updateimg img-responsive' src='img/p_big3.jpg' style='width: inherit;height: 210px;'/></div></div></div></div></div>";
+                                $("#updatebox").before(html);
+                            }
+                            document.getElementById('file').onchange = function () {
+                                add();
+                                var imgFile = this.files[0];
+                                var fr = new FileReader();
+                                fr.onload = function () {
+                                    var imgs = document.getElementsByClassName('updateimg');//获取所有img元素
+                                    imgs[imgs.length - 1].src = fr.result;//设置最后一个img的src值
+                                    /*document.getElementById('image').getElementsByTagName('img')[0].src = fr.result;*/
+                                };
+                                fr.readAsDataURL(imgFile);
+                            }
+
+                        </script>
+                </div>
+                <div class="row clearfix" style="position: absolute; bottom: 0px; display: block;">
+                    <div class="col-md-12 column">
+                        这里是文件尾部
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 column" style=" height:800px; overflow:auto">
+                <!-- 文件展示区域 -->
+                <img src="static/img/week.png"style="width:80%"></img>
+                <img src="static/img/week.png"style="width:80%"></img>
+                
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>

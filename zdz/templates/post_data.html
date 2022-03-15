@@ -6,21 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>台州气象快报系统</title>
-    <!-- <script src='../../static/jquery-1.9.1.min.js'></script>
-    <link href="../../static/js/bootstrap.min.css" rel="stylesheet">
-    <link href="../../static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen"> -->
-    <!-- <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css"> -->
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
-    <!-- <link href="static/js/bootstrap.min.css" rel="stylesheet"> -->
-    <!-- <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script> -->
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-    <!-- <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script> -->
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/jquery.datetimepicker.css" />
-    <!-- <script src="demo/jquery.js"></script> -->
     <script src="static/js/jquery.datetimepicker.full.min.js"></script>
-    <!-- Echarts基本组件 -->
     <script type="text/javascript" src="static/js/echarts.min.js"></script>
     <script type="text/javascript" src="static/js/echarts-gl.min.js"></script>
     <script type="text/javascript" src="static/js/ecStat.min.js"></script>
@@ -28,14 +19,13 @@
     <script type="text/javascript" src="static/js/china.js"></script>
     <script type="text/javascript" src="static/js/world.js"></script>
     <script type="text/javascript" src="static/js/theme.js"></script>
-    <!-- 解决bootstrap选项卡和echart代码显示冲突的bug -->
     <link rel="stylesheet" type="text/css" href="static/css/bootcss.css" />
 
 
 
 </head>
 
-<body>
+<body style="background-color:#FEF8EF">
 
 
 
@@ -71,7 +61,7 @@
                 var city = options.text()
 
                 $.ajax({
-                    url: "/post_data",  // 请求的地址
+                    url: "post_data",  // 请求的地址
                     type: "post",  // 请求方式
                     // 请求时传递过去的数据
                     data: {
@@ -112,14 +102,24 @@
                             <div class="col-md-6 column">
                                 起始时间:<input id="datetimepicker1" type="text">
                                 <script>
-                                    $('#datetimepicker1').datetimepicker();
+                                    $('#datetimepicker1').datetimepicker(
+                                        {
+                                            theme: 'dark',
+                                            format: 'Y-m-d H:i'
+                                        }
+                                    );
                                 </script>
 
                             </div>
                             <div class="col-md-6 column">
                                 结束时间:<input id="datetimepicker2" type="text">
                                 <script>
-                                    $('#datetimepicker2').datetimepicker();
+                                    $('#datetimepicker2').datetimepicker(
+                                        {
+                                            theme: 'dark',
+                                            format: 'Y-m-d H:i'
+                                        }
+                                    );
                                 </script>
                             </div>
                         </div>
@@ -362,8 +362,9 @@
                                                         <p>
                                                             按照累计降水强度进行排序
                                                         </p>
-                                                        <div class="panel-footer" style="height: 250px;overflow: auto;">
-                                                            <table id="userTable">
+                                                        <div class="panel-footer"
+                                                            style="height: 250px;overflow: auto;background-color:#FEF8EF">
+                                                            <table id="userTable" style="background-color:#FEF8EF">
                                                                 <thead>
                                                                     <tr>
                                                                         <th style="width: 25%;overflow: auto;">序号</th>
@@ -400,8 +401,9 @@
                                                         <p>
                                                             按照单站强度进行排序
                                                         </p>
-                                                        <div class="panel-footer" style="height: 250px;overflow: auto;">
-                                                            <table id="userTable">
+                                                        <div class="panel-footer"
+                                                            style="height: 250px;overflow: auto;background-color:#FEF8EF">
+                                                            <table id="userTable" style="background-color:#FEF8EF">
                                                                 <thead>
                                                                     <tr>
                                                                         <th style="width: 25%;overflow: auto;">序号</th>
@@ -413,12 +415,6 @@
                                                                 </thead>
                                                                 <tbody id="sum_rr">
 
-                                                                    <!-- <tr>
-                                                                                    <td>001</td>
-                                                                                    <td>Rammohan </td>
-                                                                                    <td>Reddy</td>
-                                                                                    <td>A+</td>
-                                                                                </tr> -->
                                                                     {% for R in RR_rx %}
                                                                     <tr>
                                                                         <td>{{R.index}}</td>
@@ -610,7 +606,7 @@
                                                     formatter: function (params) {
                                                         // do some thing
                                                         // return params.name + ":" + params.value[2]
-                                                        return  params.value[6]
+                                                        return params.value[6]
                                                     }
                                                 },
                                                 geo: {
@@ -624,14 +620,14 @@
                                                     formatter: function (params) {
                                                         // do some thing
                                                         var res = 123
-                                                        if (params.value != null){
+                                                        if (params.value != null) {
                                                             // console.log(params.value)
                                                             res = params.value[6]
                                                         }
                                                         // console.log("测试")
                                                         // console.log(params.value)
                                                         // res = params.value
-                                     
+
                                                         return res
                                                     }
                                                 },
@@ -696,9 +692,9 @@
                                                     //formatter: '{c}[2]'
                                                     formatter: function (params) {
                                                         var res = 123
-                                                        if (params.value != null){
+                                                        if (params.value != null) {
                                                             res = params.value[7]
-                                                        }                   
+                                                        }
                                                         return res
                                                     }
                                                 },
@@ -725,36 +721,36 @@
                                         <div id="map_temp_event" style="height: 550%;overflow: auto;"></div>
                                         <script>
                                             var map_temp_event = echarts.init(document.getElementById('map_temp_event'), 'light');
-                                                // console.log("666")
-                                                var taizhou = {{ taizhou| safe}};
-                                                echarts.registerMap('taizhou', taizhou, {});
-                                                // console.log("666")
-                                                // console.log(taizhou)
-                                                map_temp_event.setOption({
-                                                    title: {
-                                                        text: '气温警报',
-                                                        textStyle: { fontSize: 30 },
-                                                    },
-                                                    tooltip: {
-                                                        trigger: 'item',
-                                                        formatter: function (params) {
-                                                            // do some thing
-                                                            return params.name + ":" + params.value[2]
-                                                        }
-                                                    },
-                                                    visualMap: {
-                                                        type: "piecewise",
+                                            // console.log("666")
+                                            var taizhou = {{ taizhou| safe}};
+                                            echarts.registerMap('taizhou', taizhou, {});
+                                            // console.log("666")
+                                            // console.log(taizhou)
+                                            map_temp_event.setOption({
+                                                title: {
+                                                    text: '气温警报',
+                                                    textStyle: { fontSize: 30 },
+                                                },
+                                                tooltip: {
+                                                    trigger: 'item',
+                                                    formatter: function (params) {
+                                                        // do some thing
+                                                        return params.name + ":" + params.value[2]
+                                                    }
+                                                },
+                                                visualMap: {
+                                                    type: "piecewise",
 
 
-                                                        pieces: [
-                                                            { max: 42, min: 35, label: '高温', color: 'red' },
-                                                            { max: 3, min: 0, label: '霜冻', color: 'green' },// 不指定 max，表示 max 为无限大（Infinity）。
-                                                            { max: 0, min: -10, label: '冻害', color: 'blue' }]
+                                                    pieces: [
+                                                        { max: 42, min: 35, label: '高温', color: 'red' },
+                                                        { max: 3, min: 0, label: '霜冻', color: 'green' },// 不指定 max，表示 max 为无限大（Infinity）。
+                                                        { max: 0, min: -10, label: '冻害', color: 'blue' }]
 
                                                 },
-                                                    geo: {
+                                                geo: {
                                                     map: 'taizhou',
-                                                    roam:true,
+                                                    roam: true,
                                                     itemStyle: {
                                                         color: 'white'
                                                         // areaColor = '#333',
@@ -762,7 +758,7 @@
 
 
                                                 },
-                                                    label: {
+                                                label: {
                                                     show: true,
                                                     color: "rgba(50, 44, 44, 1)",
                                                     //formatter: '{c}[2]'
@@ -774,19 +770,19 @@
                                                         return params.name
                                                     }
                                                 },
-                                                    series: [{
-                                                        name: ' ',
-                                                        type: 'scatter',
+                                                series: [{
+                                                    name: ' ',
+                                                    type: 'scatter',
 
-                                                        symbolSize: 5,
-                                                        coordinateSystem: 'geo',
+                                                    symbolSize: 5,
+                                                    coordinateSystem: 'geo',
 
-                                                        data: {{ tmp_event| safe}}
+                                                    data: {{ tmp_event| safe}}
                                                 }]
                                             });
-                                                map_temp_event.on("click", function (e) {
-                                                    window.open(e.data.url);
-                                                });
+                                            map_temp_event.on("click", function (e) {
+                                                window.open(e.data.url);
+                                            });
                                         </script>
                                     </div>
                                     <div class="tab-pane " id="panel-713911">
@@ -911,7 +907,7 @@
                                                 },
                                                 visualMap: {
                                                     type: "piecewise",
-                                                    dimension:4,
+                                                    dimension: 4,
 
 
                                                     pieces: [
@@ -938,7 +934,7 @@
                                                 series: [{
                                                     // name: ' ',
                                                     type: 'scatter',
-                                                    Symbol:'circle',
+                                                    Symbol: 'circle',
                                                     symbolSize: 10,
                                                     coordinateSystem: 'geo',
                                                     data: {{ vv_scatter| safe}}
@@ -1061,7 +1057,7 @@
                                                 },
                                                 visualMap: {
                                                     type: "piecewise",
-                                                    dimension:2,
+                                                    dimension: 2,
 
 
                                                     pieces: [
@@ -1127,8 +1123,9 @@
                                     <p>
                                         柱状图
                                     </p>
-                                    <div class="panel-footer" style="height: 250px;overflow: auto;">
-                                        <table id="userTable">
+                                    <div class="panel-footer"
+                                        style="height: 250px;overflow: auto;background-color:#FEF8EF">
+                                        <table id="userTable" style="background-color:#FEF8EF">
                                             <thead>
                                                 <tr>
                                                     <th style="width: 25%;overflow: auto;">序号</th>
@@ -1167,7 +1164,7 @@
                                             极大风统计
                                         </p> <small>昨天08时到今天，全是降水80毫米 <cite>面雨量最大的城市主要集中在台州的中北部</cite></small>
                                     </blockquote>
-                                    
+
 
                                 </div>
                             </div>
@@ -1191,10 +1188,10 @@
 
 
 
-    
 
 
-     <!-- 遮罩窗体 -->
+
+    <!-- 遮罩窗体 -->
     <div class="modal fade" id="modal-one" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -1220,7 +1217,7 @@
 
 
 
-    
+
 
 
 
