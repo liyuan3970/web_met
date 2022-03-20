@@ -8,6 +8,9 @@
     <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- <script type="text/javascript" src="static/js/dataTool.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="static/css/jquery.datetimepicker.css" />
+    <script src="static/js/jquery.datetimepicker.full.min.js"></script>
     <title>决策材料操作平台</title>
 </head>
 <body>
@@ -29,17 +32,48 @@
         </div>
         <div class="row clearfix">
             <div class="col-md-6 column" style=" height:900px; overflow:auto">
-                <div class="row clearfix">
+                <div class="row clearfix" style = "border: 3px solid green;">
                     <div class="col-md-12 column">
                         <!-- 这里是文件头 -->
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1" />
-                       </div>
+                        <div class="row clearfix">
+                            <div class="col-md-12 column">
+                                <h5 style = " left: 30px;float: left">标题：</h5><input style = " left: 30px;float: left;width:70%">
+                            </div>
+                        </div>
+                        <div class="row clearfix">
+                            <div class="col-md-6 column">
+                                <h5 style = " left: 30px;float: left">期数：</h5><input style = " left: 30px;float: left">
+                            </div>
+                            <div class="col-md-6 column">
+                                <input style = " right:30px;float: right"><h5 style = " left: 30px;float: right">撰稿人：</h5>
+                            </div>
+                        </div>
+                        <div class="row clearfix">
+                            <div class="col-md-4 column">
+                                <h5 style = " left: 30px;float: left">日期:</h5>
+                               <input id="datetimepicker1" type="text" style = " left: 30px;float: left">
+                                <script>
+                                $('#datetimepicker1').datetimepicker(
+                                {
+                                    theme: 'dark',
+                                    format: 'Y-m-d H:i'
+                                }
+                                );
+                                </script>
+                            </div>
+                            <div class="col-md-4 column">
+                                <h5 style = " left: 30px;float: left">单位：</h5><input style = " left: 30px;float: left">
+
+                            </div>
+                            <div class="col-md-4 column">
+                                <input style = " right: 30px;float: right"><h5 style = " right: 30px;float: right">签发人：</h5>
+
+                            </div>
+                        </div>
                        
                     </div>
                 </div>
-                <div class="row clearfix">
+                <div class="row clearfix" >
                     <div class="col-md-12 column">
                         <label for="file">点击此处触发上传</label>				
                         <input type="file" id="file" style="display: none" />
@@ -98,12 +132,26 @@
 
                         </script>
                 </div>
-                <div class="row clearfix" style="position: absolute; bottom: 0px; display: block;">
+                <div class="row clearfix" style="position: absolute; bottom: 0px; display: block;border: 3px solid green;width:100%;"  >
+                    <div class="col-md-12 column" >
+                        <!-- 这里是文件尾部 -->
+                        <input type="radio" name="sex"checked="checked"><span>是</span>
+                        <input type="radio" name="sex"><span>否</span>
+                    </div>
                     <div class="col-md-12 column">
-                        这里是文件尾部
+                        <input style = "width:100%">
+
+                    </div>
+                    <div class="col-md-12 column">
+                        <button style = "width:50px;height:25px; right: 30px;float: right" text = "预览">    
+
                     </div>
                 </div>
             </div>
+
+
+
+            <!-- 这里是文件展示区域 -->
             <div class="col-md-6 column" style=" height:800px; overflow:auto">
                 <!-- 文件展示区域 -->
                 <img src="static/img/week.png"style="width:80%"></img>
