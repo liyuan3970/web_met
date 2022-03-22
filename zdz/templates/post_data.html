@@ -178,7 +178,7 @@
                                                                 这里是第一块的内容
                                                             </p> -->
                                                 <!-- <img src="{{ img }}"> -->
-                                                <div id="map1" style="height: 550%;overflow: auto;"></div>
+                                                <div id="map1" style="height: 750%;overflow: auto;"></div>
                                                 <script>
                                                     var map1 = echarts.init(document.getElementById('map1'), 'vintage');
                                                     // console.log("666")
@@ -363,7 +363,7 @@
                                                             按照累计降水强度进行排序
                                                         </p>
                                                         <div class="panel-footer"
-                                                            style="height: 250px;overflow: auto;background-color:#FEF8EF">
+                                                            style="height: 150px;overflow: auto;background-color:#FEF8EF">
                                                             <table id="userTable" style="background-color:#FEF8EF">
                                                                 <thead>
                                                                     <tr>
@@ -402,7 +402,7 @@
                                                             按照单站强度进行排序
                                                         </p>
                                                         <div class="panel-footer"
-                                                            style="height: 250px;overflow: auto;background-color:#FEF8EF">
+                                                            style="height: 150px;overflow: auto;background-color:#FEF8EF">
                                                             <table id="userTable" style="background-color:#FEF8EF">
                                                                 <thead>
                                                                     <tr>
@@ -541,10 +541,18 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-md-12 column">
+                                            <blockquote>
+                                                <p>
+                                                    降水统计
+                                                </p> <small>昨天08时到今天，全是降水80毫米 <cite>面雨量最大的城市主要集中在台州的中北部</cite></small>
+                                            </blockquote>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row clearfix">
+                            <!-- <div class="row clearfix">
                                 <div class="col-md-12 column">
                                     <blockquote>
                                         <p>
@@ -552,7 +560,7 @@
                                         </p> <small>昨天08时到今天，全是降水80毫米 <cite>面雨量最大的城市主要集中在台州的中北部</cite></small>
                                     </blockquote>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -591,127 +599,15 @@
                                         <p>
                                             最高气温
                                         </p>
-                                        <div id="map_tmp_max2" style="height: 550%;overflow: auto;"></div>
-                                        <script>
-                                            var map_tmp_max2 = echarts.init(document.getElementById('map_tmp_max2'), 'theme');
-                                            var taizhou = {{ taizhou| safe}};
-                                            echarts.registerMap('taizhou', taizhou, {});
-                                            map_tmp_max2.setOption({
-                                                title: {
-                                                    text: '',
-                                                    textStyle: { fontSize: 50 },
-                                                },
-                                                tooltip: {
-                                                    trigger: 'item',
-                                                    formatter: function (params) {
-                                                        // do some thing
-                                                        // return params.name + ":" + params.value[2]
-                                                        return params.value[6]
-                                                    }
-                                                },
-                                                geo: {
-                                                    map: 'taizhou',
+                                        <img src="{{ img_tmax }}" style="height: 550%;overflow: auto;">
 
-
-                                                },
-                                                label: {
-                                                    show: true,
-                                                    color: "rgba(50, 44, 44, 1)",
-                                                    formatter: function (params) {
-                                                        // do some thing
-                                                        var res = 123
-                                                        if (params.value != null) {
-                                                            // console.log(params.value)
-                                                            res = params.value[6]
-                                                        }
-                                                        // console.log("测试")
-                                                        // console.log(params.value)
-                                                        // res = params.value
-
-                                                        return res
-                                                    }
-                                                },
-                                                series: [{
-                                                    name: ' ',
-                                                    type: 'effectScatter',
-
-                                                    symbolSize: 5,
-                                                    coordinateSystem: 'geo',
-
-                                                    data: {{ tx_scatter| safe}},
-                                                }]
-                                            });
-                                            map_tmp_max2.on("click", function (e) {
-                                                $("#modal-content").text("修改模块内容")
-                                                $("#modal-one").modal({
-                                                    backdrop: false, // 相当于data-backdrop
-                                                    keyboard: false, // 相当于data-keyboard
-                                                    show: true, // 相当于data-show
-                                                    remote: "" // 相当于a标签作为触发器的href
-                                                });
-                                                // window.open(e.data.url);
-                                            });
-                                        </script>
                                     </div>
                                     <div class="tab-pane " id="panel-214106">
                                         <p>
                                             最低气温
                                         </p>
-                                        <div id="map_tmp_min2" style="height: 550%;overflow: auto;"></div>
-                                        <script>
-                                            var map_tmp_min2 = echarts.init(document.getElementById('map_tmp_min2'), 'theme');
-                                            // console.log("666")
-                                            var taizhou = {{ taizhou| safe}};
-                                            echarts.registerMap('taizhou', taizhou, {});
-                                            // console.log("666")
-                                            // console.log(taizhou)
-                                            map_tmp_min2.setOption({
-                                                title: {
-                                                    text: '',
-                                                    textStyle: { fontSize: 50 },
-                                                },
-                                                tooltip: {
-                                                    trigger: 'item',
-                                                    formatter: function (params) {
-                                                        // do some thing
-                                                        return params.name + ":" + params.value[7]
-                                                    }
-                                                },
-                                                geo: {
-                                                    map: 'taizhou',
-                                                    itemStyle: {
-                                                        color: 'white'
-                                                        // areaColor = '#333',
-                                                    }
+                                        <img src="{{ img_tmin }}" style="height: 550%;overflow: auto;">
 
-
-                                                },
-                                                label: {
-                                                    show: true,
-                                                    color: "rgba(50, 44, 44, 1)",
-                                                    //formatter: '{c}[2]'
-                                                    formatter: function (params) {
-                                                        var res = 123
-                                                        if (params.value != null) {
-                                                            res = params.value[7]
-                                                        }
-                                                        return res
-                                                    }
-                                                },
-                                                series: [{
-                                                    name: ' ',
-                                                    type: 'effectScatter',
-
-                                                    symbolSize: 5,
-                                                    coordinateSystem: 'geo',
-
-                                                    data: {{ tn_scatter| safe}}
-                                                }]
-                                            });
-                                            map_tmp_min2.on("click", function (e) {
-                                                window.open(e.data.url);
-                                            });
-                                        </script>
 
                                     </div>
                                     <div class="tab-pane " id="panel-299601">
@@ -794,11 +690,127 @@
                                         <p>
                                             低温分布
                                         </p>
+                                        <div id="map_tmp_min2" style="height: 550%;overflow: auto;"></div>
+                                        <script>
+                                            var map_tmp_min2 = echarts.init(document.getElementById('map_tmp_min2'), 'theme');
+                                            // console.log("666")
+                                            var taizhou = {{ taizhou| safe}};
+                                            echarts.registerMap('taizhou', taizhou, {});
+                                            // console.log("666")
+                                            // console.log(taizhou)
+                                            map_tmp_min2.setOption({
+                                                title: {
+                                                    text: '',
+                                                    textStyle: { fontSize: 50 },
+                                                },
+                                                tooltip: {
+                                                    trigger: 'item',
+                                                    formatter: function (params) {
+                                                        // do some thing
+                                                        return params.name + ":" + params.value[7]
+                                                    }
+                                                },
+                                                geo: {
+                                                    map: 'taizhou',
+                                                    itemStyle: {
+                                                        color: 'white'
+                                                        // areaColor = '#333',
+                                                    }
+
+
+                                                },
+                                                label: {
+                                                    show: true,
+                                                    color: "rgba(50, 44, 44, 1)",
+                                                    //formatter: '{c}[2]'
+                                                    formatter: function (params) {
+                                                        var res = 123
+                                                        if (params.value != null) {
+                                                            res = params.value[7]
+                                                        }
+                                                        return res
+                                                    }
+                                                },
+                                                series: [{
+                                                    name: ' ',
+                                                    type: 'effectScatter',
+
+                                                    symbolSize: 5,
+                                                    coordinateSystem: 'geo',
+
+                                                    data: {{ tn_scatter| safe}}
+                                                }]
+                                            });
+                                            map_tmp_min2.on("click", function (e) {
+                                                window.open(e.data.url);
+                                            });
+                                        </script>
                                     </div>
                                     <div class="tab-pane " id="panel-713979">
                                         <p>
-                                            高温分布
+                                            最高气温
                                         </p>
+                                        <div id="map_tmp_max2" style="height: 550%;overflow: auto;"></div>
+                                        <script>
+                                            var map_tmp_max2 = echarts.init(document.getElementById('map_tmp_max2'), 'theme');
+                                            var taizhou = {{ taizhou| safe}};
+                                            echarts.registerMap('taizhou', taizhou, {});
+                                            map_tmp_max2.setOption({
+                                                title: {
+                                                    text: '',
+                                                    textStyle: { fontSize: 50 },
+                                                },
+                                                tooltip: {
+                                                    trigger: 'item',
+                                                    formatter: function (params) {
+                                                        // do some thing
+                                                        // return params.name + ":" + params.value[2]
+                                                        return params.value[6]
+                                                    }
+                                                },
+                                                geo: {
+                                                    map: 'taizhou',
+
+
+                                                },
+                                                label: {
+                                                    show: true,
+                                                    color: "rgba(50, 44, 44, 1)",
+                                                    formatter: function (params) {
+                                                        // do some thing
+                                                        var res = 123
+                                                        if (params.value != null) {
+                                                            // console.log(params.value)
+                                                            res = params.value[6]
+                                                        }
+                                                        // console.log("测试")
+                                                        // console.log(params.value)
+                                                        // res = params.value
+
+                                                        return res
+                                                    }
+                                                },
+                                                series: [{
+                                                    name: ' ',
+                                                    type: 'effectScatter',
+
+                                                    symbolSize: 5,
+                                                    coordinateSystem: 'geo',
+
+                                                    data: {{ tx_scatter| safe}},
+                                                }]
+                                            });
+                                            map_tmp_max2.on("click", function (e) {
+                                                $("#modal-content").text("修改模块内容")
+                                                $("#modal-one").modal({
+                                                    backdrop: false, // 相当于data-backdrop
+                                                    keyboard: false, // 相当于data-keyboard
+                                                    show: true, // 相当于data-show
+                                                    remote: "" // 相当于a标签作为触发器的href
+                                                });
+                                                // window.open(e.data.url);
+                                            });
+                                        </script>
                                     </div>
                                 </div>
                             </div>

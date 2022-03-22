@@ -22,7 +22,7 @@ import matplotlib
 from math import isnan
 import geopandas as gpd
 from ncmaps import Cmaps
-print("666")
+# print("666")
 def transform_from_latlon(lat, lon):
     lat = np.asarray(lat)
     lon = np.asarray(lon)

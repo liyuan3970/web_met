@@ -70,6 +70,8 @@ class sql_data:
             'fFy':[],
             'dFy':[],
             'rsum':[],
+            'tmax':[],
+            'tmin':[],
             'rmax':[]
             }
     def comput_county(self):
@@ -110,7 +112,7 @@ class sql_data:
         dFy_data = data[data['fFy'] == data['fFy'].max()]['dFy'].iloc[0]
         value_VV = nan_del(data['VV'].min())
         value_tmax = nan_del(data['Tx'].max()/10.0)
-        value_tmin = nan_del(data['Tn'].max()/10.0)
+        value_tmin = nan_del(data['Tn'].min()/10.0)
         # print("查看数据：",print(type(value_VV)),value_VV)
 
 
@@ -178,6 +180,9 @@ class sql_data:
         self.plot_data['dFy'].append(dFy_data)
         self.plot_data['rsum'].append(value_rsum/10.0)
         self.plot_data['rmax'].append(data['RR'].max()/10.0)
+        self.plot_data['tmax'].append(value_tmax)
+        self.plot_data['tmin'].append(value_tmin)
+
 
        
         self.dic_station = {'IIiii': data['IIiii'].iloc[0],
@@ -225,6 +230,8 @@ class sql_data:
             'name':data['StationName'].iloc[0],
             'rmax': data['RR'].max()/10.0,
             'rsum':value_rsum/10.0,
+            # 'tmax':[],
+            # 'tmin':[],
             'time': data['tTime'].tolist(),
             'T': data['T'].tolist(),
             'V': data['VV'].tolist(),
@@ -318,7 +325,7 @@ class sql_data:
     # 数据绘图
 
     def plot_imd(self, plot_data, value_str):
-        value_str = 'rsum'
+        # value_str = 'rsum'
         lat = plot_data['lat']
         lon = plot_data['lon']
         value = plot_data[value_str]
@@ -370,8 +377,10 @@ class sql_data:
         data_vvmin.sort_values(by = 'tTime')
         tz_json =  self.read_shp_json()
         imd = self.plot_imd(self.plot_data,'rsum')
+        imd_tmax = self.plot_imd(self.plot_data,'tmax')
+        imd_tmin = self.plot_imd(self.plot_data,'tmin')
         
 
 
 
-        return imd,tz_json,RR_sum ,RR_rx,level_rain,RR_station_rank,RR_station_bar,tmp_min_scatter,tmp_max_scatter,tmp_event_scatter,tmp_station_bar,VV_min_scatter,fFy_wind7up_scatter,vv_time,vv_value,data_fFy_list
+        return imd,imd_tmax,imd_tmin,tz_json,RR_sum ,RR_rx,level_rain,RR_station_rank,RR_station_bar,tmp_min_scatter,tmp_max_scatter,tmp_event_scatter,tmp_station_bar,VV_min_scatter,fFy_wind7up_scatter,vv_time,vv_value,data_fFy_list

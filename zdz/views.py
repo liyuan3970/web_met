@@ -48,10 +48,12 @@ def post_data(request):
     sql_worker = data_class.sql_data(sql)
     RR_County,tmp_max_County,tmp_min_County =  sql_worker.comput_county() 
     sql_worker.comput_IIiii()
-    imd,tz_json,RR_sum ,RR_rx,level_rain,RR_station_rank,RR_station_bar,tmp_min_scatter,tmp_max_scatter,tmp_event_scatter,tmp_station_bar,VV_min_scatter,fFy_wind7up_scatter,vv_time,vv_value,data_fFy_list = sql_worker.data_output()
+    imd,imd_tmax,imd_tmin,tz_json,RR_sum ,RR_rx,level_rain,RR_station_rank,RR_station_bar,tmp_min_scatter,tmp_max_scatter,tmp_event_scatter,tmp_station_bar,VV_min_scatter,fFy_wind7up_scatter,vv_time,vv_value,data_fFy_list = sql_worker.data_output()
     print(RR_station_rank)
     context = {
         'img': imd,
+        'img_tmax': imd_tmax,
+        'img_tmin': imd_tmin,
         'taizhou':json.dumps(tz_json),
         'RR_County':json.dumps(RR_County),
         'RR_sum':RR_sum,
