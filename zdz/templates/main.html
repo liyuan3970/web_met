@@ -108,9 +108,6 @@
                                         <div class="tab-content" style="width:100%; height: 500%;margin: 0 auto；">
                                             <div class="tab-pane active" id="panel-00001"
                                                 style="width:100%; height: 500%;margin: 0 auto">
-                                                <p>
-                                                    这里是文字段落部分的布局设计
-                                                </p>
                                                 <div class="col-md-12 column">
                                                     <h5 style=" left: 30px;float: left">标题</h5><input type="text"
                                                         style="width:350px;hwight:100px;float: left">
@@ -136,16 +133,21 @@
                                                 </div>
                                                 <!-- 文字部分 -->
                                                 <div class="col-md-12 column">
-                                                    <textarea rows="5" cols="100"></textarea>
+                                                    <textarea rows="5" cols="100" id = "text"></textarea>
                                                     </textarea>
+                                                </div>
+                                                <!-- 添加删除 -->
+                                                <div >
+                                                    <input type="button" id="add_text" value="添加"
+                                                        style="width:50px;height:25px;">
+                                                    <input type="button" id="del_text" value="删除"
+                                                        style="width:50px;height:25px;">
                                                 </div>
 
                                             </div>
                                             <div class="tab-pane" id="panel-00002"
                                                 style="width:100%; height: 500%;margin: 0 auto">
-                                                <p>
-                                                <h5>图片布局类型</h5>
-                                                </p>
+                                                
                                                 <!-- 这里是图片布局的核心 -->
                                                 <div class="container">
                                                     <div class="row clearfix">
@@ -188,55 +190,59 @@
                                                                         </p>
                                                                         <table class="table-bordered">
                                                                             <thead>
-                                                                              <tr>
-                                                                                <th>图片</th>
-                                                                                <th>图片</th>
-                                                                                
-                                                                              </tr>
+                                                                                <tr>
+                                                                                    <th>图片</th>
+                                                                                    <th>图片</th>
+
+                                                                                </tr>
                                                                             </thead>
                                                                             <tbody>
-                                                                              <tr>
-                                                                                
-                                                                                <td>
-                                                                                    <div class="col-md-12 column">
-                                                                                        <div>
-                                                                                            <input name="pic_file"
-                                                                                                onchange="picViewImagesLook(this,21)"
-                                                                                                type="file" />
+                                                                                <tr>
+
+                                                                                    <td>
+                                                                                        <div class="col-md-12 column">
+                                                                                            <div>
+                                                                                                <input name="pic_file"
+                                                                                                    onchange="picViewImagesLook(this,21)"
+                                                                                                    type="file" />
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                标题:<input type="text">
+                                                                                            </div>
+                                                                                            <div id="look_view21">
+                                                                                                <img src="" alt=""
+                                                                                                    height="200"
+                                                                                                    width="200"
+                                                                                                    style="display:none;" />
+                                                                                            </div>
                                                                                         </div>
-                                                                                        <div>
-                                                                                            标题:<input type="text">
+
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div class="col-md-12 column">
+                                                                                            <div>
+                                                                                                <input name="pic_file"
+                                                                                                    onchange="picViewImagesLook(this,22)"
+                                                                                                    type="file" />
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                标题:<input type="text">
+                                                                                            </div>
+                                                                                            <div id="look_view22">
+                                                                                                <img src="" alt=""
+                                                                                                    height="200"
+                                                                                                    width="200"
+                                                                                                    style="display:none;" />
+                                                                                            </div>
                                                                                         </div>
-                                                                                        <div id="look_view21">
-                                                                                            <img src="" alt="" height="200"
-                                                                                                width="200" style="display:none;" />
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    
-                                                                                </td>
-                                                                                <td>
-                                                                                    <div class="col-md-12 column">
-                                                                                        <div>
-                                                                                            <input name="pic_file"
-                                                                                                onchange="picViewImagesLook(this,22)"
-                                                                                                type="file" />
-                                                                                        </div>
-                                                                                        <div>
-                                                                                            标题:<input type="text">
-                                                                                        </div>
-                                                                                        <div id="look_view22">
-                                                                                            <img src="" alt="" height="200"
-                                                                                                width="200" style="display:none;" />
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    
-                                                                                </td>
-                                                                                
-                                                                              </tr>
-                                                                             
+
+                                                                                    </td>
+
+                                                                                </tr>
+
                                                                             </tbody>
-                                                                          </table>
-                                                                        
+                                                                        </table>
+
                                                                     </div>
                                                                     <div class="tab-pane" id="panel-1003">
                                                                         <p>
@@ -378,63 +384,158 @@
                                                         return param;
                                                     }
                                                 </script>
+                                                <div >
+                                                    <input type="button" id="add_png" value="添加"
+                                                        style="width:50px;height:25px;">
+                                                    <input type="button" id="del_png" value="删除"
+                                                        style="width:50px;height:25px;">
+                                                </div>
 
 
 
                                             </div>
                                             <div class="tab-pane" id="panel-00003"
                                                 style="width:100%; height: 500%;margin: 0 auto">
-                                                <p>
-                                                    这里是列表数据的布局设计
-                                                </p>
+                                               
+                                                <div>
+                                                    <table class="table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th><input type="text"></input></th>
+                                                                <th><input type="text"></input></th>
+                                                                <th><input type="text"></input></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            <tr>
+                                                                <td>
+                                                                    <input type="text"></input>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text"></input>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text"></input>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <input type="text"></input>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text"></input>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text"></input>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div >
+                                                    <input type="button" id="add_table" value="添加"
+                                                        style="width:50px;height:25px;">
+                                                    <input type="button" id="del_table" value="删除"
+                                                        style="width:50px;height:25px;">
+                                                </div>
+
                                             </div>
                                         </div>
-                                        <div>
-                                            <input type="button" id="mod" value="添加"
-                                                style="width:50px;height:25px;float: left">
-                                            <input type="button" id="mod" value="删除"
-                                                style="width:50px;height:25px;float: left">
-                                        </div>
+                                        <script>
+                                            // 按钮
+                                            var add_Btn_text = document.getElementById('add_text');
+                                            var del_Btn_text = document.getElementById('del_text');
+
+                                            var add_Btn_png = document.getElementById('add_png');
+                                            var del_Btn_png = document.getElementById('del_png');
+
+                                            var add_Btn_table = document.getElementById('add_table');
+                                            var del_Btn_table = document.getElementById('del_table');
+                                            var list_div = []
+                                            var id_div = 0
+                                            html_all = ""
+
+                                            // 按钮事件
+                                            add_Btn_text.onclick = function () {
+                                                id_div = id_div + 1
+                                                var html = document.getElementById('panel-00001');
+                                                var text = document.getElementById('text').value;
+                                                list_div.push(html)
+                                                // console.log(list_div)
+                                                console.log(text)
+                                                show()
+
+                                            };
+
+                                            del_Btn_text.onclick = function () {
+                                                list_div.pop();
+                                                console.log(list_div)
+                                                show()
+                                            };
+
+                                            add_Btn_png.onclick = function () {
+                                                id_div = id_div + 1
+                                                var html = document.getElementById('panel-00002');
+
+                                                list_div.push(html)
+                                                // console.log(list_div)
+                                                console.log(html)
+                                                show()
+
+                                            };
+
+                                            del_Btn_png.onclick = function () {
+                                                list_div.pop();
+                                                console.log(list_div)
+                                                show()
+                                            };
+                                            add_Btn_table.onclick = function () {
+                                                id_div = id_div + 1
+                                                var html = document.getElementById('panel-00003');
+
+                                                list_div.push(html)
+                                                // console.log(list_div)
+                                                console.log(html)
+                                                show()
+
+                                            };
+
+                                            del_Btn_table.onclick = function () {
+                                                list_div.pop();
+                                                console.log(list_div)
+                                                show()
+                                            };
+
+
+
+
+
+
+                                            function show() {
+                                                console.log("测试成功")
+                                                $('#view').html('')
+                                                for (var i = 0; i < list_div.length; i++) {
+                                                    console.log("打印数据")
+                                                    console.log(list_div[i]);
+                                                    // html = list_div[i]
+                                                    html = ' <input type="button" id="add_text" value="添加" > '
+                                                    $('#view').append(html)
+                                                    // html_all = html_all + html
+
+
+
+                                                }
+                                            };
+
+
+                                        </script>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- 这里是一个是一个表格系统 -->
-                        <!-- <table class="table-bordered">
-                            <thead>
-                              <tr>
-                                <th><input type="text"></input></th>
-                                <th><input type="text"></input></th>
-                                <th><input type="text"></input></th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>
-                                    <input type="text"></input>
-                                </td>
-                                <td>
-                                    <input type="text"></input>
-                                </td>
-                                <td>
-                                    <input type="text"></input>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                    <input type="text"></input>
-                                </td>
-                                <td>
-                                    <input type="text"></input>
-                                </td>
-                                <td>
-                                    <input type="text"></input>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table> -->
                     </div>
-                    <div class="col-md-12 column" style="border: 3px solid green;width:104; height: 60%;">
+                    <div class="col-md-12 column" id = "view" style="border: 3px solid green;width:104; height: 60%;display:flex;flex-direction: column;">
 
                     </div>
 
