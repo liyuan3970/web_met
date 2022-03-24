@@ -109,7 +109,7 @@
                                             <div class="tab-pane active" id="panel-00001"
                                                 style="width:100%; height: 500%;margin: 0 auto">
                                                 <div class="col-md-12 column">
-                                                    <h5 style=" left: 30px;float: left">标题</h5><input type="text"
+                                                    <h5 style=" left: 30px;float: left">标题</h5><input type="text" id="title_text"
                                                         style="width:350px;hwight:100px;float: left">
 
                                                     <select class="form-control" id="wordposition"
@@ -452,7 +452,12 @@
 
                                             var add_Btn_table = document.getElementById('add_table');
                                             var del_Btn_table = document.getElementById('del_table');
-                                            var list_div = []
+                                            var list_div = [];
+                                            var list_data = [];
+                                            // var data_post = {
+                                            //     "type:":
+
+                                            // }
                                             var id_div = 0
                                             html_all = ""
 
@@ -461,9 +466,23 @@
                                                 id_div = id_div + 1
                                                 var html = document.getElementById('panel-00001');
                                                 var text = document.getElementById('text').value;
+                                                var title = document.getElementById('title_text').value;
+                                                var font_pos = document.getElementById('wordposition').value;
+                                                var font_size = document.getElementById('wordsize').value;
+                                                var font_thins = document.getElementById('wordthinks').value;
+                                                
+                                                var data_text = {
+                                                    "type":"text",
+                                                    "id":id_div,
+                                                    "title":title,
+                                                    "fontsize":[font_pos,font_size,font_thins], 
+                                                    "content":text
+                                                }
                                                 list_div.push(html)
+                                                list_data.push(data_text)
+                                                console.log(data_text)
                                                 // console.log(list_div)
-                                                console.log(text)
+                                                
                                                 show()
 
                                             };
@@ -477,6 +496,9 @@
                                             add_Btn_png.onclick = function () {
                                                 id_div = id_div + 1
                                                 var html = document.getElementById('panel-00002');
+                                                var data_png ={
+
+                                                };
 
                                                 list_div.push(html)
                                                 // console.log(list_div)
@@ -516,8 +538,8 @@
                                                 console.log("测试成功")
                                                 $('#view').html('')
                                                 for (var i = 0; i < list_div.length; i++) {
-                                                    console.log("打印数据")
-                                                    console.log(list_div[i]);
+                                                    // console.log("打印数据")
+                                                    // console.log(list_div[i]);
                                                     // html = list_div[i]
                                                     html = ' <input type="button" id="add_text" value="添加" > '
                                                     $('#view').append(html)
