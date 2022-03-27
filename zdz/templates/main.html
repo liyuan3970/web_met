@@ -463,7 +463,11 @@
 
                                             // 按钮事件
                                             add_Btn_text.onclick = function () {
-                                                id_div = id_div + 1
+                                                if (id_div >= 0){
+                                                    id_div = id_div + 1
+
+                                                }
+                                                // id_div = id_div + 1
                                                 var html = document.getElementById('panel-00001');
                                                 var text = document.getElementById('text').value;
                                                 var title = document.getElementById('title_text').value;
@@ -471,7 +475,7 @@
                                                 var font_size = document.getElementById('wordsize').value;
                                                 var font_thins = document.getElementById('wordthinks').value;
                                                 
-                                                var data_text = {
+                                                var data_add = {
                                                     "type":"text",
                                                     "id":id_div,
                                                     "title":title,
@@ -479,18 +483,24 @@
                                                     "content":text
                                                 }
                                                 list_div.push(html)
-                                                list_data.push(data_text)
-                                                console.log(data_text)
+                                                list_data.push(data_add)
+                                                // console.log(data_add.type,'666')
                                                 // console.log(list_div)
                                                 
-                                                show()
+                                                show(data_add)
 
                                             };
 
                                             del_Btn_text.onclick = function () {
+                                                if (id_div >0){
+                                                    id_div = id_div - 1
+                                                }
                                                 list_div.pop();
-                                                console.log(list_div)
-                                                show()
+                                                // console.log(list_div)
+                                                data_add = {
+                                                    "type":"del"                                                }
+
+                                                show(data_add)
                                             };
 
                                             add_Btn_png.onclick = function () {
@@ -534,21 +544,134 @@
 
 
 
-                                            function show() {
-                                                console.log("测试成功")
+                                            function show(data_add) {
+                                                var  type = data_add.type   
+                                                                                    
+                                                // if (type =='text'){
+                                                //     console.log("检测到数据")
+                                                //     console.log(data_add.title)
+                                                    
+
+                                                // }
+                                                // console.log(data.type)
                                                 $('#view').html('')
                                                 for (var i = 0; i < list_div.length; i++) {
-                                                    // console.log("打印数据")
-                                                    // console.log(list_div[i]);
-                                                    // html = list_div[i]
-                                                    html = ' <input type="button" id="add_text" value="添加" > '
-                                                    $('#view').append(html)
-                                                    // html_all = html_all + html
+                                                    // var input_button = document.createElement('input') 
+                                                    // input_button.type = 'button'
+                                                    // input_button.value = type
+                                                    // input_button.id = i
+                                                    // input_button.addEventListener('click', function(){
+                                                    //     console.log("绑定成功",type)
+                                                    // },false)
+
+                                                  
+                                                    // $('#view').append(input_button)
+                                                    console.log("执行show函数")
+                                                    var a_button = document.createElement("a")
+                                                    a_button.id = "modal-"+ i.toString()
+                                                    a_button.href = "#modal-container-"+i.toString()
+                                                    a_button.text = "添加"
+                                                    a_button.setAttribute("data-toggle","modal")
+                                                    a_button.setAttribute("role","button")
+                                                    a_button.setAttribute("class","btn")
+                                                    
+
+                                                    var div_modal = document.createElement("div")
+                                                    div_modal.setAttribute("class","modal fade")
+                                                    div_modal.setAttribute("role","dialog")
+                                                    div_modal.id = "modal-container-"+ i.toString()
+                                                    div_modal.setAttribute("role","dialog")
+                                                    div_modal.setAttribute("aria-labelledby","myModalLabel")
+                                                    div_modal.setAttribute("aria-hidden","true")
+                                                
+
+                                                    
+                                                    var div_dialog = document.createElement("div")
+                                                    div_dialog.setAttribute("class","modal-dialog") 
+                                                    div_modal.appendChild(div_dialog)
+
+                                                    var div_content = document.createElement("div")
+                                                    div_content.setAttribute("class","modal-content") 
+                                                    div_dialog.appendChild(div_content)
+
+                                                    var div_head = document.createElement("div")
+                                                    div_head.setAttribute("class","modal-header")
+                                                
+                                                    var button_head = document.createElement("button")
+                                                    button_head.setAttribute("data-dismiss","modal")
+                                                    button_head.setAttribute("aria-hidden","true")
+                                                    button_head.setAttribute("class","close")
+                                                    button_head.setAttribute("type","button")
+
+                                                    var title_h4 = document.createElement("h4")
+                                                    title_h4.setAttribute("class","modal-title")
+                                                    // title_h4.setAttribute("id","myModalLabel")
+                                                    title_h4.innerText = "标题"
+                                                    div_head.appendChild(button_head)
+                                                    div_head.appendChild(title_h4)
+                                                    
+                                                    // body
+                                                    var div_body = document.createElement("div")
+                                                    div_body.setAttribute("class", "modal-body")
+                                                    // div_body.class = "modal-body"
+                                                    // div_body.value = "内容"
+                                                    div_body.innerText = "内容" + "我是内容" + i.toString()
+
+                                                    // foot
+                                                    var div_foot = document.createElement("div")
+                                                    div_foot.setAttribute("class","modal-footer")
+                                                    // div_foot.calss = "modal-footer"
+
+                                                    var button_foot_close = document.createElement("button")
+                                                    button_foot_close.setAttribute("type","button")
+                                                    button_foot_close.setAttribute("class","btn btn-default")
+                                                    button_foot_close.setAttribute("data-dismiss","modal")
+                                                    // button_foot_close.value = "关闭"
+                                                    button_foot_close.innerText = "关闭"
+
+                                                    var button_foot_save = document.createElement("button")
+                                                    button_foot_save.setAttribute("type","button")
+                                                    button_foot_save.setAttribute("class","btn btn-primary")
+                                                    button_foot_save.innerText = "保存"
+                                                    // button_foot_save.type = "button"
+                                                    // button_foot_save.class = "btn btn-primary"
+                                                    
+                                                    div_foot.appendChild(button_foot_close)
+                                                    div_foot.appendChild(button_foot_save)
+
+
+
+                                                    div_content.appendChild(div_head)
+                                                    div_content.appendChild(div_body)
+                                                    div_content.appendChild(div_foot)
+
+                                                    var div_all = document.createElement("div")
+                                                    div_all.setAttribute("class","col-md-12 column")
+                                                    div_all.appendChild(a_button)
+                                                    div_all.appendChild(div_modal)
+
+
+
+
+                                                    
+
+
+
+
+
+
+                                                    $('#view').append(div_all)
+
+
+
+                                                    
 
 
 
                                                 }
                                             };
+
+                                            
 
 
                                         </script>
@@ -561,11 +684,10 @@
 
                     </div>
 
+                    <!-- 遮罩窗体 -->
+
 
                 </div>
-
-
-
 
 
 
