@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.js"></script> -->
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <title>Document</title>
+    <style>
+        .fileupload-box {
+            padding: 5px;
+            border: 2px dashed gainsboro;
+            height: 180px;
+            width: 400px;
+            position: relative
+        }
+
+        .fileupload-box p {
+            margin: 5px 0 0 5px;
+
+        }
+
+        .img-box {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            left: 0;
+            right: 0;
+            top: 10px;
+            bottom: 0;
+            margin: auto;
+        }
+
+        .img-box img {
+            width: 120px;
+            height: 120px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="fileupload-box">
+        <p>上传图片:</p>
+        <div class="img-box">
+            <input type="file" style="display:none" id="uploadfile" accept="image/*" />
+            <img src="src/add.png" id="image">
+        </div>
+    </div>
+
+    <script>
+        $(function () {
+            $("#image").click(function () {
+                $("#uploadfile").click();
+            })
+            $("#uploadfile").change(function () {
+
+                var files = $(this)[0].files[0];    //获取文件信息
+                if (files) {
+                    var reader = new FileReader();  //调用FileReader
+                    reader.onload = function (evt) {   //读取操作完成时触发。
+                        $("#image").attr('src', evt.target.result)  //将img标签的src绑定为DataURL
+                    }
+                    reader.readAsDataURL(files); //将文件读取为 DataURL(base64)
+                }
+                else {
+                    alert("上传失败");
+                }
+            })
+        })
+    </script>
+</body>
+
+</html>
