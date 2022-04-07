@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'url_data',views.url_data),
     url(r'^station/(.+)/$',views.station_view),
     url(r'^index',views.index_main),
+    url(r'^home',views.home),
 
 
 

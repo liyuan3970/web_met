@@ -95,10 +95,19 @@ def index_main(request):
     context = {
         'data':[123]
     }
-    return render(request,'main.html',context)
+    return render(request,'index.html',context)
+    # return render(request,'main.html',context)
 
 
 
+from django.views.decorators.clickjacking import xframe_options_exempt
+
+@xframe_options_exempt
+def home(request):
+    # return redirect('https://www.baidu.com/')
+    # return redirect('http://192.168.192.2:9001/index')
+    return redirect('http://www.tz121.com/index.php')
+    # return render(request, 'www.baidu.com')
 
 
 
