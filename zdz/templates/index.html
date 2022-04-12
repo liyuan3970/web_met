@@ -38,9 +38,13 @@
                     <li>
                         <a href="#panel-2" data-toggle="tab">工具箱</a>
                     </li>
+                    <li >
+                        <!-- 另外添加一个说明文档 -->
+                        <a href="#panel-3" data-toggle="tab">画图</a>
+                    </li>
                     <li style="float: right;">
                         <!-- 另外添加一个说明文档 -->
-                        <a href="#panel-3" data-toggle="tab">配置</a>
+                        <a href="#panel-4" data-toggle="tab">帮助</a>
                     </li>
                 </ul>
             </div>
@@ -58,72 +62,115 @@
                             style="width:100%;height:100%;background-color:rgb(8, 116, 167)">
                             <!-- 文件头 -->
                             <div
-                                style="background-color:rgb(61, 201, 136); width: 100%; height: 10%;border: 3px solid rgb(221, 20, 20);">
-                                <div
-                                    style="display: inline-block;background-color:rgb(46, 194, 26); width: 33%; height: 45%;border: 3px solid rgb(32, 32, 32);">
-
-                                    <select class="form-control">
-                                        <!-- <option value="0" selected="selected" style="display: none;">材料类型</option> -->
-                                        <option value="居中">一周天气</option>
-                                        <option value="居左">气象信息快报</option>
-                                        <option value="居右">重要气象报告</option>
-                                    </select>
-
+                                style="background-color:rgb(61, 201, 136); width: 100%; height: 4%;border: 3px solid rgb(221, 20, 20);">
+                                <a id="modal-000001" href="#modal-container-000001" role="button" class="btn" data-toggle="modal">新建</a>
+                                <a id="modal-000002" href="#modal-container-000002" role="button" class="btn" data-toggle="modal">打开</a>
+                                <a id="modal-000003" href="#modal-container-000003" role="button" class="btn" data-toggle="modal">删除</a>
+                                <a id="modal-000004" href="#modal-container-000004" role="button" class="btn" data-toggle="modal">配置</a>  
+                                <h5 style="float:right;width:25%">第47期:一周天气</h5>
+                                <h5 style="float:right;width:25%">台州市局</h5>
+                                <!-- 新建 -->
+                                <div class="modal fade" id="modal-container-000001" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                <h4 class="modal-title" id="myModalLabel">
+                                                    标题
+                                                </h4>
+                                            </div>
+                                            <div class="modal-body" style ="height: 600px;">
+                                                
+                                            </div>
+                                            <div class="modal-footer">
+                                                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> <button type="button" class="btn btn-primary">保存</button>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    
                                 </div>
-                                <div
-                                    style="display: inline-block;background-color:rgb(46, 194, 26); width: 33%; height: 45%;border: 3px solid rgb(32, 32, 32);">
-                                    <select class="form-control">
-                                        <option value="居中">台州市气象局</option>
-                                        <option value="居左">台州市气象台</option>
-
-                                    </select>
-
+                                <!-- 打开 -->
+                                <div class="modal fade" id="modal-container-000002" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                <h4 class="modal-title" id="myModalLabel">
+                                                    标题
+                                                </h4>
+                                            </div>
+                                            <div class="modal-body" style ="height: 600px;">
+                                                
+                                            </div>
+                                            <div class="modal-footer">
+                                                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> <button type="button" class="btn btn-primary">保存</button>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    
                                 </div>
-                                <div
-                                    style="display: inline-block;background-color:rgb(46, 194, 26); width: 33%; height: 45%;border: 3px solid rgb(32, 32, 32);">
-                                    <select class="form-control">
-                                        <option value="居中">撰稿人：翁之梅</option>
-                                        <option value="居左">撰稿人：高丽</option>
-
-                                    </select>
-
+                                <!-- 删除 -->
+                                <div class="modal fade" id="modal-container-000003" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                <h4 class="modal-title" id="myModalLabel">
+                                                    标题
+                                                </h4>
+                                            </div>
+                                            <div class="modal-body" style ="height: 600px;">
+                                                
+                                            </div>
+                                            <div class="modal-footer">
+                                                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> <button type="button" class="btn btn-primary">保存</button>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    
                                 </div>
-                                <div
-                                    style="display: inline-block;background-color:rgb(46, 194, 26); width: 33%; height: 45%;border: 3px solid rgb(32, 32, 32);">
-                                    期数：<input type="text" style="width: 85%;height:100% ; ">
-
+                                <!-- 配置 -->
+                                <div class="modal fade" id="modal-container-000004" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                <h4 class="modal-title" id="myModalLabel">
+                                                    标题
+                                                </h4>
+                                            </div>
+                                            <div class="modal-body" style ="height: 600px;">
+                                                <input type="button" value = "模块自定义" style = "width:100%;height:10%">
+                                                <input type="button" value = "文档种类" style = "width:100%;height:10%">
+                                                <input type="button" value = "参考网页" style = "width:100%;height:10%">
+                                                <input type="button" value = "密码账号" style = "width:100%;height:10%">
+                                            </div>
+                                            <div class="modal-footer">
+                                                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> <button type="button" class="btn btn-primary">保存</button>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    
                                 </div>
-                                <div
-                                    style="display: inline-block;background-color:rgb(46, 194, 26); width: 33%; height: 45%;border: 3px solid rgb(32, 32, 32);">
-                                    时间：<input id="datetimepicker1" type="text" style="width: 85%;height:100% ; ">
-                                    <script>
-                                        $('#datetimepicker1').datetimepicker(
-                                            {
-                                                theme: 'dark',
-                                                format: 'Y-m-d H:i'
-                                            }
-                                        );
-                                    </script>
-
-                                </div>
-                                <div
-                                    style="display: inline-block;background-color:rgb(46, 194, 26); width: 33%; height: 45%;border: 3px solid rgb(32, 32, 32);">
-                                    <select class="form-control">
-                                        <option value="居中">签发人：高丽</option>
-                                        <option value="居左">签发人：翁之梅</option>
-
-                                    </select>
-
-                                </div>
+                               
+                               
+                                
+                                
+                               
+                                
 
                                 <!-- 文件头 -->
                             </div>
                             <!-- 文件主体 -->
                             <div
-                                style="background-color:rgb(15, 15, 15); width: 100%; height: 84%;border: 3px solid rgb(58, 128, 0);">
+                                style="background-color:rgb(15, 15, 15); width: 100%; height: 90%;border: 3px solid rgb(58, 128, 0);">
                                 <!-- 功能模块 -->
                                 <div
-                                    style="background-color:rgb(204, 37, 79); display:block;width: 100%; height: 65%;border: 3px solid rgb(58, 128, 0);">
+                                    style="background-color:rgb(204, 37, 79); display:block;width: 100%; height: 75%;border: 3px solid rgb(58, 128, 0);">
                                     <!-- 选项卡 -->
                                     <div class="tabbable" id="tabs-001"
                                         style="display:block;width: 100%; height: 100%;">
@@ -137,6 +184,10 @@
                                             <li>
                                                 <a href="#panel-003" data-toggle="tab">表格</a>
                                             </li>
+                                            <li>
+                                                <a href="#panel-008" data-toggle="tab">列表</a>
+                                            </li>
+
                                             <li>
                                                 <a href="#panel-004" data-toggle="tab">短期</a>
                                             </li>
@@ -1209,6 +1260,15 @@
                                                 </div>
 
                                             </div>
+                                             <div class="tab-pane" id="panel-008"
+                                                style="width:100%;height:100%;background-color:rgb(240, 140, 9)">
+                                                <p>这里是列表数据</p> 
+
+                                               
+
+                                                   
+
+                                            </div>
 
 
                                         </div>
@@ -1216,7 +1276,7 @@
                                 </div>
                                 <!-- 显示模块 -->
                                 <div id="context_show_list"
-                                    style="background-color:rgb(21, 38, 192); width: 100%; height: 35%;overflow:auto;border: 3px solid rgb(58, 128, 0);">
+                                    style="background-color:rgb(21, 38, 192); width: 100%; height: 25%;overflow:auto;border: 3px solid rgb(58, 128, 0);">
 
                                 </div>
                                 <!-- 这里是显示列表的控制代码 -->
@@ -1403,7 +1463,7 @@
                             </div>
                             <!-- 文件预览 -->
                             <div
-                                style="background-color:rgb(78, 9, 189); width: 100%; height: 6%;border: 3px solid rgb(58, 128, 0);">
+                                style="background-color:rgb(78, 9, 189); width: 100%; height: 5%;border: 3px solid rgb(58, 128, 0);">
                                 <input type="button" value="保存" style="width:10%;height:100%;float:right ">
                                 <input type="button" value="保存并预览" style="width:10%;height:100%;float:right ">
                                 <input type="button" value="保存版本" style="width:10%;height:100%;float:right ">
@@ -1506,11 +1566,13 @@
                                 </div>
                                 <div
                                     style=" display: inline-block;width:100%;height:45%;text-align:center;vertical-align: middle;align-items: center;">
-
+                                   <label style="float: left">自动站数据:</label> 
                                     <input id="datetimepicker_history1" type="text" placeholder="起始时间"
-                                        style="width: 35%;height:40%; text-align:center;vertical-align: middle;align-items: center; ">
+                                        style="width: 25%;height:40%; text-align:center;vertical-align: middle;align-items: center; ">
                                     <input id="datetimepicker_history2" type="text" placeholder="结束时间"
-                                        style="width: 35%;height:40%; text-align:center;vertical-align: middle;align-items: center; ">
+                                        style="width: 25%;height:40%; text-align:center;vertical-align: middle;align-items: center; ">
+                                    <input id="tool_submit3" onclick="tool_3()" type="button" value="查看"
+                                        style="width: 10%;height:40% ;float: right ;">
                                     <script>
                                         $('#datetimepicker_history1').datetimepicker(
                                             {
@@ -1530,6 +1592,7 @@
 
                                 </div>
                                 <div style="display: inline-block;width:100%;height:15%;">
+                                    <label>历史材料查询</label>
                                     <input id="tool_submit3" onclick="tool_3()" type="button" value="查看"
                                         style="width: 10%;height:100% ;float: right ;">
 
@@ -1614,6 +1677,12 @@
                             style="width:100%;height:100%;background-color:rgb(8, 116, 167)">
                             <p>
                                 配置及自定义模块
+                            </p>
+                        </div>
+                        <div class="tab-pane" id="panel-4"
+                            style="width:100%;height:100%;background-color:rgb(8, 116, 167)">
+                            <p>
+                                帮助
                             </p>
                         </div>
                     </div>
