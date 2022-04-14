@@ -1036,12 +1036,36 @@
                                                 </script>
 
                                             </div>
+                                            <!-- 表格模块的编写 -->
                                             <div class="tab-pane" id="panel-003"
                                                 style="width:100%;height:100%;background-color:rgb(240, 140, 9)">
-                                                <div style="width:100%;height:10%;border: 3px solid black;">
+                                                <div style="display: inline-flex;width:100%;height:10%;border: 3px solid black;">
+                                                    <div style="width:50%;height:100%;border: 3px solid black;">
+                                                        <div style="display: inline-block;width:70%;height:100%">
+                                                            <input id = "clom" type="text" placeholder="行" style = "width:100%;height:50%">
+                                                            <input id = "row" type="text" placeholder="列" style = "width:100%;height:50%">
+
+                                                        </div>
+                                                        <div style="display: inline-flex;width:28%;height:100%;">
+                                                            <!-- <div style="width:100%;height:2%;"></div> -->
+                                                            <input  id = "create" type="button" onclick="create_new()" value="创建" style = "display:block;width:100%;height:45%;">
+                                                        </div>
+                                                    </div>
+                                                    <div style="width:50%;height:100%;border: 3px solid black;">
+                                                        <div style="display: inline-block;width:70%;height:100%">
+                                                            <input type="text" placeholder="行" style = "width:100%;height:50%">
+                                                            <input type="text" placeholder="列" style = "width:100%;height:50%">
+
+                                                        </div>
+                                                        <div style="display: inline-flex;width:28%;height:100%;">
+                                                            <!-- <div style="width:100%;height:2%;"></div> -->
+                                                            <input id = "union" type="button" value="合并" style = "display:block;width:100%;height:45%;">
+                                                        </div>
+                                                    </div>
+
 
                                                 </div>
-                                                <div style="width:100%;height:70%;border: 3px solid black;">
+                                                <div id = "table_show" style="width:100%;height:70%;border: 3px solid black;">
                                                     <table border="2" cellspacing="5" cellpadding="0"
                                                         bordercolor="black" style="width: 100%;height:100% ;">
                                                         <tr>
@@ -1089,6 +1113,62 @@
                                                     </table>
 
                                                 </div>
+                                                <!-- 表格创建的核心代码 -->
+                                                <script>
+                                                    var create = document.getElementById("create")
+                                                    var union = document.getElementById("union")
+                                                    var table_new = document.createElement("table")
+                                                    function create_new() {
+
+                                                        var table_div = document.getElementById("table_show")
+                                                        var clom = document.getElementById("clom")
+                                                        var row = document.getElementById("row")
+                                                        var clom_num = parseInt(clom.value)
+                                                        var row_num = parseInt(row.value)
+
+                                                        // console.log("获取行列：- - ->>>>",clom_num ,row_num )
+                                                        // $('#table_show').html(" ");
+                                                        table_div.innerHTML = " "
+
+                                                        var table_main = document.createElement("table")
+                                                        table_main.id = "table_main"
+                                                        table_main.style.width = "100%"
+                                                        table_main.style.height = "100%"
+                                                        table_main.style.border = "2px solid black"
+                                                        for (var i = 0; i < clom_num; i++) {
+                                                            var tr_i = document.createElement("tr")
+                                                            tr_i.id = i + 1
+                                                            table_main.appendChild(tr_i)
+                                                            // console.log(i+1)
+                                                            for (var j = 0; j < row_num; j++) {
+                                                                // console.log(j+1)
+                                                                var td_j = document.createElement("td")
+                                                                var checkbox = document.createElement("input")
+                                                                checkbox.type = "checkbox"
+                                                                checkbox.name = "checkbox"
+                                                                checkbox.id = (i + 1).toString() + (j + 1).toString() + "checkbox"
+                                                                td_j.id = (i + 1).toString() + (j + 1).toString()
+                                                                td_j.innerText = (i + 1).toString() + (j + 1).toString()
+                                                                td_j.style.border = "2px solid black"
+                                                                td_j.colSpan = "1"
+                                                                td_j.rowSpan = "1"
+                                                                td_j.appendChild(checkbox)
+                                                                tr_i.appendChild(td_j)
+                                                            }
+
+
+
+
+                                                        }
+                                                        table_div.appendChild(table_main)
+
+                                                        table_new = table_main
+
+                                                    }
+
+                                                </script>
+
+
                                                 <div style="width:100%;height:10%;border: 3px solid black;">
                                                     <input type="button" value="删除" style="float:right"><input
                                                         type="button" value="添加" style="float:right">
@@ -1171,48 +1251,49 @@
                                                 <div class="list-group" style="width:100%;height:90%;">
                                                     <a href="#" class="list-group-item active"
                                                         style="width:100%;height:10%;">防御指南</a>
-                                                    <div id="list_show" class="list-group-item"
+                                                    <div id="list_defence" class="list-group-item"
                                                         style="width:100%;height:80%;;overflow:auto;">
-                                                        <textarea
-                                                            style="width: 100%; height: 20%; resize:none;">14日(周一):多云到阴,午后因有阵雨或雷雨          24~32度</textarea>
-                                                        <textarea
-                                                            style="width: 100%; height: 20%; resize:none;">14日(周一):多云到阴,午后因有阵雨或雷雨          24~32度</textarea>
-                                                        <textarea
-                                                            style="width: 100%; height: 20%; resize:none;">14日(周一):多云到阴,午后因有阵雨或雷雨          24~32度</textarea>
-                                                        <textarea
-                                                            style="width: 100%; height: 20%; resize:none;">14日(周一):多云到阴,午后因有阵雨或雷雨          24~32度</textarea>
-                                                        <textarea
-                                                            style="width: 100%; height: 20%; resize:none;">14日(周一):多云到阴,午后因有阵雨或雷雨          24~32度</textarea>
-                                                        <textarea
+                                                        <textarea id="textare_defence_1"
+                                                            style="width: 100%; height: 10%; resize:none;">14日(周一):多云到阴,午后因有阵雨或雷雨          24~32度</textarea>
+                                                        <textarea id="textare_defence_2"
+                                                            style="width: 100%; height: 10%; resize:none;">14日(周一):多云到阴,午后因有阵雨或雷雨          24~32度</textarea>
+                                                        <textarea id="textare_defence_3"
+                                                            style="width: 100%; height: 10%; resize:none;">14日(周一):多云到阴,午后因有阵雨或雷雨          24~32度</textarea>
+                                                        <textarea id="textare_defence_4"
+                                                            style="width: 100%; height: 10%; resize:none;">14日(周一):多云到阴,午后因有阵雨或雷雨          24~32度</textarea>
+                                                        <textarea id="textare_defence_5"
+                                                            style="width: 100%; height: 10%; resize:none;">14日(周一):多云到阴,午后因有阵雨或雷雨          24~32度</textarea>
+                                                        <textarea id="textare_defence_6"
                                                             style="width: 100%; height: 10%; resize:none;">14日(周一):多云到阴,午后因有阵雨或雷雨          24~32度</textarea>
 
                                                     </div>
                                                     <a class="list-group-item active" style="width:100%;height:10%;">
-                                                        <input id="list_text_del" type="button" value="删除"
-                                                            style="float:right"><input id="list_text_add" type="button"
-                                                            value="添加" style="float:right"></a>
+                                                        <input id="list_defence_text_add" type="button" value="添加"
+                                                            style="float:right">
+                                                        <input id="list_defence_text_del" type="button" value="删除"
+                                                            style="float:right"></a>
                                                 </div>
                                                 <script>
-                                                    var list_show = document.getElementById("list_show")
-                                                    var list_text_del = document.getElementById("list_text_del")
-                                                    var list_text_add = document.getElementById("list_text_add")
+                                                    
 
-                                                    list_text_del.onclick = function () {
-                                                        console.log("删除列表")
+                                                    list_defence_text_del.onclick = function () {
+                                                        // console.log("删除列表")
+                                                        
 
                                                     };
-                                                    list_text_add.onclick = function () {
-                                                        console.log("添加列表")
+                                                    list_defence_text_add.onclick = function () {
+                                                        // console.log("添加列表")
+                                                        
 
                                                     };
 
 
                                                 </script>
-                                                <div
+                                                <!-- <div
                                                     style="background-color:rgb(218, 88, 12); width: 100%; height: 20%;border: 3px solid rgb(192, 27, 27);">
                                                     <input type="button" value="删除" style="float:right"><input
                                                         type="button" value="添加" style="float:right">
-                                                </div>
+                                                </div> -->
                                             </div>
 
                                             <div class="tab-pane" id="panel-007"
@@ -1282,7 +1363,66 @@
                                             </div>
                                             <div class="tab-pane" id="panel-008"
                                                 style="width:100%;height:100%;background-color:rgb(240, 140, 9)">
-                                                <p>这里是列表数据</p>
+                                                <div class="list-group" style="width:100%;height:90%;">
+                                                    <a href="#" class="list-group-item active"
+                                                        style="width:100%;height:10%;">列表</a>
+                                                    <div id="list_show" class="list-group-item"
+                                                        style="width:100%;height:80%;;overflow:auto;">
+                                                        <textarea id="textare1"
+                                                            style="width: 100%; height: 10%; resize:none;">14日(周一):多云到阴,午后因有阵雨或雷雨          24~32度</textarea>
+                                                        <textarea id="textare2"
+                                                            style="width: 100%; height: 10%; resize:none;">14日(周一):多云到阴,午后因有阵雨或雷雨          24~32度</textarea>
+                                                        <textarea id="textare3"
+                                                            style="width: 100%; height: 10%; resize:none;">14日(周一):多云到阴,午后因有阵雨或雷雨          24~32度</textarea>
+                                                        <textarea id="textare4"
+                                                            style="width: 100%; height: 10%; resize:none;">14日(周一):多云到阴,午后因有阵雨或雷雨          24~32度</textarea>
+                                                        <textarea id="textare5"
+                                                            style="width: 100%; height: 10%; resize:none;">14日(周一):多云到阴,午后因有阵雨或雷雨          24~32度</textarea>
+                                                        <textarea id="textare6"
+                                                            style="width: 100%; height: 10%; resize:none;">14日(周一):多云到阴,午后因有阵雨或雷雨          24~32度</textarea>
+
+                                                    </div>
+                                                    <a class="list-group-item active" style="width:100%;height:10%;">
+                                                        <input id="list_text_add" type="button" value="添加"
+                                                            style="float:right">
+                                                        <input id="list_text_del" type="button" value="删除"
+                                                            style="float:right"></a>
+                                                </div>
+                                                <script>
+                                                    var list_show = document.getElementById("list_show")
+                                                    var list_text_del = document.getElementById("list_text_del")
+                                                    var list_text_add = document.getElementById("list_text_add")
+                                                    var text_are_id = 7
+
+                                                    list_text_del.onclick = function () {
+                                                        // console.log("删除列表")
+
+
+                                                        var textare_par = document.getElementById("list_show")
+
+                                                        if (text_are_id > 0) {
+                                                            textare_par.childNodes[textare_par.childNodes.length - 1].remove()
+                                                            text_are_id = text_are_id - 1
+                                                        }
+
+
+                                                    };
+                                                    list_text_add.onclick = function () {
+                                                        // console.log("添加列表")
+                                                        var textare = document.createElement("textarea")
+                                                        textare.id = "textare" + text_are_id.toString()
+                                                        textare.style.width = "100%"
+                                                        textare.style.height = "10%"
+                                                        textare.style.resize = "none"
+                                                        text_are_id = text_are_id + 1
+                                                        list_show.appendChild(textare)
+
+
+                                                    };
+
+
+                                                </script>
+                                                
 
 
 
@@ -1349,6 +1489,7 @@
                                             id_div = id_div - 1
                                         }
                                         list_div.pop();
+                                        list_data.pop();
                                         // console.log(list_div)
                                         data_add = {
                                             "type": "del"
@@ -1359,7 +1500,7 @@
 
                                     function show(data_add) {
                                         $('#context_show_list').html('')
-                                        for (var i = 0; i < list_div.length; i++) {
+                                        for (var i = 0; i < list_data.length; i++) {
                                             console.log("执行show函数")
                                             // 创建div
                                             var div_list_item = document.createElement("div")
@@ -1367,8 +1508,8 @@
                                             div_list_item.style.height = "15%"
                                             div_list_item.style.backgroundColor = "white"
                                             div_list_item.style.border = "3px solid black"
-                                            var type_add = data_add.type
-                                            var title_add = data_add.title_main
+                                            var type_add = list_data[i].type
+                                            var title_add = list_data[i].title_main
                                             var h_5 = document.createElement("h5")
                                             h_5.style.width = "80%"
                                             h_5.style.height = "100%"
@@ -1719,7 +1860,7 @@
                             </script>
 
                         </div>
-                        <!-- 利用canvas绘图的模块 -->
+                        <!-- 利用canvas绘图的模块 ---- 这里主要提供三种画图方式（散点、插值、等值线）-->
                         <div class="tab-pane" id="panel-3"
                             style="width:100%;height:100%;background-color:rgb(8, 116, 167)">
 
