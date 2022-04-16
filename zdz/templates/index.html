@@ -14,12 +14,21 @@
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="static/js/jquery.datetimepicker.css" />
     <script src="static/js/jquery.datetimepicker.full.min.js"></script>
+    <!-- echart -->
     <script type="text/javascript" src="static/js/echarts.min.js"></script>
     <script type="text/javascript" src="static/js/echarts-gl.min.js"></script>
     <script type="text/javascript" src="static/js/ecStat.min.js"></script>
     <script type="text/javascript" src="static/js/dataTool.min.js"></script>
     <script type="text/javascript" src="static/js/china.js"></script>
     <script type="text/javascript" src="static/js/world.js"></script>
+    <!-- 表格 -->
+    <link rel="stylesheet" href="https://unpkg.com/x-data-spreadsheet@1.1.9/dist/xspreadsheet.css">
+    <script src="https://unpkg.com/x-data-spreadsheet@1.1.9/dist/xspreadsheet.js"></script>
+    <script src="https://unpkg.com/x-data-spreadsheet@1.1.9/dist/locale/zh-cn.js"></script>
+
+
+
+
     <title>决策服务模板平台</title>
 
 </head>
@@ -155,7 +164,7 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal"
-                                                    aria-hidden="true">×</button>
+                                                    aria-hidden="true"></button>
                                                 <h4 class="modal-title" id="myModalLabel">
                                                     标题
                                                 </h4>
@@ -201,7 +210,7 @@
                                             <li>
                                                 <a href="#panel-002" data-toggle="tab">图片</a>
                                             </li>
-                                            <li>
+                                            <li >
                                                 <a href="#panel-003" data-toggle="tab">表格</a>
                                             </li>
                                             <li>
@@ -1037,136 +1046,92 @@
 
                                             </div>
                                             <!-- 表格模块的编写 -->
-                                            <div class="tab-pane" id="panel-003"
+                                            <div class="tab-pane " id="panel-003"
                                                 style="width:100%;height:100%;background-color:rgb(240, 140, 9)">
-                                                <div style="display: inline-flex;width:100%;height:10%;border: 3px solid black;">
-                                                    <div style="width:50%;height:100%;border: 3px solid black;">
-                                                        <div style="display: inline-block;width:70%;height:100%">
-                                                            <input id = "clom" type="text" placeholder="行" style = "width:100%;height:50%">
-                                                            <input id = "row" type="text" placeholder="列" style = "width:100%;height:50%">
-
-                                                        </div>
-                                                        <div style="display: inline-flex;width:28%;height:100%;">
-                                                            <!-- <div style="width:100%;height:2%;"></div> -->
-                                                            <input  id = "create" type="button" onclick="create_new()" value="创建" style = "display:block;width:100%;height:45%;">
-                                                        </div>
-                                                    </div>
-                                                    <div style="width:50%;height:100%;border: 3px solid black;">
-                                                        <div style="display: inline-block;width:70%;height:100%">
-                                                            <input type="text" placeholder="行" style = "width:100%;height:50%">
-                                                            <input type="text" placeholder="列" style = "width:100%;height:50%">
-
-                                                        </div>
-                                                        <div style="display: inline-flex;width:28%;height:100%;">
-                                                            <!-- <div style="width:100%;height:2%;"></div> -->
-                                                            <input id = "union" type="button" value="合并" style = "display:block;width:100%;height:45%;">
-                                                        </div>
-                                                    </div>
+                                                <div style="display: inline-flex;width:100%;height:10%;">
+                                                    <input type="button" value="添加行" style="width:10%;height: 80%;">
+                                                    <input type="button" value="删除行" style="width:10%;height: 80%;">
+                                                    <input type="button" value="添加列" style="width:10%;height: 80%;">
+                                                    <input type="button" value="删除列" style="width:10%;height: 80%;">
+                                                    <div style="width:10%;height: 80%;"></div>
+                                                    <div style="width:10%;height: 80%;"></div>
+                                                    <div style="width:10%;height: 80%;"></div>
+                                                    <div style="width:8%;height: 80%;"></div>
 
 
+                                                    <input type="button" value="合并单元" style="width:10%;height: 80%;">
+                                                    <input type="button" value="取消合并" style="width:10%;height: 80%; ">
                                                 </div>
+                                                
+
                                                 <div id = "table_show" style="width:100%;height:70%;border: 3px solid black;">
-                                                    <table border="2" cellspacing="5" cellpadding="0"
-                                                        bordercolor="black" style="width: 100%;height:100% ;">
-                                                        <tr>
-                                                            <td colspan="1" rowspan="1" style="width:15% ;"> </td>
-                                                            <td colspan="1" rowspan="1">温度</td>
-                                                            <td colspan="1" rowspan="1">湿度</td>
-                                                            <td colspan="1" rowspan="1">风向</td>
-                                                            <td colspan="1" rowspan="1">风速</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="1" rowspan="4">3月29日</td>
-                                                            <td colspan="1" rowspan="1">18度</td>
-                                                            <td colspan="1" rowspan="1">75%</td>
-                                                            <td colspan="1" rowspan="1">NE</td>
-                                                            <td colspan="1" rowspan="1">25m/s</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <!-- <td colspan="1" rowspan="1"> </td> -->
-                                                            <td colspan="1" rowspan="1">18度</td>
-                                                            <td colspan="1" rowspan="1">75%</td>
-                                                            <td colspan="1" rowspan="1">NE</td>
-                                                            <td colspan="1" rowspan="1">25m/s</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <!-- <td colspan="1" rowspan="1"> </td> -->
-                                                            <td colspan="1" rowspan="1">18度</td>
-                                                            <td colspan="1" rowspan="1">75%</td>
-                                                            <td colspan="1" rowspan="1">NE</td>
-                                                            <td colspan="1" rowspan="1">25m/s</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <!-- <td colspan="1" rowspan="1"> </td> -->
-                                                            <td colspan="1" rowspan="1">18度</td>
-                                                            <td colspan="1" rowspan="1">75%</td>
-                                                            <td colspan="1" rowspan="1">NE</td>
-                                                            <td colspan="1" rowspan="1">25m/s</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="1" rowspan="1"> </td>
-                                                            <td colspan="1" rowspan="1">18度</td>
-                                                            <td colspan="1" rowspan="1">75%</td>
-                                                            <td colspan="1" rowspan="1">NE</td>
-                                                            <td colspan="1" rowspan="1">25m/s</td>
-                                                        </tr>
-                                                    </table>
+                                                   
 
                                                 </div>
                                                 <!-- 表格创建的核心代码 -->
                                                 <script>
-                                                    var create = document.getElementById("create")
-                                                    var union = document.getElementById("union")
-                                                    var table_new = document.createElement("table")
-                                                    function create_new() {
-
-                                                        var table_div = document.getElementById("table_show")
-                                                        var clom = document.getElementById("clom")
-                                                        var row = document.getElementById("row")
-                                                        var clom_num = parseInt(clom.value)
-                                                        var row_num = parseInt(row.value)
-
-                                                        // console.log("获取行列：- - ->>>>",clom_num ,row_num )
-                                                        // $('#table_show').html(" ");
-                                                        table_div.innerHTML = " "
-
-                                                        var table_main = document.createElement("table")
-                                                        table_main.id = "table_main"
-                                                        table_main.style.width = "100%"
-                                                        table_main.style.height = "100%"
-                                                        table_main.style.border = "2px solid black"
-                                                        for (var i = 0; i < clom_num; i++) {
-                                                            var tr_i = document.createElement("tr")
-                                                            tr_i.id = i + 1
-                                                            table_main.appendChild(tr_i)
-                                                            // console.log(i+1)
-                                                            for (var j = 0; j < row_num; j++) {
-                                                                // console.log(j+1)
-                                                                var td_j = document.createElement("td")
-                                                                var checkbox = document.createElement("input")
-                                                                checkbox.type = "checkbox"
-                                                                checkbox.name = "checkbox"
-                                                                checkbox.id = (i + 1).toString() + (j + 1).toString() + "checkbox"
-                                                                td_j.id = (i + 1).toString() + (j + 1).toString()
-                                                                td_j.innerText = (i + 1).toString() + (j + 1).toString()
-                                                                td_j.style.border = "2px solid black"
-                                                                td_j.colSpan = "1"
-                                                                td_j.rowSpan = "1"
-                                                                td_j.appendChild(checkbox)
-                                                                tr_i.appendChild(td_j)
-                                                            }
-
-
-
-
-                                                        }
-                                                        table_div.appendChild(table_main)
-
-                                                        table_new = table_main
-
-                                                    }
-
+        
+                                                    x_spreadsheet.locale('zh-cn');  //中文
+                                                    var htmlout = document.getElementById('table_show')
+                                                    var text_main_wh = document.getElementById('text_main')
+                                                    console.log("宽度",htmlout.clientWidth,htmlout.clientHeight,text_main_wh.offsetHeight,text_main_wh.offsetWidth)
+                                                    var htmlouth = text_main_wh.offsetHeight*1.2
+                                                    var htmloutw = text_main_wh.offsetWidth
+                                            
+                                                    option_sheet = option  = {
+                                                    mode: 'edit', // edit | read
+                                                    showToolbar: true, // 顶部工具栏
+                                                    showGrid: true,
+                                                    showContextmenu: true, // 切换右键菜单显示状态
+                                                    showBottomBar: false,  // 底部工具栏
+                                                    view: {
+                                                      height: () => htmlouth,
+                                                      width: () =>htmloutw,
+                                                    //   height: () => 390,
+                                                    //   width: () =>650,
+                                                    },
+                                                    row: {
+                                                      len: 15,
+                                                      height: 25,
+                                                    },
+                                                    col: {
+                                                      len: 10,
+                                                      width: 100,
+                                                      indexWidth: 60,
+                                                      minWidth: 60,
+                                                    },
+                                                    style: {
+                                                      bgcolor: 'white',
+                                                      align: 'left',
+                                                      valign: 'middle',
+                                                      textwrap: false,
+                                                      strike: false,
+                                                      underline: false,
+                                                      color: '#0a0a0a',
+                                                      font: {
+                                                        name: 'Helvetica',
+                                                        size: 10,
+                                                        bold: false,
+                                                        italic: false,
+                                                      },
+                                                    },
+                                                  }
+                                                    data = [{"name":"Sheet1","freeze":"A1","styles":[],"merges":[],
+                                                    "rows":{
+                                                        "0":{"cells":{"0":{"text":"id"},"1":{"text":"name"}}},
+                                                        "1":{"cells":{"0":{"text":"1"},"1":{"text":"Tom"}}},
+                                                        "2":{"cells":{"0":{"text":"2"},"1":{"text":"Hall"}}},
+                                                        "3":{"cells":{"0":{"text":"3"},"1":{"text":"Sure"}}},
+                                                        "len":5},
+                                                        "cols":{"len":6},
+                                                        "validations":[],
+                                                        "autofilter":{}}]
+                                                    // var xs = x_spreadsheet(htmlout,option_sheet).loadData(data)
+                                                    var xs = x_spreadsheet(htmlout,option_sheet)
+                                                    // console.log("表格返回的数据为：\n", xs.getData())  // getData得到一个object对象，要把它转为json用JSON.stringify()
+                                                    // console.log("json字符串格式为：\n", JSON.stringify(xs.getData()))
                                                 </script>
+                                                
 
 
                                                 <div style="width:100%;height:10%;border: 3px solid black;">
