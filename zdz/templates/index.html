@@ -307,8 +307,11 @@
                                                         style="width:10%;height:100%;float:right ">
                                                     <input id="change_text" type="button" value="修改"
                                                         style="width:10%;height:100%;float:right">
+                                                     
+                                                     
 
                                                 </div>
+                                                
 
 
                                             </div>
@@ -1420,6 +1423,11 @@
                                     var add_Btn_text = document.getElementById('add_text');
                                     var del_Btn_text = document.getElementById('del_text');
                                     var change_Btn_text = document.getElementById('change_text');
+                                    
+
+
+
+
                                     // 文档添加功能                     
                                     add_Btn_text.onclick = function () {
                                         if (id_div >= 0) {
@@ -1465,139 +1473,162 @@
                                         $("#title_main").val(" ")
                                         $("#title_sub").val(" ")                                        
                                     };
-                                    // 这里是删除list_data的核心内容
-                                    // del_Btn_text.onclick = function () {
-                                    //     if (id_div > 0) {
-                                    //         id_div = id_div - 1
-                                    //     }
-                                    //     list_div.pop();
-                                    //     list_data.pop();
-                                    //     // console.log(list_div)
-                                    //     data_add = {
-                                    //         "type": "del"
-                                    //     }
-
-                                    //     show()
-                                    // };
+                                   
+                                    // 段落修改
                                     change_Btn_text.onclick = function () {
-                                       
-                                    };
+                                        var change_id = parseInt($('#change_text').val()[3])                                 
+                                        console.log("修改按钮内容",change_id )
+                                        if (list_data[change_id].type == "段落"){
+                                            list_data[change_id].content  = $('#text_main').val()
+                                        }                                        
+                                  };
 
                                     function show() {
                                         $('#context_show_list').html('')
                                         for (var i = 0; i < list_data.length; i++) {
-                                            console.log("执行show函数")
-                                            // 创建div
+                                            // console.log("执行show函数")
+                                            // 创建list 清单--->div
                                             var div_list_item = document.createElement("div")
+                                            div_list_item.id = "div_show" + i.toString()
                                             div_list_item.style.width = "100%"
                                             div_list_item.style.height = "15%"
                                             div_list_item.style.backgroundColor = "white"
                                             div_list_item.style.border = "3px solid black"
-                                            var type_add = list_data[i].type
-                                            var title_add = list_data[i].title_main
-                                            var h_5 = document.createElement("h5")
-                                            h_5.style.width = "80%"
-                                            h_5.style.height = "100%"
-                                            h_5.innerText = type_add + " : " +"内容:   " + title_add+ "ID:    " + list_data[i].id
-                                            h_5.style.display = "inline-block"
-                                            // var button_add_br = document.createElement("button")
-                                            var button_add_br = document.createElement("a")
-                                            button_add_br.style.width = "10%"
-                                            button_add_br.style.height = "100%"
+                                            div_list_item.style.display = "inline-flex"
 
-                                            button_add_br.style.display = "inline-block"
-                                            button_add_br.innerText = "空格符"
+                                            if (list_data[i].type != "add_br") {
+                                                
+                                                var type_add = list_data[i].type
+                                                var title_add = list_data[i].title_main
+                                                // info
+                                                var h_5 = document.createElement("h5")
+                                                h_5.style.width = "65%"
+                                                h_5.style.height = "100%"
+                                                h_5.innerText = type_add + " : " + "内容:   " + title_add + "ID:    " + i
+                                                h_5.style.display = "inline-block"
 
-                                            // 添加遮罩栏
-                                            var a_button = document.createElement("a")
-                                            a_button.id = "modal-" + i.toString()
-                                            a_button.href = "#modal-container-" + i.toString()
-                                            a_button.text = "添加"
-                                            a_button.setAttribute("data-toggle", "modal")
-                                            a_button.setAttribute("role", "button")
-                                            a_button.setAttribute("class", "btn")
+                                                // 占位符
+                                                var button_add_br = document.createElement("input")
+                                                button_add_br.style.width = "10%"
+                                                button_add_br.style.height = "100%"
+                                                button_add_br.style.float = "right"
+                                                button_add_br.type = "button"
+                                                button_add_br.value = "添加空行"
+                                                button_add_br.id = "br_show" + i.toString()
+                                                
+                                                // console.log("空行id+",i,i)
+                                                button_add_br.addEventListener("click", function (i){
+                                                    var list_div_show_id = i.path[0].id[7]
+                                                    console.log("空行id",i,list_div_show_id )
+                                                    var data_add_br = {
+                                                        'type':'add_br'
+                                                        
+                                                    }
+                                                    list_data.splice(parseInt(list_div_show_id)+1,0,data_add_br)
+                                                    
+                                                    show()
 
+
+                                                })
+
+
+                                            // 修改按钮
+                                                var button_add_change = document.createElement("input")
+                                                button_add_change.style.width = "10%"
+                                                button_add_change.style.height = "100%"
+                                                button_add_change.style.float = "right"
+                                                button_add_change.type = "button"
+                                                button_add_change.value = "修改"
+                                                button_add_change.id = "change_show" + i.toString()
+                                                button_add_change.addEventListener("click", function (i) {
+                                                    // console.log("开始修改数据",i)
+                                                    list_div_show_id = i.path[1].id[8]
+                                                    if (list_data[parseInt(list_div_show_id)].type=='段落'){
+                                                        // list_data[parseInt(list_div_show_id)].content
+                                                        $("#text_main").val(list_data[parseInt(list_div_show_id)].content)
+                                                        $("#change_text").val("修改:"+list_div_show_id)
+
+                                                    }
+                                                })
+
+
+                                                // 删除按钮
+                                                var button_add_del = document.createElement("input")
+                                                button_add_del.style.width = "10%"
+                                                button_add_del.style.height = "100%"
+                                                button_add_del.style.float = "right"
+                                                button_add_del.type = "button"
+                                                button_add_del.value = "删除"
+                                                button_add_del.id = "del_show" + i.toString()
+                                                
+                                                button_add_del.addEventListener("click", function (i) {
+                                                    // 获取id
+                                                    var list_div_show_id = i.path[0].id.toString()[8]
+                                                    // 删除
+                                                    list_data.splice(parseInt(list_div_show_id), 1)
+                                                    // console.log("匿名函数",list_div_show_id)                                                                                        
+                                                    $('#' + 'div_show' + list_div_show_id).remove()
+                                                    show()
+                                                })
+
+
+
+                                                div_list_item.appendChild(h_5)
+                                                div_list_item.appendChild(button_add_br)
+                                                div_list_item.appendChild(button_add_change)
+                                                div_list_item.appendChild(button_add_del)
+
+                                            }
+                                            else {
+                                                div_list_item.style.backgroundColor = "red"
+                                                var h_5_br = document.createElement("h5")
+                                                h_5_br.style.width = "65%"
+                                                h_5_br.style.height = "100%"
+                                                h_5_br.innerText = "占位符:"+"    "+"内容:"+ i
+                                                h_5_br.style.display = "inline-block"
+                                                
+
+                                                // // 添加
+                                                // var button_add_br_else = document.createElement("input")
+                                                // button_add_br_else.style.width = "15%"
+                                                // button_add_br_else.style.height = "100%"
+                                                // button_add_br_else.style.float = "right"
+                                                // button_add_br_else.type = "button"
+                                                // button_add_br_else.value = "添加"
+                                                // button_add_br_else.id = "br_show_else_add" + i.toString()
+
+                                                // 删除
+                                                var button_del_br_else = document.createElement("input")
+                                                button_del_br_else.style.width = "30%"
+                                                button_del_br_else.style.height = "100%"
+                                                button_del_br_else.style.float = "right"
+                                                button_del_br_else.type = "button"
+                                                button_del_br_else.value = "删除"
+                                                button_del_br_else.id = "br_show_else_del" + i.toString()
+                                                
+                                                button_del_br_else.addEventListener("click", function (i){
+                                                    // 获取id
+                                                    var list_div_show_id_br = i.path[0].id[16]
+                                                    // 删除                                                    
+                                                    // console.log("换行函数中的删除函数",i.path[0].id[16],list_div_show_id_br)   
+                                                    list_data.splice(parseInt(list_div_show_id_br), 1)                                                                                     
+                                                    $('#' + 'div_show' + list_div_show_id_br).remove()
+                                                    show()
+                                                })
+
+
+                                                div_list_item.appendChild(h_5_br)
+                                                // div_list_item.appendChild(button_add_br_else)
+                                                div_list_item.appendChild(button_del_br_else)
+                                                
+
+
+
+                                            }
 
                                             
-                                            var div_modal = document.createElement("div")
-                                            div_modal.setAttribute("class", "modal fade")
-                                            div_modal.setAttribute("role", "dialog")
-                                            div_modal.id = "modal-container-" + i.toString()
-                                            div_modal.setAttribute("role", "dialog")
-                                            div_modal.setAttribute("aria-labelledby", "myModalLabel")
-                                            div_modal.setAttribute("aria-hidden", "true")
-
-
-
-                                            var div_dialog = document.createElement("div")
-                                            div_dialog.setAttribute("class", "modal-dialog")
-                                            div_modal.appendChild(div_dialog)
-
-                                            var div_content = document.createElement("div")
-                                            div_content.setAttribute("class", "modal-content")
-                                            div_dialog.appendChild(div_content)
-
-                                            var div_head = document.createElement("div")
-                                            div_head.setAttribute("class", "modal-header")
-
-                                            var button_head = document.createElement("button")
-                                            button_head.setAttribute("data-dismiss", "modal")
-                                            button_head.setAttribute("aria-hidden", "true")
-                                            button_head.setAttribute("class", "close")
-                                            button_head.setAttribute("type", "button")
-
-                                            var title_h4 = document.createElement("h4")
-                                            title_h4.setAttribute("class", "modal-title")
-                                            // title_h4.setAttribute("id","myModalLabel")
-                                            title_h4.innerText = "标题"
-                                            div_head.appendChild(button_head)
-                                            div_head.appendChild(title_h4)
-
-                                            // body
-                                            var div_body = document.createElement("div")
-                                            div_body.setAttribute("class", "modal-body")
-                                            // div_body.class = "modal-body"
-                                            // div_body.value = "内容"
-                                            div_body.innerText = "内容" + "我是内容" + i.toString()
-
-                                            // foot
-                                            var div_foot = document.createElement("div")
-                                            div_foot.setAttribute("class", "modal-footer")
-                                            // div_foot.calss = "modal-footer"
-
-                                            var button_foot_close = document.createElement("button")
-                                            button_foot_close.setAttribute("type", "button")
-                                            button_foot_close.setAttribute("class", "btn btn-default")
-                                            button_foot_close.setAttribute("data-dismiss", "modal")
-                                            // button_foot_close.value = "关闭"
-                                            button_foot_close.innerText = "关闭"
-
-                                            var button_foot_save = document.createElement("button")
-                                            button_foot_save.setAttribute("type", "button")
-                                            button_foot_save.setAttribute("class", "btn btn-primary")
-                                            button_foot_save.innerText = "保存"
-                                            // button_foot_save.type = "button"
-                                            // button_foot_save.class = "btn btn-primary"
-
-                                            div_foot.appendChild(button_foot_close)
-                                            div_foot.appendChild(button_foot_save)
-
-
-
-                                            div_content.appendChild(div_head)
-                                            div_content.appendChild(div_body)
-                                            div_content.appendChild(div_foot)
-
-
-                                            // 遮罩栏目加载结束
-
-
-                                            div_list_item.appendChild(h_5)
-                                            div_list_item.appendChild(button_add_br)
-                                            div_list_item.appendChild(a_button)
-                                            div_list_item.appendChild(div_modal)
-
-
+                                            
+                                            
                                             $('#context_show_list').append(div_list_item)
 
 
