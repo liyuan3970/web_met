@@ -303,8 +303,10 @@
                                                     style="display: inline-block;background-color:rgb(183, 231, 9); width: 100%; height: 10%;border: 3px solid rgb(32, 32, 32);">
                                                     <input type="button" id="add_text" value="添加"
                                                         style="width:10%;height:100%;float:right ">
-                                                    <input type="button" id="del_text" value="删除"
+                                                    <input type="button" id="del_text" value="清屏"
                                                         style="width:10%;height:100%;float:right ">
+                                                    <input id="change_text" type="button" value="修改"
+                                                        style="width:10%;height:100%;float:right">
 
                                                 </div>
 
@@ -1348,10 +1350,13 @@
 
                                                     </div>
                                                     <a class="list-group-item active" style="width:100%;height:10%;">
-                                                        <input id="list_text_add" type="button" value="添加"
+                                                            <input id="list_text_add" type="button" value="添加"
                                                             style="float:right">
-                                                        <input id="list_text_del" type="button" value="删除"
-                                                            style="float:right"></a>
+                                                            <input id="list_text_del" type="button" value="删除"
+                                                            style="float:right">
+                                                            <input id="list_text_change" type="button" value="修改"
+                                                            style="float:right">
+                                                        </a>
                                                 </div>
                                                 <script>
                                                     var list_show = document.getElementById("list_show")
@@ -1414,6 +1419,7 @@
                                     // 文档功能的添加删除功能
                                     var add_Btn_text = document.getElementById('add_text');
                                     var del_Btn_text = document.getElementById('del_text');
+                                    var change_Btn_text = document.getElementById('change_text');
                                     // 文档添加功能                     
                                     add_Btn_text.onclick = function () {
                                         if (id_div >= 0) {
@@ -1435,7 +1441,7 @@
                                         var font_thins_sub = document.getElementById('wordthinks_sub').value;
 
                                         var data_add = {
-                                            "type": "text",
+                                            "type": "段落",
                                             "id": id_div,
                                             "title_main": title_main,
                                             "title_sub": title_sub,
@@ -1446,24 +1452,38 @@
                                         }
                                         list_div.push(html)
                                         list_data.push(data_add)
-                                        show(data_add)
+                                        show()
 
                                     };
-                                    del_Btn_text.onclick = function () {
-                                        if (id_div > 0) {
-                                            id_div = id_div - 1
-                                        }
-                                        list_div.pop();
-                                        list_data.pop();
-                                        // console.log(list_div)
-                                        data_add = {
-                                            "type": "del"
-                                        }
+                                    // 清屏功能
+                                    del_Btn_text.onclick = function () {                                        
+                                        var text_main = document.getElementById('text_main').value;
+                                        var title_main = document.getElementById('title_main').value;                                
+                                        var title_sub = document.getElementById('title_sub').value;
+                                        // console.log("文本主要内容",text_main,title_main,title_main)
+                                        $("#text_main").val(" ")
+                                        $("#title_main").val(" ")
+                                        $("#title_sub").val(" ")                                        
+                                    };
+                                    // 这里是删除list_data的核心内容
+                                    // del_Btn_text.onclick = function () {
+                                    //     if (id_div > 0) {
+                                    //         id_div = id_div - 1
+                                    //     }
+                                    //     list_div.pop();
+                                    //     list_data.pop();
+                                    //     // console.log(list_div)
+                                    //     data_add = {
+                                    //         "type": "del"
+                                    //     }
 
-                                        show(data_add)
+                                    //     show()
+                                    // };
+                                    change_Btn_text.onclick = function () {
+                                       
                                     };
 
-                                    function show(data_add) {
+                                    function show() {
                                         $('#context_show_list').html('')
                                         for (var i = 0; i < list_data.length; i++) {
                                             console.log("执行show函数")
@@ -1478,7 +1498,7 @@
                                             var h_5 = document.createElement("h5")
                                             h_5.style.width = "80%"
                                             h_5.style.height = "100%"
-                                            h_5.innerText = type_add + " : " + title_add
+                                            h_5.innerText = type_add + " : " +"内容:   " + title_add+ "ID:    " + list_data[i].id
                                             h_5.style.display = "inline-block"
                                             // var button_add_br = document.createElement("button")
                                             var button_add_br = document.createElement("a")
@@ -1496,6 +1516,9 @@
                                             a_button.setAttribute("data-toggle", "modal")
                                             a_button.setAttribute("role", "button")
                                             a_button.setAttribute("class", "btn")
+
+
+                                            
                                             var div_modal = document.createElement("div")
                                             div_modal.setAttribute("class", "modal fade")
                                             div_modal.setAttribute("role", "dialog")
