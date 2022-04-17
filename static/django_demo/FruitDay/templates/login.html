@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>Document</title>
+  <link rel="stylesheet" href="/static/css/login.css" type="text/css">
+   {% block style %}
+   {% endblock %}
+ </head>
+ <body>
+	<div id="container">
+		<!--1. 顶部标题-->
+		<h2>
+      {% block h2 %}
+      会员登录
+      {% endblock %}
+    </h2>
+		<!--2. 主体内容-->
+		<div id="main">
+			<!--2.1 左列-->
+			<div class="left">
+				<img src="/static/images/huiyuan.jpg">
+        {% block anchor %}
+				<a href="/register">会员注册</a>
+        {% endblock %}
+			</div>
+			<!--2.2 右列-->
+			<div class="right">
+        {% block form %}
+				<form action="/login/" method="post">
+          {% csrf_token %}
+					<!--表单中的行-->
+					<!-- <div class="form-line">
+						<p>手机号</p>
+						<input type="text" name="uphone" placeholder="" maxlength="" class="uinput">
+					</div>
+					<div class="form-line">
+						<p>密码</p>
+						<input type="password" name="upwd" placeholder="请输入6-20位字符" class="uinput">
+					
+					</div> -->
+          {% for field in form %}
+            <div class="form-line">
+              <p>{{ field.label }}</p>
+              {{ field }}
+            </div>
+          {% endfor %}
+					<div class="form-line">
+						<p></p>
+						<div>
+							<input type="checkbox" name="isSave" id="isSave">记住密码
+							<p>
+								<a href="">忘记密码</a>
+								<a href="">快捷登录</a>
+							</p>
+						</div>
+					</div>
+					<div class="form-line">
+						<p></p>
+						<div>
+							<input type="submit" value="登录" class="btn">
+							<a href="/register" class="btn registBtn">会员注册</a>
+						</div>
+					
+					</div>
+				</form>
+        {% endblock %}
+			</div>
+		
+		</div>
+	
+	</div>
+ </body>
+</html>

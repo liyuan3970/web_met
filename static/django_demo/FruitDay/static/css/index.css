@@ -1,0 +1,209 @@
+/*清除浏览器默认样式*/
+body,h1,h2,h3,h4,h5,h6,p,ul,ol{
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+/* 统一设置页面基础样式 */
+body{
+	font:12px "微软雅黑","黑体";
+	color:#9a9a9a;
+}
+a{
+	text-decoration:none;
+	color:#9a9a9a;
+}
+a:hover{
+	color:#64a131;
+}
+/* 页面固定宽度和整体居中 */
+#container{
+	width:990px;
+	margin:0 auto;
+}
+/* 1. 导航 */
+#nav{
+	height:30px;
+	background:#eee;
+	line-height:30px;
+}
+/* 1.1 左侧导航 */
+#nav .leftNav{
+	float:left;
+}
+#nav .leftNav>ul>li{
+	float:left;
+	padding-left:10px;
+}
+/* 三角标 */
+#nav .leftNav i{
+	/*转换为行内块*/
+	display:inline-block;
+	width:0;
+	height:0;
+	border:6px solid transparent;
+	border-top:6px solid #000;
+	/*调整位置*/
+	position:relative;
+	top:4px;
+}
+/*下拉菜单*/
+#nav .leftNav .address{
+	position:relative;
+}
+#nav .leftNav .address>ol{
+	display:none;
+	background:pink;
+}
+#nav .leftNav .address:hover>ol{
+	display:block;
+	/*绝对定位,脱流不占位*/
+	position:absolute;
+	z-index:10;
+}
+#nav .leftNav .address>ol>li:hover{
+	background:gray;
+	font-weight:bold;
+	cursor:default;
+}
+/*右侧导航*/
+#nav .rightNav{
+	float:right;
+}
+#nav .rightNav li{
+	float:left;
+	padding:0 5px;
+}
+/*
+导航项之间的分割符 | 
+实现一 : 使用边框,需要调整元素高度,
+不能使用line-height调整文本的垂直居中
+(行高不会调整元素位置,元素仍然居上显示),只能依靠margin-top
+调整元素的位置
+实现二 : 通过文本标签设置边框
+*/
+#nav .rightNav b{
+	border-left:1px solid gray;
+	margin-right:10px;
+}
+
+/* 2. 轮播图*/
+#banner{
+	margin:15px 0;
+	height:207px;
+	position:relative;
+}
+#banner img{
+	width:990px;
+	height:207px;
+}
+/*除第一张图片外,其他图片都隐藏*/
+#banner img:not(:first-child){
+	display:none;
+}
+/*图片索引*/
+#banner .imgNav{
+	position:absolute;
+	bottom:20px;
+	right:50px;
+}
+#banner li{
+	float:left;
+	width:20px;
+	height:20px;
+	margin:0 5px;
+	border-radius:50%;
+	text-align:center;
+	line-height:20px;
+	color:white;
+	background:gray;
+}
+/*第一张图片默认显示,下标对应背景色显示为红色*/
+#banner li:first-child{
+	background:red;
+}
+/* 3. 推荐 */
+#commend{
+	height:112px;
+	/*解决换行导致的水平空隙*/
+	font-size:0;
+}
+#commend img{
+	width:240px;
+	height:112px;
+	margin-right:10px;
+}
+#commend img:last-child{
+	margin:0;
+}
+/* 4. 主体 */
+#main{
+	margin:15px 0;
+}
+#main .goodsType{
+
+}
+/*顶部标题*/
+#main .goodsType>p{
+	height:42px;
+	line-height:42px;
+	border-top:1px solid #ccc;
+	padding-top:15px;
+	padding-bottom:10px;
+}
+#main .goodsType>p>a{
+	float:right;
+	color:#000;
+}
+
+/*商品展示*/
+#main ul{
+	/*解决子元素全部浮动导致父元素高度为0*/
+	overflow:hidden;
+}
+#main ul li{
+	float:left;
+	width:190px;
+	margin-right:10px;
+	padding-bottom:10px;
+}
+/*每行第五个li元素设置取消外边距*/
+#main ul .no-margin{ 
+	margin:0;
+}
+#main li>div{
+	width:190px;
+	height:190px;
+	/*图片放大之后,溢出部分不可见*/
+	overflow:hidden;
+}
+#main .item{
+	/*商品大图*/
+	width:190px;
+	height:190px;
+	transition:.3s;
+}
+#main .item:hover{
+	transform:scale(1.2);
+}
+#main .cart{
+	/*购物车图片*/
+	float:right;
+	margin-top:5px;
+}
+/*文本边距*/
+#main ul p{
+	margin:5px 2px;
+}
+#main ul span{
+	margin-left:8px;
+}
+
+
+
+
+
+
+
+
+

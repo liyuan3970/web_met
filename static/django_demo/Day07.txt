@@ -1,0 +1,140 @@
+1.forms模块
+	1.小部件
+		1.继承自 forms.Form
+			属性 = forms.CharField(
+				label = '',
+				widget = forms.小部件类型(
+					attrs={
+						'html属性名':'值',
+						'html属性名':'值',
+					}
+				)
+			)
+		2.继承自 forms.ModelForm
+			class LoginForm(forms.ModelForm):
+				class Meta:
+					# 1.指定要关联的实体类
+					model = Users
+					# 2.从实体类中取出要生成控件的属性
+					fields = ['uname','upwd']
+					# 3.指定每个控件的label标签
+					labels = {
+						'uname':'用户名称',
+						'upwd':'用户密码'
+					}
+					# 4.指定小部件
+					widgets = {
+						'uname':forms.TextInput(
+							attrs={
+								'placeholder':'请输入用户名'
+							}
+						),
+						'upwd':forms.PasswordInput(
+							attrs={
+								'placeholder':'请输入密码'
+							}
+						)
+					}
+2.cookie 和 session
+	1.cookie
+		1.什么是cookie
+			保存在客户端浏览器上的文本数据
+		2.在 Django 中实现cookie
+			1.设置cookie
+				使用 响应对象 将cookie保存进客户端
+				1.HttpResponse("")
+					resp = HttpResponse("响应一句话")
+				2.render()
+					resp = render(request,'xxx.html')
+				3.redirect()
+					resp = redirect('/xxx')
+
+				响应对象.set_cookie(key,value,max_age)
+					key : cookie的名称
+					value : cookie的值
+					max_age : 最大存活时间
+						取值为正数，则正常计算过期时间
+						取值为0，删除cookie
+						取值为负数，只在当前会话期有效
+			2.获取cookie
+				request.COOKIES
+				以字典的方式返回了当前站点下所有的cookie
+			3.删除cookie
+				响应对象.delete_cookie('key')
+	2.session
+		1.什么是session
+			保存在服务器中的文本数据
+		2.session 在Django中的实现
+			1.保存session
+				request.session['key'] = value
+			2.获取session
+				value = request.session['key']
+			3.删除session
+				del request.session['key']
+		3.在 settings.py 中有关session的设置
+			1.SESSION_COOKIE_AGE
+				作用：指定sessionid在cookie中的保存时长
+					SESSION_COOKIE_AGE=60*60*24*365
+			2.SESSION_EXPIRE_AT_BROWSER_CLOSE 
+				作用：设置当浏览器关闭时session则失效功能
+				取值：True
+
+
+
+3.Django ajax
+	1.练习
+		向 /11-server 发送请求的时候顺便提交两个请求参数
+		uname ： xxx
+		upwd ： xxx
+		响应回来：用户名:xxx,密码:xxx
+
+	2.post 请求 
+		1.在网页中添加 {%csrf_token%} 
+		2.将 csrfmiddlewaretoke 作为参数提交给服务器即可
+	3.Django 中的json处理
+		1.元组，字典，列表
+			import json
+			... ...
+			return json.dumps(元组|列表|字典)
+4.项目流程
+	1.需求分析阶段
+		输出 ：需求分析文档
+		目的 ：表示出任务需求
+		内容 ：
+			1. 引言
+				1.编写目的
+				2.背景
+				3.定义
+			2.任务描述
+				1.目标
+				2.用户特点
+				3.约束
+					1.时间约束
+					2.经费约束
+			3.运行环境规定
+				1.设备
+					a.处理器，内存
+					b.外存容量
+					c.输入 和 输出设备
+				2.支持软件
+					操作系统，编译程序，测试软件等
+				3.接口
+					描述要用到的第三方的协议或接口
+			4.功能描述
+				1.划分模块
+				2.划分子程序，描述出程序功能
+	2.概要设计阶段
+		1.原型图
+		2.数据库E-R图
+	3.详细设计阶段
+		1.将概要设计的内容进行实现
+			如 概要设计中设计的软件结构图，在详细设计中要转换成流程图
+		2.数据库要研发出来
+	4.编码阶段
+		实现编码 ... ...
+	5.测试阶段
+		可能性1：有专门的测试工程师(性能测试)
+		可能性2：自己做测试
+	6.打包，部署，发行
+	7.维护
+		

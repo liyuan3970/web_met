@@ -1,0 +1,65 @@
+{% extends 'login.html' %}
+
+{% block h2 %}
+  注册会员
+{% endblock %}
+
+{% block anchor %}
+  <a href="/login">会员登录</a>
+{% endblock %}
+
+{% block form %}
+  <form action="/register/" method="post">
+    {% csrf_token %}
+    <!-- 1.手机号 -->
+    <div class="form-line">
+      <p>手机号</p>
+      <input type="text" name="uphone" placeholder="" maxlength="" class="uinput">
+      <br>
+      <span>{{ errMsg }}</span>
+    </div>
+    <!-- 2.密码 -->
+    <div class="form-line">
+      <p>密码</p>
+      <input type="password" name="upwd" placeholder="" maxlength="" class="uinput">
+    </div>
+    <!-- 3.确认密码 -->
+    <div class="form-line">
+      <p>确认密码</p>
+      <input type="password" id="cpwd" placeholder="" maxlength="" class="uinput">
+    </div>
+    <!-- 4.用户名 -->
+    <div class="form-line">
+      <p>用户名</p>
+      <input type="text" name="uname" placeholder="" maxlength="" class="uinput">
+    </div>
+    <!-- 5.邮箱 -->
+    <div class="form-line">
+      <p>邮箱</p>
+      <input type="email" name="uemail" placeholder="" maxlength="" class="uinput">
+    </div>
+    <!-- 6.按钮 -->
+    <div class="form-line">
+      <p></p>
+      <div>
+        <input type="submit" value="注册" class="btn">
+        <a href="/login" class="btn registBtn">会员登录</a>
+      </div>
+
+    </div>
+  </form>
+{% endblock %}
+
+{% block style %}
+  <style>
+    #main .right{
+      margin-top:6px;
+    }
+  </style>
+{% endblock %}
+
+
+
+
+
+
