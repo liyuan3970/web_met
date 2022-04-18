@@ -234,7 +234,7 @@
                                         </ul>
                                         <div class="tab-content" style="display:block;width: 100%; height: 100%;">
                                             <div class="tab-pane active" id="panel-001"
-                                                style="width:100%;height:99%;background-color:rgb(240, 140, 9)">
+                                                style="width:100%;height:100%;background-color:rgb(240, 140, 9)">
 
                                                 <!-- 大标题 -->
                                                 <div
@@ -294,7 +294,7 @@
                                                 </div>
                                                 <!-- 文字主体 -->
                                                 <div
-                                                    style="display: inline-block;background-color:rgb(183, 231, 9); width: 100%; height: 58%;border: 3px solid rgb(32, 32, 32);">
+                                                    style="display: inline-block;background-color:rgb(183, 231, 9); width: 100%; height: 60%;border: 3px solid rgb(32, 32, 32);">
                                                     <textarea style="width: 100%; height: 100%; resize:none;"
                                                         id="text_main"></textarea>
 
@@ -321,7 +321,7 @@
                                                 style="width:100%;height:100%;background-color:rgb(240, 140, 9)">
 
                                                 <div
-                                                    style="display: inline-block;background-color:rgb(183, 231, 9); width: 100%; height: 10%;border: 3px solid rgb(192, 27, 27);">
+                                                    style="display: inline-block;background-color:rgb(183, 231, 9); width: 100%; height: 5%;border: 1px solid rgb(192, 27, 27);">
                                                     单图：<input checked="checked" type="radio" name="png_chose"
                                                         style="width: 10%;" value="one"> 双图：<input type="radio"
                                                         name="png_chose" style="width: 10%;" value="two">四图：<input
@@ -330,23 +330,23 @@
                                                 </div>
                                                 <!-- 图片触发时间 -->
                                                 <div id="png_view_one"
-                                                    style="display:block;background-color:rgb(9, 231, 176); width: 100%; height: 90%;border: 3px solid rgb(192, 27, 27);">
+                                                    style="display:inline-block;background-color:rgb(9, 231, 176); width: 100%; height:88%;border: 3px solid rgb(192, 27, 27);">
                                                     <!-- 单个图片 -->
                                                     <div
-                                                        style="background-color:rgb(12, 118, 218); width: 100%; height: 83%;border: 3px solid rgb(192, 27, 27);padding:5% 20% 5% 20%;">
+                                                        style="background-color:rgb(12, 118, 218); width: 100%; height: 90%;border: 3px solid rgb(192, 27, 27);padding:5% 20% 5% 20%;">
 
                                                         <div id="png_one_show"
                                                             style="background-color:rgb(221, 38, 14); width: 100%; height: 90%;border: 3px solid rgb(192, 27, 27);">
 
                                                         </div>
                                                         <div id="png_one_hidden"
-                                                            style="display:none;background-color:rgb(221, 38, 14); width: 100%; height: 90%;border: 3px solid rgb(192, 27, 27);">
+                                                            style="display:none;background-color:rgb(221, 38, 14); width: 90%; height: 90%;border: 3px solid rgb(192, 27, 27);">
 
                                                         </div>
                                                         <!-- 标题和粘贴 -->
                                                         <div
                                                             style="background-color:rgb(133, 115, 101); width: 100%; height: 10%;border: 3px solid rgb(192, 27, 27);">
-                                                            <input type="text" placeholder="图题:"
+                                                            <input id="png_one_title" type="text" placeholder="图题:"
                                                                 style="width: 70%; height:100%"><input
                                                                 id="png_one_input" type="text" placeholder="请将图片粘贴于此"
                                                                 style="width: 30%; height:100%">
@@ -429,8 +429,12 @@
                                                     <!-- 提交按钮 -->
                                                     <div
                                                         style="background-color:rgb(218, 88, 12); width: 100%; height: 10%;border: 3px solid rgb(192, 27, 27);">
-                                                        <input type="button" value="删除" style="float:right"><input
-                                                            type="button" value="添加" style="float:right">
+                                                        <input type="button" id="add_one_fig" value="添加"
+                                                            style="width:10%;height:100%;float:right ">
+                                                        <input type="button" id="del_one_fig" value="清屏"
+                                                            style="width:10%;height:100%;float:right ">
+                                                        <input id="change_one_fig" type="button" value="修改"
+                                                            style="width:10%;height:100%;float:right">
 
                                                     </div>
 
@@ -438,10 +442,10 @@
 
                                                 </div>
                                                 <div id="png_view_two"
-                                                    style="display: none;text-align:center;background-color:rgb(72, 211, 8); width: 100%; height: 90%;border: 3px solid rgb(192, 27, 27);">
+                                                    style="display: none;text-align:center;background-color:rgb(72, 211, 8); width: 100%; height: 88%;border: 3px solid rgb(192, 27, 27);">
                                                     <!-- 双图 -->
                                                     <div
-                                                        style="display:inline-block;background-color: rgb(235, 19, 19);width:49%;height:80%;border: 3px solid rgb(192, 27, 27);">
+                                                        style="display:inline-block;background-color: rgb(235, 19, 19);width:49%;height:90%;border: 3px solid rgb(192, 27, 27);">
                                                         <div id="png_two_show_1st"
                                                             style="background-color:rgb(221, 38, 14); width: 100%; height: 90%;border: 3px solid rgb(192, 27, 27);">
 
@@ -453,7 +457,7 @@
                                                         <!-- 标题和粘贴 -->
                                                         <div
                                                             style="background-color:rgb(133, 115, 101); width: 100%; height: 10%;border: 3px solid rgb(192, 27, 27);">
-                                                            <input type="text" placeholder="图题:"
+                                                            <input id="png_two_title_1st" type="text" placeholder="图题:"
                                                                 style="width: 70%; height:100%"><input
                                                                 id="png_two_input_1st" type="text"
                                                                 placeholder="请将图片粘贴于此" style="width: 30%; height:100%">
@@ -533,7 +537,7 @@
 
                                                     </div>
                                                     <div
-                                                        style="display:inline-block;background-color: rgb(24, 20, 20);width:49%;height:80%;border: 3px solid rgb(192, 27, 27);">
+                                                        style="display:inline-block;background-color: rgb(24, 20, 20);width:49%;height:90%;border: 3px solid rgb(192, 27, 27);">
                                                         <div id="png_two_show_2st"
                                                             style="background-color:rgb(221, 38, 14); width: 100%; height: 90%;border: 3px solid rgb(192, 27, 27);">
 
@@ -545,7 +549,7 @@
                                                         <!-- 标题和粘贴 -->
                                                         <div
                                                             style="background-color:rgb(133, 115, 101); width: 100%; height: 10%;border: 3px solid rgb(192, 27, 27);">
-                                                            <input type="text" placeholder="图题:"
+                                                            <input id="png_two_title_2st" type="text" placeholder="图题:"
                                                                 style="width: 70%; height:100%"><input
                                                                 id="png_two_input_2st" type="text"
                                                                 placeholder="请将图片粘贴于此" style="width: 30%; height:100%">
@@ -626,8 +630,12 @@
                                                     </div>
                                                     <div
                                                         style="background-color:rgb(218, 88, 12); width: 100%; height: 10%;border: 3px solid rgb(192, 27, 27);">
-                                                        <input type="button" value="删除" style="float:right"><input
-                                                            type="button" value="添加" style="float:right">
+                                                        <input type="button" id="add_two_fig" value="添加"
+                                                            style="width:10%;height:100%;float:right ">
+                                                        <input type="button" id="del_two_fig" value="清屏"
+                                                            style="width:10%;height:100%;float:right ">
+                                                        <input id="change_two_fig" type="button" value="修改"
+                                                            style="width:10%;height:100%;float:right">
 
 
                                                     </div>
@@ -636,21 +644,21 @@
 
                                                 </div>
                                                 <div id="png_view_four"
-                                                    style="display: none;background-color:rgb(224, 9, 231); width: 100%; height: 90%;border: 3px solid rgb(192, 27, 27);">
+                                                    style="display: none;background-color:rgb(224, 9, 231); width: 100%; height: 88%;border: 3px solid rgb(192, 27, 27);">
                                                     <div
-                                                        style="display:inline-block;background-color: rgb(235, 19, 19);width:49%;height:40%;border: 3px solid rgb(192, 27, 27);">
+                                                        style="display:inline-block;background-color: rgb(235, 19, 19);width:49%;height:45%;border: 3px solid rgb(192, 27, 27);">
                                                         <div id="png_four_show_1st"
-                                                            style="background-color:rgb(221, 38, 14); width: 100%; height: 80%;border: 3px solid rgb(192, 27, 27);">
+                                                            style="background-color:rgb(221, 38, 14); width: 100%; height: 85%;border: 3px solid rgb(192, 27, 27);">
 
                                                         </div>
                                                         <div id="png_four_hidden_1st"
-                                                            style=" display: none;background-color:rgb(221, 38, 14); width: 100%; height: 90%;border: 3px solid rgb(192, 27, 27);">
+                                                            style=" display: none;background-color:rgb(221, 38, 14); width: 100%; height: 45%;border: 3px solid rgb(192, 27, 27);">
 
                                                         </div>
                                                         <!-- 标题和粘贴 -->
                                                         <div
                                                             style="background-color:rgb(133, 115, 101); width: 100%; height: 15%;border: 3px solid rgb(192, 27, 27);">
-                                                            <input type="text" placeholder="图题:"
+                                                            <input id="png_four_title_1st" type="text" placeholder="图题:"
                                                                 style="width: 70%; height:100%"><input
                                                                 id="png_four_input_1st" type="text"
                                                                 placeholder="请将图片粘贴于此" style="width: 30%; height:100%">
@@ -730,9 +738,9 @@
 
                                                     </div>
                                                     <div
-                                                        style="display:inline-block;background-color: rgb(235, 19, 19);width:49%;height:40%;border: 3px solid rgb(192, 27, 27);">
+                                                        style="display:inline-block;background-color: rgb(235, 19, 19);width:49%;height:45%;border: 3px solid rgb(192, 27, 27);">
                                                         <div id="png_four_show_2st"
-                                                            style="background-color:rgb(221, 38, 14); width: 100%; height: 80%;border: 3px solid rgb(192, 27, 27);">
+                                                            style="background-color:rgb(221, 38, 14); width: 100%; height: 85%;border: 3px solid rgb(192, 27, 27);">
 
                                                         </div>
                                                         <div id="png_four_hidden_2st"
@@ -742,7 +750,7 @@
                                                         <!-- 标题和粘贴 -->
                                                         <div
                                                             style="background-color:rgb(133, 115, 101); width: 100%; height: 15%;border: 3px solid rgb(192, 27, 27);">
-                                                            <input type="text" placeholder="图题:"
+                                                            <input id="png_four_title_2st" type="text" placeholder="图题:"
                                                                 style="width: 70%; height:100%"><input
                                                                 id="png_four_input_2st" type="text"
                                                                 placeholder="请将图片粘贴于此" style="width: 30%; height:100%">
@@ -822,9 +830,9 @@
 
                                                     </div>
                                                     <div
-                                                        style="display:inline-block;background-color: rgb(235, 19, 19);width:49%;height:40%;border: 3px solid rgb(192, 27, 27);">
+                                                        style="display:inline-block;background-color: rgb(235, 19, 19);width:49%;height:45%;border: 3px solid rgb(192, 27, 27);">
                                                         <div id="png_four_show_3st"
-                                                            style="background-color:rgb(221, 38, 14); width: 100%; height: 80%;border: 3px solid rgb(192, 27, 27);">
+                                                            style="background-color:rgb(221, 38, 14); width: 100%; height: 85%;border: 3px solid rgb(192, 27, 27);">
 
                                                         </div>
                                                         <div id="png_four_hidden_3st"
@@ -834,7 +842,7 @@
                                                         <!-- 标题和粘贴 -->
                                                         <div
                                                             style="background-color:rgb(133, 115, 101); width: 100%; height: 15%;border: 3px solid rgb(192, 27, 27);">
-                                                            <input type="text" placeholder="图题:"
+                                                            <input id="png_four_title_3st" type="text" placeholder="图题:"
                                                                 style="width: 70%; height:100%"><input
                                                                 id="png_four_input_3st" type="text"
                                                                 placeholder="请将图片粘贴于此" style="width: 30%; height:100%">
@@ -914,9 +922,9 @@
 
                                                     </div>
                                                     <div
-                                                        style="display:inline-block;background-color: rgb(235, 19, 19);width:49%;height:40%;border: 3px solid rgb(192, 27, 27);">
+                                                        style="display:inline-block;background-color: rgb(235, 19, 19);width:49%;height:45%;border: 3px solid rgb(192, 27, 27);">
                                                         <div id="png_four_show_4st"
-                                                            style="background-color:rgb(221, 38, 14); width: 100%; height: 80%;border: 3px solid rgb(192, 27, 27);">
+                                                            style="background-color:rgb(221, 38, 14); width: 100%; height: 85%;border: 3px solid rgb(192, 27, 27);">
 
                                                         </div>
                                                         <div id="png_four_hidden_4st"
@@ -926,7 +934,7 @@
                                                         <!-- 标题和粘贴 -->
                                                         <div
                                                             style="background-color:rgb(133, 115, 101); width: 100%; height: 15%;border: 3px solid rgb(192, 27, 27);">
-                                                            <input type="text" placeholder="图题:"
+                                                            <input id="png_four_title_4st" type="text" placeholder="图题:"
                                                                 style="width: 70%; height:100%"><input
                                                                 id="png_four_input_4st" type="text"
                                                                 placeholder="请将图片粘贴于此" style="width: 30%; height:100%">
@@ -1007,8 +1015,12 @@
                                                     </div>
                                                     <div
                                                         style="background-color:rgb(218, 88, 12); width: 100%; height: 10%;border: 3px solid rgb(192, 27, 27);">
-                                                        <input type="button" value="删除" style="float:right"><input
-                                                            type="button" value="添加" style="float:right">
+                                                        <input type="button" id="add_four_fig" value="添加"
+                                                            style="width:10%;height:100%;float:right ">
+                                                        <input type="button" id="del_four_fig" value="清屏"
+                                                            style="width:10%;height:100%;float:right ">
+                                                        <input id="change_four_fig" type="button" value="修改"
+                                                            style="width:10%;height:100%;float:right">
 
 
                                                     </div>
@@ -1024,7 +1036,7 @@
                                                                 var div_view_one = document.getElementById('png_view_one')
                                                                 var div_view_two = document.getElementById('png_view_two')
                                                                 var div_view_four = document.getElementById('png_view_four')
-                                                                div_view_one.style.display = 'block'
+                                                                div_view_one.style.display = 'inline-block'
                                                                 div_view_two.style.display = 'none'
                                                                 div_view_four.style.display = 'none'
                                                             }
@@ -1034,7 +1046,7 @@
                                                                 var div_view_two = document.getElementById('png_view_two')
                                                                 var div_view_four = document.getElementById('png_view_four')
                                                                 div_view_one.style.display = 'none'
-                                                                div_view_two.style.display = 'block'
+                                                                div_view_two.style.display = 'inline-block'
                                                                 div_view_four.style.display = 'none'
                                                             }
                                                             else {
@@ -1044,7 +1056,7 @@
                                                                 var div_view_four = document.getElementById('png_view_four')
                                                                 div_view_one.style.display = 'none'
                                                                 div_view_two.style.display = 'none'
-                                                                div_view_four.style.display = 'block'
+                                                                div_view_four.style.display = 'inline-block'
                                                             }
                                                         });
                                                     });
@@ -1433,6 +1445,7 @@
 
 
 
+
                                     // 文档添加功能                     
                                     add_Btn_text.onclick = function () {
                                         if (id_div >= 0) {
@@ -1487,6 +1500,213 @@
                                             list_data[change_id].content = $('#text_main').val()
                                         }
                                     };
+
+                                    // 单图模式
+                                    var add_Btn_one_fig = document.getElementById('add_one_fig');
+                                    var del_Btn_one_fig = document.getElementById('del_one_fig');
+                                    var change_Btn_one_fig = document.getElementById('change_one_fig');
+                                    // 单图清屏功能
+                                    del_Btn_one_fig.onclick = function () {
+
+                                        $("#png_one_title").val(" ")
+                                        $("#png_one_title").val($("#png_one_title").defaultValue)
+                                        $("#png_one_input").val(" ")
+                                        $("#png_one_input").val($("#png_one_input").defaultValue)
+                                        $("#png_one_show").html(" ")
+                                        $("#png_one_hidden").html(" ")
+
+                                    };
+                                    // 单图添加功能                     
+                                    add_Btn_one_fig.onclick = function () {
+                                        if (id_div >= 0) {
+                                            id_div = id_div + 1
+
+                                        }
+                                        // id_div = id_div + 1
+
+                                        var title_png_one = $("#png_one_title").val();
+                                        var main_png_one = $("#png_one_input").val();
+                                        var show_png_one = $("#png_one_show").html()
+
+
+
+                                        var data_add = {
+                                            "type": "单图",
+                                            "id": id_div,
+                                            "title_main": title_png_one,
+                                            "png_one_title": title_png_one,
+                                            "png_one_main": main_png_one,
+                                            "show_png_one": show_png_one
+
+                                        }
+
+                                        list_data.push(data_add)
+                                        show()
+
+                                    };
+                                    // 单图修改
+                                    change_Btn_one_fig.onclick = function () {
+                                        var change_id = parseInt($('#change_one_fig').val()[3])
+                                        console.log("修改按钮内容", change_id)
+                                        if (list_data[change_id].type == "单图") {
+                                            list_data[change_id].show_png_one = $("#png_one_show").html()
+                                        }
+                                    };
+                                    // 双图模式
+                                    var add_Btn_two_fig = document.getElementById('add_two_fig');
+                                    var del_Btn_two_fig = document.getElementById('del_two_fig');
+                                    var change_Btn_two_fig = document.getElementById('change_two_fig');
+                                    // 双图清屏功能
+                                    del_Btn_two_fig.onclick = function () {
+
+                                        $("#png_two_title_1st").val(" ")
+                                        $("#png_two_title_1st").val($("#png_two_title_1st").defaultValue)
+                                        $("#png_two_input_1st").val(" ")
+                                        $("#png_two_input_1st").val($("#png_two_input_1st").defaultValue)
+                                        $("#png_two_title_2st").val(" ")
+                                        $("#png_two_title_2st").val($("#png_two_title_2st").defaultValue)
+                                        $("#png_two_input_2st").val(" ")
+                                        $("#png_two_input_2st").val($("#png_two_input_2st").defaultValue)
+                                        $("#png_two_show_1st").html(" ")
+                                        $("#png_two_hidden_1st").html(" ")
+                                        $("#png_two_show_2st").html(" ")
+                                        $("#png_two_hidden_2st").html(" ")
+
+                                    };
+                                    // 双图添加功能                     
+                                    add_Btn_two_fig.onclick = function () {
+                                        if (id_div >= 0) {
+                                            id_div = id_div + 1
+
+                                        }
+                                        var title_png_two_1st = $("#png_two_title_1st").val();
+                                        var main_png_two_1st = $("#png_two_input_1st").val();
+                                        var show_png_two_1st = $("#png_two_show_1st").html();
+                                        var title_png_two_2st = $("#png_two_title_2st").val();
+                                        var main_png_two_2st = $("#png_two_input_2st").val();
+                                        var show_png_two_2st = $("#png_two_show_2st").html();
+                                        var data_add = {
+                                            "type": "双图",
+                                            "id": id_div,
+                                            "title_main": title_png_two_1st,
+                                            "png_two_title_1st": title_png_two_1st,
+                                            "png_two_main_1st": main_png_two_1st,
+                                            "show_png_two_1st": show_png_two_1st,
+                                            "png_two_title_2st": title_png_two_2st,
+                                            "png_two_main_2st": main_png_two_2st,
+                                            "show_png_two_2st": show_png_two_2st
+
+                                        }
+
+                                        list_data.push(data_add)
+                                        show()
+
+                                    };
+                                    // 双图修改
+                                    change_Btn_two_fig.onclick = function () {
+                                        var change_id = parseInt($('#change_two_fig').val()[3])
+                                        console.log("修改按钮内容", change_id)
+                                        if (list_data[change_id].type == "双图") {
+                                            list_data[change_id].show_png_two_1st = $("#png_two_show_1st").html()
+                                            list_data[change_id].show_png_two_2st = $("#png_two_show_2st").html()
+                                        }
+                                    };
+                                    // 四图
+                                    var add_Btn_four_fig = document.getElementById('add_four_fig');
+                                    var del_Btn_four_fig = document.getElementById('del_four_fig');
+                                    var change_Btn_four_fig = document.getElementById('change_four_fig');
+                                    // 四图清屏功能
+                                    del_Btn_four_fig.onclick = function () {
+
+                                        $("#png_four_title_1st").val(" ")
+                                        $("#png_four_title_1st").val($("#png_four_title_1st").defaultValue)
+                                        $("#png_four_input_1st").val(" ")
+                                        $("#png_four_input_1st").val($("#png_four_input_1st").defaultValue)
+                                        $("#png_four_title_2st").val(" ")
+                                        $("#png_four_title_2st").val($("#png_four_title_2st").defaultValue)
+                                        $("#png_four_input_2st").val(" ")
+                                        $("#png_four_input_2st").val($("#png_four_input_2st").defaultValue)
+
+                                        $("#png_four_title_3st").val(" ")
+                                        $("#png_four_title_3st").val($("#png_four_title_3st").defaultValue)
+                                        $("#png_four_input_3st").val(" ")
+                                        $("#png_four_input_3st").val($("#png_four_input_3st").defaultValue)
+                                        $("#png_four_title_4st").val(" ")
+                                        $("#png_four_title_4st").val($("#png_four_title_4st").defaultValue)
+                                        $("#png_four_input_4st").val(" ")
+                                        $("#png_four_input_4st").val($("#png_four_input_4st").defaultValue)
+
+                                        $("#png_four_show_1st").html(" ")
+                                        $("#png_four_hidden_1st").html(" ")
+                                        $("#png_four_show_2st").html(" ")
+                                        $("#png_four_hidden_2st").html(" ")
+
+                                        $("#png_four_show_3st").html(" ")
+                                        $("#png_four_hidden_3st").html(" ")
+                                        $("#png_four_show_4st").html(" ")
+                                        $("#png_four_hidden_4st").html(" ")
+
+                                    };
+                                    // 四图添加功能                     
+                                    add_Btn_four_fig.onclick = function () {
+                                        if (id_div >= 0) {
+                                            id_div = id_div + 1
+
+                                        }
+                                        var title_png_four_1st = $("#png_four_title_1st").val();
+                                        var main_png_four_1st = $("#png_four_input_1st").val();
+                                        var show_png_four_1st = $("#png_four_show_1st").html();
+                                        var title_png_four_2st = $("#png_four_title_2st").val();
+                                        var main_png_four_2st = $("#png_four_input_2st").val();
+                                        var show_png_four_2st = $("#png_four_show_2st").html();
+
+                                        var title_png_four_3st = $("#png_four_title_3st").val();
+                                        var main_png_four_3st = $("#png_four_input_3st").val();
+                                        var show_png_four_3st = $("#png_four_show_3st").html();
+                                        var title_png_four_4st = $("#png_four_title_4st").val();
+                                        var main_png_four_4st = $("#png_four_input_4st").val();
+                                        var show_png_four_4st = $("#png_four_show_4st").html();
+
+                                        var data_add = {
+                                            "type": "四图",
+                                            "id": id_div,
+                                            "title_main": title_png_four_1st,
+
+                                            "png_four_title_1st": title_png_four_1st,
+                                            "png_four_main_1st": main_png_four_1st,
+                                            "show_png_four_1st": show_png_four_1st,
+
+                                            "png_four_title_2st": title_png_four_2st,
+                                            "png_four_main_2st": main_png_four_2st,
+                                            "show_png_four_2st": show_png_four_2st,
+
+                                            "png_four_title_3st": title_png_four_3st,
+                                            "png_four_main_3st": main_png_four_3st,
+                                            "show_png_four_3st": show_png_four_3st,
+
+                                            "png_four_title_4st": title_png_four_4st,
+                                            "png_four_main_4st": main_png_four_4st,
+                                            "show_png_four_4st": show_png_four_4st
+
+                                        }
+
+                                        list_data.push(data_add)
+                                        show()
+
+                                    };
+                                    // 四图修改
+                                    change_Btn_four_fig.onclick = function () {
+                                        var change_id = parseInt($('#change_four_fig').val()[3])
+                                        console.log("修改按钮内容", change_id)
+                                        if (list_data[change_id].type == "四图") {
+                                            list_data[change_id].show_png_four_1st = $("#png_four_show_1st").html()
+                                            list_data[change_id].show_png_four_2st = $("#png_four_show_2st").html()
+                                            list_data[change_id].show_png_four_3st = $("#png_four_show_3st").html()
+                                            list_data[change_id].show_png_four_4st = $("#png_four_show_4st").html()
+                                        }
+                                    };
+
+
 
                                     function show() {
                                         $('#context_show_list').html('')
@@ -1548,10 +1768,43 @@
                                                 button_add_change.addEventListener("click", function (i) {
                                                     // console.log("开始修改数据",i)
                                                     list_div_show_id = i.path[1].id[8]
+                                                    // -++++++++++++++++++++++++++++++----+++++++++++这里添加show的各类数据修改按钮样式-++++++++++++++++++++++++++++++----+++++++++++
                                                     if (list_data[parseInt(list_div_show_id)].type == '段落') {
                                                         // list_data[parseInt(list_div_show_id)].content
                                                         $("#text_main").val(list_data[parseInt(list_div_show_id)].content)
                                                         $("#change_text").val("修改:" + list_div_show_id)
+
+                                                    }
+                                                    else if (list_data[parseInt(list_div_show_id)].type == '单图') {
+                                                        $("#png_one_show").html(list_data[parseInt(list_div_show_id)].show_png_one)
+                                                        $("#png_one_title").val(list_data[parseInt(list_div_show_id)].png_one_title)
+                                                        $("#change_one_fig").val("修改:" + list_div_show_id)
+
+
+                                                    }
+                                                    else if (list_data[parseInt(list_div_show_id)].type == '双图') {
+                                                        $("#png_two_show_1st").html(list_data[parseInt(list_div_show_id)].show_png_two_1st)
+                                                        $("#png_two_title_1st").val(list_data[parseInt(list_div_show_id)].png_two_title_1st)
+                                                        $("#png_two_show_2st").html(list_data[parseInt(list_div_show_id)].show_png_two_2st)
+                                                        $("#png_two_title_2st").val(list_data[parseInt(list_div_show_id)].png_two_title_2st)
+
+                                                        $("#change_two_fig").val("修改:" + list_div_show_id)
+
+
+                                                    }
+                                                    else if (list_data[parseInt(list_div_show_id)].type == '四图') {
+                                                        $("#png_four_show_1st").html(list_data[parseInt(list_div_show_id)].show_png_four_1st)
+                                                        $("#png_four_title_1st").val(list_data[parseInt(list_div_show_id)].png_four_title_1st)
+                                                        $("#png_four_show_2st").html(list_data[parseInt(list_div_show_id)].show_png_four_2st)
+                                                        $("#png_four_title_2st").val(list_data[parseInt(list_div_show_id)].png_four_title_2st)
+
+                                                        $("#png_four_show_3st").html(list_data[parseInt(list_div_show_id)].show_png_four_3st)
+                                                        $("#png_four_title_3st").val(list_data[parseInt(list_div_show_id)].png_four_title_3st)
+                                                        $("#png_four_show_4st").html(list_data[parseInt(list_div_show_id)].show_png_four_4st)
+                                                        $("#png_four_title_4st").val(list_data[parseInt(list_div_show_id)].png_four_title_4st)
+
+                                                        $("#change_four_fig").val("修改:" + list_div_show_id)
+
 
                                                     }
                                                 })
@@ -1593,14 +1846,6 @@
                                                 h_5_br.style.display = "inline-block"
 
 
-                                                // // 添加
-                                                // var button_add_br_else = document.createElement("input")
-                                                // button_add_br_else.style.width = "15%"
-                                                // button_add_br_else.style.height = "100%"
-                                                // button_add_br_else.style.float = "right"
-                                                // button_add_br_else.type = "button"
-                                                // button_add_br_else.value = "添加"
-                                                // button_add_br_else.id = "br_show_else_add" + i.toString()
 
                                                 // 删除
                                                 var button_del_br_else = document.createElement("input")
@@ -1945,11 +2190,11 @@
 
                                 //数据设置
                                 var data_canvas = {
-                                    "station_list": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11','12'],
+                                    "station_list": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
                                     "station": [
-                                        [360, 320, 32], 
-                                        [330, 370, 15], 
-                                        [310, 345, 15], 
+                                        [360, 320, 32],
+                                        [330, 370, 15],
+                                        [310, 345, 15],
                                         [310, 280, 15],
                                         [390, 200, 15],
                                         [486, 422, 15],
@@ -1960,7 +2205,7 @@
                                         [523, 179, 15],
                                         [440, 253, 15],
 
-                                ]
+                                    ]
                                 }
                                 //设置画布
                                 const canvas = document.getElementById("plot_canvas");
@@ -2048,7 +2293,7 @@
                                         offsetX = e.offsetX;
                                         offsetY = e.offsetY;
                                         // console.log(offsetX,offsetY)
-                                        
+
                                         var canvas_select_value = parseFloat($("input[name='canvas_num']:checked").val());
                                         var canvas_select_method = $("input[name='canvas_var']:checked").val();
                                         for (var i = 0; i < data_canvas.station_list.length; i++) {
@@ -2068,7 +2313,7 @@
                                             }
                                         }
 
-                        
+
 
 
 
