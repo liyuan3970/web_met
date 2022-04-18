@@ -99,6 +99,18 @@ def index_main(request):
     # return render(request,'main.html',context)
 
 
+def quick_look(request):
+    data_list = request.POST.get('data_post','')
+    crf = request.POST.get('csrfmiddlewaretoken','')
+
+    # data_list = request.POST['data_post']
+    print("获取到的预览数据:",data_list)
+    context = {
+        'data_test':[123]
+    }
+    return render(request,'index.html',context)
+
+
 
 from django.views.decorators.clickjacking import xframe_options_exempt
 

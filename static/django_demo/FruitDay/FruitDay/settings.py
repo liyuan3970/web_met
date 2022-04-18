@@ -25,7 +25,7 @@ SECRET_KEY = 'w7_z46u#-a(92!c-ej4s4ulc_488o6n@mg9s3gxv$rd-8(9aye'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -80,7 +80,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'FruitDay',
         'USER': 'root',
-        'PASSWORD':123456,
+        'PASSWORD':'051219',
         'HOST': 'localhost',
         'PORT':3306,
     }

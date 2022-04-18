@@ -38,6 +38,7 @@
     <div
         style="display: flex;align-content:flex-start;position: absolute; justify-content: center; flex-wrap: wrap; width: 100%;height: 100%; color: rgb(204, 203, 203); background-color: rgb(212, 202, 202);">
         <!-- 导航栏 -->
+        {% csrf_token %}
         <div style="background-color:rgb(211, 13, 13); width: 100%; height: 5%;border: 3px solid rgb(238, 14, 14);">
             <div class="tabbable" id="tabs-01" style="display:block;width: 100%; height: 100%;">
                 <ul class="nav nav-tabs">
@@ -58,7 +59,7 @@
                 </ul>
             </div>
         </div>
-        <div
+        <div id="index_main"
             style="background-color:rgb(17, 16, 17); width: 100%; height: 95%;border: 3px solid rgb(236, 5, 5);display:flex ">
             <!-- 决策材料类型 -->
             <div style="background-color:rgb(24, 214, 97); width: 50%; height: 100%;border: 3px solid rgb(128, 0, 0);">
@@ -210,7 +211,7 @@
                                             <li>
                                                 <a href="#panel-002" data-toggle="tab">图片</a>
                                             </li>
-                                            <li >
+                                            <li>
                                                 <a href="#panel-003" data-toggle="tab">表格</a>
                                             </li>
                                             <li>
@@ -307,11 +308,11 @@
                                                         style="width:10%;height:100%;float:right ">
                                                     <input id="change_text" type="button" value="修改"
                                                         style="width:10%;height:100%;float:right">
-                                                     
-                                                     
+
+
 
                                                 </div>
-                                                
+
 
 
                                             </div>
@@ -321,15 +322,15 @@
 
                                                 <div
                                                     style="display: inline-block;background-color:rgb(183, 231, 9); width: 100%; height: 10%;border: 3px solid rgb(192, 27, 27);">
-                                                    单图：<input type="radio" name="png_chose" style="width: 10%;"
-                                                        value="one"> 双图：<input type="radio" name="png_chose"
-                                                        style="width: 10%;" value="two">四图：<input type="radio"
-                                                        name="png_chose" style="width: 10%;" value="four">
+                                                    单图：<input checked="checked" type="radio" name="png_chose"
+                                                        style="width: 10%;" value="one"> 双图：<input type="radio"
+                                                        name="png_chose" style="width: 10%;" value="two">四图：<input
+                                                        type="radio" name="png_chose" style="width: 10%;" value="four">
 
                                                 </div>
                                                 <!-- 图片触发时间 -->
                                                 <div id="png_view_one"
-                                                    style="display:none;background-color:rgb(9, 231, 176); width: 100%; height: 90%;border: 3px solid rgb(192, 27, 27);">
+                                                    style="display:block;background-color:rgb(9, 231, 176); width: 100%; height: 90%;border: 3px solid rgb(192, 27, 27);">
                                                     <!-- 单个图片 -->
                                                     <div
                                                         style="background-color:rgb(12, 118, 218); width: 100%; height: 83%;border: 3px solid rgb(192, 27, 27);padding:5% 20% 5% 20%;">
@@ -1067,76 +1068,80 @@
                                                     <input type="button" value="合并单元" style="width:10%;height: 80%;">
                                                     <input type="button" value="取消合并" style="width:10%;height: 80%; ">
                                                 </div>
-                                                
 
-                                                <div id = "table_show" style="width:100%;height:70%;border: 3px solid black;">
-                                                   
+
+                                                <div id="table_show"
+                                                    style="width:100%;height:70%;border: 3px solid black;">
+
 
                                                 </div>
                                                 <!-- 表格创建的核心代码 -->
                                                 <script>
-        
+
                                                     x_spreadsheet.locale('zh-cn');  //中文
                                                     var htmlout = document.getElementById('table_show')
-                                                    var text_main_wh = document.getElementById('text_main')
-                                                    console.log("宽度",htmlout.clientWidth,htmlout.clientHeight,text_main_wh.offsetHeight,text_main_wh.offsetWidth)
-                                                    var htmlouth = text_main_wh.offsetHeight*1.2
-                                                    var htmloutw = text_main_wh.offsetWidth
-                                            
-                                                    option_sheet = option  = {
-                                                    mode: 'edit', // edit | read
-                                                    showToolbar: true, // 顶部工具栏
-                                                    showGrid: true,
-                                                    showContextmenu: true, // 切换右键菜单显示状态
-                                                    showBottomBar: false,  // 底部工具栏
-                                                    view: {
-                                                      height: () => htmlouth,
-                                                      width: () =>htmloutw,
-                                                    //   height: () => 390,
-                                                    //   width: () =>650,
-                                                    },
-                                                    row: {
-                                                      len: 15,
-                                                      height: 25,
-                                                    },
-                                                    col: {
-                                                      len: 10,
-                                                      width: 100,
-                                                      indexWidth: 60,
-                                                      minWidth: 60,
-                                                    },
-                                                    style: {
-                                                      bgcolor: 'white',
-                                                      align: 'left',
-                                                      valign: 'middle',
-                                                      textwrap: false,
-                                                      strike: false,
-                                                      underline: false,
-                                                      color: '#0a0a0a',
-                                                      font: {
-                                                        name: 'Helvetica',
-                                                        size: 10,
-                                                        bold: false,
-                                                        italic: false,
-                                                      },
-                                                    },
-                                                  }
-                                                    data = [{"name":"Sheet1","freeze":"A1","styles":[],"merges":[],
-                                                    "rows":{
-                                                        "0":{"cells":{"0":{"text":"id"},"1":{"text":"name"}}},
-                                                        "1":{"cells":{"0":{"text":"1"},"1":{"text":"Tom"}}},
-                                                        "2":{"cells":{"0":{"text":"2"},"1":{"text":"Hall"}}},
-                                                        "3":{"cells":{"0":{"text":"3"},"1":{"text":"Sure"}}},
-                                                        "len":5},
-                                                        "cols":{"len":6},
-                                                        "validations":[],
-                                                        "autofilter":{}}]
+                                                    var text_main_wh = document.getElementById('index_main')
+                                                    console.log("宽度", htmlout.clientWidth, htmlout.clientHeight, text_main_wh.offsetHeight, text_main_wh.offsetWidth)
+                                                    var htmlouth = text_main_wh.offsetHeight * 0.43
+                                                    var htmloutw = text_main_wh.offsetWidth * 0.48
+
+                                                    option_sheet = option = {
+                                                        mode: 'edit', // edit | read
+                                                        showToolbar: true, // 顶部工具栏
+                                                        showGrid: true,
+                                                        showContextmenu: true, // 切换右键菜单显示状态
+                                                        showBottomBar: false,  // 底部工具栏
+                                                        view: {
+                                                            height: () => htmlouth,
+                                                            width: () => htmloutw,
+                                                            //   height: () => 390,
+                                                            //   width: () =>650,
+                                                        },
+                                                        row: {
+                                                            len: 15,
+                                                            height: 25,
+                                                        },
+                                                        col: {
+                                                            len: 10,
+                                                            width: 100,
+                                                            indexWidth: 60,
+                                                            minWidth: 60,
+                                                        },
+                                                        style: {
+                                                            bgcolor: 'white',
+                                                            align: 'left',
+                                                            valign: 'middle',
+                                                            textwrap: false,
+                                                            strike: false,
+                                                            underline: false,
+                                                            color: '#0a0a0a',
+                                                            font: {
+                                                                name: 'Helvetica',
+                                                                size: 10,
+                                                                bold: false,
+                                                                italic: false,
+                                                            },
+                                                        },
+                                                    }
+                                                    data = [{
+                                                        "name": "Sheet1", "freeze": "A1", "styles": [], "merges": [],
+                                                        "rows": {
+                                                            "0": { "cells": { "0": { "text": "id" }, "1": { "text": "name" } } },
+                                                            "1": { "cells": { "0": { "text": "1" }, "1": { "text": "Tom" } } },
+                                                            "2": { "cells": { "0": { "text": "2" }, "1": { "text": "Hall" } } },
+                                                            "3": { "cells": { "0": { "text": "3" }, "1": { "text": "Sure" } } },
+                                                            "len": 5
+                                                        },
+                                                        "cols": { "len": 6 },
+                                                        "validations": [],
+                                                        "autofilter": {}
+                                                    }]
                                                     // var xs = x_spreadsheet(htmlout,option_sheet).loadData(data)
-                                                    var xs = x_spreadsheet(htmlout,option_sheet)
+                                                    var xs = x_spreadsheet(htmlout, option_sheet)
                                                     // console.log("表格返回的数据为：\n", xs.getData())  // getData得到一个object对象，要把它转为json用JSON.stringify()
                                                     // console.log("json字符串格式为：\n", JSON.stringify(xs.getData()))
                                                 </script>
-                                                
+
 
 
                                                 <div style="width:100%;height:10%;border: 3px solid black;">
@@ -1244,16 +1249,16 @@
                                                             style="float:right"></a>
                                                 </div>
                                                 <script>
-                                                    
+
 
                                                     list_defence_text_del.onclick = function () {
                                                         // console.log("删除列表")
-                                                        
+
 
                                                     };
                                                     list_defence_text_add.onclick = function () {
                                                         // console.log("添加列表")
-                                                        
+
 
                                                     };
 
@@ -1353,13 +1358,13 @@
 
                                                     </div>
                                                     <a class="list-group-item active" style="width:100%;height:10%;">
-                                                            <input id="list_text_add" type="button" value="添加"
+                                                        <input id="list_text_add" type="button" value="添加"
                                                             style="float:right">
-                                                            <input id="list_text_del" type="button" value="删除"
+                                                        <input id="list_text_del" type="button" value="删除"
                                                             style="float:right">
-                                                            <input id="list_text_change" type="button" value="修改"
+                                                        <input id="list_text_change" type="button" value="修改"
                                                             style="float:right">
-                                                        </a>
+                                                    </a>
                                                 </div>
                                                 <script>
                                                     var list_show = document.getElementById("list_show")
@@ -1395,7 +1400,7 @@
 
 
                                                 </script>
-                                                
+
 
 
 
@@ -1423,7 +1428,7 @@
                                     var add_Btn_text = document.getElementById('add_text');
                                     var del_Btn_text = document.getElementById('del_text');
                                     var change_Btn_text = document.getElementById('change_text');
-                                    
+
 
 
 
@@ -1464,24 +1469,24 @@
 
                                     };
                                     // 清屏功能
-                                    del_Btn_text.onclick = function () {                                        
+                                    del_Btn_text.onclick = function () {
                                         var text_main = document.getElementById('text_main').value;
-                                        var title_main = document.getElementById('title_main').value;                                
+                                        var title_main = document.getElementById('title_main').value;
                                         var title_sub = document.getElementById('title_sub').value;
                                         // console.log("文本主要内容",text_main,title_main,title_main)
                                         $("#text_main").val(" ")
                                         $("#title_main").val(" ")
-                                        $("#title_sub").val(" ")                                        
+                                        $("#title_sub").val(" ")
                                     };
-                                   
+
                                     // 段落修改
                                     change_Btn_text.onclick = function () {
-                                        var change_id = parseInt($('#change_text').val()[3])                                 
-                                        console.log("修改按钮内容",change_id )
-                                        if (list_data[change_id].type == "段落"){
-                                            list_data[change_id].content  = $('#text_main').val()
-                                        }                                        
-                                  };
+                                        var change_id = parseInt($('#change_text').val()[3])
+                                        console.log("修改按钮内容", change_id)
+                                        if (list_data[change_id].type == "段落") {
+                                            list_data[change_id].content = $('#text_main').val()
+                                        }
+                                    };
 
                                     function show() {
                                         $('#context_show_list').html('')
@@ -1497,7 +1502,7 @@
                                             div_list_item.style.display = "inline-flex"
 
                                             if (list_data[i].type != "add_br") {
-                                                
+
                                                 var type_add = list_data[i].type
                                                 var title_add = list_data[i].title_main
                                                 // info
@@ -1515,24 +1520,24 @@
                                                 button_add_br.type = "button"
                                                 button_add_br.value = "添加空行"
                                                 button_add_br.id = "br_show" + i.toString()
-                                                
+
                                                 // console.log("空行id+",i,i)
-                                                button_add_br.addEventListener("click", function (i){
+                                                button_add_br.addEventListener("click", function (i) {
                                                     var list_div_show_id = i.path[0].id[7]
-                                                    console.log("空行id",i,list_div_show_id )
+                                                    console.log("空行id", i, list_div_show_id)
                                                     var data_add_br = {
-                                                        'type':'add_br'
-                                                        
+                                                        'type': 'add_br'
+
                                                     }
-                                                    list_data.splice(parseInt(list_div_show_id)+1,0,data_add_br)
-                                                    
+                                                    list_data.splice(parseInt(list_div_show_id) + 1, 0, data_add_br)
+
                                                     show()
 
 
                                                 })
 
 
-                                            // 修改按钮
+                                                // 修改按钮
                                                 var button_add_change = document.createElement("input")
                                                 button_add_change.style.width = "10%"
                                                 button_add_change.style.height = "100%"
@@ -1543,10 +1548,10 @@
                                                 button_add_change.addEventListener("click", function (i) {
                                                     // console.log("开始修改数据",i)
                                                     list_div_show_id = i.path[1].id[8]
-                                                    if (list_data[parseInt(list_div_show_id)].type=='段落'){
+                                                    if (list_data[parseInt(list_div_show_id)].type == '段落') {
                                                         // list_data[parseInt(list_div_show_id)].content
                                                         $("#text_main").val(list_data[parseInt(list_div_show_id)].content)
-                                                        $("#change_text").val("修改:"+list_div_show_id)
+                                                        $("#change_text").val("修改:" + list_div_show_id)
 
                                                     }
                                                 })
@@ -1560,7 +1565,7 @@
                                                 button_add_del.type = "button"
                                                 button_add_del.value = "删除"
                                                 button_add_del.id = "del_show" + i.toString()
-                                                
+
                                                 button_add_del.addEventListener("click", function (i) {
                                                     // 获取id
                                                     var list_div_show_id = i.path[0].id.toString()[8]
@@ -1584,9 +1589,9 @@
                                                 var h_5_br = document.createElement("h5")
                                                 h_5_br.style.width = "65%"
                                                 h_5_br.style.height = "100%"
-                                                h_5_br.innerText = "占位符:"+"    "+"内容:"+ i
+                                                h_5_br.innerText = "占位符:" + "    " + "内容:" + i
                                                 h_5_br.style.display = "inline-block"
-                                                
+
 
                                                 // // 添加
                                                 // var button_add_br_else = document.createElement("input")
@@ -1605,13 +1610,13 @@
                                                 button_del_br_else.type = "button"
                                                 button_del_br_else.value = "删除"
                                                 button_del_br_else.id = "br_show_else_del" + i.toString()
-                                                
-                                                button_del_br_else.addEventListener("click", function (i){
+
+                                                button_del_br_else.addEventListener("click", function (i) {
                                                     // 获取id
                                                     var list_div_show_id_br = i.path[0].id[16]
                                                     // 删除                                                    
                                                     // console.log("换行函数中的删除函数",i.path[0].id[16],list_div_show_id_br)   
-                                                    list_data.splice(parseInt(list_div_show_id_br), 1)                                                                                     
+                                                    list_data.splice(parseInt(list_div_show_id_br), 1)
                                                     $('#' + 'div_show' + list_div_show_id_br).remove()
                                                     show()
                                                 })
@@ -1620,15 +1625,15 @@
                                                 div_list_item.appendChild(h_5_br)
                                                 // div_list_item.appendChild(button_add_br_else)
                                                 div_list_item.appendChild(button_del_br_else)
-                                                
+
 
 
 
                                             }
 
-                                            
-                                            
-                                            
+
+
+
                                             $('#context_show_list').append(div_list_item)
 
 
@@ -1644,14 +1649,34 @@
                             <!-- 文件预览 -->
                             <div
                                 style="background-color:rgb(78, 9, 189); width: 100%; height: 5%;border: 3px solid rgb(58, 128, 0);">
+                                <input id="quick_look" type="button" value="预览"
+                                    style="width:10%;height:100%;float:right ">
                                 <input type="button" value="保存" style="width:10%;height:100%;float:right ">
-                                <input type="button" value="保存并预览" style="width:10%;height:100%;float:right ">
-                                <input type="button" value="保存版本" style="width:10%;height:100%;float:right ">
-                                <input type="button" value="下载" style="width:10%;height:100%;float:left ">
-                                <input type="button" value="清除" style="width:10%;height:100%;float:left ">
+                                <input type="button" value="合并版本" style="width:10%;height:100%;float:right ">
+                                <!-- <input type="button" value="下载" style="width:10%;height:100%;float:left ">
+                                <input type="button" value="清除" style="width:10%;height:100%;float:left "> -->
 
 
                             </div>
+                            <!-- 数据预览保存合并的功能 -->
+                            <script>
+                                $(function () {
+                                    $("#quick_look").click(function () {
+                                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                        var data_post_quick_look = JSON.stringify(list_data)
+                                        $.ajax({
+                                            url: "quick_look",  // 请求的地址
+                                            type: "post",  // 请求方式
+                                            data: {
+                                                "data_post": data_post_quick_look,
+                                                'csrfmiddlewaretoken': csrf
+                                            },
+                                            dataType: "json",
+                                        })
+                                    })
+                                });
+
+                            </script>
 
 
 
@@ -1885,21 +1910,24 @@
 
                             <div style="display:inline-flex;width:100%;height:10%;  ">
                                 <div style="width:7%;height:100%">
-                                    <div style="width:100%;height:70%">增加<input type="radio" name="canvas_var"></div>
-                                    <div style="width:100%;height:70%">减少<input type="radio" name="canvas_var"></div>
+                                    <div style="width:100%;height:70%">增加<input checked="checked" type="radio"
+                                            name="canvas_var" value="+"></div>
+                                    <div style="width:100%;height:70%">减少<input type="radio" name="canvas_var"
+                                            value="-"></div>
                                 </div>
                                 <div style="width:80%;height:100%  ">
                                     <div style="width:100%;height:30%  ">
                                     </div>
                                     <!-- 添加数值 -->
                                     <div style="display:inline-block;width:100%;height:35%;  ">
-                                        0.1<input type="radio" name="canvas_num" style="width:5%">
-                                        0.3<input type="radio" name="canvas_num" style="width:5%">
-                                        0.5<input type="radio" name="canvas_num" style="width:5%">
-                                        1<input type="radio" name="canvas_num" style="width:5%">
-                                        3<input type="radio" name="canvas_num" style="width:5%">
-                                        5<input type="radio" name="canvas_num" style="width:5%">
-                                        10<input type="radio" name="canvas_num" style="width:5%">
+                                        0.1<input checked="checked" type="radio" name="canvas_num" style="width:5%"
+                                            value="0.1">
+                                        0.3<input type="radio" name="canvas_num" style="width:5%" value="0.3">
+                                        0.5<input type="radio" name="canvas_num" style="width:5%" value="0.5">
+                                        1<input type="radio" name="canvas_num" style="width:5%" value="1">
+                                        3<input type="radio" name="canvas_num" style="width:5%" value="3">
+                                        5<input type="radio" name="canvas_num" style="width:5%" value="5">
+                                        10<input type="radio" name="canvas_num" style="width:5%" value="10">
                                     </div>
 
                                 </div>
@@ -1912,9 +1940,27 @@
                             </div>
                             <!-- 绘图的核心js -->
                             <script type="text/javascript">
-                                //
+                                // 控件连接
+
+
+                                //数据设置
                                 var data_canvas = {
-                                    "station": [360, 320, 32]
+                                    "station_list": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11','12'],
+                                    "station": [
+                                        [360, 320, 32], 
+                                        [330, 370, 15], 
+                                        [310, 345, 15], 
+                                        [310, 280, 15],
+                                        [390, 200, 15],
+                                        [486, 422, 15],
+                                        [426, 526, 15],
+                                        [513, 257, 15],
+                                        [210, 291, 15],
+                                        [348, 114, 15],
+                                        [523, 179, 15],
+                                        [440, 253, 15],
+
+                                ]
                                 }
                                 //设置画布
                                 const canvas = document.getElementById("plot_canvas");
@@ -1923,18 +1969,9 @@
                                 canvas.height = 651;
                                 canvas.style.backgroundColor = "white";
 
-                                ctx.font = "30px Arial";
+                                ctx.font = "20px Arial";
                                 var myImg = new Image();
                                 myImg.src = 'static/src/taizhou.png';
-                                // ctx.drawImage(myImg, 0, 0, 1800, 900)
-
-                                // ctx.drawImage(myImg, 0, 0, 800, 800)   
-
-                                // setTimeout(function () {
-                                //         ctx.drawImage(myImg, 0, 0, 800, 800)
-                                //         ctx.drawImage(bgImg, 0, 0, 800, 800)
-                                //         document.querySelector('.generateImg').src = canvas.toDataURL("image/png")
-                                //     }, 10)
 
 
                                 let ballArr = [];
@@ -1961,14 +1998,12 @@
                                         ctx.save();
                                         ctx.beginPath();
                                         ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-                                        ctx.fillText(data_canvas['station'][2], data_canvas['station'][0], data_canvas['station'][1]);
-                                        // ctx.drawImage(myImg, 0, 0, 1800, 900)
-                                        // myImg = " "
-                                        // console.log("我在画图")
-
-
+                                        // ctx.fillText(data_canvas['station'][2].toFixed(2), data_canvas['station'][0], data_canvas['station'][1]);
+                                        for (var i = 0; i < data_canvas.station_list.length; i++) {
+                                            ctx.fillText(data_canvas['station'][i][2].toFixed(1), data_canvas['station'][i][0], data_canvas['station'][i][1]);
+                                        }
                                         ctx.lineWidth = 3;
-                                        ctx.strokeStyle = "blue";
+                                        ctx.strokeStyle = "red";
                                         ctx.stroke();
                                         // ctx.fillStyle = this.color;
                                         // ctx.fill();
@@ -2012,13 +2047,30 @@
                                         mouseInCanvas = true;
                                         offsetX = e.offsetX;
                                         offsetY = e.offsetY;
-                                        var len_r = (offsetX - data_canvas['station'][0]) * (offsetX - data_canvas['station'][0]) + (offsetY - data_canvas['station'][1]) * (offsetY - data_canvas['station'][1]);
-                                        if (len_r < r * r) {
-                                            data_canvas['station'][2] = data_canvas['station'][2] - 1
+                                        // console.log(offsetX,offsetY)
+                                        
+                                        var canvas_select_value = parseFloat($("input[name='canvas_num']:checked").val());
+                                        var canvas_select_method = $("input[name='canvas_var']:checked").val();
+                                        for (var i = 0; i < data_canvas.station_list.length; i++) {
 
+                                            var len_r = (offsetX - data_canvas['station'][i][0]) * (offsetX - data_canvas['station'][i][0]) + (offsetY - data_canvas['station'][i][1]) * (offsetY - data_canvas['station'][i][1]);
+                                            if (canvas_select_method == '+') {
 
+                                                if (len_r < r * r) {
+                                                    data_canvas['station'][i][2] = data_canvas['station'][i][2] + canvas_select_value
+                                                }
+                                            }
+                                            else {
+
+                                                if (len_r < r * r) {
+                                                    data_canvas['station'][i][2] = data_canvas['station'][i][2] - canvas_select_value
+                                                }
+                                            }
                                         }
-                                        // console.log(offsetX, offsetY, this.r)
+
+                        
+
+
 
                                     });
                                 // 鼠标滑轮
@@ -2036,7 +2088,7 @@
                                         }
                                         // r = r + z*0.1
 
-                                        console.log(z, r)
+                                        // console.log(z, r)
 
                                     });
                                 //鼠标出画布
@@ -2063,6 +2115,7 @@
                                     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
                                     ctx.drawImage(myImg, 0, 0, 727, 651)
+
                                     // console.log("我在刷新")
                                     for (let i = 0; i < ballArr.length; i++) {
                                         undefined
@@ -3758,6 +3811,7 @@
             </div>
 
         </div>
+        {% csrf_token %}
     </div>
 
 

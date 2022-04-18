@@ -10,7 +10,7 @@ def index_views(request):
 def login_views(request):
     if request.method == 'GET':
         #获取请求源地址
-        url = request.META.get('HTTP_REFERER','/')
+        url = request.META.get('HTTP_REFERER','/login')
 
         #判断session中是否有登录信息(uphone)
         if 'uphone' in request.session:
