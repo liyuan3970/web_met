@@ -1065,25 +1065,9 @@
                                             </div>
                                             <!-- 表格模块的编写 -->
                                             <div class="tab-pane " id="panel-003"
-                                                style="width:100%;height:100%;background-color:rgb(240, 140, 9)">
-                                                <div style="display: inline-flex;width:100%;height:10%;">
-                                                    <input type="button" value="添加行" style="width:10%;height: 80%;">
-                                                    <input type="button" value="删除行" style="width:10%;height: 80%;">
-                                                    <input type="button" value="添加列" style="width:10%;height: 80%;">
-                                                    <input type="button" value="删除列" style="width:10%;height: 80%;">
-                                                    <div style="width:10%;height: 80%;"></div>
-                                                    <div style="width:10%;height: 80%;"></div>
-                                                    <div style="width:10%;height: 80%;"></div>
-                                                    <div style="width:8%;height: 80%;"></div>
-
-
-                                                    <input type="button" value="合并单元" style="width:10%;height: 80%;">
-                                                    <input type="button" value="取消合并" style="width:10%;height: 80%; ">
-                                                </div>
-
-
+                                                style="width:100%;height:100%;background-color:rgb(240, 140, 9)">                                               
                                                 <div id="table_show"
-                                                    style="width:100%;height:70%;border: 3px solid black;">
+                                                    style="width:100%;height:83.5%;border: 3px solid black;">
 
 
                                                 </div>
@@ -1094,10 +1078,10 @@
                                                     var htmlout = document.getElementById('table_show')
                                                     var text_main_wh = document.getElementById('index_main')
                                                     console.log("宽度", htmlout.clientWidth, htmlout.clientHeight, text_main_wh.offsetHeight, text_main_wh.offsetWidth)
-                                                    var htmlouth = text_main_wh.offsetHeight * 0.43
+                                                    var htmlouth = text_main_wh.offsetHeight * 0.545
                                                     var htmloutw = text_main_wh.offsetWidth * 0.48
 
-                                                    option_sheet = option = {
+                                                    option_sheet = {
                                                         mode: 'edit', // edit | read
                                                         showToolbar: true, // 顶部工具栏
                                                         showGrid: true,
@@ -1157,9 +1141,12 @@
 
 
                                                 <div style="width:100%;height:10%;border: 3px solid black;">
-                                                    <input type="button" value="删除" style="float:right"><input
-                                                        type="button" value="添加" style="float:right">
+                                                    <input id ="add_sheet" type="button" value="添加" style="width: 10%;height:100%;float:right">
+                                                    <input id ="del_sheet" type="button" value="清屏" style="width: 10%;height:100%;float:right">
+                                                    <input id ="change_sheet" type="button" value="修改" style="width: 10%;height:100%;float:right">
 
+                                                    
+                                                
                                                 </div>
 
                                             </div>
@@ -1288,71 +1275,91 @@
                                                 <!-- <p>
                                                     呈送发
                                                 </p> -->
-                                                <div class="panel-group" id="panel-944300"
-                                                    style="background-color:rgb(218, 88, 12); width: 100%; height: 80%;border: 3px solid rgb(192, 27, 27);">
-                                                    <div class="panel panel-default">
-                                                        <div class="panel-heading">
-                                                            <a class="panel-title collapsed" data-toggle="collapse"
-                                                                data-parent="#panel-944300"
-                                                                href="#panel-element-001">宣传二维码</a>
+                                                
+                                       
+                                                <div 
+                                                    style="background-color:rgb(218, 88, 12); width: 100%; height: 83.5%;border: 3px solid rgb(192, 27, 27);">
+                                                    <div style="display:inline-flex;width: 100%; height: 25%;border: 3px solid rgb(20, 20, 20);" >
+                                                        <div style="width: 97%; height:100%;text-align:center;">
+                                                            <img src="static/src/二维码.png" style="width: 33%; height:90%;" >
+                                                            <img src="static/src/二维码.png" style="width: 33%; height:90%;" >
+                                                            <img src="static/src/二维码.png" style="width: 33%; height:90%;" >
+
                                                         </div>
-                                                        <div id="panel-element-001" class="panel-collapse collapse">
-                                                            <div class="panel-body">
-                                                                图片
-                                                            </div>
-                                                        </div>
+                                                        <select style="width: 3%; height: 100%;" >
+                                                            <option selected="selected" disabled="disabled"  style='display: none' value=''></option>
+                                                            <option>HTML</option>
+                                                            <option>CSS</option>
+                                                            <option>Javascript</option>
+                                                            <option>vue</option>
+                                                            <option>react</option>
+                                                        </select>
+                                                        
+                                                        
+
                                                     </div>
-                                                    <div class="panel panel-default">
-                                                        <div class="panel-heading">
-                                                            <a class="panel-title" data-toggle="collapse"
-                                                                data-parent="#panel-944300"
-                                                                href="#panel-element-002">呈</a>
+                                                    <div style="width: 100%; height: 75%;border: 3px solid rgb(20, 20, 20);" >
+                                                        <div style="display:inline-flex;width: 100%; height: 33%;border: 3px solid rgb(20, 20, 20);" >
+                                                            
+                                                            
+                                                            <textarea style="width: 97%; height: 90%;resize: none;" placeholder="呈送领导"></textarea>
+                                                            <select style="width: 3%; height: 90%;" >
+                                                                <option selected="selected" disabled="disabled"  style='display: none' value=''></option>
+                                                                <option>HTML</option>
+                                                                <option>CSS</option>
+                                                                <option>Javascript</option>
+                                                                <option>vue</option>
+                                                                <option>react</option>
+                                                            </select>
+                                                            
+                                                    
+
                                                         </div>
-                                                        <div id="panel-element-002" class="panel-collapse in">
-                                                            <div class="panel-body">
-                                                                呈:李跃期,孙中山,王晓,李跃期,孙中山,王晓,李跃期,孙中山,王晓,李跃期,孙中山,王晓
-                                                            </div>
+                                                        <div style="display:inline-flex;width: 100%; height: 33%;border: 3px solid rgb(20, 20, 20);" >
+                                                            <textarea style="width: 97%; height: 90%;resize: none;" placeholder="抄送单位"></textarea>
+                                                            <select style="width: 3%; height: 90%;" >
+                                                                <option selected="selected" disabled="disabled"  style='display: none' value=''></option>
+                                                                <option>HTML</option>
+                                                                <option>CSS</option>
+                                                                <option>Javascript</option>
+                                                                <option>vue</option>
+                                                                <option>react</option>
+                                                            </select>
+
                                                         </div>
+                                                        <div style="display:inline-flex;width: 100%; height: 33%;border: 3px solid rgb(20, 20, 20);" >
+                                                            <textarea style="width: 97%; height: 90%;resize: none;" placeholder="抄送部门"></textarea>
+                                                            <select style="width: 3%; height: 90%;" >
+                                                                <option selected="selected" disabled="disabled"  style='display: none' value=''></option>
+                                                                <option>HTML</option>
+                                                                <option>CSS</option>
+                                                                <option>Javascript</option>
+                                                                <option>vue</option>
+                                                                <option>react</option>
+                                                            </select>
+
+                                                        </div>
+
                                                     </div>
-                                                    <div class="panel panel-default">
-                                                        <div class="panel-heading">
-                                                            <a class="panel-title" data-toggle="collapse"
-                                                                data-parent="#panel-944300"
-                                                                href="#panel-element-003">送</a>
-                                                        </div>
-                                                        <div id="panel-element-003" class="panel-collapse in">
-                                                            <div class="panel-body">
-                                                                抄送:李跃期,孙中山,王晓,李跃期,孙中山,王晓,李跃期,孙中山,王晓,李跃期,孙中山,王晓
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel panel-default">
-                                                        <div class="panel-heading">
-                                                            <a class="panel-title" data-toggle="collapse"
-                                                                data-parent="#panel-944300"
-                                                                href="#panel-element-004">发</a>
-                                                        </div>
-                                                        <div id="panel-element-004" class="panel-collapse in">
-                                                            <div class="panel-body">
-                                                                单位:李跃期,孙中山,王晓,李跃期,孙中山,王晓,李跃期,孙中山,王晓,李跃期,孙中山,王晓
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    
                                                 </div>
 
 
                                                 <div
-                                                    style="background-color:rgb(218, 88, 12); width: 100%; height: 20%;border: 3px solid rgb(192, 27, 27);">
-                                                    <input type="button" value="删除" style="float:right"><input
-                                                        type="button" value="添加" style="float:right">
+                                                    style="background-color:rgb(218, 88, 12); width: 100%; height: 10%;border: 3px solid rgb(192, 27, 27);">
+                                                    <input type="button" id="add_publish" value="添加" style="width:10%;height:100%;float:right ">
+                                                        <input type="button" id="del_publish" value="清屏" style="width:10%;height:100%;float:right ">
+                                                        <input id="change_publish" type="button" value="修改" style="width:10%;height:100%;float:right">
                                                 </div>
 
                                             </div>
                                             <div class="tab-pane" id="panel-008"
                                                 style="width:100%;height:100%;background-color:rgb(240, 140, 9)">
-                                                <div class="list-group" style="width:100%;height:90%;">
-                                                    <a href="#" class="list-group-item active"
-                                                        style="width:100%;height:10%;">列表</a>
+                                                <div class="list-group" style="width:100%;height:93.5%;">
+                                                    <!-- <a href="#" class="list-group-item active"
+                                                        style="width:100%;height:10%;">列表</a> -->
+                                                    <input id = "list_text_title" type="text" placeholder="请输入标题" class="list-group-item active" style="width:100%;height:10%;">
+
                                                     <div id="list_show" class="list-group-item"
                                                         style="width:100%;height:80%;;overflow:auto;">
                                                         <textarea id="textare1"
@@ -1369,20 +1376,20 @@
                                                             style="width: 100%; height: 10%; resize:none;">14日(周一):多云到阴,午后因有阵雨或雷雨          24~32度</textarea>
 
                                                     </div>
-                                                    <a class="list-group-item active" style="width:100%;height:10%;">
-                                                        <input id="list_text_add" type="button" value="添加"
-                                                            style="float:right">
-                                                        <input id="list_text_del" type="button" value="删除"
-                                                            style="float:right">
-                                                        <input id="list_text_change" type="button" value="修改"
-                                                            style="float:right">
-                                                    </a>
+                                                    <div  style="width:100%;height:10%;">
+                                                        <input type="button" id="add_list_text" value="添加" style="width:10%;height:100%;float:right ">
+                                                        <input type="button" id="del_list_text" value="清屏" style="width:10%;height:100%;float:right ">
+                                                        <input id="change_list_text" type="button" value="修改" style="width:10%;height:100%;float:right">
+                                                        <input id="list_text_add" type="button" value="添加列表" style="width:10%;height:100%;float:left">
+                                                        <input id="list_text_del" type="button" value="删除列表" style="width:10%;height:100%;float:left">
+                                                    
+                                                    </div>
                                                 </div>
                                                 <script>
                                                     var list_show = document.getElementById("list_show")
                                                     var list_text_del = document.getElementById("list_text_del")
                                                     var list_text_add = document.getElementById("list_text_add")
-                                                    var text_are_id = 7
+                                                    var text_are_id = 6
 
                                                     list_text_del.onclick = function () {
                                                         // console.log("删除列表")
@@ -1390,7 +1397,7 @@
 
                                                         var textare_par = document.getElementById("list_show")
 
-                                                        if (text_are_id > 0) {
+                                                        if (text_are_id > 6) {
                                                             textare_par.childNodes[textare_par.childNodes.length - 1].remove()
                                                             text_are_id = text_are_id - 1
                                                         }
@@ -1400,11 +1407,12 @@
                                                     list_text_add.onclick = function () {
                                                         // console.log("添加列表")
                                                         var textare = document.createElement("textarea")
+                                                        text_are_id = text_are_id + 1
                                                         textare.id = "textare" + text_are_id.toString()
                                                         textare.style.width = "100%"
                                                         textare.style.height = "10%"
                                                         textare.style.resize = "none"
-                                                        text_are_id = text_are_id + 1
+                                                        
                                                         list_show.appendChild(textare)
 
 
@@ -1705,6 +1713,134 @@
                                             list_data[change_id].show_png_four_4st = $("#png_four_show_4st").html()
                                         }
                                     };
+                                    // 列表模块
+                                    var add_Btn_list_text = document.getElementById('add_list_text');
+                                    var del_Btn_list_text = document.getElementById('del_list_text');
+                                    var change_Btn_list_text = document.getElementById('change_list_text');
+                                    // 列表清屏功能
+                                    del_Btn_list_text.onclick = function () {
+                                        $("#list_show").html(" ")
+                                        for (i=0;i<6;i++){
+                                            var textare = document.createElement("textarea")                                                        
+                                            textare.id = "textare" + (i+1).toString()
+                                            textare.style.width = "100%"
+                                            textare.style.height = "10%"
+                                            textare.style.resize = "none"
+                                            textare.placeholder="14日(周一):多云到阴,午后因有阵雨或雷雨          24~32度"                                                      
+                                            $("#list_show").append(textare)
+                                        }
+                                    }
+                                    // 列表添加功能
+                                    add_Btn_list_text.onclick = function () {
+                                        if (id_div >= 0) {
+                                            id_div = id_div + 1
+
+                                        }
+                                        // 添加要素
+
+                                        var title_main = $("#list_text_title").val();
+                                        var list_text_main = $("#list_show").children().length;
+                                        var list_text_html = $("#list_show").html()
+                                        var list_text_context = []
+                                        for (i=0;i<list_text_main;i++){
+                                            var textare_item = $('#textare'+(i+1).toString()).val()                                   
+                                            list_text_context[i] = textare_item
+
+                                        }
+
+                                        var data_add = {
+                                            "type": "列表",
+                                            "id": id_div,
+                                            "title_main": title_main,
+                                            "text_main": list_text_context,
+                                            "text_html": list_text_html
+
+                                        }
+
+                                        list_data.push(data_add)
+                                        show()
+
+                                    }
+                                    // 列表修改
+                                    change_Btn_list_text.onclick = function () {
+                                        var change_id = parseInt($('#change_list_text').val()[3])
+                                        var list_text_main = $("#list_show").children().length;
+                                        var list_text_html = $("#list_show").html()
+                                        var list_text_context = []
+                                        for (i=0;i<list_text_main;i++){
+                                            var textare_item = $('#textare'+(i+1).toString()).val()                                   
+                                            list_text_context[i] = textare_item
+
+                                        }
+                                        // console.log("修改按钮内容", change_id)
+                                        if (list_data[change_id].type == "列表") {
+                                            list_data[change_id].list_text_context = list_text_context
+                                            list_data[change_id].title_main = $("#list_text_title").val();
+                                            
+                                        }
+                                    };
+                                    // 表格模块
+                                    var add_Btn_sheet = document.getElementById('add_sheet');
+                                    var del_Btn_sheet = document.getElementById('del_sheet');
+                                    var change_Btn_sheet = document.getElementById('change_sheet');
+
+                                    del_Btn_sheet.onclick = function () {
+                                        // 空表格数据
+                                        var null_sheet_data = JSON.stringify({
+                                            "name": "sheet1",
+                                                "freeze": "A1",
+                                                    "styles": [],
+                                                        "merges": [],
+                                                            "rows": {
+                                                "len": 15
+                                            },
+                                            "cols": {
+                                                "len": 10
+                                            },
+                                            "validations": [],
+                                                "autofilter": { }
+                                        })
+                                        
+                                        
+                                        xs.loadData(null_sheet_data)
+
+                                        
+                                        // console.log("表格返回的数据为：\n", xs.getData())
+                                    }
+                                    // 表格添加功能
+                                    add_Btn_sheet.onclick = function () {
+                                        if (id_div >= 0) {
+                                            id_div = id_div + 1
+
+                                        }
+                                        // 添加要素
+
+                                        var title_main = "表格数据"
+                                        var data_sheet = xs.getData()
+                                        // JSON.stringify(xs.getData())
+                                        
+                                        
+                                        var data_add = {
+                                            "type": "表格",
+                                            "id": id_div,
+                                            "title_main": title_main,
+                                            "sheet_main": data_sheet
+                                            
+
+                                        }
+
+                                        list_data.push(data_add)
+                                        show()
+
+                                    }
+                                    // 表格修改
+                                    change_Btn_sheet.onclick = function () {
+                                        var change_id = parseInt($('#change_sheet').val()[3])
+                                        var change_sheet_data = xs.getData()
+                                        list_data[change_id].sheet_main = change_sheet_data
+                                        
+                                        
+                                    }
 
 
 
@@ -1744,7 +1880,7 @@
                                                 // console.log("空行id+",i,i)
                                                 button_add_br.addEventListener("click", function (i) {
                                                     var list_div_show_id = i.path[0].id[7]
-                                                    console.log("空行id", i, list_div_show_id)
+                                                    // console.log("空行id", i, list_div_show_id)
                                                     var data_add_br = {
                                                         'type': 'add_br'
 
@@ -1806,6 +1942,17 @@
                                                         $("#change_four_fig").val("修改:" + list_div_show_id)
 
 
+                                                    }
+                                                    else if (list_data[parseInt(list_div_show_id)].type == '列表') {
+                                                        $("#list_text_title").val(list_data[parseInt(list_div_show_id)].title_main)
+                                                        $("#list_show").html(list_data[parseInt(list_div_show_id)].text_html)
+
+                                                        $("#change_list_text").val("修改:" + list_div_show_id)
+
+                                                    }
+                                                    else if (list_data[parseInt(list_div_show_id)].type == '表格') {                                                                                                                                                                  
+                                                        xs.loadData(list_data[parseInt(list_div_show_id)].sheet_main)  
+                                                        $("#change_sheet").val("修改:" + list_div_show_id)
                                                     }
                                                 })
 
@@ -1916,7 +2063,8 @@
                                                 "data_post": data_post_quick_look,
                                                 'csrfmiddlewaretoken': csrf
                                             },
-                                            dataType: "json",
+                                            dataType: "json"
+                                            
                                         })
                                     })
                                 });
@@ -2130,6 +2278,26 @@
                                 }
 
                                 function tool_5() {
+                                    // 向服务器要数据并显示tool5
+                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                    console.log("打印后端接受的数据",{{ data_test }})
+                                    $.ajax({
+                                            url: "upload_selfplot_data",  // 请求的地址
+                                            type: "get",  // 请求方式
+                                            data: {
+                                                "plot_self_data": JSON.stringify(data_canvas),
+                                                'csrfmiddlewaretoken': csrf
+                                            },
+                                            dataType: "json",
+                                            success: function (data){
+                                                console.log("ajax请求成功返回的数据",data.img)
+                                                var plotImg = new Image();
+                                                plotImg.src = data.img
+                                                $('#canvas_plot_div').html(" ")
+                                                $('#canvas_plot_div').html(plotImg)
+                                                
+                                            }
+                                        })
 
                                     var tool1_view = document.getElementById("tool1_view")
                                     var tool2_view = document.getElementById("tool2_view")
@@ -2143,6 +2311,7 @@
                                     tool2_view.style.display = "none"
                                     tool3_view.style.display = "none"
                                     tool5_view.style.display = "inline-block"
+                                    
 
 
                                 }
@@ -2173,6 +2342,7 @@
                                         3<input type="radio" name="canvas_num" style="width:5%" value="3">
                                         5<input type="radio" name="canvas_num" style="width:5%" value="5">
                                         10<input type="radio" name="canvas_num" style="width:5%" value="10">
+                                        
                                     </div>
 
                                 </div>
@@ -2379,6 +2549,25 @@
                                     style="width:10%;height: 50%;float:right">
                                 <input type="button" value="刷新" style="width:10%;height: 50%;float:right">
                             </div>
+
+                            <!-- 绘图的post相关代码 -->
+                            <!-- <script type="text/javascript">
+                                $(function () {
+                                    $("#quick_look").click(function () {
+                                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                        var data_post_quick_look = JSON.stringify(list_data)
+                                        $.ajax({
+                                            url: "quick_look",  // 请求的地址
+                                            type: "post",  // 请求方式
+                                            data: {
+                                                "data_post": data_post_quick_look,
+                                                'csrfmiddlewaretoken': csrf
+                                            },
+                                            dataType: "json",
+                                        })
+                                    })
+                                });
+                            </script> -->
 
 
 
@@ -3959,9 +4148,12 @@
                 <div id="tool5_view"
                     style="display: inline-block;background-color:white; width: 100%; height: 100%;border: 3px solid rgb(58, 128, 0);overflow:auto">
                     <!-- 这里是canvas的结果 -->
-                    <div style="width:100%;height:70%;border: 3px solid rgb(58, 128, 0);overflow:auto">
-                        <img src="static/src/降水.png" style="width:100%;height:100%;">
+                    <div id = "canvas_plot_div" style="width:100%;height:70%;border: 3px solid rgb(58, 128, 0);overflow:auto">
+                        <!-- <img id = "canvas_plot" src=" " style="width:100%;height:100%;">
+                        <img src="static/src/降水.png" style="width:100%;height:100%;"> -->
+                        
                     </div>
+                    
                     <div
                         style="display: inline-flex;width:100%;height:30%;border: 3px solid rgb(58, 128, 0);overflow:auto">
                         <div id="canvas_bar"

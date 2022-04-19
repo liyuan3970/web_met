@@ -25,7 +25,9 @@ urlpatterns = [
     url(r'^station/(.+)/$',views.station_view),
     url(r'^index',views.index_main),
     url(r'^home',views.home),
-    url(r'^quick_look',views.quick_look)
+    url(r'^quick_look',views.quick_look),
+    # 自定义绘图
+    url(r'^upload_selfplot_data',views.plot_self_data)
 
 
 

@@ -105,12 +105,39 @@ def quick_look(request):
 
     # data_list = request.POST['data_post']
     print("获取到的预览数据:",data_list)
-    context = {
-        'data_test':[123]
+    
+    return render(request,'index.html')
+
+def plot_self_data(request):
+    plot_self_data = request.GET.get('plot_self_data','')
+    crf = request.GET.get('csrfmiddlewaretoken','')
+    data  = json.loads(plot_self_data)
+    lon = []
+    lat = []
+    value = []
+    
+    # (llcrnrlon=120.1,llcrnrlat=27.8,urcrnrlon=122,urcrnrlat=29.5)
+    for i in range(len(data['station'])):
+        x = data['station'][i][0]*1.9/727+120.1
+        lon.append(x)
+        y = 29.5-data['station'][i][0]*1.7/651
+        lat.append(y)
+        value.append(data['station'][i][2])
+    func.plot_image(lat,lon,value)
+    buffer = BytesIO()
+    plt.savefig(buffer,bbox_inches='tight')  
+    plot_img = buffer.getvalue()
+    imb = base64.b64encode(plot_img) 
+    ims = imb.decode()
+    imd = "data:image/png;base64,"+ims
+    # <img src="{{ img }}"> 
+    print("获取到的预览数据:")
+    context2 = {
+        'data_test':723.5,
+        "img":imd,
     }
-    return render(request,'index.html',context)
-
-
+    return JsonResponse(context2) 
+    # return render(request,'index.html',context2)
 
 from django.views.decorators.clickjacking import xframe_options_exempt
 
