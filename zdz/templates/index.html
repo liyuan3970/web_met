@@ -52,6 +52,10 @@
                         <!-- 另外添加一个说明文档 -->
                         <a href="#panel-3" data-toggle="tab">画图</a>
                     </li>
+                    <li>
+                        <!-- 另外添加一个说明文档 -->
+                        <a href="#panel-5" data-toggle="tab">快捷网址</a>
+                    </li>
                     <li style="float: right;">
                         <!-- 另外添加一个说明文档 -->
                         <a href="#panel-4" data-toggle="tab">帮助</a>
@@ -2129,23 +2133,33 @@
                             </div>
                             <div style="width:100%;height:25%;background-color:rgb ;border: 3px solid black;">
                                 <div style="width:100%;height:15%">
-                                    <h3>预报数据</h3>
+                                    <h3>市台订正:</h3>
 
                                 </div>
                                 <div
-                                    style="display: inline-flex;width:100%;height:55%;text-align:center;vertical-align: middle;align-items: center;">
+                                    style="display: inline-flex;width:100%;height:15%;text-align:center;align-items: center;">
+                                    08:<input type="radio" name="tz_self_time"
+                                        style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
+                                    20:<input type="radio" name="tz_self_time"
+                                        style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
 
-                                    气温:<input type="radio"
+                                </div>
+                                <div
+                                    style="display: inline-flex;width:100%;height:40%;text-align:center;align-items: center;">
+
+                                    短期气温:<input type="radio" name="tz_self"
                                         style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
-                                    降水:<input type="radio"
+                                    短期降水:<input type="radio" name="tz_self"
                                         style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
-                                    高温:<input type="radio"
+                                    短期大风:<input type="radio" name="tz_self"
                                         style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
-                                    低温：<input type="radio"
+                                    降水:<input type="radio" name="tz_self"
                                         style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
-                                    能见度：<input type="radio"
+                                    高温:<input type="radio" name="tz_self"
                                         style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
-                                    雪深：<input type="radio"
+                                    低温:<input type="radio" name="tz_self"
+                                        style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
+                                    短期云量:<input type="radio" name="tz_self"
                                         style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
 
                                 </div>
@@ -2320,254 +2334,256 @@
                         </div>
                         <!-- 利用canvas绘图的模块 ---- 这里主要提供三种画图方式（散点、插值、等值线）-->
                         <div class="tab-pane" id="panel-3"
-                            style="width:100%;height:100%;background-color:rgb(8, 116, 167)">
-
-                            <div style="display:inline-flex;width:100%;height:10%;  ">
-                                <div style="width:7%;height:100%">
-                                    <div style="width:100%;height:70%">增加<input checked="checked" type="radio"
-                                            name="canvas_var" value="+"></div>
-                                    <div style="width:100%;height:70%">减少<input type="radio" name="canvas_var"
-                                            value="-"></div>
-                                </div>
-                                <div style="width:80%;height:100%  ">
-                                    <div style="width:100%;height:30%  ">
-                                    </div>
-                                    <!-- 添加数值 -->
-                                    <div style="display:inline-block;width:100%;height:35%;  ">
-                                        0.1<input checked="checked" type="radio" name="canvas_num" style="width:5%"
-                                            value="0.1">
-                                        0.3<input type="radio" name="canvas_num" style="width:5%" value="0.3">
-                                        0.5<input type="radio" name="canvas_num" style="width:5%" value="0.5">
-                                        1<input type="radio" name="canvas_num" style="width:5%" value="1">
-                                        3<input type="radio" name="canvas_num" style="width:5%" value="3">
-                                        5<input type="radio" name="canvas_num" style="width:5%" value="5">
-                                        10<input type="radio" name="canvas_num" style="width:5%" value="10">
-                                        
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                            <div
-                                style="width:100%;height:75%; text-align:center;vertical-align: middle;align-items: center; ">
-                                <canvas id="plot_canvas" style="width:727px;height:651px;"></canvas>
-                            </div>
-                            <!-- 绘图的核心js -->
-                            <script type="text/javascript">
-                                // 控件连接
-
-
-                                //数据设置
-                                var data_canvas = {
-                                    "station_list": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-                                    "station": [
-                                        [360, 320, 32],
-                                        [330, 370, 15],
-                                        [310, 345, 15],
-                                        [310, 280, 15],
-                                        [390, 200, 15],
-                                        [486, 422, 15],
-                                        [426, 526, 15],
-                                        [513, 257, 15],
-                                        [210, 291, 15],
-                                        [348, 114, 15],
-                                        [523, 179, 15],
-                                        [440, 253, 15],
-
-                                    ]
-                                }
-                                //设置画布
-                                const canvas = document.getElementById("plot_canvas");
-                                const ctx = canvas.getContext('2d');
-                                canvas.width = 727;
-                                canvas.height = 651;
-                                canvas.style.backgroundColor = "white";
-
-                                ctx.font = "20px Arial";
-                                var myImg = new Image();
-                                myImg.src = 'static/src/taizhou.png';
+                            style="width:100%;height:100%;background-color:rgb(119, 136, 214)">
+                            <div class="tabbable" id="tabs-329760" style="width:100%;height:100%; ">
+                                <ul class="nav nav-tabs">
+                                    <li class="active">
+                                         <a href="#panel-canvas01" data-toggle="tab">面雨量</a>
+                                    </li>
+                                    <li>
+                                         <a href="#panel-canvas02" data-toggle="tab">极大风</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" style="width:100%;height:95%">
+                                    <div class="tab-pane active" id="panel-canvas01" style="width:100%;height:100%">
+                                    
+                                        <!-- <label style="fontsize:40px">降水订正</label> -->
+                                        <div style="display:inline-flex;width:100%;height:10%;  ">
+                                            <div style="width:7%;height:100%">
+                                                <div style="width:100%;height:70%">增加<input checked="checked" type="radio" name="canvas_var" value="+">
+                                                </div>
+                                                <div style="width:100%;height:70%">减少<input type="radio" name="canvas_var" value="-"></div>
+                                            </div>
+                                            <div style="width:80%;height:100%  ">
+                                                <div style="width:100%;height:30%  ">
+                                                </div>
+                                                <!-- 添加数值 -->
+                                                <div style="display:inline-block;width:100%;height:35%;  ">
+                                                    0.1<input checked="checked" type="radio" name="canvas_num" style="width:5%" value="0.1">
+                                                    0.3<input type="radio" name="canvas_num" style="width:5%" value="0.3">
+                                                    0.5<input type="radio" name="canvas_num" style="width:5%" value="0.5">
+                                                    1<input type="radio" name="canvas_num" style="width:5%" value="1">
+                                                    3<input type="radio" name="canvas_num" style="width:5%" value="3">
+                                                    5<input type="radio" name="canvas_num" style="width:5%" value="5">
+                                                    10<input type="radio" name="canvas_num" style="width:5%" value="10">
+                                    
+                                                </div>
+                                    
+                                            </div>
+                                    
+                                        </div>
+                                    
+                                        <div style="width:100%;height:75%; text-align:center;vertical-align: middle;align-items: center; ">
+                                            <canvas id="plot_canvas" style="width:727px;height:651px;"></canvas>
+                                        </div>
+                                        <!-- 绘图的核心js -->
+                                        <script type="text/javascript">
+                                            // 控件连接
 
 
-                                let ballArr = [];
-                                let colorArr = ['red', "blue", 'green'];
+                                            //数据设置
+                                            var data_canvas = {
+                                                "station_list": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+                                                "station": [
+                                                    [360, 320, 32],
+                                                    [330, 370, 15],
+                                                    [310, 345, 15],
+                                                    [310, 280, 15],
+                                                    [390, 200, 15],
+                                                    [486, 422, 15],
+                                                    [426, 526, 15],
+                                                    [513, 257, 15],
+                                                    [210, 291, 15],
+                                                    [348, 114, 15],
+                                                    [523, 179, 15],
+                                                    [440, 253, 15],
 
-                                let mouseInCanvas = false;
-                                let offsetX;//通过事件获取鼠标X
-                                let offsetY;//通过事件获取鼠标Y
-                                let r = 150;//球的半径
+                                                ]
+                                            }
+                                            //设置画布
+                                            const canvas = document.getElementById("plot_canvas");
+                                            const ctx = canvas.getContext('2d');
+                                            canvas.width = 727;
+                                            canvas.height = 651;
+                                            canvas.style.backgroundColor = "white";
 
-                                //小球类
-                                class Ball {
-                                    undefined
-                                    constructor(x, y, color) {
-                                        undefined
-                                        this.x = x;
-                                        this.y = y;
-                                        this.color = color;
-                                        this.r = r;
-                                    }
-                                    //绘制小球
-                                    render() {
-                                        undefined
-                                        ctx.save();
-                                        ctx.beginPath();
-                                        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-                                        // ctx.fillText(data_canvas['station'][2].toFixed(2), data_canvas['station'][0], data_canvas['station'][1]);
-                                        for (var i = 0; i < data_canvas.station_list.length; i++) {
-                                            ctx.fillText(data_canvas['station'][i][2].toFixed(1), data_canvas['station'][i][0], data_canvas['station'][i][1]);
-                                        }
-                                        ctx.lineWidth = 3;
-                                        ctx.strokeStyle = "red";
-                                        ctx.stroke();
-                                        // ctx.fillStyle = this.color;
-                                        // ctx.fill();
-                                        ctx.restore();
-                                    }
-                                }
+                                            ctx.font = "20px Arial";
+                                            var myImg = new Image();
+                                            myImg.src = 'static/src/taizhou.png';
 
-                                //会移动的小球类
-                                class MoveBall extends Ball {
-                                    undefined
-                                    constructor(x, y, color) {
-                                        undefined
-                                        super(x, y, color);
-                                    }
 
-                                    Update() {
-                                        undefined
-                                        this.x += this.dX;
-                                        this.y += this.dY;
-                                        this.r -= this.dR;
-                                        if (this.r < 0) {
-                                            undefined
-                                            this.r = 0;
-                                        }
-                                    }
-                                }
+                                            let ballArr = [];
+                                            let colorArr = ['red', "blue", 'green'];
 
-                                //鼠标移动
-                                canvas.addEventListener('mousemove',
-                                    function (e) {
-                                        undefined
-                                        mouseInCanvas = true;
-                                        offsetX = e.offsetX;
-                                        offsetY = e.offsetY;
+                                            let mouseInCanvas = false;
+                                            let offsetX;//通过事件获取鼠标X
+                                            let offsetY;//通过事件获取鼠标Y
+                                            let r = 150;//球的半径
 
-                                    });
-                                // 鼠标点击模块
-                                canvas.addEventListener('click',
-                                    function (e) {
-                                        undefined
-                                        mouseInCanvas = true;
-                                        offsetX = e.offsetX;
-                                        offsetY = e.offsetY;
-                                        // console.log(offsetX,offsetY)
-
-                                        var canvas_select_value = parseFloat($("input[name='canvas_num']:checked").val());
-                                        var canvas_select_method = $("input[name='canvas_var']:checked").val();
-                                        for (var i = 0; i < data_canvas.station_list.length; i++) {
-
-                                            var len_r = (offsetX - data_canvas['station'][i][0]) * (offsetX - data_canvas['station'][i][0]) + (offsetY - data_canvas['station'][i][1]) * (offsetY - data_canvas['station'][i][1]);
-                                            if (canvas_select_method == '+') {
-
-                                                if (len_r < r * r) {
-                                                    data_canvas['station'][i][2] = data_canvas['station'][i][2] + canvas_select_value
+                                            //小球类
+                                            class Ball {
+                                                undefined
+                                                constructor(x, y, color) {
+                                                    undefined
+                                                    this.x = x;
+                                                    this.y = y;
+                                                    this.color = color;
+                                                    this.r = r;
+                                                }
+                                                //绘制小球
+                                                render() {
+                                                    undefined
+                                                    ctx.save();
+                                                    ctx.beginPath();
+                                                    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                                                    // ctx.fillText(data_canvas['station'][2].toFixed(2), data_canvas['station'][0], data_canvas['station'][1]);
+                                                    for (var i = 0; i < data_canvas.station_list.length; i++) {
+                                                        ctx.fillText(data_canvas['station'][i][2].toFixed(1), data_canvas['station'][i][0], data_canvas['station'][i][1]);
+                                                    }
+                                                    ctx.lineWidth = 3;
+                                                    ctx.strokeStyle = "red";
+                                                    ctx.stroke();
+                                                    // ctx.fillStyle = this.color;
+                                                    // ctx.fill();
+                                                    ctx.restore();
                                                 }
                                             }
-                                            else {
 
-                                                if (len_r < r * r) {
-                                                    data_canvas['station'][i][2] = data_canvas['station'][i][2] - canvas_select_value
+                                            //会移动的小球类
+                                            class MoveBall extends Ball {
+                                                undefined
+                                                constructor(x, y, color) {
+                                                    undefined
+                                                    super(x, y, color);
+                                                }
+
+                                                Update() {
+                                                    undefined
+                                                    this.x += this.dX;
+                                                    this.y += this.dY;
+                                                    this.r -= this.dR;
+                                                    if (this.r < 0) {
+                                                        undefined
+                                                        this.r = 0;
+                                                    }
                                                 }
                                             }
-                                        }
+
+                                            //鼠标移动
+                                            canvas.addEventListener('mousemove',
+                                                function (e) {
+                                                    undefined
+                                                    mouseInCanvas = true;
+                                                    offsetX = e.offsetX;
+                                                    offsetY = e.offsetY;
+
+                                                });
+                                            // 鼠标点击模块
+                                            canvas.addEventListener('click',
+                                                function (e) {
+                                                    undefined
+                                                    mouseInCanvas = true;
+                                                    offsetX = e.offsetX;
+                                                    offsetY = e.offsetY;
+                                                    // console.log(offsetX,offsetY)
+
+                                                    var canvas_select_value = parseFloat($("input[name='canvas_num']:checked").val());
+                                                    var canvas_select_method = $("input[name='canvas_var']:checked").val();
+                                                    for (var i = 0; i < data_canvas.station_list.length; i++) {
+
+                                                        var len_r = (offsetX - data_canvas['station'][i][0]) * (offsetX - data_canvas['station'][i][0]) + (offsetY - data_canvas['station'][i][1]) * (offsetY - data_canvas['station'][i][1]);
+                                                        if (canvas_select_method == '+') {
+
+                                                            if (len_r < r * r) {
+                                                                data_canvas['station'][i][2] = data_canvas['station'][i][2] + canvas_select_value
+                                                            }
+                                                        }
+                                                        else {
+
+                                                            if (len_r < r * r) {
+                                                                data_canvas['station'][i][2] = data_canvas['station'][i][2] - canvas_select_value
+                                                            }
+                                                        }
+                                                    }
 
 
 
 
 
-                                    });
-                                // 鼠标滑轮
-                                canvas.addEventListener('mousewheel',
-                                    function (e) {
-                                        undefined
-                                        mouseInCanvas = true;
+                                                });
+                                            // 鼠标滑轮
+                                            canvas.addEventListener('mousewheel',
+                                                function (e) {
+                                                    undefined
+                                                    mouseInCanvas = true;
 
-                                        let z = e.deltaY
-                                        if (r >= 50) {
-                                            r = r + z * 0.1
-                                        }
-                                        else {
-                                            r = 50
-                                        }
-                                        // r = r + z*0.1
+                                                    let z = e.deltaY
+                                                    if (r >= 50) {
+                                                        r = r + z * 0.1
+                                                    }
+                                                    else {
+                                                        r = 50
+                                                    }
+                                                    // r = r + z*0.1
 
-                                        // console.log(z, r)
+                                                    // console.log(z, r)
 
-                                    });
-                                //鼠标出画布
-                                canvas.addEventListener('mouseout',
-                                    function (e) {
-                                        undefined
-                                        mouseInCanvas = false;
-                                    });
-                                //鼠标进画布
-                                canvas.addEventListener('mouseover',
-                                    function (e) {
-                                        undefined
-                                        mouseInCanvas = true;
-                                    });
+                                                });
+                                            //鼠标出画布
+                                            canvas.addEventListener('mouseout',
+                                                function (e) {
+                                                    undefined
+                                                    mouseInCanvas = false;
+                                                });
+                                            //鼠标进画布
+                                            canvas.addEventListener('mouseover',
+                                                function (e) {
+                                                    undefined
+                                                    mouseInCanvas = true;
+                                                });
 
-                                setInterval(function () {
-                                    undefined
-                                    if (mouseInCanvas) {
-                                        undefined
-                                        //圆圈移动
-                                        ballArr.push(new MoveBall(offsetX, offsetY, colorArr[1]));
+                                            setInterval(function () {
+                                                undefined
+                                                if (mouseInCanvas) {
+                                                    undefined
+                                                    //圆圈移动
+                                                    ballArr.push(new MoveBall(offsetX, offsetY, colorArr[1]));
 
-                                    }
-                                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                                }
+                                                ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                                    ctx.drawImage(myImg, 0, 0, 727, 651)
+                                                ctx.drawImage(myImg, 0, 0, 727, 651)
 
-                                    // console.log("我在刷新")
-                                    for (let i = 0; i < ballArr.length; i++) {
-                                        undefined
-                                        ballArr[i].render();
-                                        ballArr[i].Update();
-                                    }
-                                }, 50);
-                            </script>
-
-
-                            <div style="width:100%;height:10%;  ">
-                                <input type="text" placeholder="起始时间" style="width:20%;height: 50%;float:left">
-                                <input type="text" placeholder="起始时间" style="width:20%;height: 50%;float:left">
-                                <input type="button" value="下载" style="width:10%;height: 50%;float:left">
-                                <input type="button" value="绘制" onclick="tool_5()"
-                                    style="width:10%;height: 50%;float:right">
-                                <input type="button" value="刷新" style="width:10%;height: 50%;float:right">
+                                                // console.log("我在刷新")
+                                                for (let i = 0; i < ballArr.length; i++) {
+                                                    undefined
+                                                    ballArr[i].render();
+                                                    ballArr[i].Update();
+                                                }
+                                            }, 50);
+                                        </script>
+                                        <div style="width:100%;height:5%;"></div>
+                                  
+                                        <div style="width:100%;height:5%;  ">
+                                            <input type="text" placeholder="起始时间" style="width:20%;height: 50%;float:left">
+                                            <input type="text" placeholder="起始时间" style="width:20%;height: 50%;float:left">
+                                            <input type="button" value="下载" style="width:10%;height: 50%;float:left">
+                                            <input type="button" value="绘制" onclick="tool_5()" style="width:10%;height: 100%;float:right">
+                                            <input type="button" value="刷新" style="width:10%;height: 100%;float:right">
+                                        </div>
+                                    </div>
+                                    <!-- 站位符号 -->
+                                    <div class="tab-pane" id="panel-canvas02">
+                                        <p>
+                                            Howdy, I'm in Section 2.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
 
-                            <!-- 绘图的post相关代码 -->
-                            <!-- <script type="text/javascript">
-                                $(function () {
-                                    $("#quick_look").click(function () {
-                                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                                        var data_post_quick_look = JSON.stringify(list_data)
-                                        $.ajax({
-                                            url: "quick_look",  // 请求的地址
-                                            type: "post",  // 请求方式
-                                            data: {
-                                                "data_post": data_post_quick_look,
-                                                'csrfmiddlewaretoken': csrf
-                                            },
-                                            dataType: "json",
-                                        })
-                                    })
-                                });
-                            </script> -->
+                            
+
+                           
 
 
 

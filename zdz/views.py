@@ -120,9 +120,9 @@ def plot_self_data(request):
     for i in range(len(data['station'])):
         x = data['station'][i][0]*1.9/727+120.1
         lon.append(x)
-        y = 29.5-data['station'][i][0]*1.7/651
+        y = 29.5-data['station'][i][1]*1.7/651
         lat.append(y)
-        value.append(data['station'][i][2])
+        value.append(data['station'][i][2]*10)
     func.plot_image(lat,lon,value)
     buffer = BytesIO()
     plt.savefig(buffer,bbox_inches='tight')  
@@ -131,7 +131,6 @@ def plot_self_data(request):
     ims = imb.decode()
     imd = "data:image/png;base64,"+ims
     # <img src="{{ img }}"> 
-    print("获取到的预览数据:")
     context2 = {
         'data_test':723.5,
         "img":imd,
