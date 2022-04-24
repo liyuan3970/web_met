@@ -27,7 +27,9 @@ urlpatterns = [
     url(r'^home',views.home),
     url(r'^quick_look',views.quick_look),
     # 自定义绘图
-    url(r'^upload_selfplot_data',views.plot_self_data)
+    url(r'^upload_selfplot_data',views.plot_self_data),
+    # 订正产品
+    url(r'^upload_select_taizhou_data',views.upload_select_taizhou_data)
 
 
 

@@ -2259,6 +2259,20 @@
 
                                 }
                                 function tool_2() {
+                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                    
+                                    $.ajax({
+                                            url: "upload_select_taizhou_data",  // 请求的地址
+                                            type: "post",  // 请求方式
+                                            data: {
+                                                'csrfmiddlewaretoken': csrf
+                                            },
+                                            dataType: "json",
+                                            success: function (data){
+                                                console.log("ajax请求成功返回的数据",data.data_test)
+                                                                                                
+                                            }
+                                        })
 
                                     var tool1_view = document.getElementById("tool1_view")
                                     var tool2_view = document.getElementById("tool2_view")
@@ -2294,7 +2308,7 @@
                                 function tool_5() {
                                     // 向服务器要数据并显示tool5
                                     var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                                    console.log("打印后端接受的数据",{{ data_test }})
+                                    
                                     $.ajax({
                                             url: "upload_selfplot_data",  // 请求的地址
                                             type: "get",  // 请求方式
@@ -3721,7 +3735,7 @@
                 <div id="tool2_view"
                     style="display: none;background-color:white; width: 100%; height: 100%;border: 3px solid rgb(58, 128, 0);overflow:auto">
                     <div style="border: 3px solid black ;width: 100%;height: 10%;">
-                        <h1>精细化预报：</h1>
+                        <h1>市台订正：</h1>
                     </div>
                     <div style="display: inline-flex;border: 3px solid black ;width: 100%;height: 80%;">
                         <div style=" border: 3px solid black ;width: 80%;height: 100%;">
@@ -3765,11 +3779,11 @@
                     </div>
                     <div
                         style="border: 3px solid black ;width: 100%;height: 10%;;text-align:center;vertical-align: middle;align-items: center;">
-                        智能网格：<input type="radio" name="tool_2_last"
+                        <input id = "go_on"  type="button"  value = "前进："
                             style="width: 10%;height: 50%;text-align:center;vertical-align: middle;align-items: center;">
-                        市台订正：<input type="radio" name="tool_2_last"
+                        <input id = "go_back" type="button"  value = "后退："
                             style="width: 10%;height: 50%;text-align:center;vertical-align: middle;align-items: center;">
-                        EC预报<input type="radio" name="tool_2_last"
+                        <input type="button" name="tool_2_last" value = "导出为gif"
                             style="width: 10%;height: 50%;text-align:center;vertical-align: middle;align-items: center;">
 
                     </div>

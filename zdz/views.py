@@ -107,7 +107,7 @@ def quick_look(request):
     print("获取到的预览数据:",data_list)
     
     return render(request,'index.html')
-
+# canvas 绘图
 def plot_self_data(request):
     plot_self_data = request.GET.get('plot_self_data','')
     crf = request.GET.get('csrfmiddlewaretoken','')
@@ -137,6 +137,21 @@ def plot_self_data(request):
     }
     return JsonResponse(context2) 
     # return render(request,'index.html',context2)
+
+
+
+def upload_select_taizhou_data(request):
+    # 绘制等值线图像
+    context = {
+        'data_test':723.5
+        
+    }
+    return JsonResponse(context)
+
+
+
+
+
 
 from django.views.decorators.clickjacking import xframe_options_exempt
 
