@@ -147,9 +147,9 @@ def upload_select_taizhou_data(request):
     plot_time = request.POST.get('plot_time','')
     crf = request.POST.get('csrfmiddlewaretoken','')
     print(os.environ["HDF5_USE_FILE_LOCKING"])
-    imd_list = []
+    # imd_list = []
     plot_worker = data_class.plot_tz_product(plot_type,plot_time) 
-    # imd_list = plot_worker.multy_plot()   
+    imd_list = plot_worker.multy_plot()   
 
     
     context = {

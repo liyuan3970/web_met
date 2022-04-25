@@ -32,7 +32,6 @@ from math import ceil, floor
 from rasterio import features
 from affine import Affine
 import os
-print("执行了os")
 os.environ["HDF5_USE_FILE_LOCKING"] = 'FALSE'
 
 
@@ -475,10 +474,10 @@ class plot_tz_product:
         os.environ["HDF5_USE_FILE_LOCKING"] = 'FALSE'
         file_path = "static/data/TZ_self/"        
         # file_name = file_path +"20220401/"+'I20220401080000.'+self.plot_type+'.nc'
-        file_name = file_path +"20220401/"+'test.nc'
+        file_name = file_path +"20220402/"+'I20220402080000.'+self.plot_type+'.nc'
         # f = xr.open_dataset(file_name)
         f = netCDF4.Dataset(file_name,"r",format="NETCDF4")
-        data_xr_nc = f.variables['T']
+        data_xr_nc = f.variables[str(self.plot_type)]
         lat = f.variables['lat'][:]
         lon = f.variables['lon'][:]
         time = f.variables['time'][:]
@@ -498,7 +497,7 @@ class plot_tz_product:
         # plt.rcParams.update({'font.size': 20})
         fig = plt.figure(figsize=[8,8]) 
         ax = fig.add_subplot(111)
-        shp_path = "static/data/shp_file/"
+        shp_path = "static/data/shpfile/"
         shp_da = self.add_shape_coord_from_data_array(data_xr, shp_path+"taizhou.shp", "test")
         awash_da = shp_da.where(shp_da.test<7, other=np.nan)
         m = Basemap(llcrnrlon=120.0,
