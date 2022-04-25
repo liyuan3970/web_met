@@ -5,15 +5,43 @@ import numpy as np
 import pandas as pd
 import time
 from . import func
-import matplotlib
+import netCDF4 
+# import h5netcdf.legacyapi as netCDF4
+import h5py
+
+from mpl_toolkits.basemap import Basemap
+from matplotlib.path import Path
+from matplotlib.patches import PathPatch
 import matplotlib.pyplot as plt
+import cartopy.crs as ccrs
+import shapefile
+import matplotlib as mpl
+import xarray as xr
+from matplotlib.font_manager import FontProperties
+import netCDF4 as nc
+from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
+import matplotlib
+import geopandas as gpd
+from ncmaps import Cmaps
 from io import BytesIO
 import base64
 import json
 import math
+from scipy.interpolate import griddata
+from math import ceil, floor
+from rasterio import features
+from affine import Affine
+import os
+print("执行了os")
+os.environ["HDF5_USE_FILE_LOCKING"] = 'FALSE'
 
 
 
+
+
+
+
+# 查询历史数据的calss
 class sql_data:
     def __init__(self, sql):
         self.sql = sql  # 传进来的参数
@@ -384,3 +412,134 @@ class sql_data:
 
 
         return imd,imd_tmax,imd_tmin,tz_json,RR_sum ,RR_rx,level_rain,RR_station_rank,RR_station_bar,tmp_min_scatter,tmp_max_scatter,tmp_event_scatter,tmp_station_bar,VV_min_scatter,fFy_wind7up_scatter,vv_time,vv_value,data_fFy_list
+
+
+
+# 画图的核心类
+class plot_tz_product:
+    def __init__(self, plot_type,plot_time):
+        self.plot_time = plot_time
+        self.plot_type = plot_type
+        self.time_len = 0
+        self.lat,self.lon,self.time,self.data_xr_nc  = self.read_data()
+    # 外部函数
+    def transform_from_latlon(self,lat, lon):
+        lat = np.asarray(lat)
+        lon = np.asarray(lon)
+        trans = Affine.translation(lon[0], lat[0])
+        scale = Affine.scale(lon[1] - lon[0], lat[1] - lat[0])
+        return trans * scale
+    
+    def rasterize(self,shapes, coords, latitude='lat', longitude='lon',fill=np.nan, **kwargs):
+        transform = self.transform_from_latlon(coords[latitude], coords[longitude])
+        out_shape = (len(coords[latitude]), len(coords[longitude]))
+        raster = features.rasterize(shapes, out_shape=out_shape,
+                                fill=fill, transform=transform,
+                                dtype=float, **kwargs)
+        spatial_coords = {latitude: coords[latitude], longitude: coords[longitude]}
+        return xr.DataArray(raster, coords=spatial_coords, dims=(latitude, longitude))
+
+    def add_shape_coord_from_data_array(self,xr_da, shp_path, coord_name):   
+        shp_gpd = gpd.read_file(shp_path)
+        shapes = [(shape, n) for n, shape in enumerate(shp_gpd.geometry)]
+        xr_da[coord_name] = self.rasterize(shapes, xr_da.coords, longitude='lon', latitude='lat')
+        return xr_da
+
+
+    def basemask(self,cs, ax, map, shpfile):
+        sf = shapefile.Reader(shpfile)
+        vertices = []
+        codes = []
+        for shape_rec in sf.shapeRecords():
+            if shape_rec.record[0] >= 0:  
+                pts = shape_rec.shape.points
+                prt = list(shape_rec.shape.parts) + [len(pts)]
+                for i in range(len(prt) - 1):
+                    for j in range(prt[i], prt[i+1]):
+                        vertices.append(map(pts[j][0], pts[j][1]))
+                    codes += [Path.MOVETO]
+                    codes += [Path.LINETO] * (prt[i+1] - prt[i] -2)
+                    codes += [Path.CLOSEPOLY]
+                clip = Path(vertices, codes)
+                clip = PathPatch(clip, transform = ax.transData)    
+        for contour in cs.collections:
+            contour.set_clip_path(clip)    
+
+
+
+    def makedegreelabel(self,degreelist):
+        labels=[str(x)+u'°E' for x in degreelist]
+        return labels
+
+    def read_data(self):
+        os.environ["HDF5_USE_FILE_LOCKING"] = 'FALSE'
+        file_path = "static/data/TZ_self/"        
+        # file_name = file_path +"20220401/"+'I20220401080000.'+self.plot_type+'.nc'
+        file_name = file_path +"20220401/"+'test.nc'
+        # f = xr.open_dataset(file_name)
+        f = netCDF4.Dataset(file_name,"r",format="NETCDF4")
+        data_xr_nc = f.variables['T']
+        lat = f.variables['lat'][:]
+        lon = f.variables['lon'][:]
+        time = f.variables['time'][:]
+        self.time_len = len(time)        
+        return lat,lon,time,data_xr_nc
+    def plot_img(self,item):
+        lat = self.lat
+        lon = self.lon
+        time = self.time
+        data_xr_nc = self.data_xr_nc
+        data_xr = xr.DataArray(data_xr_nc[item,:,:],coords=[lat,lon], dims=["lat", "lon"])
+        levels = np.linspace(start = 2, stop = 11, num = 7)#[10,20,30,40,50,60,70,80,90,100,110]
+        self_define_list = [130,144,155,170,185,200,225,235,240,244]
+        rgb_file = 'ncl_default'
+        #以下是核心api,实质为调用Cmaps基类的listmap()方法
+        cmaps = Cmaps('ncl_default',self_define_list).listmap()
+        # plt.rcParams.update({'font.size': 20})
+        fig = plt.figure(figsize=[8,8]) 
+        ax = fig.add_subplot(111)
+        shp_path = "static/data/shp_file/"
+        shp_da = self.add_shape_coord_from_data_array(data_xr, shp_path+"taizhou.shp", "test")
+        awash_da = shp_da.where(shp_da.test<7, other=np.nan)
+        m = Basemap(llcrnrlon=120.0,
+            llcrnrlat=27.8,
+            urcrnrlon=122,
+            urcrnrlat=29.5,
+            resolution = None, 
+            projection = 'cyl')
+        # 设置colorbar
+        cbar_kwargs = {
+        #'orientation': 'horizontal',
+        # 'label': 'Potential',
+        'shrink': 0.5,
+        }
+        lons, lats = np.meshgrid(lon, lat)
+        cs =m.contourf(lons,lats,data_xr,ax=ax, cmap='Spectral_r',levels =levels,cbar_kwargs=cbar_kwargs,add_labels=False)
+        m.readshapefile(shp_path+'taizhou','taizhou',color='k',linewidth=1.2)
+        parallels = np.arange(27.8,29.5,0.2)
+        m.drawparallels(parallels,labels=[True,False,True,False],color='dimgrey',dashes=[2, 3],fontsize= 12)  # ha= 'right'
+        meridians = np.arange(120.0,122.0,0.2)
+        m.drawmeridians(meridians,labels=[False,True,False,True],color='dimgrey',dashes=[2, 3],fontsize= 12)
+        len_lat = len(data_xr.lat.data)
+        len_lon = len(data_xr.lon.data)
+        for i in range(len_lon-1):
+            for j in range(len_lat-1):
+                y0 = round(27.50+j*0.05,2)
+                x0 = round(119.80+i*0.05,2)
+                if not isnan(awash_da.data[j,i]):
+                    plt.text(x0,y0,str(int(awash_da.data[j,i])),fontsize= 7,fontweight = 800 ,color ="black")            
+        self.basemask(cs, ax, m, shp_path+'taizhou') 
+        buffer = BytesIO()
+        plt.savefig(buffer,bbox_inches='tight')  
+        plot_img = buffer.getvalue()
+        imb = base64.b64encode(plot_img) 
+        ims = imb.decode()
+        imd = "data:image/png;base64,"+ims
+        return imd        
+    def multy_plot(self):
+        '''返回图片列表'''
+        imd_list = []
+        for i in range(self.time_len):
+            imd = self.plot_img(i)
+            imd_list.append(imd)
+        return imd_list

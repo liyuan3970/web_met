@@ -22,7 +22,7 @@ import base64
 import json
 import pandas as pd
 import numpy as np
-
+import os
 
 
 
@@ -142,8 +142,19 @@ def plot_self_data(request):
 
 def upload_select_taizhou_data(request):
     # 绘制等值线图像
+    os.environ["HDF5_USE_FILE_LOCKING"] = 'FALSE'
+    plot_type = request.POST.get('plot_type','')
+    plot_time = request.POST.get('plot_time','')
+    crf = request.POST.get('csrfmiddlewaretoken','')
+    print(os.environ["HDF5_USE_FILE_LOCKING"])
+    imd_list = []
+    plot_worker = data_class.plot_tz_product(plot_type,plot_time) 
+    # imd_list = plot_worker.multy_plot()   
+
+    
     context = {
-        'data_test':723.5
+        'data_test':723.5,
+        'img_list':imd_list
         
     }
     return JsonResponse(context)

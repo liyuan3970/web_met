@@ -2138,28 +2138,28 @@
                                 </div>
                                 <div
                                     style="display: inline-flex;width:100%;height:15%;text-align:center;align-items: center;">
-                                    08:<input type="radio" name="tz_self_time"
+                                    08:<input type="radio" name="tz_self_time" value = "08" 
                                         style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
-                                    20:<input type="radio" name="tz_self_time"
+                                    20:<input type="radio" name="tz_self_time" value = "20"
                                         style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
 
                                 </div>
                                 <div
                                     style="display: inline-flex;width:100%;height:40%;text-align:center;align-items: center;">
 
-                                    短期气温:<input type="radio" name="tz_self"
+                                    短期气温:<input type="radio" name="tz_self" value = "T"
                                         style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
-                                    短期降水:<input type="radio" name="tz_self"
+                                    短期降水:<input type="radio" name="tz_self" value = "P"
                                         style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
-                                    短期大风:<input type="radio" name="tz_self"
+                                    短期大风:<input type="radio" name="tz_self" value = "Wind"
                                         style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
-                                    降水:<input type="radio" name="tz_self"
+                                    降水:<input type="radio" name="tz_self" value = "P_7day"
                                         style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
-                                    高温:<input type="radio" name="tz_self"
+                                    高温:<input type="radio" name="tz_self" value = "Tmax_7day"
                                         style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
-                                    低温:<input type="radio" name="tz_self"
+                                    低温:<input type="radio" name="tz_self" value = "Tmin_7day"
                                         style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
-                                    短期云量:<input type="radio" name="tz_self"
+                                    短期云量:<input type="radio" name="tz_self" value = "Cloud_7day"
                                         style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
 
                                 </div>
@@ -2259,17 +2259,25 @@
 
                                 }
                                 function tool_2() {
+                                    // 市台订正数据的核心代码
+                                    var time_plot_taizhou = $("input[name='tz_self_time']:checked").val()
+                                    var type_plot_taizhou = $("input[name='tz_self']:checked").val() 
                                     var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                    console.log(time_plot_taizhou,type_plot_taizhou)
                                     
                                     $.ajax({
                                             url: "upload_select_taizhou_data",  // 请求的地址
                                             type: "post",  // 请求方式
+                                            timeout:25000, //设置延迟上限
                                             data: {
-                                                'csrfmiddlewaretoken': csrf
+                                                'csrfmiddlewaretoken': csrf,
+                                                'plot_type':type_plot_taizhou,
+                                                'plot_time':time_plot_taizhou
                                             },
                                             dataType: "json",
                                             success: function (data){
-                                                console.log("ajax请求成功返回的数据",data.data_test)
+                                                var server_img_list = data.img_list
+                                                console.log("ajax请求成功返回的数据",server_img_list)
                                                                                                 
                                             }
                                         })
