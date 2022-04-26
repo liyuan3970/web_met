@@ -495,7 +495,7 @@ class plot_tz_product:
         #以下是核心api,实质为调用Cmaps基类的listmap()方法
         cmaps = Cmaps('ncl_default',self_define_list).listmap()
         # plt.rcParams.update({'font.size': 20})
-        fig = plt.figure(figsize=[8,8]) 
+        fig = plt.figure(figsize=[13,13]) 
         ax = fig.add_subplot(111)
         shp_path = "static/data/shpfile/"
         shp_da = self.add_shape_coord_from_data_array(data_xr, shp_path+"taizhou.shp", "test")

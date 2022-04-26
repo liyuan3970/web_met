@@ -2261,26 +2261,72 @@
                                 function tool_2() {
                                     // 市台订正数据的核心代码
                                     var time_plot_taizhou = $("input[name='tz_self_time']:checked").val()
-                                    var type_plot_taizhou = $("input[name='tz_self']:checked").val() 
+                                    var type_plot_taizhou = $("input[name='tz_self']:checked").val()
                                     var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                                    console.log(time_plot_taizhou,type_plot_taizhou)
-                                    
+                                    console.log(time_plot_taizhou, type_plot_taizhou)
+
                                     $.ajax({
-                                            url: "upload_select_taizhou_data",  // 请求的地址
-                                            type: "post",  // 请求方式
-                                            timeout:2500000, //设置延迟上限
-                                            data: {
-                                                'csrfmiddlewaretoken': csrf,
-                                                'plot_type':type_plot_taizhou,
-                                                'plot_time':time_plot_taizhou
-                                            },
-                                            dataType: "json",
-                                            success: function (data){
-                                                var server_img_list = data.img_list
-                                                console.log("ajax请求成功返回的数据",server_img_list)
-                                                                                                
+                                        url: "upload_select_taizhou_data",  // 请求的地址
+                                        type: "post",  // 请求方式
+                                        timeout: 2500000, //设置延迟上限
+                                        data: {
+                                            'csrfmiddlewaretoken': csrf,
+                                            'plot_type': type_plot_taizhou,
+                                            'plot_time': time_plot_taizhou
+                                        },
+                                        dataType: "json",
+                                        success: function (data) {
+                                            // var show_img_list = $
+                                            var server_img_list = data.img_list
+                                            console.log("ajax请求成功返回的数据", server_img_list)                                            
+                                            $("#self_png_show").html(" ")
+                                            $("#ul_self").html(" ")
+                                            for (i = 0; i < server_img_list.length; i++) {
+                                                // 图部分
+                                                var img_item = new Image()
+                                                img_item.id = "self_" + (i + 1).toString()
+                                                img_item.src = server_img_list[i]
+                                                img_item.style.width = "100%"
+                                                img_item.style.height = "100%"
+                                                $('#self_png_show').append(img_item)
+                                                var a_item = document.createElement("a")
+                                                a_item.id = "a_" + (i + 1).toString()
+                                                a_item.setAttribute("class", "list-group-item")
+                                                a_item.setAttribute("href","#self_"+(i + 1).toString())
+                                                a_item.innerText = "202200401"
+                                                var input_item = document.createElement("input")
+                                                input_item.id = "in_"+ (i + 1).toString()
+                                                input_item.style.display = "none"
+                                                input_item.setAttribute("type","radio")
+                                                input_item.setAttribute("name","ul_png")
+                                                if (i==0){
+                                                    input_item.setAttribute("checked","true")
+                                                }
+                                                a_item.appendChild(input_item)
+                                                var click_item = parseInt(i)
+                                                a_item.addEventListener("click", function (click_item) {
+                                                    console.log(click_item)
+                                                    $("input:radio[name='ul_png']").attr("checked", false)
+                                                    a_item.children[0].setAttribute("checked","true")
+                                                    
+                                                    // $('#in_'+(i + 1).toString()).attr("checked", true)
+                                                    var child_len = $("input:radio[name='ul_png']").length
+                                                    for (j = 0; j < child_len; j++) {
+                                                        $('#a_' + (j + 1).toString()).attr("style", "color:balck")
+                                                    }
+                                                    $('#a_'+(j + 1).toString()).attr("style", "color:red")
+
+                                                })
+                                                
+                                                $("#ul_self").append(a_item)
+
+
+
+
                                             }
-                                        })
+
+                                        }
+                                    })
 
                                     var tool1_view = document.getElementById("tool1_view")
                                     var tool2_view = document.getElementById("tool2_view")
@@ -2316,24 +2362,24 @@
                                 function tool_5() {
                                     // 向服务器要数据并显示tool5
                                     var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                                    
+
                                     $.ajax({
-                                            url: "upload_selfplot_data",  // 请求的地址
-                                            type: "get",  // 请求方式
-                                            data: {
-                                                "plot_self_data": JSON.stringify(data_canvas),
-                                                'csrfmiddlewaretoken': csrf
-                                            },
-                                            dataType: "json",
-                                            success: function (data){
-                                                console.log("ajax请求成功返回的数据",data.img)
-                                                var plotImg = new Image();
-                                                plotImg.src = data.img
-                                                $('#canvas_plot_div').html(" ")
-                                                $('#canvas_plot_div').html(plotImg)
-                                                
-                                            }
-                                        })
+                                        url: "upload_selfplot_data",  // 请求的地址
+                                        type: "get",  // 请求方式
+                                        data: {
+                                            "plot_self_data": JSON.stringify(data_canvas),
+                                            'csrfmiddlewaretoken': csrf
+                                        },
+                                        dataType: "json",
+                                        success: function (data) {
+                                            console.log("ajax请求成功返回的数据", data.img)
+                                            var plotImg = new Image();
+                                            plotImg.src = data.img
+                                            $('#canvas_plot_div').html(" ")
+                                            $('#canvas_plot_div').html(plotImg)
+
+                                        }
+                                    })
 
                                     var tool1_view = document.getElementById("tool1_view")
                                     var tool2_view = document.getElementById("tool2_view")
@@ -2347,7 +2393,7 @@
                                     tool2_view.style.display = "none"
                                     tool3_view.style.display = "none"
                                     tool5_view.style.display = "inline-block"
-                                    
+
 
 
                                 }
@@ -3746,39 +3792,21 @@
                         <h1>市台订正：</h1>
                     </div>
                     <div style="display: inline-flex;border: 3px solid black ;width: 100%;height: 80%;">
-                        <div style=" border: 3px solid black ;width: 80%;height: 100%;">
+                        <div id = "self_png_show" style=" border: 3px solid black ;width: 80%;height: 100%;overflow:auto ;">
                             <img src="static/src/降水.png" style="width:98%;height:100% ;">
 
                         </div>
                         <!-- <img src="src/降水.png" style="display: inline-block;width:80%;height:99%"> -->
                         <div style="border: 3px solid black ;width: 18%;height: 100%;overflow: auto;">
 
-                            <ul class="list-group" style="width: 100%;height: 100%">
+                            <ul id= "ul_self" class="list-group" style="width: 100%;height: 100%">
+                                <!-- <li class="list-group-item">2022年8月3日20时</li>
                                 <li class="list-group-item">2022年8月3日20时</li>
                                 <li class="list-group-item">2022年8月3日20时</li>
                                 <li class="list-group-item">2022年8月3日20时</li>
                                 <li class="list-group-item">2022年8月3日20时</li>
-                                <li class="list-group-item">2022年8月3日20时</li>
-                                <li class="list-group-item">2022年8月3日20时</li>
-                                <li class="list-group-item">2022年8月3日20时</li>
-                                <li class="list-group-item">2022年8月3日20时</li>
-                                <li class="list-group-item">2022年8月3日20时</li>
-                                <li class="list-group-item">2022年8月3日20时</li>
-                                <li class="list-group-item">2022年8月3日20时</li>
-                                <li class="list-group-item">2022年8月3日20时</li>
-                                <li class="list-group-item">2022年8月3日20时</li>
-                                <li class="list-group-item">2022年8月3日20时</li>
-                                <li class="list-group-item">2022年8月3日20时</li>
-                                <li class="list-group-item">2022年8月3日20时</li>
-                                <li class="list-group-item">2022年8月3日20时</li>
-                                <li class="list-group-item">2022年8月3日20时</li>
-                                <li class="list-group-item">2022年8月3日20时</li>
-                                <li class="list-group-item">2022年8月3日20时</li>
-                                <li class="list-group-item">2022年8月3日20时</li>
-                                <li class="list-group-item">2022年8月3日20时</li>
-                                <li class="list-group-item">2022年8月3日20时</li>
-                                <li class="list-group-item">2022年8月3日20时</li>
-                                <li class="list-group-item">2022年8月3日20时</li>
+                                <li class="list-group-item">2022年8月3日20时</li> -->
+                                
                             </ul>
 
 
@@ -3795,6 +3823,49 @@
                             style="width: 10%;height: 50%;text-align:center;vertical-align: middle;align-items: center;">
 
                     </div>
+                    <script>
+                        $('#go_on').click(function(){                            
+                            var select_length = $("input:radio[name='ul_png']").length
+                            var select_item = $("input:radio[name='ul_png']:checked")
+                            var select_data = $("input:radio[name='ul_png']:checked").attr("id").toString()
+                            var select_id = parseInt(select_data[3]) +1 
+                            var select_show_id = "#self_" + select_id.toString()
+                            // console.log($('input:radio[name="ul_png"]:checked').attr("id")) 
+                            console.log(select_length)
+                            if (select_id<=select_length){
+                                // $("#self_png_show").animate({scrollTop:$(select_show_id).offset().top},100);
+                                $("#a_" + select_id.toString())[0].click()
+                                
+                                var next_id = "#in_" + select_id.toString()
+                                $("input:radio[name='ul_png']:checked").attr("checked",false)
+                                $(next_id).attr("checked",true)
+                            }
+                            else{
+                                alert("到头了")
+                            }    
+                        })
+                        $('#go_back').click(function(){  
+                            // console.log("??")
+                            var select_length = $("input:radio[name='ul_png']").length
+                            var select_item = $("input:radio[name='ul_png']:checked")
+                            var select_data = $("input:radio[name='ul_png']:checked").attr("id").toString()
+                            var select_id = parseInt(select_data[3]) -1 
+                            var select_show_id = "#self_" + select_id.toString()
+                            
+                            if (select_id>=1){
+                                // $("#self_png_show").animate({scrollTop:$(select_show_id).offset().top},100);
+                                $("#a_" + select_id.toString())[0].click()
+                                
+                                var next_id = "#in_" + select_id.toString()
+                                $("input:radio[name='ul_png']:checked").attr("checked",false)
+                                $(next_id).attr("checked",true)
+                            }
+                            else{
+                                alert("到头了")
+                            }
+
+                        })
+                    </script>
 
                 </div>
                 <!-- 历史数据模式 -->
