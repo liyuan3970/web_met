@@ -2402,14 +2402,14 @@
                         </div>
                         <!-- 利用canvas绘图的模块 ---- 这里主要提供三种画图方式（散点、插值、等值线）-->
                         <div class="tab-pane" id="panel-3"
-                            style="width:100%;height:100%;background-color:rgb(119, 136, 214)">
+                            style="width:100%;height:100%;background-color:rgb(243, 244, 247)">
                             <div class="tabbable" id="tabs-329760" style="width:100%;height:100%; ">
                                 <ul class="nav nav-tabs">
                                     <li class="active">
-                                         <a href="#panel-canvas01" data-toggle="tab">面雨量</a>
+                                         <a href="#panel-canvas01" data-toggle="tab">精细化订正</a>
                                     </li>
                                     <li>
-                                         <a href="#panel-canvas02" data-toggle="tab">极大风</a>
+                                         <a href="#panel-canvas02" data-toggle="tab">快速绘图</a>
                                     </li>
                                 </ul>
                                 <div class="tab-content" style="width:100%;height:95%">
@@ -2640,11 +2640,295 @@
                                             <input type="button" value="刷新" style="width:10%;height: 100%;float:right">
                                         </div>
                                     </div>
-                                    <!-- 站位符号 -->
-                                    <div class="tab-pane" id="panel-canvas02">
-                                        <p>
-                                            Howdy, I'm in Section 2.
-                                        </p>
+                                    <!-- 快速绘图的核心代码 -->
+                                    <div class="tab-pane" id="panel-canvas02"  style="width:100%;height:100%">
+                                        <div style = "width:100%;height:5%;border: 3px solid black">
+                                            城市:<input type="radio" checked = "checked" name = "taizhou_shp_type" value = "taizhou_city">
+                                            县区:<input type="radio" name = "taizhou_shp_type" value = "taizhou_county">
+                                            乡镇:<input type="radio" name = "taizhou_shp_type" value = "taizhou_village">
+                                            <span style="width:10%;height: 100%;text-algin-last:justify  "> &#12288&#12288&#12288</span>
+                                            <input type="text" placeholder = "请输入标题" style = "width:60%;height:100%">
+                                        </div>
+                                        <div style = "display:inline-block;width:100%;height:80%;border: 3px solid black">
+                                            <div style = "display:inline-flex;width:100%;height:100%;border: 3px solid black">
+                                                <!-- 颜色 -->
+                                                <div style = "display:inline-block;width:10%;height:100%;border: 3px solid black">
+                                                    <div style = "width:100%;height:5%;">
+                                                       请选择颜色: 
+                                                    </div>
+                                                    <div style = "width:100%;height:5%;background-color: rgb(245, 9, 9);">
+                                                        <input type="radio" checked = "checked" name = "selected_color" value = "rgb(245, 9, 9)" style = "width:20%;height:100%;">
+                                                    </div>
+                                                    <div style = "width:100%;height:5%;background-color: rgb(112, 27, 35);">
+                                                        <input type="radio" name = "selected_color" value = "rgb(112, 27, 35)" style = "width:20%;height:100%;">
+                                                    </div>
+                                                    <div style = "width:100%;height:5%;background-color: rgb(240, 10, 190);">
+                                                        <input type="radio" name = "selected_color" value = "rgb(240, 10, 190)" style = "width:20%;height:100%;">
+                                                    </div>
+                                                    <div style = "width:100%;height:5%;background-color: rgb(13, 27, 224);">
+                                                        <input type="radio" name = "selected_color" value = "rgb(13, 27, 224)" style = "width:20%;height:100%;">
+                                                    </div>
+                                                    <div style = "width:100%;height:5%;background-color: rgb(64, 137, 179);">
+                                                        <input type="radio" name = "selected_color" value = "rgb(64, 137, 179)" style = "width:20%;height:100%;">
+                                                    </div>
+                                                    <div style = "width:100%;height:5%;background-color: rgb(49, 131, 11);">
+                                                        <input type="radio" name = "selected_color" value = "rgb(49, 131, 11)" style = "width:20%;height:100%;">
+                                                    </div>
+                                                    <div style = "width:100%;height:5%;background-color: rgb(156, 231, 35);">
+                                                        <input type="radio" name = "selected_color" value = "rgb(156, 231, 35)" style = "width:20%;height:100%;">
+                                                    </div>
+                                                    <div style = "width:100%;height:5%;background-color: rgb(245, 240, 243)">
+                                                        <input type="radio" name = "selected_color" value = "rgb(245, 240, 243)" style = "width:20%;height:100%;">
+                                                    </div>
+                                                    <div style = "width:100%;height:5%;background-color: rgb(19, 12, 16);">
+                                                        <input type="radio" name = "selected_color" value = "rgb(19, 12, 16)" style = "width:20%;height:100%;">
+                                                    </div>
+                                                    <div style = "width:100%;height:5%;background-color: red;">
+                                                        <input type="radio" name = "selected_color" value = "rgb(19, 12, 16)" style = "width:20%;height:100%;">
+                                                    </div>
+                                                    <div style = "width:100%;height:5%;background-color: rgb(31, 27, 27);">
+                                                        <input type="radio" name = "selected_color" value = "rgb(19, 12, 16)" style = "width:20%;height:100%;">
+                                                    </div>
+                                                    <div style = "width:100%;height:5%;background-color: rgb(19, 211, 105);">
+                                                        <input type="radio" name = "selected_color" value = "rgb(19, 12, 16)" style = "width:20%;height:100%;">
+                                                    </div>
+                                                    <div style = "width:100%;height:5%;background-color: rgb(13, 27, 224);">
+                                                        <input type="radio" name = "selected_color" value = "rgb(19, 12, 16)" style = "width:20%;height:100%;">
+                                                    </div>
+                                                </div>
+                                                <!-- 绘图的主要面板 -->
+                                                <canvas id = "canvas_quick_plot" style = "width:90%;height:100%" ></canvas>
+                                                <script src='static/js/taizhou_county.js'></script>
+                                                <script>
+                                                    // 快速绘图的核心代码
+                                                    let isDown = false;
+                                                    let beginPoint = null;
+                                                    const canvas_quick_plot = document.querySelector('#canvas_quick_plot');
+                                                    const ctx_quick_plot = canvas_quick_plot.getContext('2d');
+                                                    let canvasW = canvas_quick_plot.width = window.innerWidth *0.5*0.895
+                                                    let canvasH = canvas_quick_plot.height = window.innerHeight * 0.95 * 0.73
+
+                                                    let geoCenterX = 0, geoCenterY = 0  // 地图区域的经纬度中心点
+                                                    let scale = 1   // 地图缩放系数
+                                                    let geoData = []
+                                                    let offsetX_qp = 0, offsetY_qp = 0    // 鼠标事件的位置信息
+                                                    let eventType = ''  // 事件类型
+
+
+                                                    // 图像的底图
+                                                    var maskCanvas = document.createElement('canvas');
+                                                    // Ensure same dimensions
+                                                    maskCanvas.width = canvas_quick_plot.width;
+                                                    maskCanvas.height = canvas_quick_plot.height;
+                                                    var maskCtx = maskCanvas.getContext('2d');
+
+                                                    function drawMap() {
+                                                        maskCtx.clearRect(0, 0, canvasW, canvasH)
+                                                        // 画布背景
+                                                        maskCtx.fillStyle = 'white'
+                                                        maskCtx.fillRect(0, 0, canvasW, canvasH)
+                                                        drawArea()
+                                                        // drawText()
+                                                    }
+                                                    // 绘制地图各子区域
+                                                    function drawArea() {
+                                                        let dataArr = geoData.features
+                                                        let cursorFlag = false
+                                                        for (let i = 0; i < dataArr.length; i++) {
+                                                            let centerX = canvasW / 2
+                                                            let centerY = canvasH / 2
+                                                            dataArr[i].geometry.coordinates.forEach(area => {
+                                                                maskCtx.save()
+                                                                maskCtx.beginPath()
+                                                                // maskCtx.strokeStyle = 'black'
+                                                                maskCtx.translate(centerX, centerY)
+                                                                area[0].forEach((elem, index) => {
+                                                                    let position = toScreenPosition(elem[0], elem[1])
+                                                                    if (index === 0) {
+                                                                        maskCtx.moveTo(position.x, position.y)
+                                                                    } else {
+                                                                        maskCtx.lineTo(position.x, position.y)
+                                                                    }
+                                                                    
+                                                                })
+                                                                maskCtx.closePath()
+                                                                maskCtx.strokeStyle = 'black'
+                                                                maskCtx.lineWidth = 3
+                                                                // 将鼠标悬浮的区域设置为橘黄色
+                                                                // if (maskCtx.isPointInPath(offsetX_qp, offsetY_qp)) {
+                                                                //     cursorFlag = true
+                                                                //     maskCtx.fillStyle = 'white'
+                                                                //     if (eventType === 'click') {
+                                                                //         console.log(dataArr[i])
+                                                                //     }
+                                                                // } else {
+                                                                //     maskCtx.fillStyle = 'white'
+                                                                // }
+                                                                maskCtx.fill()
+                                                                maskCtx.stroke()
+                                                                maskCtx.restore()
+                                                            });
+                                                            // 动态设置鼠标样式
+                                                            // if (cursorFlag) {
+                                                            //     canvas.style.cursor = 'pointer'
+                                                            // } else {
+                                                            //     canvas.style.cursor = 'default'
+                                                            // }
+                                                        }
+                                                    }
+                                                    // 将经纬度坐标转换为屏幕坐标
+                                                    function toScreenPosition(horizontal, vertical) {
+                                                        return {
+                                                            x: (horizontal - geoCenterX) * scale,
+                                                            y: (geoCenterY - vertical) * scale
+                                                        }
+                                                    }
+
+                                                    // 获取包围盒范围，计算包围盒中心经纬度坐标，计算地图缩放系数
+                                                    function getBoxArea() {
+                                                        let N = -90, S = 90, W = 180, E = -180
+                                                        geoData.features.forEach(item => {
+                                                            // 将MultiPolygon和Polygon格式的地图处理成统一数据格式
+                                                            if (item.geometry.type === 'Polygon') {
+                                                                item.geometry.coordinates = [item.geometry.coordinates]
+                                                            }
+                                                            // 取四个方向的极值
+                                                            item.geometry.coordinates.forEach(area => {
+                                                                let areaN = - 90, areaS = 90, areaW = 180, areaE = -180
+                                                                area[0].forEach(elem => {
+                                                                    if (elem[0] < W) {
+                                                                        W = elem[0]
+                                                                    }
+                                                                    if (elem[0] > E) {
+                                                                        E = elem[0]
+                                                                    }
+                                                                    if (elem[1] > N) {
+                                                                        N = elem[1]
+                                                                    }
+                                                                    if (elem[1] < S) {
+                                                                        S = elem[1]
+                                                                    }
+                                                                })
+                                                            })
+                                                        })
+                                                        // 计算包围盒的宽高
+                                                        let width = Math.abs(E - W)
+                                                        let height = Math.abs(N - S)
+                                                        let wScale = canvasW / width
+                                                        let hScale = canvasH / height
+                                                        // 计算地图缩放系数
+                                                        scale = wScale > hScale ? hScale : wScale
+                                                        scale = scale - 70
+                                                        // 获取包围盒中心经纬度坐标
+                                                        geoCenterX = (E + W) / 2
+                                                        geoCenterY = (N + S) / 2
+                                                    }
+
+                                                    // This color is the one of the filled shape
+                                                    maskCtx.fillStyle = "black";
+                                                    // Fill the mask
+                                                    // maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
+                                                    // Set xor operation
+                                                    maskCtx.globalCompositeOperation = 'xor';
+                                                    // Draw the shape you want to take out
+                                                    geoData = tz_json_county
+                                                    getBoxArea()
+                                                    drawMap()
+                                                    // maskCtx.arc(600, 450, 130, 0, 2 * Math.PI);
+                                                    maskCtx.fill();
+                                                    ctx_quick_plot.drawImage(maskCanvas, 0, 0);
+
+                                                    // 设置线条颜色
+        ctx_quick_plot.strokeStyle = 'black';
+        ctx_quick_plot.lineWidth = 1;
+        ctx_quick_plot.lineJoin = 'round';
+        ctx_quick_plot.lineCap = 'round';
+        // var countour_rect_x = []
+        // var countour_rect_y = []
+
+        let countour_rect = {
+            'x': [],
+            'y': []
+
+        }
+        canvas_quick_plot.addEventListener('click',
+            function (e) {
+                undefined
+                offsetX_qp = e.offsetX;
+                offsetY_qp = e.offsetY;
+                // var canvas_quick_plot_select_value = parseFloat($("input[name='canvas_quick_plot_num']:checked").val());
+                console.log(offsetX_qp, offsetY_qp)
+                ctx_quick_plot.beginPath();
+                ctx_quick_plot.fillStyle = "black"
+                ctx_quick_plot.fillRect(offsetX_qp - 5, offsetY_qp - 5, 10, 10);
+                countour_rect.x.push(offsetX_qp)
+                countour_rect.y.push(offsetY_qp)
+                ctx_quick_plot.closePath();
+
+
+            });
+        canvas_quick_plot.oncontextmenu = function (event) {
+            var event = event || window.event;
+            console.log("右键点击", countour_rect)
+            // 绘制直线，清空举行框
+            var len_point = countour_rect.x.length
+
+            for (i = 0; i < len_point; i++) {
+                if (i == 0) {
+                    ctx_quick_plot.beginPath();
+                    ctx_quick_plot.moveTo(countour_rect.x[i], countour_rect.y[i]);
+                }
+                else if (i != len_point - 1) {
+                    ctx_quick_plot.lineTo(countour_rect.x[i], countour_rect.y[i]);
+
+                    ctx_quick_plot.stroke();
+
+                }
+                else {
+                    ctx_quick_plot.lineTo(countour_rect.x[i], countour_rect.y[i]);
+                    var color_style = $("input[name='selected_color']:checked").val()
+                    ctx_quick_plot.fillStyle = color_style
+                    ctx_quick_plot.fill()
+                    // ctx_quick_plot.fill('evenodd');
+                    ctx_quick_plot.closePath();
+                    // ctx_quick_plot.strokeStyle="red";
+                    // ctx_quick_plot.stroke();
+                    ctx_quick_plot.fillStyle = "red"
+                    countour_rect.x = []
+                    countour_rect.y = []
+
+                }
+
+
+
+            }
+            ctx_quick_plot.drawImage(maskCanvas, 0, 0);
+
+
+            return false;//屏蔽浏览器自带的右键菜单
+        };
+
+
+
+                                                </script>
+
+                                            </div>
+                                        </div>
+                                        <!-- 画图方法 -->
+                                        <div style = "display:inline-block;width:100%;height:3%">
+                                            等值线:<input type="radio" checked = "checked" name = "taizhou_quick_plot_type" value = "coutour" >
+                                            曲线:<input type="radio" name = "taizhou_quick_plot_type" value = "line">
+                                            图标:<input type="radio" name = "taizhou_quick_plot_type" value = "scatter_icon">
+                                            文字:<input type="radio" name = "taizhou_quick_plot_type" value = "scatter_text">
+                                            图片:<input type="radio" name = "taizhou_quick_plot_type" value = "scatter_pic">
+                                        </div>
+                                        <!-- 对应方法的选项 -->
+                                        <div id="taizhou_quick_plot_type_view" style = "display:inline-block;width:100%;height:10%;border: 3px solid black">
+
+                                        </div>
+                                        <script type="text/javascript">
+
+                                        </script>
                                     </div>
                                 </div>
                             </div>
