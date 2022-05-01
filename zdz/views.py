@@ -92,12 +92,32 @@ def station_view(request,station_name):
 
 ## 决策服务操作平台
 def index_main(request):
-    context = {
-        'data':[123]
-    }
-    return render(request,'index.html',context)
+    
+    return render(request,'index.html')
     # return render(request,'main.html',context)
+def login_main(request):
+    if request.method == 'GET':
+        return render(request,'login.html')
+    else:
+        if request.method == 'POST':
+            passwd = request.POST.get('passwd','')
+            user = request.POST.get('user','')
+            if user=='1' and passwd == '1':
+                print("成功")
+                # return redirect('/index')
+                return render(request,'index.html')
+            else:
+                print("失败")
+                print(request.POST)
+                # return redirect('/index/')
+                return render(request,'login.html')
+                # return HttpResponse("失败")
+    # return render(request,'index.html')
 
+
+
+
+    
 
 def quick_look(request):
     data_list = request.POST.get('data_post','')

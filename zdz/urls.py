@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'url_data',views.url_data),
     url(r'^station/(.+)/$',views.station_view),
     url(r'^index',views.index_main),
+    url(r'^login',views.login_main),
     url(r'^home',views.home),
     url(r'^quick_look',views.quick_look),
     # 自定义绘图
