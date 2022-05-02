@@ -77,10 +77,23 @@ WSGI_APPLICATION = 'tzdemo.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        # 数据库名称
+        'NAME': 'tzweb',
+        'USER': 'root',
+        'PASSWORD': '051219',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 
 # Password validation
@@ -100,6 +113,16 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': [
+            '127.0.0.1:9001/upload_select_taizhou_data',
+            #'127.0.0.2:11211' 存在多个缓存服务时，可以这样传入多个缓存服务IP地址
+        ]
+    }
+}
 
 
 # Internationalization

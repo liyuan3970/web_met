@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse
+from django.core.cache import cache
+from django.utils.cache import get_cache_key
+from django.views.decorators.cache import cache_page
 from . import func
 from . import data_class
 # Create your views here.
@@ -124,8 +127,7 @@ def quick_look(request):
     crf = request.POST.get('csrfmiddlewaretoken','')
 
     # data_list = request.POST['data_post']
-    print("获取到的预览数据:",data_list)
-    
+    print("获取到的预览数据:",data_list)    
     return render(request,'index.html')
 # canvas 绘图
 def plot_self_data(request):
@@ -134,8 +136,7 @@ def plot_self_data(request):
     data  = json.loads(plot_self_data)
     lon = []
     lat = []
-    value = []
-    
+    value = []    
     # (llcrnrlon=120.1,llcrnrlat=27.8,urcrnrlon=122,urcrnrlat=29.5)
     for i in range(len(data['station'])):
         x = data['station'][i][0]*1.9/727+120.1
@@ -159,7 +160,7 @@ def plot_self_data(request):
     # return render(request,'index.html',context2)
 
 
-
+@cache_page(60*10)
 def upload_select_taizhou_data(request):
     # 绘制等值线图像
     os.environ["HDF5_USE_FILE_LOCKING"] = 'FALSE'
@@ -168,10 +169,12 @@ def upload_select_taizhou_data(request):
     crf = request.POST.get('csrfmiddlewaretoken','')
     print(os.environ["HDF5_USE_FILE_LOCKING"])
     # imd_list = []
+    # cached_data = cache.get('img_list')
+    # if cached:
+    #     return JsonResponse({'data': cached_data})
     plot_worker = data_class.plot_tz_product(plot_type,plot_time) 
     imd_list = plot_worker.multy_plot()   
-
-    
+    # cache.set('img_list', imd_list)   
     context = {
         'data_test':723.5,
         'img_list':imd_list
