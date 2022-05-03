@@ -3,8 +3,14 @@ scipy==1.7.3
 matplotlib==3.5.1
 basemap===1.3.2
 xarray==0.20.2
-#recommend use conda to install below packages
-#require rasterio conda install -c conda-forge rasterio
-#require Cartopy conda install -c conda-forge cartopy
-#require geopandas conda install -c conda-forge geopandas
-#require pyproj conda install -c conda-forge pyproj
+pymysql==1.0.2
+gevent==21.12.0
+netCDF4==1.5.8
+python-memcached==1.59
+# 以下请用conda安装
+# recommend use conda to install below packages
+# require rasterio conda install -c conda-forge rasterio
+# require Cartopy conda install -c conda-forge cartopy
+# require geopandas conda install -c conda-forge geopandas
+# require pyproj conda install -c conda-forge pyproj
+# conda install h5py
