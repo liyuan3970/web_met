@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'y2%gu@dxkow&f)+rf$dd*y4833tsuxz50ssdfczqms8*j5cu$5'
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-
 
 # Application definition
 
@@ -71,7 +69,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tzdemo.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -86,7 +83,6 @@ DATABASES = {
         'PORT': '3306',
     }
 }
-
 
 # DATABASES = {
 #     'default': {
@@ -116,14 +112,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
         'LOCATION': [
-            '127.0.0.1:9001/upload_select_taizhou_data',
-            #'127.0.0.2:11211' 存在多个缓存服务时，可以这样传入多个缓存服务IP地址
+            # 服务端地址
+            '127.0.0.1:11211'
         ]
     }
 }
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -138,13 +133,12 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-STATICFILES_DIRS = [  os.path.join(BASE_DIR,"static"),
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),
 
-]
+                    ]
 STATIC_URL = '/static/'
 X_FRAME_OPTIONS = 'ALLOWALL'
 # X_FRAME_OPTIONS = 'ALLOWALL url'
-# X_FRAME_OPTIONS = 'ALLOWALL www.baidu.com'	
+# X_FRAME_OPTIONS = 'ALLOWALL www.baidu.com'
