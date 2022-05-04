@@ -1135,6 +1135,48 @@
 
                                         </div>
                                         <script type="text/javascript">
+                                            var taizhou_quick_plot_type = $("input[name='taizhou_quick_plot_type']:checked").val()
+                                            // $("input[name='taizhou_quick_plot_type']:checked").click(function () {
+                                            //     console.log("dianji")
+                                            // }
+                                            // )
+                                            $(document).ready(function () {
+                                                        $('input[type=radio][name=taizhou_quick_plot_type]').change(function () {
+                                                            if (this.value == 'contour') {
+                                                                console.log("contour");
+                                                                
+                                                            }
+                                                            else if (this.value == 'line') {
+                                                                console.log("line");
+                                                                
+                                                            }
+                                                            else if (this.value == 'scatter_icon') {
+                                                                console.log("scatter_icon");
+                                                                
+                                                            }
+                                                            else if (this.value == 'scatter_text') {
+                                                                console.log("scatter_text");
+                                                                
+                                                            }
+                                                            else if (this.value == 'scatter_pic') {
+                                                                console.log("scatter_pic");
+                                                                
+                                                            }
+                                                        });
+                                                    });
+                                            // if (taizhou_quick_plot_type == 'coutour'){
+                                            //     $('#taizhou_quick_plot_type_view').innerText("等值线") 
+                                            // }
+                                            // else if (taizhou_quick_plot_type == 'line'){
+                                            //     $('#taizhou_quick_plot_type_view').innerText("曲线") 
+                                            // }
+                                            // else if (taizhou_quick_plot_type == 'scatter_icon'){
+                                            //     $('#taizhou_quick_plot_type_view').innerText("文本") 
+                                            // }
+                                            // else if (taizhou_quick_plot_type == 'scatter_pic'){
+                                            //     $('#taizhou_quick_plot_type_view').innerText("图例") 
+                                            // }
+
 
                                         </script>
                                     </div>
