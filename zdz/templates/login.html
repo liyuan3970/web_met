@@ -813,372 +813,171 @@
                                                 <!-- 绘图的主要面板 -->
                                                 <canvas id="canvas_quick_plot" style="width:90%;height:100%"></canvas>
                                                 <script src='static/js/taizhou_county.js'></script>
-                                                <script>
-                                                    // 快速绘图的核心代码
-                                                    let isDown = false;
-                                                    let beginPoint = null;
-                                                    let points = [];
-                                                    const canvas_quick_plot = document.querySelector('#canvas_quick_plot');
-                                                    const ctx_quick_plot = canvas_quick_plot.getContext('2d');
-                                                    let canvasW = canvas_quick_plot.width = window.innerWidth * 0.5 * 0.895
-                                                    let canvasH = canvas_quick_plot.height = window.innerHeight * 0.95 * 0.73
-
-                                                    let geoCenterX = 0, geoCenterY = 0  // 地图区域的经纬度中心点
-                                                    let scale = 1   // 地图缩放系数
-                                                    let geoData = []
-                                                    let offsetX_qp = 0, offsetY_qp = 0    // 鼠标事件的位置信息
-                                                    let eventType = ''  // 事件类型
-                                                    let countour_rect = {
-                                                        'x': [],
-                                                        'y': []
-
-                                                    }
-                                                    function down(evt) {
-                                                        isDown = true;
-                                                        const { x, y } = getPos(evt);
-                                                        points.push({ x, y });
-                                                        beginPoint = { x, y };
-                                                    }
-
-                                                    function move(evt) {
-                                                        if (!isDown) return;
-
-                                                        const { x, y } = getPos(evt);
-                                                        points.push({ x, y });
-
-                                                        if (points.length > 3) {
-                                                            const lastTwoPoints = points.slice(-2);
-                                                            const controlPoint = lastTwoPoints[0];
-                                                            const endPoint = {
-                                                                x: (lastTwoPoints[0].x + lastTwoPoints[1].x) / 2,
-                                                                y: (lastTwoPoints[0].y + lastTwoPoints[1].y) / 2,
-                                                            }
-                                                            drawLine(beginPoint, controlPoint, endPoint);
-                                                            beginPoint = endPoint;
-                                                        }
-                                                    }
-
-                                                    function up(evt) {
-                                                        if (!isDown) return;
-                                                        const { x, y } = getPos(evt);
-                                                        points.push({ x, y });
-
-                                                        if (points.length > 3) {
-                                                            const lastTwoPoints = points.slice(-2);
-                                                            const controlPoint = lastTwoPoints[0];
-                                                            const endPoint = lastTwoPoints[1];
-                                                            drawLine(beginPoint, controlPoint, endPoint);
-                                                        }
-                                                        beginPoint = null;
-                                                        isDown = false;
-                                                        points = [];
-                                                    }
-
-                                                    function getPos(evt) {
-                                                        return {
-                                                            x: evt.offsetX,
-                                                            y: evt.offsetY
-                                                            // x: evt.clientX,
-                                                            // y: evt.clientY
-                                                        }
-                                                    }
-
-                                                    function drawLine(beginPoint, controlPoint, endPoint) {
-                                                        console.log(beginPoint.x, beginPoint.y)
-                                                        countour_rect.x.push(beginPoint.x)
-                                                        countour_rect.y.push(beginPoint.y)
-                                                        ctx_quick_plot.beginPath();
-                                                        ctx_quick_plot.moveTo(beginPoint.x, beginPoint.y);
-                                                        // ctx_quick_plot.quadraticCurveTo(controlPoint.x, controlPoint.y, endPoint.x, endPoint.y);
-                                                        ctx_quick_plot.lineTo(endPoint.x, endPoint.y);
-                                                        ctx_quick_plot.stroke();
-                                                        ctx_quick_plot.fill()
-                                                        ctx_quick_plot.closePath();
-                                                    }
-
-
-                                                    // 图像的底图
-                                                    var maskCanvas = document.createElement('canvas');
-                                                    // Ensure same dimensions
-                                                    maskCanvas.width = canvas_quick_plot.width;
-                                                    maskCanvas.height = canvas_quick_plot.height;
-                                                    var maskCtx = maskCanvas.getContext('2d');
-
-                                                    function drawMap() {
-                                                        maskCtx.clearRect(0, 0, canvasW, canvasH)
-                                                        // 画布背景
-                                                        maskCtx.fillStyle = 'white'
-                                                        maskCtx.fillRect(0, 0, canvasW, canvasH)
-                                                        drawArea()
-                                                        // drawText()
-                                                    }
-                                                    // 绘制地图各子区域
-                                                    function drawArea() {
-                                                        let dataArr = geoData.features
-                                                        let cursorFlag = false
-                                                        for (let i = 0; i < dataArr.length; i++) {
-                                                            let centerX = canvasW / 2
-                                                            let centerY = canvasH / 2
-                                                            dataArr[i].geometry.coordinates.forEach(area => {
-                                                                maskCtx.save()
-                                                                maskCtx.beginPath()
-                                                                // maskCtx.strokeStyle = 'black'
-                                                                maskCtx.translate(centerX, centerY)
-                                                                area[0].forEach((elem, index) => {
-                                                                    let position = toScreenPosition(elem[0], elem[1])
-                                                                    if (index === 0) {
-                                                                        maskCtx.moveTo(position.x, position.y)
-                                                                    } else {
-                                                                        maskCtx.lineTo(position.x, position.y)
-                                                                    }
-
-                                                                })
-                                                                maskCtx.closePath()
-                                                                maskCtx.strokeStyle = 'black'
-                                                                maskCtx.lineWidth = 3
-                                                                // 将鼠标悬浮的区域设置为橘黄色
-                                                                // if (maskCtx.isPointInPath(offsetX_qp, offsetY_qp)) {
-                                                                //     cursorFlag = true
-                                                                //     maskCtx.fillStyle = 'white'
-                                                                //     if (eventType === 'click') {
-                                                                //         console.log(dataArr[i])
-                                                                //     }
-                                                                // } else {
-                                                                //     maskCtx.fillStyle = 'white'
-                                                                // }
-                                                                maskCtx.fill()
-                                                                maskCtx.stroke()
-                                                                maskCtx.restore()
-                                                            });
-                                                            // 动态设置鼠标样式
-                                                            // if (cursorFlag) {
-                                                            //     canvas.style.cursor = 'pointer'
-                                                            // } else {
-                                                            //     canvas.style.cursor = 'default'
-                                                            // }
-                                                        }
-                                                    }
-                                                    // 将经纬度坐标转换为屏幕坐标
-                                                    function toScreenPosition(horizontal, vertical) {
-                                                        return {
-                                                            x: (horizontal - geoCenterX) * scale,
-                                                            y: (geoCenterY - vertical) * scale
-                                                        }
-                                                    }
-
-                                                    // 获取包围盒范围，计算包围盒中心经纬度坐标，计算地图缩放系数
-                                                    function getBoxArea() {
-                                                        let N = -90, S = 90, W = 180, E = -180
-                                                        geoData.features.forEach(item => {
-                                                            // 将MultiPolygon和Polygon格式的地图处理成统一数据格式
-                                                            if (item.geometry.type === 'Polygon') {
-                                                                item.geometry.coordinates = [item.geometry.coordinates]
-                                                            }
-                                                            // 取四个方向的极值
-                                                            item.geometry.coordinates.forEach(area => {
-                                                                let areaN = - 90, areaS = 90, areaW = 180, areaE = -180
-                                                                area[0].forEach(elem => {
-                                                                    if (elem[0] < W) {
-                                                                        W = elem[0]
-                                                                    }
-                                                                    if (elem[0] > E) {
-                                                                        E = elem[0]
-                                                                    }
-                                                                    if (elem[1] > N) {
-                                                                        N = elem[1]
-                                                                    }
-                                                                    if (elem[1] < S) {
-                                                                        S = elem[1]
-                                                                    }
-                                                                })
-                                                            })
-                                                        })
-                                                        // 计算包围盒的宽高
-                                                        let width = Math.abs(E - W)
-                                                        let height = Math.abs(N - S)
-                                                        let wScale = canvasW / width
-                                                        let hScale = canvasH / height
-                                                        // 计算地图缩放系数
-                                                        scale = wScale > hScale ? hScale : wScale
-                                                        scale = scale - 70
-                                                        // 获取包围盒中心经纬度坐标
-                                                        geoCenterX = (E + W) / 2
-                                                        geoCenterY = (N + S) / 2
-                                                    }
-
-                                                    // This color is the one of the filled shape
-                                                    maskCtx.fillStyle = "black";
-                                                    // Fill the mask
-                                                    // maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
-                                                    // Set xor operation
-                                                    maskCtx.globalCompositeOperation = 'xor';
-                                                    // Draw the shape you want to take out
-                                                    geoData = tz_json_county
-                                                    getBoxArea()
-                                                    drawMap()
-                                                    // maskCtx.arc(600, 450, 130, 0, 2 * Math.PI);
-                                                    maskCtx.fill();
-                                                    ctx_quick_plot.drawImage(maskCanvas, 0, 0);
-
-                                                    // 设置线条颜色
-                                                    ctx_quick_plot.strokeStyle = 'black';
-                                                    ctx_quick_plot.lineWidth = 2;
-                                                    ctx_quick_plot.lineJoin = 'round';
-                                                    ctx_quick_plot.lineCap = 'round';
-                                                    // var countour_rect_x = []
-                                                    // var countour_rect_y = []
-
-
-                                                    canvas_quick_plot.addEventListener('mousedown', down, false);
-                                                    canvas_quick_plot.addEventListener('mousemove', move, false);
-                                                    canvas_quick_plot.addEventListener('mouseup', up, false);
-                                                    canvas_quick_plot.addEventListener('mouseout', up, false);
-
-
-                                                    // canvas_quick_plot.addEventListener('click',
-                                                    //     function (e) {
-                                                    //         undefined
-                                                    //         offsetX_qp = e.offsetX;
-                                                    //         offsetY_qp = e.offsetY;
-                                                    //         var color_style = $("input[name='selected_color']:checked").val()
-                                                    //         // var canvas_quick_plot_select_value = parseFloat($("input[name='canvas_quick_plot_num']:checked").val());
-                                                    //         console.log(offsetX_qp, offsetY_qp)
-
-                                                    //         ctx_quick_plot.beginPath();
-
-                                                    //         ctx_quick_plot.fillStyle = color_style
-                                                    //         ctx_quick_plot.fillRect(offsetX_qp - 5, offsetY_qp - 5, 10, 10);
-                                                    //         countour_rect.x.push(offsetX_qp)
-                                                    //         countour_rect.y.push(offsetY_qp)
-                                                    //         ctx_quick_plot.closePath();
-
-
-                                                    //     });
-                                                    canvas_quick_plot.oncontextmenu = function (event) {
-                                                        var event = event || window.event;
-                                                        // console.log("右键点击", countour_rect)
-                                                        // ctx_quick_plot.strokeStyle = 'rgb(255,255,255,1)'
-                                                        // 绘制直线，清空举行框
-                                                        var select_plot_type = $("input[name='taizhou_quick_plot_type']:checked").val()
-                                                        if (select_plot_type == 'coutour') {
-                                                            var len_point = countour_rect.x.length
-                                                            for (i = 0; i < len_point; i++) {
-                                                                if (i == 0) {
-                                                                    ctx_quick_plot.beginPath();
-                                                                    ctx_quick_plot.moveTo(countour_rect.x[i], countour_rect.y[i]);
-                                                                }
-                                                                else if (i != len_point - 1) {
-                                                                    ctx_quick_plot.lineTo(countour_rect.x[i], countour_rect.y[i]);
-
-                                                                    // ctx_quick_plot.stroke();
-
-                                                                }
-                                                                else {
-                                                                    ctx_quick_plot.lineTo(countour_rect.x[i], countour_rect.y[i]);
-                                                                    var color_style = $("input[name='selected_color']:checked").val()
-
-                                                                    // 清空矩形点                                                 
-                                                                    // for (i = 0; i < len_point; i++) {
-                                                                    //     console.log(countour_rect.x.length)
-                                                                    //     // ctx_quick_plot.fillStyle = "blue"
-                                                                    //     ctx_quick_plot.clearRect(countour_rect.x[i] - 5, countour_rect.y[i] - 5, 10, 10);
-
-                                                                    // }
-
-                                                                    ctx_quick_plot.fillStyle = color_style
-                                                                    ctx_quick_plot.fill()
-                                                                    ctx_quick_plot.stroke()
-                                                                    ctx_quick_plot.closePath();
-
-                                                                    // ctx_quick_plot.fillStyle = "red"
-                                                                    countour_rect.x = []
-                                                                    countour_rect.y = []
-
-                                                                }
-
-
-
-                                                            }
-                                                            ctx_quick_plot.drawImage(maskCanvas, 0, 0);
-                                                            return false;//屏蔽浏览器自带的右键菜单
-
-                                                        }
-                                                        else if (select_plot_type == 'line') {
-                                                            console.log('开始绘制曲线')
-                                                            countour_rect.x = []
-                                                            countour_rect.y = []
-                                                            ctx_quick_plot.drawImage(maskCanvas, 0, 0);
-                                                            return false;//屏蔽浏览器自带的右键菜单
-
-                                                        }
-
-                                                    };
-
-
-
-                                                </script>
-
                                             </div>
                                         </div>
                                         <!-- 画图方法 -->
                                         <div style="display:inline-block;width:100%;height:3%">
-                                            等值线:<input type="radio" checked="checked" name="taizhou_quick_plot_type"
-                                                value="coutour">
-                                            曲线:<input type="radio" name="taizhou_quick_plot_type" value="line">
-                                            图标:<input type="radio" name="taizhou_quick_plot_type" value="scatter_icon">
-                                            文字:<input type="radio" name="taizhou_quick_plot_type" value="scatter_text">
-                                            图例:<input type="radio" name="taizhou_quick_plot_type" value="scatter_pic">
+                                            等值线:&nbsp;<input id="taizhou_quick_plot_contour" type="radio" checked="checked" name="taizhou_quick_plot_type"
+                                                value="coutour">&nbsp;&nbsp;&nbsp;
+                                            曲线:&nbsp;<input id="taizhou_quick_plot_line" type="radio" name="taizhou_quick_plot_type" value="line">&nbsp;&nbsp;&nbsp;
+                                            图标:&nbsp;<input id="taizhou_quick_plot_icon" type="radio" name="taizhou_quick_plot_type" value="scatter_icon">&nbsp;&nbsp;&nbsp;
+                                            文字:&nbsp;<input id="taizhou_quick_plot_text" type="radio" name="taizhou_quick_plot_type" value="scatter_text">&nbsp;&nbsp;&nbsp;
+                                            图例:&nbsp;<input id="taizhou_quick_plot_pic" type="radio" name="taizhou_quick_plot_type" value="scatter_pic">&nbsp;&nbsp;&nbsp;
+                                            <input id="forward_canvas" type="button" value="前进" style="float: right;">
+                                            <input id="reback_canvas" type="button" value="撤回" style="float: right;">
+                                            
                                         </div>
                                         <!-- 对应方法的选项 -->
-                                        <div id="taizhou_quick_plot_type_view"
-                                            style="display:inline-block;width:100%;height:10%;border: 3px solid black">
+                                        <div id="taizhou_quick_plot_type_view0"
+                                            style="display:inline-block;width:100%;height:13%;border: 3px solid black">
+                                        </div>
+                                        <div id="taizhou_quick_plot_type_view1"
+                                            style="display:none;width:100%;height:13%;border: 3px solid black">
+                                            标识:&nbsp;<input id = "plot_text_content" type="text" placeholder="请输入线标识" value = "请输入线标识" style="width: 10%;" >
+                                            线宽:&nbsp;<input id = "plot_text_size" type="number"  min="0" placeholder="3" value="3" style="width: 6%;" >
+                                            线首:&nbsp;<input id = "plot_text_start" type="checkbox" value = "0" checked = "checked">
+                                            线尾:&nbsp;<input id = "plot_text_end" type="checkbox" value = "0" checked = "checked">
+                                            行距:&nbsp;<input id = "plot_text_clomn" type="number"  min="0"  placeholder="50" value = "50"  style="width: 6%;" >
+                                            列距:&nbsp;<input id = "plot_text_row" type="number"  min="0"  placeholder="10" value = "10"  style="width: 6%;" >
 
                                         </div>
+                                        <div id="taizhou_quick_plot_type_view2" style="display:none;width:100%;height:13%;border: 3px solid black">
+                                            <img class="icon_scatter" src="static/src/icon/35到37度.png" style = "width:50px;height:50px">
+                                            <img class="icon_scatter" src="static/src/icon/6-8级大风.png" style = "width:50px;height:50px">
+                                            <img class="icon_scatter" src="static/src/icon/40度以上.png" style = "width:50px;height:50px">
+                                            <img class="icon_scatter" src="static/src/icon/7-9级大风.png" style = "width:50px;height:50px">
+                                            <img class="icon_scatter" src="static/src/icon/7~9级雷雨大风.png" style = "width:50px;height:50px">
+                                        
+                                        </div>
+                                        <script>
+                                            var el = window.document.body; //声明一个变量，默认值为body
+                                            var select_icon_img = []
+                                            window.document.body.onmouseover = function (event) {
+                                                el = event.target; //鼠标每经过一个元素，就把该元素赋值给变量el
+                                                var class_name = el.className 
+                                                el.addEventListener("click",function(){
+                                                    if (class_name == 'icon_scatter'){
+                                                        // $('.icon_scatter').attr("border","0px")
+                                                        $('.icon_scatter').css("border","0px")
+                                                        el.setAttribute("border","3px")
+                                                        el.style.border = "3px solid red"
+                                                        // el.style.border-color = ("border-color","red")
+                                                        select_icon_img = []
+                                                        select_icon_img.push(el)
+                                                        console.log(el.className )
+                                
+                                                    }
+                                                    
+                                                    
+                                                })
+                                                // console.log('当前鼠标在', el, '元素上'); //在控制台中打印该变量
+                                            }
+                                
+                                        </script>
+                                        <div id="taizhou_quick_plot_type_view3"
+                                            style="display:none;width:100%;height:13%;border: 3px solid black">
+                                            内容:&nbsp;<input id= "taizhou_quick_plot_text_content" placeholder="请输入文字" value = "请输入文字" type="text" style="width: 40%;" >
+                                            颜色:&nbsp;<input type="radio" value = "0">
+                                            大小:&nbsp;<input type="number" max = "10" min="0" placeholder="3" style="width: 6%;" >
+
+                                        </div>
+                                        <div id="taizhou_quick_plot_type_view4" style="display:none;width:100%;height:13%;border: 3px solid black">
+                                            <!-- 添加颜色的radio -->
+                                            <div id="color_select_list" style="display: inline-block;width:100%;height: 40%; "></div>
+                                            <div style="width:100%;height: 10%; "></div>
+                                            
+                                            &nbsp;<input type="button" value="绘制" onclick="color_bar_plot()" style="width: 10%;height: 35%;float: right;">
+                                            &nbsp;<input id="color_bar_add" type="button" value="添加" onclick="color_bar_add()"
+                                                style="width: 10%;height: 35%;float: right;">
+                                            &nbsp;<input id="color_bar_del" type="button" value="删除" onclick="color_bar_del()"
+                                                style="width: 10%;height: 35%;float: right;">
+                                        
+                                        </div>
+                                        <script>
+                                            // 颜色色戒的核心代码
+                                            var data_color_bar ={
+                                                "color":[],
+                                                "text":[]
+                                            }
+                                            function color_bar_add(){
+                                                console.log("添加color")
+                                                var color_style = $("input[name='selected_color']:checked").val()
+                                                var add_radio = document.createElement('input')
+                                                add_radio.style.width = "8%"
+                                                add_radio.style.height = "80%"
+                                                add_radio.style.backgroundColor = color_style
+                                                // color_bar_list.push(color_style)
+                                                // add_radio.
+                                                add_radio.style.display ="inline-block"
+                                                add_radio.style.border = "1px solid black"
+                                                add_radio.setAttribute("class","color_bar")
+                                                add_radio.setAttribute("type","text")
+                                                
+                                                $('#color_select_list').append(add_radio)
+                                            }
+                                            function color_bar_del(){
+                                                $('#color_select_list').children().last().remove()
+                                                data_color_bar.text.pop()
+                                                data_color_bar.color.pop()
+                                            }
+                                            function color_bar_plot(){    
+                                                var bar_length =  $('#color_select_list').children().length
+                                                $(".color_bar").each(function(index, el) {
+                                                    data_color_bar.text[index] = el.value;
+                                                    data_color_bar.color[index] = el.style.backgroundColor;
+                                                });
+                                                for (i=0;i<data_color_bar.color.length;i++){
+                                                            ctx_quick_plot.fillStyle = data_color_bar.color[i]
+                                                            ctx_quick_plot.fillRect(160,460+i*30,80,30)
+                                                            ctx_quick_plot.fillText(data_color_bar.text[i],160+80+8,460+i*30+15)
+                                                        }               
+                                            }
+                                            
+                                        </script>
                                         <script type="text/javascript">
                                             var taizhou_quick_plot_type = $("input[name='taizhou_quick_plot_type']:checked").val()
-                                            // $("input[name='taizhou_quick_plot_type']:checked").click(function () {
-                                            //     console.log("dianji")
-                                            // }
-                                            // )
-                                            $(document).ready(function () {
-                                                        $('input[type=radio][name=taizhou_quick_plot_type]').change(function () {
-                                                            if (this.value == 'contour') {
-                                                                console.log("contour");
-                                                                
-                                                            }
-                                                            else if (this.value == 'line') {
-                                                                console.log("line");
-                                                                
-                                                            }
-                                                            else if (this.value == 'scatter_icon') {
-                                                                console.log("scatter_icon");
-                                                                
-                                                            }
-                                                            else if (this.value == 'scatter_text') {
-                                                                console.log("scatter_text");
-                                                                
-                                                            }
-                                                            else if (this.value == 'scatter_pic') {
-                                                                console.log("scatter_pic");
-                                                                
-                                                            }
-                                                        });
-                                                    });
-                                            // if (taizhou_quick_plot_type == 'coutour'){
-                                            //     $('#taizhou_quick_plot_type_view').innerText("等值线") 
-                                            // }
-                                            // else if (taizhou_quick_plot_type == 'line'){
-                                            //     $('#taizhou_quick_plot_type_view').innerText("曲线") 
-                                            // }
-                                            // else if (taizhou_quick_plot_type == 'scatter_icon'){
-                                            //     $('#taizhou_quick_plot_type_view').innerText("文本") 
-                                            // }
-                                            // else if (taizhou_quick_plot_type == 'scatter_pic'){
-                                            //     $('#taizhou_quick_plot_type_view').innerText("图例") 
-                                            // }
+
+                                            // 前端绘图模块的
+                                            $('#taizhou_quick_plot_contour').click(function () {
+                                                $('#taizhou_quick_plot_type_view0').attr("style", "display:inline-block;width:100%;height:13%;border: 3px solid black");
+                                                $('#taizhou_quick_plot_type_view1').attr("style", "display:none;width:100%;height:13%;border: 3px solid black");
+                                                $('#taizhou_quick_plot_type_view2').attr("style", "display:none;width:100%;height:13%;border: 3px solid black");
+                                                $('#taizhou_quick_plot_type_view3').attr("style", "display:none;width:100%;height:13%;border: 3px solid black");
+                                                $('#taizhou_quick_plot_type_view4').attr("style", "display:none;width:100%;height:13%;border: 3px solid black");
+                                            })
+                                            $('#taizhou_quick_plot_line').click(function () {
+                                                $('#taizhou_quick_plot_type_view0').attr("style", "display:none;width:100%;height:13%;border: 3px solid black");
+                                                $('#taizhou_quick_plot_type_view1').attr("style", "display:inline-block;width:100%;height:13%;border: 3px solid black");
+                                                $('#taizhou_quick_plot_type_view2').attr("style", "display:none;width:100%;height:13%;border: 3px solid black");
+                                                $('#taizhou_quick_plot_type_view3').attr("style", "display:none;width:100%;height:13%;border: 3px solid black");
+                                                $('#taizhou_quick_plot_type_view4').attr("style", "display:none;width:100%;height:13%;border: 3px solid black");
+                                            })
+                                            $('#taizhou_quick_plot_icon').click(function () {
+                                                $('#taizhou_quick_plot_type_view0').attr("style", "display:none;width:100%;height:13%;border: 3px solid black");
+                                                $('#taizhou_quick_plot_type_view1').attr("style", "display:none;width:100%;height:13%;border: 3px solid black");
+                                                $('#taizhou_quick_plot_type_view2').attr("style", "display:inline-block;width:100%;height:13%;border: 3px solid black");
+                                                $('#taizhou_quick_plot_type_view3').attr("style", "display:none;width:100%;height:13%;border: 3px solid black");
+                                                $('#taizhou_quick_plot_type_view4').attr("style", "display:none;width:100%;height:13%;border: 3px solid black");
+                                            })
+                                            $('#taizhou_quick_plot_text').click(function () {
+                                                $('#taizhou_quick_plot_type_view0').attr("style", "display:none;width:100%;height:13%;border: 3px solid black");
+                                                $('#taizhou_quick_plot_type_view1').attr("style", "display:none;width:100%;height:13%;border: 3px solid black");
+                                                $('#taizhou_quick_plot_type_view2').attr("style", "display:none;width:100%;height:13%;border: 3px solid black");
+                                                $('#taizhou_quick_plot_type_view3').attr("style", "display:inline-block;width:100%;height:13%;border: 3px solid black");
+                                                $('#taizhou_quick_plot_type_view4').attr("style", "display:none;width:100%;height:13%;border: 3px solid black");
+                                            })
+                                            $('#taizhou_quick_plot_pic').click(function () {
+                                                $('#taizhou_quick_plot_type_view0').attr("style", "display:none;width:100%;height:13%;border: 3px solid black");
+                                                $('#taizhou_quick_plot_type_view1').attr("style", "display:none;width:100%;height:13%;border: 3px solid black");
+                                                $('#taizhou_quick_plot_type_view2').attr("style", "display:none;width:100%;height:13%;border: 3px solid black");
+                                                $('#taizhou_quick_plot_type_view3').attr("style", "display:none;width:100%;height:13%;border: 3px solid black");
+                                                $('#taizhou_quick_plot_type_view4').attr("style", "display:inline-block;width:100%;height:13%;border: 3px solid black");
+                                            })
+
 
 
                                         </script>
+                                        <script type="text/javascript" src='static/js/canvas_quick_plot.js'></script>
                                     </div>
                                 </div>
                             </div>
