@@ -122,57 +122,71 @@
 
                         </div>
                         <div class="tab-pane" id="panel-2"
-                            style="width:100%;height:100%;background-color:rgb(8, 116, 167)">
+                            style="width:100%;height:100%;background-color:rgb(247, 248, 248)">
                             <div style="width:100%;height:25%;background-color:rgb ;border: 3px solid black;">
-                                <div
-                                    style="display: inline-block ;width:100%;height:15%;background-color:rgb;vertical-align:middle;font-size: 25px;">
-                                    <label>精细化站点预报</label>
-                                </div>
-                                <div
-                                    style="display: inline-block ;width:100%;height:25%;background-color:rgb;vertical-align:middle;font-size: 25px;">
-                                    <h3 style="display: inline-block ;width:15% ;">数据源：</h3>
-                                    EC数据: <input type="radio" name="check_data_source" style="width: 5%;height:50%;">
-                                    智能网格: <input type="radio" name="check_data_source" style="width: 5%;height:50%;">
-                                    市台订正: <input type="radio" name="check_data_source" style="width: 5%;height:50%;">
+                                <div class="tabbable" id="tabs-233110" style="width:100%;height:100%;">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active">
+                                            <a href="#panel-03001" data-toggle="tab">一周天气</a>
+                                        </li>
+                                        <li>
+                                            <a href="#panel-03002" data-toggle="tab">气象信息快报</a>
+                                        </li>
+                                        <li>
+                                            <a href="#panel-03003" data-toggle="tab">重要气象报告</a>
+                                        </li>
+                                        <li>
+                                            <a href="#panel-03004" data-toggle="tab">天气专报</a>
+                                        </li>
+                                        <li>
+                                            <a href="#panel-03005" data-toggle="tab">天气公报</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" style="width:100%;height:87%">
+                                        <div class="tab-pane active" id="panel-03001"
+                                            style="width:100%;height:100%">
+                                            <!-- 调整好的布局结构 -->
+                                            <div style="width:100%;height:97%;">
+                                                <div style="width:100%;height:80%;overflow: auto;">
+                                                    <div style="height: 20%;">
+                                                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <label
+                                                            for="file_week0"
+                                                            style="width:90%;text-align:center;vertical-align: middle;align-items: center;">第一期
+                                                            一周天气 </label> <input type="radio" name="file_week"
+                                                            id="file_week0">
+                                                    </div>
+                                                    <div style="height: 20%;">
+                                                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <label
+                                                            for="file_week1"
+                                                            style="width:90%;text-align:center;vertical-align: middle;align-items: center;">第一期
+                                                            一周天气 </label> <input type="radio" name="file_week"
+                                                            id="file_week1">
+                                                    </div>
+                                                    <div style="height: 20%;">
+                                                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <label
+                                                            for="file_week2"
+                                                            style="width:90%;text-align:center;vertical-align: middle;align-items: center;">第一期
+                                                            一周天气 </label> <input type="radio" name="file_week"
+                                                            id="file_week2">
+                                                    </div>
+                                                </div>
+                                                <input type="button" value="查看"
+                                                    style="width:15%;height:18%;float:right">
 
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="panel-03002">
+                                            <p>
+                                                Howdy, I'm in Section 2.
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div
-                                    style="display: inline-block ;width:100%;height:25%;background-color:rgb;vertical-align:middle;font-size: 25px;">
-                                    站点模式：<input type="radio" name="check_data_way" style="width: 5%;height:50%;">
-                                    <input placeholder="初始时间" id="datetimepicker_check_data_way_start" type="text"
-                                        style="width: 35%;height:80% ; ">
-                                    <input placeholder="终止时间" id="datetimepicker_check_data_way_end" type="text"
-                                        style="width: 35%;height:80% ; ">
-                                </div>
-                                <script>
-                                    $('#datetimepicker_check_data_way_start').datetimepicker(
-                                        {
-                                            theme: 'dark',
-                                            format: 'Y-m-d H:i'
-                                        }
-                                    );
-                                </script>
-                                <script>
-                                    $('#datetimepicker_check_data_way_end').datetimepicker(
-                                        {
-                                            theme: 'dark',
-                                            format: 'Y-m-d H:i'
-                                        }
-                                    );
-                                </script>
-                                <div
-                                    style="display: inline-block ;width:100%;height:25%;background-color:rgb;vertical-align:middle;font-size: 25px;">
-                                    经纬度模式：<input type="radio" name="check_data_way" style="width: 5%;height:50%;">
-                                    <input type="text" placeholder="经度" style="width: 20%;height:80%;"><input
-                                        type="text" placeholder="纬度" style="width: 20%;height:80%;">
-                                    <input id="tool_submit1" onclick="tool_1()" type="button" value="查询"
-                                        style="width: 10%;height:60% ;float: right ;">
-                                </div>
+                                
 
 
                             </div>
-                            <div style="width:100%;height:25%;background-color:rgb ;border: 3px solid black;">
+                            <div style="width:100%;height:25%;background-color:rgb(247, 248, 248) ;border: 3px solid black;">
                                 <div style="width:100%;height:15%">
                                     <h3>市台订正:</h3>
 
@@ -255,64 +269,52 @@
                             <div
                                 style="width:100%;height:25%;background-color:rgb ;background-color: rgb(247, 248, 248);">
                                 <div style="width:100%;height:100%;background-color:rgb ;">
-                                    <div class="tabbable" id="tabs-233110" style="width:100%;height:100%;">
-                                        <ul class="nav nav-tabs">
-                                            <li class="active">
-                                                <a href="#panel-03001" data-toggle="tab">一周天气</a>
-                                            </li>
-                                            <li>
-                                                <a href="#panel-03002" data-toggle="tab">气象信息快报</a>
-                                            </li>
-                                            <li>
-                                                <a href="#panel-03003" data-toggle="tab">重要气象报告</a>
-                                            </li>
-                                            <li>
-                                                <a href="#panel-03004" data-toggle="tab">天气专报</a>
-                                            </li>
-                                            <li>
-                                                <a href="#panel-03005" data-toggle="tab">天气公报</a>
-                                            </li>
-                                        </ul>
-                                        <div class="tab-content" style="width:100%;height:87%">
-                                            <div class="tab-pane active" id="panel-03001"
-                                                style="width:100%;height:100%">
-                                                <!-- 调整好的布局结构 -->
-                                                <div style="width:100%;height:97%;">
-                                                    <div style="width:100%;height:80%;overflow: auto;">
-                                                        <div style="height: 20%;border: 1px solid rgb(15, 15, 15);">
-                                                            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <label
-                                                                for="file_week0"
-                                                                style="width:90%;text-align:center;vertical-align: middle;align-items: center;">第一期
-                                                                一周天气 </label> <input type="radio" name="file_week"
-                                                                id="file_week0">
-                                                        </div>
-                                                        <div style="height: 20%;border: 1px solid rgb(15, 15, 15);">
-                                                            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <label
-                                                                for="file_week1"
-                                                                style="width:90%;text-align:center;vertical-align: middle;align-items: center;">第一期
-                                                                一周天气 </label> <input type="radio" name="file_week"
-                                                                id="file_week1">
-                                                        </div>
-                                                        <div style="height: 20%;border: 1px solid rgb(15, 15, 15);">
-                                                            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <label
-                                                                for="file_week2"
-                                                                style="width:90%;text-align:center;vertical-align: middle;align-items: center;">第一期
-                                                                一周天气 </label> <input type="radio" name="file_week"
-                                                                id="file_week2">
-                                                        </div>
-                                                    </div>
-                                                    <input type="button" value="查看"
-                                                        style="width:15%;height:18%;float:right">
+                                    <div
+                                    style="display: inline-block ;width:100%;height:15%;background-color:rgb;vertical-align:middle;font-size: 25px;">
+                                    <label>精细化站点预报</label>
+                                </div>
+                                <div
+                                    style="display: inline-block ;width:100%;height:25%;background-color:rgb;vertical-align:middle;font-size: 25px;">
+                                    <!-- <h3 style="display: inline-block ;width:15% ;">数据源：</h3>
+                                    EC数据: <input type="radio" name="check_data_source" style="width: 5%;height:50%;">
+                                    智能网格: <input type="radio" name="check_data_source" style="width: 5%;height:50%;">
+                                    市台订正: <input type="radio" name="check_data_source" style="width: 5%;height:50%;"> -->
 
-                                                </div>
-                                            </div>
-                                            <div class="tab-pane" id="panel-03002">
-                                                <p>
-                                                    Howdy, I'm in Section 2.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                </div>
+
+                                <!-- <div
+                                    style="display: inline-block ;width:100%;height:25%;background-color:rgb;vertical-align:middle;font-size: 25px;">
+                                    站点模式:<input type="radio" name="check_data_way" style="width: 5%;height:50%;">
+                                    <input placeholder="初始时间" id="datetimepicker_check_data_way_start" type="text"
+                                        style="width: 35%;height:80% ; ">
+                                    <input placeholder="终止时间" id="datetimepicker_check_data_way_end" type="text"
+                                        style="width: 35%;height:80% ; ">
+                                </div>
+                                <script>
+                                    $('#datetimepicker_check_data_way_start').datetimepicker(
+                                        {
+                                            theme: 'dark',
+                                            format: 'Y-m-d H:i'
+                                        }
+                                    );
+                                </script>
+                                <script>
+                                    $('#datetimepicker_check_data_way_end').datetimepicker(
+                                        {
+                                            theme: 'dark',
+                                            format: 'Y-m-d H:i'
+                                        }
+                                    );
+                                </script> -->
+                                <div
+                                    style="display: inline-block ;width:100%;height:25%;background-color:rgb;vertical-align:middle;font-size: 25px;">
+                                    <!-- 经纬度模式:<input type="radio" name="check_data_way" style="width: 5%;height:50%;"> -->
+                                    <input type="text" placeholder="经度" style="width: 20%;height:80%;"><input
+                                        type="text" placeholder="纬度" style="width: 20%;height:80%;">
+                                    <input id="tool_submit1" onclick="tool_1()" type="button" value="查询"
+                                        style="width: 10%;height:60% ;float: right ;">
+                                </div>
+                                    
 
 
 
@@ -734,8 +736,16 @@
                                             县区:<input type="radio" name="taizhou_shp_type" value="taizhou_county">
                                             乡镇:<input type="radio" name="taizhou_shp_type" value="taizhou_village">
                                             <span style="width:10%;height: 100%;text-algin-last:justify  ">
-                                                &#12288&#12288&#12288</span>
-                                            <input type="text" placeholder="请输入标题" style="width:60%;height:100%">
+                                                &#12288;&#12288;&#12288;</span>
+                                            <input id ="text_canvas_main" type="text" placeholder="请输入标题" value="请输入标题" style="width:60%;height:100%">
+                                            <input id = "text_canvas_plot" type ="button" value="绘制" style="width:10%;height:100%;float: right">
+                                            <script>
+                                                $('#text_canvas_plot').click(function () {                                                    
+                                                    ctx_quick_plot.font = 'normal 15pt "楷体"';
+                                                    ctx_quick_plot.clearRect(0, 0,600,70)
+                                                    ctx_quick_plot.fillText($('#text_canvas_main').val(),35,60)
+                                                })
+                                            </script>
                                         </div>
                                         <div style="display:inline-block;width:100%;height:80%;border: 3px solid black">
                                             <div
@@ -825,15 +835,119 @@
                                             图例:&nbsp;<input id="taizhou_quick_plot_pic" type="radio" name="taizhou_quick_plot_type" value="scatter_pic">&nbsp;&nbsp;&nbsp;
                                             <input id="forward_canvas" type="button" value="前进" style="float: right;">
                                             <input id="reback_canvas" type="button" value="撤回" style="float: right;">
+                                            <input id="flash_canvas" type="button" value="刷新" style="float: right;">
                                             
                                         </div>
+                                        <!-- 刷新代码 -->
+                                        <script>
+                                            $('#flash_canvas').click(function () {
+                                                // console.log("绘制刷新")
+                                                ctx_quick_plot.putImageData(reback_list[0], 0, 0)
+                                            })
+
+                                        </script>
                                         <!-- 对应方法的选项 -->
+                                        <!-- 等值线的填充 -->
                                         <div id="taizhou_quick_plot_type_view0"
                                             style="display:inline-block;width:100%;height:13%;border: 3px solid black">
+                                            <div style="display:inline-block;width:100%;height: 30%;">
+                                                颜色1:&nbsp;<input id="" type="radio" class = "select_color_bar_type" name="select_color_bar_type" checked = "checked" value="1">&nbsp;&nbsp;&nbsp;
+                                                颜色2:&nbsp;<input id="" type="radio" class = "select_color_bar_type" name="select_color_bar_type" value="2">&nbsp;&nbsp;&nbsp;
+                                                颜色3:&nbsp;<input id="" type="radio" class = "select_color_bar_type" name="select_color_bar_type" value="3">&nbsp;&nbsp;&nbsp;
+                                                颜色4:&nbsp;<input id="" type="radio" class = "select_color_bar_type" name="select_color_bar_type" value="4">&nbsp;&nbsp;&nbsp;
+
+                                            </div>
+                                            <div id = "select_color_bar1" style="display: inline-block;width:100%;height: 60%;">
+                                                <div style="display: inline-flex;width: 100%;height:5%"></div>
+                                                <div style="display: inline-flex;width: 5%;height:40%;background-color:rgb(78, 55, 55);"></div>
+                                                <div style="display: inline-flex;width: 5%;height:40%;background-color:rgb(0, 255, 221);"></div>
+                                                <div style="display: inline-flex;width: 5%;height:40%;background-color:rgb(150, 69, 197);"></div>
+                                                <div style="display: inline-flex;width: 5%;height:40%;background-color:rgb(74, 21, 196);"></div>
+                                                <div style="display: inline-flex;width: 5%;height:40%;background-color:rgb(214, 235, 96);"></div>
+                                                <div style="display: inline-flex;width: 5%;height:40%;background-color:red;"></div>
+
+                                            </div>
+                                            <div id = "select_color_bar2" style="display: none;width:100%;height: 60%;">
+                                                <div style="display: inline-flex;width: 100%;height:5%"></div>
+                                             
+
+                                            </div>
+                                            <div id = "select_color_bar3" style="display: none;width:100%;height: 60%;">
+                                                <div style="display: inline-flex;width: 100%;height:5%"></div>
+                                                
+
+                                            </div>
+                                            <div id = "select_color_bar4" style="display: none;width:100%;height: 60%;">
+                                                <div style="display: inline-flex;width: 100%;height:5%"></div>
+                                                
+
+                                            </div>
+                                            <script type="text/javascript">
+                                                $('input[type=radio][name=select_color_bar_type]').click(function () {
+                                                    console.log($('input[type=radio][name=select_color_bar_type]').val(),this.value)
+                                                    if (this.value=='1'){
+                                                        console.log("开始你的业务逻辑")
+                                                    }
+                                                    else if(this.value=='2'){
+                                                        $('#select_color_bar1').css("display","none")
+                                                        $('#select_color_bar2').css("display","inline-block")
+                                                        $('#select_color_bar3').css("display","none")
+                                                        $('#select_color_bar4').css("display","none")
+                                                        var color_bar = ['red','blue','green','black']
+                                                        $('#select_color_bar2').html(" ")
+                                                        var add_blank_div = document.createElement("div")
+                                                        add_blank_div.style.display="inline-flex"
+                                                        add_blank_div.style.width = "100%"
+                                                        add_blank_div.style.height = "5%"
+                                                        $('#select_color_bar2').append(add_blank_div)
+                                                        for (i=0;i<color_bar.length;i++){
+                                                            var add_div = document.createElement('div')
+                                                            add_div.style.display="inline-flex"
+                                                            add_div.style.width = "5%"
+                                                            add_div.style.height = "40%"
+                                                            add_div.style.backgroundColor = color_bar[i]
+                                                            $('#select_color_bar2').append(add_div)
+                                                        }
+
+
+                                                    }
+                                                    else if(this.value=='3'){
+                                                        $('#select_color_bar1').css("display","none")
+                                                        $('#select_color_bar2').css("display","none")
+                                                        $('#select_color_bar3').css("display","inline-block")
+                                                        $('#select_color_bar4').css("display","none")
+                                                        var color_bar = ['red','blue','green','black','yellow','orange']
+                                                        $('#select_color_bar3').html(" ")
+                                                        var add_blank_div = document.createElement("div")
+                                                        add_blank_div.style.display="inline-flex"
+                                                        add_blank_div.style.width = "100%"
+                                                        add_blank_div.style.height = "5%"
+                                                        $('#select_color_bar3').append(add_blank_div)
+                                                        for (i=0;i<color_bar.length;i++){
+                                                            var add_div = document.createElement('div')
+                                                            add_div.style.display="inline-flex"
+                                                            add_div.style.width = "5%"
+                                                            add_div.style.height = "40%"
+                                                            add_div.style.backgroundColor = color_bar[i]
+                                                            $('#select_color_bar3').append(add_div)
+                                                        }
+
+
+                                                    }
+                                                    else if(this.value=='4'){
+
+                                                    }
+
+                                                })
+                                                // $('.select_color_bar_type').click(function (){
+                                                //    console.log($('.select_color_bar_type').val())
+                                                // })
+                                            </script>
+
                                         </div>
                                         <div id="taizhou_quick_plot_type_view1"
                                             style="display:none;width:100%;height:13%;border: 3px solid black">
-                                            标识:&nbsp;<input id = "plot_text_content" type="text" placeholder="请输入线标识" value = "请输入线标识" style="width: 10%;" >
+                                            标识:&nbsp;<input id = "plot_text_content" type="text" placeholder="请输入线标识" value = "" style="width: 10%;" >
                                             线宽:&nbsp;<input id = "plot_text_size" type="number"  min="0" placeholder="3" value="3" style="width: 6%;" >
                                             线首:&nbsp;<input id = "plot_text_start" type="checkbox" value = "0" checked = "checked">
                                             线尾:&nbsp;<input id = "plot_text_end" type="checkbox" value = "0" checked = "checked">
@@ -857,11 +971,9 @@
                                                 var class_name = el.className 
                                                 el.addEventListener("click",function(){
                                                     if (class_name == 'icon_scatter'){
-                                                        // $('.icon_scatter').attr("border","0px")
                                                         $('.icon_scatter').css("border","0px")
                                                         el.setAttribute("border","3px")
                                                         el.style.border = "3px solid red"
-                                                        // el.style.border-color = ("border-color","red")
                                                         select_icon_img = []
                                                         select_icon_img.push(el)
                                                         console.log(el.className )
@@ -870,7 +982,7 @@
                                                     
                                                     
                                                 })
-                                                // console.log('当前鼠标在', el, '元素上'); //在控制台中打印该变量
+                                                
                                             }
                                 
                                         </script>
@@ -1058,19 +1170,8 @@
                         style=" display: inline-flex;width: 60%; height: 45%;border: 3px solid rgb(58, 128, 0)">
 
                     </div>
-                    <!-- <script>
-                        $(function () {
-                            console.log("要实现小目标了-1！")
-                            var h = window.screen.height * 0.44*0.8
-                            var w = document.body.clientWidth * 0.58
-                            var map_tool1 = document.getElementById("map_tool1")
-                            console.log(h, w)
-                            map_tool1.style.width = w
-                            map_tool1.style.height = h
-                        });
 
-                    </script> -->
-
+                    <script src='static/js/taizhou_village.js'> </script>
                     <script src='static/js/map_tool1.js'></script>
                     <div style=" width: 40%; height: 45%;border: 3px solid rgb(58, 128, 0);float: right;">
                         <div

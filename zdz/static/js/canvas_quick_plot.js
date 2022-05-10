@@ -295,16 +295,6 @@ canvas_quick_plot.addEventListener('click',
 
         }
 
-
-        // ctx_quick_plot.beginPath();
-
-        // ctx_quick_plot.fillStyle = color_style
-        // ctx_quick_plot.fillRect(offsetX_qp - 5, offsetY_qp - 5, 10, 10);
-        // countour_rect.x.push(offsetX_qp)
-        // countour_rect.y.push(offsetY_qp)
-        // ctx_quick_plot.closePath();
-
-
     });
 // 右键绘图
 
@@ -398,3 +388,4 @@ $('#forward_canvas').click(function () {
         }
 
 })
+
