@@ -172,7 +172,7 @@ def upload_select_taizhou_data(request):
         # 常规方法获取列表
         imd_list = get_imd_list(request)
         # 设置缓存
-        cache.set(key, imd_list, timeout=60 * 15)
+        cache.set(key, imd_list, timeout=60 * 60*24)
 
     context = {
         'data_test': 723.5,
