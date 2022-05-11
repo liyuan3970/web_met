@@ -99,19 +99,119 @@
                                                     新建材料:
                                                 </h4>
                                             </div>
-                                            <div class="modal-body" style="height: 600px;">
+                                            <div class="modal-body" style="height: 300px;">
+                                                <div style="display: inline-flex;width:100%;height:100%;">
+                                                    <div style="width:15%;height:100%;">
+
+                                                    </div>
+                                                    <!-- 新建材料的核心数据 -->
+                                                    <div style="width:70%;height:100%;border:3px solid black">
+                                                        <div style="width:100%;height:20%;" ></div>
+                                                        <div style="display:inline-block; ;width:100%;height:15%;" >
+                                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;材料种类:
+                                                            <select id = "new_document_type" style="width:60%;height:80%;border:0">
+                                                                <!-- <option value="" style="text-align: center;">一周天气预测</option>
+                                                                <option value="" style="text-align: center;">一周天气预测</option>
+                                                                <option value="" style="text-align: center;">一周天气预测</option> -->
+                                                            </select>
+                                                        </div>
+                                                        <div style="display:inline-block; ;width:100%;height:15%;" >
+                                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;撰稿人:&nbsp;&nbsp;&nbsp;&nbsp;
+                                                            <select  id = "new_document_writer" style="width:20%;height:80%;border:0"></select>
+                                                            &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;签发人:
+                                                            <select  id = "new_document_publisher" style="width:20%;height:80%;border:0"></select>
+                                                        </div>
+                                                        <div style="display:inline-block; ;width:100%;height:15%;" >
+                                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发布单位:
+                                                            <select  id = "new_document_unity" style="width:60%;height:80%;border:0"></select>
+                                                        </div>
+                                                        <div style="display:inline-block; ;width:100%;height:15%;" >
+                                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发布日期:
+                                                            <select style="width:60%;height:80%;border:0"></select>
+                                                        </div>
+                                                    </div>
+                                                    <div style="width:15%;height:100%;">
+
+                                                    </div>
+
+                                                </div>
 
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default"
-                                                    data-dismiss="modal">关闭</button> 
-                                                    <button type="button" class="btn btn-primary">保存</button>
+                                                    data-dismiss="modal">返回</button> 
+                                                <button id= "new_document_post" type="button" class="btn btn-default"
+                                                    data-dismiss="modal">创建</button>                                                 
                                             </div>
+                                            <script>
+                                                // 后端数据的传输
+                                                $('#new_document_post').click(function(){
+                                                    console.log("向后端传输创建信息",$('#new_document_publisher').val())
+                                                   
+                                                } )
+                                            </script>
                                         </div>
 
                                     </div>
 
                                 </div>
+                                <script type="text/javascript">
+                                    $('#modal-000001').click(function () {
+                                        console.log('新建文档')
+                                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                        $.ajax({
+                                            url: "create_new_doc",  // 请求的地址
+                                            type: "post",  // 请求方式
+                                            timeout: 2500000, //设置延迟上限
+                                            data: {
+                                                'csrfmiddlewaretoken': csrf
+                                            },
+                                            dataType: "json",
+                                            success: function (data) {
+                                                // 'data_publisher': data_publisher,
+                                                // 'data_writers': data_writers,
+                                                // 'data_unity': data_unity,
+                                                // 'data_documenttype': data_documenttype
+                                                $('#new_document_publisher').html("")
+                                                $('#new_document_writer').html("")
+                                                $('#new_document_unity').html("")
+                                                $('#new_document_type').html("")
+                                                for (i=0;i<data.data_publisher.length;i++){
+                                                    var option_publisher = document.createElement('option');
+                                                    option_publisher.value = data.data_publisher[i]
+                                                    option_publisher.innerText = data.data_publisher[i]
+                                                    $('#new_document_publisher').append(option_publisher)
+                                                }
+                                                for (j=0;j<data.data_writers.length;j++){
+                                                    var option_writers = document.createElement('option');
+                                                    option_writers.value = data.data_writers[j]
+                                                    option_writers.innerText = data.data_writers[j]
+                                                    $('#new_document_writer').append(option_writers)
+                                                }
+                                                for (k=0;k<data.data_unity.length;k++){
+                                                    var option_unity = document.createElement('option');
+                                                    option_unity.value = data.data_unity[k]
+                                                    option_unity.innerText = data.data_unity[k]
+                                                    option_unity.style.textAlign = 'center'
+                                                    $('#new_document_unity').append(option_unity)
+                                                }
+                                                for (m=0;m<data.data_documenttype.length;m++){
+                                                    var option_documenttype = document.createElement('option');
+                                                    option_documenttype.value = data.data_documenttype[m]
+                                                    option_documenttype.innerText = data.data_documenttype[m]
+                                                    option_documenttype.style.textAlign = 'center'
+                                                    $('#new_document_type').append(option_documenttype)
+                                                }
+                                                
+                                                
+
+                                            }
+
+                                        })
+                                    })
+
+                                    
+                                </script>
                                 <!-- 打开 -->
                                 <div class="modal fade" id="modal-container-000002" role="dialog"
                                     aria-labelledby="myModalLabel" aria-hidden="true">
@@ -119,7 +219,7 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal"
-                                                    aria-hidden="true">×</button>
+                                                    aria-hidden="true"></button>
                                                 <h4 class="modal-title" id="myModalLabel">
                                                     打开材料
                                                 </h4>
@@ -144,7 +244,7 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal"
-                                                    aria-hidden="true">×</button>
+                                                    aria-hidden="true"></button>
                                                 <h4 class="modal-title" id="myModalLabel">
                                                     删除材料
                                                 </h4>

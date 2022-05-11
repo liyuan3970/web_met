@@ -141,5 +141,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),
                     ]
 STATIC_URL = '/static/'
 X_FRAME_OPTIONS = 'ALLOWALL'
-# X_FRAME_OPTIONS = 'ALLOWALL url'
-# X_FRAME_OPTIONS = 'ALLOWALL www.baidu.com'
+# 图片二维码的存储地址
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')     #设置静态文件路径为主目录下的media文件夹
+MEDIA_URL = '/media/'                                                 #url映射
+# MEDIA_ROOT = 'home/liyuan3970/Data/My_Git/web_met/static/'
+

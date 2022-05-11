@@ -1,7 +1,7 @@
 from django.core.cache import cache
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-
+from .models import *
 from . import data_class
 from . import func
 
@@ -195,6 +195,29 @@ def get_imd_list(request):
     plot_worker = data_class.plot_tz_product(plot_type, plot_time)
     imd_list = plot_worker.multy_plot()
     return imd_list
+
+# 新建文档
+def create_new_doc(request):
+
+    writers = Writer.objects.all().values()
+    unity = Unity.objects.all().values()
+    publisher = Publisher.objects.all().values()
+    documenttype = DocumentType.objects.all().values()
+
+    data_publisher = [i['name'] for i in publisher]
+    data_writers = [i['name'] for i in writers]
+    data_unity = [i['name'] for i in unity]
+    data_documenttype = [i['name'] for i in documenttype]
+    context = {
+        'data_publisher':data_publisher,
+        'data_writers':data_writers,
+        'data_unity':data_unity,
+        'data_documenttype':data_documenttype
+    }
+    return JsonResponse(context)
+
+
+
 
 
 from django.views.decorators.clickjacking import xframe_options_exempt
