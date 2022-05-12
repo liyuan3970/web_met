@@ -208,11 +208,32 @@ def create_new_doc(request):
     data_writers = [i['name'] for i in writers]
     data_unity = [i['name'] for i in unity]
     data_documenttype = [i['name'] for i in documenttype]
+    # print("返回数据")
     context = {
         'data_publisher':data_publisher,
         'data_writers':data_writers,
         'data_unity':data_unity,
         'data_documenttype':data_documenttype
+    }
+    return JsonResponse(context)
+# 创建新的一期文档
+def create_new_doc_data(request):
+    type_doc = request.POST.get('doc_type', '')
+    doc_writer = request.POST.get('doc_writer', '')
+    doc_publisher = request.POST.get('doc_publisher', '')
+    doc_unity = request.POST.get('doc_unity', '')
+    # obj = Document.objects.create(
+    #     types = type_doc,
+    #     writer = doc_writer,
+    #     publisher=doc_publisher,
+    #     unity = doc_unity
+    # )
+    
+    
+    context = {
+        'status':"ok",
+        'type_doc':type_doc
+
     }
     return JsonResponse(context)
 

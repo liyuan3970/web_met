@@ -37,7 +37,7 @@ map.setOption({
                       // symble:"triangle",
                       // symbol: "roundRect",
                       // symbolSize:50,
-                      coordinateSystem: 'geo',
+                      coordinateSystem: 'geo'
                       // itemStyle: {
                       //   color: function (params) {
                       //       var colorlist = ['black'];
@@ -49,8 +49,8 @@ map.setOption({
                       // },
                     // },
 
-                      data:[{ name:"K8515",value: [121.0, 28.8, 123], url: "url_data",
-                      symbol:'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z',symbolSize:15,symbolRotate:330}]
+                      // data:[{ name:"K8515",value: [121.0, 28.8, 123], url: "url_data",
+                      // symbol:'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z',symbolSize:15,symbolRotate:330}]
 
                   }]
 
@@ -68,8 +68,12 @@ map.setOption({
 	if (componentType == "geo") {
 		var offsetX = params.event.offsetX;
 		var offsetY = params.event.offsetY;
-		let zuobiao = map.convertFromPixel('geo', [offsetX, offsetY]); // 转换成坐标
-        console.log(zuobiao ) 
+		var zuobiao = map.convertFromPixel('geo', [offsetX, offsetY]); // 转换成坐标
+    // console.log(zuobiao,"数据",params.name) 
+    $('#h4_village').html("乡镇名称:"+" " + params.name)
+    $('#h4_lon').html("经度:"+" " + zuobiao[0].toFixed(2))
+    $('#h4_lat').html("纬度:"+" " + zuobiao[1].toFixed(2))
+
 	}
 });
 

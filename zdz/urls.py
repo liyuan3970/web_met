@@ -32,8 +32,9 @@ urlpatterns = [
     # 订正产品
     url(r'^upload_select_taizhou_data',views.upload_select_taizhou_data),
     # 新建文件
+    # 获取创建文件的基本信息
     url(r'^create_new_doc',views.create_new_doc),
-
-
+    # 像数据库添加文档基本数据
+    url(r'^create_doc_data',views.create_new_doc_data),
 
 ]
