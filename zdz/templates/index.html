@@ -110,9 +110,6 @@
                                                         <div style="display:inline-block; ;width:100%;height:15%;" >
                                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;材料种类:
                                                             <select id = "new_document_type" style="width:60%;height:80%;border:0">
-                                                                <!-- <option value="" style="text-align: center;">一周天气预测</option>
-                                                                <option value="" style="text-align: center;">一周天气预测</option>
-                                                                <option value="" style="text-align: center;">一周天气预测</option> -->
                                                             </select>
                                                         </div>
                                                         <div style="display:inline-block; ;width:100%;height:15%;" >
@@ -127,8 +124,15 @@
                                                         </div>
                                                         <div style="display:inline-block; ;width:100%;height:15%;" >
                                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发布日期:
-                                                            <select style="width:60%;height:80%;border:0"></select>
+                                                            <input id="create_doc_date" type="text" style="width:60%;height:80%;border:0;text-align: center;";>
                                                         </div>
+                                                        <script>
+                                                            $('#create_doc_date').datetimepicker({
+                                                                theme: 'dark',
+                                                                format: 'Y-m-d H:i'
+                                                                }
+                                                            );
+                                                        </script>
                                                     </div>
                                                     <div style="width:15%;height:100%;">
 
@@ -158,15 +162,13 @@
                                                             'doc_type': $('#new_document_type').val(),
                                                             'doc_writer': $('#new_document_writer').val(),
                                                             'doc_publisher': $('#new_document_publisher').val(),
-                                                            'doc_unity': $('#new_document_unity').val()
-                                                            
+                                                            'doc_unity': $('#new_document_unity').val(),
+                                                            'doc_date': $('#create_doc_date').val()                                                          
                                                         },
                                                         dataType: "json",
                                                         success: function (data) {
-                                                            console.log("返回成功",data)
-                                                            
+                                                            console.log("返回成功",data)                                                           
                                                         }
-
                                                     })
                                                    
                                                 } )
@@ -447,9 +449,9 @@
 
                                                 <div
                                                     style="display: inline-block;background-color:rgb(183, 231, 9); width: 100%; height: 5%;border: 1px solid rgb(192, 27, 27);">
-                                                    单图：<input checked="checked" type="radio" name="png_chose"
-                                                        style="width: 10%;" value="one"> 双图：<input type="radio"
-                                                        name="png_chose" style="width: 10%;" value="two">四图：<input
+                                                    单图:<input checked="checked" type="radio" name="png_chose"
+                                                        style="width: 10%;" value="one"> 双图:<input type="radio"
+                                                        name="png_chose" style="width: 10%;" value="two">四图:<input
                                                         type="radio" name="png_chose" style="width: 10%;" value="four">
 
                                                 </div>
@@ -2373,9 +2375,9 @@
                                     <h3 style="display: inline-block ;width:15% ;">时间:</h3>
                                     <select>
                                         <option value="">20220501</option>
-                                        <option value="">20220501</option>
-                                        <option value="">20220501</option>
-                                        <option value="">20220501</option>
+                                        <option value="">20220502</option>
+                                        <option value="">20220503</option>
+                                        <option value="">20220504</option>
                                     </select>
                                     <input type="text" placeholder="起始时间" style="width:20%;height:80%;">
                                     <input type="text" placeholder="起始时间" style="width:20%;height:80%;">

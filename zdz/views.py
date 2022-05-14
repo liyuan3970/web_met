@@ -5,7 +5,8 @@ from .models import *
 from . import data_class
 from . import func
 
-
+# 这里处理显示单站数据页面
+from django.shortcuts import redirect
 # Create your views here.
 
 def kuaibao(request):
@@ -70,14 +71,12 @@ def post_data(request):
         'vv_time': vv_time,
         'vv_value': vv_value,
         'fy_list': data_fFy_list,
-
     }
     # 返回所需数据
     return render(request, 'post_data.html', context)
 
 
-# 这里处理显示单站数据页面
-from django.shortcuts import redirect
+
 
 
 def url_data(request):
@@ -198,12 +197,10 @@ def get_imd_list(request):
 
 # 新建文档
 def create_new_doc(request):
-
     writers = Writer.objects.all().values()
     unity = Unity.objects.all().values()
     publisher = Publisher.objects.all().values()
     documenttype = DocumentType.objects.all().values()
-
     data_publisher = [i['name'] for i in publisher]
     data_writers = [i['name'] for i in writers]
     data_unity = [i['name'] for i in unity]
@@ -222,14 +219,23 @@ def create_new_doc_data(request):
     doc_writer = request.POST.get('doc_writer', '')
     doc_publisher = request.POST.get('doc_publisher', '')
     doc_unity = request.POST.get('doc_unity', '')
-    # obj = Document.objects.create(
-    #     types = type_doc,
-    #     writer = doc_writer,
-    #     publisher=doc_publisher,
-    #     unity = doc_unity
-    # )
-    
-    
+    doc_date = request.POST.get('doc_date', '')
+    year = doc_date[0:4]
+    data = Document.objects.filter(year = year,types = type_doc).last()
+    item = data.item + 1
+    content = []
+    obj = Document.objects.create(
+        types = type_doc,
+        writer = doc_writer,
+        publisher=doc_publisher,
+        unity = doc_unity,
+        pub_date = doc_date,
+        item = item, 
+        year = year,
+        verson_content = {
+            'blank':content 
+        }
+    )        
     context = {
         'status':"ok",
         'type_doc':type_doc
