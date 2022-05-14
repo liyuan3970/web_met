@@ -3,8 +3,9 @@ from django.db import models
 # Create your models here.
 # 1 文档字段
 class Document(models.Model):
+    id = models.AutoField(primary_key=True)
     types = models.CharField(max_length=50,verbose_name='类别')
-    item = models.IntegerField(primary_key=True,verbose_name='期数')
+    item = models.IntegerField(verbose_name='期数')
     year = models.IntegerField(verbose_name='年份')
     unity = models.CharField(max_length=50,verbose_name='单位')
     pub_date = models.CharField(max_length=50,verbose_name='发布日期')
