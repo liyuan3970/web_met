@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 import os
 import sys
+from tzdemo.settings import base
 
 if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tzdemo.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE",
+                          "tzdemo.settings.%s" % base.ENV)
     try:
         from django.core.management import execute_from_command_line
     except ImportError:
