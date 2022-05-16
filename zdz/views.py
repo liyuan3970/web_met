@@ -120,8 +120,8 @@ def login_main(request):
 def quick_look(request):
     data_list = request.POST.get('data_post', '')
     crf = request.POST.get('csrfmiddlewaretoken', '')
-
     # data_list = request.POST['data_post']
+    # 获取核心数据，保存版本、编写解析函数、保存文档为word、
     print("获取到的预览数据:", data_list)
     return render(request, 'index.html')
 
