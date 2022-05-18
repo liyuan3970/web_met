@@ -36,5 +36,7 @@ urlpatterns = [
     url(r'^create_new_doc',views.create_new_doc),
     # 像数据库添加文档基本数据
     url(r'^create_doc_data',views.create_new_doc_data),
+    # 呈送发的代码
+    url(r'^leader_Data_post',views.leader_Data_post),
 
 ]

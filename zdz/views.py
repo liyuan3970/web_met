@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.core.cache import cache
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
@@ -244,6 +245,33 @@ def create_new_doc_data(request):
     return JsonResponse(context)
 
 
+
+
+# 获取呈送发的数据
+def leader_Data_post(request):
+    versions =  Leader_Data.objects.all().values( )
+
+    names  = Picture.objects.all().values('name')
+    name_list = []
+    for name in names:
+        name_list.append(name['name'])        
+    version_list = []
+    for version in versions:
+        v = { }
+        v['name'] = version['name']
+        v['service_name'] = version['service_name']
+        v['service_unity'] = version['service_unity']
+        v['recive_unity'] = version['recive_unity']
+        version_list.append(v)
+        
+
+    print("呈送",version_list,name_list)
+    context = {
+        'status':"ok",
+        'version': version_list,
+        'name': name_list
+    }
+    return JsonResponse(context)
 
 
 

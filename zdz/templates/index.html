@@ -355,9 +355,9 @@
                                                 <a href="#panel-006" data-toggle="tab">防御指南</a>
                                             </li>
                                             <li>
-                                                <a href="#panel-007" data-toggle="tab">呈送发</a>
+                                                <a id= "href_panel-007" href="#panel-007" data-toggle="tab">呈送发</a>
                                             </li>
-
+                                            
                                         </ul>
                                         <div class="tab-content" style="display:block;width: 100%; height: 100%;">
                                             <div class="tab-pane active" id="panel-001"
@@ -1405,71 +1405,138 @@
                                                 
                                        
                                                 <div 
-                                                    style="background-color:rgb(218, 88, 12); width: 100%; height: 83.5%;border: 3px solid rgb(192, 27, 27);">
-                                                    <div style="display:inline-flex;width: 100%; height: 25%;border: 3px solid rgb(20, 20, 20);" >
-                                                        <div style="width: 97%; height:100%;text-align:center;">
-                                                            <img src="static/src/二维码.png" style="width: 33%; height:90%;" >
-                                                            <img src="static/src/二维码.png" style="width: 33%; height:90%;" >
-                                                            <img src="static/src/二维码.png" style="width: 33%; height:90%;" >
+                                                    style=" width: 100%; height: 83.5%;border: 3px solid rgb(192, 27, 27);">
+                                                    <div style="display:inline-block;width: 100%; height: 25%;" >
+                                                        <div style="display:flex;width: 100%; height:100%;">
+                                                            <select id = "leader_select_version" style="width:2%;height:100%">                                                   
+                                                                <option value="" style="display:none;"> </option>
+                                                                
+                                                            </select>
+                                                            <script>                                                            
+                                                                $("#leader_select_version").change(function(){
+                                                                    
+                                                                    // console.log(this.value)
+                                                                    for (i =0;i<leader_version.length;i++){
+                                                                        if (this.value == Leader_Data[i].name){
+                                                                            $('#service_name_data').html(" ")
+                                                                            $('#service_name_data').text("呈送领导:  "+Leader_Data[i].service_name)
 
-                                                        </div>
-                                                        <select style="width: 3%; height: 100%;" >
-                                                            <option selected="selected" disabled="disabled"  style='display: none' value=''></option>
-                                                            <option>HTML</option>
-                                                            <option>CSS</option>
-                                                            <option>Javascript</option>
-                                                            <option>vue</option>
-                                                            <option>react</option>
-                                                        </select>
-                                                        
-                                                        
+                                                                            $('#service_unity_data').html(" ")
+                                                                            $('#service_unity_data').text("发布单位:  "+Leader_Data[i].service_unity)
 
+                                                                            $('#recive_unity_data').html(" ")
+                                                                            $('#recive_unity_data').text("抄送单位:  "+Leader_Data[i].recive_unity)
+
+                                                                        }
+                                                                    }
+                                                                    // if (this.value == Leader_Data){
+
+                                                                    // }
+
+                                                                })
+                                                            </script>
+                                                            <div style="width:98%;height:100%;">
+                                                                <div style="width:100%;height:30%;" >
+                                                                    <h2>请选择版本</h2>
+                                                                    
+                                                                </div>
+                                                                <div style="width:100%;height:70%;" >
+                                                                    <div id = "png_scan_check" style="width:100%;height:70%;text-align:center;">
+                                                                        <input type="checkbox">
+                                                                        <input type="checkbox">
+                                                                        <input type="checkbox">
+
+                                                                    </div>
+                                                                    
+                                                                    <!-- <input type = "checkbox">
+                                                                    <input type = "checkbox">
+                                                                    <input type = "checkbox"> -->
+                                                                    
+                                                                </div>
+
+                                                            </div>                                                            
+                                                        </div>                                                                                                                                                               
                                                     </div>
                                                     <div style="width: 100%; height: 75%;border: 3px solid rgb(20, 20, 20);" >
                                                         <div style="display:inline-flex;width: 100%; height: 33%;border: 3px solid rgb(20, 20, 20);" >
                                                             
                                                             
-                                                            <textarea style="width: 97%; height: 90%;resize: none;" placeholder="呈送领导"></textarea>
-                                                            <select style="width: 3%; height: 90%;" >
-                                                                <option selected="selected" disabled="disabled"  style='display: none' value=''></option>
-                                                                <option>HTML</option>
-                                                                <option>CSS</option>
-                                                                <option>Javascript</option>
-                                                                <option>vue</option>
-                                                                <option>react</option>
-                                                            </select>
+                                                            <textarea id = "service_name_data" style="width: 100%; height: 100%;resize: none;" placeholder="呈送领导"></textarea>
+                                                            
                                                             
                                                     
 
                                                         </div>
                                                         <div style="display:inline-flex;width: 100%; height: 33%;border: 3px solid rgb(20, 20, 20);" >
-                                                            <textarea style="width: 97%; height: 90%;resize: none;" placeholder="抄送单位"></textarea>
-                                                            <select style="width: 3%; height: 90%;" >
-                                                                <option selected="selected" disabled="disabled"  style='display: none' value=''></option>
-                                                                <option>HTML</option>
-                                                                <option>CSS</option>
-                                                                <option>Javascript</option>
-                                                                <option>vue</option>
-                                                                <option>react</option>
-                                                            </select>
+                                                            <textarea id = "service_unity_data" style="width: 100%; height: 100%;resize: none;" placeholder="抄送单位"></textarea>
+                                                           
 
                                                         </div>
                                                         <div style="display:inline-flex;width: 100%; height: 33%;border: 3px solid rgb(20, 20, 20);" >
-                                                            <textarea style="width: 97%; height: 90%;resize: none;" placeholder="抄送部门"></textarea>
-                                                            <select style="width: 3%; height: 90%;" >
-                                                                <option selected="selected" disabled="disabled"  style='display: none' value=''></option>
-                                                                <option>HTML</option>
-                                                                <option>CSS</option>
-                                                                <option>Javascript</option>
-                                                                <option>vue</option>
-                                                                <option>react</option>
-                                                            </select>
+                                                            <textarea id = "recive_unity_data" style="width: 100%; height: 100%;resize: none;" placeholder="抄送部门"></textarea>
+                                                           
 
                                                         </div>
 
                                                     </div>
                                                     
                                                 </div>
+                                                <script>
+                                                    let Leader_Data = []
+                                                    let leader_version = []
+                                                    $('#href_panel-007').click(function (){
+                                                        // console.log("我被点击了")
+                                                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                                        if (Leader_Data.length==0){
+                                                            $.ajax({
+                                                                    url: "leader_Data_post",  // 请求的地址
+                                                                    type: "post",  // 请求方式
+                                                                    timeout: 250, //设置延迟上限
+                                                                    data: {
+                                                                        'csrfmiddlewaretoken': csrf
+                                                                    },
+                                                                    dataType: "json",
+                                                                    success: function (data) {
+                                                                        // console.log(data.version)
+                                                                        // console.log(data.name)
+                                                                        // Leader_Data = data  
+                                                                        $('#png_scan_check').html(" ")
+                                                                        for (i=0;i<data.name.length;i++){
+                                                                            console.log(i)
+                                                                            var checkbox_png = document.createElement('input')
+                                                                            checkbox_png.type = 'checkbox'
+                                                                            checkbox_png.name = 'png_checkbox'
+                                                                            checkbox_png.value = data.name[i]
+                                                                            var label = data.name[i]
+                                                                            $('#png_scan_check').append(label)
+                                                                            $('#png_scan_check').append(checkbox_png)
+                                                                        } 
+                                                                        $('#leader_select_version').html(" ") 
+                                                                        var option_version_none = document.createElement('option');
+                                                                        option_version_none.style.display = 'none'
+                                                                        $('#leader_select_version').append(option_version_none)
+                                                                        for (j=0;j<data.version.length;j++){  
+                                                                            var option_version = document.createElement('option');
+                                                                            option_version.value =  data.version[j].name 
+                                                                            option_version.innerText = data.version[j].name 
+                                                                            // option_version.addEventListener("click" , function (){
+                                                                            //     console.log(option_version.value)
+                                                                            // })
+                                                                            $('#leader_select_version').append(option_version)
+                                                                            Leader_Data.push(data.version[j])
+                                                                            leader_version.push(data.version[j].name)
+
+                                                                         }          
+                                            
+                                                                    }
+    
+                                                                })
+                                                        }
+                                                        // else {
+    
+                                                        // }
+                                                    })
+                                                </script>
 
 
                                                 <div
@@ -1968,6 +2035,45 @@
                                         
                                         
                                     }
+                                    // 呈送发功能
+                                    $('#add_publish').click(function () {
+                                        if (id_div >= 0) {
+                                            id_div = id_div + 1
+                                        }
+                                        var png_checkbox_list = []
+                                        
+                                        $("input[name='png_checkbox']:checked").each( function() {
+                                            png_checkbox_list.push($(this).attr('value'))
+                                        })
+                                        // console.log(png_checkbox_list) 
+                                        var data_add = {
+                                            "type": "呈送发",
+                                            "title_main": "文档服务对象",
+                                            "id": id_div,
+                                            "png_list": png_checkbox_list,
+                                            "service_name": $('#service_name_data').text(),
+                                            "service_unity": $('#service_unity_data').text(),
+                                            "recive_unity":$('#recive_unity_data').text()
+                                        }
+                                        list_data.push(data_add)
+                                        show()
+
+                                    })
+                                    // 呈送发的修改功能
+                                    $('#change_publish').click(function () {
+                                        var change_id = parseInt($('#change_publish').val()[3])
+                                        var png_checkbox_list = []
+                                        
+                                        $("input[name='png_checkbox']:checked").each( function() {
+                                            png_checkbox_list.push($(this).attr('value'))
+                                        })
+                                        
+                                        list_data[change_id].png_list = png_checkbox_list
+                                        list_data[change_id].service_name = $('#service_name_data').text()
+                                        list_data[change_id].service_unity = $('#service_unity_data').text()
+                                        list_data[change_id].recive_unity = $('#recive_unity_data').text()
+                                        console.log(change_id,list_data[change_id])
+                                    })
 
 
 
@@ -2080,6 +2186,22 @@
                                                     else if (list_data[parseInt(list_div_show_id)].type == '表格') {                                                                                                                                                                  
                                                         xs.loadData(list_data[parseInt(list_div_show_id)].sheet_main)  
                                                         $("#change_sheet").val("修改:" + list_div_show_id)
+                                                    }
+                                                    else if (list_data[parseInt(list_div_show_id)].type == '呈送发') {
+                                                        for (i = 0; i < list_data[parseInt(list_div_show_id)].png_list.length; i++) {
+                                                            var checked_box = list_data[parseInt(list_div_show_id)].png_list[i]
+                                                            $("input[name='png_checkbox']").each(function() {
+                                                                if ($(this).attr('value')==checked_box){
+                                                                    this.checked=true
+                                                                }
+                                                            })                                          
+                                                        }
+                                                        
+                                                        $('#service_name_data').text(list_data[parseInt(list_div_show_id)].service_name)
+                                                        $('#service_unity_data').text(list_data[parseInt(list_div_show_id)].service_unity)
+                                                        $('#recive_unity_data').text(list_data[parseInt(list_div_show_id)].recive_unity)
+                                                        $("#change_publish").val("修改:" + list_div_show_id)
+
                                                     }
                                                 })
 

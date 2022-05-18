@@ -9,7 +9,7 @@ class Document(models.Model):
     year = models.IntegerField(verbose_name='年份')
     unity = models.CharField(max_length=50,verbose_name='单位')
     pub_date = models.CharField(max_length=50,verbose_name='发布日期')
-    verson_content = models.TextField(max_length=21844,verbose_name='版本内容')
+    verson_content = models.TextField(max_length=21844,verbose_name='版本内容')# 存放字典用来记录版本信息
     writer = models.CharField(max_length=50,verbose_name='撰稿人')
     publisher = models.CharField(max_length=50,verbose_name='签发人',default="翁之梅")
     class Meta:
@@ -70,18 +70,31 @@ class Picture(models.Model):
 # 7 呈送发
 class Leader_Data(models.Model):
     name = models.CharField(primary_key=True,max_length=20,verbose_name='发布版本')
-    picture_list = models.CharField(max_length=20,verbose_name='二维码种类')
-    service_name = models.CharField(max_length=20,verbose_name='呈报对象')
+    picture_list = models.CharField(max_length=20,verbose_name='二维码种类') # 存放二维码的字典
+    service_name = models.CharField(max_length=20,verbose_name='呈报对象') 
     service_unity = models.CharField(max_length=20,verbose_name='发布单位')
     recive_unity = models.CharField(max_length=20,verbose_name='抄送单位')    
     class Meta:
-        verbose_name = verbose_name_plural = '发布版本'
+        verbose_name = verbose_name_plural = '呈送发'
         db_table = 'leader_data' # 通过db_table自定义数据表名
     # 定义后台列表中的字段名称(self是对应字段的内同)
     def __str__(self):
-        return self.name
+        return "呈送发:"+self.name
 
-
+# # 以下是文档模块的字段，与文档存在关系映射
+# # 文字内容 呈送发
+# class Text_Data(models.Model):
+#     name = models.CharField(primary_key=True,max_length=20,verbose_name='发布版本')
+#     picture_list = models.CharField(max_length=20,verbose_name='二维码种类')
+#     service_name = models.CharField(max_length=20,verbose_name='呈报对象')
+#     service_unity = models.CharField(max_length=20,verbose_name='发布单位')
+#     recive_unity = models.CharField(max_length=20,verbose_name='抄送单位')    
+#     class Meta:
+#         verbose_name = verbose_name_plural = '发布版本'
+#         db_table = 'leader_data' # 通过db_table自定义数据表名
+#     # 定义后台列表中的字段名称(self是对应字段的内同)
+#     def __str__(self):
+#         return self.name
 
 
 
