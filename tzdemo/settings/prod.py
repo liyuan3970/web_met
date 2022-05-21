@@ -11,20 +11,20 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         # 数据库名称
         'NAME': 'tzweb',
-        'USER': 'root',
+        'USER': 'tzweb',
         'PASSWORD': '051219',
-        'HOST': 'localhost',
+        'HOST': '192.168.192.4',
         'PORT': '3306',
     }
 }
 
 CACHES = {
-    'default': {
-        # 'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
-        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
-        'LOCATION': [
-            # 服务端地址
-            '127.0.0.1:11211'
-        ]
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://192.168.192.4:6379/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PASSWORD": "051219"
+        }
     }
 }
