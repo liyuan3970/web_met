@@ -8,3 +8,6 @@ gevent==21.12.0
 netCDF4==1.5.8
 memcache==0.11.0
 pymemcache==3.5.2
+pydocx==0.9.10
+
+pymupdf == 1.19.6
