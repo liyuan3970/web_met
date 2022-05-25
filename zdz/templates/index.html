@@ -2752,7 +2752,76 @@
                                     </div>
 
                                     <div
-                                        style="width:100%;height:75%; text-align:center;vertical-align: middle;align-items: center;background-color: white;">
+                                        style="display: inline-flex;width:100%;height:75%; background-color: white;">
+                                        <div
+                                                style="width:10%;height:100%;border: 3px solid black">
+                                                <div style="width:100%;height:5%;">
+                                                    请选择颜色:
+                                                </div>
+                                                <div style="width:100%;height:5%;background-color: rgb(245, 9, 9);">
+                                                    <input type="radio" checked="checked" name="selected_color_1st"
+                                                        value="rgb(245, 9, 9)" style="width:20%;height:100%;">
+                                                </div>
+                                                <div
+                                                    style="width:100%;height:5%;background-color: rgb(112, 27, 35);">
+                                                    <input type="radio" name="selected_color_1st"
+                                                        value="rgb(112, 27, 35)" style="width:20%;height:100%;">
+                                                </div>
+                                                <div
+                                                    style="width:100%;height:5%;background-color: rgb(240, 10, 190);">
+                                                    <input type="radio" name="selected_color_1st"
+                                                        value="rgb(240, 10, 190)" style="width:20%;height:100%;">
+                                                </div>
+                                                <div
+                                                    style="width:100%;height:5%;background-color: rgb(13, 27, 224);">
+                                                    <input type="radio" name="selected_color_1st"
+                                                        value="rgb(13, 27, 224)" style="width:20%;height:100%;">
+                                                </div>
+                                                <div
+                                                    style="width:100%;height:5%;background-color: rgb(64, 137, 179);">
+                                                    <input type="radio" name="selected_color_1st"
+                                                        value="rgb(64, 137, 179)" style="width:20%;height:100%;">
+                                                </div>
+                                                <div
+                                                    style="width:100%;height:5%;background-color: rgb(49, 131, 11);">
+                                                    <input type="radio" name="selected_color_1st"
+                                                        value="rgb(49, 131, 11)" style="width:20%;height:100%;">
+                                                </div>
+                                                <div
+                                                    style="width:100%;height:5%;background-color: rgb(156, 231, 35);">
+                                                    <input type="radio" name="selected_color_1st"
+                                                        value="rgb(156, 231, 35)" style="width:20%;height:100%;">
+                                                </div>
+                                                <div
+                                                    style="width:100%;height:5%;background-color: rgb(245, 240, 243)">
+                                                    <input type="radio" name="selected_color_1st"
+                                                        value="rgb(245, 240, 243)" style="width:20%;height:100%;">
+                                                </div>
+                                                <div
+                                                    style="width:100%;height:5%;background-color: rgb(19, 12, 16);">
+                                                    <input type="radio" name="selected_color_1st"
+                                                        value="rgb(19, 12, 16)" style="width:20%;height:100%;">
+                                                </div>
+                                                <div style="width:100%;height:5%;background-color: red;">
+                                                    <input type="radio" name="selected_color_1st"
+                                                        value="rgb(19, 12, 16)" style="width:20%;height:100%;">
+                                                </div>
+                                                <div
+                                                    style="width:100%;height:5%;background-color: rgb(31, 27, 27);">
+                                                    <input type="radio" name="selected_color_1st"
+                                                        value="rgb(19, 12, 16)" style="width:20%;height:100%;">
+                                                </div>
+                                                <div
+                                                    style="width:100%;height:5%;background-color: rgb(19, 211, 105);">
+                                                    <input type="radio" name="selected_color_1st"
+                                                        value="rgb(19, 12, 16)" style="width:20%;height:100%;">
+                                                </div>
+                                                <div
+                                                    style="width:100%;height:5%;background-color: rgb(13, 27, 224);">
+                                                    <input type="radio" name="selected_color_1st"
+                                                        value="rgb(19, 12, 16)" style="width:20%;height:100%;">
+                                                </div>
+                                        </div>
                                         <canvas id="plot_canvas" style="width:727px;height:651px;"></canvas>
                                     </div>
                                     <!-- 绘图的核心js -->
@@ -4848,8 +4917,10 @@
                             var show_data =params.value[1]
                             $('#show_panel-725173').html(" ")
                             $('#show_panel-725173').html(show_data)
+                            
                             $('#a_panel-725171').click()
                         });
+                        
 
                     </script>
                     <div class="tabbable" id="tabs-492675"
@@ -5088,9 +5159,7 @@
                             <div class="tab-pane" id="panel-725171"
                                 style="width: 100%; height: 100%;border: 3px solid rgb(58, 128, 0);">
                                 <div id = "show_panel-725173" style="display: inline-flex;width: 100%; height: 100%;">
-                                这里是点击按钮的响应
-                                    
-                                   
+                                    这里是点击按钮的响应  
                                 </div>
                             </div>
                         </div>
