@@ -2292,13 +2292,14 @@
                                 style="background-color:rgb(78, 9, 189); width: 100%; height: 5%;border: 3px solid rgb(58, 128, 0);">
                                 <input id="quick_look" type="button" value="预览"
                                     style="width:10%;height:100%;float:right ">
-                                <input type="button" value="保存" style="width:10%;height:100%;float:right ">
+                                <input type="button" id = "save_and_vue" value="保存" style="width:10%;height:100%;float:right ">
                                 <input type="button" value="合并版本" style="width:10%;height:100%;float:right ">
                                 <!-- <input type="button" value="下载" style="width:10%;height:100%;float:left ">
                                 <input type="button" value="清除" style="width:10%;height:100%;float:left "> -->
 
 
                             </div>
+                            <script type="text/javascript" src = 'static/js/save_and_vue.js'></script>
                             <!-- 数据预览保存合并的功能 -->
                             <script>
                                 $(function () {
@@ -3376,8 +3377,145 @@
                 <!-- 产品图片 -->
                 <div id="product_view"
                     style="background-color:white; width: 100%; height: 100%;border: 3px solid rgb(58, 128, 0);overflow:auto">
-                    <img src="static/src/week.png" style="width:100%"></img>
-                    <img src="static/src/week.png" style="width:100%"></img>
+                    <!-- 文件头 -->
+                    <div style="height:27%;width:100%;background-color:white;position: relative;">
+                        <div style="top:30%;height:10%;width:100%;background-color:white;position: absolute;text-align: center;font-size:50px ;font-family:'宋体';color:red">
+                            一周天气预测
+                        </div>
+                        <div style="top:60%;height:10%;width:100%;background-color:white;position: absolute;text-align: center;font-size:20px ;font-family:'宋体';color:black">
+                            第15期
+                        </div>
+                        <div style="top:80%;;height:10%;width:100%;position: absolute;text-align: center;font-size:20px ;font-family:'宋体';color:black">
+                            台州市气象局
+                        </div>
+                        <div style="top:80%;left:10% ;height:10%;width:100%;position: absolute;font-size:20px ;font-family:'宋体';color:black">
+                            2022年3月01日19时
+                        </div>
+                        <div style="top:65%;left:80%;height:10%;width:100%;position: absolute;font-size:20px ;font-family:'宋体';color:black">
+                            撰稿人：翁之梅
+                        </div>
+                        <div style="top:80%;left:80%;height:10%;width:100%;position: absolute;font-size:20px ;font-family:'宋体';color:black">
+                            签发人:高丽
+                        </div>
+                        <div style="top:95%;left:8%;height:1%;width:88%;;position: absolute;border: 2px solid red;">                    
+                        </div>
+                        
+                    </div>
+                    <!-- 文件段落 -->
+                    
+                    <div style="display:flex; justify-content:center align-items:center;height:auto;width:100%;background-color:white;font-size:20px ;font-family:'宋体';color:black;">
+                        <div style="width: 10%;"></div> 
+                        <div style="width:80%;"> 
+                            <p style=";width:100% ;line-height:50px;font-size:25px ;font-family:'宋体';color:black;text-align: center;font-weight:bold">
+                                未来天气冷空气较多，降水频繁
+                            </p>
+                            <p style=";width:100%;font-size:20px ;font-family:'宋体';color:black;">
+                                一、短期预报
+                            </p>
+                            <p style="text-indent:2em;width:100% ;line-height:50px;;font-size:20px">
+                                本周前期天气阴沉，周后期强冷空气影响转晴冷天气，全市有严重冰冻。今天、明天阴有分散性小雨，最高气温12～14度；后天多云到阴，夜里～周四受强冷空气影响有明显降温、大风和弱雨雪过程，预计日平均气温过程降温幅度可达8～10度，后天夜里部分地区有小雨夹雪或雪，山区有小雪；周五～周日天气晴冷，其中周五、周六早晨北部地区降至零下6～零下8度，山区零下9～零下12度，其它地区零下4～零下6度，全市有严重冰冻，须注意防寒保暖。另外，周二沿海风力8～9级，周三夜里～周四沿海和内陆分别有8～10级和6～8级偏北大风。
+                            </p>
+                            <p style="text-indent:2em;width:100% ;line-height:50px;;font-size:20px">
+                                本周前期天气阴沉，周后期强冷空气影响转晴冷天气，全市有严重冰冻。今天、明天阴有分散性小雨，最高气温12～14度；后天多云到阴，夜里～周四受强冷空气影响有明显降温、大风和弱雨雪过程，预计日平均气温过程降温幅度可达8～10度，后天夜里部分地区有小雨夹雪或雪，山区有小雪；周五～周日天气晴冷，其中周五、周六早晨北部地区降至零下6～零下8度，山区零下9～零下12度，其它地区零下4～零下6度，全市有严重冰冻，须注意防寒保暖。另外，周二沿海风力8～9级，周三夜里～周四沿海和内陆分别有8～10级和6～8级偏北大风。
+                            </p>                                                        
+                        </div>
+                    </div>
+                    <!-- 文档列表  -->
+                    <div style="display:flex; justify-content:center align-items:center;height:auto;width:100%;background-color:white;font-size:20px ;font-family:'宋体';color:black;line-height:50px;">
+                        <div style="width: 10%;"></div> 
+                        <div style="width:80%;">                             
+                            <p style=";width:100%;font-size:20px ;font-family:'宋体';color:black;;font-weight:bold">
+                                台州市主城区具体天气预报如下：
+                            </p>
+                            <div style="display:inline-block;text-indent:1.5em;width:100%;height: 40% ;line-height:50px;;font-size:20px;">
+                                <p style="float:left;line-height:40px;">
+                                    4日（周一）：阴，部分地区有时有小雨区有时
+                                </p>
+                                <p style="float:right;line-height:40px;">
+                                    9～14度
+                                </p>
+                                <p style="float:left;line-height:40px;">
+                                    4日（周一）：阴，部分地区有时有小雨区有时
+                                </p>
+                                <p style="float:right;line-height:40px;">
+                                    9～14度
+                                </p>
+                                <p style="float:left;line-height:40px;">
+                                    4日（周一）：阴，部分地区有时有小雨区有时
+                                </p>
+                                <p style="float:right;line-height:40px;">
+                                    9～14度
+                                </p>
+                                <p style="float:left;line-height:40px;">
+                                    4日（周一）：阴，部分地区有时有小雨区有时
+                                </p>
+                                <p style="float:right;line-height:40px;">
+                                    9～14度
+                                </p>
+
+                            </div>
+
+                            
+                           
+                        </div>
+                    </div>
+                    <!-- 文档图片  单图 -->
+                    <div style="display:flex; justify-content:center align-items:center;height:auto;width:100%;background-color:white;font-size:20px ;font-family:'宋体';color:black;">
+                        <div style="width: 10%;"></div> 
+                        <div style="width:80%;"> 
+                            <div style="display: flex;justify-content: center;align-items:center;height:95%;width:100%;">
+                                <img src="static/src/pre_test1.png" style="display:block;height:100%;width:100%;"  >
+                            </div>
+                            <div style="display: flex;justify-content: center;align-items:center;height:5%;width:100%;"> 台州降水</div>                                                                                                                                     
+                        </div>
+                    </div>
+
+                    <!-- 文档结尾 -->
+                    <div style="display:flex;height:auto;width:100%;background-color:white;font-size:20px ;font-family:'宋体';color:black;">
+                        <div style="width: 10%;"></div> 
+                        <div style="width:80%;"> 
+                            <div style="width:100% ;text-align: center;">
+                                <div style="display: inline-flex;width:25%;height:25%">
+                                    <img src="static/src/二维码.png" style=";width:100%;height:100%">
+                                    
+                                </div>
+                                <div style="display: inline-flex;width:25%;height:25%">
+                                    <img src="static/src/二维码.png" style=";width:100%;height:100%">
+                                </div>
+                                <div style="display: inline-flex;width:25%;height:25%">
+                                    <img src="static/src/二维码.png" style=";width:100%;height:100%">
+                                </div>
+                            </div>
+                            <!-- <div style="height:5%;width:100%;position: relative;">
+                                <p style="height:100%;width:33%;position: absolute;left: 20%;">宣传码</p>
+                                <p style="height:100%;width:33%;position: absolute;left: 45%;">宣传码</p>
+                                <p style="height:100%;width:33%;position: absolute;left: 73%;">宣传码</p>                                
+                            </div> -->
+                            <div style="display: flex;justify-content: center;text-align: center;height:5%;width:100%;">
+                                <div style="display: inline-flex;width:25%;height:100%;text-align: center;">&nbsp;&nbsp; 宣传码</div>
+                                <div style="display: inline-flex;width:25%;height:100%;text-align: center;">&nbsp;&nbsp;&nbsp;宣传码</div>
+                                <div style="display: inline-flex;width:25%;height:100%;text-align: center;">&nbsp;&nbsp;&nbsp;宣传码</div>
+                            </div>
+                            
+                            <div style="height:5%;width:100%;"></div>
+                            <div style="height:1%;width:100%;border: 2px solid rgb(12, 12, 12);"></div>
+                            
+                            <div style="width:100%;height:auto">
+                                <p style="line-height:20px;">
+                                    呈送领导：宋伟2、李渊、小王、张三
+                                </p>
+                                <p style="line-height:20px;">
+                                    抄送单位：气象台、玉环市气象局、水利局、气象台、玉环市气象局、水利局、气象台、玉环市气象局、水利局气象台、玉环市气象局、水利局、气象台、玉环市气象局、水利局、气象台、玉环市气象局、水利局
+                                </p>
+                                <p style="line-height:20px;">
+                                    抄送领导：宋伟2、李渊、小王、张三
+                                </p> 
+                                                               
+                            </div>  
+                            
+                            
+                        </div>
+                    </div>
 
 
                 </div>
@@ -4298,7 +4436,7 @@
                                     <script type="text/javascript"
                                         src="https://cdn.jsdelivr.net/npm/echarts@5.3.1/dist/echarts.min.js"></script>
                                     <script type="text/javascript">
-                                        var dom = document.getElementById("multiple-y-axis");
+                                        var dom_ecdata = document.getElementById("multiple-y-axis");
                                         //参数container为图表盒子节点.charts为图表节点  
 
                                         // function chartssize(container, charts) {
@@ -4314,7 +4452,7 @@
                                         //     charts.style.width = wi
                                         //     charts.style.height = hi
                                         // }
-                                        var myChart = echarts.init(dom);
+                                        var myChart_ecdata = echarts.init(dom_ecdata);
                                         var app = {};
 
                                         var option;
@@ -4471,7 +4609,7 @@
 
 
                                         if (option && typeof option === 'object') {
-                                            myChart.setOption(option);
+                                            myChart_ecdata.setOption(option);
                                         }
 
                                     </script>
@@ -4699,6 +4837,19 @@
                         if (option && typeof option === 'object') {
                             myChart.setOption(option);
                         }
+                        myChart.on('click', function (params) {
+                            let componentType = params.componentType;   // geo是地图图层                      
+                           
+                            console.log("数据",params.value) 
+                            // $('#panel-725171').attr("calss", "tab-pane active")
+                            // $('#panel-883512').attr("calss", "tab-pane")
+                            // $('#panel-725174').attr("calss", "tab-pane")
+                            // $('#panel-725173').attr("calss", "tab-pane")
+                            var show_data =params.value[1]
+                            $('#show_panel-725173').html(" ")
+                            $('#show_panel-725173').html(show_data)
+                            $('#a_panel-725171').click()
+                        });
 
                     </script>
                     <div class="tabbable" id="tabs-492675"
@@ -4714,7 +4865,7 @@
                                 <a href="#panel-725173" data-toggle="tab">能见度</a>
                             </li>
                             <li>
-                                <a href="#panel-725171" data-toggle="tab">气温</a>
+                                <a id ="a_panel-725171" href="#panel-725171" data-toggle="tab">日报</a>
                             </li>
                         </ul>
                         <div class="tab-content"
@@ -4934,6 +5085,14 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="tab-pane" id="panel-725171"
+                                style="width: 100%; height: 100%;border: 3px solid rgb(58, 128, 0);">
+                                <div id = "show_panel-725173" style="display: inline-flex;width: 100%; height: 100%;">
+                                这里是点击按钮的响应
+                                    
+                                   
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -4975,7 +5134,7 @@
                         </div>
                         <script>
                             var chartDom = document.getElementById('canvas_bar');
-                            var myChart = echarts.init(chartDom);
+                            var myChart_bar = echarts.init(chartDom);
                             var option;
 
                             option = {
@@ -5007,7 +5166,7 @@
                                 ]
                             };
 
-                            option && myChart.setOption(option);
+                            option && myChart_bar.setOption(option);
 
                         </script>
                         <div style="width:40%;height:100%;border: 3px solid rgb(58, 128, 0);overflow:auto">
