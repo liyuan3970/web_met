@@ -14,6 +14,7 @@ DATABASES = {
         'USER': 'tzweb',
         'PASSWORD': '051219',
         'HOST': '192.168.192.4',
+        # 'HOST': 'localhost',
         'PORT': '3306',
     }
 }

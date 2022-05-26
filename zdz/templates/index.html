@@ -12,9 +12,16 @@
     <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="static/js/jquery.datetimepicker.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/jquery.datetimepicker.css" />
     <script src="static/js/jquery.datetimepicker.full.min.js"></script>
     <!-- echart -->
+    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/extension/dataTool.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-gl@2/dist/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-stat@latest/dist/ecStat.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/map/js/china.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/map/js/world.js"></script> -->
+
     <script type="text/javascript" src="static/js/echarts.min.js"></script>
     <script type="text/javascript" src="static/js/echarts-gl.min.js"></script>
     <script type="text/javascript" src="static/js/ecStat.min.js"></script>
@@ -2721,19 +2728,15 @@
                                 <div class="tab-pane active" id="panel-canvas01" style="width:100%;height:100%">
 
                                     <!-- <label style="fontsize:40px">降水订正</label> -->
-                                    <div style="display:inline-flex;width:100%;height:10%;  ">
-                                        <div style="width:7%;height:100%">
-                                            <div style="width:100%;height:50%;border: 1px solid black">增加<input checked="checked"
-                                                    type="radio" name="canvas_var" value="+">
-                                            </div>
-                                            <div style="width:100%;height:50%;border: 1px solid black">减少<input type="radio"
-                                                    name="canvas_var" value="-"></div>
-                                        </div>
-                                        <div style="width:93%;height:100%;border: 1px solid black  ">
+                                    <div style="display:inline-flex;width:100%;height:5%;  ">
+                        
+                                        <div style="width:100%;height:100%;border: 1px solid black  ">
                                             <div style="width:100%;height:30%  ">
                                             </div>
                                             <!-- 添加数值 -->
                                             <div style="display:inline-block;width:100%;height:35%;  ">
+                                                增加<input checked="checked" type="radio" name="canvas_var" value="+">
+                                                减少<input type="radio" name="canvas_var" value="-">
                                                 0.1<input checked="checked" type="radio" name="canvas_num"
                                                     style="width:5%" value="0.1">
                                                 0.3<input type="radio" name="canvas_num" style="width:5%"
@@ -2822,7 +2825,7 @@
                                                         value="rgb(19, 12, 16)" style="width:20%;height:100%;">
                                                 </div>
                                         </div>
-                                        <canvas id="plot_canvas" style="width:727px;height:651px;"></canvas>
+                                        <canvas id="plot_canvas" style="width:727px;height:650px;"></canvas>
                                     </div>
                                     <!-- 绘图的核心js -->
                                     <script type="text/javascript">
@@ -3012,23 +3015,101 @@
                                         }, 50);
 
                                     </script>
-                                    <div style="width:100%;height:1%;"></div>
-                                    <div style="width:100%;height:14%;border: 1px solid black">
-                                        <div style="width:100%;height:5%;"></div>
-                                        <div style="width:100%;height:20%;"></div>
-                                        <div style="width:100%;height:25%;">
+                                    
+                                    <div style="width:100%;height:20%;border: 3px solid black">
+                                        <div style="width:100%;height:20%;border: 3px solid black">
+                                            &nbsp;&nbsp;&nbsp;数据源:<input id = "plot_1st_data" checked="checked" type="radio" name="select_color_and_data" style="width:2%">
+                                            &nbsp;&nbsp;&nbsp;色标:<input id = "plot_1st_color"  type="radio" name="select_color_and_data" style="width:2%">
+                                            
+                                            <input type="button" value="绘制" onclick="tool_5()" style="width:10%;height: 100%;float:right">
+                                            <input type="button" value="刷新" style="width:10%;height:100%;float:right">
+
+                                        </div>
+                                        <div id = "plot_1st_tool1" style="display:inline-block;width:100%;height:80%;border: 1px solid black">
+                                            <div style=";width:100%;height:20%; ">
+                                                &nbsp;&nbsp;&nbsp;EC:<input type="radio" name="defalut_data_sourec" style="width:2%">
+                                                &nbsp;&nbsp;&nbsp;订正:<input type="radio" name="defalut_data_sourec" style="width:2%">
+                                                &nbsp;&nbsp;&nbsp;自动站:<input type="radio" name="defalut_data_sourec" style="width:2%">
+                                            </div>
+                                            <div style=";width:100%;height:25%; "></div>
+                                            <div style="display: inline-flex;width:100%;height:20%; ">
+                                                <div style="width:20%;height:80%; "></div>
+                                                <input type="text" placeholder="起始时间" style="width:20%;height: 100%;float:left">
+                                                <input type="text" placeholder="起始时间" style="width:20%;height: 100%;float:left">
+                                                <input type="button" value="下载" style="width:10%;height: 100%;float:left">
+                                            </div>
+                                            
+
+                                            
+
+                                        </div>
+                                        <div id = "plot_1st_tool2" style="display:none;width:100%;height:80%;border: 1px solid black">
+    
+                                            <div id="color_select_list_for_plot_1st" style="display: inline-block;width:100%;height: 40%; "></div>
+                                            <div style="width:100%;height: 10%; "></div>
+                                            
+                                            
+                                            &nbsp;<input id="color_bar_add" type="button" value="添加" onclick="color_bar_add_for_plot_1st()"
+                                                style="width: 10%;height: 35%;float: right;">
+                                            &nbsp;<input id="color_bar_del" type="button" value="删除" onclick="color_bar_del_for_plot_1st()"
+                                                style="width: 10%;height: 35%;float: right;">
+
+                                        </div>
+
+                                        <script type="text/javascript">
+                                            var data_color_bar_for_plot_1st= {
+                                                "color": [],
+                                                "text": []
+                                            }
+                                            function color_bar_add_for_plot_1st() {
+                                                // console.log("添加color")
+                                                var color_style = $("input[name='selected_color_1st']:checked").val()
+                                                var add_radio = document.createElement('input')
+                                                add_radio.style.width = "8%"
+                                                add_radio.style.height = "80%"
+                                                add_radio.style.backgroundColor = color_style
+                                                // color_bar_list.push(color_style)
+                                                // add_radio.
+                                                add_radio.style.display = "inline-block"
+                                                add_radio.style.border = "1px solid black"
+                                                add_radio.setAttribute("class", "color_bar")
+                                                add_radio.setAttribute("type", "text")
+
+                                                $('#color_select_list_for_plot_1st').append(add_radio)
+                                            }
+                                            function color_bar_del_for_plot_1st() {
+                                                $('#color_select_list_for_plot_1st').children().last().remove()
+                                                data_color_bar_for_plot_1st.text.pop()
+                                                data_color_bar_for_plot_1st.color.pop()
+                                            }
+
+
+
+                                            $('#plot_1st_data').click(function () {
+                                                $('#plot_1st_tool1').attr("style", "display:inline-block;width:100%;height:80%;border: 1px solid black")
+                                                $('#plot_1st_tool2').attr("style", "display:none;width:100%;height:80%;border: 1px solid black")
+                                            })
+                                            $('#plot_1st_color').click(function () {
+                                                console.log("点击颜色成功")
+                                                $('#plot_1st_tool1').attr("style", "display:none;width:100%;height:80%;border: 1px solid black")
+                                                $('#plot_1st_tool2').attr("style", "display:inline-block;width:100%;height:80%;border: 1px solid black")
+                                            })
+
+
+                                        </script>
+                                        
+                                        <!-- <div style="width:100%;height:25%;">
                                             &nbsp;&nbsp;&nbsp;EC:<input type="radio" name="defalut_data_sourec" style="width:2%">
                                             &nbsp;&nbsp;&nbsp;订正:<input type="radio" name="defalut_data_sourec" style="width:2%">
                                             &nbsp;&nbsp;&nbsp;自动站:<input type="radio" name="defalut_data_sourec" style="width:2%">
+                                            
                                         </div>
                                     
                                         <div style="width:100%;height:50%;">
                                             <input type="text" placeholder="起始时间" style="width:20%;height: 80%;float:left">
                                             <input type="text" placeholder="起始时间" style="width:20%;height: 80%;float:left">
-                                            <input type="button" value="下载" style="width:10%;height: 80%;float:left">
-                                            <input type="button" value="绘制" onclick="tool_5()" style="width:10%;height: 80%;float:right">
-                                            <input type="button" value="刷新" style="width:10%;height: 80%;float:right">
-                                        </div>
+                                            <input type="button" value="下载" style="width:10%;height: 80%;float:left">                                        
+                                        </div> -->
                                     </div>
                                 </div>
                                 <!-- 快速绘图的核心代码 -->
