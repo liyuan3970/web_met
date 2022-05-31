@@ -12,9 +12,9 @@ DATABASES = {
         # 数据库名称
         'NAME': 'tzweb',
         'USER': 'tzweb',
-        'PASSWORD': '051219',
-        'HOST': '192.168.192.4',
-        # 'HOST': 'localhost',
+        'PASSWORD': '',
+        # 'HOST': '192.168.192.5',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
@@ -22,10 +22,10 @@ DATABASES = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://192.168.192.4:6379/0",
+        "LOCATION": "redis://192.168.192.5:6379/0",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "PASSWORD": "051219"
+            "PASSWORD": ""
         }
     }
 }

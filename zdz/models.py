@@ -31,16 +31,16 @@ class Document(BaseModel):
     Returns:
         _type_: _description_
     """
-    types = models.CharField(max_length=50, verbose_name='类别')
+    types = models.TextField(max_length=200, verbose_name='类别')
     item = models.IntegerField(verbose_name='期数')
     year = models.IntegerField(verbose_name='年份')
-    unity = models.CharField(max_length=50, verbose_name='单位')
-    pub_date = models.CharField(max_length=50, verbose_name='发布日期')
+    unity = models.CharField(max_length=200, verbose_name='单位')
+    pub_date = models.CharField(max_length=200, verbose_name='发布日期')
     verson_content = models.TextField(
         max_length=21844, verbose_name='版本内容')  # 存放字典用来记录版本信息
     writer = models.CharField(max_length=50, verbose_name='撰稿人')
     publisher = models.CharField(
-        max_length=50, verbose_name='签发人', default="翁之梅")
+        max_length=200, verbose_name='签发人', default="翁之梅")
 
     class Meta:
         verbose_name = verbose_name_plural = '文档'
@@ -48,6 +48,19 @@ class Document(BaseModel):
 
     def __str__(self):
         return str(self.year)+"年"+self.types + ":第"+str(self.item)+"期"
+
+
+class SelfDefineModel(BaseModel):
+    types = models.CharField(max_length=200, verbose_name='类别')
+    name = models.CharField(max_length=200, verbose_name='名称')
+    data  = models.JSONField(null=False)
+    class Meta:
+        verbose_name = verbose_name_plural = '预定义类型'
+        db_table = 'selfmode'  # 通过db_table自定义数据表名
+    def __str__(self):
+        return str(self.type) + ":" + self.name
+
+
 
 
 class Unity(BaseModel):
@@ -59,7 +72,7 @@ class Unity(BaseModel):
     Returns:
         _type_: _description_
     """
-    name = models.CharField(max_length=50, verbose_name='单位')
+    name = models.CharField(max_length=200, verbose_name='单位')
 
     class Meta:
         verbose_name = verbose_name_plural = '单位'
@@ -78,7 +91,7 @@ class Publisher(BaseModel):
     Returns:
         _type_: _description_
     """
-    name = models.CharField(max_length=50, verbose_name='签发人')
+    name = models.CharField(max_length=200, verbose_name='签发人')
 
     class Meta:
         verbose_name = verbose_name_plural = '签发人'
@@ -97,7 +110,7 @@ class Writer(BaseModel):
     Returns:
         _type_: _description_
     """
-    name = models.CharField(max_length=50, verbose_name='撰稿人')
+    name = models.CharField(max_length=200, verbose_name='撰稿人')
 
     class Meta:
         verbose_name = verbose_name_plural = '撰稿人'
@@ -116,7 +129,7 @@ class DocumentType(BaseModel):
     Returns:
         _type_: _description_
     """
-    name = models.CharField(max_length=50, verbose_name='材料类型')
+    name = models.CharField(max_length=200, verbose_name='材料类型')
 
     class Meta:
         verbose_name = verbose_name_plural = '材料类型'
@@ -136,7 +149,7 @@ class Picture(BaseModel):
         _type_: _description_
     """
     img = models.ImageField(upload_to='img/')
-    name = models.CharField(max_length=20, verbose_name='宣传二维码')
+    name = models.CharField(max_length=200, verbose_name='宣传二维码')
 
     class Meta:
         verbose_name = verbose_name_plural = '宣传二维码'
@@ -158,9 +171,9 @@ class Leader_Data(BaseModel):
     name = models.CharField(max_length=20, verbose_name='发布版本')
     picture_list = models.CharField(
         max_length=20, verbose_name='二维码种类')  # 存放二维码的字典
-    service_name = models.CharField(max_length=20, verbose_name='呈报对象')
-    service_unity = models.CharField(max_length=20, verbose_name='发布单位')
-    recive_unity = models.CharField(max_length=20, verbose_name='抄送单位')
+    service_name = models.TextField(max_length=21844, verbose_name='呈报对象')
+    service_unity = models.TextField(max_length=21844, verbose_name='发布单位')
+    recive_unity = models.TextField(max_length=21844, verbose_name='抄送单位')
 
     class Meta:
         verbose_name = verbose_name_plural = '呈送发'

@@ -9,3 +9,6 @@ netCDF4==1.5.8
 django-redis==5.2.0
 pydocx==0.9.10
 pymupdf == 1.19.6
+rasterio == 1.2.10
+geopandas==0.10.2
+fiona==1.8.21
