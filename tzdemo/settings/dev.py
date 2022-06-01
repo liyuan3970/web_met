@@ -11,8 +11,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         # 数据库名称
         'NAME': 'tzweb',
-        'USER': 'tzweb',
-        'PASSWORD': '',
+        'USER': 'root',
+        'PASSWORD': '051219',
         # 'HOST': '192.168.192.5',
         'HOST': '127.0.0.1',
         'PORT': '3306',
