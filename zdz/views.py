@@ -137,9 +137,9 @@ def plot_self_data(request):
     value = []
     # (llcrnrlon=120.1,llcrnrlat=27.8,urcrnrlon=122,urcrnrlat=29.5)
     for i in range(len(data['station'])):
-        x = data['station'][i][0] * 1.9 / 727 + 120.1
+        x = data['station'][i][0] 
         lon.append(x)
-        y = 29.5 - data['station'][i][1] * 1.7 / 651
+        y = data['station'][i][1] 
         lat.append(y)
         value.append(data['station'][i][2] * 10)
     func.plot_image(lat, lon, value)

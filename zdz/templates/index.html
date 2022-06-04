@@ -2558,15 +2558,23 @@
                             <script>
                                 function tool_3() {
 
-                                    var tool1_view = document.getElementById("tool1_view")
-                                    var tool2_view = document.getElementById("tool2_view")
-                                    var tool3_view = document.getElementById("tool3_view")
-                                    var tool5_view = document.getElementById("tool5_view")
-                                    var product_view = document.getElementById("product_view")
-                                    product_view.style.display = "none"
-                                    tool1_view.style.display = "none"
-                                    tool2_view.style.display = "none"
-                                    tool3_view.style.display = "inline-block"
+                                    // var tool1_view = document.getElementById("tool1_view")
+                                    // var tool2_view = document.getElementById("tool2_view")
+                                    // var tool3_view = document.getElementById("tool3_view")
+                                    // var tool5_view = document.getElementById("tool5_view")
+                                    // var product_view = document.getElementById("product_view")
+                                    // product_view.style.display = "none"
+                                    // tool1_view.style.display = "none"
+                                    // tool2_view.style.display = "none"
+                                    // tool3_view.style.display = "inline-block"
+
+                                    $('#tool1_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool2_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool3_view').attr("style", "display: inline-block;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#product_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool5_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+
+                                    
 
 
                                 }
@@ -2640,33 +2648,43 @@
                                         }
                                     })
 
-                                    var tool1_view = document.getElementById("tool1_view")
-                                    var tool2_view = document.getElementById("tool2_view")
-                                    var tool3_view = document.getElementById("tool3_view")
-                                    var tool5_view = document.getElementById("tool5_view")
-                                    var product_view = document.getElementById("product_view")
-                                    product_view.style.display = "none"
-                                    tool1_view.style.display = "none"
-                                    tool2_view.style.display = "inline-block"
-                                    tool3_view.style.display = "none"
-                                    tool5_view.style.display = "none"
+                                    // var tool1_view = document.getElementById("tool1_view")
+                                    // var tool2_view = document.getElementById("tool2_view")
+                                    // var tool3_view = document.getElementById("tool3_view")
+                                    // var tool5_view = document.getElementById("tool5_view")
+                                    // var product_view = document.getElementById("product_view")
+                                    // product_view.style.display = "none"
+                                    // tool1_view.style.display = "none"
+                                    // tool2_view.style.display = "inline-block"
+                                    // tool3_view.style.display = "none"
+                                    // tool5_view.style.display = "none"
+                                    $('#tool1_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool2_view').attr("style", "display: inline-block;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool3_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#product_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool5_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
 
 
                                 }
                                 function tool_1() {
 
-                                    var tool1_view = document.getElementById("tool1_view")
-                                    var tool2_view = document.getElementById("tool2_view")
-                                    var tool3_view = document.getElementById("tool3_view")
-                                    var tool5_view = document.getElementById("tool5_view")
-                                    var product_view = document.getElementById("product_view")
-                                    product_view.style.display = "none"
-                                    tool1_view.style.display = "inline-block"
-                                    // tool1_view.style.height = "100%"
+                                    // var tool1_view = document.getElementById("tool1_view")
+                                    // var tool2_view = document.getElementById("tool2_view")
+                                    // var tool3_view = document.getElementById("tool3_view")
+                                    // var tool5_view = document.getElementById("tool5_view")
+                                    // var product_view = document.getElementById("product_view")
+                                    // product_view.style.display = "none"
+                                    // tool1_view.style.display = "inline-block"
+                                    // // tool1_view.style.height = "100%"
 
-                                    tool2_view.style.display = "none"
-                                    tool3_view.style.display = "none"
-                                    tool5_view.style.display = "none"
+                                    // tool2_view.style.display = "none"
+                                    // tool3_view.style.display = "none"
+                                    // tool5_view.style.display = "none"
+                                    $('#tool1_view').attr("style", "display:inline-block;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool2_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool3_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#product_view').attr("style", "display:none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool5_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
 
 
                                 }
@@ -2674,6 +2692,7 @@
                                 function tool_5() {
                                     // 向服务器要数据并显示tool5
                                     var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                    
 
                                     $.ajax({
                                         url: "upload_selfplot_data",  // 请求的地址
@@ -2687,24 +2706,31 @@
                                             console.log("ajax请求成功返回的数据", data.img)
                                             var plotImg = new Image();
                                             plotImg.src = data.img
+                                            plotImg.style = "width:100%;height:100%"
                                             $('#canvas_plot_div').html(" ")
                                             $('#canvas_plot_div').html(plotImg)
+                                            $('#tool1_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                            $('#tool2_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                            $('#tool3_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                            $('#product_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                            $('#tool5_view').attr("style", "display: inline-block;background-color:white; width: 100%; height: 100%;overflow:auto")
 
                                         }
                                     })
 
-                                    var tool1_view = document.getElementById("tool1_view")
-                                    var tool2_view = document.getElementById("tool2_view")
-                                    var tool3_view = document.getElementById("tool3_view")
-                                    var tool5_view = document.getElementById("tool5_view")
-                                    var product_view = document.getElementById("product_view")
-                                    product_view.style.display = "none"
-                                    tool1_view.style.display = "none"
-                                    // tool1_view.style.height = "100%"
+                                    // var tool1_view = document.getElementById("tool1_view")
+                                    // var tool2_view = document.getElementById("tool2_view")
+                                    // var tool3_view = document.getElementById("tool3_view")
+                                    // var tool5_view = document.getElementById("tool5_view")
+                                    // var product_view = document.getElementById("product_view")                            
+                                    // product_view.style.display = "none"
+                                    // tool1_view.style.display = "none"                                    
+                                    // tool2_view.style.display = "none"
+                                    // tool3_view.style.display = "none"
+                                    // tool5_view.style.display = "inline-block"
 
-                                    tool2_view.style.display = "none"
-                                    tool3_view.style.display = "none"
-                                    tool5_view.style.display = "inline-block"
+                                    
+
 
 
 
@@ -2730,7 +2756,7 @@
                                     <!-- <label style="fontsize:40px">降水订正</label> -->
                                     <div style="display:inline-flex;width:100%;height:5%;  ">
                         
-                                        <div style="width:100%;height:100%;border: 1px solid black  ">
+                                        <div style="width:100%;height:100%;border: 1px solid  black  ">
                                             <div style="width:100%;height:30%  ">
                                             </div>
                                             <!-- 添加数值 -->
@@ -2757,7 +2783,7 @@
                                     <div
                                         style="display: inline-flex;width:100%;height:75%; background-color: white;">
                                         <div
-                                                style="width:10%;height:100%;border: 3px solid black">
+                                                style="width:10%;height:100%;border: 1px  black;border-style:hidden solid hidden hidden;">
                                                 <div style="width:100%;height:5%;">
                                                     请选择颜色:
                                                 </div>
@@ -2831,196 +2857,9 @@
                                     <script src='static/js/taizhou.js'></script>
                                     <script type="text/javascript" src='static/js/canvas_self_plot.js'></script>
                                     
-                                    <!-- <script type="text/javascript">
-                                        // 控件连接
-
-
-                                        //数据设置
-                                        var data_canvas = {
-                                            "station_list": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-                                            "station": [
-                                                [360, 320, 32],
-                                                [330, 370, 15],
-                                                [310, 345, 15],
-                                                [310, 280, 15],
-                                                [390, 200, 15],
-                                                [486, 422, 15],
-                                                [426, 526, 15],
-                                                [513, 257, 15],
-                                                [210, 291, 15],
-                                                [348, 114, 15],
-                                                [523, 179, 15],
-                                                [440, 253, 15],
-
-                                            ]
-                                        }
-                                        //设置画布
-                                        const canvas = document.getElementById("plot_canvas");
-                                        const ctx = canvas.getContext('2d');
-                                        canvas.width = 727;
-                                        canvas.height = 651;
-                                        canvas.style.backgroundColor = "white";
-
-                                        ctx.font = "20px Arial";
-                                        var myImg = new Image();
-                                        myImg.src = 'static/src/taizhou.png';
-
-
-                                        let ballArr = [];
-                                        let colorArr = ['red', "blue", 'green'];
-
-                                        let mouseInCanvas = false;
-                                        let offsetX;//通过事件获取鼠标X
-                                        let offsetY;//通过事件获取鼠标Y
-                                        let r = 150;//球的半径
-                                        
-
-                                        //小球类
-                                        class Ball {
-                                            undefined
-                                            constructor(x, y, color) {
-                                                undefined
-                                                this.x = x;
-                                                this.y = y;
-                                                this.color = color;
-                                                this.r = r;
-                                            }
-                                            //绘制小球
-                                            render() {
-                                                undefined
-                                                ctx.save();
-                                                ctx.beginPath();
-                                                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-                                                // ctx.fillText(data_canvas['station'][2].toFixed(2), data_canvas['station'][0], data_canvas['station'][1]);
-                                                for (var i = 0; i < data_canvas.station_list.length; i++) {
-                                                    ctx.fillText(data_canvas['station'][i][2].toFixed(1), data_canvas['station'][i][0], data_canvas['station'][i][1]);
-                                                }
-                                                ctx.lineWidth = 3;
-                                                ctx.strokeStyle = "red";
-                                                ctx.stroke();
-                                                // ctx.fillStyle = this.color;
-                                                // ctx.fill();
-                                                ctx.restore();
-                                            }
-                                        }
-
-                                        //会移动的小球类
-                                        class MoveBall extends Ball {
-                                            undefined
-                                            constructor(x, y, color) {
-                                                undefined
-                                                super(x, y, color);
-                                            }
-
-                                            Update() {
-                                                undefined
-                                                this.x += this.dX;
-                                                this.y += this.dY;
-                                                this.r -= this.dR;
-                                                if (this.r < 0) {
-                                                    undefined
-                                                    this.r = 0;
-                                                }
-                                            }
-                                        }
-
-                                        //鼠标移动
-                                        canvas.addEventListener('mousemove',
-                                            function (e) {
-                                                undefined
-                                                mouseInCanvas = true;
-                                                offsetX = e.offsetX;
-                                                offsetY = e.offsetY;
-
-                                            });
-                                        // 鼠标点击模块
-                                        canvas.addEventListener('click',
-                                            function (e) {
-                                                undefined
-                                                mouseInCanvas = true;
-                                                offsetX = e.offsetX;
-                                                offsetY = e.offsetY;
-                                                // console.log(offsetX,offsetY)
-
-                                                var canvas_select_value = parseFloat($("input[name='canvas_num']:checked").val());
-                                                var canvas_select_method = $("input[name='canvas_var']:checked").val();
-                                                for (var i = 0; i < data_canvas.station_list.length; i++) {
-
-                                                    var len_r = (offsetX - data_canvas['station'][i][0]) * (offsetX - data_canvas['station'][i][0]) + (offsetY - data_canvas['station'][i][1]) * (offsetY - data_canvas['station'][i][1]);
-                                                    if (canvas_select_method == '+') {
-
-                                                        if (len_r < r * r) {
-                                                            data_canvas['station'][i][2] = data_canvas['station'][i][2] + canvas_select_value
-                                                        }
-                                                    }
-                                                    else {
-
-                                                        if (len_r < r * r) {
-                                                            data_canvas['station'][i][2] = data_canvas['station'][i][2] - canvas_select_value
-                                                        }
-                                                    }
-                                                }
-
-
-
-
-
-                                            });
-                                        // 鼠标滑轮
-                                        canvas.addEventListener('mousewheel',
-                                            function (e) {
-                                                undefined
-                                                mouseInCanvas = true;
-
-                                                let z = e.deltaY
-                                                if (r >= 50) {
-                                                    r = r + z * 0.1
-                                                }
-                                                else {
-                                                    r = 50
-                                                }
-                                                // r = r + z*0.1
-
-                                                // console.log(z, r)
-
-                                            });
-                                        //鼠标出画布
-                                        canvas.addEventListener('mouseout',
-                                            function (e) {
-                                                undefined
-                                                mouseInCanvas = false;
-                                            });
-                                        //鼠标进画布
-                                        canvas.addEventListener('mouseover',
-                                            function (e) {
-                                                undefined
-                                                mouseInCanvas = true;
-                                            });
-
-                                        setInterval(function () {
-                                            undefined
-                                            if (mouseInCanvas) {
-                                                undefined
-                                                //圆圈移动
-                                                ballArr.push(new MoveBall(offsetX, offsetY, colorArr[1]));
-
-                                            }
-                                            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                                            ctx.drawImage(myImg, 0, 0, 727, 651)
-
-                                            // console.log("我在刷新")
-                                            for (let i = 0; i < ballArr.length; i++) {
-                                                undefined
-                                                ballArr[i].render();
-                                                ballArr[i].Update();
-                                            }
-                                        }, 50);
-
-                                    </script> -->
                                     
-                                    <div style="width:100%;height:20%;border: 3px solid black">
-                                        <div style="width:100%;height:20%;border: 3px solid black">
+                                    <div style="width:100%;height:20%;border: 1px solid black">
+                                        <div style="width:100%;height:20%;border: 1px black;border-style:hidden hidden solid hidden ;">
                                             &nbsp;&nbsp;&nbsp;数据源:<input id = "plot_1st_data" checked="checked" type="radio" name="select_color_and_data" style="width:2%">
                                             &nbsp;&nbsp;&nbsp;色标:<input id = "plot_1st_color"  type="radio" name="select_color_and_data" style="width:2%">
                                             
@@ -3028,7 +2867,7 @@
                                             <input type="button" value="刷新" style="width:10%;height:100%;float:right">
 
                                         </div>
-                                        <div id = "plot_1st_tool1" style="display:inline-block;width:100%;height:80%;border: 1px solid black">
+                                        <div id = "plot_1st_tool1" style="display:inline-block;width:100%;height:80%">
                                             <div style=";width:100%;height:20%; ">
                                                 &nbsp;&nbsp;&nbsp;EC:<input type="radio" name="defalut_data_sourec" style="width:2%">
                                                 &nbsp;&nbsp;&nbsp;订正:<input type="radio" name="defalut_data_sourec" style="width:2%">
@@ -3117,7 +2956,7 @@
                                 </div>
                                 <!-- 快速绘图的核心代码 -->
                                 <div class="tab-pane" id="panel-canvas02" style="width:100%;height:100%">
-                                    <div style="width:100%;height:5%;border: 3px solid black">
+                                    <div style="width:100%;height:5%;border: 1px solid black">
                                         城市:<input type="radio" checked="checked" name="taizhou_shp_type"
                                             value="taizhou_city">
                                         县区:<input type="radio" name="taizhou_shp_type" value="taizhou_county">
@@ -3134,12 +2973,12 @@
                                             })
                                         </script>
                                     </div>
-                                    <div style="display:inline-block;width:100%;height:80%;border: 3px solid black">
+                                    <div style="display:inline-block;width:100%;height:80%;border: 1px black;border-style:solid solid solid solid ;">
                                         <div
-                                            style="display:inline-flex;width:100%;height:100%;border: 3px solid black">
+                                            style="display:inline-flex;width:100%;height:100%;border: 1px black;border-style:solid solid solid solid ;">
                                             <!-- 颜色 -->
                                             <div
-                                                style="display:inline-block;width:10%;height:100%;border: 3px solid black">
+                                                style="display:inline-block;width:10%;height:100%;border: 1px black;border-style:hidden solid hidden hidden ;">
                                                 <div style="width:100%;height:5%;">
                                                     请选择颜色:
                                                 </div>
@@ -3213,7 +3052,7 @@
                                         </div>
                                     </div>
                                     <!-- 画图方法 -->
-                                    <div style="display:inline-block;width:100%;height:3%">
+                                    <div style="display:inline-block;width:100%;height:3%;border: 1px black;border-style:solid solid solid solid ;">
                                         等值线:&nbsp;<input id="taizhou_quick_plot_contour" type="radio" checked="checked" name="taizhou_quick_plot_type"
                                             value="coutour">&nbsp;&nbsp;&nbsp;
                                         曲线:&nbsp;<input id="taizhou_quick_plot_line" type="radio" name="taizhou_quick_plot_type" value="line">&nbsp;&nbsp;&nbsp;
@@ -3236,7 +3075,7 @@
                                     <!-- 对应方法的选项 -->
                                     <!-- 等值线的填充 -->
                                     <div id="taizhou_quick_plot_type_view0"
-                                        style="display:inline-block;width:100%;height:13%;border: 3px solid black">
+                                        style="display:inline-block;width:100%;height:13%;border: 1px black;border-style:solid solid solid solid ;">
                                         <div style="display:inline-block;width:100%;height: 30%;">
                                             颜色1:&nbsp;<input id="" type="radio" class = "select_color_bar_type" name="select_color_bar_type" checked = "checked" value="1">&nbsp;&nbsp;&nbsp;
                                             颜色2:&nbsp;<input id="" type="radio" class = "select_color_bar_type" name="select_color_bar_type" value="2">&nbsp;&nbsp;&nbsp;
@@ -4865,7 +4704,7 @@
                 </div>
                 <!-- 历史数据模式 -->
                 <div id="tool3_view"
-                    style="display: inline-block;background-color:white; width: 100%; height: 100%;border: 3px solid rgb(58, 128, 0);overflow:auto">
+                    style="display:none;background-color:white; width: 100%; height: 100%;border: 3px solid rgb(58, 128, 0);overflow:auto">
                     <div id="calendar_history" style="width: 100%; height: 30%;border: 3px solid rgb(58, 128, 0);">
 
 
@@ -5273,9 +5112,8 @@
                 <div id="tool5_view"
                     style="display: inline-block;background-color:white; width: 100%; height: 100%;border: 3px solid rgb(58, 128, 0);overflow:auto">
                     <!-- 这里是canvas的结果 -->
-                    <div id = "canvas_plot_div" style="width:100%;height:70%;border: 3px solid rgb(58, 128, 0);overflow:auto">
-                        <!-- <img id = "canvas_plot" src=" " style="width:100%;height:100%;">
-                        <img src="static/src/降水.png" style="width:100%;height:100%;"> -->
+                    <div id = "canvas_plot_div" style="width:100%;height:70%;">
+                        
                         
                     </div>
                     

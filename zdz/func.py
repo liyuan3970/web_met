@@ -115,7 +115,7 @@ def plot_image(lat,lon,value):
     #以下是核心api,实质为调用Cmaps基类的listmap()方法
     cmaps = Cmaps('ncl_default',self_define_list).listmap()
     # plt.rcParams.update({'font.size': 20})
-    fig = plt.figure(figsize=[12,16]) 
+    fig = plt.figure(figsize=[10,8]) 
     
     ax = fig.add_subplot(111)
     # plt.subplots_adjust(top=1,bottom=0,left=0,right=1,hspace=0,wspace=0)
@@ -127,7 +127,8 @@ def plot_image(lat,lon,value):
     m = Basemap(llcrnrlon=120.0,llcrnrlat=27.8,urcrnrlon=122,urcrnrlat=29.5,resolution = None, projection = 'cyl')
     # 设置colorbar
     cbar_kwargs = {'shrink': 0.5}    
-    cs = data_xr.plot.contourf(ax=ax, cmap='Spectral_r',levels =levels,cbar_kwargs=cbar_kwargs,add_labels=False)
+    # cs = data_xr.plot.contourf(ax=ax, cmap='Spectral_r',levels =levels,cbar_kwargs=cbar_kwargs,add_labels=False)
+    cs = data_xr.plot.contourf(ax=ax, cmap='Spectral_r',add_labels=False)
     m.readshapefile(filepath+'taizhou','taizhou',color='k',linewidth=1.2)
     parallels = np.arange(27.8,29.5,0.2)
     # labels = [left,right,top,bottom]
