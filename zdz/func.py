@@ -137,12 +137,12 @@ def plot_image(lat,lon,value):
     m.drawmeridians(meridians,labels=[False,True,False,True],color='dimgrey',dashes=[2, 3],fontsize= 12)
     len_lat = len(data_xr.lat.data)
     len_lon = len(data_xr.lon.data)
-    for i in range(len_lon-1):
-        for j in range(len_lat-1):
-            y0 = round(27.8+j*0.05,2)
-            x0 = round(120.0+i*0.05,2)
-            if not isnan(awash_da.data[j,i]):
-                plt.text(x0,y0,str(int(awash_da.data[j,i])),fontsize= 7,fontweight = 800 ,color ="black")
+    # for i in range(len_lon-1):
+    #     for j in range(len_lat-1):
+    #         y0 = round(27.8+j*0.05,2)
+    #         x0 = round(120.0+i*0.05,2)
+    #         if not isnan(awash_da.data[j,i]):
+    #             plt.text(x0,y0,str(int(awash_da.data[j,i])),fontsize= 7,fontweight = 800 ,color ="black")
     basemask(cs, ax, m, filepath+'taizhou')  
 
 

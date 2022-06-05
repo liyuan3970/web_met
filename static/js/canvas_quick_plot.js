@@ -281,7 +281,7 @@ canvas_quick_plot.addEventListener('click',
             plot_icon = select_icon_img[0]
             
 
-            ctx_quick_plot.drawImage(plot_icon, offsetX_qp, offsetY_qp);
+            ctx_quick_plot.drawImage(plot_icon, offsetX_qp-25, offsetY_qp-25);
 
         }
         else if (select_plot_type == 'scatter_pic') {

@@ -1685,7 +1685,7 @@
 
                                             "content": text_main
                                         }
-                                        list_div.push(html)
+                                        
                                         list_data.push(data_add)
                                         show()
 
@@ -2692,6 +2692,11 @@
                                 function tool_5() {
                                     // 向服务器要数据并显示tool5
                                     var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                    $('#tool1_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool2_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool3_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#product_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool5_view').attr("style", "display: inline-block;background-color:white; width: 100%; height: 100%;overflow:auto")
                                     
 
                                     $.ajax({
@@ -2709,11 +2714,8 @@
                                             plotImg.style = "width:100%;height:100%"
                                             $('#canvas_plot_div').html(" ")
                                             $('#canvas_plot_div').html(plotImg)
-                                            $('#tool1_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                                            $('#tool2_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                                            $('#tool3_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                                            $('#product_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                                            $('#tool5_view').attr("style", "display: inline-block;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                            // 添加表结构和数据
+                                            
 
                                         }
                                     })
@@ -3337,13 +3339,13 @@
                             </p>
                         </div>
                         <div class="tab-pane" id="panel-5"
-                            style="width:100%;height:100%;background-color:rgb(235, 243, 247);overflow: auto ;">
+                            style="width:100%;height:100%;background-color:white;overflow: auto ;">
                             <div style="display:flex;flex-wrap: wrap;align-content:flex-start;width:100%;height:100%;justify-content: center;align-items: center;">
                                 <a href="http://www.baidu.com" target="_Blank" style="display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url(static/src/二维码.png);font-size: 25px;color:red;text-align:center;line-height: 230px; " >百度</a> 
                                 <!-- 控制字符在8个汉字之内 -->
-                                <a href="http://www.baidu.com" target="_Blank" style="display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url(static/src/二维码.png);font-size: 25px;color:red;text-align:center;line-height: 230px; " >百度</a>
-                                <a href="http://www.baidu.com" target="_Blank" style="display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url(static/src/二维码.png);font-size: 25px;color:red;text-align:center;line-height: 230px; " >百度</a>
-                                <a href="http://www.baidu.com" target="_Blank" style="display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url(static/src/二维码.png);font-size: 25px;color:red;text-align:center;line-height: 230px; " >百度</a>
+                                <a href="http://www.baidu.com" target="_Blank" style="display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url(static/src/二维码.png);font-size: 25px;color:red;text-align:center;line-height: 230px; " >台风</a>
+                                <a href="http://www.baidu.com" target="_Blank" style="display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url(static/src/二维码.png);font-size: 25px;color:red;text-align:center;line-height: 230px; " >气候</a>
+                                <a href="http://www.baidu.com" target="_Blank" style="display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url(static/src/二维码.png);font-size: 25px;color:red;text-align:center;line-height: 230px; " >中央台</a>
               
                               
                                
@@ -4705,13 +4707,15 @@
                 <!-- 历史数据模式 -->
                 <div id="tool3_view"
                     style="display:none;background-color:white; width: 100%; height: 100%;border: 3px solid rgb(58, 128, 0);overflow:auto">
-                    <div id="calendar_history" style="width: 100%; height: 30%;border: 3px solid rgb(58, 128, 0);">
+                    <div id="calendar_history" style="display:inline-flex;width: 100%; height: 30%;border: 3px solid rgb(58, 128, 0);">
 
 
                     </div>
                     <script type="text/javascript">
                         var dom = document.getElementById("calendar_history");
                         var myChart = echarts.init(dom);
+                        // myChart.resize()
+                        
                         var app = {};
 
                         var option;
