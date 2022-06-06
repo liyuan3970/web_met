@@ -161,12 +161,12 @@ def plot_self_data(request):
 def upload_select_taizhou_data(request):
     plot_type = request.POST.get('plot_type', '')
     plot_time = request.POST.get('plot_time', '')
+    # 不缓存的暴力方法
+    # imd_list = get_imd_list(request)
 
     # 设置key
     key = f'img_list_{plot_type}_{plot_time}'
-
     imd_list = cache.get(key)
-
     if not imd_list:
         print('非缓存方法')
         # 常规方法获取列表

@@ -2292,14 +2292,14 @@
                                 style="background-color:rgb(78, 9, 189); width: 100%; height: 5%;border: 3px solid rgb(58, 128, 0);">
                                 <input id="quick_look" type="button" value="预览"
                                     style="width:10%;height:100%;float:right ">
-                                <input type="button" id = "product_show_button" value="保存" style="width:10%;height:100%;float:right ">
+                                <input type="button" id = "save_and_vue" value="保存" style="width:10%;height:100%;float:right ">
                                 <input type="button" value="合并版本" style="width:10%;height:100%;float:right ">
                                 <!-- <input type="button" value="下载" style="width:10%;height:100%;float:left ">
                                 <input type="button" value="清除" style="width:10%;height:100%;float:left "> -->
 
 
                             </div>
-                            
+                            <script type="text/javascript" src = 'static/js/save_and_vue.js'></script>
                             <!-- 数据预览保存合并的功能 -->
                             <script>
                                 $(function () {
@@ -2375,7 +2375,7 @@
                                                             id="file_week2">
                                                     </div>
                                                 </div>
-                                                <input id ="tool_history_button" type="button" value="查看"
+                                                <input type="button" value="查看"
                                                     style="width:15%;height:18%;float:right">
 
                                             </div>
@@ -2424,7 +2424,7 @@
 
                                 </div>
                                 <div style="display: inline-block;width:100%;height:20%;">
-                                    <input id="tool_prodict_product_button"  type="button" value="查看"
+                                    <input id="tool_submit2" onclick="tool_2()" type="button" value="查看"
                                         style="width: 10%;height:80% ;float: right ;">
 
                                 </div>
@@ -2443,7 +2443,7 @@
                                         style="width: 25%;height:40%; text-align:center;vertical-align: middle;align-items: center; ">
                                     <input id="datetimepicker_history2" type="text" placeholder="结束时间"
                                         style="width: 25%;height:40%; text-align:center;vertical-align: middle;align-items: center; ">
-                                    <input id="tool_zdz_button" type="button" value="查看"
+                                    <input id="tool_submit3" onclick="tool_3()" type="button" value="查看"
                                         style="width: 10%;height:40% ;float: right ;">
                                     <script>
                                         $('#datetimepicker_history1').datetimepicker(
@@ -2463,7 +2463,12 @@
                                     </script>
 
                                 </div>
-                                
+                                <!-- <div style="display: inline-block;width:100%;height:15%;">
+                                    <label>历史材料查询</label>
+                                    <input id="tool_submit3" onclick="tool_3()" type="button" value="查看"
+                                        style="width: 10%;height:100% ;float: right ;">
+
+                                </div> -->
 
                             </div>
                             <div
@@ -2503,13 +2508,36 @@
 
                                 </div>
 
-                        
+                                <!-- <div
+                                    style="display: inline-block ;width:100%;height:25%;;vertical-align:middle;font-size: 25px;">
+                                    站点模式:<input type="radio" name="check_data_way" style="width: 5%;height:50%;">
+                                    <input placeholder="初始时间" id="datetimepicker_check_data_way_start" type="text"
+                                        style="width: 35%;height:80% ; ">
+                                    <input placeholder="终止时间" id="datetimepicker_check_data_way_end" type="text"
+                                        style="width: 35%;height:80% ; ">
+                                </div>
+                                <script>
+                                    $('#datetimepicker_check_data_way_start').datetimepicker(
+                                        {
+                                            theme: 'dark',
+                                            format: 'Y-m-d H:i'
+                                        }
+                                    );
+                                </script>
+                                <script>
+                                    $('#datetimepicker_check_data_way_end').datetimepicker(
+                                        {
+                                            theme: 'dark',
+                                            format: 'Y-m-d H:i'
+                                        }
+                                    );
+                                </script> -->
                                 <div
                                     style="display: inline-block ;width:100%;height:25%;background-color:rgb;vertical-align:middle;font-size: 25px;">
                                     <!-- 经纬度模式:<input type="radio" name="check_data_way" style="width: 5%;height:50%;"> -->
                                     <!-- <input type="text" placeholder="经度" style="width: 20%;height:80%;"><input
                                         type="text" placeholder="纬度" style="width: 20%;height:80%;"> -->
-                                    <input id="tool_ec_button"  type="button" value="打开"
+                                    <input id="tool_submit1" onclick="tool_1()" type="button" value="打开"
                                         style="width: 10%;height:60% ;float: right ;">
                                 </div>
                                     
@@ -2520,7 +2548,189 @@
 
 
                             </div>
-                            
+                            <script>
+                                function tool_3() {
+
+                                    // var tool1_view = document.getElementById("tool1_view")
+                                    // var tool2_view = document.getElementById("tool2_view")
+                                    // var tool3_view = document.getElementById("tool3_view")
+                                    // var tool5_view = document.getElementById("tool5_view")
+                                    // var product_view = document.getElementById("product_view")
+                                    // product_view.style.display = "none"
+                                    // tool1_view.style.display = "none"
+                                    // tool2_view.style.display = "none"
+                                    // tool3_view.style.display = "inline-block"
+
+                                    $('#tool1_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool2_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool3_view').attr("style", "display: inline-block;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#product_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool5_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+
+                                    
+
+
+                                }
+                                function tool_2() {
+                                    // 市台订正数据的核心代码
+                                    var time_plot_taizhou = $("input[name='tz_self_time']:checked").val()
+                                    var type_plot_taizhou = $("input[name='tz_self']:checked").val()
+                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                    console.log(time_plot_taizhou, type_plot_taizhou)
+
+                                    $.ajax({
+                                        url: "upload_select_taizhou_data",  // 请求的地址
+                                        type: "post",  // 请求方式
+                                        timeout: 2500000, //设置延迟上限
+                                        data: {
+                                            'csrfmiddlewaretoken': csrf,
+                                            'plot_type': type_plot_taizhou,
+                                            'plot_time': time_plot_taizhou
+                                        },
+                                        dataType: "json",
+                                        success: function (data) {
+                                            // var show_img_list = $
+                                            var server_img_list = data.img_list
+                                            console.log("ajax请求成功返回的数据", server_img_list)
+                                            $("#self_png_show").html(" ")
+                                            $("#ul_self").html(" ")
+                                            for (i = 0; i < server_img_list.length; i++) {
+                                                // 图部分
+                                                var img_item = new Image()
+                                                img_item.id = "self_" + (i + 1).toString()
+                                                img_item.src = server_img_list[i]
+                                                img_item.style.width = "100%"
+                                                img_item.style.height = "100%"
+                                                $('#self_png_show').append(img_item)
+                                                var a_item = document.createElement("a")
+                                                a_item.id = "a_" + (i + 1).toString()
+                                                a_item.setAttribute("class", "list-group-item")
+                                                a_item.setAttribute("href", "#self_" + (i + 1).toString())
+                                                a_item.innerText = "202200401"
+                                                var input_item = document.createElement("input")
+                                                input_item.id = "in_" + (i + 1).toString()
+                                                input_item.style.display = "none"
+                                                input_item.setAttribute("type", "radio")
+                                                input_item.setAttribute("name", "ul_png")
+                                                if (i == 0) {
+                                                    input_item.setAttribute("checked", "true")
+                                                }
+                                                a_item.appendChild(input_item)
+                                                var click_item = parseInt(i)
+                                                a_item.addEventListener("click", function (click_item) {
+                                                    console.log(click_item)
+                                                    $("input:radio[name='ul_png']").attr("checked", false)
+                                                    a_item.children[0].setAttribute("checked", "true")
+
+                                                    // $('#in_'+(i + 1).toString()).attr("checked", true)
+                                                    var child_len = $("input:radio[name='ul_png']").length
+                                                    for (j = 0; j < child_len; j++) {
+                                                        $('#a_' + (j + 1).toString()).attr("style", "color:balck")
+                                                    }
+                                                    $('#a_' + (j + 1).toString()).attr("style", "color:red")
+
+                                                })
+
+                                                $("#ul_self").append(a_item)
+
+
+
+
+                                            }
+
+                                        }
+                                    })
+
+                                    // var tool1_view = document.getElementById("tool1_view")
+                                    // var tool2_view = document.getElementById("tool2_view")
+                                    // var tool3_view = document.getElementById("tool3_view")
+                                    // var tool5_view = document.getElementById("tool5_view")
+                                    // var product_view = document.getElementById("product_view")
+                                    // product_view.style.display = "none"
+                                    // tool1_view.style.display = "none"
+                                    // tool2_view.style.display = "inline-block"
+                                    // tool3_view.style.display = "none"
+                                    // tool5_view.style.display = "none"
+                                    $('#tool1_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool2_view').attr("style", "display: inline-block;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool3_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#product_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool5_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+
+
+                                }
+                                function tool_1() {
+
+                                    // var tool1_view = document.getElementById("tool1_view")
+                                    // var tool2_view = document.getElementById("tool2_view")
+                                    // var tool3_view = document.getElementById("tool3_view")
+                                    // var tool5_view = document.getElementById("tool5_view")
+                                    // var product_view = document.getElementById("product_view")
+                                    // product_view.style.display = "none"
+                                    // tool1_view.style.display = "inline-block"
+                                    // // tool1_view.style.height = "100%"
+
+                                    // tool2_view.style.display = "none"
+                                    // tool3_view.style.display = "none"
+                                    // tool5_view.style.display = "none"
+                                    $('#tool1_view').attr("style", "display:inline-block;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool2_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool3_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#product_view').attr("style", "display:none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool5_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+
+
+                                }
+
+                                function tool_5() {
+                                    // 向服务器要数据并显示tool5
+                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                    $('#tool1_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool2_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool3_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#product_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    $('#tool5_view').attr("style", "display: inline-block;background-color:white; width: 100%; height: 100%;overflow:auto")
+                                    
+
+                                    $.ajax({
+                                        url: "upload_selfplot_data",  // 请求的地址
+                                        type: "get",  // 请求方式
+                                        data: {
+                                            "plot_self_data": JSON.stringify(data_canvas),
+                                            'csrfmiddlewaretoken': csrf
+                                        },
+                                        dataType: "json",
+                                        success: function (data) {
+                                            console.log("ajax请求成功返回的数据", data.img)
+                                            var plotImg = new Image();
+                                            plotImg.src = data.img
+                                            plotImg.style = "width:100%;height:100%"
+                                            $('#canvas_plot_div').html(" ")
+                                            $('#canvas_plot_div').html(plotImg)
+                                            // 添加表结构和数据
+                                            
+
+                                        }
+                                    })
+
+                                    // var tool1_view = document.getElementById("tool1_view")
+                                    // var tool2_view = document.getElementById("tool2_view")
+                                    // var tool3_view = document.getElementById("tool3_view")
+                                    // var tool5_view = document.getElementById("tool5_view")
+                                    // var product_view = document.getElementById("product_view")                            
+                                    // product_view.style.display = "none"
+                                    // tool1_view.style.display = "none"                                    
+                                    // tool2_view.style.display = "none"
+                                    // tool3_view.style.display = "none"
+                                    // tool5_view.style.display = "inline-block"
+
+                                    
+
+
+
+
+                                }
+                            </script>
 
                         </div>
                         <!-- 利用canvas绘图的模块 ---- 这里主要提供三种画图方式（散点、插值、等值线）-->
@@ -2648,7 +2858,7 @@
                                             &nbsp;&nbsp;&nbsp;数据源:<input id = "plot_1st_data" checked="checked" type="radio" name="select_color_and_data" style="width:2%">
                                             &nbsp;&nbsp;&nbsp;色标:<input id = "plot_1st_color"  type="radio" name="select_color_and_data" style="width:2%">
                                             
-                                            <input id ="plot_self_button" type="button" value="绘制"  style="width:10%;height: 100%;float:right">
+                                            <input type="button" value="绘制" onclick="tool_5()" style="width:10%;height: 100%;float:right">
                                             <input type="button" value="刷新" style="width:10%;height:100%;float:right">
 
                                         </div>
@@ -3150,7 +3360,7 @@
 
             <!-- 预览界面 -->
             <div
-                style="background-color:white; width: 50%; height: 100%;overflow: hidden;">
+                style="background-color:white; width: 50%; height: 100%;border: 3px solid rgb(58, 128, 0);overflow: hidden;">
                 <!-- 产品图片 -->
                 <div id="product_view"
                     style="background-color:white; width: 100%; height: 100%;border: 3px solid rgb(58, 128, 0);overflow:auto">
@@ -3296,47 +3506,1563 @@
 
 
                 </div>
-                <!-- 预览界面数据交互的核心代码 -->
-                <script type="text/javascript" src = 'static/js/save_and_vue.js'></script>
-                <script src='static/js/taizhou_village.js'> </script>
-                <script>
-                    // id为product_view的数据交互渲染函数
-                    function product_view_show(type) {
-                        if (type == "plot_self") {
-                            console.log("---------------绘图--------------------------")
-                            $('#product_view').html(" ")
-                            var self_plot_div = document.createElement('div')
-                            self_plot_div.style = "width:100%;height:70%;"
-                            self_plot_div.id = "self_plot_div"
-                            $('#product_view').append(self_plot_div)
+                <!-- <div style="display: block;width: 100%; height: 0%;border: 3px solid rgb(58, 128, 0)">
+                </div> -->
 
-                            var analyze_div = document.createElement('div')
-                            analyze_div.style = "display:inline-flex;width:100%;height:30%;overflow:auto"
-                            canvas_bar = document.createElement('div')
-                            canvas_bar.style = "width:60%;height:100%;overflow:auto"
-                            canvas_bar.id = "canvas_bar"
-                            analyze_div.append(canvas_bar)
-                            // 表格数据
-                            var table_div = document.createElement('div');
-                            table_div.style = "width:40%;height:100%;overflow:auto"
-                            var table = document.createElement('table');
-                            table.setAttribute("class", "table table-bordered")
 
-                            var caption = document.createElement('caption')
-                            caption.innerText = "乡镇排行"
-                            table_div.append(table)
-                            table.append(caption)
-                            table.innerHTML = "<thead><tr><th>排名</th><th>名称</th><th>降水</th></tr></thead><tbody>\
-                                                                                                                                <tr><td>1</td><td>坎门</td><td>30mm</td></tr>\
-                                                                                                                                <tr><td>2</td><td>淡竹</td><td>15mm</td></tr>\
-                                                                                                                                <tr><td>3</td><td>淡竹</td><td>15mm</td></tr>\
-                                                                                                                                <tr><td>3</td><td>淡竹</td><td>15mm</td></tr>\
-                                                                                                                                <tr><td>3</td><td>淡竹</td><td>15mm</td></tr>\
-                                                                                                                                <tr><td>3</td><td>淡竹</td><td>15mm</td></tr>\
-                                                                                                                                </tbody>"
+                <!-- 预览图片 -->
+                <!-- <img src="src/week.png" style="width:100%"></img>
+                <img src="src/week.png" style="width:100%"></img> -->
 
-                            analyze_div.append(table_div)
-                            $('#product_view').append(analyze_div)
+                <!-- 精细化站点预报服务 -->
+                <div id="tool1_view"
+                    style="display: inline-block;background-color:white; width: 100%; height: 100%;border: 3px solid rgb(58, 128, 0);overflow:auto">
+
+
+                    <div id="map_tool1"
+                        style=" display: inline-flex;width: 60%; height: 45%;border: 3px solid rgb(58, 128, 0)">
+
+                    </div>
+                    <!-- <script>
+                        $(function () {
+                            console.log("要实现小目标了-1！")
+                            var h = window.screen.height * 0.44*0.8
+                            var w = document.body.clientWidth * 0.58
+                            var map_tool1 = document.getElementById("map_tool1")
+                            console.log(h, w)
+                            map_tool1.style.width = w
+                            map_tool1.style.height = h
+                        });
+
+                    </script> -->
+                    <script src='static/js/taizhou_village.js'> </script>
+                    <script src='static/js/map_tool1.js'></script>
+                    <div style=" width: 40%; height: 45%;;float: right;">
+                        <div style=" width: 100%; height: 25%;;"></div>
+                        <div style=" display: inline-flex;width: 100%; height: 20%;;">
+                            &nbsp;&nbsp;&nbsp;<h4 id = "h4_village">乡镇名称:仙居</h4>
+                        </div>
+                        <div style=" display: inline-flex;width: 100%; height: 20%;;">
+                            &nbsp;&nbsp;&nbsp;<h4 id = "h4_lon">经度:27.5度</h4>&nbsp;&nbsp;&nbsp;&nbsp;<h4 id = "h4_lat">纬度:27.5度</h4>
+                        </div>
+                        <div style=" display: inline-block;width: 100%; height: 20%;;">
+                            <div style="width:10%;height:80%;float:right"></div>
+                            <input type="button" value="查询" style="width:25%;height:50%;float:right">&nbsp;&nbsp;&nbsp;
+                        </div>
+                        
+                    </div>
+                    <div style=" width: 100%; height: 62%;border: 3px solid rgb(8, 8, 8);float: right;">
+                        <div class="tabbable" id="tabs-439149" style="width: 100%;height: 100%;">
+                            <ul class="nav nav-tabs" style="width: 100%;height: 10%;">
+                                <li>
+                                    <a href="#panel-727742" data-toggle="tab">数据表格</a>
+                                </li>
+                                <li class="active">
+                                    <a href="#panel-578432" data-toggle="tab">时序图</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" style="width: 100%;height: 70%;">
+                                <div class="tab-pane " id="panel-727742" style="width: 100%;height: 100%;">
+                                    <h2>
+                                        仙居淡竹乡精细化预报:
+                                    </h2>
+                                    <table class="table table-bordered table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    时间
+                                                </th>
+                                                <th>
+                                                    20
+                                                </th>
+                                                <th>
+                                                    21
+                                                </th>
+                                                <th>
+                                                    22
+                                                </th>
+                                                <th>
+                                                    23
+                                                </th>
+                                                <th>
+                                                    00
+                                                </th>
+                                                <th>
+                                                    01
+                                                </th>
+                                                <th>
+                                                    02
+                                                </th>
+                                                <th>
+                                                    03
+                                                </th>
+                                                <th>
+                                                    04
+                                                </th>
+                                                <th>
+                                                    05
+                                                </th>
+                                                <th>
+                                                    06
+                                                </th>
+                                                <th>
+                                                    07
+                                                </th>
+                                                <th>
+                                                    08
+                                                </th>
+                                                <th>
+                                                    09
+                                                </th>
+                                                <th>
+                                                    10
+                                                </th>
+                                                <th>
+                                                    11
+                                                </th>
+                                                <th>
+                                                    12
+                                                </th>
+                                                <th>
+                                                    13
+                                                </th>
+                                                <th>
+                                                    14
+                                                </th>
+                                                <th>
+                                                    15
+                                                </th>
+                                                <th>
+                                                    16
+                                                </th>
+                                                <th>
+                                                    17
+                                                </th>
+                                                <th>
+                                                    18
+                                                </th>
+                                                <th>
+                                                    19
+                                                </th>
+                                                <th>
+                                                    20
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th>
+                                                    要素0
+                                                </th>
+                                                <th>
+                                                    20
+                                                </th>
+                                                <th>
+                                                    21
+                                                </th>
+                                                <th>
+                                                    22
+                                                </th>
+                                                <th>
+                                                    23
+                                                </th>
+                                                <th>
+                                                    00
+                                                </th>
+                                                <th>
+                                                    01
+                                                </th>
+                                                <th>
+                                                    02
+                                                </th>
+                                                <th>
+                                                    03
+                                                </th>
+                                                <th>
+                                                    04
+                                                </th>
+                                                <th>
+                                                    05
+                                                </th>
+                                                <th>
+                                                    06
+                                                </th>
+                                                <th>
+                                                    07
+                                                </th>
+                                                <th>
+                                                    08
+                                                </th>
+                                                <th>
+                                                    09
+                                                </th>
+                                                <th>
+                                                    10
+                                                </th>
+                                                <th>
+                                                    11
+                                                </th>
+                                                <th>
+                                                    12
+                                                </th>
+                                                <th>
+                                                    13
+                                                </th>
+                                                <th>
+                                                    14
+                                                </th>
+                                                <th>
+                                                    15
+                                                </th>
+                                                <th>
+                                                    16
+                                                </th>
+                                                <th>
+                                                    17
+                                                </th>
+                                                <th>
+                                                    18
+                                                </th>
+                                                <th>
+                                                    19
+                                                </th>
+                                                <th>
+                                                    20
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    要素1
+                                                </th>
+                                                <th>
+                                                    20
+                                                </th>
+                                                <th>
+                                                    21
+                                                </th>
+                                                <th>
+                                                    22
+                                                </th>
+                                                <th>
+                                                    23
+                                                </th>
+                                                <th>
+                                                    00
+                                                </th>
+                                                <th>
+                                                    01
+                                                </th>
+                                                <th>
+                                                    02
+                                                </th>
+                                                <th>
+                                                    03
+                                                </th>
+                                                <th>
+                                                    04
+                                                </th>
+                                                <th>
+                                                    05
+                                                </th>
+                                                <th>
+                                                    06
+                                                </th>
+                                                <th>
+                                                    07
+                                                </th>
+                                                <th>
+                                                    08
+                                                </th>
+                                                <th>
+                                                    09
+                                                </th>
+                                                <th>
+                                                    10
+                                                </th>
+                                                <th>
+                                                    11
+                                                </th>
+                                                <th>
+                                                    12
+                                                </th>
+                                                <th>
+                                                    13
+                                                </th>
+                                                <th>
+                                                    14
+                                                </th>
+                                                <th>
+                                                    15
+                                                </th>
+                                                <th>
+                                                    16
+                                                </th>
+                                                <th>
+                                                    17
+                                                </th>
+                                                <th>
+                                                    18
+                                                </th>
+                                                <th>
+                                                    19
+                                                </th>
+                                                <th>
+                                                    20
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    高温
+                                                </th>
+                                                <th>
+                                                    20
+                                                </th>
+                                                <th>
+                                                    21
+                                                </th>
+                                                <th>
+                                                    22
+                                                </th>
+                                                <th>
+                                                    23
+                                                </th>
+                                                <th>
+                                                    00
+                                                </th>
+                                                <th>
+                                                    01
+                                                </th>
+                                                <th>
+                                                    02
+                                                </th>
+                                                <th>
+                                                    03
+                                                </th>
+                                                <th>
+                                                    04
+                                                </th>
+                                                <th>
+                                                    05
+                                                </th>
+                                                <th>
+                                                    06
+                                                </th>
+                                                <th>
+                                                    07
+                                                </th>
+                                                <th>
+                                                    08
+                                                </th>
+                                                <th>
+                                                    09
+                                                </th>
+                                                <th>
+                                                    10
+                                                </th>
+                                                <th>
+                                                    11
+                                                </th>
+                                                <th>
+                                                    12
+                                                </th>
+                                                <th>
+                                                    13
+                                                </th>
+                                                <th>
+                                                    14
+                                                </th>
+                                                <th>
+                                                    15
+                                                </th>
+                                                <th>
+                                                    16
+                                                </th>
+                                                <th>
+                                                    17
+                                                </th>
+                                                <th>
+                                                    18
+                                                </th>
+                                                <th>
+                                                    19
+                                                </th>
+                                                <th>
+                                                    20
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    低温
+                                                </th>
+                                                <th>
+                                                    20
+                                                </th>
+                                                <th>
+                                                    21
+                                                </th>
+                                                <th>
+                                                    22
+                                                </th>
+                                                <th>
+                                                    23
+                                                </th>
+                                                <th>
+                                                    00
+                                                </th>
+                                                <th>
+                                                    01
+                                                </th>
+                                                <th>
+                                                    02
+                                                </th>
+                                                <th>
+                                                    03
+                                                </th>
+                                                <th>
+                                                    04
+                                                </th>
+                                                <th>
+                                                    05
+                                                </th>
+                                                <th>
+                                                    06
+                                                </th>
+                                                <th>
+                                                    07
+                                                </th>
+                                                <th>
+                                                    08
+                                                </th>
+                                                <th>
+                                                    09
+                                                </th>
+                                                <th>
+                                                    10
+                                                </th>
+                                                <th>
+                                                    11
+                                                </th>
+                                                <th>
+                                                    12
+                                                </th>
+                                                <th>
+                                                    13
+                                                </th>
+                                                <th>
+                                                    14
+                                                </th>
+                                                <th>
+                                                    15
+                                                </th>
+                                                <th>
+                                                    16
+                                                </th>
+                                                <th>
+                                                    17
+                                                </th>
+                                                <th>
+                                                    18
+                                                </th>
+                                                <th>
+                                                    19
+                                                </th>
+                                                <th>
+                                                    20
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    湿度
+                                                </th>
+                                                <th>
+                                                    20
+                                                </th>
+                                                <th>
+                                                    21
+                                                </th>
+                                                <th>
+                                                    22
+                                                </th>
+                                                <th>
+                                                    23
+                                                </th>
+                                                <th>
+                                                    00
+                                                </th>
+                                                <th>
+                                                    01
+                                                </th>
+                                                <th>
+                                                    02
+                                                </th>
+                                                <th>
+                                                    03
+                                                </th>
+                                                <th>
+                                                    04
+                                                </th>
+                                                <th>
+                                                    05
+                                                </th>
+                                                <th>
+                                                    06
+                                                </th>
+                                                <th>
+                                                    07
+                                                </th>
+                                                <th>
+                                                    08
+                                                </th>
+                                                <th>
+                                                    09
+                                                </th>
+                                                <th>
+                                                    10
+                                                </th>
+                                                <th>
+                                                    11
+                                                </th>
+                                                <th>
+                                                    12
+                                                </th>
+                                                <th>
+                                                    13
+                                                </th>
+                                                <th>
+                                                    14
+                                                </th>
+                                                <th>
+                                                    15
+                                                </th>
+                                                <th>
+                                                    16
+                                                </th>
+                                                <th>
+                                                    17
+                                                </th>
+                                                <th>
+                                                    18
+                                                </th>
+                                                <th>
+                                                    19
+                                                </th>
+                                                <th>
+                                                    20
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    风向
+                                                </th>
+                                                <th>
+                                                    20
+                                                </th>
+                                                <th>
+                                                    21
+                                                </th>
+                                                <th>
+                                                    22
+                                                </th>
+                                                <th>
+                                                    23
+                                                </th>
+                                                <th>
+                                                    00
+                                                </th>
+                                                <th>
+                                                    01
+                                                </th>
+                                                <th>
+                                                    02
+                                                </th>
+                                                <th>
+                                                    03
+                                                </th>
+                                                <th>
+                                                    04
+                                                </th>
+                                                <th>
+                                                    05
+                                                </th>
+                                                <th>
+                                                    06
+                                                </th>
+                                                <th>
+                                                    07
+                                                </th>
+                                                <th>
+                                                    08
+                                                </th>
+                                                <th>
+                                                    09
+                                                </th>
+                                                <th>
+                                                    10
+                                                </th>
+                                                <th>
+                                                    11
+                                                </th>
+                                                <th>
+                                                    12
+                                                </th>
+                                                <th>
+                                                    13
+                                                </th>
+                                                <th>
+                                                    14
+                                                </th>
+                                                <th>
+                                                    15
+                                                </th>
+                                                <th>
+                                                    16
+                                                </th>
+                                                <th>
+                                                    17
+                                                </th>
+                                                <th>
+                                                    18
+                                                </th>
+                                                <th>
+                                                    19
+                                                </th>
+                                                <th>
+                                                    20
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    风速
+                                                </th>
+                                                <th>
+                                                    20
+                                                </th>
+                                                <th>
+                                                    21
+                                                </th>
+                                                <th>
+                                                    22
+                                                </th>
+                                                <th>
+                                                    23
+                                                </th>
+                                                <th>
+                                                    00
+                                                </th>
+                                                <th>
+                                                    01
+                                                </th>
+                                                <th>
+                                                    02
+                                                </th>
+                                                <th>
+                                                    03
+                                                </th>
+                                                <th>
+                                                    04
+                                                </th>
+                                                <th>
+                                                    05
+                                                </th>
+                                                <th>
+                                                    06
+                                                </th>
+                                                <th>
+                                                    07
+                                                </th>
+                                                <th>
+                                                    08
+                                                </th>
+                                                <th>
+                                                    09
+                                                </th>
+                                                <th>
+                                                    10
+                                                </th>
+                                                <th>
+                                                    11
+                                                </th>
+                                                <th>
+                                                    12
+                                                </th>
+                                                <th>
+                                                    13
+                                                </th>
+                                                <th>
+                                                    14
+                                                </th>
+                                                <th>
+                                                    15
+                                                </th>
+                                                <th>
+                                                    16
+                                                </th>
+                                                <th>
+                                                    17
+                                                </th>
+                                                <th>
+                                                    18
+                                                </th>
+                                                <th>
+                                                    19
+                                                </th>
+                                                <th>
+                                                    20
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    能见度
+                                                </th>
+                                                <th>
+                                                    20
+                                                </th>
+                                                <th>
+                                                    21
+                                                </th>
+                                                <th>
+                                                    22
+                                                </th>
+                                                <th>
+                                                    23
+                                                </th>
+                                                <th>
+                                                    00
+                                                </th>
+                                                <th>
+                                                    01
+                                                </th>
+                                                <th>
+                                                    02
+                                                </th>
+                                                <th>
+                                                    03
+                                                </th>
+                                                <th>
+                                                    04
+                                                </th>
+                                                <th>
+                                                    05
+                                                </th>
+                                                <th>
+                                                    06
+                                                </th>
+                                                <th>
+                                                    07
+                                                </th>
+                                                <th>
+                                                    08
+                                                </th>
+                                                <th>
+                                                    09
+                                                </th>
+                                                <th>
+                                                    10
+                                                </th>
+                                                <th>
+                                                    11
+                                                </th>
+                                                <th>
+                                                    12
+                                                </th>
+                                                <th>
+                                                    13
+                                                </th>
+                                                <th>
+                                                    14
+                                                </th>
+                                                <th>
+                                                    15
+                                                </th>
+                                                <th>
+                                                    16
+                                                </th>
+                                                <th>
+                                                    17
+                                                </th>
+                                                <th>
+                                                    18
+                                                </th>
+                                                <th>
+                                                    19
+                                                </th>
+                                                <th>
+                                                    20
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    云量
+                                                </th>
+                                                <th>
+                                                    20
+                                                </th>
+                                                <th>
+                                                    21
+                                                </th>
+                                                <th>
+                                                    22
+                                                </th>
+                                                <th>
+                                                    23
+                                                </th>
+                                                <th>
+                                                    00
+                                                </th>
+                                                <th>
+                                                    01
+                                                </th>
+                                                <th>
+                                                    02
+                                                </th>
+                                                <th>
+                                                    03
+                                                </th>
+                                                <th>
+                                                    04
+                                                </th>
+                                                <th>
+                                                    05
+                                                </th>
+                                                <th>
+                                                    06
+                                                </th>
+                                                <th>
+                                                    07
+                                                </th>
+                                                <th>
+                                                    08
+                                                </th>
+                                                <th>
+                                                    09
+                                                </th>
+                                                <th>
+                                                    10
+                                                </th>
+                                                <th>
+                                                    11
+                                                </th>
+                                                <th>
+                                                    12
+                                                </th>
+                                                <th>
+                                                    13
+                                                </th>
+                                                <th>
+                                                    14
+                                                </th>
+                                                <th>
+                                                    15
+                                                </th>
+                                                <th>
+                                                    16
+                                                </th>
+                                                <th>
+                                                    17
+                                                </th>
+                                                <th>
+                                                    18
+                                                </th>
+                                                <th>
+                                                    19
+                                                </th>
+                                                <th>
+                                                    20
+                                                </th>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane active" id="panel-578432" style="width: 100%;height: 70%;">
+                                    <h3 style="width: 100%;height:5%; ">
+                                        仙居淡竹乡精细化时序图：
+                                    </h3>
+                                    <div id="multiple-y-axis" style="width: 900px;height:400px;">
+
+                                    </div>
+                                    <script type="text/javascript"
+                                        src="https://cdn.jsdelivr.net/npm/echarts@5.3.1/dist/echarts.min.js"></script>
+                                    <script type="text/javascript">
+                                        var dom_ecdata = document.getElementById("multiple-y-axis");                                      
+                                        var myChart_ecdata = echarts.init(dom_ecdata);
+                                        var app = {};
+                                        var option;
+                                        const colors = ['#5470C6', '#91CC75', '#EE6666', '#1E0026'];
+                                        option = {
+                                            color: colors,
+                                            tooltip: {
+                                                trigger: 'axis',
+                                                axisPointer: {
+                                                    type: 'cross'
+                                                }
+                                            },
+                                            grid: {
+                                                left: 60,
+                                                right: 50,
+                                                height: '65%'
+                                            },
+                                            toolbox: {
+                                                feature: {
+                                                    dataView: { show: true, readOnly: false },
+                                                    restore: { show: true },
+                                                    saveAsImage: { show: true }
+                                                }
+                                            },
+                                            legend: {
+                                                data: ['1小时降水', '2米相对湿度', '2米温度', '能见度']
+                                            },
+                                            xAxis: [
+                                                {
+                                                    type: 'category',
+                                                    axisTick: {
+                                                        alignWithLabel: true
+                                                    },
+                                                    // prettier-ignore
+                                                    data: ['23:00', '01:00', '03:00', '05:00', '07:00', '09:00',
+                                                        '11:00', '13:00', '15:00', '17:00', '19:00', '21:00']
+                                                }
+                                            ],
+                                            yAxis: [
+                                                {
+                                                    type: 'value',
+                                                    name: '1小时降水',
+                                                    position: 'right',
+                                                    alignTicks: false,
+                                                    axisLabel: {
+                                                        formatter: '{value} ml'
+                                                    },
+                                                    min: 0,
+                                                    max: 3,
+                                                    show: false
+                                                },
+                                                {
+                                                    type: 'value',
+                                                    name: '相对湿度',
+                                                    position: 'right',
+                                                    alignTicks: false,
+                                                    splitLine: {
+                                                        show: false
+                                                    },
+                                                    axisLine: {
+                                                        show: true,
+                                                        lineStyle: {
+                                                            color: '#333333'
+                                                        }
+                                                    },
+                                                    axisLabel: {
+                                                        formatter: '{value} %'
+                                                    },
+                                                    min: 0,
+                                                    max: 100
+                                                },
+                                                {
+                                                    type: 'value',
+                                                    name: '温度',
+                                                    position: 'left',
+                                                    alignTicks: false,
+                                                    splitLine: {
+                                                        lineStyle: {
+                                                            color: '#333333'
+                                                        }
+                                                    },
+                                                    axisLine: {
+                                                        show: true,
+                                                        lineStyle: {
+                                                            color: '#333333'
+                                                        }
+                                                    },
+                                                    axisLabel: {
+                                                        formatter: '{value} °C'
+                                                    },
+                                                    min: 0,
+                                                    max: 18,
+                                                    splitNumber: 6
+                                                },
+                                                {
+                                                    type: 'value',
+                                                    name: '能见度',
+                                                    position: 'right',
+                                                    alignTicks: false,
+                                                    // offset: 80,
+                                                    axisLine: {
+                                                        show: true,
+                                                        lineStyle: {
+                                                            color: colors[3]
+                                                        }
+                                                    },
+                                                    axisLabel: {
+                                                        formatter: '{value}'
+                                                    },
+                                                    min: 0,
+                                                    max: 100,
+                                                    show: false
+                                                }
+                                            ],
+                                            series: [
+                                                {
+                                                    name: '1小时降水',
+                                                    type: 'bar',
+                                                    data: [0.3, 2, 0.8, 1.2, 0.7, 0.1, 0, 0, 0.2, 0.7, 0.4, 0.1],
+                                                    label: {
+                                                        show: true,
+                                                        position: 'top'
+                                                    }
+                                                },
+                                                {
+                                                    name: '2米相对湿度',
+                                                    type: 'line',
+                                                    yAxisIndex: 1,
+                                                    data: [95, 93, 90, 89, 88, 88, 86.9, 86, 85, 84, 83, 82]
+                                                },
+                                                {
+                                                    name: '2米温度',
+                                                    type: 'line',
+                                                    yAxisIndex: 2,
+                                                    data: [18, 15, 16, 17, 15, 18, 17, 17, 16, 16.5, 15, 14]
+                                                },
+                                                {
+                                                    name: '风向',
+                                                    type: 'scatter',
+                                                    yAxisIndex: 3,
+                                                    symbol: 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
+                                                    symbolSize: 15,
+                                                    symbolRotate: 330,
+                                                    data: [30, 70, 80, 80, 50, 20, 20, 20, 50, 80, 60, 50]
+                                                    // markLine: {
+                                                    //     data: [{ type: 'average', name: 'Avg' }]
+                                                    // }
+                                                }
+                                            ]
+                                        };
+
+
+                                        if (option && typeof option === 'object') {
+                                            myChart_ecdata.setOption(option);
+                                        }
+
+                                    </script>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+
+                </div>
+                <!-- 图表模式 -->
+                <div id="tool2_view"
+                    style="display: none;background-color:white; width: 100%; height: 100%;border: 3px solid rgb(58, 128, 0);overflow:auto">
+                    <div style="border: 3px solid black ;width: 100%;height: 10%;">
+                        <h1>市台订正：</h1>
+                    </div>
+                    <div style="display: inline-flex;border: 3px solid black ;width: 100%;height: 80%;">
+                        <div id = "self_png_show" style=" border: 3px solid black ;width: 80%;height: 100%;overflow:auto ;">
+                            <img src="static/src/降水.png" style="width:98%;height:100% ;">
+
+                        </div>
+                        <!-- <img src="src/降水.png" style="display: inline-block;width:80%;height:99%"> -->
+                        <div style="border: 3px solid black ;width: 18%;height: 100%;overflow: auto;">
+
+                            <ul id= "ul_self" class="list-group" style="width: 100%;height: 100%">
+                                <!-- <li class="list-group-item">2022年8月3日20时</li>
+                                <li class="list-group-item">2022年8月3日20时</li>
+                                <li class="list-group-item">2022年8月3日20时</li>
+                                <li class="list-group-item">2022年8月3日20时</li>
+                                <li class="list-group-item">2022年8月3日20时</li>
+                                <li class="list-group-item">2022年8月3日20时</li> -->
+                                
+                            </ul>
+
+
+                        </div>
+
+                    </div>
+                    <div
+                        style="border: 3px solid black ;width: 100%;height: 10%;;text-align:center;vertical-align: middle;align-items: center;">
+                        <input id = "go_on"  type="button"  value = "前进："
+                            style="width: 10%;height: 50%;text-align:center;vertical-align: middle;align-items: center;">
+                        <input id = "go_back" type="button"  value = "后退："
+                            style="width: 10%;height: 50%;text-align:center;vertical-align: middle;align-items: center;">
+                        <input type="button" name="tool_2_last" value = "导出为gif"
+                            style="width: 10%;height: 50%;text-align:center;vertical-align: middle;align-items: center;">
+
+                    </div>
+                    <script>
+                        $('#go_on').click(function(){                            
+                            var select_length = $("input:radio[name='ul_png']").length
+                            var select_item = $("input:radio[name='ul_png']:checked")
+                            var select_data = $("input:radio[name='ul_png']:checked").attr("id").toString()
+                            var select_id = parseInt(select_data[3]) +1 
+                            var select_show_id = "#self_" + select_id.toString()
+                            // console.log($('input:radio[name="ul_png"]:checked').attr("id")) 
+                            console.log(select_length)
+                            if (select_id<=select_length){
+                                // $("#self_png_show").animate({scrollTop:$(select_show_id).offset().top},100);
+                                $("#a_" + select_id.toString())[0].click()
+                                
+                                var next_id = "#in_" + select_id.toString()
+                                $("input:radio[name='ul_png']:checked").attr("checked",false)
+                                $(next_id).attr("checked",true)
+                            }
+                            else{
+                                alert("到头了")
+                            }    
+                        })
+                        $('#go_back').click(function(){  
+                            // console.log("??")
+                            var select_length = $("input:radio[name='ul_png']").length
+                            var select_item = $("input:radio[name='ul_png']:checked")
+                            var select_data = $("input:radio[name='ul_png']:checked").attr("id").toString()
+                            var select_id = parseInt(select_data[3]) -1 
+                            var select_show_id = "#self_" + select_id.toString()
+                            
+                            if (select_id>=1){
+                                // $("#self_png_show").animate({scrollTop:$(select_show_id).offset().top},100);
+                                $("#a_" + select_id.toString())[0].click()
+                                
+                                var next_id = "#in_" + select_id.toString()
+                                $("input:radio[name='ul_png']:checked").attr("checked",false)
+                                $(next_id).attr("checked",true)
+                            }
+                            else{
+                                alert("到头了")
+                            }
+
+                        })
+                    </script>
+
+                </div>
+                <!-- 历史数据模式 -->
+                <div id="tool3_view"
+                    style="display:none;background-color:white; width: 100%; height: 100%;border: 3px solid rgb(58, 128, 0);overflow:auto">
+                    <div id="calendar_history" style="display:inline-flex;width: 100%; height: 30%;border: 3px solid rgb(58, 128, 0);">
+
+
+                    </div>
+                    <script type="text/javascript">
+                        var dom = document.getElementById("calendar_history");
+                        var myChart = echarts.init(dom);
+                        // myChart.resize()
+                        
+                        var app = {};
+
+                        var option;
+
+
+
+                        const dateList = [
+
+                            ['2022-4-14', '十七', '强降水'],
+                            ['2022-4-15', '十八'],
+                            ['2022-4-16', '十九'],
+                            ['2022-4-17', '二十'],
+                            ['2022-4-18', '廿一', '浓雾-小雨'],
+                            ['2022-4-19', '廿二', '大风'],
+                            ['2022-4-20', '廿三', '小雨'],
+                            ['2022-4-21', '廿四'],
+                            ['2022-4-22', '廿五'],
+                            ['2022-4-23', '廿六'],
+                            ['2022-4-24', '廿七'],
+                            ['2022-4-25', '廿八', '强降水']
+
+
+                        ];
+                        let heatmapData = [];
+                        let lunarData = [];
+                        for (let i = 0; i < dateList.length; i++) {
+                            heatmapData.push([dateList[i][0], Math.random() * 300]);
+                            lunarData.push([dateList[i][0], 1, dateList[i][1], dateList[i][2]]);
+                        }
+                        option = {
+                            title: {
+                                text: '历史天况统计',
+                                textStyle: { fontSize: 30 },
+                            },
+                            tooltip: {
+                                formatter: function (params) {
+                                    return '降雨量: ' + params.value[1].toFixed(2);
+                                }
+                            },
+                            visualMap: {
+                                show: false,
+                                min: 0,
+                                max: 300,
+                                calculable: true,
+                                seriesIndex: [2],
+                                orient: 'horizontal',
+                                left: 'center',
+                                bottom: 20,
+                                inRange: {
+                                    color: ['#e0ffff', '#006edd'],
+                                    opacity: 0.3
+                                },
+                                controller: {
+                                    inRange: {
+                                        opacity: 0.5
+                                    }
+                                }
+                            },
+                            calendar: [
+                                {
+                                    left: 'center',
+                                    top: 'middle',
+                                    cellSize: [60, 60],
+                                    yearLabel: { show: false },
+                                    orient: 'vertical',
+                                    dayLabel: {
+                                        firstDay: 1,
+                                        nameMap: 'cn'
+                                    },
+                                    monthLabel: {
+                                        show: false
+                                    },
+                                    range: ['2022-04-14', '2022-04-25']
+                                }
+                            ],
+                            series: [
+                                {
+                                    type: 'scatter',
+                                    coordinateSystem: 'calendar',
+                                    symbolSize: 1,
+                                    label: {
+                                        show: true,
+                                        formatter: function (params) {
+                                            var d = echarts.number.parseDate(params.value[0]);
+                                            return d.getDate() + '\n\n' + params.value[2] + '\n\n';
+                                        },
+                                        color: '#000'
+                                    },
+                                    data: lunarData
+                                },
+                                {
+                                    type: 'scatter',
+                                    coordinateSystem: 'calendar',
+                                    symbolSize: 1,
+                                    label: {
+                                        show: true,
+                                        formatter: function (params) {
+                                            return '\n\n\n' + (params.value[3] || '');
+                                        },
+                                        fontSize: 14,
+                                        fontWeight: 700,
+                                        color: '#a00'
+                                    },
+                                    data: lunarData
+                                },
+                                {
+                                    name: '降雨量',
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: heatmapData
+                                }
+                            ]
+                        };
+
+                        if (option && typeof option === 'object') {
+                            myChart.setOption(option);
+                        }
+                        myChart.on('click', function (params) {
+                            let componentType = params.componentType;   // geo是地图图层                      
+                           
+                            console.log("数据",params.value) 
+                            // $('#panel-725171').attr("calss", "tab-pane active")
+                            // $('#panel-883512').attr("calss", "tab-pane")
+                            // $('#panel-725174').attr("calss", "tab-pane")
+                            // $('#panel-725173').attr("calss", "tab-pane")
+                            var show_data =params.value[1]
+                            $('#show_panel-725173').html(" ")
+                            $('#show_panel-725173').html(show_data)
+                            
+                            $('#a_panel-725171').click()
+                        });
+                        
+
+                    </script>
+                    <div class="tabbable" id="tabs-492675"
+                        style="width: 100%; height: 50%;border: 3px solid rgb(58, 128, 0);">
+                        <ul class="nav nav-tabs" style="width: 100%; height: 12%;border: 3px solid rgb(58, 128, 0);">
+                            <li class="active">
+                                <a href="#panel-883512" data-toggle="tab">降水</a>
+                            </li>
+                            <li>
+                                <a href="#panel-725174" data-toggle="tab">大风</a>
+                            </li>
+                            <li>
+                                <a href="#panel-725173" data-toggle="tab">能见度</a>
+                            </li>
+                            <li>
+                                <a id ="a_panel-725171" href="#panel-725171" data-toggle="tab">日报</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content"
+                            style="display: inline-block;width: 100%; height: 88%;border: 3px solid rgb(58, 128, 0);">
+                            <!-- 历史降水 -->
+                            <div class="tab-pane active" id="panel-883512"
+                                style="width: 100%; height: 100%;border: 3px solid rgb(58, 128, 0);">
+
+                                <div id="map_bar" style="width: 100%; height: 100%;border: 3px solid rgb(58, 128, 0);">
+
+
+                                </div>
+                                <script src='static/js/map_bar.js'></script>
+
+
+                            </div>
+                            <!-- 其他特征 -->
+                            <div class="tab-pane" id="panel-725174"
+                                style="width: 100%; height: 100%;border: 3px solid rgb(58, 128, 0);">
+                                <div style="display: inline-flex;width: 100%; height: 100%;">
+                                    <div id="map_wind"
+                                        style="display: inline-block;width: 580px; height: 370px;border: 3px solid rgb(58, 128, 0);">
+
+                                    </div>
+                                    <script src='static/js/map_wind.js'></script>
+                                    <div
+                                        style="width: 350px; height:380px;border: 3px solid rgb(128, 73, 0);overflow: auto;">
+                                        <table class="table table-hover table-bordered table-condensed">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        排序
+                                                    </th>
+                                                    <th>
+                                                        乡镇
+                                                    </th>
+                                                    <th>
+                                                        站点
+                                                    </th>
+                                                    <th>
+                                                        风力
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        1
+                                                    </td>
+                                                    <td>
+                                                        TB - Monthly
+                                                    </td>
+                                                    <td>
+                                                        01/04/2012
+                                                    </td>
+                                                    <td>
+                                                        Default
+                                                    </td>
+                                                </tr>
+                                                <tr class="success">
+                                                    <td>
+                                                        1
+                                                    </td>
+                                                    <td>
+                                                        TB - Monthly
+                                                    </td>
+                                                    <td>
+                                                        01/04/2012
+                                                    </td>
+                                                    <td>
+                                                        Approved
+                                                    </td>
+                                                </tr>
+                                                <tr class="error">
+                                                    <td>
+                                                        2
+                                                    </td>
+                                                    <td>
+                                                        TB - Monthly
+                                                    </td>
+                                                    <td>
+                                                        02/04/2012
+                                                    </td>
+                                                    <td>
+                                                        Declined
+                                                    </td>
+                                                </tr>
+                                                <tr class="warning">
+                                                    <td>
+                                                        3
+                                                    </td>
+                                                    <td>
+                                                        TB - Monthly
+                                                    </td>
+                                                    <td>
+                                                        03/04/2012
+                                                    </td>
+                                                    <td>
+                                                        Pending
+                                                    </td>
+                                                </tr>
+                                                <tr class="info">
+                                                    <td>
+                                                        4
+                                                    </td>
+                                                    <td>
+                                                        TB - Monthly
+                                                    </td>
+                                                    <td>
+                                                        04/04/2012
+                                                    </td>
+                                                    <td>
+                                                        Call confirm
+                                                    </td>
+                                                </tr>
+                                                <tr class="info">
+                                                    <td>
+                                                        4
+                                                    </td>
+                                                    <td>
+                                                        TB - Monthly
+                                                    </td>
+                                                    <td>
+                                                        04/04/2012
+                                                    </td>
+                                                    <td>
+                                                        Call in
+                                                    </td>
+                                                </tr>
+                                                <tr class="info">
+                                                    <td>
+                                                        4
+                                                    </td>
+                                                    <td>
+                                                        TB - Monthly
+                                                    </td>
+                                                    <td>
+                                                        04/04/2012
+                                                    </td>
+                                                    <td>
+                                                        Call in to
+                                                    </td>
+                                                </tr>
+                                                <tr class="info">
+                                                    <td>
+                                                        4
+                                                    </td>
+                                                    <td>
+                                                        TB - Monthly
+                                                    </td>
+                                                    <td>
+                                                        04/04/2012
+                                                    </td>
+                                                    <td>
+                                                        Call in to
+                                                    </td>
+                                                </tr>
+                                                <tr class="info">
+                                                    <td>
+                                                        4
+                                                    </td>
+                                                    <td>
+                                                        TB - Monthly
+                                                    </td>
+                                                    <td>
+                                                        04/04/2012
+                                                    </td>
+                                                    <td>
+                                                        Call in
+                                                    </td>
+                                                </tr>
+                                                <tr class="info">
+                                                    <td>
+                                                        4
+                                                    </td>
+                                                    <td>
+                                                        TB - Monthly
+                                                    </td>
+                                                    <td>
+                                                        04/04/2012
+                                                    </td>
+                                                    <td>
+                                                        Call in
+                                                    </td>
+                                                </tr>
+                                                <tr class="info">
+                                                    <td>
+                                                        4
+                                                    </td>
+                                                    <td>
+                                                        TB - Monthly
+                                                    </td>
+                                                    <td>
+                                                        04/04/2012
+                                                    </td>
+                                                    <td>
+                                                        Call in
+                                                    </td>
+                                                </tr>
+                                                <tr class="info">
+                                                    <td>
+                                                        4
+                                                    </td>
+                                                    <td>
+                                                        TB -
+                                                    </td>
+                                                    <td>
+                                                        04/04/2012
+                                                    </td>
+                                                    <td>
+                                                        Call in
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="panel-725171"
+                                style="width: 100%; height: 100%;border: 3px solid rgb(58, 128, 0);">
+                                <div id = "show_panel-725173" style="display: inline-flex;width: 100%; height: 100%;">
+                                    这里是点击按钮的响应  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-- 历史数据统计 -->
+                    <div style="width: 100%; height: 20%;border: 3px solid rgb(58, 128, 0);">
+                        <blockquote>
+                            <p>
+                                风雨情统计
+                            </p> <small>昨天08时到今天，全是降水80毫米，本次较强降雨过程已结束，截止26日08时，全市出现大雨，部分地区暴雨，累计面雨量46.2毫米，各县（市、区）如下：玉环55.6毫米、三门53.8毫米、天台51.1毫米、临海49.5毫米、椒江45.8毫米、黄岩44.0毫米、温岭43.0毫米、路桥36.7毫米、仙居34.5毫米；共有58个乡镇面雨量超50毫米，单站最大天台石梁镇龙皇堂91.5毫米；沿海海面和海拔较高山区出现最大10级偏南大风，风力较大的有临海田岙岛27.9m／s（10级）、椒江上大陈26.9m／s（10级）、临海括苍山25.6m／s（10级）。预计今天阴天，傍晚到夜里部分地区有阵雨，沿海海面北到东北风6－7级阵风8级，夜里减弱到5－6级阵风7级。
+                                <cite>面雨量最大的城市主要集中在台州的中北部</cite></small>
+                        </blockquote>
+
+                    </div>
+
+                </div>
+                <!-- web -->
+                <!-- <div id = "tool4_view"
+                    style="background-color:white; width: 100%; height: 100%;border: 3px solid rgb(58, 128, 0);overflow:auto">
+                    <iframe id="mainIframe" name="mainIframe" src="http://www.baidu.com" frameborder="0" scrolling="auto" ></iframe>
+
+                </div> -->
+                <!-- canvas_view -->
+                <div id="tool5_view"
+                    style="display: inline-block;background-color:white; width: 100%; height: 100%;border: 3px solid rgb(58, 128, 0);overflow:auto">
+                    <!-- 这里是canvas的结果 -->
+                    <div id = "canvas_plot_div" style="width:100%;height:70%;">
+                        
+                        
+                    </div>
+                    
+                    <div
+                        style="display: inline-flex;width:100%;height:30%;border: 3px solid rgb(58, 128, 0);overflow:auto">
+                        <div id="canvas_bar"
+                            style="width:60%;height:100%;border: 3px solid rgb(58, 128, 0);overflow:auto">
+
+                        </div>
+                        <script>
                             var chartDom = document.getElementById('canvas_bar');
                             var myChart_bar = echarts.init(chartDom);
                             var option;
@@ -3371,1423 +5097,54 @@
                             };
 
                             option && myChart_bar.setOption(option);
-                            // 添加表格数据
-                            var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                            $.ajax({
-                                url: "upload_selfplot_data",  // 请求的地址
-                                type: "get",  // 请求方式
-                                data: {
-                                    "plot_self_data": JSON.stringify(data_canvas),
-                                    'csrfmiddlewaretoken': csrf
-                                },
-                                dataType: "json",
-                                success: function (data) {
-                                    // 得到请求的数据
-                                    var plotImg = new Image();
-                                    plotImg.src = data.img
-                                    plotImg.style = "width:100%;height:100%"
-                                    // js构建前端模板
-                                    var self_plot_div = document.getElementById('self_plot_div')
-                                    self_plot_div.append(plotImg)
 
-                                }
-
-
-                            })
-
-
-
-                        }
-                        else if (type == "product_show") {
-                            console.log("-------------------------------自定义材料加载----------------------")
-                            $('#product_view').html(" ")
-                            var list_data_all = [
-                                {  //# 文件头
-                                    "type": "一周天气预测",
-                                    "company": "台州市气象台",
-                                    "writer": "翁之梅",
-                                    "putter": "高丽",
-                                    "index": 15,
-                                    "time": 'Wed Mar 01 2022 19:18:00 GMT+0800 (中国标准时间)'
-                                },
-                                {  //# 文档内容
-                                    "type": "段落",
-                                    "title": ["本周后期强冷空气影响，全市有严重冰冻", 1, 2, 3],
-                                    "subtitle": ["短信内容", 1, 2, 3],
-                                    "text": "本周前期天气阴沉，周后期强冷空气影响转晴冷天气，全市有严重冰冻。今天、明天阴有分散性小雨，最高气温12～14度；后天多云到阴，夜里～周四受强冷空气影响有明显降温、大风和弱雨雪过程，预计日平均气温过程降温幅度可达8～10度，后天夜里部分地区有小雨夹雪或雪，山区有小雪；周五～周日天气晴冷，其中周五、周六早晨北部地区降至零下6～零下8度，山区零下9～零下12度，其它地区零下4～零下6度，全市有严重冰冻，须注意防寒保暖。另外，周二沿海风力8～9级，周三夜里～周四沿海和内陆分别有8～10级和6～8级偏北大风。"
-                                },
-                                {  //# 文档列表
-                                    "type": "列表",
-                                    "title": ["台州市主城区具体天气预报如下：", 1, 2, 3],
-                                    "subtitle": ["短信内容", 1, 2, 3],
-                                    "text_list1": "4日（周一）：阴，部分地区有时有小雨              9～14度",
-                                    "text_list2": "4日（周一）：阴，部分地区有时有小雨        9～14度",
-                                    "text_list3": "4日（周一）：阴，部分地区有时有小雨        9～14度",
-                                    "text_list4": "4日（周一）：阴，部分地区有时有小雨        9～14度",
-                                    "text_list5": "4日（周一）：阴，部分地区有时有小雨        9～14度",
-                                    "text_list6": "4日（周一）：阴，部分地区有时有小雨        9～14度",
-
-                                },
-                                {  //# 图片列表
-                                    "type": "单图",
-                                    "title": "台州市气象台",
-                                    "png": 'src/pre_test.png'
-                                },
-                                {
-                                    "type": "文件尾",
-                                    "title1": "微信宣传",
-                                    "png1": 'src/二维码.png',
-                                    "title2": "气象台宣传",
-                                    "png2": 'src/二维码.png',
-                                    "title3": "浙政钉宣传",
-                                    "png3": 'src/二维码.png',
-                                    "service_name": '宋伟2、李渊、小王、张三',
-                                    "service_unity": '气象台、玉环市气象局、水利局、气象台、玉环市气象局、水利局、气象台、玉环市气象局、水利局、玉环市气象局、水利局、气象台、玉环市气象局、水利局、玉环市气象局、水利局、气象台、玉环市气象局、水利局、玉环市气象局、水利局、气象台、玉环市气象局、水利局',
-                                    "recive_unity": '气象台、玉环市气象局、水利局、玉环市气象局、水利局'
-                                }
-
-                            ]
-                            $('#product_view').html(" ")
-
-
-                            for (const i of list_data_all) {
-                                if (i['type'] == '一周天气预测') {
-                                    head_div(i)
-                                }
-                                else if (i['type'] == '单图') {
-                                    // console.log(i)
-                                    png_div(i)
-                                }
-                                else if (i['type'] == '列表') {
-                                    // console.log(i)
-                                    list_div(i)
-                                }
-                                else if (i['type'] == '文件尾') {
-                                    // console.log(i)
-                                    foot_div(i)
-                                }
-                                else if (i['type'] == '段落') {
-                                    // console.log(i)
-                                    text_div(i)
-                                }
-
-                            }
-
-
-
-                        }
-                        else if (type == "tool_history") {
-                            console.log("历史数据的加载")
-                            $('#product_view').html(" 历史数据的加载")
-                            var list_data_all = [
-                                {  //# 文件头
-                                    "type": "一周天气预测",
-                                    "company": "台州市气象台",
-                                    "writer": "翁之梅",
-                                    "putter": "高丽",
-                                    "index": 15,
-                                    "time": 'Wed Mar 01 2022 19:18:00 GMT+0800 (中国标准时间)'
-                                },
-                                {  //# 文档内容
-                                    "type": "段落",
-                                    "title": ["本周后期强冷空气影响，全市有严重冰冻", 1, 2, 3],
-                                    "subtitle": ["短信内容", 1, 2, 3],
-                                    "text": "本周前期天气阴沉，周后期强冷空气影响转晴冷天气，全市有严重冰冻。今天、明天阴有分散性小雨，最高气温12～14度；后天多云到阴，夜里～周四受强冷空气影响有明显降温、大风和弱雨雪过程，预计日平均气温过程降温幅度可达8～10度，后天夜里部分地区有小雨夹雪或雪，山区有小雪；周五～周日天气晴冷，其中周五、周六早晨北部地区降至零下6～零下8度，山区零下9～零下12度，其它地区零下4～零下6度，全市有严重冰冻，须注意防寒保暖。另外，周二沿海风力8～9级，周三夜里～周四沿海和内陆分别有8～10级和6～8级偏北大风。"
-                                },
-                                {  //# 文档列表
-                                    "type": "列表",
-                                    "title": ["台州市主城区具体天气预报如下：", 1, 2, 3],
-                                    "subtitle": ["短信内容", 1, 2, 3],
-                                    "text_list1": "4日（周一）：阴，部分地区有时有小雨              9～14度",
-                                    "text_list2": "4日（周一）：阴，部分地区有时有小雨        9～14度",
-                                    "text_list3": "4日（周一）：阴，部分地区有时有小雨        9～14度",
-                                    "text_list4": "4日（周一）：阴，部分地区有时有小雨        9～14度",
-                                    "text_list5": "4日（周一）：阴，部分地区有时有小雨        9～14度",
-                                    "text_list6": "4日（周一）：阴，部分地区有时有小雨        9～14度",
-
-                                },
-                                {  //# 图片列表
-                                    "type": "单图",
-                                    "title": "台州市气象台",
-                                    "png": 'src/pre_test.png'
-                                },
-                                {
-                                    "type": "文件尾",
-                                    "title1": "微信宣传",
-                                    "png1": 'src/二维码.png',
-                                    "title2": "气象台宣传",
-                                    "png2": 'src/二维码.png',
-                                    "title3": "浙政钉宣传",
-                                    "png3": 'src/二维码.png',
-                                    "service_name": '宋伟2、李渊、小王、张三',
-                                    "service_unity": '气象台、玉环市气象局、水利局、气象台、玉环市气象局、水利局、气象台、玉环市气象局、水利局、玉环市气象局、水利局、气象台、玉环市气象局、水利局、玉环市气象局、水利局、气象台、玉环市气象局、水利局、玉环市气象局、水利局、气象台、玉环市气象局、水利局',
-                                    "recive_unity": '气象台、玉环市气象局、水利局、玉环市气象局、水利局'
-                                }
-
-                            ]
-                            $('#product_view').html(" ")
-
-
-                            for (const i of list_data_all) {
-                                if (i['type'] == '一周天气预测') {
-                                    head_div(i)
-                                }
-                                else if (i['type'] == '单图') {
-                                    // console.log(i)
-                                    png_div(i)
-                                }
-                                else if (i['type'] == '列表') {
-                                    // console.log(i)
-                                    list_div(i)
-                                }
-                                else if (i['type'] == '文件尾') {
-                                    // console.log(i)
-                                    foot_div(i)
-                                }
-                                else if (i['type'] == '段落') {
-                                    // console.log(i)
-                                    text_div(i)
-                                }
-
-                            }
-
-                        }
-                        else if (type == "tool_prodict_product") {
-                            console.log("市台自订正")
-                            $('#product_view').html("")
-                            var product_view = document.getElementById('product_view')
-
-                            var prodict_head_div = document.createElement('div')
-                            prodict_head_div.style = "border: 1px solid black ;width: 100%;height: 10%;"
-                            var head_h = document.createElement('h1')
-                            head_h.innerText = "市台订正:"
-                            prodict_head_div.append(head_h)
-
-                            var prodict_body_div = document.createElement('div')
-                            prodict_body_div.style = "display: inline-flex;border: 3px solid black ;width: 100%;height: 80%;"
-
-                            var self_png_show = document.createElement('div')
-                            self_png_show.style = style = " border: 1px solid black ;width: 80%;height: 100%;overflow:auto ;"
-                            self_png_show.id = "self_png_show"
-
-                            var body_ul_div = document.createElement('div')
-                            body_ul_div.style = style = style = "border: 3px solid black ;width: 18%;height: 100%;overflow: auto;"
-                            body_ul_div.id = "body_ul_div"
-
-                            var body_ul = document.createElement('ul')
-                            body_ul.id = "ul_self"
-                            body_ul.setAttribute('class', 'list-group')
-                            body_ul.style = "width: 100%;height: 100%"
-                            body_ul_div.append(body_ul)
-                            prodict_body_div.append(self_png_show, body_ul_div)
-
-
-                            var prodict_foot_div = document.createElement('div')
-                            prodict_foot_div.style = "border: 3px solid black ;width: 100%;height: 10%;;text-align:center;vertical-align: middle;align-items: center;"
-                            var foot_input1 = document.createElement('input')
-                            foot_input1.id = "go_on"
-                            foot_input1.style = "width: 10%;height: 50%;text-align:center;vertical-align: middle;align-items: center;"
-                            foot_input1.setAttribute("type", "button")
-                            foot_input1.setAttribute("value", "前进：")
-
-                            var foot_input2 = document.createElement('input')
-                            foot_input2.id = "go_back"
-                            foot_input2.style = "width: 10%;height: 50%;text-align:center;vertical-align: middle;align-items: center;"
-                            foot_input2.setAttribute("type", "button")
-                            foot_input2.setAttribute("value", "后退：")
-
-                            var foot_input3 = document.createElement('input')
-                            foot_input3.name = "tool_2_last"
-                            foot_input3.style = "width: 10%;height: 50%;text-align:center;vertical-align: middle;align-items: center;"
-                            foot_input3.setAttribute("type", "button")
-                            foot_input3.setAttribute("value", "导出为git")
-                            foot_div.append(foot_input1, foot_input2, foot_input3)
-
-                            product_view.append(prodict_head_div, prodict_body_div, prodict_foot_div)
-
-                            foot_input1.addEventListener("click", function () {
-                                console.log("单机前进按钮")
-                                var select_length = $("input:radio[name='ul_png']").length
-                                var select_item = $("input:radio[name='ul_png']:checked")
-                                var select_data = $("input:radio[name='ul_png']:checked").attr("id").toString()
-                                var select_id = parseInt(select_data[3]) + 1
-                                var select_show_id = "#self_" + select_id.toString()
-                                // console.log($('input:radio[name="ul_png"]:checked').attr("id")) 
-                                console.log(select_length)
-                                if (select_id <= select_length) {
-                                    // $("#self_png_show").animate({scrollTop:$(select_show_id).offset().top},100);
-                                    $("#a_" + select_id.toString())[0].click()
-
-                                    var next_id = "#in_" + select_id.toString()
-                                    $("input:radio[name='ul_png']:checked").attr("checked", false)
-                                    $(next_id).attr("checked", true)
-                                }
-                                else {
-                                    alert("到头了")
-                                }
-
-                            })
-
-                            foot_input2.addEventListener("click", function () {
-                                console.log("单机前进按钮")
-                                var select_length = $("input:radio[name='ul_png']").length
-                                var select_item = $("input:radio[name='ul_png']:checked")
-                                var select_data = $("input:radio[name='ul_png']:checked").attr("id").toString()
-                                var select_id = parseInt(select_data[3]) - 1
-                                var select_show_id = "#self_" + select_id.toString()
-
-                                if (select_id >= 1) {
-                                    // $("#self_png_show").animate({scrollTop:$(select_show_id).offset().top},100);
-                                    $("#a_" + select_id.toString())[0].click()
-
-                                    var next_id = "#in_" + select_id.toString()
-                                    $("input:radio[name='ul_png']:checked").attr("checked", false)
-                                    $(next_id).attr("checked", true)
-                                }
-                                else {
-                                    alert("到头了")
-                                }
-
-                            })
-
-
-
-                            // 加载ajax
-                            var time_plot_taizhou = $("input[name='tz_self_time']:checked").val()
-                            var type_plot_taizhou = $("input[name='tz_self']:checked").val()
-                            var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                            console.log(time_plot_taizhou, type_plot_taizhou)
-
-                            $.ajax({
-                                url: "upload_select_taizhou_data",  // 请求的地址
-                                type: "post",  // 请求方式
-                                timeout: 2500000, //设置延迟上限
-                                data: {
-                                    'csrfmiddlewaretoken': csrf,
-                                    'plot_type': type_plot_taizhou,
-                                    'plot_time': time_plot_taizhou
-                                },
-                                dataType: "json",
-                                success: function (data) {
-                                    // var show_img_list = $
-                                    var server_img_list = data.img_list
-                                    console.log("ajax请求成功返回的数据", server_img_list)
-                                    $("#self_png_show").html(" ")
-                                    $("#ul_self").html(" ")
-                                    for (i = 0; i < server_img_list.length; i++) {
-                                        // 图部分
-                                        var img_item = new Image()
-                                        img_item.id = "self_" + (i + 1).toString()
-                                        img_item.src = server_img_list[i]
-                                        img_item.style.width = "100%"
-                                        img_item.style.height = "100%"
-                                        $('#self_png_show').append(img_item)
-                                        var a_item = document.createElement("a")
-                                        a_item.id = "a_" + (i + 1).toString()
-                                        a_item.setAttribute("class", "list-group-item")
-                                        a_item.setAttribute("href", "#self_" + (i + 1).toString())
-                                        a_item.innerText = "202200401"
-                                        var input_item = document.createElement("input")
-                                        input_item.id = "in_" + (i + 1).toString()
-                                        input_item.style.display = "none"
-                                        input_item.setAttribute("type", "radio")
-                                        input_item.setAttribute("name", "ul_png")
-                                        if (i == 0) {
-                                            input_item.setAttribute("checked", "true")
-                                        }
-                                        a_item.appendChild(input_item)
-                                        var click_item = parseInt(i)
-                                        a_item.addEventListener("click", function (click_item) {
-                                            console.log(click_item)
-                                            $("input:radio[name='ul_png']").attr("checked", false)
-                                            a_item.children[0].setAttribute("checked", "true")
-
-                                            // $('#in_'+(i + 1).toString()).attr("checked", true)
-                                            var child_len = $("input:radio[name='ul_png']").length
-                                            for (j = 0; j < child_len; j++) {
-                                                $('#a_' + (j + 1).toString()).attr("style", "color:balck")
-                                            }
-                                            $('#a_' + (j + 1).toString()).attr("style", "color:red")
-
-                                        })
-
-                                        $("#ul_self").append(a_item)
-
-
-
-
-                                    }
-
-                                }
-                            })
-
-
-
-
-
-
-
-
-
-
-
-
-                        }
-                        else if (type == "tool_zdz") {
-                            console.log("自动站数据加载")
-                            $('#product_view').html("")
-                            var product_view = document.getElementById("product_view")
-                            var calendar_history = document.createElement('div')
-                            calendar_history.id = "calendar_history"
-                            calendar_history.style = "display:inline-flex;width: 100%; height: 30%;"
-
-                            var tabbable = document.createElement('div')
-                            tabbable.setAttribute('class', 'tabbable')
-                            tabbable.id = "tabs-492675"
-                            tabbable.style = "width: 100%; height: 50%;"
-
-                            var tab_content = document.createElement('div')
-                            tab_content.style = "display: inline-block;width: 100%; height: 88%;"
-                            tab_content.setAttribute('class', 'tab-content')
-
-                            var tabbable_ul = document.createElement('ul')
-                            tabbable_ul.setAttribute("class", "nav nav-tabs")
-                            tabbable_ul.style = "width: 100%; height: 12%;"
-
-                            var tabbable_li1 = document.createElement('li')
-                            tabbable_li1.setAttribute('class', 'active')
-                            var tabbable_a1 = document.createElement('a')
-                            tabbable_a1.setAttribute('href', '#panel-883512')
-                            tabbable_a1.setAttribute('data-toggle', 'tab')
-                            tabbable_a1.innerText = "降水"
-                            tabbable_li1.append(tabbable_a1)
-
-                            var tabbable_li2 = document.createElement('li')
-                            var tabbable_a2 = document.createElement('a')
-                            tabbable_a2.setAttribute('href', '#panel-725174')
-                            tabbable_a2.setAttribute('data-toggle', 'tab')
-                            tabbable_a2.innerText = "大风"
-                            tabbable_li2.append(tabbable_a2)
-
-                            var tabbable_li3 = document.createElement('li')
-                            var tabbable_a3 = document.createElement('a')
-                            tabbable_a3.setAttribute('href', '#panel-725173')
-                            tabbable_a3.setAttribute('data-toggle', 'tab')
-                            tabbable_a3.innerText = "能见度"
-                            tabbable_li3.append(tabbable_a3)
-
-                            var tabbable_li4 = document.createElement('li')
-                            var tabbable_a4 = document.createElement('a')
-                            tabbable_a4.setAttribute('href', '#panel-725171')
-                            tabbable_a4.setAttribute('data-toggle', 'tab')
-                            tabbable_a4.innerText = "日报"
-                            tabbable_a4.id = "a_panel-725171"
-                            tabbable_li4.append(tabbable_a4)
-
-                            tabbable_ul.append(tabbable_li1, tabbable_li2, tabbable_li3, tabbable_li4)
-
-                            // 降水
-                            var panel_883512 = document.createElement('div')
-                            panel_883512.style = "width: 100%; height: 100%;"
-                            panel_883512.id = "panel-883512"
-                            panel_883512.setAttribute("class", "tab-pane active")
-
-                            var map_bar = document.createElement('div')
-                            map_bar.id = "map_bar"
-                            map_bar.style = "width: 100%; height: 100%;"
-
-                            panel_883512.append(map_bar)
-                            tab_content.append(panel_883512)
-
-                            // 大风
-                            var panel_725174 = document.createElement('div')
-                            panel_725174.setAttribute("class", "tab-pane")
-                            panel_725174.style = "width: 100%; height: 100%;"
-                            panel_725174.id = "panel-725174"
-
-                            var wind_all = document.createElement('div')
-                            wind_all.style = "display: inline-flex;width: 100%; height: 100%;"
-
-                            var map_wind = document.createElement('div')
-                            map_wind.id = "map_wind"
-                            map_wind.style = "display: inline-block;width: 580px; height: 370px;"
-
-                            var table_wind_div = document.createElement('div')
-                            table_wind_div.style = "width: 350px; height:380px;overflow: auto;"
-
-                            var table_wind = document.createElement('table')
-                            table_wind.setAttribute('class', 'table table-hover table-bordered table-condensed')
-
-                            var table_head = document.createElement('thead')
-                            table_head.innerHTML = "<tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>"
-
-                            var table_body = document.createElement('tbody')
-                            table_body.innerHTML = "\
-                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                                                            "
-
-                            table_wind.append(table_head, table_body)
-                            table_wind_div.append(table_wind)
-                            wind_all.append(map_wind, table_wind_div)
-                            panel_725174.append(wind_all)
-                            tab_content.append(panel_725174)
-                            // 能见度
-
-                            // 自定义数据加载                            
-                            var panel_725171 = document.createElement('div')
-                            panel_725171.setAttribute("class", "tab-pane")
-                            panel_725171.style = "width: 100%; height: 100%;"
-                            panel_725171.id = "panel-725171"
-                            var show_panel_725171 = document.createElement('div')
-                            show_panel_725171.id = "show_panel-725171"
-                            show_panel_725171.style = "display: inline-flex;width: 100%; height: 100%;"
-                            panel_725171.append(show_panel_725171)
-                            tab_content.append(panel_725171)
-
-                            // tab_content.append(panel_883512,panel_725174,panel_725171)
-
-                            tabbable.append(tabbable_ul, tab_content)
-                            // 风雨情
-                            var result_div = document.createElement('div')
-                            result_div.style = "width: 100%; height: 20%;;border: 1px solid black"
-                            result_div.innerHTML = "\
-                                                                            \<blockquote><p>风雨情统计</p><small>昨天08时到今天，全是降水80毫米，本次较强降雨过程已结束，截止26日08时，全市出现大雨，部分地区暴雨，累计面雨量46.2毫米，各县（市、区）如下：玉环55.6毫米、三门53.8毫米、天台51.1毫米、临海49.5毫米、椒江45.8毫米、黄岩44.0毫米、温岭43.0毫米、路桥36.7毫米、仙居34.5毫米；共有58个乡镇面雨量超50毫米，单站最大天台石梁镇龙皇堂91.5毫米；沿海海面和海拔较高山区出现最大10级偏南大风，风力较大的有临海田岙岛27.9m／s（10级）、椒江上大陈26.9m／s（10级）、临海括苍山25.6m／s（10级）。预计今天阴天，傍晚到夜里部分地区有阵雨，沿海海面北到东北风6－7级阵风8级，夜里减弱到5－6级阵风7级。<cite>面雨量最大的城市主要集中在台州的中北部</cite></small></blockquote>\
-                                                                            "
-
-
-                            product_view.append(calendar_history, tabbable, result_div)
-                            // 加载bar 
-                            var dom = document.getElementById("calendar_history");
-                            var myChart = echarts.init(dom);
-                            // myChart.resize()
-
-
-
-                            var option;
-
-
-
-                            const dateList = [
-
-                                ['2022-4-14', '十七', '强降水'],
-                                ['2022-4-15', '十八'],
-                                ['2022-4-16', '十九'],
-                                ['2022-4-17', '二十'],
-                                ['2022-4-18', '廿一', '浓雾-小雨'],
-                                ['2022-4-19', '廿二', '大风'],
-                                ['2022-4-20', '廿三', '小雨'],
-                                ['2022-4-21', '廿四'],
-                                ['2022-4-22', '廿五'],
-                                ['2022-4-23', '廿六'],
-                                ['2022-4-24', '廿七'],
-                                ['2022-4-25', '廿八', '强降水']
-
-
-                            ];
-                            let heatmapData = [];
-                            let lunarData = [];
-                            for (let i = 0; i < dateList.length; i++) {
-                                heatmapData.push([dateList[i][0], Math.random() * 300]);
-                                lunarData.push([dateList[i][0], 1, dateList[i][1], dateList[i][2]]);
-                            }
-                            option = {
-                                title: {
-                                    text: '历史天况统计',
-                                    textStyle: { fontSize: 30 },
-                                },
-                                tooltip: {
-                                    formatter: function (params) {
-                                        return '降雨量: ' + params.value[1].toFixed(2);
-                                    }
-                                },
-                                visualMap: {
-                                    show: false,
-                                    min: 0,
-                                    max: 300,
-                                    calculable: true,
-                                    seriesIndex: [2],
-                                    orient: 'horizontal',
-                                    left: 'center',
-                                    bottom: 20,
-                                    inRange: {
-                                        color: ['#e0ffff', '#006edd'],
-                                        opacity: 0.3
-                                    },
-                                    controller: {
-                                        inRange: {
-                                            opacity: 0.5
-                                        }
-                                    }
-                                },
-                                calendar: [
-                                    {
-                                        left: 'center',
-                                        top: 'middle',
-                                        cellSize: [60, 60],
-                                        yearLabel: { show: false },
-                                        orient: 'vertical',
-                                        dayLabel: {
-                                            firstDay: 1,
-                                            nameMap: 'cn'
-                                        },
-                                        monthLabel: {
-                                            show: false
-                                        },
-                                        range: ['2022-04-14', '2022-04-25']
-                                    }
-                                ],
-                                series: [
-                                    {
-                                        type: 'scatter',
-                                        coordinateSystem: 'calendar',
-                                        symbolSize: 1,
-                                        label: {
-                                            show: true,
-                                            formatter: function (params) {
-                                                var d = echarts.number.parseDate(params.value[0]);
-                                                return d.getDate() + '\n\n' + params.value[2] + '\n\n';
-                                            },
-                                            color: '#000'
-                                        },
-                                        data: lunarData
-                                    },
-                                    {
-                                        type: 'scatter',
-                                        coordinateSystem: 'calendar',
-                                        symbolSize: 1,
-                                        label: {
-                                            show: true,
-                                            formatter: function (params) {
-                                                return '\n\n\n' + (params.value[3] || '');
-                                            },
-                                            fontSize: 14,
-                                            fontWeight: 700,
-                                            color: '#a00'
-                                        },
-                                        data: lunarData
-                                    },
-                                    {
-                                        name: '降雨量',
-                                        type: 'heatmap',
-                                        coordinateSystem: 'calendar',
-                                        data: heatmapData
-                                    }
-                                ]
-                            };
-
-                            if (option && typeof option === 'object') {
-                                myChart.setOption(option);
-                            }
-                            myChart.on('click', function (params) {
-                                let componentType = params.componentType;   // geo是地图图层                      
-
-                                console.log("数据", params.value)
-                                // $('#panel-725171').attr("calss", "tab-pane active")
-                                // $('#panel-883512').attr("calss", "tab-pane")
-                                // $('#panel-725174').attr("calss", "tab-pane")
-                                // $('#panel-725173').attr("calss", "tab-pane")
-                                var show_data = params.value[1]
-                                $('#show_panel-725171').html(" ")
-                                $('#show_panel-725171').html(show_data)
-
-                                $('#a_panel-725171').click()
-                            });
-
-
-                            // 加载降水图 tz_json
-                            var chart = echarts.init(document.getElementById('map_bar'));
-                            echarts.registerMap('taizhou', tz_json, {});
-                            var data_xy = [["天台", "仙居", "玉环", "临海", "黄岩", "三门", "温岭", "仙居", "仙居", 9, 10, 11, 12], [600, 1150, 400, 850, 600, 650, 100, 1150, 100, 700, 600, 800, 500]]
-                            chart.setOption({
-                                xAxis: [
-                                    { geoIndex: 0 },
-                                    { data: data_xy[0], gridIndex: 1 }
-
-                                ],
-                                yAxis: [
-                                    { geoIndex: 0 },
-                                    {
-                                        name: '面雨量',
-                                        splitLine: { show: false },
-                                        gridIndex: 1
-                                    }
-
-                                ],
-                                layoutSize: '145%',
-                                title: {
-                                    text: ' 降水分布',
-                                    textStyle: { fontSize: 30 },
-                                },
-                                tooltip: {
-                                    trigger: 'item',
-                                    formatter: '{b}<br/>{c} (p / km2)'
-                                },
-                                geo: {
-                                    map: 'taizhou',
-                                    layoutCenter: ['80%', '45%'],
-                                    layoutSize: 250
-                                },
-                                grid: [
-                                    { left: '5%', bottom: '10%', top: '30%', right: '30%' },
-                                    { left: '5%', bottom: '10%', top: '30%', right: '30%' }
-                                ],
-                                label: {
-                                    show: true,
-                                    color: "rgba(50, 44, 44, 1)",
-                                    //formatter: '{c}[2]'
-                                },
-                                series: [{
-                                    name: '确诊数量',
-                                    type: 'scatter',
-
-
-
-                                    layoutCenter: ['60%', '80%'],
-                                    layoutSize: 10,
-
-                                    symbolSize: 5,
-
-
-
-                                },
-                                {
-                                    type: 'bar',
-                                    xAxisIndex: 1,//指定折线图数据显示到：grid坐标系：0
-                                    yAxisIndex: 1,
-                                    showSymbol: false,
-                                    data: data_xy[1]//折线图y轴数据赋值
-                                }
-                                ]
-
-
-
-                            });
-
-
-                            // 加载大风图 tz_json
-                            var map = echarts.init(document.getElementById('map_wind'), 'light');
-                            //  echarts.registerMap('taizhou',tz_json,{});
-
-                            var data = {
-                                'month': [4300, 10000, 28000, 35000, 35000, 50000, 19000],
-                                'history': [5000, 14000, 28000, 31000, 31000, 42000, 21000],
-                            }
-                            map.setOption({
-                                title: {
-                                    text: '极大风',
-                                    textStyle: { fontSize: 30 },
-                                },
-                                tooltip: {
-                                    trigger: 'item',
-                                    formatter: 'k8505 50(m/s)'
-                                },
-                                geo: {
-                                    map: 'taizhou',
-                                    roam: true,
-                                    // tooltip:{borderColor = '#333'}
-                                    itemStyle: {
-                                        color: 'white'
-                                        // areaColor = '#333',
-                                    }
-
-
-                                },
-                                visualMap: {
-                                    type: "piecewise",
-                                    // orient:'horizontal',
-                                    // type:"continuous",
-                                    // min: 0,
-                                    // max: 200,
-                                    // splitNumber = 5,
-                                    // color: ["rgb(255, 255, 255)",
-                                    // "rgb(255, 238, 255)",
-                                    // "rgb(255, 238, 204)",
-                                    // "rgb(255, 204, 153)",
-                                    // "rgb(255, 204, 102)",
-                                    // "rgb(255, 170, 68)",
-                                    // "rgb(153, 255, 136)",
-                                    // "rgb(0, 255, 85)",
-                                    // "rgb(0, 170, 51)",
-                                    // "rgb(0, 170, 255)",
-                                    // "rgb(17, 136, 204)",
-                                    // "rgb(0, 85, 204)",
-                                    // "rgb(0, 68, 221)",
-                                    // "rgb(0, 0, 221)"],
-                                    right: 0,
-                                    padding: 0,
-                                    itemGap: 0,
-                                    textGap: 0,
-                                    textStyle: { fontSize: 8 },
-                                    pieces: [
-                                        { min: 2000, max: 2500, label: '10 到 200', color: "rgb(255, 255, 255)" },
-                                        { min: 1500, max: 2000, label: '10 到 200', color: "rgb(255, 238, 255)" },// 不指定 max，表示 max 为无限大（Infinity）。
-                                        { min: 900, max: 1500, label: '10 到 200', color: "rgb(255, 238, 204)" },
-                                        { min: 310, max: 1000, label: '10 到 200', color: "rgb(255, 204, 153)" },
-                                        { min: 200, max: 300, label: '10 到 200', color: "rgb(255, 204, 102)" },
-                                        { min: 10, max: 200, label: '10 到 200', color: "rgb(255, 170, 68)" },
-                                        { max: 10, min: 5, label: '10 到 200', color: "rgb(153, 255, 136)" },    // 不指定 min，表示 min 为无限大（-Infinity）。
-                                        { max: 5, min: 4, label: '10 到 200', color: "rgb(0, 255, 85)" },
-                                        { max: 4, min: 3, label: '10 到 200', color: "rgb(0, 170, 51)" },
-                                        { max: 3, min: 2, label: '10 到 200', color: "rgb(0, 170, 255)" },
-                                        { max: 2, min: 1, label: '10 到 200', color: "rgb(17, 136, 204)" },
-                                        { max: 1, min: 0, label: '10 到 200', color: "rgb(0, 85, 204)" },
-                                        { max: 0, min: -1, label: '10 到 200', color: "rgb(0, 68, 221)" },
-                                        { max: -1, min: -2, label: '10 到 200', color: "rgb(0, 0, 221)" }
-
-                                    ],
-
-                                    // categories: ['1', '2', '3', '4', '5','6']
-
-                                    // inRange: {
-                                    //     color: ['lightskyblue','yellow', 'orangered']
-                                    // }
-                                },
-                                // label: {
-                                //             show: true,
-                                //             color: "rgba(50, 44, 44, 1)",
-                                //             formatter: 'K8505'
-                                //         },
-                                series: [{
-                                    name: '确诊数量',
-                                    // type: 'effectScatter',
-                                    type: 'scatter',
-                                    // symble:"triangle",
-                                    // symbol: "roundRect",
-                                    // symbolSize:50,
-                                    coordinateSystem: 'geo',
-                                    // itemStyle: {
-                                    //   color: function (params) {
-                                    //       var colorlist = ['black'];
-                                    //       return colorlist[params.dataIndex];
-                                    //   },
-                                    //   symbol: function (params) {
-                                    //     var symbollist = ['path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z'];
-                                    //     return symbollist[params.dataIndex];
-                                    // },
-                                    // },
-
-                                    data: [{
-                                        name: "data", value: [121.0, 28.8, 123], url: "url_data",
-                                        symbol: 'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z', symbolSize: 15, symbolRotate: 330
-                                    }]
-
-                                }]
-
-
-
-                            });
-
-
-
-                        }
-                        else if (type == "tool_ec") {
-                            console.log("---------------模式数据单点导出---------------")
-                            $('#product_view').html(" ")
-                            var product_view = document.getElementById("product_view")
-                            // 绘图的核心程序
-                            var map_tool1 = document.createElement('div')
-                            map_tool1.style = "display: inline-flex;width: 60%; height: 45%;"
-                            map_tool1.id = "map_tool1"
-                            // 映射位置的核心程序
-                            // 图表
-                            var position_ec = document.createElement('div')
-                            position_ec.style = "width: 40%; height: 45%;;float: right;"
-                            var blank_ec = document.createElement('div')
-                            blank_ec.style = "width: 40%; height: 45%;;float: right;"
-                            var name_ec = document.createElement('div')
-                            name_ec.style = "display: inline-flex;width: 100%; height: 20%;"
-                            name_ec.innerHTML = "&nbsp;&nbsp;&nbsp;"
-                            var name_ec_h = document.createElement('h4')
-                            name_ec_h.id = "h4_village"
-                            name_ec_h.innerText = "乡镇名称:仙居"
-                            name_ec.append(name_ec_h)
-                            // 位置
-                            var latlon_ec = document.createElement('div')
-                            latlon_ec.style = "display: inline-flex;width: 100%; height: 20%;"
-                            latlon_ec.innerHTML = "&nbsp;&nbsp;&nbsp;"
-                            var lon_ec_h = document.createElement('h4')
-                            lon_ec_h.id = "h4_lon"
-                            lon_ec_h.innerText = "经度:27.5度    "
-                            latlon_ec.append(lon_ec_h)
-                            // latlon_ec.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;" 
-                            var lat_ec_h = document.createElement('h4')
-                            lat_ec_h.id = "h4_lat"
-                            lat_ec_h.innerText = "纬度:27.5度"
-                            latlon_ec.append(lat_ec_h)
-                            position_ec.append(blank_ec, name_ec, latlon_ec)
-                            // 数据展示
-                            var ec_single_data = document.createElement('div')
-                            ec_single_data.style = "width: 100%; height: 55%;border: 3px solid rgb(8, 8, 8);float: right;"
-
-                            var ec_tabbable = document.createElement('div')
-                            ec_tabbable.setAttribute("class", "tabbable")
-                            ec_tabbable.id = "tabs-439149"
-                            ec_tabbable.style = "width: 100%;height: 100%;"
-
-                            ec_tabbable_ul = document.createElement('ul')
-                            ec_tabbable_ul.setAttribute("class", "nav nav-tabs")
-                            ec_tabbable_ul.style = "width: 100%;height: 10%;"
-
-                            ec_tabbable_li1 = document.createElement('li')
-                            ec_tabbable_a1 = document.createElement('a')
-                            ec_tabbable_a1.setAttribute('href', '#panel-727742')
-                            ec_tabbable_a1.setAttribute('data-toggle', 'tab')
-                            ec_tabbable_a1.innerText = "数据表格"
-                            ec_tabbable_li1.append(ec_tabbable_a1)
-
-                            ec_tabbable_li2 = document.createElement('li')
-                            ec_tabbable_li2.setAttribute('class', 'active')
-                            ec_tabbable_a2 = document.createElement('a')
-                            ec_tabbable_a2.setAttribute('href', '#panel-578432')
-                            ec_tabbable_a2.setAttribute('data-toggle', 'tab')
-                            ec_tabbable_a2.innerText = "时序图"
-                            ec_tabbable_li2.append(ec_tabbable_a2)
-
-                            var ec_tabbable_content = document.createElement('div')
-                            ec_tabbable_content.style = "width: 100%;height: 70%;"
-                            ec_tabbable_content.setAttribute("class", "tab-content")
-                            // ec表格
-                            tabbable_content1 = document.createElement('div')
-                            tabbable_content1.id = "panel-727742"
-                            tabbable_content1.style = "width: 100%;height: 100%;"
-                            tabbable_content1.setAttribute("class", "tab-pane")
-
-                            tabbable_h = document.createElement('h2')
-                            tabbable_h.innerText = "仙居淡竹乡精细化预报:"
-
-                            tabbable_table = document.createElement('table')
-                            tabbable_table.setAttribute('class', 'table table-bordered table-condensed')
-
-                            tabbable_head = document.createElement('thead')
-                            tabbable_head.innerHTML = "<tr><th>时间</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>"
-
-                            tabbable_body = document.createElement('tbody')
-                            tabbable_body.innerHTML = "\
-                                                                            <tr><th>时间</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>\
-                                                                            <tr><th>气温</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>\
-                                                                            <tr><th>降水</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>\
-                                                                            <tr><th>湿度</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>\
-                                                                            <tr><th>K</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>\
-                                                                            <tr><th>能见度</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>\
-                                                                            <tr><th>时间</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>\
-                                                                            <tr><th>时间</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>\
-                                                                            <tr><th>时间</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>\
-                                                                            <tr><th>时间</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>\
-                                                                            "
-
-                            tabbable_table.append(tabbable_head, tabbable_body)
-                            tabbable_content1.append(tabbable_h, tabbable_table)
-
-
-
-                            // 时序图
-                            tabbable_content2 = document.createElement('div')
-                            tabbable_content2.id = "panel-578432"
-                            tabbable_content2.style = "width: 100%;height: 100%;"
-                            tabbable_content2.setAttribute("class", "tab-pane active")
-                            content2_h = document.createElement('h3')
-                            content2_h.style = "width: 100%;height:5%;"
-                            content2_h.innerText = "仙居淡竹乡精细化时序图:"
-                            content2_div = document.createElement('div')
-                            content2_div.id = "multiple-y-axis"
-                            content2_div.style = "width: 900px;height:400px"
-                            tabbable_content2.append(content2_h, content2_div)
-                            ec_tabbable_ul.append(ec_tabbable_li1, ec_tabbable_li2)
-                            ec_tabbable_content.append(tabbable_content1, tabbable_content2)
-                            ec_tabbable.append(ec_tabbable_ul, ec_tabbable_content)
-
-
-
-
-
-
-
-
-
-
-
-                            ec_single_data.append(ec_tabbable)
-                            product_view.append(map_tool1, position_ec, ec_single_data)
-                            // product_view.append(position_ec)
-
-                            var dom_ecdata = document.getElementById("multiple-y-axis");
-                            var myChart_ecdata = echarts.init(dom_ecdata);
-                            var app = {};
-                            var option;
-                            const colors = ['#5470C6', '#91CC75', '#EE6666', '#1E0026'];
-                            option = {
-                                color: colors,
-                                tooltip: {
-                                    trigger: 'axis',
-                                    axisPointer: {
-                                        type: 'cross'
-                                    }
-                                },
-                                grid: {
-                                    left: 60,
-                                    right: 50,
-                                    height: '65%'
-                                },
-                                toolbox: {
-                                    feature: {
-                                        dataView: { show: true, readOnly: false },
-                                        restore: { show: true },
-                                        saveAsImage: { show: true }
-                                    }
-                                },
-                                legend: {
-                                    data: ['1小时降水', '2米相对湿度', '2米温度', '能见度']
-                                },
-                                xAxis: [
-                                    {
-                                        type: 'category',
-                                        axisTick: {
-                                            alignWithLabel: true
-                                        },
-                                        // prettier-ignore
-                                        data: ['23:00', '01:00', '03:00', '05:00', '07:00', '09:00',
-                                            '11:00', '13:00', '15:00', '17:00', '19:00', '21:00']
-                                    }
-                                ],
-                                yAxis: [
-                                    {
-                                        type: 'value',
-                                        name: '1小时降水',
-                                        position: 'right',
-                                        alignTicks: false,
-                                        axisLabel: {
-                                            formatter: '{value} ml'
-                                        },
-                                        min: 0,
-                                        max: 3,
-                                        show: false
-                                    },
-                                    {
-                                        type: 'value',
-                                        name: '相对湿度',
-                                        position: 'right',
-                                        alignTicks: false,
-                                        splitLine: {
-                                            show: false
-                                        },
-                                        axisLine: {
-                                            show: true,
-                                            lineStyle: {
-                                                color: '#333333'
-                                            }
-                                        },
-                                        axisLabel: {
-                                            formatter: '{value} %'
-                                        },
-                                        min: 0,
-                                        max: 100
-                                    },
-                                    {
-                                        type: 'value',
-                                        name: '温度',
-                                        position: 'left',
-                                        alignTicks: false,
-                                        splitLine: {
-                                            lineStyle: {
-                                                color: '#333333'
-                                            }
-                                        },
-                                        axisLine: {
-                                            show: true,
-                                            lineStyle: {
-                                                color: '#333333'
-                                            }
-                                        },
-                                        axisLabel: {
-                                            formatter: '{value} °C'
-                                        },
-                                        min: 0,
-                                        max: 18,
-                                        splitNumber: 6
-                                    },
-                                    {
-                                        type: 'value',
-                                        name: '能见度',
-                                        position: 'right',
-                                        alignTicks: false,
-                                        // offset: 80,
-                                        axisLine: {
-                                            show: true,
-                                            lineStyle: {
-                                                color: colors[3]
-                                            }
-                                        },
-                                        axisLabel: {
-                                            formatter: '{value}'
-                                        },
-                                        min: 0,
-                                        max: 100,
-                                        show: false
-                                    }
-                                ],
-                                series: [
-                                    {
-                                        name: '1小时降水',
-                                        type: 'bar',
-                                        data: [0.3, 2, 0.8, 1.2, 0.7, 0.1, 0, 0, 0.2, 0.7, 0.4, 0.1],
-                                        label: {
-                                            show: true,
-                                            position: 'top'
-                                        }
-                                    },
-                                    {
-                                        name: '2米相对湿度',
-                                        type: 'line',
-                                        yAxisIndex: 1,
-                                        data: [95, 93, 90, 89, 88, 88, 86.9, 86, 85, 84, 83, 82]
-                                    },
-                                    {
-                                        name: '2米温度',
-                                        type: 'line',
-                                        yAxisIndex: 2,
-                                        data: [18, 15, 16, 17, 15, 18, 17, 17, 16, 16.5, 15, 14]
-                                    },
-                                    {
-                                        name: '风向',
-                                        type: 'scatter',
-                                        yAxisIndex: 3,
-                                        symbol: 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
-                                        symbolSize: 15,
-                                        symbolRotate: 330,
-                                        data: [30, 70, 80, 80, 50, 20, 20, 20, 50, 80, 60, 50]
-                                        // markLine: {
-                                        //     data: [{ type: 'average', name: 'Avg' }]
-                                        // }
-                                    }
-                                ]
-                            };
-
-
-                            if (option && typeof option === 'object') {
-                                myChart_ecdata.setOption(option);
-                            }
-
-                            //乡镇地图v 
-                            var chartDom = document.getElementById('map_tool1');
-                            var map = echarts.init(chartDom, 'light');
-                            echarts.registerMap('taizhou', taizhou, {});
-                            map.setOption({
-                                title: {
-                                    text: '',
-                                    textStyle: { fontSize: 50 },
-                                },
-                                tooltip: {
-                                    trigger: 'item',
-                                    // formatter: '{c}(m/s)'
-                                    formatter: function (params) {
-                                        // do some thing
-                                        return params.value[2] + params.name
-                                    }
-                                },
-                                geo: {
-                                    map: 'taizhou',
-                                    roam: true,
-                                    // tooltip:{borderColor = '#333'}
-                                    itemStyle: {
-                                        color: 'white'
-                                        // areaColor = '#333',
-                                    }
-
-
-                                },
-
-
-                                series: [{
-                                    name: '确诊数量',
-                                    // type: 'effectScatter',
-                                    type: 'scatter',
-                                    // symble:"triangle",
-                                    // symbol: "roundRect",
-                                    // symbolSize:50,
-                                    coordinateSystem: 'geo'
-                                    // itemStyle: {
-                                    //   color: function (params) {
-                                    //       var colorlist = ['black'];
-                                    //       return colorlist[params.dataIndex];
-                                    //   },
-                                    //   symbol: function (params) {
-                                    //     var symbollist = ['path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z'];
-                                    //     return symbollist[params.dataIndex];
-                                    // },
-                                    // },
-
-                                    // data:[{ name:"K8515",value: [121.0, 28.8, 123], url: "url_data",
-                                    // symbol:'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z',symbolSize:15,symbolRotate:330}]
-
-                                }]
-
-
-
-                            });
-                            map.on('click', function (params) {
-                                let componentType = params.componentType;   // geo是地图图层
-                                if (componentType == "geo") {
-                                    var offsetX = params.event.offsetX;
-                                    var offsetY = params.event.offsetY;
-                                    var zuobiao = map.convertFromPixel('geo', [offsetX, offsetY]); // 转换成坐标
-                                    // console.log(zuobiao,"数据",params.name) 
-                                    $('#h4_village').html("乡镇名称:" + " " + params.name)
-                                    $('#h4_lon').html("经度:" + " " + zuobiao[0].toFixed(2))
-                                    $('#h4_lat').html("纬度:" + " " + zuobiao[1].toFixed(2))
-
-                                }
-                            });
-
-
-
-                        }
-                    }
-                    // 自定义材料加载
-                    $('#product_show_button').click(function () {
-                        var type = "product_show"
-                        product_view_show(type)
-
-                    })
-                    // 画图--精细化
-                    $('#plot_self_button').click(function () {
-                        var type = "plot_self"
-                        product_view_show(type)
-                        // var chartDom = document.getElementById('canvas_bar');
-                        // var myChart_bar = echarts.init(chartDom);
-
-                    })
-                    // 市台历史数据的显示
-                    $('#tool_history_button').click(function () {
-                        var type = "tool_history"
-                        product_view_show(type)
-
-
-                    })
-
-                    // 市台订正数据加载
-                    $('#tool_prodict_product_button').click(function () {
-                        var type = "tool_prodict_product"
-                        product_view_show(type)
-
-                    })
-
-                    // 自动站数据加载
-                    $('#tool_zdz_button').click(function () {
-                        var type = "tool_zdz"
-                        product_view_show(type)
-
-                    })
-                    // 精细化EC单点数据加载
-                    $('#tool_ec_button').click(function () {
-                        var type = "tool_ec"
-                        product_view_show(type)
-
-                    })
-
-
-
-
-
-                </script>
-                
-
-                
-                <script>
-                    function tool_3() {
-
-                        // var tool1_view = document.getElementById("tool1_view")
-                        // var tool2_view = document.getElementById("tool2_view")
-                        // var tool3_view = document.getElementById("tool3_view")
-                        // var tool5_view = document.getElementById("tool5_view")
-                        // var product_view = document.getElementById("product_view")
-                        // product_view.style.display = "none"
-                        // tool1_view.style.display = "none"
-                        // tool2_view.style.display = "none"
-                        // tool3_view.style.display = "inline-block"
-
-                        $('#tool1_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool2_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool3_view').attr("style", "display: inline-block;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#product_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool5_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-
-                        
-
-
-                    }
-                    function tool_2() {
-                        // 市台订正数据的核心代码
-                        var time_plot_taizhou = $("input[name='tz_self_time']:checked").val()
-                        var type_plot_taizhou = $("input[name='tz_self']:checked").val()
-                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                        console.log(time_plot_taizhou, type_plot_taizhou)
-
-                        $.ajax({
-                            url: "upload_select_taizhou_data",  // 请求的地址
-                            type: "post",  // 请求方式
-                            timeout: 2500000, //设置延迟上限
-                            data: {
-                                'csrfmiddlewaretoken': csrf,
-                                'plot_type': type_plot_taizhou,
-                                'plot_time': time_plot_taizhou
-                            },
-                            dataType: "json",
-                            success: function (data) {
-                                // var show_img_list = $
-                                var server_img_list = data.img_list
-                                console.log("ajax请求成功返回的数据", server_img_list)
-                                $("#self_png_show").html(" ")
-                                $("#ul_self").html(" ")
-                                for (i = 0; i < server_img_list.length; i++) {
-                                    // 图部分
-                                    var img_item = new Image()
-                                    img_item.id = "self_" + (i + 1).toString()
-                                    img_item.src = server_img_list[i]
-                                    img_item.style.width = "100%"
-                                    img_item.style.height = "100%"
-                                    $('#self_png_show').append(img_item)
-                                    var a_item = document.createElement("a")
-                                    a_item.id = "a_" + (i + 1).toString()
-                                    a_item.setAttribute("class", "list-group-item")
-                                    a_item.setAttribute("href", "#self_" + (i + 1).toString())
-                                    a_item.innerText = "202200401"
-                                    var input_item = document.createElement("input")
-                                    input_item.id = "in_" + (i + 1).toString()
-                                    input_item.style.display = "none"
-                                    input_item.setAttribute("type", "radio")
-                                    input_item.setAttribute("name", "ul_png")
-                                    if (i == 0) {
-                                        input_item.setAttribute("checked", "true")
-                                    }
-                                    a_item.appendChild(input_item)
-                                    var click_item = parseInt(i)
-                                    a_item.addEventListener("click", function (click_item) {
-                                        console.log(click_item)
-                                        $("input:radio[name='ul_png']").attr("checked", false)
-                                        a_item.children[0].setAttribute("checked", "true")
-
-                                        // $('#in_'+(i + 1).toString()).attr("checked", true)
-                                        var child_len = $("input:radio[name='ul_png']").length
-                                        for (j = 0; j < child_len; j++) {
-                                            $('#a_' + (j + 1).toString()).attr("style", "color:balck")
-                                        }
-                                        $('#a_' + (j + 1).toString()).attr("style", "color:red")
-
-                                    })
-
-                                    $("#ul_self").append(a_item)
-
-
-
-
-                                }
-
-                            }
-                        })
-
-                        // var tool1_view = document.getElementById("tool1_view")
-                        // var tool2_view = document.getElementById("tool2_view")
-                        // var tool3_view = document.getElementById("tool3_view")
-                        // var tool5_view = document.getElementById("tool5_view")
-                        // var product_view = document.getElementById("product_view")
-                        // product_view.style.display = "none"
-                        // tool1_view.style.display = "none"
-                        // tool2_view.style.display = "inline-block"
-                        // tool3_view.style.display = "none"
-                        // tool5_view.style.display = "none"
-                        $('#tool1_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool2_view').attr("style", "display: inline-block;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool3_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#product_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool5_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-
-
-                    }
-                    function tool_1() {
-
-                        // var tool1_view = document.getElementById("tool1_view")
-                        // var tool2_view = document.getElementById("tool2_view")
-                        // var tool3_view = document.getElementById("tool3_view")
-                        // var tool5_view = document.getElementById("tool5_view")
-                        // var product_view = document.getElementById("product_view")
-                        // product_view.style.display = "none"
-                        // tool1_view.style.display = "inline-block"
-                        // // tool1_view.style.height = "100%"
-
-                        // tool2_view.style.display = "none"
-                        // tool3_view.style.display = "none"
-                        // tool5_view.style.display = "none"
-                        $('#tool1_view').attr("style", "display:inline-block;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool2_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool3_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#product_view').attr("style", "display:none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool5_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-
-
-                    }
-
-                    function tool_5() {
-                        // 向服务器要数据并显示tool5
-                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                        $('#tool1_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool2_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool3_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#product_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool5_view').attr("style", "display: inline-block;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        
-
-                        $.ajax({
-                            url: "upload_selfplot_data",  // 请求的地址
-                            type: "get",  // 请求方式
-                            data: {
-                                "plot_self_data": JSON.stringify(data_canvas),
-                                'csrfmiddlewaretoken': csrf
-                            },
-                            dataType: "json",
-                            success: function (data) {
-                                console.log("ajax请求成功返回的数据", data.img)
-                                var plotImg = new Image();
-                                plotImg.src = data.img
-                                plotImg.style = "width:100%;height:100%"
-                                $('#canvas_plot_div').html(" ")
-                                $('#canvas_plot_div').html(plotImg)
-                                // 添加表结构和数据
-                                
-
-                            }
-                        })
-
-                        // var tool1_view = document.getElementById("tool1_view")
-                        // var tool2_view = document.getElementById("tool2_view")
-                        // var tool3_view = document.getElementById("tool3_view")
-                        // var tool5_view = document.getElementById("tool5_view")
-                        // var product_view = document.getElementById("product_view")                            
-                        // product_view.style.display = "none"
-                        // tool1_view.style.display = "none"                                    
-                        // tool2_view.style.display = "none"
-                        // tool3_view.style.display = "none"
-                        // tool5_view.style.display = "inline-block"
-
-                        
-
-
-
-
-                    }
-                </script>
-
+                        </script>
+                        <div style="width:40%;height:100%;border: 3px solid rgb(58, 128, 0);overflow:auto">
+
+                            <table class="table table-bordered">
+                                <caption>乡镇排行</caption>
+                                <thead>
+                                    <tr>
+                                        <th>排名</th>
+                                        <th>名称</th>
+                                        <th>降水</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>坎门</td>
+                                        <td>30mm</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>淡竹</td>
+                                        <td>15mm</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Pune</td>
+                                        <td>1mm</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Pune</td>
+                                        <td>1mm</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+                </div>
 
 
             </div>
