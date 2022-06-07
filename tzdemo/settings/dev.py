@@ -22,10 +22,22 @@ DATABASES = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://localhost:6379/0",
+        "LOCATION": "redis://192.168.192.5:6379/0",    # /0：代表redis的0号数据库
         "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient"
-            # "PASSWORD": ""
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PASSWORD": "lq9394"
         }
     }
 }
+
+
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": "redis://192.168.192.5:6379/0",
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#             "PASSWORD": ""
+#         }
+#     }
+# }
