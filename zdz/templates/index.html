@@ -36,10 +36,10 @@
 <body>
     <!-- 全局布局 -->
     <div
-        style="display: flex;align-content:flex-start;position: absolute; justify-content: center; flex-wrap: wrap; width: 100%;height: 100%; color: rgb(204, 203, 203); background-color: rgb(212, 202, 202);">
+        style="display: flex;align-content:flex-start;position: absolute; justify-content: center; flex-wrap: wrap; width: 100%;height: 100%; color: black; background-color: rgb(243, 244, 247);">
         <!-- 导航栏 -->
         {% csrf_token %}
-        <div style="background-color:rgb(211, 13, 13); width: 100%; height: 5%;border: 3px solid rgb(238, 14, 14);">
+        <div style="background-color:rgb(240, 233, 132); width: 100%; height: 5%;border: 1px solid black;">
             <div class="tabbable" id="tabs-01" style="display:block;width: 100%; height: 100%;">
                 <ul class="nav nav-tabs">
                     <li class="active">
@@ -64,19 +64,19 @@
             </div>
         </div>
         <div id="index_main"
-            style="background-color:rgb(17, 16, 17); width: 100%; height: 95%;border: 3px solid rgb(236, 5, 5);display:flex ">
+            style="background-color:rgb(243, 244, 247); width: 100%; height: 95%;border: 1px solid black;display:flex ">
             <!-- 决策材料类型 -->
-            <div style="background-color:rgb(24, 214, 97); width: 50%; height: 100%;border: 3px solid rgb(128, 0, 0);">
+            <div style="background-color:rgb(243, 244, 247); width: 50%; height: 100%;border: 1px  black;border-style: hidden solid solid solid;">
                 <!-- 文件头 -->
                 <div
-                    style="background-color:rgb(61, 201, 136); width: 100%; height: 100%;border: 3px solid rgb(221, 20, 20);">
+                    style="background-color:rgb(243, 244, 247); width: 100%; height: 100%;border: 1px solid black;">
                     <!-- 材料类型选项卡 -->
                     <div class="tab-content" style="display:block;width: 100%; height: 100%;">
                         <div class="tab-pane active" id="panel-1"
-                            style="width:100%;height:100%;background-color:rgb(8, 116, 167)">
+                            style="width:100%;height:100%;background-color:rgb(243, 244, 247)">
                             <!-- 文件头 -->
                             <div
-                                style="background-color:rgb(61, 201, 136); width: 100%; height: 4%;border: 3px solid rgb(221, 20, 20);">
+                                style="background-color:rgb(243, 244, 247); width: 100%; height: 4%;border: 1px  black;border-style: hidden hidden solid hidden;">
                                 <a id="modal-000001" href="#modal-container-000001" role="button" class="btn"
                                     data-toggle="modal">新建</a>
                                 <a id="modal-000002" href="#modal-container-000002" role="button" class="btn"
@@ -105,7 +105,7 @@
 
                                                     </div>
                                                     <!-- 新建材料的核心数据 -->
-                                                    <div style="width:70%;height:100%;border:3px solid black">
+                                                    <div style="width:70%;height:100%;border:1px solid black">
                                                         <div style="width:100%;height:20%;" ></div>
                                                         <div style="display:inline-block; ;width:100%;height:15%;" >
                                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;材料种类:
@@ -324,10 +324,10 @@
                             </div>
                             <!-- 文件主体 -->
                             <div
-                                style="background-color:rgb(15, 15, 15); width: 100%; height: 90%;border: 3px solid rgb(58, 128, 0);">
+                                style="background-color:rgb(243, 244, 247); width: 100%; height: 90%;border: 1px solid black;border-style: hidden hidden solid hidden;">
                                 <!-- 功能模块 -->
                                 <div
-                                    style="background-color:rgb(204, 37, 79); display:block;width: 100%; height: 75%;border: 3px solid rgb(58, 128, 0);">
+                                    style="background-color:rgb(243, 244, 247); display:block;width: 100%; height: 75%;border: 1px solid black;border-style: hidden hidden solid hidden;">
                                     <!-- 选项卡 -->
                                     <div class="tabbable" id="tabs-001"
                                         style="display:block;width: 100%; height: 100%;">
@@ -359,33 +359,33 @@
                                             </li>
                                             
                                         </ul>
-                                        <div class="tab-content" style="display:block;width: 100%; height: 100%;">
+                                        <div class="tab-content" style="display:block;width: 100%; height: 100%;border: 1px solid black;border-style: hidden hidden solid hidden;">                           
                                             <div class="tab-pane active" id="panel-001"
-                                                style="width:100%;height:100%;background-color:rgb(240, 140, 9)">
+                                                style="width:100%;height:100%;background-color:rgb(243, 244, 247)">
 
                                                 <!-- 大标题 -->
                                                 <div
-                                                    style="display: inline-block;background-color:rgb(183, 231, 9); width: 68%; height: 10%;border: 3px solid rgb(32, 32, 32);">
+                                                    style="display: inline-block;background-color:rgb(243, 244, 247); width: 68%; height: 10%;">
                                                     <h4 style="display: inline-block;width:10%;height: 100% ;">主标题</h5>
                                                         <input id="title_main" type="text"
                                                             style="display: inline-block;width:88%;height: 100% ;">
                                                 </div>
                                                 <div
-                                                    style="display: inline-block;background-color:rgb(183, 231, 9); width: 10%; height: 10%;border: 3px solid rgb(32, 32, 32);">
+                                                    style="display: inline-block;background-color:rgb(243, 244, 247); width: 10%; height: 10%;">
                                                     <select id="wordposition_main" class="form-control">
                                                         <option value="居中">居中</option>
                                                         <option value="居左">居左</option>
                                                     </select>
                                                 </div>
                                                 <div
-                                                    style="display: inline-block;background-color:rgb(183, 231, 9); width: 10%; height: 10%;border: 3px solid rgb(32, 32, 32);">
+                                                    style="display: inline-block;background-color:rgb(243, 244, 247); width: 10%; height: 10%;">
                                                     <select id="wordsize_main" class="form-control">
                                                         <option value="四号">四号</option>
                                                         <option value="五号">五号</option>
                                                     </select>
                                                 </div>
                                                 <div
-                                                    style="display: inline-block;background-color:rgb(183, 231, 9); width: 10%; height: 10%;border: 3px solid rgb(32, 32, 32);">
+                                                    style="display: inline-block;background-color:rgb(243, 244, 247); width: 10%; height: 10%;">
                                                     <select id="wordthinks_main" class="form-control">
                                                         <option value="加粗">加粗</option>
                                                         <option value="斜体">斜体</option>
@@ -393,27 +393,27 @@
                                                 </div>
                                                 <!-- 小标题 -->
                                                 <div
-                                                    style="display: inline-block;background-color:rgb(183, 231, 9); width: 68%; height: 10%;border: 3px solid rgb(32, 32, 32);">
+                                                    style="display: inline-block;background-color:rgb(243, 244, 247); width: 68%; height: 10%;">
                                                     <h4 style="display: inline-block;width:10%;height: 100% ;">副标题</h5>
                                                         <input id="title_sub" type="text"
                                                             style="display: inline-block;width:88%;height: 100% ;">
                                                 </div>
                                                 <div
-                                                    style="display: inline-block;background-color:rgb(183, 231, 9); width: 10%; height: 10%;border: 3px solid rgb(32, 32, 32);">
+                                                    style="display: inline-block;background-color:rgb(243, 244, 247); width: 10%; height: 10%;">
                                                     <select id="wordposition_sub" class="form-control">
                                                         <option value="居中">居中</option>
                                                         <option value="居左">居左</option>
                                                     </select>
                                                 </div>
                                                 <div
-                                                    style="display: inline-block;background-color:rgb(183, 231, 9); width: 10%; height: 10%;border: 3px solid rgb(32, 32, 32);">
+                                                    style="display: inline-block;background-color:rgb(243, 244, 247); width: 10%; height: 10%;">
                                                     <select id="wordsize_sub" class="form-control">
                                                         <option value="四号">四号</option>
                                                         <option value="五号">五号</option>
                                                     </select>
                                                 </div>
                                                 <div
-                                                    style="display: inline-block;background-color:rgb(183, 231, 9); width: 10%; height: 10%;border: 3px solid rgb(32, 32, 32);">
+                                                    style="display: inline-block;background-color:rgb(243, 244, 247); width: 10%; height: 10%;">
                                                     <select id="wordthinks_sub" class="form-control">
                                                         <option value="四号">加粗</option>
                                                         <option value="五号">斜体</option>
@@ -421,23 +421,20 @@
                                                 </div>
                                                 <!-- 文字主体 -->
                                                 <div
-                                                    style="display: inline-block;background-color:rgb(183, 231, 9); width: 100%; height: 60%;border: 3px solid rgb(32, 32, 32);">
+                                                    style="display: inline-block;background-color:rgb(243, 244, 247); width: 100%; height: 60%;border: 1px solid black;border-style: solid hidden hidden hidden;">
                                                     <textarea style="width: 100%; height: 100%; resize:none;"
                                                         id="text_main"></textarea>
 
                                                 </div>
                                                 <!-- 添加删除 -->
                                                 <div
-                                                    style="display: inline-block;background-color:rgb(183, 231, 9); width: 100%; height: 10%;border: 3px solid rgb(32, 32, 32);">
+                                                    style="display: inline-block;background-color:rgb(243, 244, 247); width: 100%; height: 8.2%;border-style: hidden hidden solid hidden;">
                                                     <input type="button" id="add_text" value="添加"
                                                         style="width:10%;height:100%;float:right ">
                                                     <input type="button" id="del_text" value="清屏"
                                                         style="width:10%;height:100%;float:right ">
                                                     <input id="change_text" type="button" value="修改"
                                                         style="width:10%;height:100%;float:right">
-
-
-
                                                 </div>
 
 
@@ -445,10 +442,10 @@
                                             </div>
                                             <!-- 图片模块 -->
                                             <div class="tab-pane" id="panel-002"
-                                                style="width:100%;height:100%;background-color:rgb(240, 140, 9)">
+                                                style="width:100%;height:100%;background-color:rgb(243, 244, 247)">
 
                                                 <div
-                                                    style="display: inline-block;background-color:rgb(183, 231, 9); width: 100%; height: 5%;border: 1px solid rgb(192, 27, 27);">
+                                                    style="display: inline-block;background-color:rgb(243, 244, 247); width: 100%; height: 5%;border: 1px solid rgb(243, 244, 247);">
                                                     单图:<input checked="checked" type="radio" name="png_chose"
                                                         style="width: 10%;" value="one"> 双图:<input type="radio"
                                                         name="png_chose" style="width: 10%;" value="two">四图:<input
@@ -1628,7 +1625,7 @@
                                 </div>
                                 <!-- 显示模块 -->
                                 <div id="context_show_list"
-                                    style="background-color:rgb(21, 38, 192); width: 100%; height: 25%;overflow:auto;border: 3px solid rgb(58, 128, 0);">
+                                    style="background-color:rgb(243, 244, 247); width: 100%; height: 25%;overflow:auto;border: 1px solid black;border-style: solid hidden solid hidden;">
 
                                 </div>
                                 <!-- 这里是显示列表的控制代码 -->
@@ -2087,7 +2084,7 @@
                                             div_list_item.style.width = "100%"
                                             div_list_item.style.height = "15%"
                                             div_list_item.style.backgroundColor = "white"
-                                            div_list_item.style.border = "3px solid black"
+                                            // div_list_item.style.border = "3px solid black"
                                             div_list_item.style.display = "inline-flex"
 
                                             if (list_data[i].type != "add_br") {
@@ -2289,7 +2286,7 @@
                             </div>
                             <!-- 文件预览 -->
                             <div
-                                style="background-color:rgb(78, 9, 189); width: 100%; height: 5%;border: 3px solid rgb(58, 128, 0);">
+                                style="background-color:rgb(243, 244, 247); width: 100%; height: 5%;border: 1px solid black;border-style: solid hidden hidden hidden;">
                                 <input id="quick_look" type="button" value="预览"
                                     style="width:10%;height:100%;float:right ">
                                 <input type="button" id = "product_show_button" value="保存" style="width:10%;height:100%;float:right ">
@@ -2320,15 +2317,10 @@
                                 });
 
                             </script>
-
-
-
-
-
                         </div>
                         <div class="tab-pane" id="panel-2"
                             style="width:100%;height:100%;background-color:rgb(247, 248, 248)">
-                            <div style="width:100%;height:25%;background-color:rgb ;border: 3px solid black;">
+                            <div style="width:100%;height:25%;background-color:rgb;border: 1px black;border-style: hidden hidden solid hidden;;">
                                 <div class="tabbable" id="tabs-233110" style="width:100%;height:100%;">
                                     <ul class="nav nav-tabs">
                                         <li class="active">
@@ -2376,7 +2368,7 @@
                                                     </div>
                                                 </div>
                                                 <input id ="tool_history_button" type="button" value="查看"
-                                                    style="width:15%;height:18%;float:right">
+                                                    style="width:10%;height:15%;float:right">
 
                                             </div>
                                         </div>
@@ -2386,15 +2378,11 @@
                                             </p>
                                         </div>
                                     </div>
-                                </div>
-                                
-
-
+                                </div>                       
                             </div>
-                            <div style="width:100%;height:25%;background-color:rgb(247, 248, 248) ;border: 3px solid black;">
+                            <div style="width:100%;height:20%;background-color:rgb(247, 248, 248);border: 1px black;border-style: hidden hidden solid hidden;">
                                 <div style="width:100%;height:15%">
                                     <h3>市台订正:</h3>
-
                                 </div>
                                 <div
                                     style="display: inline-flex;width:100%;height:15%;text-align:center;align-items: center;">
@@ -2402,7 +2390,6 @@
                                         style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
                                     20:<input type="radio" name="tz_self_time" value="20"
                                         style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
-
                                 </div>
                                 <div
                                     style="display: inline-flex;width:100%;height:40%;text-align:center;align-items: center;">
@@ -2423,15 +2410,14 @@
                                         style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
 
                                 </div>
-                                <div style="display: inline-block;width:100%;height:20%;">
+                                <div style="display: inline-block;width:100%;height:15%;">
                                     <input id="tool_prodict_product_button"  type="button" value="查看"
-                                        style="width: 10%;height:80% ;float: right ;">
-
+                                        style="width: 10%;height:95% ;float: right ;">
                                 </div>
 
 
                             </div>
-                            <div style="width:100%;height:25%;background-color:rgb ;border: 3px solid black;">
+                            <div style="width:100%;height:20%;background-color:rgb ;border: 1px black;border-style: hidden hidden solid hidden;">
                                 <div style="width:100%;height:30%">
                                     <h3>历史数据</h3>
 
@@ -2467,7 +2453,7 @@
 
                             </div>
                             <div
-                                style="width:100%;height:25%;background-color:rgb ;background-color: rgb(247, 248, 248);">
+                                style="width:100%;height:25%;background-color:rgb ;background-color: rgb(247, 248, 248);border: 1px black;border-style: hidden hidden solid hidden;">
                                 <div style="width:100%;height:100%; ;">
                                     <div
                                     style="display: inline-block ;width:100%;height:15%;background-color:rgb;vertical-align:middle;font-size: 25px;">
@@ -3124,11 +3110,11 @@
                         <div class="tab-pane" id="panel-5"
                             style="width:100%;height:100%;background-color:white;overflow: auto ;">
                             <div style="display:flex;flex-wrap: wrap;align-content:flex-start;width:100%;height:100%;justify-content: center;align-items: center;">
-                                <a href="http://www.baidu.com" target="_Blank" style="display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url(static/src/二维码.png);font-size: 25px;color:red;text-align:center;line-height: 230px; " >百度</a> 
+                                <a href="http://www.baidu.com" target="_Blank" style="display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url(static/src/渔场.png);font-size: 25px;color:red;text-align:center;line-height: 230px; " >百度</a> 
                                 <!-- 控制字符在8个汉字之内 -->
-                                <a href="http://www.baidu.com" target="_Blank" style="display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url(static/src/二维码.png);font-size: 25px;color:red;text-align:center;line-height: 230px; " >台风</a>
-                                <a href="http://www.baidu.com" target="_Blank" style="display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url(static/src/二维码.png);font-size: 25px;color:red;text-align:center;line-height: 230px; " >气候</a>
-                                <a href="http://www.baidu.com" target="_Blank" style="display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url(static/src/二维码.png);font-size: 25px;color:red;text-align:center;line-height: 230px; " >中央台</a>
+                                <a href="http://www.baidu.com" target="_Blank" style="display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url(static/src/温度.png);font-size: 25px;color:red;text-align:center;line-height: 230px; " >台风</a>
+                                <a href="http://www.baidu.com" target="_Blank" style="display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url(static/src/平台.png);font-size: 25px;color:red;text-align:center;line-height: 230px; " >气候</a>
+                                <a href="http://www.baidu.com" target="_Blank" style="display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url(static/src/预报.png);font-size: 25px;color:red;text-align:center;line-height: 230px; " >中央台</a>
               
                               
                                
@@ -3153,7 +3139,7 @@
                 style="background-color:white; width: 50%; height: 100%;overflow: hidden;">
                 <!-- 产品图片 -->
                 <div id="product_view"
-                    style="background-color:white; width: 100%; height: 100%;border: 3px solid rgb(58, 128, 0);overflow:auto">
+                    style="background-color:white; width: 100%; height: 100%;border: 1px solid black;overflow:auto">
                     <!-- 文件头 -->
                     <div style="height:27%;width:100%;background-color:white;position: relative;">
                         <div style="top:30%;height:10%;width:100%;background-color:white;position: absolute;text-align: center;font-size:50px ;font-family:'宋体';color:red">
@@ -4602,191 +4588,6 @@
 
                 </script>
                 
-
-                
-                <script>
-                    function tool_3() {
-
-                        // var tool1_view = document.getElementById("tool1_view")
-                        // var tool2_view = document.getElementById("tool2_view")
-                        // var tool3_view = document.getElementById("tool3_view")
-                        // var tool5_view = document.getElementById("tool5_view")
-                        // var product_view = document.getElementById("product_view")
-                        // product_view.style.display = "none"
-                        // tool1_view.style.display = "none"
-                        // tool2_view.style.display = "none"
-                        // tool3_view.style.display = "inline-block"
-
-                        $('#tool1_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool2_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool3_view').attr("style", "display: inline-block;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#product_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool5_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-
-                        
-
-
-                    }
-                    function tool_2() {
-                        // 市台订正数据的核心代码
-                        var time_plot_taizhou = $("input[name='tz_self_time']:checked").val()
-                        var type_plot_taizhou = $("input[name='tz_self']:checked").val()
-                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                        console.log(time_plot_taizhou, type_plot_taizhou)
-
-                        $.ajax({
-                            url: "upload_select_taizhou_data",  // 请求的地址
-                            type: "post",  // 请求方式
-                            timeout: 2500000, //设置延迟上限
-                            data: {
-                                'csrfmiddlewaretoken': csrf,
-                                'plot_type': type_plot_taizhou,
-                                'plot_time': time_plot_taizhou
-                            },
-                            dataType: "json",
-                            success: function (data) {
-                                // var show_img_list = $
-                                var server_img_list = data.img_list
-                                console.log("ajax请求成功返回的数据", server_img_list)
-                                $("#self_png_show").html(" ")
-                                $("#ul_self").html(" ")
-                                for (i = 0; i < server_img_list.length; i++) {
-                                    // 图部分
-                                    var img_item = new Image()
-                                    img_item.id = "self_" + (i + 1).toString()
-                                    img_item.src = server_img_list[i]
-                                    img_item.style.width = "100%"
-                                    img_item.style.height = "100%"
-                                    $('#self_png_show').append(img_item)
-                                    var a_item = document.createElement("a")
-                                    a_item.id = "a_" + (i + 1).toString()
-                                    a_item.setAttribute("class", "list-group-item")
-                                    a_item.setAttribute("href", "#self_" + (i + 1).toString())
-                                    a_item.innerText = "202200401"
-                                    var input_item = document.createElement("input")
-                                    input_item.id = "in_" + (i + 1).toString()
-                                    input_item.style.display = "none"
-                                    input_item.setAttribute("type", "radio")
-                                    input_item.setAttribute("name", "ul_png")
-                                    if (i == 0) {
-                                        input_item.setAttribute("checked", "true")
-                                    }
-                                    a_item.appendChild(input_item)
-                                    var click_item = parseInt(i)
-                                    a_item.addEventListener("click", function (click_item) {
-                                        console.log(click_item)
-                                        $("input:radio[name='ul_png']").attr("checked", false)
-                                        a_item.children[0].setAttribute("checked", "true")
-
-                                        // $('#in_'+(i + 1).toString()).attr("checked", true)
-                                        var child_len = $("input:radio[name='ul_png']").length
-                                        for (j = 0; j < child_len; j++) {
-                                            $('#a_' + (j + 1).toString()).attr("style", "color:balck")
-                                        }
-                                        $('#a_' + (j + 1).toString()).attr("style", "color:red")
-
-                                    })
-
-                                    $("#ul_self").append(a_item)
-
-
-
-
-                                }
-
-                            }
-                        })
-
-                        // var tool1_view = document.getElementById("tool1_view")
-                        // var tool2_view = document.getElementById("tool2_view")
-                        // var tool3_view = document.getElementById("tool3_view")
-                        // var tool5_view = document.getElementById("tool5_view")
-                        // var product_view = document.getElementById("product_view")
-                        // product_view.style.display = "none"
-                        // tool1_view.style.display = "none"
-                        // tool2_view.style.display = "inline-block"
-                        // tool3_view.style.display = "none"
-                        // tool5_view.style.display = "none"
-                        $('#tool1_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool2_view').attr("style", "display: inline-block;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool3_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#product_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool5_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-
-
-                    }
-                    function tool_1() {
-
-                        // var tool1_view = document.getElementById("tool1_view")
-                        // var tool2_view = document.getElementById("tool2_view")
-                        // var tool3_view = document.getElementById("tool3_view")
-                        // var tool5_view = document.getElementById("tool5_view")
-                        // var product_view = document.getElementById("product_view")
-                        // product_view.style.display = "none"
-                        // tool1_view.style.display = "inline-block"
-                        // // tool1_view.style.height = "100%"
-
-                        // tool2_view.style.display = "none"
-                        // tool3_view.style.display = "none"
-                        // tool5_view.style.display = "none"
-                        $('#tool1_view').attr("style", "display:inline-block;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool2_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool3_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#product_view').attr("style", "display:none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool5_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-
-
-                    }
-
-                    function tool_5() {
-                        // 向服务器要数据并显示tool5
-                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                        $('#tool1_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool2_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool3_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#product_view').attr("style", "display: none;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        $('#tool5_view').attr("style", "display: inline-block;background-color:white; width: 100%; height: 100%;overflow:auto")
-                        
-
-                        $.ajax({
-                            url: "upload_selfplot_data",  // 请求的地址
-                            type: "get",  // 请求方式
-                            data: {
-                                "plot_self_data": JSON.stringify(data_canvas),
-                                'csrfmiddlewaretoken': csrf
-                            },
-                            dataType: "json",
-                            success: function (data) {
-                                console.log("ajax请求成功返回的数据", data.img)
-                                var plotImg = new Image();
-                                plotImg.src = data.img
-                                plotImg.style = "width:100%;height:100%"
-                                $('#canvas_plot_div').html(" ")
-                                $('#canvas_plot_div').html(plotImg)
-                                // 添加表结构和数据
-                                
-
-                            }
-                        })
-
-                        // var tool1_view = document.getElementById("tool1_view")
-                        // var tool2_view = document.getElementById("tool2_view")
-                        // var tool3_view = document.getElementById("tool3_view")
-                        // var tool5_view = document.getElementById("tool5_view")
-                        // var product_view = document.getElementById("product_view")                            
-                        // product_view.style.display = "none"
-                        // tool1_view.style.display = "none"                                    
-                        // tool2_view.style.display = "none"
-                        // tool3_view.style.display = "none"
-                        // tool5_view.style.display = "inline-block"
-
-                        
-
-
-
-
-                    }
-                </script>
 
 
 
