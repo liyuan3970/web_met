@@ -182,7 +182,7 @@ def upload_select_taizhou_data(request):
 
 
 def get_imd_list(request):
-    # 绘制等值线图像
+    # 测试绘制等值线的图
     os.environ["HDF5_USE_FILE_LOCKING"] = 'FALSE'
     plot_type = request.POST.get('plot_type', '')
     plot_time = request.POST.get('plot_time', '')
@@ -195,7 +195,6 @@ def get_imd_list(request):
     plot_worker = data_class.plot_tz_product(plot_type, plot_time)
     imd_list = plot_worker.multy_plot()
     return imd_list
-
 # 新建文档
 def create_new_doc(request):
     writers = Writer.objects.all().values()

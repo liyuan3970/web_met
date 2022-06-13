@@ -126,9 +126,6 @@ class sql_data:
             tmp_min_County.append({"name":i['county'],"value":i['Tn']})
             RR_County.append({"name":i['county'],"value":i['RR']})
         return RR_County,tmp_max_County,tmp_min_County
-
-
-
     def data_gevent(self,data):
         # print("data_gevent")
 
@@ -141,9 +138,6 @@ class sql_data:
         value_tmax = nan_del(data['Tx'].max()/10.0)
         value_tmin = nan_del(data['Tn'].min()/10.0)
         # print("查看数据：",print(type(value_VV)),value_VV)
-
-
-
         if value_rsum >= 0 and value_rsum < 10:
             self.station_RR_small = self.station_RR_small + 0
         elif value_rsum >= 9 and value_rsum < 25:
@@ -427,8 +421,7 @@ class plot_tz_product:
         lon = np.asarray(lon)
         trans = Affine.translation(lon[0], lat[0])
         scale = Affine.scale(lon[1] - lon[0], lat[1] - lat[0])
-        return trans * scale
-    
+        return trans * scale    
     def rasterize(self,shapes, coords, latitude='lat', longitude='lon',fill=np.nan, **kwargs):
         transform = self.transform_from_latlon(coords[latitude], coords[longitude])
         out_shape = (len(coords[latitude]), len(coords[longitude]))
@@ -437,14 +430,11 @@ class plot_tz_product:
                                 dtype=float, **kwargs)
         spatial_coords = {latitude: coords[latitude], longitude: coords[longitude]}
         return xr.DataArray(raster, coords=spatial_coords, dims=(latitude, longitude))
-
     def add_shape_coord_from_data_array(self,xr_da, shp_path, coord_name):   
         shp_gpd = gpd.read_file(shp_path)
         shapes = [(shape, n) for n, shape in enumerate(shp_gpd.geometry)]
         xr_da[coord_name] = self.rasterize(shapes, xr_da.coords, longitude='lon', latitude='lat')
         return xr_da
-
-
     def basemask(self,cs, ax, map, shpfile):
         sf = shapefile.Reader(shpfile)
         vertices = []
@@ -463,13 +453,9 @@ class plot_tz_product:
                 clip = PathPatch(clip, transform = ax.transData)    
         for contour in cs.collections:
             contour.set_clip_path(clip)    
-
-
-
     def makedegreelabel(self,degreelist):
         labels=[str(x)+u'°E' for x in degreelist]
         return labels
-
     def read_data(self):
         os.environ["HDF5_USE_FILE_LOCKING"] = 'FALSE'
         file_path = "static/data/TZ_self/"        
@@ -489,13 +475,13 @@ class plot_tz_product:
         time = self.time
         data_xr_nc = self.data_xr_nc
         data_xr = xr.DataArray(data_xr_nc[item,:,:],coords=[lat,lon], dims=["lat", "lon"])
-        levels = np.linspace(start = 2, stop = 11, num = 7)#[10,20,30,40,50,60,70,80,90,100,110]
+        levels = np.linspace(start = 15, stop = 25, num = 5)#[10,20,30,40,50,60,70,80,90,100,110]
         self_define_list = [130,144,155,170,185,200,225,235,240,244]
         rgb_file = 'ncl_default'
         #以下是核心api,实质为调用Cmaps基类的listmap()方法
         cmaps = Cmaps('ncl_default',self_define_list).listmap()
         # plt.rcParams.update({'font.size': 20})
-        fig = plt.figure(figsize=[13,13]) 
+        fig = plt.figure(figsize=[10,10]) 
         ax = fig.add_subplot(111)
         shp_path = "static/data/shpfile/"
         shp_da = self.add_shape_coord_from_data_array(data_xr, shp_path+"taizhou.shp", "test")
@@ -514,6 +500,7 @@ class plot_tz_product:
         }
         lons, lats = np.meshgrid(lon, lat)
         cs =m.contourf(lons,lats,data_xr,ax=ax, cmap='Spectral_r',levels =levels,cbar_kwargs=cbar_kwargs,add_labels=False)
+        # m.colorbar(cs)
         m.readshapefile(shp_path+'taizhou','taizhou',color='k',linewidth=1.2)
         parallels = np.arange(27.8,29.5,0.2)
         m.drawparallels(parallels,labels=[True,False,True,False],color='dimgrey',dashes=[2, 3],fontsize= 12)  # ha= 'right'
@@ -526,7 +513,17 @@ class plot_tz_product:
                 y0 = round(27.50+j*0.05,2)
                 x0 = round(119.80+i*0.05,2)
                 if not isnan(awash_da.data[j,i]):
-                    plt.text(x0,y0,str(int(awash_da.data[j,i])),fontsize= 7,fontweight = 800 ,color ="black")            
+                    plt.text(x0,y0,str(int(awash_da.data[j,i])),fontsize= 7,fontweight = 800 ,color ="black")  
+        # 在图上绘制色标
+        rect1 = [0.75, 0.20, 0.03, 0.12]         
+        ax2 = plt.axes(rect1,frameon='False' )
+        ax2.set_xticks([])
+        ax2.set_yticks([])
+        ax2.spines['top'].set_visible(False)
+        ax2.spines['bottom'].set_visible(False)
+        ax2.spines['left'].set_visible(False)
+        ax2.spines['right'].set_visible(False)
+        m.colorbar(cs, location='right', size='30%', pad="-100%",ax = ax2)          
         self.basemask(cs, ax, m, shp_path+'taizhou') 
         buffer = BytesIO()
         plt.savefig(buffer,bbox_inches='tight')  
