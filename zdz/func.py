@@ -22,6 +22,7 @@ import matplotlib
 from math import isnan
 import geopandas as gpd
 from ncmaps import Cmaps
+import datetime
 # print("666")
 def transform_from_latlon(lat, lon):
     lat = np.asarray(lat)
@@ -81,6 +82,11 @@ def makedegreelabel(degreelist):
     labels=[str(x)+u'°E' for x in degreelist]
     return labels
 
+
+def contrab_data():
+    # 将数据存储到数据库中的基本操作
+    time_now = datetime.datetime.now().strftime('%Y-%m-%d')
+    print("测试时间:",time_now)
 
 def plot_image(lat,lon,value):
     #线性插值
