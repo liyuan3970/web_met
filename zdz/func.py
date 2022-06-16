@@ -82,7 +82,7 @@ def makedegreelabel(degreelist):
     labels=[str(x)+u'°E' for x in degreelist]
     return labels
 
-
+# 用来出定时任务
 def contrab_data():
     # 将数据存储到数据库中的基本操作
     time_now = datetime.datetime.now().strftime('%Y-%m-%d')
