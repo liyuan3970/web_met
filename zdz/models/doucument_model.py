@@ -1,28 +1,8 @@
 from django.db import models
-
-# Create your models here.
-
-
-class BaseModel(models.Model):
-    """抽象基类
-
-    Args:
-        models (_type_): _description_
-
-    Returns:
-        _type_: _description_
-    """
-    id = models.BigAutoField(primary_key=True, verbose_name="主键")
-    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
-    create_user = models.BigIntegerField(verbose_name="创建用户")
-    update_time = models.DateTimeField(auto_now=True, verbose_name="更新时间")
-    update_user = models.BigIntegerField(verbose_name="更新用户")
-
-    class Meta:
-        abstract = True
+from .base_model import BaseModel
 
 
-class Document(BaseModel):
+class DocumentModel(BaseModel):
     """文档字段
 
     Args:
@@ -53,17 +33,17 @@ class Document(BaseModel):
 class SelfDefineModel(BaseModel):
     types = models.CharField(max_length=200, verbose_name='类别')
     name = models.CharField(max_length=200, verbose_name='名称')
-    data  = models.JSONField(null=False)
+    data = models.JSONField(null=False)
+
     class Meta:
         verbose_name = verbose_name_plural = '预定义类型'
         db_table = 'selfmode'  # 通过db_table自定义数据表名
+
     def __str__(self):
         return str(self.type) + ":" + self.name
 
 
-
-
-class Unity(BaseModel):
+class UnityModel(BaseModel):
     """单位名称
 
     Args:
@@ -82,7 +62,7 @@ class Unity(BaseModel):
         return self.name
 
 
-class Publisher(BaseModel):
+class PublisherModel(BaseModel):
     """签发人
 
     Args:
@@ -101,7 +81,7 @@ class Publisher(BaseModel):
         return self.name
 
 
-class Writer(BaseModel):
+class WriterModel(BaseModel):
     """撰稿人
 
     Args:
@@ -120,7 +100,7 @@ class Writer(BaseModel):
         return self.name
 
 
-class DocumentType(BaseModel):
+class DocumentTypeModel(BaseModel):
     """文档类别
 
     Args:
@@ -139,7 +119,7 @@ class DocumentType(BaseModel):
         return self.name
 
 
-class Picture(BaseModel):
+class PictureModel(BaseModel):
     """图片二维码
 
     Args:
@@ -159,7 +139,7 @@ class Picture(BaseModel):
         return self.name
 
 
-class Leader_Data(BaseModel):
+class LeaderDataModel(BaseModel):
     """呈发送
 
     Args:
@@ -181,18 +161,3 @@ class Leader_Data(BaseModel):
 
     def __str__(self):
         return "呈送发:"+self.name
-
-# # 以下是文档模块的字段，与文档存在关系映射
-# # 文字内容 呈送发
-# class Text_Data(models.Model):
-#     name = models.CharField(primary_key=True,max_length=20,verbose_name='发布版本')
-#     picture_list = models.CharField(max_length=20,verbose_name='二维码种类')
-#     service_name = models.CharField(max_length=20,verbose_name='呈报对象')
-#     service_unity = models.CharField(max_length=20,verbose_name='发布单位')
-#     recive_unity = models.CharField(max_length=20,verbose_name='抄送单位')
-#     class Meta:
-#         verbose_name = verbose_name_plural = '发布版本'
-#         db_table = 'leader_data' # 通过db_table自定义数据表名
-#     # 定义后台列表中的字段名称(self是对应字段的内同)
-#     def __str__(self):
-#         return self.name

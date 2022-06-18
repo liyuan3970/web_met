@@ -1,31 +1,27 @@
 # -*- coding: utf-8 -*-
+from django.views.decorators.clickjacking import xframe_options_exempt
+import os
+import json
+import base64
+from io import BytesIO
+import matplotlib.pyplot as plt
 from django.core.cache import cache
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
-from .models import *
-from . import data_class
-from . import func
+from django.shortcuts import render, redirect
+from ..models.doucument_model import *
+from .. import data_class
+from .. import func
 
-# 这里处理显示单站数据页面
-from django.shortcuts import redirect
-# Create your views here.
 
 def kuaibao(request):
-    ## print(this is a index)
+    # print(this is a index)
     return render(request, 'kuaibao.html', locals())
 
 
 # demo_02是气象快报的核心代码主要用来统计数据
 def index_kb(request):
-    ## print(this is a index)
+    # print(this is a index)
     return render(request, 'post_data.html', locals())
-
-
-import matplotlib.pyplot as plt
-from io import BytesIO
-import base64
-import json
-import os
 
 
 def post_data(request):
@@ -77,9 +73,6 @@ def post_data(request):
     return render(request, 'post_data.html', context)
 
 
-
-
-
 def url_data(request):
     # 处理点击数据时链接url显示单站数据
     print("链接url")
@@ -92,7 +85,7 @@ def station_view(request, station_name):
     return HttpResponse("The station_name is : " + station_name)
 
 
-## 决策服务操作平台
+# 决策服务操作平台
 def index_main(request):
     return render(request, 'index.html')
     # return render(request,'main.html',context)
@@ -137,9 +130,9 @@ def plot_self_data(request):
     value = []
     # (llcrnrlon=120.1,llcrnrlat=27.8,urcrnrlon=122,urcrnrlat=29.5)
     for i in range(len(data['station'])):
-        x = data['station'][i][0] 
+        x = data['station'][i][0]
         lon.append(x)
-        y = data['station'][i][1] 
+        y = data['station'][i][1]
         lat.append(y)
         value.append(data['station'][i][2] * 10)
     func.plot_image(lat, lon, value)
@@ -149,7 +142,7 @@ def plot_self_data(request):
     imb = base64.b64encode(plot_img)
     ims = imb.decode()
     imd = "data:image/png;base64," + ims
-    # <img src="{{ img }}"> 
+    # <img src="{{ img }}">
     context2 = {
         'data_test': 723.5,
         "img": imd,
@@ -196,24 +189,28 @@ def get_imd_list(request):
     imd_list = plot_worker.multy_plot()
     return imd_list
 # 新建文档
+
+
 def create_new_doc(request):
-    writers = Writer.objects.all().values()
-    unity = Unity.objects.all().values()
-    publisher = Publisher.objects.all().values()
-    documenttype = DocumentType.objects.all().values()
+    writers = WriterModel.objects.all().values()
+    unity = UnityModel.objects.all().values()
+    publisher = PublisherModel.objects.all().values()
+    documenttype = DocumentTypeModel.objects.all().values()
     data_publisher = [i['name'] for i in publisher]
     data_writers = [i['name'] for i in writers]
     data_unity = [i['name'] for i in unity]
     data_documenttype = [i['name'] for i in documenttype]
     # print("返回数据")
     context = {
-        'data_publisher':data_publisher,
-        'data_writers':data_writers,
-        'data_unity':data_unity,
-        'data_documenttype':data_documenttype
+        'data_publisher': data_publisher,
+        'data_writers': data_writers,
+        'data_unity': data_unity,
+        'data_documenttype': data_documenttype
     }
     return JsonResponse(context)
 # 创建新的一期文档
+
+
 def create_new_doc_data(request):
     type_doc = request.POST.get('doc_type', '')
     doc_writer = request.POST.get('doc_writer', '')
@@ -221,60 +218,53 @@ def create_new_doc_data(request):
     doc_unity = request.POST.get('doc_unity', '')
     doc_date = request.POST.get('doc_date', '')
     year = doc_date[0:4]
-    data = Document.objects.filter(year = year,types = type_doc).last()
+    data = DocumentModel.objects.filter(year=year, types=type_doc).last()
     item = data.item + 1
     content = []
-    obj = Document.objects.create(
-        types = type_doc,
-        writer = doc_writer,
+    obj = DocumentModel.objects.create(
+        types=type_doc,
+        writer=doc_writer,
         publisher=doc_publisher,
-        unity = doc_unity,
-        pub_date = doc_date,
-        item = item, 
-        year = year,
-        verson_content = {
-            'blank':content 
+        unity=doc_unity,
+        pub_date=doc_date,
+        item=item,
+        year=year,
+        verson_content={
+            'blank': content
         }
-    )        
+    )
     context = {
-        'status':"ok",
-        'type_doc':type_doc
+        'status': "ok",
+        'type_doc': type_doc
 
     }
     return JsonResponse(context)
 
 
-
-
 # 获取呈送发的数据
 def leader_Data_post(request):
-    versions =  Leader_Data.objects.all().values( )
+    versions = LeaderDataModel.objects.all().values()
 
-    names  = Picture.objects.all().values('name')
+    names = PictureModel.objects.all().values('name')
     name_list = []
     for name in names:
-        name_list.append(name['name'])        
+        name_list.append(name['name'])
     version_list = []
     for version in versions:
-        v = { }
+        v = {}
         v['name'] = version['name']
         v['service_name'] = version['service_name']
         v['service_unity'] = version['service_unity']
         v['recive_unity'] = version['recive_unity']
         version_list.append(v)
-        
 
-    print("呈送",version_list,name_list)
+    print("呈送", version_list, name_list)
     context = {
-        'status':"ok",
+        'status': "ok",
         'version': version_list,
         'name': name_list
     }
     return JsonResponse(context)
-
-
-
-from django.views.decorators.clickjacking import xframe_options_exempt
 
 
 @xframe_options_exempt
