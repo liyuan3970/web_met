@@ -9,8 +9,7 @@ from django.core.cache import cache
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from ..models.doucument_model import *
-from .. import data_class
-from .. import func
+from zdz.common.utils import data_class, func
 
 
 def kuaibao(request):
