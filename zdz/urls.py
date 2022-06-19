@@ -38,5 +38,7 @@ urlpatterns = [
     url(r'^create_doc_data',views.create_new_doc_data),
     # 呈送发的代码
     url(r'^leader_Data_post',views.leader_Data_post),
+    # EC站点数据的查询渲染
+    url(r'^ec_single_data',views.ec_single_data),
 
 ]

@@ -265,6 +265,14 @@ def leader_Data_post(request):
     }
     return JsonResponse(context)
 
+# 查询EC单站的数据并返回给前端进行渲染
+def ec_single_data(request):
+    context = {
+        'status': "ok"
+        
+    }
+    return JsonResponse(context)
+
 
 @xframe_options_exempt
 def home(request):

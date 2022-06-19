@@ -4212,7 +4212,35 @@
                             lat_ec_h.id = "h4_lat"
                             lat_ec_h.innerText = "纬度:27.5度"
                             latlon_ec.append(lat_ec_h)
-                            position_ec.append(blank_ec, name_ec, latlon_ec)
+                            // 添加按钮
+                            var button_ec = document.createElement("div")
+                            button_ec.style = "display: inline-block;width: 100%; height: 20%;"
+                            var button_input_ec = document.createElement('input')
+                            button_input_ec.setAttribute('type','button')
+                            button_input_ec.setAttribute('value','查询')
+                            button_input_ec.style = 'width:25%;height:50%;float:right'
+                            button_input_ec.id = 'button_input_ec'
+                            button_ec.append(button_input_ec)
+                            
+                            position_ec.append(blank_ec, name_ec, latlon_ec,button_ec)
+                            // 添加查询按钮的响应事件
+                            button_input_ec.addEventListener('click', function(){
+                                console.log("button_input_ec被点击了",$('#h4_village').text())
+                                var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                $.ajax({
+                                        url: "ec_single_data",  // 请求的地址
+                                        type: "post",  // 请求方式
+                                        timeout: 25000, //设置延迟上限
+                                        data: {
+                                                'csrfmiddlewaretoken': csrf,
+                                                'ec_village': $('#h4_village').text()                                                         
+                                        },
+                                        dataType: "json",
+                                        success: function (data) {
+                                            console.log("返回成功",data)                                                           
+                                        }
+                                })
+                            })
                             // 数据展示
                             var ec_single_data = document.createElement('div')
                             ec_single_data.style = "width: 100%; height: 55%;border: 3px solid rgb(8, 8, 8);float: right;"
