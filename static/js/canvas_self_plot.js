@@ -4,7 +4,7 @@
 var data_canvas = {
     "station_list": ['1', '2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'],
     "station": [
-        [120.5, 28.5, 32],
+        [120.5, 28.5, 9999],
         [120.92, 28.78, 55],
         [120.47, 28.55, 45],
         [120.91, 29.11, 35],
@@ -23,7 +23,8 @@ var data_canvas = {
         [121.25, 28.90, 23],
         [121.21, 28.20, 65],
         [121.15, 28.25, 68],
-        [120.95, 28.60, 68]
+        [120.95, 28.60, 68],
+        [121.00, 28.60, 9999]
     
     ]
 }
@@ -298,8 +299,8 @@ canvas.addEventListener('click',
 
         var canvas_select_value = parseFloat($("input[name='canvas_num']:checked").val());
         var canvas_select_method = $("input[name='canvas_var']:checked").val();
-        for (var i = 0; i < data_canvas.station_list.length; i++) {
-
+        for (var i = 0; i < data_canvas.station.length; i++) {
+            //便利所有自动站中的数据并进行加减  
             var canvas_position = return_canvas_position(data_canvas['station'][i][0], data_canvas['station'][i][1])
             // var len_r = (offsetX - data_canvas['station'][i][0]) * (offsetX - data_canvas['station'][i][0]) + (offsetY - data_canvas['station'][i][1]) * (offsetY - data_canvas['station'][i][1]);
             var len_r = (offsetX - canvas_position.x) * (offsetX - canvas_position.x) + (offsetY - canvas_position.y) * (offsetY - canvas_position.y);
