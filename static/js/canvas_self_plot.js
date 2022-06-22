@@ -360,6 +360,7 @@ setInterval(function () {
         undefined
         //圆圈移动
         ballArr.push(new MoveBall(offsetX, offsetY, colorArr[1]));
+        
 
     }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
