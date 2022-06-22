@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
-from django.views.decorators.clickjacking import xframe_options_exempt
-import os
-import json
 import base64
+import json
+import os
 from io import BytesIO
+
 import matplotlib.pyplot as plt
 from django.core.cache import cache
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
-from ..models.doucument_model import *
+from django.views.decorators.clickjacking import xframe_options_exempt
+
 from zdz.common.utils import data_class, func
+from ..models.doucument_model import *
 
 
 def kuaibao(request):
@@ -164,7 +166,7 @@ def upload_select_taizhou_data(request):
         # 常规方法获取列表
         imd_list = get_imd_list(request)
         # 设置缓存
-        cache.set(key, imd_list, timeout=60 * 60*24)
+        cache.set(key, imd_list, timeout=60 * 60 * 24)
 
     context = {
         'data_test': 723.5,
@@ -187,6 +189,8 @@ def get_imd_list(request):
     plot_worker = data_class.plot_tz_product(plot_type, plot_time)
     imd_list = plot_worker.multy_plot()
     return imd_list
+
+
 # 新建文档
 
 
@@ -207,6 +211,8 @@ def create_new_doc(request):
         'data_documenttype': data_documenttype
     }
     return JsonResponse(context)
+
+
 # 创建新的一期文档
 
 
@@ -265,76 +271,76 @@ def leader_Data_post(request):
     }
     return JsonResponse(context)
 
+
 # 查询EC单站的数据并返回给前端进行渲染
 def ec_single_data(request):
     context = {
         'status': "ok",
-        'date':['23:00', '01:00', '03:00', '05:00', '07:00', '09:00',
-                '11:00', '13:00', '15:00', '17:00', '19:00', '21:00'],
-        'pre':[3, 2, 0.8, 1.2, 0.7, 0.1, 0, 0, 0.2, 0.7, 0.4, 2.5],
-        'temp':[12, 15, 16, 17, 19, 18, 17, 17, 16, 16.5, 15, 3],
-        'r':[95, 93, 90, 89, 88, 88, 86.9, 86, 85, 84, 83, 12],
-        'windir':[30, 70, 80, 80, 50, 20, 20, 20, 50, 80, 60, 10],
-        'winspd':[30, 70, 80, 80, 50, 20, 20, 20, 50, 80, 60, 10],
-        'windall':[
+        'date': ['23:00', '01:00', '03:00', '05:00', '07:00', '09:00',
+                 '11:00', '13:00', '15:00', '17:00', '19:00', '21:00'],
+        'pre': [3, 2, 0.8, 1.2, 0.7, 0.1, 0, 0, 0.2, 0.7, 0.4, 2.5],
+        'temp': [12, 15, 16, 17, 19, 18, 17, 17, 16, 16.5, 15, 3],
+        'r': [95, 93, 90, 89, 88, 88, 86.9, 86, 85, 84, 83, 12],
+        'windir': [30, 70, 80, 80, 50, 20, 20, 20, 50, 80, 60, 10],
+        'winspd': [30, 70, 80, 80, 50, 20, 20, 20, 50, 80, 60, 10],
+        'windall': [
             {
                 'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
                 'symbolRotate': 360,
-                'value':30
+                'value': 30
             },
             {
                 'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
                 'symbolRotate': 310,
-                'value':70
+                'value': 70
             },
             {
                 'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
                 'symbolRotate': 270,
-                'value':80
+                'value': 80
             },
             {
                 'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
                 'symbolRotate': 150,
-                'value':80
+                'value': 80
             },
             {
                 'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
                 'symbolRotate': 130,
-                'value':50
+                'value': 50
             },
             {
                 'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
                 'symbolRotate': 240,
-                'value':20
+                'value': 20
             },
             {
                 'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
                 'symbolRotate': 270,
-                'value':60
+                'value': 60
             },
             {
                 'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
                 'symbolRotate': 290,
-                'value':90
+                'value': 90
             },
             {
                 'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
                 'symbolRotate': 210,
-                'value':70
+                'value': 70
             },
             {
                 'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
                 'symbolRotate': 230,
-                'value':10
+                'value': 10
             },
             {
                 'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
                 'symbolRotate': 345,
-                'value':50
+                'value': 50
             }
-            ]
+        ]
 
-        
     }
     return JsonResponse(context)
 

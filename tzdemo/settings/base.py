@@ -16,6 +16,10 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(
     os.path.dirname(os.path.abspath(__file__))))
 
+# 日志文件夹初始化
+LOG_PATH = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(LOG_PATH): os.mkdir(LOG_PATH)
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -115,3 +119,42 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace(
     '\\', '/')  # 设置静态文件路径为主目录下的media文件夹
 MEDIA_URL = '/media/'  # url映射
 # MEDIA_ROOT = 'home/liyuan3970/Data/My_Git/web_met/static/'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {  # 日志信息显示的格式
+        'verbose': {
+            'format': '[%(asctime)s] [%(filename)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
+        },
+    },
+    'filters': {  # 对日志进行过滤
+        'require_debug_true': {  # django在debug模式下才输出日志
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {  # 日志处理方法
+        'console': {  # 向终端中输出日志
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],  # debug为true才会输出
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        'file': {  # 向文件中输出日志
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_PATH, "error.log"),  # 日志文件的位置
+            'maxBytes': 300 * 1024 * 1024,  # 300M大小
+            'backupCount': 10,
+            'formatter': 'verbose',
+            'encoding': 'utf-8'
+        },
+    },
+    'loggers': {  # 日志器
+        "django": {  # 默认的logger应用如下配置
+            "handlers": ["console", "file"],
+            "propagate": True,
+            "level": "DEBUG"
+        },
+    }
+}
