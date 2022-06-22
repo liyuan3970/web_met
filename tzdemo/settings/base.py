@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_crontab',# 定时任务
+    'django_crontab',  # 定时任务
     'zdz',
 ]
 
@@ -48,6 +48,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 全局异常处理
+    'zdz.middleware.exception_middleware.ExceptionMiddleware'
 ]
 
 ROOT_URLCONF = 'tzdemo.urls'

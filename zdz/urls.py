@@ -40,5 +40,8 @@ urlpatterns = [
     url(r'^leader_Data_post', views.leader_Data_post),
     # EC站点数据的查询渲染
     url(r'^ec_single_data', views.ec_single_data),
-    url(r'^test', views.test)
+
+    # 测试url
+    url(r'^test', views.test),
+    url(r'^error', views.test_error),
 ]
