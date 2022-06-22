@@ -359,7 +359,18 @@ setInterval(function () {
     if (mouseInCanvas) {
         undefined
         //圆圈移动
-        ballArr.push(new MoveBall(offsetX, offsetY, colorArr[1]));
+        console.log("ball的长度",parseInt(ballArr.length/3))
+        if (ballArr.length>100){
+            var num_ball = parseInt(ballArr.length/3)
+            console.log("ball的长度",num_ball)
+            ballArr.splice(0,num_ball)
+            ballArr.push(new MoveBall(offsetX, offsetY, colorArr[1]));
+
+        }
+        else {
+            ballArr.push(new MoveBall(offsetX, offsetY, colorArr[1]));
+        }
+        
         
 
     }
