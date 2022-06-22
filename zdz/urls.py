@@ -14,31 +14,31 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
+
 from . import views
 
 urlpatterns = [
-    url(r'zdz_kuaibao',views.kuaibao),
-
-    url(r'index_kb',views.index_kb),
-    url(r'post_data',views.post_data),
-    url(r'url_data',views.url_data),
-    url(r'^station/(.+)/$',views.station_view),
-    url(r'^index',views.index_main),
-    url(r'^login',views.login_main),
-    url(r'^home',views.home),
-    url(r'^quick_look',views.quick_look),
+    url(r'zdz_kuaibao', views.kuaibao),
+    url(r'index_kb', views.index_kb),
+    url(r'post_data', views.post_data),
+    url(r'url_data', views.url_data),
+    url(r'^station/(.+)/$', views.station_view),
+    url(r'^index', views.index_main),
+    url(r'^login', views.login_main),
+    url(r'^home', views.home),
+    url(r'^quick_look', views.quick_look),
     # 自定义绘图
-    url(r'^upload_selfplot_data',views.plot_self_data),
+    url(r'^upload_selfplot_data', views.plot_self_data),
     # 订正产品
-    url(r'^upload_select_taizhou_data',views.upload_select_taizhou_data),
+    url(r'^upload_select_taizhou_data', views.upload_select_taizhou_data),
     # 新建文件
     # 获取创建文件的基本信息
-    url(r'^create_new_doc',views.create_new_doc),
+    url(r'^create_new_doc', views.create_new_doc),
     # 像数据库添加文档基本数据
-    url(r'^create_doc_data',views.create_new_doc_data),
+    url(r'^create_doc_data', views.create_new_doc_data),
     # 呈送发的代码
-    url(r'^leader_Data_post',views.leader_Data_post),
+    url(r'^leader_Data_post', views.leader_Data_post),
     # EC站点数据的查询渲染
-    url(r'^ec_single_data',views.ec_single_data),
-
+    url(r'^ec_single_data', views.ec_single_data),
+    url(r'^test', views.test)
 ]
