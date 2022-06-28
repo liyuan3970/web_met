@@ -274,6 +274,14 @@ def leader_Data_post(request):
 
 # 查询EC单站的数据并返回给前端进行渲染
 def ec_single_data(request):
+    # 数据的接收 
+    village = request.POST.get('ec_village', '')
+    lat = request.POST.get('ec_lat', '')
+    lon = request.POST.get('ec_lon', '')
+    print(village[5:],lat[3:],lon[3:])
+    # 处理数据逻辑
+
+    # 数据的返回
     context = {
         'status': "ok",
         'date': ['23:00', '01:00', '03:00', '05:00', '07:00', '09:00',

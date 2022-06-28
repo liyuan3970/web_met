@@ -359,7 +359,7 @@ setInterval(function () {
     if (mouseInCanvas) {
         undefined
         //圆圈移动
-        console.log("ball的长度",parseInt(ballArr.length/3))
+        // console.log("ball的长度",parseInt(ballArr.length/3))
         if (ballArr.length>100){
             var num_ball = parseInt(ballArr.length/3)
             console.log("ball的长度",num_ball)
