@@ -3915,7 +3915,7 @@
                             table_wind.setAttribute('class', 'table table-hover table-bordered table-condensed')
 
                             var table_head = document.createElement('thead')
-                            table_head.innerHTML = "<tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>"
+                            table_head.innerHTML = "<tr><th>日期</th><th>时段</th><th>天况</th><th>气温</th></tr>"
 
                             var table_body = document.createElement('tbody')
                             table_body.innerHTML = "\
@@ -3968,15 +3968,8 @@
                             var dom = document.getElementById("calendar_history");
                             var myChart = echarts.init(dom);
                             // myChart.resize()
-
-
-
                             var option;
-
-
-
                             const dateList = [
-
                                 ['2022-4-14', '十七', '强降水'],
                                 ['2022-4-15', '十八'],
                                 ['2022-4-16', '十九'],
@@ -3989,8 +3982,6 @@
                                 ['2022-4-23', '廿六'],
                                 ['2022-4-24', '廿七'],
                                 ['2022-4-25', '廿八', '强降水']
-
-
                             ];
                             let heatmapData = [];
                             let lunarData = [];
@@ -4105,7 +4096,7 @@
                             // 加载降水图 tz_json
                             var chart = echarts.init(document.getElementById('map_bar'));
                             echarts.registerMap('taizhou', tz_json, {});
-                            var data_xy = [["天台", "仙居", "玉环", "临海", "黄岩", "三门", "温岭", "仙居", "仙居", 9, 10, 11, 12], [600, 1150, 400, 850, 600, 650, 100, 1150, 100, 700, 600, 800, 500]]
+                            var data_xy = [["天台", "仙居", "玉环", "临海", "黄岩", "三门", "温岭", "仙居", "仙居"], [600, 1150, 400, 850, 600, 650, 100, 1150, 100, 700, 600, 800, 500]]
                             chart.setOption({
                                 xAxis: [
                                     { geoIndex: 0 },
@@ -4548,21 +4539,19 @@
                             tabbable_table.setAttribute('class', 'table table-bordered table-condensed')
 
                             tabbable_head = document.createElement('thead')
-                            tabbable_head.innerHTML = "<tr><th>时间</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>"
+                            tabbable_head.innerHTML = "<tr><th>时间</th><th>时段</th><th>天况</th><th>气温</th><th>风力</th><th>降水</th><th>相对湿度</th></tr>"
 
                             tabbable_body = document.createElement('tbody')
                             tabbable_body.innerHTML = "\
-                                                                            <tr><th>时间</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>\
-                                                                            <tr><th>气温</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>\
-                                                                            <tr><th>降水</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>\
-                                                                            <tr><th>湿度</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>\
-                                                                            <tr><th>K</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>\
-                                                                            <tr><th>能见度</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>\
-                                                                            <tr><th>时间</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>\
-                                                                            <tr><th>时间</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>\
-                                                                            <tr><th>时间</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>\
-                                                                            <tr><th>时间</th><th>20</th><th>21</th><th>22</th><th>23</th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>\
-                                                                            "
+                                        <tr ><td colspan='1' rowspan='3'>6月29日</td><td>08:00~09:00</td><td>多云转阴</td><td>25~27°C</td><td>8级风</td><td>15mm</td><td>80%</td></tr>\
+                                        <tr ><td>08:00~09:00</td><td>多云转阴</td><td>25~27°C</td><td>8级风</td><td>15mm</td><td>80%</td></tr>\
+                                        <tr ><td>08:00~09:00</td><td>多云转阴</td><td>25~27°C</td><td>8级风</td><td>15mm</td><td>80%</td></tr>\
+                                        <tr ><td colspan='1' rowspan='3'>6月29日</td><td>08:00~09:00</td><td>多云转阴</td><td>25~27°C</td><td>8级风</td><td>15mm</td><td>80%</td></tr>\
+                                        <tr ><td>08:00~09:00</td><td>多云转阴</td><td>25~27°C</td><td>8级风</td><td>15mm</td><td>80%</td></tr>\
+                                        <tr ><td>08:00~09:00</td><td>多云转阴</td><td>25~27°C</td><td>8级风</td><td>15mm</td><td>80%</td></tr>\
+                                        <tr ><td colspan='1' rowspan='3'>6月29日</td><td>08:00~09:00</td><td>多云转阴</td><td>25~27°C</td><td>8级风</td><td>15mm</td><td>80%</td></tr>\
+                                        <tr ><td>08:00~09:00</td><td>多云转阴</td><td>25~27°C</td><td>8级风</td><td>15mm</td><td>80%</td></tr>\
+                                        <tr ><td>08:00~09:00</td><td>多云转阴</td><td>25~27°C</td><td>8级风</td><td>15mm</td><td>80%</td></tr>"
 
                             tabbable_table.append(tabbable_head, tabbable_body)
                             tabbable_content1.append(tabbable_h, tabbable_table)
