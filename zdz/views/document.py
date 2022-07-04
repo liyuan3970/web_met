@@ -352,6 +352,44 @@ def ec_single_data(request):
     }
     return JsonResponse(context)
 
+def self_plot_download(request):
+    self_plot_start_time = request.POST.get('self_plot_start_time', '')
+    self_plot_end_time = request.POST.get('self_plot_end_time', '')
+    # 编写数据查询的后端逻辑
+    data_canvas = {
+    "station_list": ['1', '2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'],
+    "station": [
+        [120.5, 28.5, 300],
+        [120.92, 28.78, 55],
+        [120.47, 28.55, 45],
+        [120.91, 29.11, 35],
+        [121.46, 28.94, 25],
+        [121.05, 28.77, 15],
+        [121.41, 28.64, 25],
+        [120.21, 28.66, 35],
+        [121.41, 28.47, 45],
+        [121.40, 28.34, 55],
+        [121.15, 27.94, 65],
+        [121.21, 28.41, 75],
+        [120.54, 28.70, 85],
+        [121.20, 28.68, 15],
+        [120.66, 28.89, 25],
+        [121.04, 29.00, 23],
+        [121.25, 28.90, 23],
+        [121.21, 28.20, 65],
+        [121.15, 28.25, 68],
+        [120.95, 28.60, 68],
+        [121.00, 28.60, 300]
+    
+    ]
+}
+    context = {
+        'status': "ok",
+        'data_canvas':data_canvas
+    }
+    return JsonResponse(context)
+
+
 
 @xframe_options_exempt
 def home(request):

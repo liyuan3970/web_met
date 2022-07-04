@@ -16,6 +16,8 @@ urlpatterns = [
     path('quick_look', views.quick_look),
     # 自定义绘图
     path('upload_selfplot_data', views.plot_self_data),
+    # 自定义画图数据下载
+    path('self_plot_download', views.self_plot_download),
     # 订正产品
     path('upload_select_taizhou_data', views.upload_select_taizhou_data),
     # 新建文件
@@ -27,6 +29,7 @@ urlpatterns = [
     path('leader_Data_post', views.leader_Data_post),
     # EC站点数据的查询渲染
     path('ec_single_data', views.ec_single_data),
+    
 
     # 测试url
     path('test', views.test),

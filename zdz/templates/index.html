@@ -2599,62 +2599,39 @@
                                                 <div style="width:100%;height:5%;">
                                                     请选择颜色:
                                                 </div>
-                                                <div style="width:100%;height:5%;background-color: rgb(245, 9, 9);">
+                                                <div style="width:100%;height:10%;background-color: rgb(128, 0, 64);">
                                                     <input type="radio" checked="checked" name="selected_color_1st"
-                                                        value="rgb(245, 9, 9)" style="width:20%;height:100%;">
+                                                        value="rgb(128, 0, 64)" style="width:20%;height:100%;">
                                                 </div>
-                                                <div style="width:100%;height:5%;background-color: rgb(112, 27, 35);">
+                                                <div style="width:100%;height:10%;background-color: rgb(250, 0, 250);">
                                                     <input type="radio" name="selected_color_1st"
-                                                        value="rgb(112, 27, 35)" style="width:20%;height:100%;">
+                                                        value="rgb(250, 0, 250)" style="width:20%;height:100%;">
                                                 </div>
-                                                <div style="width:100%;height:5%;background-color: rgb(240, 10, 190);">
+                                                <div style="width:100%;height:10%;background-color: rgb(0, 0, 225);">
                                                     <input type="radio" name="selected_color_1st"
-                                                        value="rgb(240, 10, 190)" style="width:20%;height:100%;">
+                                                        value="rgb(0, 0, 225)" style="width:20%;height:100%;">
                                                 </div>
-                                                <div style="width:100%;height:5%;background-color: rgb(13, 27, 224);">
+                                                <div style="width:100%;height:10%;background-color: rgb(97, 184, 255);">
                                                     <input type="radio" name="selected_color_1st"
-                                                        value="rgb(13, 27, 224)" style="width:20%;height:100%;">
+                                                        value="rgb(97, 184, 255)" style="width:20%;height:100%;">
                                                 </div>
-                                                <div style="width:100%;height:5%;background-color: rgb(64, 137, 179);">
+                                                <div style="width:100%;height:10%;background-color: rgb(61,186,61);">
                                                     <input type="radio" name="selected_color_1st"
-                                                        value="rgb(64, 137, 179)" style="width:20%;height:100%;">
+                                                        value="rgb(61,186,61)" style="width:20%;height:100%;">
                                                 </div>
-                                                <div style="width:100%;height:5%;background-color: rgb(49, 131, 11);">
+                                                <div style="width:100%;height:10%;background-color: rgb(166,242,143);">
                                                     <input type="radio" name="selected_color_1st"
-                                                        value="rgb(49, 131, 11)" style="width:20%;height:100%;">
+                                                        value="rgb(166,242,143)" style="width:20%;height:100%;">
                                                 </div>
-                                                <div style="width:100%;height:5%;background-color: rgb(156, 231, 35);">
-                                                    <input type="radio" name="selected_color_1st"
-                                                        value="rgb(156, 231, 35)" style="width:20%;height:100%;">
-                                                </div>
-                                                <div style="width:100%;height:5%;background-color: rgb(245, 240, 243)">
-                                                    <input type="radio" name="selected_color_1st"
-                                                        value="rgb(245, 240, 243)" style="width:20%;height:100%;">
-                                                </div>
-                                                <div style="width:100%;height:5%;background-color: rgb(19, 12, 16);">
-                                                    <input type="radio" name="selected_color_1st"
-                                                        value="rgb(19, 12, 16)" style="width:20%;height:100%;">
-                                                </div>
-                                                <div style="width:100%;height:5%;background-color: red;">
-                                                    <input type="radio" name="selected_color_1st"
-                                                        value="rgb(19, 12, 16)" style="width:20%;height:100%;">
-                                                </div>
-                                                <div style="width:100%;height:5%;background-color: rgb(31, 27, 27);">
-                                                    <input type="radio" name="selected_color_1st"
-                                                        value="rgb(19, 12, 16)" style="width:20%;height:100%;">
-                                                </div>
-                                                <div style="width:100%;height:5%;background-color: rgb(19, 211, 105);">
-                                                    <input type="radio" name="selected_color_1st"
-                                                        value="rgb(19, 12, 16)" style="width:20%;height:100%;">
-                                                </div>
-                                                <div style="width:100%;height:5%;background-color: rgb(13, 27, 224);">
+                                                <!-- 自定义颜色 -->
+                                                <div style="width:100%;height:10%;background-color: rgb(19, 12, 16);">
                                                     <input type="radio" name="selected_color_1st"
                                                         value="rgb(19, 12, 16)" style="width:20%;height:100%;">
                                                 </div>
                                             </div>
                                             <canvas id="plot_canvas" style="width:90%;height:100%;"></canvas>
                                         </div>
-                                        <!-- 绘图的核心js -->
+                                        <!-- 自订正绘图的核心js -->
                                         <script src='static/js/taizhou.js'></script>
                                         <script type="text/javascript" src='static/js/canvas_self_plot.js'></script>
 
@@ -2669,7 +2646,7 @@
 
                                                 <input id="plot_self_button" type="button" value="绘制"
                                                     style="width:10%;height: 100%;float:right">
-                                                <input type="button" value="刷新"
+                                                <input id="plot_self_flash" type="button" value="刷新"
                                                     style="width:10%;height:100%;float:right">
 
                                             </div>
@@ -2685,13 +2662,75 @@
                                                 <div style=";width:100%;height:25%; "></div>
                                                 <div style="display: inline-flex;width:100%;height:20%; ">
                                                     <div style="width:20%;height:80%; "></div>
-                                                    <input type="text" placeholder="起始时间"
+                                                    <input id = "self_plot_start_time" type="text" placeholder="起始时间"
                                                         style="width:20%;height: 100%;float:left">
-                                                    <input type="text" placeholder="起始时间"
+                                                    <input id = "self_plot_end_time" type="text" placeholder="起始时间"
                                                         style="width:20%;height: 100%;float:left">
-                                                    <input type="button" value="下载"
+                                                    <input type="button" id = "self_plot_download" value="下载"
                                                         style="width:10%;height: 100%;float:left">
                                                 </div>
+                                                <!-- 自订正画图的下载代码 -->
+
+                                                <script type="text/javascript">
+                                                    $('#self_plot_download').click(function () {
+                                                        // console.log("我被点击了")
+                                                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                                        var self_plot_start_time = $('#self_plot_start_time').val();
+                                                        var self_plot_end_time = $('#self_plot_end_time').val();
+                                                        $.ajax({
+                                                            url: "self_plot_download",  // 请求的地址
+                                                            type: "post",  // 请求方式
+                                                            timeout: 250, //设置延迟上限
+                                                            data: {
+                                                                'csrfmiddlewaretoken': csrf,
+                                                                'self_plot_start_time': self_plot_start_time,
+                                                                'self_plot_end_time': self_plot_end_time
+                                                            },
+                                                            dataType: "json",
+                                                            success: function (data) {
+                                                                // data_canvas = {}
+                                                                data_canvas = data.data_canvas
+                                                                // plot_self_flash_data ={}
+                                                                plot_self_flash_data = data.data_canvas
+                                                            }
+                                                        })
+                                                    })
+                                                    let plot_self_flash_data = {
+                                                        "station_list": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'],
+                                                        "station": [
+                                                            [120.5, 28.5, 199],
+                                                            [120.92, 28.78, 55],
+                                                            [120.47, 28.55, 45],
+                                                            [120.91, 29.11, 35],
+                                                            [121.46, 28.94, 25],
+                                                            [121.05, 28.77, 15],
+                                                            [121.41, 28.64, 25],
+                                                            [120.21, 28.66, 35],
+                                                            [121.41, 28.47, 45],
+                                                            [121.40, 28.34, 55],
+                                                            [121.15, 27.94, 65],
+                                                            [121.21, 28.41, 75],
+                                                            [120.54, 28.70, 85],
+                                                            [121.20, 28.68, 15],
+                                                            [120.66, 28.89, 25],
+                                                            [121.04, 29.00, 23],
+                                                            [121.25, 28.90, 23],
+                                                            [121.21, 28.20, 65],
+                                                            [121.15, 28.25, 68],
+                                                            [120.95, 28.60, 68],
+                                                            [121.00, 28.60, 99]
+
+                                                        ]
+                                                    }
+                                                    $('#plot_self_flash').click(function () {
+                                                        
+                                                        // 解决前端对象相等的时候指针相等的问题
+                                                        data_canvas = {}
+                                                        data_canvas = JSON.parse(JSON.stringify(plot_self_flash_data))
+                                                        console.log("我点击了",data_canvas.station[0],"刷新值",plot_self_flash_data.station[0])
+                                                        })
+
+                                                </script>
 
 
 
