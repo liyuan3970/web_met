@@ -2466,12 +2466,18 @@
                                     <input id="tool_zdz_button" type="button" value="查看"
                                         style="width: 10%;height:40% ;float: right ;">
                                     <script>
+                                        
                                         $('#datetimepicker_history1').datetimepicker(
                                             {
                                                 theme: 'dark',
-                                                format: 'Y-m-d H:i'
+                                                format: 'Y-m-d',
+                                                minView: "month",
+                                                language:'zh',
+                                                startView:2
+                                                
                                             }
                                         );
+                                        $("#datetimepicker_history1").datetimepicker("setDate", new Date() ); 
                                     </script>
                                     <script>
                                         $('#datetimepicker_history2').datetimepicker(
@@ -2524,8 +2530,30 @@
                                             <option value="">20220503</option>
                                             <option value="">20220504</option>
                                         </select>
-                                        <input type="text" placeholder="起始时间" style="width:20%;height:80%;">
-                                        <input type="text" placeholder="起始时间" style="width:20%;height:80%;">
+                                        <input id = "ec_start_time" type="text" placeholder="起始时间" style="width:20%;height:80%;">
+                                        <input id = "ec_end_time" type="text" placeholder="起始时间" style="width:20%;height:80%;">
+                                        <script>
+                                        
+                                            $('#ec_start_time').datetimepicker(
+                                                {
+                                                    theme: 'dark',
+                                                    format: 'Y-m-d',
+                                                    minView: "month",
+                                                    language:'zh',
+                                                    startView:2
+                                                    
+                                                }
+                                            );
+                                            $("#ec_start_time").datetimepicker("setDate", new Date() ); 
+                                     
+                                            $('#ec_end_time').datetimepicker(
+                                                {
+                                                    theme: 'dark',
+                                                    format: 'Y-m-d H:i'
+                                                }
+                                            );
+                                        </script>
+
 
 
                                     </div>
@@ -4377,6 +4405,8 @@
                                         'ec_village': $('#h4_village').text(), 
                                         'ec_lon':$('#h4_lon').text(), 
                                         'ec_lat':$('#h4_lat').text(),
+                                        'ec_start_time':$('#ec_start_time').val(),
+                                        'ec_end_time':$('#ec_end_time').val()
 
                                     },
                                     dataType: "json",

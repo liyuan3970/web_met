@@ -278,7 +278,9 @@ def ec_single_data(request):
     village = request.POST.get('ec_village', '')
     lat = request.POST.get('ec_lat', '')
     lon = request.POST.get('ec_lon', '')
-    print(village[5:],lat[3:],lon[3:])
+    ec_start_time = request.POST.get('ec_start_time', '')
+    ec_end_time = request.POST.get('ec_end_time', '')
+    print(ec_start_time,ec_end_time)
     # 处理数据逻辑
 
     # 数据的返回
