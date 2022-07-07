@@ -2697,9 +2697,30 @@
                                                     <input type="button" id = "self_plot_download" value="下载"
                                                         style="width:10%;height: 100%;float:left">
                                                 </div>
+                                                
+            
+
                                                 <!-- 自订正画图的下载代码 -->
 
                                                 <script type="text/javascript">
+                                                    $('#self_plot_start_time').datetimepicker(
+                                                        {
+                                                            theme: 'dark',
+                                                            format: 'Y-m-d H:i',
+                                                            minView: "month",
+                                                            language:'zh',
+                                                            startView:2
+                                                            
+                                                        }
+                                                    );
+                                                    $("#self_plot_start_time").datetimepicker("setDate", new Date() ); 
+                                             
+                                                    $('#self_plot_end_time').datetimepicker(
+                                                        {
+                                                            theme: 'dark',
+                                                            format: 'Y-m-d H:i'
+                                                        }
+                                                    );                                       
                                                     $('#self_plot_download').click(function () {
                                                         // console.log("我被点击了")
                                                         var csrf = $('input[name="csrfmiddlewaretoken"]').val();
@@ -3538,7 +3559,7 @@
                             var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                             $.ajax({
                                 url: "upload_selfplot_data",  // 请求的地址
-                                type: "get",  // 请求方式
+                                type: "post",  // 请求方式
                                 data: {
                                     "plot_self_data": JSON.stringify(data_canvas),
                                     'csrfmiddlewaretoken': csrf

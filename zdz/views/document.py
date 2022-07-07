@@ -13,6 +13,11 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from zdz.common.utils import data_class, func
 from ..models.doucument_model import *
 
+import pandas as pd
+from numpy import random
+
+# 设置全局变量用来存储EC数据的数据对象
+ec_worker = None
 
 def kuaibao(request):
     # print(this is a index)
@@ -123,8 +128,8 @@ def quick_look(request):
 
 # canvas 绘图
 def plot_self_data(request):
-    plot_self_data = request.GET.get('plot_self_data', '')
-    crf = request.GET.get('csrfmiddlewaretoken', '')
+    plot_self_data = request.POST.get('plot_self_data', '')
+    crf = request.POST.get('csrfmiddlewaretoken', '')
     data = json.loads(plot_self_data)
     lon = []
     lat = []
@@ -358,33 +363,26 @@ def self_plot_download(request):
     self_plot_start_time = request.POST.get('self_plot_start_time', '')
     self_plot_end_time = request.POST.get('self_plot_end_time', '')
     # 编写数据查询的后端逻辑
+    data = pd.read_csv('static/data/' +  'rect_station_info_tz.csv',encoding='ISO-8859-1')
     data_canvas = {
-    "station_list": ['1', '2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'],
-    "station": [
-        [120.5, 28.5, 300],
-        [120.92, 28.78, 55],
-        [120.47, 28.55, 45],
-        [120.91, 29.11, 35],
-        [121.46, 28.94, 25],
-        [121.05, 28.77, 15],
-        [121.41, 28.64, 25],
-        [120.21, 28.66, 35],
-        [121.41, 28.47, 45],
-        [121.40, 28.34, 55],
-        [121.15, 27.94, 65],
-        [121.21, 28.41, 75],
-        [120.54, 28.70, 85],
-        [121.20, 28.68, 15],
-        [120.66, 28.89, 25],
-        [121.04, 29.00, 23],
-        [121.25, 28.90, 23],
-        [121.21, 28.20, 65],
-        [121.15, 28.25, 68],
-        [120.95, 28.60, 68],
-        [121.00, 28.60, 300]
-    
-    ]
-}
+        "station_list": [],
+        "station":[]   
+    }
+    length = data.shape[0]
+
+    for i in range(length):
+        station_data = []
+        if i < 41:
+            data_canvas['station_list'].append(data.iloc[i,4])
+            station_data.append(data.iloc[i,3])
+            station_data.append(data.iloc[i,2])
+            station_data.append(random.randint(100))
+            data_canvas['station'].append(station_data)
+        else:
+            station_data.append(data.iloc[i,3])
+            station_data.append(data.iloc[i,2])
+            station_data.append(random.randint(100))
+            data_canvas['station'].append(station_data)
     context = {
         'status': "ok",
         'data_canvas':data_canvas
