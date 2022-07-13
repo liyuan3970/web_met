@@ -42,7 +42,8 @@ let canvasH_self_plot = canvas.height = window.innerHeight *0.95*0.75
 // let canvasH_self_plot = canvas.height = 651;
 
 let geoCenterX_self_plot = 0, geoCenterY_self_plot = 0  // 地图区域的经纬度中心点
-let scale_self_plot = 1.0   // 地图缩放系数
+let scale_self_plot_x = 1.0   // 地图缩放系数
+let scale_self_plot_y = 1.0 
 let map_box = []
 canvas.style.backgroundColor = "white";
 
@@ -144,6 +145,7 @@ function drawText_self_plot() {
             y = item.properties.center[1]
         }
         let position = toScreenPosition_self_plot(x, y)
+        
         ctx.fillText(item.properties.name, position.x, position.y);
         ctx.restore()
     })
@@ -152,8 +154,8 @@ function drawText_self_plot() {
 // 将经纬度坐标转换为屏幕坐标
 function toScreenPosition_self_plot(horizontal, vertical) {
     return {
-        x: (horizontal - geoCenterX_self_plot) * scale_self_plot,
-        y: (geoCenterY_self_plot - vertical) * scale_self_plot
+        x: (horizontal - geoCenterX_self_plot) * scale_self_plot_x,
+        y: (geoCenterY_self_plot - vertical) * scale_self_plot_y
     }
 }
 
@@ -191,8 +193,10 @@ function getBoxArea_self_plot() {
     let wScale = canvasW_self_plot / width
     let hScale = canvasH_self_plot / height
     // 计算地图缩放系数
-    scale_self_plot = wScale > hScale ? hScale : wScale
-    scale_self_plot = scale_self_plot -100 //地图真实的大小
+    scale_self_plot_x = wScale 
+    scale_self_plot_y = hScale   //地图真实的大小
+    // scale_self_plot = wScale > hScale ? hScale : wScale
+    // scale_self_plot = scale_self_plot //地图真实的大小
     // 获取包围盒中心经纬度坐标
     geoCenterX_self_plot = (E + W) / 2
     geoCenterY_self_plot = (N + S) / 2
@@ -213,9 +217,14 @@ function getBoxArea_self_plot() {
 function return_canvas_position (lon, lat){
 
     return {
-        x:(lon - map_box[3])*(canvas.width/map_box[0]),
-        y:(map_box[2]-lat)*(canvas.height/map_box[1])
+        x:(lon - map_box[3])*scale_self_plot_x,
+        y:(map_box[2]-lat)*scale_self_plot_y
     }
+
+    // return {
+    //     x:(lon - map_box[3])*(canvas.width/map_box[0]),
+    //     y:(map_box[2]-lat)*(canvas.height/map_box[1])
+    // }
 
 }
 //小球类
@@ -296,7 +305,7 @@ canvas.addEventListener('click',
         offsetX = e.offsetX;
         offsetY = e.offsetY;
         // console.log(offsetX,offsetY)
-
+        
         var canvas_select_value = parseFloat($("input[name='canvas_num']:checked").val());
         var canvas_select_method = $("input[name='canvas_var']:checked").val();
         for (var i = 0; i < data_canvas.station.length; i++) {
@@ -308,6 +317,7 @@ canvas.addEventListener('click',
 
                 if (len_r < r * r) {
                     data_canvas['station'][i][2] = data_canvas['station'][i][2] + canvas_select_value
+                    // console.log("所在位置的经纬度:",offsetX,offsetY,data_canvas['station'][i][0], data_canvas['station'][i][1])
                 }
             }
             else {
@@ -362,7 +372,7 @@ setInterval(function () {
         // console.log("ball的长度",parseInt(ballArr.length/3))
         if (ballArr.length>100){
             var num_ball = parseInt(ballArr.length/3)
-            console.log("ball的长度",num_ball)
+            // console.log("ball的长度",num_ball)
             ballArr.splice(0,num_ball)
             ballArr.push(new MoveBall(offsetX, offsetY, colorArr[1]));
 
