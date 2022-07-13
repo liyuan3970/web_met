@@ -15,7 +15,6 @@ let eventType = ''  // 事件类型
 let countour_rect = {
     'x': [],
     'y': []
-
 }
 function down(evt) {
     var select_plot_type = $("input[name='taizhou_quick_plot_type']:checked").val()

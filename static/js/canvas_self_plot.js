@@ -172,10 +172,10 @@ function getBoxArea_self_plot() {
             let areaN = - 90, areaS = 90, areaW = 180, areaE = -180
             area[0].forEach(elem => {
                 if (elem[0] < W) {
-                    W = elem[0]
+                    W = elem[0] 
                 }
                 if (elem[0] > E) {
-                    E = elem[0]
+                    E = elem[0] 
                 }
                 if (elem[1] > N) {
                     N = elem[1]
@@ -183,8 +183,14 @@ function getBoxArea_self_plot() {
                 if (elem[1] < S) {
                     S = elem[1]
                 }
+
             })
         })
+        // 此处为变相的修改缩放比例
+        W = W - 0.03 
+        E = E + 0.03
+        N = N + 0.03
+        S = S - 0.06
     })
     // 计算包围盒的宽高
     let width = Math.abs(E - W)
@@ -193,7 +199,7 @@ function getBoxArea_self_plot() {
     let wScale = canvasW_self_plot / width
     let hScale = canvasH_self_plot / height
     // 计算地图缩放系数
-    scale_self_plot_x = wScale 
+    scale_self_plot_x = wScale  
     scale_self_plot_y = hScale   //地图真实的大小
     // scale_self_plot = wScale > hScale ? hScale : wScale
     // scale_self_plot = scale_self_plot //地图真实的大小
@@ -213,6 +219,12 @@ function getBoxArea_self_plot() {
 //     // ctx.arc(offsetX, offsetY,150, 0, Math.PI * 2);
 // })
 
+// function return_canvas_position(horizontal, vertical) {
+//     return {
+//         x: (horizontal - geoCenterX_self_plot) * scale_self_plot_x,
+//         y: (geoCenterY_self_plot - vertical) * scale_self_plot_y
+//     }
+// }
 
 function return_canvas_position (lon, lat){
 
