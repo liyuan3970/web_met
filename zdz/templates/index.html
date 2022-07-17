@@ -3950,6 +3950,13 @@
                             tabbable_a3.innerText = "能见度"
                             tabbable_li3.append(tabbable_a3)
 
+                            var tabbable_li5 = document.createElement('li')
+                            var tabbable_a5 = document.createElement('a')
+                            tabbable_a5.setAttribute('href', '#panel-725172')
+                            tabbable_a5.setAttribute('data-toggle', 'tab')
+                            tabbable_a5.innerText = "气温"
+                            tabbable_li5.append(tabbable_a5)
+
                             var tabbable_li4 = document.createElement('li')
                             var tabbable_a4 = document.createElement('a')
                             tabbable_a4.setAttribute('href', '#panel-725171')
@@ -3958,7 +3965,7 @@
                             tabbable_a4.id = "a_panel-725171"
                             tabbable_li4.append(tabbable_a4)
 
-                            tabbable_ul.append(tabbable_li1, tabbable_li2, tabbable_li3, tabbable_li4)
+                            tabbable_ul.append(tabbable_li1, tabbable_li2, tabbable_li3, tabbable_li5,tabbable_li4)
 
                             // 降水
                             var panel_883512 = document.createElement('div')
@@ -4018,6 +4025,69 @@
                             panel_725174.append(wind_all)
                             tab_content.append(panel_725174)
                             // 能见度
+                            var panel_725173 = document.createElement('div')
+                            panel_725173.setAttribute("class", "tab-pane")
+                            panel_725173.style = "width: 100%; height: 100%;"
+                            panel_725173.id = "panel-725173"
+
+                            var see_view_all = document.createElement('div')
+                            see_view_all.style = "display: inline-block;width: 100%; height: 100%;"
+
+                            var map_see_view = document.createElement('div')
+                            map_see_view.id = "map_see_view"
+                            map_see_view.style = "display: inline-block;width: 560px; height: 370px;"
+
+                            var table_see_view_div = document.createElement('div')
+                            table_see_view_div.style = "display: inline-block;width: 370px; height:380px;overflow: auto;"
+
+                            var table_see_view = document.createElement('table')
+                            table_see_view.setAttribute('class', 'table table-hover table-bordered table-condensed')
+
+                            var table_head = document.createElement('thead')
+                            table_head.innerHTML = "<tr><th>日期</th><th>时段</th><th>天况</th><th>气温</th></tr>"
+
+                            var table_body = document.createElement('tbody')
+                            table_body.innerHTML = "\
+                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
+                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
+                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
+                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
+                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
+                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
+                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
+                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
+                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
+                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
+                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
+                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
+                                                                            <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
+                                                                            "
+
+                            table_see_view.append(table_head, table_body)
+                            table_see_view_div.append(table_see_view)
+                            see_view_all.append(map_see_view, table_see_view_div)
+                            panel_725173.append(see_view_all)
+                            tab_content.append(panel_725173)
+                            //气温
+                            var panel_725172 = document.createElement('div')
+                            panel_725172.setAttribute("class", "tab-pane")
+                            panel_725172.style = "width: 100%; height: 100%;"
+                            panel_725172.id = "panel-725172"
+
+                            var see_view_all_temp = document.createElement('div')
+                            see_view_all.style = "display: inline-block;width: 100%; height: 100%;"
+
+                            var maphigt_see_view = document.createElement('div')
+                            maphigt_see_view.id = "maphigt_see_view"
+                            maphigt_see_view.style = "display: inline-block;width: 430px; height: 370px;border 3px solid black;"
+
+                            var maplow_see_view = document.createElement('div')
+                            maplow_see_view.id = "maplow_see_view"
+                            maplow_see_view.style = "display: inline-block;width: 430px; height:370px;"
+
+                            see_view_all_temp.append(maphigt_see_view, maplow_see_view)
+                            panel_725172.append(see_view_all_temp)
+                            tab_content.append(panel_725172)
 
                             // 自定义数据加载                            
                             var panel_725171 = document.createElement('div')
@@ -4157,7 +4227,7 @@
                             }
                             myChart.on('click', function (params) {
                                 let componentType = params.componentType;   // geo是地图图层                      
-
+                                // 日报的数据加载 
                                 console.log("数据", params.value)
                                 // $('#panel-725171').attr("calss", "tab-pane active")
                                 // $('#panel-883512').attr("calss", "tab-pane")
@@ -4165,7 +4235,8 @@
                                 // $('#panel-725173').attr("calss", "tab-pane")
                                 var show_data = params.value[1]
                                 $('#show_panel-725171').html(" ")
-                                $('#show_panel-725171').html(show_data)
+                                // 用来返回ajax的html数据请求
+                                $('#show_panel-725171').html(show_data +"value的值" +  params.value)
 
                                 $('#a_panel-725171').click()
                             });
@@ -4245,10 +4316,6 @@
                             var map = echarts.init(document.getElementById('map_wind'), 'light');
                             //  echarts.registerMap('taizhou',tz_json,{});
 
-                            var data = {
-                                'month': [4300, 10000, 28000, 35000, 35000, 50000, 19000],
-                                'history': [5000, 14000, 28000, 31000, 31000, 42000, 21000],
-                            }
                             map.setOption({
                                 title: {
                                     text: '极大风',
@@ -4354,8 +4421,338 @@
 
                             });
 
+                            // 加载能见度图 
+                            var map = echarts.init(document.getElementById('map_see_view'), 'light');
+                            //  echarts.registerMap('taizhou',tz_json,{});
+
+                            map.setOption({
+                                title: {
+                                    text: '极大风',
+                                    textStyle: { fontSize: 30 },
+                                },
+                                tooltip: {
+                                    trigger: 'item',
+                                    formatter: 'k8505 50(m/s)'
+                                },
+                                geo: {
+                                    map: 'taizhou',
+                                    roam: true,
+                                    // tooltip:{borderColor = '#333'}
+                                    itemStyle: {
+                                        color: 'white'
+                                        // areaColor = '#333',
+                                    }
 
 
+                                },
+                                visualMap: {
+                                    type: "piecewise",
+                                    // orient:'horizontal',
+                                    // type:"continuous",
+                                    // min: 0,
+                                    // max: 200,
+                                    // splitNumber = 5,
+                                    // color: ["rgb(255, 255, 255)",
+                                    // "rgb(255, 238, 255)",
+                                    // "rgb(255, 238, 204)",
+                                    // "rgb(255, 204, 153)",
+                                    // "rgb(255, 204, 102)",
+                                    // "rgb(255, 170, 68)",
+                                    // "rgb(153, 255, 136)",
+                                    // "rgb(0, 255, 85)",
+                                    // "rgb(0, 170, 51)",
+                                    // "rgb(0, 170, 255)",
+                                    // "rgb(17, 136, 204)",
+                                    // "rgb(0, 85, 204)",
+                                    // "rgb(0, 68, 221)",
+                                    // "rgb(0, 0, 221)"],
+                                    right: 0,
+                                    padding: 0,
+                                    itemGap: 0,
+                                    textGap: 0,
+                                    textStyle: { fontSize: 8 },
+                                    pieces: [
+                                        { min: 2000, max: 2500, label: '10 到 200', color: "rgb(255, 255, 255)" },
+                                        { min: 1500, max: 2000, label: '10 到 200', color: "rgb(255, 238, 255)" },// 不指定 max，表示 max 为无限大（Infinity）。
+                                        { min: 900, max: 1500, label: '10 到 200', color: "rgb(255, 238, 204)" },
+                                        { min: 310, max: 1000, label: '10 到 200', color: "rgb(255, 204, 153)" },
+                                        { min: 200, max: 300, label: '10 到 200', color: "rgb(255, 204, 102)" },
+                                        { min: 10, max: 200, label: '10 到 200', color: "rgb(255, 170, 68)" },
+                                        { max: 10, min: 5, label: '10 到 200', color: "rgb(153, 255, 136)" },    // 不指定 min，表示 min 为无限大（-Infinity）。
+                                        { max: 5, min: 4, label: '10 到 200', color: "rgb(0, 255, 85)" },
+                                        { max: 4, min: 3, label: '10 到 200', color: "rgb(0, 170, 51)" },
+                                        { max: 3, min: 2, label: '10 到 200', color: "rgb(0, 170, 255)" },
+                                        { max: 2, min: 1, label: '10 到 200', color: "rgb(17, 136, 204)" },
+                                        { max: 1, min: 0, label: '10 到 200', color: "rgb(0, 85, 204)" },
+                                        { max: 0, min: -1, label: '10 到 200', color: "rgb(0, 68, 221)" },
+                                        { max: -1, min: -2, label: '10 到 200', color: "rgb(0, 0, 221)" }
+
+                                    ],
+
+                                    // categories: ['1', '2', '3', '4', '5','6']
+
+                                    // inRange: {
+                                    //     color: ['lightskyblue','yellow', 'orangered']
+                                    // }
+                                },
+                                // label: {
+                                //             show: true,
+                                //             color: "rgba(50, 44, 44, 1)",
+                                //             formatter: 'K8505'
+                                //         },
+                                series: [{
+                                    name: '确诊数量',
+                                    // type: 'effectScatter',
+                                    type: 'scatter',
+                                    // symble:"triangle",
+                                    // symbol: "roundRect",
+                                    // symbolSize:50,
+                                    coordinateSystem: 'geo',
+                                    // itemStyle: {
+                                    //   color: function (params) {
+                                    //       var colorlist = ['black'];
+                                    //       return colorlist[params.dataIndex];
+                                    //   },
+                                    //   symbol: function (params) {
+                                    //     var symbollist = ['path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z'];
+                                    //     return symbollist[params.dataIndex];
+                                    // },
+                                    // },
+
+                                    data: [{
+                                        name: "data", value: [121.0, 28.8, 123], url: "url_data",
+                                        symbol: 'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z', symbolSize: 15, symbolRotate: 330
+                                    }]
+
+                                }]
+
+
+
+                            });
+                            
+
+
+                            //加载气温
+                            // 高温
+                            var map = echarts.init(document.getElementById('maphigt_see_view'), 'light');
+                            //  echarts.registerMap('taizhou',tz_json,{});
+
+                            map.setOption({
+                                title: {
+                                    text: '极大风',
+                                    textStyle: { fontSize: 30 },
+                                },
+                                tooltip: {
+                                    trigger: 'item',
+                                    formatter: 'k8505 50(m/s)'
+                                },
+                                geo: {
+                                    map: 'taizhou',
+                                    roam: true,
+                                    // tooltip:{borderColor = '#333'}
+                                    itemStyle: {
+                                        color: 'white'
+                                        // areaColor = '#333',
+                                    }
+
+
+                                },
+                                visualMap: {
+                                    type: "piecewise",
+                                    // orient:'horizontal',
+                                    // type:"continuous",
+                                    // min: 0,
+                                    // max: 200,
+                                    // splitNumber = 5,
+                                    // color: ["rgb(255, 255, 255)",
+                                    // "rgb(255, 238, 255)",
+                                    // "rgb(255, 238, 204)",
+                                    // "rgb(255, 204, 153)",
+                                    // "rgb(255, 204, 102)",
+                                    // "rgb(255, 170, 68)",
+                                    // "rgb(153, 255, 136)",
+                                    // "rgb(0, 255, 85)",
+                                    // "rgb(0, 170, 51)",
+                                    // "rgb(0, 170, 255)",
+                                    // "rgb(17, 136, 204)",
+                                    // "rgb(0, 85, 204)",
+                                    // "rgb(0, 68, 221)",
+                                    // "rgb(0, 0, 221)"],
+                                    right: 0,
+                                    padding: 0,
+                                    itemGap: 0,
+                                    textGap: 0,
+                                    textStyle: { fontSize: 8 },
+                                    pieces: [
+                                        { min: 2000, max: 2500, label: '10 到 200', color: "rgb(255, 255, 255)" },
+                                        { min: 1500, max: 2000, label: '10 到 200', color: "rgb(255, 238, 255)" },// 不指定 max，表示 max 为无限大（Infinity）。
+                                        { min: 900, max: 1500, label: '10 到 200', color: "rgb(255, 238, 204)" },
+                                        { min: 310, max: 1000, label: '10 到 200', color: "rgb(255, 204, 153)" },
+                                        { min: 200, max: 300, label: '10 到 200', color: "rgb(255, 204, 102)" },
+                                        { min: 10, max: 200, label: '10 到 200', color: "rgb(255, 170, 68)" },
+                                        { max: 10, min: 5, label: '10 到 200', color: "rgb(153, 255, 136)" },    // 不指定 min，表示 min 为无限大（-Infinity）。
+                                        { max: 5, min: 4, label: '10 到 200', color: "rgb(0, 255, 85)" },
+                                        { max: 4, min: 3, label: '10 到 200', color: "rgb(0, 170, 51)" },
+                                        { max: 3, min: 2, label: '10 到 200', color: "rgb(0, 170, 255)" },
+                                        { max: 2, min: 1, label: '10 到 200', color: "rgb(17, 136, 204)" },
+                                        { max: 1, min: 0, label: '10 到 200', color: "rgb(0, 85, 204)" },
+                                        { max: 0, min: -1, label: '10 到 200', color: "rgb(0, 68, 221)" },
+                                        { max: -1, min: -2, label: '10 到 200', color: "rgb(0, 0, 221)" }
+
+                                    ],
+
+                                    // categories: ['1', '2', '3', '4', '5','6']
+
+                                    // inRange: {
+                                    //     color: ['lightskyblue','yellow', 'orangered']
+                                    // }
+                                },
+                                // label: {
+                                //             show: true,
+                                //             color: "rgba(50, 44, 44, 1)",
+                                //             formatter: 'K8505'
+                                //         },
+                                series: [{
+                                    name: '确诊数量',
+                                    // type: 'effectScatter',
+                                    type: 'scatter',
+                                    // symble:"triangle",
+                                    // symbol: "roundRect",
+                                    // symbolSize:50,
+                                    coordinateSystem: 'geo',
+                                    // itemStyle: {
+                                    //   color: function (params) {
+                                    //       var colorlist = ['black'];
+                                    //       return colorlist[params.dataIndex];
+                                    //   },
+                                    //   symbol: function (params) {
+                                    //     var symbollist = ['path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z'];
+                                    //     return symbollist[params.dataIndex];
+                                    // },
+                                    // },
+
+                                    data: [{
+                                        name: "data", value: [121.0, 28.8, 123], url: "url_data",
+                                        symbol: 'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z', symbolSize: 15, symbolRotate: 330
+                                    }]
+
+                                }]
+
+
+
+                            });
+                        
+                            // 低温
+                            var map = echarts.init(document.getElementById('maplow_see_view'), 'light');
+                            //  echarts.registerMap('taizhou',tz_json,{});
+
+                            map.setOption({
+                                title: {
+                                    text: '极大风',
+                                    textStyle: { fontSize: 30 },
+                                },
+                                tooltip: {
+                                    trigger: 'item',
+                                    formatter: 'k8505 50(m/s)'
+                                },
+                                geo: {
+                                    map: 'taizhou',
+                                    roam: true,
+                                    // tooltip:{borderColor = '#333'}
+                                    itemStyle: {
+                                        color: 'white'
+                                        // areaColor = '#333',
+                                    }
+
+
+                                },
+                                visualMap: {
+                                    type: "piecewise",
+                                    // orient:'horizontal',
+                                    // type:"continuous",
+                                    // min: 0,
+                                    // max: 200,
+                                    // splitNumber = 5,
+                                    // color: ["rgb(255, 255, 255)",
+                                    // "rgb(255, 238, 255)",
+                                    // "rgb(255, 238, 204)",
+                                    // "rgb(255, 204, 153)",
+                                    // "rgb(255, 204, 102)",
+                                    // "rgb(255, 170, 68)",
+                                    // "rgb(153, 255, 136)",
+                                    // "rgb(0, 255, 85)",
+                                    // "rgb(0, 170, 51)",
+                                    // "rgb(0, 170, 255)",
+                                    // "rgb(17, 136, 204)",
+                                    // "rgb(0, 85, 204)",
+                                    // "rgb(0, 68, 221)",
+                                    // "rgb(0, 0, 221)"],
+                                    right: 0,
+                                    padding: 0,
+                                    itemGap: 0,
+                                    textGap: 0,
+                                    textStyle: { fontSize: 8 },
+                                    pieces: [
+                                        { min: 2000, max: 2500, label: '10 到 200', color: "rgb(255, 255, 255)" },
+                                        { min: 1500, max: 2000, label: '10 到 200', color: "rgb(255, 238, 255)" },// 不指定 max，表示 max 为无限大（Infinity）。
+                                        { min: 900, max: 1500, label: '10 到 200', color: "rgb(255, 238, 204)" },
+                                        { min: 310, max: 1000, label: '10 到 200', color: "rgb(255, 204, 153)" },
+                                        { min: 200, max: 300, label: '10 到 200', color: "rgb(255, 204, 102)" },
+                                        { min: 10, max: 200, label: '10 到 200', color: "rgb(255, 170, 68)" },
+                                        { max: 10, min: 5, label: '10 到 200', color: "rgb(153, 255, 136)" },    // 不指定 min，表示 min 为无限大（-Infinity）。
+                                        { max: 5, min: 4, label: '10 到 200', color: "rgb(0, 255, 85)" },
+                                        { max: 4, min: 3, label: '10 到 200', color: "rgb(0, 170, 51)" },
+                                        { max: 3, min: 2, label: '10 到 200', color: "rgb(0, 170, 255)" },
+                                        { max: 2, min: 1, label: '10 到 200', color: "rgb(17, 136, 204)" },
+                                        { max: 1, min: 0, label: '10 到 200', color: "rgb(0, 85, 204)" },
+                                        { max: 0, min: -1, label: '10 到 200', color: "rgb(0, 68, 221)" },
+                                        { max: -1, min: -2, label: '10 到 200', color: "rgb(0, 0, 221)" }
+
+                                    ],
+
+                                    // categories: ['1', '2', '3', '4', '5','6']
+
+                                    // inRange: {
+                                    //     color: ['lightskyblue','yellow', 'orangered']
+                                    // }
+                                },
+                                // label: {
+                                //             show: true,
+                                //             color: "rgba(50, 44, 44, 1)",
+                                //             formatter: 'K8505'
+                                //         },
+                                series: [{
+                                    name: '确诊数量',
+                                    // type: 'effectScatter',
+                                    type: 'scatter',
+                                    // symble:"triangle",
+                                    // symbol: "roundRect",
+                                    // symbolSize:50,
+                                    coordinateSystem: 'geo',
+                                    // itemStyle: {
+                                    //   color: function (params) {
+                                    //       var colorlist = ['black'];
+                                    //       return colorlist[params.dataIndex];
+                                    //   },
+                                    //   symbol: function (params) {
+                                    //     var symbollist = ['path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z'];
+                                    //     return symbollist[params.dataIndex];
+                                    // },
+                                    // },
+
+                                    data: [{
+                                        name: "data", value: [121.0, 28.8, 123], url: "url_data",
+                                        symbol: 'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z', symbolSize: 15, symbolRotate: 330
+                                    }]
+
+                                }]
+
+
+
+                            });
+                        
+                            
+                        
                         }
                         else if (type == "tool_ec") {
                             console.log("---------------模式数据单点导出---------------")
