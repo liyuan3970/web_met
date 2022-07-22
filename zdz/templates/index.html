@@ -4118,24 +4118,24 @@
                             // myChart.resize()
                             var option;
                             const dateList = [
-                                ['2022-4-14', '十七', '强降水'],
-                                ['2022-4-15', '十八'],
-                                ['2022-4-16', '十九'],
-                                ['2022-4-17', '二十'],
-                                ['2022-4-18', '廿一', '浓雾-小雨'],
-                                ['2022-4-19', '廿二', '大风'],
-                                ['2022-4-20', '廿三', '小雨'],
-                                ['2022-4-21', '廿四'],
-                                ['2022-4-22', '廿五'],
-                                ['2022-4-23', '廿六'],
-                                ['2022-4-24', '廿七'],
-                                ['2022-4-25', '廿八', '强降水']
+                                ['2022-04-14', 200,'高温', '降水 大风', 200],
+                                ['2022-04-15',200, '低温','雨', 200],
+                                ['2022-04-16',200, '浓雾','风', 200],
+                                ['2022-4-17', 200,'低温','', 200],
+                                ['2022-4-18', 200,'低温 浓雾', '降水 大风', 200],
+                                ['2022-4-19',200, ' ', '大风', 200],
+                                ['2022-4-20',200, ' ', '小雨', 200],
+                                ['2022-4-21',200, ' ','', 200],
+                                ['2022-4-22',200, ' ','', 200],
+                                ['2022-4-23',200, ' ','', 200],
+                                ['2022-4-24',200, ' ','', 200],
+                                ['2022-4-25', 200,' ', '强降水', 200]
                             ];
-                            let heatmapData = [];
+                            // let heatmapData = [];
                             let lunarData = [];
                             for (let i = 0; i < dateList.length; i++) {
-                                heatmapData.push([dateList[i][0], Math.random() * 300]);
-                                lunarData.push([dateList[i][0], 1, dateList[i][1], dateList[i][2]]);
+                                // heatmapData.push([dateList[i][0], dateList[i][1]]);
+                                lunarData.push([dateList[i][0],dateList[i][1], dateList[i][2], dateList[i][3], dateList[i][4]]);
                             }
                             option = {
                                 title: {
@@ -4144,7 +4144,8 @@
                                 },
                                 tooltip: {
                                     formatter: function (params) {
-                                        return '降雨量: ' + params.value[1].toFixed(2);
+                                        // 实现显示的逻辑
+                                        return '降雨量: ' + params.value[1].toFixed(2) + params.value[2] + params.value[3];
                                     }
                                 },
                                 visualMap: {
@@ -4152,12 +4153,13 @@
                                     min: 0,
                                     max: 300,
                                     calculable: true,
-                                    seriesIndex: [2],
+                                    seriesIndex: [3],
                                     orient: 'horizontal',
                                     left: 'center',
                                     bottom: 20,
                                     inRange: {
-                                        color: ['#e0ffff', '#006edd'],
+                                        // color: ['#e0ffff', '#006edd'],
+                                        color: ['black'],
                                         opacity: 0.3
                                     },
                                     controller: {
@@ -4192,32 +4194,65 @@
                                             show: true,
                                             formatter: function (params) {
                                                 var d = echarts.number.parseDate(params.value[0]);
-                                                return d.getDate() + '\n\n' + params.value[2] + '\n\n';
+                                                // return d.getDate() + '\n\n' + params.value[2] + '\n\n';
+                                                return d.getDate() + '\n\n'+ '\n\n'
                                             },
-                                            color: '#000'
+                                            color: 'black'
                                         },
                                         data: lunarData
                                     },
-                                    {
+                                    {   //显示蓝色字
                                         type: 'scatter',
                                         coordinateSystem: 'calendar',
                                         symbolSize: 1,
                                         label: {
                                             show: true,
                                             formatter: function (params) {
-                                                return '\n\n\n' + (params.value[3] || '');
+                                                return params.value[2] ;
                                             },
-                                            fontSize: 14,
+                                            fontSize: 12,
                                             fontWeight: 700,
-                                            color: '#a00'
+                                            color: 'blue'
                                         },
                                         data: lunarData
                                     },
-                                    {
+                                    {   //显示字
+                                        type: 'scatter',
+                                        coordinateSystem: 'calendar',
+                                        symbolSize: 1,
+                                        label: {
+                                            show: true,
+                                            formatter: function (params) {
+                                                return '\n\n\n'+ params.value[3] ;
+                                            },
+                                            fontSize: 12,
+                                            fontWeight: 700,
+                                            color: 'red'
+                                        },
+                                        data: lunarData
+                                    },
+                                    // {   //显示红色字
+                                    //     type: 'scatter',
+                                    //     coordinateSystem: 'calendar',
+                                    //     symbolSize: 1,
+                                    //     label: {
+                                    //         show: true,
+                                    //         formatter: function (params) {
+                                    //             return '\n\n\n' + params.value[3] ;
+                                    //         },
+                                    //         fontSize: 14,
+                                    //         fontWeight: 700,
+                                    //         // color: '#a00'
+                                    //         color: 'red'
+                                    //     },
+                                    //     data: lunarData
+                                    // },
+                                    {   //显示降水量
                                         name: '降雨量',
                                         type: 'heatmap',
                                         coordinateSystem: 'calendar',
-                                        data: heatmapData
+                                        data: lunarData
+                                        // data: heatmapData
                                     }
                                 ]
                             };
