@@ -1,6 +1,7 @@
 """URL Configuration
 """
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
 from . import views
 
@@ -29,9 +30,10 @@ urlpatterns = [
     path('leader_Data_post', views.leader_Data_post),
     # EC站点数据的查询渲染
     path('ec_single_data', views.ec_single_data),
-    
+]
 
-    # 测试url
-    path('test', views.test),
-    path('error', views.test_error),
+router = DefaultRouter()
+router.register(r'user', views.UserViewSet)
+urlpatterns += [
+    path('', include(router.urls))
 ]
