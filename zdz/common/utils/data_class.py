@@ -33,7 +33,7 @@ from rasterio import features
 from affine import Affine
 import os
 os.environ["HDF5_USE_FILE_LOCKING"] = 'FALSE'
-
+import datetime
 
 
 
@@ -539,3 +539,247 @@ class plot_tz_product:
             imd = self.plot_img(i)
             imd_list.append(imd)
         return imd_list
+
+# 自动站数据查询的class
+
+class zdz_data:
+    def __init__(self, start,end):
+        self.start = start
+        self.end = end
+        # 基础数据
+        self.station_data = None
+        self.day_list = None
+        self.rain_line = None
+        self.rain_scatter = None
+        self.station_all = self.read_csv()
+        self.event_data()
+        self.rain_data()
+        
+        
+    def sql_date(self):
+        '''数据库读取sql数据'''
+        print('读取数据库数据')
+    def read_csv(self):
+        '''
+        1.数据读取---此方法为测试方法
+        2.数据分段---每天
+        3.每天统计
+        '''
+#         station_Mws = pd.read_csv("Mws_15.csv")
+#         station_Aws = pd.read_csv("Aws_15.csv")
+#         station_all = pd.concat([station_Aws, station_Mws])
+        #station_all = pd.read_csv("data_zdz_height.csv")
+        station_all = pd.read_csv("static/data/data_zdz_height.csv")
+        return station_all
+    def event_data(self):
+        '''
+        1.数据库查询
+        2.数据分段---每天
+        3.每天统计
+        ['2022-04-14', 200,'高温 浓雾', '降水 大风', 200],
+        '''
+        dateList = [ ] 
+        # 多少天
+        dates = self.return_daylist()
+        for i in dates:
+            #解析每天的数据
+            # grouped_county = self.station_all.groupby('county')
+            # grouped_IIiii = self.station_all.groupby('IIiii')
+            # for i in self.grouped_county.size().index: 
+            s_date = i + ' ' + '00:00'
+            e_date = i + ' ' + '23:00'
+            df_preday = self.station_all[(self.station_all['tTime'] >= s_date) & (self.station_all['tTime'] <= e_date)]              
+#             df_RR= df_preday[df_preday['RR'] == -9999 ].count()
+#             grouped_county = 
+            date_preday = []
+            # 日期
+            day_date = str(i)
+            # 面雨量
+            rainfall = 200
+            # 气温
+            temp_min = df_preday[(df_preday['Height']<6000)&(df_preday['T'] > -400)]['T'].min()
+            temp_min = temp_min/10.0
+            temp_max = df_preday[(df_preday['Height']<6000)&(df_preday['T'] > -400)]['T'].max()
+            temp_max = temp_max/10.0
+            temp_label = ''
+            if temp_min < 3.0:
+                temp_label = '低温'
+            elif temp_max > 35.0:
+                temp_label = '高温'
+            else:
+                temp_label = ' '
+            # 能见度
+            # df_VV= df_preday[(df_preday['VV']>0.1)&(df_preday['VV']<500)]['VV'].count()
+            vv = df_preday[(df_preday['VV']>0.1)&(df_preday['VV']<500)]['VV'].count()
+            if vv>0:
+                view_label = '浓雾'
+            else:
+                view_label = ' '    
+            # 降水
+            df_RR= df_preday[(df_preday['RR']>0.3)&(df_preday['RR']<8888)]['RR'].count()
+            
+            if df_RR > 0:
+                pre_label = '降水'
+            else:
+                pre_label = ' '
+            # 大风
+            wind_count = df_preday[df_preday['fFy']>187]['fFy'].count()
+            if wind_count>0:
+                wind_label = '大风'
+            else:
+                wind_label = ' '
+            date_preday = [day_date,rainfall,temp_label + ' '+ view_label, pre_label +' '+ wind_label ,rainfall]
+            dateList.append(date_preday)
+        self.day_list = dateList
+#         print('event_data:返回一个每天的数组和日历所需的数据','气温',dateList)
+    def return_daylist(self):
+        '''
+        返回每天的起始列表
+        '''
+        dates = []
+#         dt = datetime.datetime.strptime(self.start, "%Y-%m-%d")
+        dt = datetime.datetime.strptime(self.start[0:10], "%Y-%m-%d")
+        date = self.start[:10]
+        while date <= self.end[:10]:
+            dates.append(date)
+            dt = dt + datetime.timedelta(1)
+            date = dt.strftime("%Y-%m-%d")
+        return dates
+    def rain_data(self):
+        '''
+        1.根据起始时间计算面雨量的sql语句
+        2.根据初始语句返回每站的总降水量
+        '''
+        station_all = self.station_all
+        
+        data_rain = {
+            'rain_sum':{
+                'time':[],
+                'data':[]
+            },
+            'IIiii_data':{}
+            
+        }
+        
+        grouped_tTime = station_all.groupby('tTime')
+        for i in grouped_tTime.size().index:  
+            data= grouped_tTime.get_group(i)
+            data['RR'].replace(-9999,np.nan,inplace=True)
+            rain_mean = data['RR'].mean()/10.0
+            rain_time = i
+            data_rain['rain_sum']['time'].append(rain_time)
+            data_rain['rain_sum']['data'].append(rain_mean)
+        # 导出单站数据
+        grouped_IIiii = station_all.groupby('IIiii')
+        rain_scatter = []
+#         {
+#          name: "K8515", value: [121.2, 28.6, 110],
+#          symbol: 'circle'
+#         }
+        for i in grouped_IIiii.size().index:  
+            data= grouped_IIiii.get_group(i)
+            data['RR'].replace(-9999,np.nan,inplace=True)
+            station_name = str(i) 
+            data_rain['IIiii_data'][station_name] = data
+            single_data = {}
+            single_data['name'] = station_name
+            single_data['value'] = [data['lon'].iloc[0],data['lat'].iloc[0],data['RR'].sum()/10.0]
+            single_data['symble'] = 'circle'
+            rain_scatter.append(single_data)
+        self.station_data = data_rain['IIiii_data']
+        self.rain_line =  [data_rain['rain_sum']['time'],data_rain['rain_sum']['data']]
+        self.rain_scatter = rain_scatter  
+        print(self.rain_scatter)
+    def wind_data(self):
+        '''
+        1.根据sql语句计算8及以上大风的分布和排序
+        ''' 
+        data_wind_list = []
+        station_all = self.station_all
+        sort_data = {
+            'IIiii':[],
+            'county':[],
+            'town':[],
+            'value':[]
+        }
+        #wind_max = station_all['fFy'].idxmax(axis=0)
+        #station_max_name = station_all.iloc[wind_max,7]
+        #station_max_data = self.station_data[station_max_name]
+        grouped_IIiii = station_all.groupby('IIiii')
+        for i in grouped_IIiii.size().index:  
+            data= grouped_IIiii.get_group(i)
+            if data['fFy'].max()>187:
+                data_single = {}
+                data_single['IIiii'] = data['IIiii'].iloc[0]
+                data_single['county'] = data['county'].iloc[0]
+                data_single['town'] = data['Town'].iloc[0]
+                data_single['value'] = [data['lon'].iloc[0],data['lat'].iloc[0],data['fFy'].max()/10.0]
+                data_single['symbol'] = 'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z'
+                data_single['symbolRotate'] = data[data['fFy'] == data['fFy'].max()]['dFy'].iloc[0]
+                sort_data['IIiii'].append(data['IIiii'].iloc[0])
+                sort_data['county'].append(data['county'].iloc[0])
+                sort_data['town'].append(data['Town'].iloc[0])
+                sort_data['value'].append(data['fFy'].max()/10.0)
+                data_wind_list.append(data_single)
+        # 对数据进行排序
+        max_sort = max(sort_data['value'])
+        level_sort = np.linspace(start = 0.0, stop = max_sort, num = 9)
+        sort_data = pd.DataFrame(sort_data)    
+        sort_data['index'] = sort_data['value'].rank(ascending=0,method='dense')
+        sort_out = sort_data.sort_values(by =['value'],ascending = [False]) 
+        return data_wind_list , sort_out
+    def view_data(self):
+        '''
+        1.根据sql语句计算低能见度的分布和排序
+        '''
+        data_wind_list = []
+        station_all = self.station_all
+        sort_data = {
+            'IIiii':[],
+            'county':[],
+            'town':[],
+            'value':[]
+        }
+        grouped_IIiii = station_all.groupby('IIiii')
+        for i in grouped_IIiii.size().index:  
+            data= grouped_IIiii.get_group(i)
+            if (data['VV'].min()<500)&(data['VV'].min()>0):
+                data_single = {}
+                data_single['IIiii'] = data['IIiii'].iloc[0]
+                data_single['county'] = data['county'].iloc[0]
+                data_single['town'] = data['Town'].iloc[0]
+                data_single['value'] = [data['lon'].iloc[0],data['lat'].iloc[0],data['VV'].min()]
+                sort_data['IIiii'].append(data['IIiii'].iloc[0])
+                sort_data['county'].append(data['county'].iloc[0])
+                sort_data['town'].append(data['Town'].iloc[0])
+                sort_data['value'].append(data['VV'].min())
+                data_wind_list.append(data_single)
+        #对数据进行排序
+        max_sort = max(sort_data['value'])
+        level_sort = np.linspace(start = 0.0, stop = max_sort, num = 9)
+        sort_data = pd.DataFrame(sort_data)    
+        sort_data['index'] = sort_data['value'].rank(ascending=1,method='dense')
+        sort_out = sort_data.sort_values(by =['value'],ascending = [True]) 
+        return data_wind_list , sort_out
+    def temp_data(self):
+        '''
+        1.根据sql语句计算高低温的分布和排序
+        '''
+        temp_station_list = ['K8719','K8425','K8674']
+        data_temp = []
+        for i in temp_station_list:
+            single_data = {}
+            station_name = i
+            single_data['name'] = i
+            single_data['value'] = [self.station_data[i]['lon'].iloc[0],self.station_data[i]['lat'].iloc[0],self.station_data[i]['T'].max()/10.0,self.station_data[i]['T'].min()/10.0]
+            data_temp.append(single_data)
+        return data_temp   
+    def pre_day(self,date):
+        '''
+        日报的响应时间、触发后统计对应天的灾情
+        '2022-04-14', 200,'高温 浓雾', '降水 大风', 200
+        '''
+        print('计算指定日期的数据',date)
+    def text_data(self):
+        '''用来处理风雨情统计数据'''
+        print('用来处理风雨情统计数据')

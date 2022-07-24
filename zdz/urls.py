@@ -28,6 +28,10 @@ urlpatterns = [
     path('create_doc_data', views.create_new_doc_data),
     # 呈送发的代码
     path('leader_Data_post', views.leader_Data_post),
+    # 自动站历史数据的查询交互
+    path('tool_zdz_date', views.tool_zdz_date),
+    # 自动站历史数据大风的查询
+    path('tool_zdz_wind', views.tool_zdz_wind),
     # EC站点数据的查询渲染
     path('ec_single_data', views.ec_single_data),
 ]

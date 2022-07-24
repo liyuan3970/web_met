@@ -388,7 +388,34 @@ def self_plot_download(request):
         'data_canvas':data_canvas
     }
     return JsonResponse(context)
+# 自动站历史数据的查询交互
+def tool_zdz_date(request):
+    start_time = request.POST.get('start_time', '')
+    end_time = request.POST.get('end_time', '')
+    # 用于测试
+    start = '2022-01-25 20:00'
+    end = '2022-02-10 06:00'
+    sql_worker = data_class.zdz_data(start,end)
+    context = {
+        'status': "ok",
+        'day_list':sql_worker.day_list,
+        'day_range':[sql_worker.day_list[0][0],sql_worker.day_list[-1][0]],
+        'rain_line':sql_worker.rain_line,
+        'rain_scatter':json.dumps(sql_worker.rain_scatter)
+    }
+    return JsonResponse(context)
 
+# 自动站历史数据大风的查询
+def tool_zdz_wind(request):
+    # 用于测试
+    start = '2022-01-25 20:00'
+    end = '2022-02-10 06:00'
+    sql_worker = data_class.zdz_data(start,end)
+    context = {
+        'status': "ok"
+        
+    }
+    return JsonResponse(context)
 
 
 @xframe_options_exempt
