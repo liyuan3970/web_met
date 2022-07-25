@@ -19,6 +19,23 @@ from numpy import random
 # 设置全局变量用来存储EC数据的数据对象
 ec_worker = None
 
+
+# 序列化numpy的数字
+import numpy
+class NpEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, (numpy.int_, numpy.intc, numpy.intp, numpy.int8,
+            numpy.int16, numpy.int32, numpy.int64, numpy.uint8,
+            numpy.uint16,numpy.uint32, numpy.uint64)):
+            return int(obj)
+        elif isinstance(obj, (numpy.float_, numpy.float16, numpy.float32, 
+            numpy.float64)):
+            return float(obj)
+        elif isinstance(obj, (numpy.ndarray,)): # add this line
+            return obj.tolist() # add this line
+        return json.JSONEncoder.default(self, obj)  
+
+
 def kuaibao(request):
     # print(this is a index)
     return render(request, 'kuaibao.html', locals())
@@ -389,19 +406,23 @@ def self_plot_download(request):
     }
     return JsonResponse(context)
 # 自动站历史数据的查询交互
+# 设置自动站的全居变量
+zdz_worker =None
+
 def tool_zdz_date(request):
     start_time = request.POST.get('start_time', '')
     end_time = request.POST.get('end_time', '')
     # 用于测试
     start = '2022-01-25 20:00'
     end = '2022-02-10 06:00'
-    sql_worker = data_class.zdz_data(start,end)
+    global zdz_worker
+    zdz_worker = data_class.zdz_data(start,end)
     context = {
         'status': "ok",
-        'day_list':sql_worker.day_list,
-        'day_range':[sql_worker.day_list[0][0],sql_worker.day_list[-1][0]],
-        'rain_line':sql_worker.rain_line,
-        'rain_scatter':json.dumps(sql_worker.rain_scatter)
+        'day_list':zdz_worker.day_list,
+        'day_range':[zdz_worker.day_list[0][0],zdz_worker.day_list[-1][0]],
+        'rain_line':zdz_worker.rain_line,
+        'rain_scatter':json.dumps(zdz_worker.rain_scatter)
     }
     return JsonResponse(context)
 
@@ -410,11 +431,19 @@ def tool_zdz_wind(request):
     # 用于测试
     start = '2022-01-25 20:00'
     end = '2022-02-10 06:00'
-    sql_worker = data_class.zdz_data(start,end)
+    global zdz_worker
+    if zdz_worker:
+        data_wind_list , sort_html = zdz_worker.wind_data()
+    else:
+        zdz_worker = data_class.zdz_data(start,end)
+        data_wind_list , sort_html = zdz_worker.wind_data()
+    # print(data_wind_list)
     context = {
-        'status': "ok"
-        
+        'status': "ok",
+        'data_wind_list':json.dumps(data_wind_list,cls=NpEncoder) ,
+        'sort_html':sort_html  
     }
+    
     return JsonResponse(context)
 
 

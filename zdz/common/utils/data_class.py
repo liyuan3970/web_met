@@ -689,7 +689,6 @@ class zdz_data:
         self.station_data = data_rain['IIiii_data']
         self.rain_line =  [data_rain['rain_sum']['time'],data_rain['rain_sum']['data']]
         self.rain_scatter = rain_scatter  
-        print(self.rain_scatter)
     def wind_data(self):
         '''
         1.根据sql语句计算8及以上大风的分布和排序
@@ -727,7 +726,15 @@ class zdz_data:
         sort_data = pd.DataFrame(sort_data)    
         sort_data['index'] = sort_data['value'].rank(ascending=0,method='dense')
         sort_out = sort_data.sort_values(by =['value'],ascending = [False]) 
-        return data_wind_list , sort_out
+        sort_html = ''
+        # <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>
+        for i in sort_out['index']:
+            table_html = '<tr><th>' + str(int(i)) + '</th><th>' + \
+                          str(sort_out[sort_out['index']==i]['town'].iloc[0]) + '</th><th>' + \
+                          str(sort_out[sort_out['index']==i]['IIiii'].iloc[0]) + '</th><th>' + \
+                          str(sort_out[sort_out['index']==i]['value'].iloc[0]) + '</th></tr>'
+            sort_html = sort_html + table_html
+        return data_wind_list , sort_html
     def view_data(self):
         '''
         1.根据sql语句计算低能见度的分布和排序
