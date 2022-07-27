@@ -1,7 +1,5 @@
-"""settings
-"""
-# from corsheaders.middleware import CorsMiddleware
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(
@@ -104,6 +102,26 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace(
     '\\', '/')  # 设置静态文件路径为主目录下的media文件夹
 MEDIA_URL = '/media/'  # url映射
 # MEDIA_ROOT = 'home/liyuan3970/Data/My_Git/web_met/static/'
+
+# drf配置
+REST_FRAMEWORK = {
+    # jwt
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTStatelessUserAuthentication',
+    ),
+
+}
+
+# jwt配置
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
+}
+
+# 自定义jwt校验
+AUTHENTICATION_BACKENDS = (
+    'zdz.middleware.custom_jwt_auth.CustomJWTAuth',
+)
 
 # 日志配置
 # 日志文件夹初始化
