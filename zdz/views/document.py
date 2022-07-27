@@ -447,6 +447,19 @@ def tool_zdz_wind(request):
     return JsonResponse(context)
 
 
+
+# 自动站日报daily 的数据查询
+def tool_zdz_daily(request):
+    # 用于测试
+    start = '2022-01-25 20:00'
+    end = '2022-02-10 06:00'
+    global zdz_worker
+    context = {
+        'status': "ok"
+    }
+    
+    return JsonResponse(context)
+
 @xframe_options_exempt
 def home(request):
     # return redirect('https://www.baidu.com/')

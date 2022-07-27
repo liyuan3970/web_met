@@ -32,6 +32,8 @@ urlpatterns = [
     path('tool_zdz_date', views.tool_zdz_date),
     # 自动站历史数据大风的查询
     path('tool_zdz_wind', views.tool_zdz_wind),
+    # 自动站日报daily 的数据查询
+    path('tool_zdz_daily',views.tool_zdz_daily),
     # EC站点数据的查询渲染
     path('ec_single_data', views.ec_single_data),
 ]
