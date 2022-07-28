@@ -739,7 +739,10 @@ class zdz_data:
         '''
         1.根据sql语句计算低能见度的分布和排序
         '''
-        data_wind_list = []
+        '''
+        1.根据sql语句计算8及以上大风的分布和排序
+        ''' 
+        data_view_list = []
         station_all = self.station_all
         sort_data = {
             'IIiii':[],
@@ -747,27 +750,40 @@ class zdz_data:
             'town':[],
             'value':[]
         }
+        #wind_max = station_all['fFy'].idxmax(axis=0)
+        #station_max_name = station_all.iloc[wind_max,7]
+        #station_max_data = self.station_data[station_max_name]
         grouped_IIiii = station_all.groupby('IIiii')
         for i in grouped_IIiii.size().index:  
             data= grouped_IIiii.get_group(i)
-            if (data['VV'].min()<500)&(data['VV'].min()>0):
+            if data['fFy'].max()>187:
                 data_single = {}
                 data_single['IIiii'] = data['IIiii'].iloc[0]
                 data_single['county'] = data['county'].iloc[0]
                 data_single['town'] = data['Town'].iloc[0]
-                data_single['value'] = [data['lon'].iloc[0],data['lat'].iloc[0],data['VV'].min()]
+                data_single['value'] = [data['lon'].iloc[0],data['lat'].iloc[0],data['fFy'].max()/10.0]
+                data_single['symbol'] = 'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z'
+                data_single['symbolRotate'] = data[data['fFy'] == data['fFy'].max()]['dFy'].iloc[0]
                 sort_data['IIiii'].append(data['IIiii'].iloc[0])
                 sort_data['county'].append(data['county'].iloc[0])
                 sort_data['town'].append(data['Town'].iloc[0])
-                sort_data['value'].append(data['VV'].min())
-                data_wind_list.append(data_single)
-        #对数据进行排序
+                sort_data['value'].append(data['fFy'].max()/10.0)
+                data_view_list.append(data_single)
+        # 对数据进行排序
         max_sort = max(sort_data['value'])
         level_sort = np.linspace(start = 0.0, stop = max_sort, num = 9)
         sort_data = pd.DataFrame(sort_data)    
-        sort_data['index'] = sort_data['value'].rank(ascending=1,method='dense')
-        sort_out = sort_data.sort_values(by =['value'],ascending = [True]) 
-        return data_wind_list , sort_out
+        sort_data['index'] = sort_data['value'].rank(ascending=0,method='dense')
+        sort_out = sort_data.sort_values(by =['value'],ascending = [False]) 
+        sort_html = ''
+        # <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>
+        for i in sort_out['index']:
+            table_html = '<tr><th>' + str(int(i)) + '</th><th>' + \
+                          str(sort_out[sort_out['index']==i]['town'].iloc[0]) + '</th><th>' + \
+                          str(sort_out[sort_out['index']==i]['IIiii'].iloc[0]) + '</th><th>' + \
+                          str(sort_out[sort_out['index']==i]['value'].iloc[0]) + '</th></tr>'
+            sort_html = sort_html + table_html
+        return data_view_list , sort_html
     def temp_data(self):
         '''
         1.根据sql语句计算高低温的分布和排序
