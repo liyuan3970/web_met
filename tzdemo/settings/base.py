@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt',
     'django_crontab',  # 定时任务
     'zdz',
 ]
@@ -90,10 +91,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static'),
-# ]
+STATIC_ROOT = 'static'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, '/static/'),
+]
 
 X_FRAME_OPTIONS = 'ALLOWALL'
 
@@ -107,13 +108,21 @@ MEDIA_URL = '/media/'  # url映射
 REST_FRAMEWORK = {
     # jwt
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTStatelessUserAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 
+    # 全局权限
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
 }
 
 # jwt配置
 SIMPLE_JWT = {
+    'SIGNING_KEY': SECRET_KEY,
+
+    'AUTH_HEADER_NAME': 'HTTP_TOKEN',
+
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
 }
@@ -122,6 +131,8 @@ SIMPLE_JWT = {
 AUTHENTICATION_BACKENDS = (
     'zdz.middleware.custom_jwt_auth.CustomJWTAuth',
 )
+
+AUTH_USER_MODEL = 'zdz.UserModel'
 
 # 日志配置
 # 日志文件夹初始化

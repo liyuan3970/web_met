@@ -1,7 +1,8 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class UserModel(models.Model):
+class UserModel(AbstractUser):
     """用户表"""
     id = models.BigAutoField(primary_key=True, verbose_name="主键")
     username = models.CharField(unique=True, max_length=50, verbose_name="用户名")
@@ -11,5 +12,6 @@ class UserModel(models.Model):
     update_time = models.DateTimeField(auto_now=True, verbose_name="更新时间")
 
     class Meta:
+        app_label = "zdz"
         verbose_name = verbose_name_plural = '用户表'
         db_table = 'user'  # 通过db_table自定义数据表名
