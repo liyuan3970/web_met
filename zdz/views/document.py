@@ -446,19 +446,60 @@ def tool_zdz_wind(request):
     
     return JsonResponse(context)
 
+# 自动站历史数据能见度的查询
+def tool_zdz_view(request):
+    # 用于测试
+    start = '2022-01-25 20:00'
+    end = '2022-02-10 06:00'
+    global zdz_worker
+    if zdz_worker:
+        data_view_list , sort_html = zdz_worker.view_data()
+    else:
+        zdz_worker = data_class.zdz_data(start,end)
+        data_view_list , sort_html = zdz_worker.view_data()
+    # print(data_wind_list)
+    context = {
+        'status': "ok",
+        'data_view_list':json.dumps(data_view_list,cls=NpEncoder) ,
+        'sort_html':sort_html  
+    }
+    
+    return JsonResponse(context)
 
+# 自动站历史数据气温的查询
+def tool_zdz_temp(request):
+    # 用于测试
+    start = '2022-01-25 20:00'
+    end = '2022-02-10 06:00'
+    global zdz_worker
+    if zdz_worker:
+        data_temp = zdz_worker.temp_data()
+    else:
+        zdz_worker = data_class.zdz_data(start,end)
+        data_temp = zdz_worker.temp_data()
+    # print(data_wind_list)
+    context = {
+        'status': "ok",
+        'data_temp':json.dumps(data_temp,cls=NpEncoder)  
+    }
+    
+    return JsonResponse(context)
 
+# ###################################################################
 # 自动站日报daily 的数据查询
 def tool_zdz_daily(request):
     # 用于测试
     start = '2022-01-25 20:00'
     end = '2022-02-10 06:00'
+    date = request.POST.get('date', '')
+    print('获取的时间',date)
     global zdz_worker
     context = {
-        'status': "ok"
-    }
-    
+        'status': "ok",
+        'date':str(date)
+    }  
     return JsonResponse(context)
+
 
 @xframe_options_exempt
 def home(request):
