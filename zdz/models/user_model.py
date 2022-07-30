@@ -2,8 +2,16 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class UserModel(AbstractUser):
+class User(AbstractUser):
     """用户表"""
+
+    # 删除字段
+    email = None
+    first_name = None
+    last_name = None
+    date_joined = None
+
+    # 新建字段
     id = models.BigAutoField(primary_key=True, verbose_name="主键")
     username = models.CharField(unique=True, max_length=50, verbose_name="用户名")
     password = models.CharField(max_length=50, verbose_name="密码")

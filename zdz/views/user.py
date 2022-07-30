@@ -3,28 +3,38 @@ from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
 
-from ..models import UserModel
-from ..serializers import RegisterSerializer
+from ..models import User
+from ..serializers import RegisterSerializer, LoginSerializer
+
+
+# 登录view
+class LoginView(TokenObtainPairView):
+    serializer_class = LoginSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = UserModel.objects.all()
+    queryset = User.objects.all()
 
     @transaction.atomic()
-    @action(methods=["post"], url_path="register", detail=False, permission_classes=[permissions.AllowAny])
+    @action(methods=["post"], url_path="register", detail=False)
     def register(self, request):
+        # todo 校验和密码加密存储
         reg_ser = RegisterSerializer(data=request.data)
         reg_ser.is_valid(raise_exception=True)
         reg_ser.save()
 
-        print(reg_ser.instance)
-
         refresh = RefreshToken.for_user(reg_ser.instance)
 
-        print(refresh.access_token)
-        return Response(str(refresh))
+        data = dict()
+        data["access"] = str(refresh.access_token)
+        data["refresh"] = str(refresh)
+        data["user_id"] = reg_ser.instance.id
+        data["name"] = reg_ser.instance.name
 
-    @action(methods=["post"], url_path="test", detail=False)
+        return Response(data=data)
+
+    @action(methods=["post"], url_path="test", detail=False, permission_classes=[permissions.IsAuthenticated])
     def test(self, request):
         return Response("ok")

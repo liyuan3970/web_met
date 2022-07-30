@@ -36,8 +36,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 全局异常处理
-    'zdz.middleware.exception_middleware.ExceptionMiddleware'
 ]
 
 ROOT_URLCONF = 'tzdemo.urls'
@@ -110,21 +108,23 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-
-    # 全局权限
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    )
+    # 全局配置异常模块
+    'EXCEPTION_HANDLER': 'zdz.middleware.custom_exception_handler.custom_exception_handler',
+    # 默认返回类
+    'DEFAULT_RENDERER_CLASSES': (
+        'zdz.middleware.custom_renderer.CustomRenderer',
+    ),
 }
 
 # jwt配置
 SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
+    'UPDATE_LAST_LOGIN': True,
+
     'SIGNING_KEY': SECRET_KEY,
 
     'AUTH_HEADER_NAME': 'HTTP_TOKEN',
-
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
 }
 
 # 自定义jwt校验
@@ -132,7 +132,7 @@ AUTHENTICATION_BACKENDS = (
     'zdz.middleware.custom_jwt_auth.CustomJWTAuth',
 )
 
-AUTH_USER_MODEL = 'zdz.UserModel'
+AUTH_USER_MODEL = 'zdz.User'
 
 # 日志配置
 # 日志文件夹初始化
