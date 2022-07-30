@@ -473,14 +473,15 @@ def tool_zdz_temp(request):
     end = '2022-02-10 06:00'
     global zdz_worker
     if zdz_worker:
-        data_temp = zdz_worker.temp_data()
+        data_temp_max,data_temp_min = zdz_worker.temp_data()
     else:
         zdz_worker = data_class.zdz_data(start,end)
-        data_temp = zdz_worker.temp_data()
+        data_temp_max,data_temp_min = zdz_worker.temp_data()
     # print(data_wind_list)
     context = {
         'status': "ok",
-        'data_temp':json.dumps(data_temp,cls=NpEncoder)  
+        'data_temp_max':json.dumps(data_temp_max,cls=NpEncoder), 
+        'data_temp_min':json.dumps(data_temp_min,cls=NpEncoder) 
     }
     
     return JsonResponse(context)
