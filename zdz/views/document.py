@@ -503,9 +503,15 @@ def tool_zdz_daily(request):
     date = request.POST.get('date', '')
     print('获取的时间', date)
     global zdz_worker
+    if zdz_worker:
+        pre_list = zdz_worker.pre_day(date)
+    else:
+        zdz_worker = data_class.zdz_data(start, end)
+        pre_list = zdz_worker.pre_day(date)
     context = {
         'status': "ok",
-        'date': str(date)
+        'date': str(date),
+        'pre_list': json.dumps(pre_list, cls=NpEncoder)
     }
     return JsonResponse(context)
 
