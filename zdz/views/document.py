@@ -5,35 +5,35 @@ import os
 from io import BytesIO
 
 import matplotlib.pyplot as plt
+import pandas as pd
 from django.core.cache import cache
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.clickjacking import xframe_options_exempt
+from numpy import random
 
 from zdz.common.utils import data_class, func
 from ..models.doucument_model import *
 
-import pandas as pd
-from numpy import random
-
 # 设置全局变量用来存储EC数据的数据对象
 ec_worker = None
 
-
 # 序列化numpy的数字
 import numpy
+
+
 class NpEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, (numpy.int_, numpy.intc, numpy.intp, numpy.int8,
-            numpy.int16, numpy.int32, numpy.int64, numpy.uint8,
-            numpy.uint16,numpy.uint32, numpy.uint64)):
+                            numpy.int16, numpy.int32, numpy.int64, numpy.uint8,
+                            numpy.uint16, numpy.uint32, numpy.uint64)):
             return int(obj)
-        elif isinstance(obj, (numpy.float_, numpy.float16, numpy.float32, 
-            numpy.float64)):
+        elif isinstance(obj, (numpy.float_, numpy.float16, numpy.float32,
+                              numpy.float64)):
             return float(obj)
-        elif isinstance(obj, (numpy.ndarray,)): # add this line
-            return obj.tolist() # add this line
-        return json.JSONEncoder.default(self, obj)  
+        elif isinstance(obj, (numpy.ndarray,)):  # add this line
+            return obj.tolist()  # add this line
+        return json.JSONEncoder.default(self, obj)
 
 
 def kuaibao(request):
@@ -217,10 +217,10 @@ def get_imd_list(request):
 
 
 def create_new_doc(request):
-    writers = WriterModel.objects.all().values()
-    unity = UnityModel.objects.all().values()
-    publisher = PublisherModel.objects.all().values()
-    documenttype = DocumentTypeModel.objects.all().values()
+    writers = Writer.objects.all().values()
+    unity = Unity.objects.all().values()
+    publisher = Publisher.objects.all().values()
+    documenttype = DocumentType.objects.all().values()
     data_publisher = [i['name'] for i in publisher]
     data_writers = [i['name'] for i in writers]
     data_unity = [i['name'] for i in unity]
@@ -245,10 +245,10 @@ def create_new_doc_data(request):
     doc_unity = request.POST.get('doc_unity', '')
     doc_date = request.POST.get('doc_date', '')
     year = doc_date[0:4]
-    data = DocumentModel.objects.filter(year=year, types=type_doc).last()
+    data = Document.objects.filter(year=year, types=type_doc).last()
     item = data.item + 1
     content = []
-    obj = DocumentModel.objects.create(
+    obj = Document.objects.create(
         types=type_doc,
         writer=doc_writer,
         publisher=doc_publisher,
@@ -270,9 +270,9 @@ def create_new_doc_data(request):
 
 # 获取呈送发的数据
 def leader_Data_post(request):
-    versions = LeaderDataModel.objects.all().values()
+    versions = LeaderData.objects.all().values()
 
-    names = PictureModel.objects.all().values('name')
+    names = Picture.objects.all().values('name')
     name_list = []
     for name in names:
         name_list.append(name['name'])
@@ -302,7 +302,7 @@ def ec_single_data(request):
     lon = request.POST.get('ec_lon', '')
     ec_start_time = request.POST.get('ec_start_time', '')
     ec_end_time = request.POST.get('ec_end_time', '')
-    print(ec_start_time,ec_end_time)
+    print(ec_start_time, ec_end_time)
     # 处理数据逻辑
 
     # 数据的返回
@@ -376,38 +376,42 @@ def ec_single_data(request):
     }
     return JsonResponse(context)
 
+
 def self_plot_download(request):
     self_plot_start_time = request.POST.get('self_plot_start_time', '')
     self_plot_end_time = request.POST.get('self_plot_end_time', '')
     # 编写数据查询的后端逻辑
-    data = pd.read_csv('static/data/' +  'rect_station_info_tz.csv',encoding='ISO-8859-1')
+    data = pd.read_csv('static/data/' + 'rect_station_info_tz.csv', encoding='ISO-8859-1')
     data_canvas = {
         "station_list": [],
-        "station":[]   
+        "station": []
     }
     length = data.shape[0]
 
     for i in range(length):
         station_data = []
         if i < 41:
-            data_canvas['station_list'].append(data.iloc[i,4])
-            station_data.append(data.iloc[i,3])
-            station_data.append(data.iloc[i,2])
+            data_canvas['station_list'].append(data.iloc[i, 4])
+            station_data.append(data.iloc[i, 3])
+            station_data.append(data.iloc[i, 2])
             station_data.append(random.randint(100))
             data_canvas['station'].append(station_data)
         else:
-            station_data.append(data.iloc[i,3])
-            station_data.append(data.iloc[i,2])
+            station_data.append(data.iloc[i, 3])
+            station_data.append(data.iloc[i, 2])
             station_data.append(random.randint(100))
             data_canvas['station'].append(station_data)
     context = {
         'status': "ok",
-        'data_canvas':data_canvas
+        'data_canvas': data_canvas
     }
     return JsonResponse(context)
+
+
 # 自动站历史数据的查询交互
 # 设置自动站的全居变量
-zdz_worker =None
+zdz_worker = None
+
 
 def tool_zdz_date(request):
     start_time = request.POST.get('start_time', '')
@@ -416,15 +420,16 @@ def tool_zdz_date(request):
     start = '2022-01-25 20:00'
     end = '2022-02-10 06:00'
     global zdz_worker
-    zdz_worker = data_class.zdz_data(start,end)
+    zdz_worker = data_class.zdz_data(start, end)
     context = {
         'status': "ok",
-        'day_list':zdz_worker.day_list,
-        'day_range':[zdz_worker.day_list[0][0],zdz_worker.day_list[-1][0]],
-        'rain_line':zdz_worker.rain_line,
-        'rain_scatter':json.dumps(zdz_worker.rain_scatter)
+        'day_list': zdz_worker.day_list,
+        'day_range': [zdz_worker.day_list[0][0], zdz_worker.day_list[-1][0]],
+        'rain_line': zdz_worker.rain_line,
+        'rain_scatter': json.dumps(zdz_worker.rain_scatter)
     }
     return JsonResponse(context)
+
 
 # 自动站历史数据大风的查询
 def tool_zdz_wind(request):
@@ -433,18 +438,19 @@ def tool_zdz_wind(request):
     end = '2022-02-10 06:00'
     global zdz_worker
     if zdz_worker:
-        data_wind_list , sort_html = zdz_worker.wind_data()
+        data_wind_list, sort_html = zdz_worker.wind_data()
     else:
-        zdz_worker = data_class.zdz_data(start,end)
-        data_wind_list , sort_html = zdz_worker.wind_data()
+        zdz_worker = data_class.zdz_data(start, end)
+        data_wind_list, sort_html = zdz_worker.wind_data()
     # print(data_wind_list)
     context = {
         'status': "ok",
-        'data_wind_list':json.dumps(data_wind_list,cls=NpEncoder) ,
-        'sort_html':sort_html  
+        'data_wind_list': json.dumps(data_wind_list, cls=NpEncoder),
+        'sort_html': sort_html
     }
-    
+
     return JsonResponse(context)
+
 
 # 自动站历史数据能见度的查询
 def tool_zdz_view(request):
@@ -453,18 +459,19 @@ def tool_zdz_view(request):
     end = '2022-02-10 06:00'
     global zdz_worker
     if zdz_worker:
-        data_view_list , sort_html = zdz_worker.view_data()
+        data_view_list, sort_html = zdz_worker.view_data()
     else:
-        zdz_worker = data_class.zdz_data(start,end)
-        data_view_list , sort_html = zdz_worker.view_data()
+        zdz_worker = data_class.zdz_data(start, end)
+        data_view_list, sort_html = zdz_worker.view_data()
     # print(data_wind_list)
     context = {
         'status': "ok",
-        'data_view_list':json.dumps(data_view_list,cls=NpEncoder) ,
-        'sort_html':sort_html  
+        'data_view_list': json.dumps(data_view_list, cls=NpEncoder),
+        'sort_html': sort_html
     }
-    
+
     return JsonResponse(context)
+
 
 # 自动站历史数据气温的查询
 def tool_zdz_temp(request):
@@ -473,18 +480,19 @@ def tool_zdz_temp(request):
     end = '2022-02-10 06:00'
     global zdz_worker
     if zdz_worker:
-        data_temp_max,data_temp_min = zdz_worker.temp_data()
+        data_temp_max, data_temp_min = zdz_worker.temp_data()
     else:
-        zdz_worker = data_class.zdz_data(start,end)
-        data_temp_max,data_temp_min = zdz_worker.temp_data()
+        zdz_worker = data_class.zdz_data(start, end)
+        data_temp_max, data_temp_min = zdz_worker.temp_data()
     # print(data_wind_list)
     context = {
         'status': "ok",
-        'data_temp_max':json.dumps(data_temp_max,cls=NpEncoder), 
-        'data_temp_min':json.dumps(data_temp_min,cls=NpEncoder) 
+        'data_temp_max': json.dumps(data_temp_max, cls=NpEncoder),
+        'data_temp_min': json.dumps(data_temp_min, cls=NpEncoder)
     }
-    
+
     return JsonResponse(context)
+
 
 # ###################################################################
 # 自动站日报daily 的数据查询
@@ -493,12 +501,12 @@ def tool_zdz_daily(request):
     start = '2022-01-25 20:00'
     end = '2022-02-10 06:00'
     date = request.POST.get('date', '')
-    print('获取的时间',date)
+    print('获取的时间', date)
     global zdz_worker
     context = {
         'status': "ok",
-        'date':str(date)
-    }  
+        'date': str(date)
+    }
     return JsonResponse(context)
 
 

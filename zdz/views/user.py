@@ -20,7 +20,6 @@ class UserViewSet(viewsets.ModelViewSet):
     @transaction.atomic()
     @action(methods=["post"], url_path="register", detail=False)
     def register(self, request):
-        # todo 校验和密码加密存储
         reg_ser = RegisterSerializer(data=request.data)
         reg_ser.is_valid(raise_exception=True)
         reg_ser.save()

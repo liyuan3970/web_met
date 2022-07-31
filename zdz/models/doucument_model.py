@@ -1,16 +1,10 @@
 from django.db import models
+
 from .base_model import BaseModel
 
 
-class DocumentModel(BaseModel):
-    """文档字段
-
-    Args:
-        models (_type_): _description_
-
-    Returns:
-        _type_: _description_
-    """
+class Document(BaseModel):
+    """文档字段"""
     types = models.TextField(max_length=200, verbose_name='类别')
     item = models.IntegerField(verbose_name='期数')
     year = models.IntegerField(verbose_name='年份')
@@ -27,10 +21,10 @@ class DocumentModel(BaseModel):
         db_table = 'document'  # 通过db_table自定义数据表名
 
     def __str__(self):
-        return str(self.year)+"年"+self.types + ":第"+str(self.item)+"期"
+        return str(self.year) + "年" + self.types + ":第" + str(self.item) + "期"
 
 
-class SelfDefineModel(BaseModel):
+class SelfDefine(BaseModel):
     types = models.CharField(max_length=200, verbose_name='类别')
     name = models.CharField(max_length=200, verbose_name='名称')
     data = models.JSONField(null=False)
@@ -43,15 +37,8 @@ class SelfDefineModel(BaseModel):
         return str(self.type) + ":" + self.name
 
 
-class UnityModel(BaseModel):
-    """单位名称
-
-    Args:
-        models (_type_): _description_
-
-    Returns:
-        _type_: _description_
-    """
+class Unity(BaseModel):
+    """单位名称"""
     name = models.CharField(max_length=200, verbose_name='单位')
 
     class Meta:
@@ -62,15 +49,8 @@ class UnityModel(BaseModel):
         return self.name
 
 
-class PublisherModel(BaseModel):
-    """签发人
-
-    Args:
-        models (_type_): _description_
-
-    Returns:
-        _type_: _description_
-    """
+class Publisher(BaseModel):
+    """签发人"""
     name = models.CharField(max_length=200, verbose_name='签发人')
 
     class Meta:
@@ -81,15 +61,8 @@ class PublisherModel(BaseModel):
         return self.name
 
 
-class WriterModel(BaseModel):
-    """撰稿人
-
-    Args:
-        models (_type_): _description_
-
-    Returns:
-        _type_: _description_
-    """
+class Writer(BaseModel):
+    """撰稿人"""
     name = models.CharField(max_length=200, verbose_name='撰稿人')
 
     class Meta:
@@ -100,15 +73,8 @@ class WriterModel(BaseModel):
         return self.name
 
 
-class DocumentTypeModel(BaseModel):
-    """文档类别
-
-    Args:
-        models (_type_): _description_
-
-    Returns:
-        _type_: _description_
-    """
+class DocumentType(BaseModel):
+    """文档类别"""
     name = models.CharField(max_length=200, verbose_name='材料类型')
 
     class Meta:
@@ -119,15 +85,8 @@ class DocumentTypeModel(BaseModel):
         return self.name
 
 
-class PictureModel(BaseModel):
-    """图片二维码
-
-    Args:
-        models (_type_): _description_
-
-    Returns:
-        _type_: _description_
-    """
+class Picture(BaseModel):
+    """图片二维码"""
     img = models.ImageField(upload_to='img/')
     name = models.CharField(max_length=200, verbose_name='宣传二维码')
 
@@ -139,15 +98,8 @@ class PictureModel(BaseModel):
         return self.name
 
 
-class LeaderDataModel(BaseModel):
-    """呈发送
-
-    Args:
-        models (_type_): _description_
-
-    Returns:
-        _type_: _description_
-    """
+class LeaderData(BaseModel):
+    """呈发送"""
     name = models.CharField(max_length=20, verbose_name='发布版本')
     picture_list = models.CharField(
         max_length=20, verbose_name='二维码种类')  # 存放二维码的字典
@@ -160,4 +112,4 @@ class LeaderDataModel(BaseModel):
         db_table = 'leader_data'  # 通过db_table自定义数据表名
 
     def __str__(self):
-        return "呈送发:"+self.name
+        return "呈送发:" + self.name
