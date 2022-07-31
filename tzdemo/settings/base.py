@@ -109,11 +109,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     # 全局配置异常模块
-    'EXCEPTION_HANDLER': 'zdz.middleware.custom_exception_handler.custom_exception_handler',
-    # 默认返回类
-    'DEFAULT_RENDERER_CLASSES': (
-        'zdz.middleware.custom_renderer.CustomRenderer',
-    ),
+    'EXCEPTION_HANDLER': 'zdz.middleware.custom_exception_handler',
 }
 
 # jwt配置
@@ -129,7 +125,7 @@ SIMPLE_JWT = {
 
 # 自定义jwt校验
 AUTHENTICATION_BACKENDS = (
-    'zdz.middleware.custom_jwt_auth.CustomJWTAuth',
+    'zdz.middleware.CustomJWTAuth',
 )
 
 AUTH_USER_MODEL = 'zdz.User'

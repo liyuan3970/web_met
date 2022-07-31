@@ -4,9 +4,8 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views import static
-from rest_framework_simplejwt.views import TokenRefreshView
 
-from zdz.views.user import LoginView
+from zdz.views.user import LoginView, LoginRefreshView
 
 urlpatterns = [
     # debug=false路由静态文件
@@ -15,6 +14,6 @@ urlpatterns = [
     # rest_framework_simplejwt自带的得到token
     path('user/login/', LoginView.as_view()),
     # 刷新jwt
-    path('user/login/refresh/', TokenRefreshView.as_view()),
+    path('user/login/refresh/', LoginRefreshView.as_view()),
     path('', include('zdz.urls')),
 ]
