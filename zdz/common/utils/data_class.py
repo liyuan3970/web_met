@@ -789,20 +789,78 @@ class zdz_data:
         1.根据sql语句计算高低温的分布和排序
         '''
         temp_station_list = ['K8719','K8425','K8674']
-        data_temp = []
+        data_temp_max = []
+        data_temp_min = []
         for i in temp_station_list:
-            single_data = {}
+            single_data_max = {}
+            single_data_min = {}
             station_name = i
-            single_data['name'] = i
-            single_data['value'] = [self.station_data[i]['lon'].iloc[0],self.station_data[i]['lat'].iloc[0],self.station_data[i]['T'].max()/10.0,self.station_data[i]['T'].min()/10.0]
-            data_temp.append(single_data)
-        return data_temp   
+            single_data_max['name'] = i
+            single_data_max['value'] = [self.station_data[i]['lon'].iloc[0],self.station_data[i]['lat'].iloc[0],self.station_data[i]['T'].max()/10.0]
+            single_data_min['name'] = i
+            single_data_min['value'] = [self.station_data[i]['lon'].iloc[0],self.station_data[i]['lat'].iloc[0],self.station_data[i]['T'].min()/10.0]
+            data_temp_max.append(single_data_max)
+            data_temp_min.append(single_data_min)
+        return data_temp_max,data_temp_min 
     def pre_day(self,date):
         '''
         日报的响应时间、触发后统计对应天的灾情
-        '2022-04-14', 200,'高温 浓雾', '降水 大风', 200
+        '2022-04-14', 200,'高温 浓雾', '降水 大风', 
         '''
-        print('计算指定日期的数据',date)
+        #date = ['2022-04-14', 200,'低温 浓雾', '降水 大风', 200]
+        # 计算时间
+        today = datetime.datetime.strptime(date,'%Y-%m-%d')
+        start_time = str(today+datetime.timedelta(days = -1))[0:10] + ' 20:00'
+        end_time = str(today+datetime.timedelta(days = 1))[0:10] + ' 08:00'
+        data_all = self.station_all
+        data_time = data_all[(data_all['tTime'] >= start_time) & (data_all['tTime'] <= end_time)]
+        
+        grouped_IIiii = data_time.groupby('IIiii')
+        # 所需数据库
+        pre_list = []
+        wind_list = []
+        view_list = []
+        tmax_list = []
+        tmin_list = []
+        
+        for i in grouped_IIiii.size().index:  
+            data = grouped_IIiii.get_group(i)
+            # print(data)   
+            # 低温
+            if data[data['T'] > -999]['T'].min() < 30:
+                tmin_dir = {}
+                tmin_dir['name'] = data['IIiii'].iloc[0]
+                tmin_dir['value'] = [data['lon'].iloc[0],data['lat'].iloc[0],data['T'].tolist(),data['T'].min()]
+                tmin_list.append(tmin_dir)
+            # 高温   
+            if data['T'].max() > 350:
+                tmax_dir = {}
+                tmax_dir['name'] = data['IIiii'].iloc[0]
+                tmax_dir['value'] = [data['lon'].iloc[0],data['lat'].iloc[0],data['T'].tolist(),data['T'].max()]
+                tmax_list.append(tmax_dir)
+            # 大风
+            if data[data['fFy']>187]['fFy'].max():
+                wind_dir = {}
+                wind_dir['name'] = data['IIiii'].iloc[0]
+                wind_dir['value'] = [data['lon'].iloc[0],data['lat'].iloc[0],data['fFy'].tolist(),data['fFy'].max()] 
+                wind_dir['symbol'] = 'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z'
+                wind_dir['symbolRotate'] = data[data['fFy'] == data['fFy'].max()]['dFy'].iloc[0]
+                wind_list.append(wind_dir)
+            # 能见度
+            if data[(data['VV']<500) & (data['VV']>0)]['VV'].min() :
+                view_dir = {}
+                view_dir['name'] = data['IIiii'].iloc[0]
+                view_dir['value'] = [data['lon'].iloc[0],data['lat'].iloc[0],data['VV'].tolist(),data['VV'].min()] 
+                view_list.append(view_dir)                
+            # 降水
+            if data['RR'].max() > 0:
+                pre_dir = {}
+                data['RR'].replace(-9999,np.nan,inplace=True)
+                pre_dir['name'] = data['IIiii'].iloc[0]
+                pre_dir['value'] = [data['lon'].iloc[0],data['lat'].iloc[0],data['tTime'].tolist(),data['RR'].tolist(),data['RR'].sum()] 
+                pre_dir['symble'] = "circle"
+                pre_list.append(pre_dir)        
+        return pre_list
     def text_data(self):
         '''用来处理风雨情统计数据'''
         print('用来处理风雨情统计数据')
