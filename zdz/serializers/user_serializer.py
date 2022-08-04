@@ -1,6 +1,7 @@
 from django.contrib.auth.hashers import make_password
-from rest_framework import serializers
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.utils.translation import gettext_lazy as _
+from rest_framework import serializers, status
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 
 from ..models import User
 
@@ -22,6 +23,10 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(TokenObtainPairSerializer):
+    default_error_messages = {
+        "no_active_account": _("No active account found with the given credentials")
+    }
+
     def validate(self, attrs):
         data = super().validate(attrs)
 
@@ -32,4 +37,27 @@ class LoginSerializer(TokenObtainPairSerializer):
         data["user_id"] = self.user.id
         data["name"] = self.user.name
 
-        return data
+        ret = {
+            "code": status.HTTP_200_OK,
+            "msg": "success",
+            "data": data
+        }
+
+        return ret
+
+
+class LoginRefreshSerializer(TokenRefreshSerializer):
+    default_error_messages = {
+        "no_active_account": _("No active account found with the given credentials")
+    }
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        ret = {
+            "code": status.HTTP_200_OK,
+            "msg": "success",
+            "data": data
+        }
+
+        return ret

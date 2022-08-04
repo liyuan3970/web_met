@@ -3,15 +3,20 @@ from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+from ..common.utils.http_utils import APIResponse
 from ..models import User
-from ..serializers import RegisterSerializer, LoginSerializer
+from ..serializers import RegisterSerializer, LoginSerializer, LoginRefreshSerializer
 
 
 # 登录view
 class LoginView(TokenObtainPairView):
     serializer_class = LoginSerializer
+
+
+class LoginRefreshView(TokenRefreshView):
+    serializer_class = LoginRefreshSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -32,7 +37,7 @@ class UserViewSet(viewsets.ModelViewSet):
         data["user_id"] = reg_ser.instance.id
         data["name"] = reg_ser.instance.name
 
-        return Response(data=data)
+        return APIResponse(data)
 
     @action(methods=["post"], url_path="test", detail=False, permission_classes=[permissions.IsAuthenticated])
     def test(self, request):

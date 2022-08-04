@@ -1,6 +1,7 @@
 from django.contrib.auth.backends import ModelBackend
-from rest_framework import serializers
 
+from zdz.common.constant.enum import ResponseCodeEnum
+from zdz.common.exceptions import BusinessException
 from ..models import User
 
 
@@ -10,13 +11,13 @@ class CustomJWTAuth(ModelBackend):
         try:
             try:
                 user = User.objects.get(username=username)
-            except Exception as e:
-                raise serializers.ValidationError({"": "账号没有注册"})
+            except Exception:
+                raise BusinessException(ResponseCodeEnum.ACCOUNT_NOT_EXISTED)
 
             if user.check_password(password):
                 return user
             else:
-                raise serializers.ValidationError({"": "密码错误"})
+                raise BusinessException(ResponseCodeEnum.PASSWORD_ERROR)
 
         except Exception as e:
             raise e
