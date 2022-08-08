@@ -5877,6 +5877,8 @@
                                         };
 
                                         myChart_ecdata.setOption(option);
+                                        //ec的html内容直接解析导入
+                                        $("#table_ecworker_html").html(" ")
 
                                     }
                                 })
@@ -5928,6 +5930,7 @@
                             tabbable_head.innerHTML = "<tr><th>时间</th><th>时段</th><th>天况</th><th>气温</th><th>风力</th><th>降水</th><th>相对湿度</th></tr>"
 
                             tabbable_body = document.createElement('tbody')
+                            tabbable_body.id = "table_ecworker_html"
                             tabbable_body.innerHTML = "\
                                         <tr ><td colspan='1' rowspan='3'>6月29日</td><td>08:00~09:00</td><td>多云转阴</td><td>25~27°C</td><td>8级风</td><td>15mm</td><td>80%</td></tr>\
                                         <tr ><td>08:00~09:00</td><td>多云转阴</td><td>25~27°C</td><td>8级风</td><td>15mm</td><td>80%</td></tr>\

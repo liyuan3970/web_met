@@ -15,8 +15,7 @@ from numpy import random
 from zdz.common.utils import data_class, func
 from ..models.doucument_model import *
 
-# 设置全局变量用来存储EC数据的数据对象
-ec_worker = None
+
 
 # 序列化numpy的数字
 import numpy
@@ -294,7 +293,8 @@ def leader_Data_post(request):
     return JsonResponse(context)
 
 
-# 查询EC单站的数据并返回给前端进行渲染
+# 设置全局变量用来存储EC数据的数据对象
+ec_worker = None
 def ec_single_data(request):
     # 数据的接收 
     village = request.POST.get('ec_village', '')
@@ -302,8 +302,15 @@ def ec_single_data(request):
     lon = request.POST.get('ec_lon', '')
     ec_start_time = request.POST.get('ec_start_time', '')
     ec_end_time = request.POST.get('ec_end_time', '')
-    print(ec_start_time, ec_end_time)
+    # 测试
+    select_time,select_type,select_lat,select_lon = '2022041700','t',27.5,125.7     
     # 处理数据逻辑
+    global ec_worker
+    if ec_worker:
+        ec_worker.comput_all_data()
+    else:
+        ec_worker = data_class.ec_data_point(select_time,select_type,select_lat,select_lon)
+        ec_worker.comput_all_data()
 
     # 数据的返回
     context = {
