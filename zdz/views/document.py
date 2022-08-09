@@ -142,7 +142,7 @@ def quick_look(request):
     return render(request, 'index.html')
 
 
-# canvas 绘图
+# canvas 三点数据自定义绘图
 def plot_self_data(request):
     plot_self_data = request.POST.get('plot_self_data', '')
     crf = request.POST.get('csrfmiddlewaretoken', '')

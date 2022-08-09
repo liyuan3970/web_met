@@ -25,6 +25,44 @@
     <link rel="stylesheet" href="https://unpkg.com/x-data-spreadsheet@1.1.9/dist/xspreadsheet.css">
     <script src="https://unpkg.com/x-data-spreadsheet@1.1.9/dist/xspreadsheet.js"></script>
     <script src="https://unpkg.com/x-data-spreadsheet@1.1.9/dist/locale/zh-cn.js"></script>
+    <!-- 颜色选择器 -->
+    <script src="static/js/jquery.minicolors.js"></script>
+	<link rel="stylesheet" href="static/css/jquery.minicolors.css">
+	<!-- <script>
+		$(document).ready(function () {
+
+			$('.demo').each(function () {
+				//
+				// Dear reader, it's actually very easy to initialize MiniColors. For example:
+				//
+				//  $(selector).minicolors();
+				//
+				// The way I've done it below is just for the demo, so don't get confused 
+				// by it. Also, data- attributes aren't supported at this time...they're 
+				// only used for this demo.
+				//
+				$(this).minicolors({
+					control: $(this).attr('data-control') || 'hue',
+					defaultValue: $(this).attr('data-defaultValue') || '',
+					inline: $(this).attr('data-inline') === 'true',
+					letterCase: $(this).attr('data-letterCase') || 'lowercase',
+					opacity: $(this).attr('data-opacity'),
+					position: $(this).attr('data-position') || 'bottom left',
+					change: function (hex, opacity) {
+						if (!hex) return;
+						if (opacity) hex += ', ' + opacity;
+						try {
+							console.log(hex);
+						} catch (e) { }
+					},
+					theme: 'bootstrap'
+				});
+
+			});
+
+		});
+	</script>    -->
+    
 
 
 
@@ -2654,9 +2692,35 @@
                                                 </div>
                                                 <!-- 自定义颜色 -->
                                                 <div style="width:100%;height:10%;background-color: rgb(19, 12, 16);">
+                                                    <!-- <input type="text" id="hue-demo" class="form-control demo" data-control="hue" value="#ff6161"> -->
+
                                                     <input type="radio" name="selected_color_1st"
                                                         value="rgb(19, 12, 16)" style="width:20%;height:100%;">
                                                 </div>
+                                                <!-- 自定义颜色 -->
+                                                <div style="width:100%;height:10%;">
+                                                    <input type="text" id="hue-demo" data-control="hue" value="#ff6161">
+                                                </div>
+                                                <script>
+                                                    $('#hue-demo').minicolors( {defaults: {
+        animationSpeed: 50,
+        animationEasing: 'swing',
+        change: null,
+        changeDelay: 0,
+        control: 'hue',
+        defaultValue: '',
+        hide: null,
+        hideSpeed: 100,
+        inline: false,
+        letterCase: 'lowercase',
+        opacity: false,
+        position: 'bottom left',
+        show: null,
+        showSpeed: 100,
+        theme: 'default'
+    }});
+                                                </script>
+
                                             </div>
                                             <canvas id="plot_canvas" style="width:90%;height:100%;"></canvas>
                                         </div>
