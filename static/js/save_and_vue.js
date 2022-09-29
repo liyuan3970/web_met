@@ -29,7 +29,7 @@ function head_div(data) {
     div_putter.innerText = "签发人:" +data['putter'] 
 
     var div_red_line = document.createElement('div')
-    div_red_line.style = "top:95%;left:8%;height:1%;width:88%;;position: absolute;border: 2px solid red;"
+    div_red_line.style = "top:95%;left:8%;height:1%;width:88%;;position: absolute;"
         
     div_main.append(div_type)
     div_main.append(div_index)
@@ -176,7 +176,7 @@ function foot_div(data) {
     div_blank2.style = "height:5%;width:100%;"
 
     var div_black_line = document.createElement('div')
-    div_black_line.style = "height:1%;width:100%;border: 2px solid rgb(12, 12, 12);"
+    div_black_line.style = "height:1%;width:100%;"
 
     var div_main_p = document.createElement('div')
     div_main_p.style = "width:100%;height:auto"
