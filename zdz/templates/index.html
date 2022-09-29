@@ -28,40 +28,10 @@
     <!-- 颜色选择器 -->
     <script src="static/js/jquery.minicolors.js"></script>
     <link rel="stylesheet" href="static/css/jquery.minicolors.css">
-    <!-- <script>
-		$(document).ready(function () {
+    <style type="text/css">
+        .scrollbar::-webkit-scrollbar {display: none;}
 
-			$('.demo').each(function () {
-				//
-				// Dear reader, it's actually very easy to initialize MiniColors. For example:
-				//
-				//  $(selector).minicolors();
-				//
-				// The way I've done it below is just for the demo, so don't get confused 
-				// by it. Also, data- attributes aren't supported at this time...they're 
-				// only used for this demo.
-				//
-				$(this).minicolors({
-					control: $(this).attr('data-control') || 'hue',
-					defaultValue: $(this).attr('data-defaultValue') || '',
-					inline: $(this).attr('data-inline') === 'true',
-					letterCase: $(this).attr('data-letterCase') || 'lowercase',
-					opacity: $(this).attr('data-opacity'),
-					position: $(this).attr('data-position') || 'bottom left',
-					change: function (hex, opacity) {
-						if (!hex) return;
-						if (opacity) hex += ', ' + opacity;
-						try {
-							console.log(hex);
-						} catch (e) { }
-					},
-					theme: 'bootstrap'
-				});
-
-			});
-
-		});
-	</script>    -->
+    </style>
 
 
 
@@ -3812,11 +3782,15 @@
                             prodict_body_div.style = "display: inline-flex;width: 100%;height: 80%;;margin:15px"
 
                             var self_png_show = document.createElement('div')
-                            self_png_show.style = style = " width: 80%;height: 100%;overflow:auto ;"
+                            self_png_show.style = style = " width: 80%;height: 100%;overflow-x: hidden;overflow-y: scroll;"
+                            self_png_show.setAttribute("class","scrollbar")
+                            
+                            
                             self_png_show.id = "self_png_show"
 
                             var body_ul_div = document.createElement('div')
-                            body_ul_div.style = style = style = "width: 18%;height: 100%;overflow: auto;"
+                            body_ul_div.style = style = style = "width: 18%;height: 100%;overflow-x: hidden;overflow-y: scroll;"
+                            body_ul_div.setAttribute("class","scrollbar")
                             body_ul_div.id = "body_ul_div"
 
                             var body_ul = document.createElement('ul')
@@ -3926,6 +3900,7 @@
                                         img_item.src = server_img_list[i]
                                         img_item.style.width = "100%"
                                         img_item.style.height = "100%"
+
                                         $('#self_png_show').append(img_item)
                                         var a_item = document.createElement("a")
                                         a_item.id = "a_" + (i + 1).toString()
@@ -3955,7 +3930,7 @@
                                             $('#a_' + (j + 1).toString()).attr("style", "color:red")
 
                                         })
-
+                                        // $("#ul_self").css("")
                                         $("#ul_self").append(a_item)
 
 
