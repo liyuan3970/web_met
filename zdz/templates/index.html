@@ -3680,7 +3680,7 @@
                             console.log("-------------------------------自定义材料加载----------------------")
                             $('#product_view').html(" ")
                             var product_view = document.getElementById('product_view')
-                            product_view.style = "width:97.5%;height:100%;background-color:white;margin:15px"
+                            product_view.style = "width:97.5%;height:97%;background-color:white;margin:15px"
                             var list_data_all = [
                                 {  //# 文件头
                                     "type": "一周天气预测",
@@ -3760,7 +3760,7 @@
                             console.log("历史数据的加载")
                             $('#product_view').html(" 历史数据的加载")
                             var product_view = document.getElementById('product_view')
-                            product_view.style = "width:97.5%;height:100%;background-color:white;margin:15px"
+                            product_view.style = "width:97.5%;height:97%;background-color:white;margin:15px"
                             var list_data_all = [
                                 {  //# 文件头
                                     "type": "一周天气预测",
@@ -3838,7 +3838,7 @@
                             console.log("市台自订正")
                             $('#product_view').html("")
                             var product_view = document.getElementById('product_view')
-                            product_view.style = "width:97.5%;height:100%;background-color:white;margin:15px"
+                            product_view.style = "width:97.5%;height:97%;background-color:white;margin:15px"
                             var prodict_head_div = document.createElement('div')
                             prodict_head_div.style = "width: 100%;height: 5%;background-color:rgb(220, 222, 226);"
                             var head_h = document.createElement('h1')
@@ -3871,24 +3871,26 @@
 
                             var prodict_foot_div = document.createElement('div')
                             prodict_foot_div.style = "width: 100%;height: 10%;;text-align:center;vertical-align: middle;align-items: center;"
+
                             var foot_input1 = document.createElement('input')
                             foot_input1.id = "go_on"
-                            foot_input1.style = "width: 10%;height: 50%;text-align:center;vertical-align: middle;align-items: center;"
+                            foot_input1.style = "border:2px;width: 5%;height: 50%;text-align:center;vertical-align: middle;align-items: center;background-image: url(static/src/前进.png);background-size: 100%;background-repeat: no-repeat;"
                             foot_input1.setAttribute("type", "button")
-                            foot_input1.setAttribute("value", "前进：")
+                            // foot_input1.setAttribute("value", "前进")
 
                             var foot_input2 = document.createElement('input')
                             foot_input2.id = "go_back"
-                            foot_input2.style = "width: 10%;height: 50%;text-align:center;vertical-align: middle;align-items: center;"
+                            foot_input2.style = "border:2px;width: 5%;height: 50%;text-align:center;vertical-align: middle;align-items: center;background-image: url(static/src/后退.png);background-size: 100%;background-repeat: no-repeat;"
                             foot_input2.setAttribute("type", "button")
-                            foot_input2.setAttribute("value", "后退：")
+                            // foot_input2.setAttribute("value", "后退")
 
-                            var foot_input3 = document.createElement('input')
-                            foot_input3.name = "tool_2_last"
-                            foot_input3.style = "width: 10%;height: 50%;text-align:center;vertical-align: middle;align-items: center;"
-                            foot_input3.setAttribute("type", "button")
-                            foot_input3.setAttribute("value", "导出为git")
-                            prodict_foot_div.append(foot_input1, foot_input2, foot_input3)
+                            // var foot_input3 = document.createElement('input')
+                            // foot_input3.name = "tool_2_last"
+                            // foot_input3.style = "width: 10%;height: 50%;text-align:center;vertical-align: middle;align-items: center;"
+                            // foot_input3.setAttribute("type", "button")
+                            // foot_input3.setAttribute("value", "导出为git")
+                            // prodict_foot_div.append(foot_input1, foot_input2, foot_input3)
+                            prodict_foot_div.append(foot_input2, foot_input1)
 
                             product_view.append(prodict_head_div, prodict_body_div, prodict_foot_div)
 
@@ -4036,7 +4038,7 @@
                                     // console.log("zdz--ok",rain_scatter,typeof(rain_scatter))
                                     $('#product_view').html("")
                                     var product_view = document.getElementById("product_view")
-                                    product_view.style = "width:97.5%;height:100%;background-color:white;margin:15px"
+                                    product_view.style = "width:97.5%;height:97%;background-color:white;margin:15px"
                                     var calendar_history = document.createElement('div')
                                     calendar_history.id = "calendar_history"
                                     calendar_history.style = "display:inline-flex;width: 100%; height: 30%;"
@@ -5771,7 +5773,7 @@
                             console.log("---------------模式数据单点导出---------------")
                             $('#product_view').html(" ")
                             var product_view = document.getElementById("product_view")
-                            product_view.style = "width:97.5%;height:100%;background-color:white;margin:15px"
+                            product_view.style = "width:97.5%;height:97%;background-color:white;margin:15px"
                             // 绘图的核心程序
                             var map_tool1 = document.createElement('div')
                             map_tool1.style = "display: inline-flex;width: 60%; height: 45%;"
