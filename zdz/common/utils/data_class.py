@@ -29,6 +29,7 @@ from scipy.interpolate import interp1d
 
 os.environ["HDF5_USE_FILE_LOCKING"] = 'FALSE'
 import datetime
+# from datetime import *
 
 
 # 查询历史数据的calss
@@ -403,7 +404,7 @@ class plot_tz_product:
         self.plot_time = plot_time
         self.plot_type = plot_type
         self.time_len = 0
-        self.lat, self.lon, self.time, self.data_xr_nc = self.read_data()
+        self.lat, self.lon, self.time, self.data_xr_nc,self.date = self.read_data()
 
     # 外部函数
     def transform_from_latlon(self, lat, lon):
@@ -462,82 +463,102 @@ class plot_tz_product:
         lat = f.variables['lat'][:]
         lon = f.variables['lon'][:]
         time = f.variables['time'][:]
+        date = "20220402"
         self.time_len = len(time)
-        return lat, lon, time, data_xr_nc
+        return lat, lon, time, data_xr_nc,date
 
     def plot_img(self, item):
+        '''绘制逐小时的气温'''
         lat = self.lat
         lon = self.lon
         time = self.time
         data_xr_nc = self.data_xr_nc
-        data_xr = xr.DataArray(data_xr_nc[item, :, :], coords=[lat, lon], dims=["lat", "lon"])
-        levels = np.linspace(start=15, stop=25, num=5)  # [10,20,30,40,50,60,70,80,90,100,110]
-        self_define_list = [130, 144, 155, 170, 185, 200, 225, 235, 240, 244]
+        data_xr = xr.DataArray(data_xr_nc[item,:,:],coords=[lat,lon], dims=["lat", "lon"])
+        # 添加最大值和最小值
+        levels = np.linspace(start =data_xr.min(), stop = data_xr.max(), num = 7)#[10,20,30,40,50,60,70,80,90,100,110]
+        #levels = np.linspace(start = 15, stop = 20, num = 7)#[10,20,30,40,50,60,70,80,90,100,110]
+        self_define_list = [130,144,155,170,185,200,225,235,240,244]
         rgb_file = 'ncl_default'
-        # 以下是核心api,实质为调用Cmaps基类的listmap()方法
-        cmaps = Cmaps('ncl_default', self_define_list).listmap()
+        #以下是核心api,实质为调用Cmaps基类的listmap()方法
+        cmaps = Cmaps('ncl_default',self_define_list).listmap()
         # plt.rcParams.update({'font.size': 20})
-        fig = plt.figure(figsize=[10, 10])
+        fig = plt.figure(figsize=[10,10]) 
         ax = fig.add_subplot(111)
-        shp_path = "static/data/shpfile/"
-        shp_da = self.add_shape_coord_from_data_array(data_xr, shp_path + "taizhou.shp", "test")
-        awash_da = shp_da.where(shp_da.test < 7, other=np.nan)
+        shp_path = basicfile+"/static/data/shpfile/"
+        shp_da = self.add_shape_coord_from_data_array(data_xr, shp_path+"taizhou.shp", "country")
+        awash_da = shp_da.where(shp_da.country<7, other=np.nan)
         m = Basemap(llcrnrlon=120.0,
-                    llcrnrlat=27.8,
-                    urcrnrlon=122,
-                    urcrnrlat=29.5,
-                    resolution=None,
-                    projection='cyl')
+            llcrnrlat=27.8,
+            urcrnrlon=122,
+            urcrnrlat=29.5,
+            resolution = None, 
+            projection = 'cyl')
         # 设置colorbar
         cbar_kwargs = {
-            # 'orientation': 'horizontal',
-            # 'label': 'Potential',
-            'shrink': 0.5,
+        #'orientation': 'horizontal',
+        # 'label': 'Potential',
+        'shrink': 0.5,
         }
         lons, lats = np.meshgrid(lon, lat)
-        cs = m.contourf(lons, lats, data_xr, ax=ax, cmap='Spectral_r', levels=levels, cbar_kwargs=cbar_kwargs,
-                        add_labels=False)
-        # m.colorbar(cs)
-        m.readshapefile(shp_path + 'taizhou', 'taizhou', color='k', linewidth=1.2)
-        parallels = np.arange(27.8, 29.5, 0.2)
-        m.drawparallels(parallels, labels=[True, False, True, False], color='dimgrey', dashes=[2, 3],
-                        fontsize=12)  # ha= 'right'
-        meridians = np.arange(120.0, 122.0, 0.2)
-        m.drawmeridians(meridians, labels=[False, True, False, True], color='dimgrey', dashes=[2, 3], fontsize=12)
+        cs =m.contourf(lons,lats,data_xr,ax=ax, cmap=cmaps,levels =levels,cbar_kwargs=cbar_kwargs,add_labels=True)
+        # position=fig.add_axes([0.15, 0.05, 0.7, 0.03])#位置[左,下,右,上]
+        # m.colorbar?
+        ##########标题#############################
+        plt.rcParams["font.sans-serif"]=["SimHei"] #设置字体
+        plt.rcParams["axes.unicode_minus"]=False #该语句解决图像中的“-”负号的乱码问题
+        start_year = int(self.date[0:4])
+        start_month = int(self.date[4:6])
+        start_day = int(self.date[6:8])
+        
+        init_time = datetime(start_year, start_month, start_day, int(self.plot_time), 0, 0)
+        start_hours = int(time[item]-1)
+        start_time = init_time + timedelta(hours = start_hours)
+        end_time =  start_time + timedelta(hours = 1)
+        print("年",start_time,end_time,start_hours )
+        label = str(start_time)[:16] + "---" + str(end_time)[10:16]
+        plt.text(120.2,29.4, label,fontsize=15)
+        ##########标题#############################
+        m.readshapefile(shp_path+'taizhou','taizhou',color='k',linewidth=1.2)
+        parallels = np.arange(27.8,29.5,0.2)
+        m.drawparallels(parallels,labels=[True,False,True,False],color='dimgrey',dashes=[2, 3],fontsize= 12)  # ha= 'right'
+        meridians = np.arange(120.0,122.0,0.2)
+        m.drawmeridians(meridians,labels=[False,True,False,True],color='dimgrey',dashes=[2, 3],fontsize= 12)
         len_lat = len(data_xr.lat.data)
         len_lon = len(data_xr.lon.data)
-        for i in range(len_lon - 1):
-            for j in range(len_lat - 1):
-                y0 = round(27.50 + j * 0.05, 2)
-                x0 = round(119.80 + i * 0.05, 2)
-                if not isnan(awash_da.data[j, i]):
-                    plt.text(x0, y0, str(int(awash_da.data[j, i])), fontsize=7, fontweight=800, color="black")
-                    # 在图上绘制色标
-        rect1 = [0.75, 0.20, 0.03, 0.12]
-        ax2 = plt.axes(rect1, frameon='False')
+        for i in range(len_lon-1):
+            for j in range(len_lat-1):
+                y0 = round(27.50+j*0.05,2)
+                x0 = round(119.80+i*0.05,2)
+                if not isnan(awash_da.data[j,i]):
+                    plt.text(x0,y0,str(int(awash_da.data[j,i])),fontsize= 7,fontweight = 800 ,color ="black")            
+        # 在图上绘制色标
+        rect1 = [0.35, 0.25, 0.03, 0.12]         
+        ax2 = plt.axes(rect1,frameon='False' )
         ax2.set_xticks([])
         ax2.set_yticks([])
         ax2.spines['top'].set_visible(False)
         ax2.spines['bottom'].set_visible(False)
         ax2.spines['left'].set_visible(False)
         ax2.spines['right'].set_visible(False)
-        m.colorbar(cs, location='right', size='30%', pad="-100%", ax=ax2)
-        self.basemask(cs, ax, m, shp_path + 'taizhou')
+        m.colorbar(cs, location='right', size='30%', pad="-100%",ax = ax2)
+        self.basemask(cs, ax, m, shp_path+'taizhou') 
         buffer = BytesIO()
-        plt.savefig(buffer, bbox_inches='tight')
+        plt.savefig(buffer,bbox_inches='tight')  
         plot_img = buffer.getvalue()
-        imb = base64.b64encode(plot_img)
+        imb = base64.b64encode(plot_img) 
         ims = imb.decode()
-        imd = "data:image/png;base64," + ims
-        return imd
+        imd = "data:image/png;base64,"+ims
+        return imd,str(start_time)[:16]
 
     def multy_plot(self):
         '''返回图片列表'''
         imd_list = []
+        time_list = []
         for i in range(self.time_len):
-            imd = self.plot_img(i)
+            imd,time = self.plot_img(i)
             imd_list.append(imd)
-        return imd_list
+            time_list.append(time)
+        return imd_list,time_list
 
 
 # 自动站数据查询的class

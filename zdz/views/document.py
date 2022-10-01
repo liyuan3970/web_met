@@ -185,13 +185,14 @@ def upload_select_taizhou_data(request):
     if not imd_list:
         print('非缓存方法')
         # 常规方法获取列表
-        imd_list = get_imd_list(request)
+        imd_list,time_list = get_imd_list(request)
         # 设置缓存
         cache.set(key, imd_list, timeout=60 * 60 * 24)
 
     context = {
         'data_test': 723.5,
         'img_list': imd_list
+        # 'time_list':time_list
     }
     return JsonResponse(context)
 
@@ -208,8 +209,8 @@ def get_imd_list(request):
     # if cached:
     #     return JsonResponse({'data': cached_data})
     plot_worker = data_class.plot_tz_product(plot_type, plot_time)
-    imd_list = plot_worker.multy_plot()
-    return imd_list
+    imd_list,time_list = plot_worker.multy_plot()
+    return imd_list,time_list
 
 
 # 新建文档
