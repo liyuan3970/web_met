@@ -2420,46 +2420,113 @@
                                     </div>
                                 </div>
                             </div>
-                            <div style="width:100%;height:1%;"></div>
+                            <!-- <div style="width:100%;height:1%;"></div> -->
                             <div
                                 style="width:97.5%;height:20%;background-color:white;margin:15px">
-                                <div style="width:100%;height:15%">
-                                    <h3>市台订正:</h3>
+                                <div style="width:100%;height:15%;background-color:rgb(220, 222, 226);">
+                                    <h2 style="text-align:center;background-color:rgb(45, 104, 221);width:15%;border-top-left-radius: 5px;border-top-right-radius:5px;font-size: 23px;font-weight:900;font-family:'宋体';color:white">市台订正</h2>
                                 </div>
                                 <div
-                                    style="display: inline-flex;width:100%;height:15%;text-align:center;align-items: center;">
-                                    08:<input type="radio" name="tz_self_time" value="08" checked="checked"
-                                        style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
-                                    20:<input type="radio" name="tz_self_time" value="20"
-                                        style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
+                                    style="display: inline-flex;width:100%;height:20%;text-align:center;align-items: center;">
+                                    <div style="height: 100%;width:2%;"></div>
+                                    <div style="height: 100%;width:10%;font-size: 20px;vertical-align: middle">
+                                        <label for="08input">08</label>&nbsp;&nbsp;<input type="radio" name="tz_self_time" value="08" checked="checked" id = "08input">
+
+                                    </div>
+                                    <div style="height: 100%;width:1%;">
+                                    </div>
+                                    <div style="height: 100%;width:10%;font-size: 20px;vertical-align: middle">
+                                        <label for="20input">20</label>&nbsp;&nbsp;<input type="radio" name="tz_self_time" value="20" id = "20input">
+
+                                    </div>
                                 </div>
                                 <div
-                                    style="display: inline-flex;width:100%;height:40%;text-align:center;align-items: center;">
+                                    style="display: inline-flex;width:100%;height:60%;text-align:center;align-items: center;">
 
-                                    短期气温:<input type="radio" name="tz_self" value="T"
-                                        style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
-                                    短期降水:<input type="radio" name="tz_self" value="Pr01"
-                                        style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
-                                    短期大风:<input type="radio" name="tz_self" value="Wind"
-                                        style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
-                                    降水:<input type="radio" name="tz_self" value="Pr24"
-                                        style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
-                                    高温:<input type="radio" name="tz_self" value="TMax24" checked="checked"
-                                        style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
-                                    低温:<input type="radio" name="tz_self" value="TMin24"
-                                        style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
-                                    短期云量:<input type="radio" name="tz_self" value="Cloud_7day"
-                                        style="width: 10%;text-align:center;vertical-align: middle;align-items: center;">
+                                    <div style="width:15%;height:80%;"></div>
+                                    <div style="display:inline-block;width:8%;height:60%;background-color: rgb(220, 222, 226);;border-radius: 10px;">
+                                        <div style="width:100%;height:50%;text-align:center;;vertical-align: middle;margin:5px">
+                                            <label for="T_short" style="padding-right:10%;padding-top: 10%;" >短期气温</label>
+                                        </div>
+                                        <div style="width:100%;height:50%;">
+                                            <input type="radio" name="tz_self" value="T" class = "tool_prodict_product" id="T_short" style="width: 100%;height:50%;padding-bottom: 10%;">
+                                        </div>               
+                                    </div>
+                                    <div style="width:1%;height:80%;"></div>
+
+                                    <div style="width:1%;height:80%;"></div>
+                                    <div style="display:inline-block;width:8%;height:60%;background-color: rgb(220, 222, 226);;border-radius: 10px;">
+                                        <div style="width:100%;height:50%;text-align:center;;vertical-align: middle;margin:5px">
+                                            <label for="Pr01_short" style="padding-right:10%;padding-top: 10%;" >短期降水</label>
+                                        </div>
+                                        <div style="width:100%;height:50%;">
+                                            <input type="radio" name="tz_self" value="Pr01" class = "tool_prodict_product" id="Pr01_short" style="width: 100%;height:50%;padding-bottom: 10%;">
+                                        </div>               
+                                    </div>
+                                    <div style="width:1%;height:80%;"></div>
+
+                                    <div style="width:1%;height:80%;"></div>
+                                    <div style="display:inline-block;width:8%;height:60%;background-color: rgb(220, 222, 226);;border-radius: 10px;">
+                                        <div style="width:100%;height:50%;text-align:center;;vertical-align: middle;margin:5px">
+                                            <label for="Wind_short" style="padding-right:10%;padding-top: 10%;" >短期大风</label>
+                                        </div>
+                                        <div style="width:100%;height:50%;">
+                                            <input type="radio" name="tz_self" value="Wind" class = "tool_prodict_product" id="Wind_short" style="width: 100%;height:50%;padding-bottom: 10%;">
+                                        </div>               
+                                    </div>
+                                    <div style="width:1%;height:80%;"></div>
+
+                                    <div style="width:1%;height:80%;"></div>
+                                    <div style="display:inline-block;width:8%;height:60%;background-color: rgb(220, 222, 226);;border-radius: 10px;">
+                                        <div style="width:100%;height:50%;text-align:center;;vertical-align: middle;margin:5px">
+                                            <label for="Pr24_short" style="padding-right:10%;padding-top: 10%;" >降水</label>
+                                        </div>
+                                        <div style="width:100%;height:50%;">
+                                            <input type="radio" name="tz_self" value="Pr24" class = "tool_prodict_product" id="Pr24_short" style="width: 100%;height:50%;padding-bottom: 10%;">
+                                        </div>               
+                                    </div>
+                                    <div style="width:1%;height:80%;"></div>
+                                    
+                                    <div style="width:1%;height:80%;"></div>
+                                    <div style="display:inline-block;width:8%;height:60%;background-color: rgb(220, 222, 226);;border-radius: 10px;">
+                                        <div style="width:100%;height:50%;text-align:center;;vertical-align: middle;margin:5px">
+                                            <label for="TMax24_short" style="padding-right:10%;padding-top: 10%;" >高温</label>
+                                        </div>
+                                        <div style="width:100%;height:50%;">
+                                            <input type="radio" name="tz_self" value="TMax24" class = "tool_prodict_product" id="TMax24_short" style="width: 100%;height:50%;padding-bottom: 10%;">
+                                        </div>               
+                                    </div>
+                                    <div style="width:1%;height:80%;"></div>
+
+                                    <div style="width:1%;height:80%;"></div>
+                                    <div style="display:inline-block;width:8%;height:60%;background-color: rgb(220, 222, 226);;border-radius: 10px;">
+                                        <div style="width:100%;height:50%;text-align:center;;vertical-align: middle;margin:5px">
+                                            <label for="TMin24_short" style="padding-right:10%;padding-top: 10%;" >低温</label>
+                                        </div>
+                                        <div style="width:100%;height:50%;">
+                                            <input type="radio" name="tz_self" value="TMin24" class = "tool_prodict_product" id="TMin24_short" style="width: 100%;height:50%;padding-bottom: 10%;">
+                                        </div>               
+                                    </div>
+                                    <div style="width:1%;height:80%;"></div>
+
+                                    <div style="width:1%;height:80%;"></div>
+                                    <div style="display:inline-block;width:8%;height:60%;background-color: rgb(220, 222, 226);;border-radius: 10px;">
+                                        <div style="width:100%;height:50%;text-align:center;;vertical-align: middle;margin:5px">
+                                            <label for="Cloud_7day_short" style="padding-right:10%;padding-top: 10%;" >短期云量</label>
+                                        </div>
+                                        <div style="width:100%;height:50%;">
+                                            <input type="radio" name="tz_self" value="Cloud_7day" class = "tool_prodict_product" id="Cloud_7day_short" style="width: 100%;height:50%;padding-bottom: 10%;">
+                                        </div>               
+                                    </div>
+                                    <div style="width:1%;height:80%;"></div>
+
 
                                 </div>
-                                <div style="display: inline-block;width:100%;height:15%;">
-                                    <input id="tool_prodict_product_button" type="button" value="查看"
-                                        style="width: 10%;height:95% ;float: right ;">
-                                </div>
+
 
 
                             </div>
-                            <!-- <div style="width:100%;height:0.2%;"></div> -->
+
                             <div
                                 style="width:97.5%;height:10%;background-color:white;margin:15px">
                                 <div style="width:100%;height:30%">
@@ -3773,9 +3840,10 @@
                             var product_view = document.getElementById('product_view')
                             product_view.style = "width:97.5%;height:100%;background-color:white;margin:15px"
                             var prodict_head_div = document.createElement('div')
-                            prodict_head_div.style = "width: 100%;height: 10%;"
+                            prodict_head_div.style = "width: 100%;height: 5%;background-color:rgb(220, 222, 226);"
                             var head_h = document.createElement('h1')
-                            head_h.innerText = "市台订正:"
+                            head_h.style="margin:0;text-align:center;background-color:rgb(45, 104, 221);width:15%;height:100%;border-top-left-radius: 5px;border-top-right-radius:5px;font-size: 23px;font-weight:900;font-family:'宋体';color:white;padding-top:1.5%"
+                            head_h.innerText = "市台订正"
                             prodict_head_div.append(head_h)
 
                             var prodict_body_div = document.createElement('div')
@@ -6269,7 +6337,8 @@
                     })
 
                     // 市台订正数据加载
-                    $('#tool_prodict_product_button').click(function () {
+                    $('.tool_prodict_product').click(function () {
+                        console.log("点击了数据文件")
                         var type = "tool_prodict_product"
                         product_view_show(type)
 
