@@ -5842,8 +5842,10 @@
                             // 图表
                             var position_ec = document.createElement('div')
                             position_ec.style = ";width: 45%; height: 45%;;float: right;"
+                            // 文字描述
                             var blank_ec = document.createElement('div')
-                            blank_ec.style = "width: 85%; height: 35%;margin:15px;border-radius: 20px;;float: left;font-size: 20px;font-weight:900;font-family:'宋体';;"
+                            blank_ec.style = "width: 85%; height: 35%;margin:15px;border-radius: 20px;;float: left;font-size: 17px;font-weight:900;font-family:'宋体';overflow-x: hidden;overflow-y: scroll;;"
+                            blank_ec.setAttribute("class","scrollbar")
                             blank_ec.innerText = "大麦屿街道，隶属于浙江省台州市玉环市，地处玉环市西南部，东连坎门街道，南与温州市洞头县鹿西乡隔海相望，西、西北临乐清湾，与温州市乐清市城东街道、虹桥镇隔海相眺，北、东北连接玉城街道，辖区总面积74.1平方千米。"
                             var name_ec = document.createElement('div')
                             name_ec.style = "display: inline-flex;width: 100%; height: 20%;"
@@ -5877,7 +5879,7 @@
                             var button_input_ec = document.createElement('input')
                             button_input_ec.setAttribute('type', 'button')
                             button_input_ec.setAttribute('value', '查询')
-                            button_input_ec.style = "width:25%;height:50%;float:right;font-size: 10px;font-weight:900;font-family:'宋体';color:white;background-color:blue;"
+                            button_input_ec.style = "width:25%;height:50%;float:right;font-size: 18px;font-weight:900;font-family:'宋体';color:white;background-color:blue;border-radius:10px"
                             button_input_ec.id = 'button_input_ec'
                             button_ec.append(button_input_ec)
 
