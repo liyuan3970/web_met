@@ -5841,25 +5841,31 @@
                             // 映射位置的核心程序
                             // 图表
                             var position_ec = document.createElement('div')
-                            position_ec.style = "width: 40%; height: 45%;;float: right;"
+                            position_ec.style = ";width: 45%; height: 45%;;float: right;"
                             var blank_ec = document.createElement('div')
-                            blank_ec.style = "width: 40%; height: 45%;;float: right;"
+                            blank_ec.style = "width: 85%; height: 35%;margin:15px;border-radius: 20px;;float: left;font-size: 20px;font-weight:900;font-family:'宋体';;"
+                            blank_ec.innerText = "大麦屿街道，隶属于浙江省台州市玉环市，地处玉环市西南部，东连坎门街道，南与温州市洞头县鹿西乡隔海相望，西、西北临乐清湾，与温州市乐清市城东街道、虹桥镇隔海相眺，北、东北连接玉城街道，辖区总面积74.1平方千米。"
                             var name_ec = document.createElement('div')
                             name_ec.style = "display: inline-flex;width: 100%; height: 20%;"
                             name_ec.innerHTML = "&nbsp;&nbsp;&nbsp;"
                             var name_ec_h = document.createElement('h4')
                             name_ec_h.id = "h4_village"
+                            name_ec_h.style = "font-size: 25px;font-weight:900;font-family:'宋体';color:blue;padding-top:20%"
                             name_ec_h.innerText = "乡镇名称:仙居"
                             name_ec.append(name_ec_h)
                             // 位置
                             var latlon_ec = document.createElement('div')
-
-                            latlon_ec.style = "display: inline-flex;width: 100%; height: 20%;"
-                            latlon_ec.innerHTML = "&nbsp;&nbsp;&nbsp;"
+                            latlon_ec.style = "display: inline-flex;width: 100%; height: 20%;font-size: 10px;font-weight:900;font-family:'宋体';color:black;padding-top:10%;padding-left:2%"
+                            latlon_ec.innerHTML = "&nbsp;"
                             var lon_ec_h = document.createElement('h4')
                             lon_ec_h.id = "h4_lon"
                             lon_ec_h.innerText = "经度:27.5度    "
                             latlon_ec.append(lon_ec_h)
+                            var lon_ec_blank = document.createElement('h4')
+                            lon_ec_blank.style = "width: 1%; height:100%;"
+                            lon_ec_blank.innerHTML= "&nbsp;&nbsp;&nbsp; "
+                            latlon_ec.append(lon_ec_blank)
+
                             // latlon_ec.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;" 
                             var lat_ec_h = document.createElement('h4')
                             lat_ec_h.id = "h4_lat"
@@ -5867,15 +5873,15 @@
                             latlon_ec.append(lat_ec_h)
                             // 添加按钮
                             var button_ec = document.createElement("div")
-                            button_ec.style = "display: inline-block;width: 100%; height: 20%;"
+                            button_ec.style = "display: inline-block;width: 100%; height: 20%;padding-top:4%;padding-right:12%;"
                             var button_input_ec = document.createElement('input')
                             button_input_ec.setAttribute('type', 'button')
                             button_input_ec.setAttribute('value', '查询')
-                            button_input_ec.style = 'width:25%;height:50%;float:right'
+                            button_input_ec.style = "width:25%;height:50%;float:right;font-size: 10px;font-weight:900;font-family:'宋体';color:white;background-color:blue;"
                             button_input_ec.id = 'button_input_ec'
                             button_ec.append(button_input_ec)
 
-                            position_ec.append(blank_ec, name_ec, latlon_ec, button_ec)
+                            position_ec.append(name_ec, latlon_ec,blank_ec , button_ec)
                             // 添加查询按钮的响应事件
                             button_input_ec.addEventListener('click', function () {
                                 console.log("button_input_ec被点击了", $('#h4_village').text())
