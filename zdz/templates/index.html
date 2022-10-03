@@ -4151,9 +4151,44 @@
                                     $('#product_view').html("")
                                     var product_view = document.getElementById("product_view")
                                     product_view.style = "width:97.5%;height:97%;background-color:white;margin:15px"
+
+                                    // 日历模块
+                                    var calendar_all = document.createElement('div')
+                                    calendar_all.style = "display:inline-flex;width: 100%; height: 30%;"
+
+                                    var calendar_ul = document.createElement('div')
+                                    calendar_ul.style = "display:inline-block;width: 39%; height: 100%;;background-color:rgb(220, 222, 226);"
+
+                    
+
+                                    // // li元素的配置
+                                    // var table_li_div1 = document.createElement('div')
+                                    // table_li_div1.style = "display:inline-block;width: 48%; height: 48%;background-color:white;margin:3px"
+                       
+
+                                    // var table_li_div2 = document.createElement('div')
+                                    // table_li_div2.style = "display:inline-block;width: 48%; height: 48%;background-color:white;;margin:3px;"
+
+                                    // var table_li_div3 = document.createElement('div')
+                                    // table_li_div3.style = "display:inline-block;width: 48%; height: 48%;background-color:white;;margin:3px"
+
+                                    // var table_li_div4 = document.createElement('div')
+                                    // table_li_div4.style = "display:inline-block;width: 48%; height: 48%;background-color:white;;margin:3px;"
+
+                                    // calendar_ul.append(table_li_div1,table_li_div2,table_li_div3,table_li_div4)
+
+
+
+
+
+
+
+
                                     var calendar_history = document.createElement('div')
                                     calendar_history.id = "calendar_history"
-                                    calendar_history.style = "display:inline-flex;width: 100%; height: 30%;"
+                                    calendar_history.style = "display:inline-flex;width: 59%; height: 100%;"
+
+                                    calendar_all.append(calendar_ul,calendar_history)
 
                                     var tabbable = document.createElement('div')
                                     tabbable.setAttribute('class', 'tabbable')
@@ -4161,43 +4196,68 @@
                                     tabbable.style = "width: 100%; height: 50%;"
 
                                     var tab_content = document.createElement('div')
-                                    tab_content.style = "display: inline-block;width: 100%; height: 88%;"
+                                    tab_content.style = "display: inline-block;width: 100%; height: 90%;"
                                     tab_content.setAttribute('class', 'tab-content')
+
+                                    // 设置说明头
+
+                                    var tabbable_head = document.createElement('div')
+                                    tabbable_head.style = "width: 100%; height: 10%;;background-color:rgb(220, 222, 226);"
+                                    var tablehead_h = document.createElement('h1')
+                                    tablehead_h.style = "margin:0;text-align:center;background-color:rgb(45, 104, 221);width:15%;height:100%;border-top-left-radius: 5px;border-top-right-radius:5px;font-size: 23px;font-weight:900;font-family:'宋体';color:white;padding-top:1.5%"
+                                    tablehead_h.innerText = "实况查询"
+                                    tabbable_head.append(tablehead_h)
+
 
                                     var tabbable_ul = document.createElement('ul')
                                     tabbable_ul.setAttribute("class", "nav nav-tabs")
-                                    tabbable_ul.style = "width: 100%; height: 12%;"
+                                    tabbable_ul.style = "display:inline-block;width: 100%; height: 100%;"
+
+
+                                    
+                                    calendar_ul.append(tabbable_ul)
+
+
 
                                     var tabbable_li1 = document.createElement('li')
                                     tabbable_li1.setAttribute('class', 'active')
+                                    tabbable_li1.style = "display:inline-block;width: 50%; height: 50%;"
                                     var tabbable_a1 = document.createElement('a')
                                     tabbable_a1.setAttribute('href', '#panel-883512')
                                     tabbable_a1.setAttribute('data-toggle', 'tab')
+                                    tabbable_a1.style = "display:inline-block;width: 100%; height: 100%;"
                                     tabbable_a1.innerText = "降水"
                                     tabbable_li1.append(tabbable_a1)
 
                                     var tabbable_li2 = document.createElement('li')
+                                    tabbable_li2.style = "display:inline-block;width: 50%; height: 50%;"
                                     var tabbable_a2 = document.createElement('a')
                                     tabbable_a2.setAttribute('href', '#panel-725174')
                                     tabbable_a2.setAttribute('data-toggle', 'tab')
+                                    tabbable_a2.style = "display:inline-block;width: 100%; height: 100%;"
                                     tabbable_a2.innerText = "大风"
                                     tabbable_li2.append(tabbable_a2)
 
                                     var tabbable_li3 = document.createElement('li')
+                                    tabbable_li3.style = "display:inline-block;width: 50%; height: 50%;"
                                     var tabbable_a3 = document.createElement('a')
                                     tabbable_a3.setAttribute('href', '#panel-725173')
                                     tabbable_a3.setAttribute('data-toggle', 'tab')
+                                    tabbable_a3.style = "display:inline-block;width: 100%; height: 100%;"
                                     tabbable_a3.innerText = "能见度"
                                     tabbable_li3.append(tabbable_a3)
 
                                     var tabbable_li5 = document.createElement('li')
+                                    tabbable_li5.style = "display:inline-block;width: 50%; height: 50%;"
                                     var tabbable_a5 = document.createElement('a')
                                     tabbable_a5.setAttribute('href', '#panel-725172')
                                     tabbable_a5.setAttribute('data-toggle', 'tab')
+                                    tabbable_a5.style = "display:inline-block;width: 100%; height: 100%;"
                                     tabbable_a5.innerText = "气温"
                                     tabbable_li5.append(tabbable_a5)
 
                                     var tabbable_li4 = document.createElement('li')
+                                    
                                     var tabbable_a4 = document.createElement('a')
                                     tabbable_a4.setAttribute('href', '#panel-725171')
                                     tabbable_a4.setAttribute('data-toggle', 'tab')
@@ -4951,9 +5011,9 @@
                                     panel_725171.append(show_panel_725171)
                                     tab_content.append(panel_725171)
 
-                                    // tab_content.append(panel_883512,panel_725174,panel_725171)
-
-                                    tabbable.append(tabbable_ul, tab_content)
+                                    // 导航头
+                                    tabbable.append(tabbable_head, tab_content)
+                                    // tabbable.append(tabbable_ul, tab_content)
                                     // 风雨情
                                     var result_div = document.createElement('div')
                                     result_div.style = "width: 100%; height: 20%;"
@@ -4962,7 +5022,7 @@
                                                                             "
 
 
-                                    product_view.append(calendar_history, tabbable, result_div)
+                                    product_view.append(tabbable, result_div,calendar_all)
                                     // 加载bar 
                                     var dom = document.getElementById("calendar_history");
                                     var myChart = echarts.init(dom);
