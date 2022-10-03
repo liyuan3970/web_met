@@ -6,3 +6,4 @@
 20221002 235126.697 ERROR            PET0 ESMF_Grid.F90:29232 ESMF_GridCreateDistgridReg Internal error: Bad condition  - Internal subroutine call returned Error
 20221002 235126.697 ERROR            PET0 ESMF_Grid.F90:10715 ESMF_GridCreateNoPeriDimR Internal error: Bad condition  - Internal subroutine call returned Error
 20221002 235126.698 ERROR            PET0 ESMF_Grid_C.F90:78 f_esmf_gridcreatenoperidim Internal error: Bad condition  - Internal subroutine call returned Error
+20221003 000309.175 INFO             PET0 Finalizing ESMF
