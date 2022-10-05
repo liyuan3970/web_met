@@ -21,6 +21,7 @@
     <script type="text/javascript" src="static/js/dataTool.min.js"></script>
     <script type="text/javascript" src="static/js/china.js"></script>
     <script type="text/javascript" src="static/js/world.js"></script>
+    <script type="text/javascript" src="static/js/乡镇名称.js"></script>
     <!-- 表格 -->
     <link rel="stylesheet" href="https://unpkg.com/x-data-spreadsheet@1.1.9/dist/xspreadsheet.css">
     <script src="https://unpkg.com/x-data-spreadsheet@1.1.9/dist/xspreadsheet.js"></script>
@@ -48,26 +49,26 @@
         style="display: flex;align-content:flex-start;position: absolute; justify-content: center; flex-wrap: wrap; width: 100%;height: 100%;  background-color: rgb(243, 244, 247);">
         <!-- 导航栏 -->
         {% csrf_token %}
-        <div style="background-color:rgb(50, 104, 206); width: 100%; height: 5%;">
+        <div style="background-color:rgb(119, 160, 236); width: 100%; height: 5%;">
             <div class="tabbable" id="tabs-01" style="display:block;width: 100%; height: 100%;">
-                <ul class="nav nav-tabs" style="border-bottom: 0px;">
+                <ul class="nav nav-tabs" style="border-bottom: 0px;;font-size: 16px;font-weight:900;font-family:'宋体';">
                     <li class="active">
-                        <a href="#panel-1" data-toggle="tab">材料制作</a>
+                        <a href="#panel-1" data-toggle="tab" >材料制作</a>
                     </li>
                     <li>
-                        <a href="#panel-2" data-toggle="tab">工具箱</a>
-                    </li>
-                    <li>
-                        <!-- 另外添加一个说明文档 -->
-                        <a href="#panel-3" data-toggle="tab">画图</a>
+                        <a href="#panel-2" data-toggle="tab" >工具箱</a>
                     </li>
                     <li>
                         <!-- 另外添加一个说明文档 -->
-                        <a href="#panel-5" data-toggle="tab">快捷网址</a>
+                        <a href="#panel-3" data-toggle="tab" >画图</a>
+                    </li>
+                    <li>
+                        <!-- 另外添加一个说明文档 -->
+                        <a href="#panel-5" data-toggle="tab" >快捷网址</a>
                     </li>
                     <li style="float: right;">
                         <!-- 另外添加一个说明文档 -->
-                        <a href="#panel-4" data-toggle="tab">帮助</a>
+                        <a href="#panel-4" data-toggle="tab" >帮助</a>
                     </li>
                 </ul>
             </div>
@@ -5932,9 +5933,10 @@
                             position_ec.style = ";width: 45%; height: 45%;;float: right;"
                             // 文字描述
                             var blank_ec = document.createElement('div')
+                            blank_ec.id = "blank_ec"
                             blank_ec.style = "width: 85%; height: 35%;margin:15px;border-radius: 20px;;float: left;font-size: 17px;font-weight:900;font-family:'宋体';overflow-x: hidden;overflow-y: scroll;;"
                             blank_ec.setAttribute("class", "scrollbar")
-                            blank_ec.innerText = "大麦屿街道，隶属于浙江省台州市玉环市，地处玉环市西南部，东连坎门街道，南与温州市洞头县鹿西乡隔海相望，西、西北临乐清湾，与温州市乐清市城东街道、虹桥镇隔海相眺，北、东北连接玉城街道，辖区总面积74.1平方千米。"
+                            blank_ec.innerHTML ="&nbsp;&nbsp;大麦屿街道，隶属于浙江省台州市玉环市，地处玉环市西南部，东连坎门街道，南与温州市洞头县鹿西乡隔海相望，西、西北临乐清湾，与温州市乐清市城东街道、虹桥镇隔海相眺，北、东北连接玉城街道，辖区总面积74.1平方千米。"               
                             var name_ec = document.createElement('div')
                             name_ec.style = "display: inline-flex;width: 100%; height: 20%;"
                             name_ec.innerHTML = "&nbsp;&nbsp;&nbsp;"
@@ -5974,7 +5976,7 @@
                             position_ec.append(name_ec, latlon_ec, blank_ec, button_ec)
                             // 添加查询按钮的响应事件
                             button_input_ec.addEventListener('click', function () {
-                                console.log("button_input_ec被点击了", $('#h4_village').text())
+                                // console.log("button_input_ec被点击了",taizhou['features'])
                                 var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                                 $.ajax({
                                     url: "ec_single_data",  // 请求的地址
@@ -6455,16 +6457,21 @@
 
 
                             });
+                            // ec地图的相应事件
                             map.on('click', function (params) {
                                 let componentType = params.componentType;   // geo是地图图层
                                 if (componentType == "geo") {
                                     var offsetX = params.event.offsetX;
                                     var offsetY = params.event.offsetY;
                                     var zuobiao = map.convertFromPixel('geo', [offsetX, offsetY]); // 转换成坐标
-                                    // console.log(zuobiao,"数据",params.name) 
+                                    var detail =  taizhou_xz[params.name]
+                                    console.log("数据----",taizhou_xz[params.name]) 
+                                    // var  village
                                     $('#h4_village').html("乡镇名称:" + " " + params.name)
                                     $('#h4_lon').html("经度:" + " " + zuobiao[0].toFixed(2))
                                     $('#h4_lat').html("纬度:" + " " + zuobiao[1].toFixed(2))
+                                    // $('#blank_ec').text("&nbsp;&nbsp;" +detail.toString())
+                                    $('#blank_ec').html("&nbsp;&nbsp;" +detail.toString())
 
                                 }
                             });
