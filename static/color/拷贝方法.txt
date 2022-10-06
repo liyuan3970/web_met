@@ -1,0 +1,1 @@
+ cp -rf /home/liyuan3970/Data/My_Git/web_met/static/color/* /opt/conda/lib/python3.7/site-packages/ncmaps/ncar_colormaps
