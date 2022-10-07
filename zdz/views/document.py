@@ -5,6 +5,8 @@ import os
 from io import BytesIO
 
 import matplotlib.pyplot as plt
+# 序列化numpy的数字
+import numpy
 import pandas as pd
 from django.core.cache import cache
 from django.http import HttpResponse, JsonResponse
@@ -14,11 +16,6 @@ from numpy import random
 
 from zdz.common.utils import data_class, func
 from ..models.doucument_model import *
-
-
-
-# 序列化numpy的数字
-import numpy
 
 
 class NpEncoder(json.JSONEncoder):
@@ -176,41 +173,40 @@ def plot_self_data(request):
 def upload_select_taizhou_data(request):
     plot_type = request.POST.get('plot_type', '')
     plot_time = request.POST.get('plot_time', '')
-    # 不缓存的暴力方法
-    # imd_list = get_imd_list(request)
 
     # 设置key
-    key = f'img_list_{plot_type}_{plot_time}'
-    imd_list = cache.get(key)
-    if not imd_list:
+    key = f"imd_dict_{plot_type}_{plot_time}"
+    imd_dict = cache.get(key)
+    if not imd_dict:
         print('非缓存方法')
         # 常规方法获取列表
-        imd_list,time_list = get_imd_list(request)
+        imd_dict = get_imd_dict(request)
         # 设置缓存
-        cache.set(key, imd_list, timeout=60 * 60 * 24)
+        cache.set(key, imd_dict, timeout=60 * 60 * 24)
 
     context = {
         'data_test': 723.5,
-        'img_list': imd_list
-        # 'time_list':time_list
+        'img_list': imd_dict.get("img_list"),
+        'time_list': imd_dict.get("time_list"),
     }
     return JsonResponse(context)
 
 
-def get_imd_list(request):
+def get_imd_dict(request):
     # 测试绘制等值线的图
     os.environ["HDF5_USE_FILE_LOCKING"] = 'FALSE'
     plot_type = request.POST.get('plot_type', '')
     plot_time = request.POST.get('plot_time', '')
-    crf = request.POST.get('csrfmiddlewaretoken', '')
+
     print(os.environ["HDF5_USE_FILE_LOCKING"])
-    # imd_list = []
-    # cached_data = cache.get('img_list')
-    # if cached:
-    #     return JsonResponse({'data': cached_data})
+
     plot_worker = data_class.plot_tz_product(plot_type, plot_time)
-    imd_list,time_list = plot_worker.multy_plot()
-    return imd_list,time_list
+    imd_list, time_list = plot_worker.multy_plot()
+
+    return {
+        "imd_list": imd_list,
+        "time_list": time_list
+    }
 
 
 # 新建文档
@@ -296,6 +292,8 @@ def leader_Data_post(request):
 
 # 设置全局变量用来存储EC数据的数据对象
 ec_worker = None
+
+
 def ec_single_data(request):
     # 数据的接收 
     village = request.POST.get('ec_village', '')
@@ -304,13 +302,13 @@ def ec_single_data(request):
     ec_start_time = request.POST.get('ec_start_time', '')
     ec_end_time = request.POST.get('ec_end_time', '')
     # 测试
-    select_time,select_type,select_lat,select_lon = '2022041700','t',27.5,125.7     
+    select_time, select_type, select_lat, select_lon = '2022041700', 't', 27.5, 125.7
     # 处理数据逻辑
     global ec_worker
     if ec_worker:
         ec_worker.comput_all_data()
     else:
-        ec_worker = data_class.ec_data_point(select_time,select_type,select_lat,select_lon)
+        ec_worker = data_class.ec_data_point(select_time, select_type, select_lat, select_lon)
         ec_worker.comput_all_data()
 
     # 数据的返回
