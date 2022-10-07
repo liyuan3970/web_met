@@ -29,7 +29,7 @@ from scipy.interpolate import interp1d
 
 os.environ["HDF5_USE_FILE_LOCKING"] = 'FALSE'
 import datetime
-# from datetime import *
+from datetime import *
 
 
 # 查询历史数据的calss
@@ -484,7 +484,7 @@ class plot_tz_product:
         # plt.rcParams.update({'font.size': 20})
         fig = plt.figure(figsize=[10,10]) 
         ax = fig.add_subplot(111)
-        shp_path = basicfile+"/static/data/shpfile/"
+        shp_path = "static/data/shpfile/"
         shp_da = self.add_shape_coord_from_data_array(data_xr, shp_path+"taizhou.shp", "country")
         awash_da = shp_da.where(shp_da.country<7, other=np.nan)
         m = Basemap(llcrnrlon=120.0,
@@ -508,8 +508,7 @@ class plot_tz_product:
         plt.rcParams["axes.unicode_minus"]=False #该语句解决图像中的“-”负号的乱码问题
         start_year = int(self.date[0:4])
         start_month = int(self.date[4:6])
-        start_day = int(self.date[6:8])
-        
+        start_day = int(self.date[6:8])   
         init_time = datetime(start_year, start_month, start_day, int(self.plot_time), 0, 0)
         start_hours = int(time[item]-1)
         start_time = init_time + timedelta(hours = start_hours)

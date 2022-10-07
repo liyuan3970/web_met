@@ -187,7 +187,7 @@ def upload_select_taizhou_data(request):
     context = {
         'data_test': 723.5,
         'img_list': imd_dict.get("img_list"),
-        'time_list': imd_dict.get("time_list"),
+        'time_list': imd_dict.get("time_list")
     }
     return JsonResponse(context)
 
