@@ -30,7 +30,7 @@ from scipy.interpolate import interp1d
 os.environ["HDF5_USE_FILE_LOCKING"] = 'FALSE'
 import datetime
 from datetime import *
-
+from matplotlib.colors import ListedColormap,LinearSegmentedColormap
 
 # 查询历史数据的calss
 class sql_data:
@@ -467,21 +467,15 @@ class plot_tz_product:
         self.time_len = len(time)
         return lat, lon, time, data_xr_nc,date
 
-    def plot_img(self, item):
+    def plot_img(self,item):
         '''绘制逐小时的气温'''
         lat = self.lat
         lon = self.lon
         time = self.time
         data_xr_nc = self.data_xr_nc
         data_xr = xr.DataArray(data_xr_nc[item,:,:],coords=[lat,lon], dims=["lat", "lon"])
-        # 添加最大值和最小值
-        levels = np.linspace(start =data_xr.min(), stop = data_xr.max(), num = 7)#[10,20,30,40,50,60,70,80,90,100,110]
-        #levels = np.linspace(start = 15, stop = 20, num = 7)#[10,20,30,40,50,60,70,80,90,100,110]
-        self_define_list = [130,144,155,170,185,200,225,235,240,244]
-        rgb_file = 'ncl_default'
-        #以下是核心api,实质为调用Cmaps基类的listmap()方法
-        cmaps = Cmaps('ncl_default',self_define_list).listmap()
-        # plt.rcParams.update({'font.size': 20})
+        # ##########色标和大小#############################
+        cmaps ,levels = self.colormap(self.plot_type)
         fig = plt.figure(figsize=[10,10]) 
         ax = fig.add_subplot(111)
         shp_path = "static/data/shpfile/"
@@ -493,28 +487,10 @@ class plot_tz_product:
             urcrnrlat=29.5,
             resolution = None, 
             projection = 'cyl')
-        # 设置colorbar
-        cbar_kwargs = {
-        #'orientation': 'horizontal',
-        # 'label': 'Potential',
-        'shrink': 0.5,
-        }
         lons, lats = np.meshgrid(lon, lat)
-        cs =m.contourf(lons,lats,data_xr,ax=ax, cmap=cmaps,levels =levels,cbar_kwargs=cbar_kwargs,add_labels=True)
-        # position=fig.add_axes([0.15, 0.05, 0.7, 0.03])#位置[左,下,右,上]
-        # m.colorbar?
+        cs =m.contourf(lons,lats,data_xr,ax=ax, cmap=cmaps,levels =levels,add_labels=True)
         ##########标题#############################
-        plt.rcParams["font.sans-serif"]=["SimHei"] #设置字体
-        plt.rcParams["axes.unicode_minus"]=False #该语句解决图像中的“-”负号的乱码问题
-        start_year = int(self.date[0:4])
-        start_month = int(self.date[4:6])
-        start_day = int(self.date[6:8])   
-        init_time = datetime(start_year, start_month, start_day, int(self.plot_time), 0, 0)
-        start_hours = int(time[item]-1)
-        start_time = init_time + timedelta(hours = start_hours)
-        end_time =  start_time + timedelta(hours = 1)
-        print("年",start_time,end_time,start_hours )
-        label = str(start_time)[:16] + "---" + str(end_time)[10:16]
+        label, start_time  = self.label_text(self.plot_type,item)
         plt.text(120.2,29.4, label,fontsize=15)
         ##########标题#############################
         m.readshapefile(shp_path+'taizhou','taizhou',color='k',linewidth=1.2)
@@ -558,7 +534,75 @@ class plot_tz_product:
             imd_list.append(imd)
             time_list.append(time)
         return imd_list,time_list
-
+    def colormap(self,plot_type):
+        '''色标的自定义'''
+        # 可选用的绘图类型  
+        ## 降水
+#         colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 降水
+#         cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+#         levels = [0,1,2,3,4,5,6,7]
+        ## 云量
+#         colorslist = ['#FFFFFF',"#F0F0F0","#E6E6E6","#D2D2D2","#BEBEBE","#AAAAAA","#969696","#828282","#6E6E6E","#5A5A5A"]# CLOUND
+#         cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=10)
+#         levels = [0,1,2,3,4,5,6,7,8,9,10]
+        ## 气温
+#         colorslist = ["#264FC7","#286BD9","#2B87EB","#2EA4FD","#48BBF0","#62D3E3","#7DEBD7","#9CEFC0","#BBF3A9","#DBF792","#E7E07C","#F3CB66","#FFB551","#FFBB6A","#FFC184","#FFC89E","#FFDABE","#FFECDE","#FFFFFF"]# CLOUND
+#         cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=19)
+#         levels = [6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40]    
+        if plot_type =="T":
+            # 短期气温
+            colorslist = ["#264FC7","#286BD9","#2B87EB","#2EA4FD","#48BBF0","#62D3E3","#7DEBD7","#9CEFC0","#BBF3A9","#DBF792","#E7E07C","#F3CB66","#FFB551","#FFBB6A","#FFC184","#FFC89E","#FFDABE","#FFECDE","#FFFFFF"]# CLOUND
+            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=19)
+            levels = [6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40] 
+        elif plot_type =="Pr01":
+            # 短期降水
+            colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 降水
+            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+            levels = [0,1,2,3,4,5,6,7]
+        elif plot_type =="Pr12":
+            # 降水
+            colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 降水
+            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+            levels = [0,1,2,3,4,5,6,7]
+        elif plot_type =="TMax24":
+            # 高温
+            colorslist = ["#264FC7","#286BD9","#2B87EB","#2EA4FD","#48BBF0","#62D3E3","#7DEBD7","#9CEFC0","#BBF3A9","#DBF792","#E7E07C","#F3CB66","#FFB551","#FFBB6A","#FFC184","#FFC89E","#FFDABE","#FFECDE","#FFFFFF"]# CLOUND
+            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=19)
+            levels = [6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40] 
+        elif plot_type =="TMin24":
+            # 低温
+            colorslist = ["#264FC7","#286BD9","#2B87EB","#2EA4FD","#48BBF0","#62D3E3","#7DEBD7","#9CEFC0","#BBF3A9","#DBF792","#E7E07C","#F3CB66","#FFB551","#FFBB6A","#FFC184","#FFC89E","#FFDABE","#FFECDE","#FFFFFF"]# CLOUND
+            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=19)
+            levels = [6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40] 
+        elif plot_type =="Cloud":
+            colorslist = ['#FFFFFF',"#F0F0F0","#E6E6E6","#D2D2D2","#BEBEBE","#AAAAAA","#969696","#828282","#6E6E6E","#5A5A5A"]# CLOUND
+            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=10)
+            levels = [0,1,2,3,4,5,6,7,8,9,10]
+        return cmaps,levels
+    def label_text(self,plot_type,item):
+        '''图题'''
+        if plot_type in ["T","Pr01","Cloud"]:
+            # 逐小时
+            print("查看数据",item)
+            start_year = int(self.date[0:4])
+            start_month = int(self.date[4:6])
+            start_day = int(self.date[6:8])   
+            init_time = datetime(start_year, start_month, start_day, int(self.plot_time), 0, 0)
+            start_hours = int(self.time[item]-1)
+            start_time = init_time + timedelta(hours = start_hours)
+            end_time =  start_time + timedelta(hours = 1)
+            label = str(start_time)[:16] + "---" + str(end_time)[10:16]
+        else:
+            # 每天
+            start_year = int(self.date[0:4])
+            start_month = int(self.date[4:6])
+            start_day = int(self.date[6:8])   
+            init_time = datetime(start_year, start_month, start_day, int(self.plot_time), 0, 0)
+            start_hours = int(self.time[item]-1)
+            start_time = init_time + timedelta(hours = start_hours)
+            end_time =  start_time + timedelta(hours = 24)
+            label = str(start_time)[:16] + "---" + str(end_time)[10:16]
+        return label, start_time    
 
 # 自动站数据查询的class
 

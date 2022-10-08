@@ -2513,7 +2513,7 @@
                                                 style="padding-right:10%;padding-top: 10%;">降水</label>
                                         </div>
                                         <div style="width:100%;height:50%;">
-                                            <input type="radio" name="tz_self" value="Pr24" class="tool_prodict_product"
+                                            <input type="radio" name="tz_self" value="Pr12" class="tool_prodict_product"
                                                 id="Pr24_short" style="width: 100%;height:50%;padding-bottom: 10%;">
                                         </div>
                                     </div>
@@ -2560,7 +2560,7 @@
                                                 style="padding-right:10%;padding-top: 10%;">短期云量</label>
                                         </div>
                                         <div style="width:100%;height:50%;">
-                                            <input type="radio" name="tz_self" value="Cloud_7day"
+                                            <input type="radio" name="tz_self" value="Cloud"
                                                 class="tool_prodict_product" id="Cloud_7day_short"
                                                 style="width: 100%;height:50%;padding-bottom: 10%;">
                                         </div>
@@ -4070,7 +4070,7 @@
                                 dataType: "json",
                                 success: function (data) {
                                     // var show_img_list = $
-                                    var server_img_list = data.img_list
+                                    var server_img_list = data.imd_list
                                     var server_time_list = data.time_list
                                     console.log("ajax请求成功返回的数据", server_time_list,server_img_list)
                                     $("#self_png_show").html(" ")
@@ -4088,8 +4088,8 @@
                                         a_item.id = "a_" + (i + 1).toString()
                                         a_item.setAttribute("class", "list-group-item")
                                         a_item.setAttribute("href", "#self_" + (i + 1).toString())
-                                        a_item.innerText = "测试"
-                                        // a_item.innerText = server_time_list[i]
+                                        // a_item.innerText = "测试"
+                                        a_item.innerText = server_time_list[i]
                                         var input_item = document.createElement("input")
                                         input_item.id = "in_" + (i + 1).toString()
                                         input_item.style.display = "none"
