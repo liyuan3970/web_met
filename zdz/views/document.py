@@ -301,6 +301,10 @@ def ec_single_data(request):
     lon = request.POST.get('ec_lon', '')
     ec_start_time = request.POST.get('ec_start_time', '')
     ec_end_time = request.POST.get('ec_end_time', '')
+    ec_data_type = request.POST.get('ec_data_type', '')
+    ec_time_item = request.POST.get('ec_time_item', '')
+    ec_select_time = request.POST.get('ec_select_time', '')
+
     # 测试
     select_time, select_type, select_lat, select_lon = '2022041700', 't', 27.5, 125.7
     # 处理数据逻辑

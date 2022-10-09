@@ -28,7 +28,7 @@ from scipy.interpolate import interp1d
 # import h5netcdf.legacyapi as netCDF4
 
 os.environ["HDF5_USE_FILE_LOCKING"] = 'FALSE'
-import datetime
+import datetime as dtt
 from datetime import *
 from matplotlib.colors import ListedColormap,LinearSegmentedColormap
 
@@ -578,6 +578,10 @@ class plot_tz_product:
             colorslist = ['#FFFFFF',"#F0F0F0","#E6E6E6","#D2D2D2","#BEBEBE","#AAAAAA","#969696","#828282","#6E6E6E","#5A5A5A"]# CLOUND
             cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=10)
             levels = [0,1,2,3,4,5,6,7,8,9,10]
+        elif plot_type =="Special12":
+            colorslist = ['#FFFFFF',"#F0F0F0","#E6E6E6","#D2D2D2","#BEBEBE","#AAAAAA","#969696","#828282","#6E6E6E","#5A5A5A"]# CLOUND
+            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=10)
+            levels = [0,1,2,3,4,5,6,7,8,9,10]
         return cmaps,levels
     def label_text(self,plot_type,item):
         '''图题'''
@@ -704,11 +708,11 @@ class zdz_data:
         '''
         dates = []
         #         dt = datetime.datetime.strptime(self.start, "%Y-%m-%d")
-        dt = datetime.datetime.strptime(self.start[0:10], "%Y-%m-%d")
+        dt = dtt.datetime.strptime(self.start[0:10], "%Y-%m-%d")
         date = self.start[:10]
         while date <= self.end[:10]:
             dates.append(date)
-            dt = dt + datetime.timedelta(1)
+            dt = dt + dtt.timedelta(1)
             date = dt.strftime("%Y-%m-%d")
         return dates
 
@@ -882,7 +886,7 @@ class zdz_data:
         '''
         # date = ['2022-04-14', 200,'低温 浓雾', '降水 大风', 200]
         # 计算时间
-        today = datetime.datetime.strptime(date, '%Y-%m-%d')
+        today = dtt.datetime.strptime(date, '%Y-%m-%d')
         start_time = str(today + datetime.timedelta(days=-1))[0:10] + ' 20:00'
         end_time = str(today + datetime.timedelta(days=1))[0:10] + ' 08:00'
         data_all = self.station_all
@@ -1015,9 +1019,9 @@ class ec_data_point:
     #  1. 计算超出指定日期的时间段数
     def time_point_len(self,times,step):
         start = str(times[0:10] + ' 00:00:00')
-        t_start =datetime.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
+        t_start =dtt.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
         end = str(times+':00')
-        t_end =datetime.datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
+        t_end =dtt.datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
         timedelta = (t_end - t_start).seconds
         hours = timedelta/3600
         if step == 'hours':
@@ -1084,11 +1088,11 @@ class ec_data_point:
         end_len = self.time_point_len(end_day,step)
         # 计算日期
         dates = []
-        dt = datetime.datetime.strptime(start_day[0:10], "%Y-%m-%d")
+        dt = dtt.datetime.strptime(start_day[0:10], "%Y-%m-%d")
         date = start_day[0:10] + ' 00:00'
         while date <= end_day:
             dates.append(date)
-            dt = dt + datetime.timedelta(1)
+            dt = dt + dtt.timedelta(1)
             date = dt.strftime("%Y-%m-%d") + ' 00:00'
         return dates,start_len,end_len,ts  
     def return_timestep(self,dates,step,start_len,end_len,ts,single_point_data):
