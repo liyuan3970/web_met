@@ -4251,33 +4251,17 @@
                                     map_wind.style = "display: inline-block;width: 60%; height: 100%;"
 
                                     var table_wind_div = document.createElement('div')
-                                    table_wind_div.style = "width: 40%; height:100%;overflow: auto;"
+                                    table_wind_div.style = "width: 40%; height:90%;margin:10px;overflow-x: hidden;overflow-y: scroll;"
+                                    table_wind_div.setAttribute("class","scrollbar")
 
                                     var table_wind = document.createElement('table')
-                                    table_wind.setAttribute('class', 'table table-hover table-bordered table-condensed')
+                                    table_wind.setAttribute('class', 'table')
 
                                     var table_head = document.createElement('thead')
                                     table_head.innerHTML = "<tr><th>日期</th><th>时段</th><th>天况</th><th>气温</th></tr>"
 
                                     var table_body = document.createElement('tbody')
                                     table_body.id = "zdz_wind_table"
-
-                                    // table_body.innerHTML = "\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>风力</th></tr>\
-                                    //                                         "
-
                                     table_wind.append(table_head, table_body)
                                     table_wind_div.append(table_wind)
                                     wind_all.append(map_wind, table_wind_div)
@@ -4294,7 +4278,7 @@
                                             },
                                             dataType: "json",
                                             success: function (data) {
-                                                console.log("返回成功", data)
+                                                // console.log("返回成功", data)
                                                 // 加载大风图 tz_json
                                                 var map = echarts.init(document.getElementById('map_wind'), 'light');
                                                 //  echarts.registerMap('taizhou',tz_json,{});
@@ -4421,32 +4405,17 @@
                                     map_see_view.style = "width: 60%; height: 100%;"
 
                                     var table_see_view_div = document.createElement('div')
-                                    table_see_view_div.style = "width: 40%; height:100%;overflow: auto;"
+                                    table_see_view_div.style ="width: 40%; height:90%;margin:10px;overflow-x: hidden;overflow-y: scroll;"
+                                    table_see_view_div.setAttribute("class","scrollbar")
 
                                     var table_see_view = document.createElement('table')
-                                    table_see_view.setAttribute('class', 'table table-hover table-bordered table-condensed')
+                                    table_see_view.setAttribute('class', 'table')
 
                                     var table_head = document.createElement('thead')
                                     table_head.innerHTML = "<tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>"
 
                                     var table_body = document.createElement('tbody')
                                     table_body.id = "zdz_view_table"
-                                    // table_body.innerHTML = "\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>ss</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
-                                    //                                         <tr><th>排序</th><th>乡镇</th><th>站点</th><th>能见度</th></tr>\
-                                    //                                         "
-
                                     table_see_view.append(table_head, table_body)
                                     table_see_view_div.append(table_see_view)
                                     see_view_all.append(map_see_view, table_see_view_div)
