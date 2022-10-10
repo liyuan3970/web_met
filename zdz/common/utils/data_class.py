@@ -622,7 +622,18 @@ class zdz_data:
         self.station_all = self.read_csv()
         self.event_data()
         self.rain_data()
-
+        self.img = self.plot_img()
+    def plot_img(self):
+        x = [1,2,3,4,5,6]
+        y = [1,2,3,4,5,6]
+        plt.plot(y)
+        buffer = BytesIO()
+        plt.savefig(buffer,bbox_inches='tight')  
+        plot_img = buffer.getvalue()
+        imb = base64.b64encode(plot_img) 
+        ims = imb.decode()
+        imd = "data:image/png;base64,"+ims
+        return imd
     def sql_date(self):
         '''数据库读取sql数据'''
         print('读取数据库数据')
@@ -731,7 +742,7 @@ class zdz_data:
             'IIiii_data': {}
 
         }
-
+        
         grouped_tTime = station_all.groupby('tTime')
         for i in grouped_tTime.size().index:
             data = grouped_tTime.get_group(i)
@@ -760,6 +771,7 @@ class zdz_data:
         self.station_data = data_rain['IIiii_data']
         self.rain_line = [data_rain['rain_sum']['time'], data_rain['rain_sum']['data']]
         self.rain_scatter = rain_scatter
+        #self.plot_img()
 
     def wind_data(self):
         '''
