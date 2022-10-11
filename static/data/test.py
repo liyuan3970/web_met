@@ -7,10 +7,9 @@ import xesmf as xe
 import redis
 import pandas as pd
 import datetime
-
+import math
 class ec_data_point:
     def __init__(self, select_time,select_type,select_lat,select_lon): 
-        # self.var_list = ['vis','u10','v10','tmax2','tmin2','tcc','t2','skt','lsp','cp']
         self.var_list = ['u10','v10','tcc','t2','skt','lsp','cp','tp','r'] # 风向风速、云量、温度、tp（总降水）、相对湿度
         self.data = { }
         self.read_data()
@@ -79,6 +78,7 @@ class ec_data_point:
     # 以下为处理html表格的核心代码######################################################################################################################
     #  1. 计算超出指定日期的时间段数
     def time_point_len(self,times,step):
+        '''计算时间步长'''
         start = str(times[0:10] + ' 00:00:00')
         t_start =datetime.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
         end = str(times+':00')
@@ -141,7 +141,7 @@ class ec_data_point:
             'r':[i for i in range(241)]
             
         }
-        step = 'hours'
+        step = '3hours'
         time_data = pd.date_range(start='2022-04-17 00:00:00',end='2022-04-27 00:00:00',freq='1H')
         data_index = [i for i in range(241) ]
         ts = pd.Series(data_index, time_data)
@@ -157,6 +157,7 @@ class ec_data_point:
             date = dt.strftime("%Y-%m-%d") + ' 00:00'
         return dates,start_len,end_len,ts  
     def return_timestep(self,dates,step,start_len,end_len,ts,single_point_data):
+        '''返回表第一行的日期数据'''
         step_data = []
         if step == 'hours':
             # 6是每段时间的个数
@@ -343,70 +344,13 @@ class ec_data_point:
         return data
     
     def decode_html_table(self,data):
+        '''解析html的数据'''
         # 用来解析数据并返回表格的html数据
         # 日期、间隔
         step = 'prehours'# 'sixhours';'thrdhours'
-#         data = {
-#             'day':['29日','30日'],
-#             'time_step':[
-#                 {
-#                 'step_list':['08:00~09:00','08:00~09:00','08:00~09:00'],
-#                 'step_data':[
-#                     ['多云转阴','25~27°C','东南风6~8级','15mm','80%'], 
-#                     ['多云转阴','25~27°C','东南风6~8级','15mm','80%'], 
-#                     ['多云转阴','25~27°C','东南风6~8级','15mm','80%']
-#                     ]
-#                 },
-#                 {
-#                 'step_list':['08:00~09:00','08:00~09:00','08:00~09:00'],
-#                 'step_data':[
-#                     ['多云转阴','25~27°C','东南风6~8级','15mm','80%'], 
-#                     ['多云转阴','25~27°C','东南风6~8级','15mm','80%'], 
-#                     ['多云转阴','25~27°C','东南风6~8级','15mm','80%']
-#                     ]
-#                 }
-#             ],
-#             'blank':[
-#                 ['','08:00~09:00','多云转阴','25~27°C','东南风6~8级','15mm','80%']
-#             ]
-#         }
         len_day = len(data['day'])
         len_setp = 3#len(data['time_step']['step_list'])
         html_table = ""
-        for i in data['day']: 
-            day_index = 0
-            if i == 'blank':
-                k = 0
-                html_table = " <tr ><td>" + data['blank'][k][0] + "</td><td>" +  \
-                    "<td>" + data['blank'][k][1] + "</td>" + \
-                    "<td>" + data['blank'][k][2] + "</td>" + \
-                    "<td>" + data['blank'][k][3] + "</td>" + \
-                    "<td>" + data['blank'][k][4] + "</td>" + \
-                    "<td>" + data['blank'][k][5] + "</td>" + \
-                    "</tr>"
-                html_table = html_table + table
-                k = k+1
-            else:
-                for j in range(len_setp):
-                    if j==0:
-                        table =" <tr ><td colspan='1' rowspan= "+"'" + str(len_setp) +  "'" + ">" + str(i) + "</td>"+\
-                        "<td>" + str(data['time_step'][day_index]['step_list'][j]) +  "</td>"+\
-                        "<td>" + str(data['time_step'][day_index]['step_data'][j][0]) + "</td>"+\
-                        "<td>" + str(data['time_step'][day_index]['step_data'][j][1]) + "</td>" + \
-                        "<td>" + str(data['time_step'][day_index]['step_data'][j][2]) + "</td>"+\
-                        "<td>" + str(data['time_step'][day_index]['step_data'][j][3]) + "</td>" +\
-                        "<td>" + str(data['time_step'][day_index]['step_data'][j][4]) + "</td></tr>"                    
-                        html_table = html_table + table
-                    else:
-                        table = "<tr >"+"<td>"+ str(data['time_step'][day_index]['step_list'][j]) + "</td>"+\
-                        "<td>" + str(data['time_step'][day_index]['step_data'][j][0]) + "</td>"+\
-                        "<td>" + str(data['time_step'][day_index]['step_data'][j][1]) + "</td>"+\
-                        "<td>" + str(data['time_step'][day_index]['step_data'][j][2]) + "</td>"+\
-                        "<td>" + str(data['time_step'][day_index]['step_data'][j][3]) + "</td>"+\
-                        "<td>" + str(data['time_step'][day_index]['step_data'][j][4]) + "</td>" + "</tr>"
-                
-                        html_table = html_table + table
-                day_index = day_index + 1
         return html_table
     # 实例创建后和用户交互的核心代码###############################################################################################
     def interp1d_data(self,data):
@@ -421,31 +365,56 @@ class ec_data_point:
         d['val'] = d['val'].interpolate(method='linear')        
         return d['val'].tolist() 
     def accum_data(self,data):
-        date = data.index.tolist()
-        value = data.tolist()
-        time_data = pd.date_range(start='2022-04-17 00:00:00',end='2022-04-27 00:00:00',freq='1H')
-        data_index =[i for i in range(241) ]
-        ts = pd.Series(data_index, time_data)
-        # 赋值        
-        ts[0:73:3] = value[0:25]
-        ts[78:241:6] = value[25:53]
-        ts_list = []
-        for i in range(len(ts)):
-            if i >= 0 and i<3:
-                ts_list.append(ts[3]/3) 
-            elif i < 72 and i>=3:
-                index = i % 3  # 余数
-                mod = i// 3 # 商
-                ts_list.append(ts[(mod+1)*3]/3 - ts[(mod)*3]/3  )
-            elif i >=72 and i < 78:
-                ts_list.append((ts[78] - ts[72])/6) 
-            elif i>=78 and i <=234:
-                index = i % 6  # 余数
-                mod = i// 6 # 商
-                ts_list.append(ts[(mod+1)*6]/6 - ts[(mod)*6]/6  )
-            if i>=235:
-                ts_list.append((ts[240] - ts[234])/6) 
-        return ts_list 
+        '''累计降水的计算'''
+        div = []
+        accum = data.tolist()
+        for i in range(len(data.tolist())):
+            if i==0:
+                div.append(0)
+            else:
+                div.append(accum[i] - accum[i-1] )
+        output = []
+        for i in range(len(div)):
+            if i<=24:
+                for j in range(3):
+                    output.append(accum[i]/3)
+            else:
+                for j in range(6):
+                    output.append(accum[i]/6)
+        return output
+    def step_single_data(self,data):
+        '''分时次处理输出数据'''
+        step ="6hours"
+        rain = []
+        if step=="hours":
+            init_item = len(pd.date_range(start=init_day,end=start_day,freq='1H'))     
+        elif step=="3hours":
+            for i in range(len(data)):
+                if np.isnan(data[i]):
+                    data[i] = 0
+                if i ==0:
+                    rain_all = 0
+                    rain.append(rain_all)
+                elif (i+1)%3 ==0:
+                    rain_all = data[i] + data[i-1] + data[i-2]
+                    rain.append(rain_all)
+                else:
+                    rain_all = 0.0
+                    rain.append(rain_all)
+        elif step=="6hours":
+            for i in range(len(data)):
+                if np.isnan(data[i]):
+                    data[i] = 0
+                if i ==0:
+                    rain_all = 0
+                    rain.append(rain_all)
+                elif (i+1)%6 ==0:
+                    rain_all = data[i] + data[i-1] + data[i-2] + data[i-3] + data[i-4] +  data[i-5]
+                    rain.append(rain_all)
+                else:
+                    rain_all = 0.0
+                    rain.append(rain_all)
+        return rain
     def get_single(self,select_lat,select_lon):
         '''用于处理特定经纬度数据'''
         # single_point_data = {
@@ -461,8 +430,6 @@ class ec_data_point:
             else:
                 single_point_inter1d_data[var] = self.accum_data(single_point_data[var])
         return single_point_inter1d_data 
-    def comput_wind(self):
-        pass
     # 处理所有数据的核心data #############################################################################################################
     def comput_all_data(self):
         '''用于计算所有数据的核心代码
@@ -470,27 +437,25 @@ class ec_data_point:
         2.依据step 返回曲线图的data 4个list 一个字典list
         '''
         # 计算单点数据
-#         single_point_data = self.get_single(27.5,125.7)
+        # single_point_data = self.get_single(27.5,125.7)
         single_point_data = {
-            'wind_speed':[i for i in range(241)],
-            'wind_dir':[i for i in range(241)],
-            'tcc':[i for i in range(241)],
-            'skt':[i for i in range(241)],
-            't2':[i for i in range(241)],
-            'lsp':[i for i in range(241)],
-            'cp':[i for i in range(241)],
-            'tp':[i for i in range(241)],
-            'r':[i for i in range(241)]
+            'wind_speed':[i for i in range(243)],
+            'wind_dir':[i for i in range(243)],
+            'tcc':[i for i in range(243)],
+            'skt':[i for i in range(243)],
+            't2':[i for i in range(243)],
+            'lsp':[i for i in range(243)],
+            'cp':[i for i in range(243)],
+            'tp':[i for i in range(243)],
+            'r':[i for i in range(243)]
             
         }
-#         self.return_dates_step()
         dates,start_len,end_len,ts  = self.return_dates_step()
-#         dates = ['2022-04-18 00:00', '2022-04-19 00:00', '2022-04-20 00:00', '2022-04-21 00:00', '2022-04-22 00:00']
-        print(dates)
-        step = 'hours'
-        print("ok")
+        # dates = ['2022-04-18 00:00', '2022-04-19 00:00', '2022-04-20 00:00', '2022-04-21 00:00', '2022-04-22 00:00']
+        step = '3hours'
+        # 
+        single_point_data = self.single_point_data(step)
         data = self.return_timestep(dates,step,start_len,end_len,ts,single_point_data)
-        print(data)
         html_table = self.decode_html_table(data)
         
         # 计算datalist
@@ -498,20 +463,93 @@ class ec_data_point:
         r_list = single_point_data['r']
         temp_list = single_point_data['r']
         pre_list = single_point_data['r']
-        print(html_table)
-        return dates,pre_list,html_table
-        
+        return dates,pre_list,html_table,data
+    def wind_dir(self,u,v):
+        deg = 180.0/np.pi
+        rad = np.pi/180.0 
+        wdir =  180.0 + np.arctan2(u, v)*deg
+        widsped = math.sqrt(u*u + v*v)
+        return wdir,widsped
+    def single_point_data(self,step):
+        '''用于返回满足echart图标的数据'''
+        # single_point_data = self.get_single(27.5,125.7)
+        init_day =  r'2022-04-17 08:00'
+        start_day = r'2022-04-18 00:00'
+        end_day = r'2022-04-22 13:00'
+        step ="3hours"
+        single_point_inter1d_data = self.get_single(28.5,121.7)
+        wind_speed = []
+        wind_dir = []
+        tcc = []
+        for i in range(len(single_point_inter1d_data['u10'])):
+            wdir,widsped = self.wind_dir(single_point_inter1d_data['u10'][i],single_point_inter1d_data['v10'][i])
+            wind_speed.append(widsped)
+            wind_dir.append(wdir)       
+        rain = self.step_single_data(single_point_inter1d_data['tp'])
+        single_point_data = {
+            'wind_speed':wind_speed,
+            'wind_dir':wind_dir,
+            'tcc':single_point_inter1d_data['tcc'],
+            't2':single_point_inter1d_data['t2'],
+            'tp':rain,
+            'r':single_point_inter1d_data['r']
+            
+        }  
+        # list_data  1.相对湿度r 2.降水pre 3.风向风速wind_all 4温度temp 5.date
+        # 编码逻辑  241个时次，每个时次的数据都是卡在对应的时间点上的
+        # r   list
+        windall = []
+        if step =="hours":
+            init_item = len(pd.date_range(start=init_day,end=start_day,freq='1H'))
+            time_data = pd.date_range(start=start_day,end=end_day,freq='1H')
+            num_time = len(time_data) - len(time_data)%1
+            pre = single_point_data['r'][num_time::1]
+            temp = single_point_data['t2'][num_time::1]
+            r = single_point_data['r'][num_time::1]
+            for i in range(num_time):
+                windinfo = {
+                    'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
+                    'symbolRotate': single_point_data['wind_speed'][init_item+i],
+                    'value': single_point_data['wind_dir'][init_item+i]
+                }
+                windall.append(windinfo)
+        elif step =="3hours":
+            init_item = len(pd.date_range(start=init_day,end=start_day,freq='1H'))
+            time_data = pd.date_range(start=start_day,end=end_day,freq='1H')
+            num_time = len(time_data) - len(time_data)%3
+            pre = single_point_data['r'][num_time::3]
+            temp = single_point_data['t2'][num_time::3]
+            r = single_point_data['r'][num_time::3]
+            # 具体的业务逻辑
+            for i in range(num_time):
+                windinfo = {
+                    'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
+                    'symbolRotate': single_point_data['wind_speed'][init_item+i],
+                    'value': single_point_data['wind_dir'][init_item+i]
+                }
+                windall.append(windinfo)
+        elif step =="6hours":
+            init_item = len(pd.date_range(start=init_day,end=start_day,freq='1H'))
+            time_data = pd.date_range(start=start_day,end=end_day,freq='1H')
+            num_time = len(time_data) - len(time_data)%6
+            pre = single_point_data['r'][num_time::6]
+            temp = single_point_data['t2'][num_time::6]
+            r = single_point_data['r'][num_time::6]
+            for i in range(num_time):
+                windinfo = {
+                    'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
+                    'symbolRotate': single_point_data['wind_speed'][init_item+i],
+                    'value': single_point_data['wind_dir'][init_item+i]
+                }
+                windall.append(windinfo)
+
+        # 返回有 single_data 和 date 
+        return single_point_data 
         
         
 # 开始数据
 
 select_time,select_type,select_lat,select_lon = '2022041700','t',27.5,125.7
 ec_worker = ec_data_point(select_time,select_type,select_lat,select_lon) 
-a,b,c = ec_worker.comput_all_data()
-# regrid_data = ec_worker.regrid_data()
-# read_data = ec_worker.read_data()
-
-
-<tr ><td colspan='1' rowspan= '3'>04月18日凌晨</td><td>00:00~01:00</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td></tr><tr ><td>01:00~02:00</td><td>25</td><td>25</td><td>25</td><td>25</td><td>25</td></tr><tr ><td>02:00~03:00</td><td>26</td><td>26</td><td>26</td><td>26</td><td>26</td></tr> <tr ><td colspan='1' rowspan= '3'>04月18日上午</td><td>00:00~01:00</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td></tr><tr ><td>01:00~02:00</td><td>25</td><td>25</td><td>25</td><td>25</td><td>25</td></tr><tr ><td>02:00~03:00</td><td>26</td><td>26</td><td>26</td><td>26</td><td>26</td></tr> <tr ><td colspan='1' rowspan= '3'>04月18日下午</td><td>00:00~01:00</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td></tr><tr ><td>01:00~02:00</td><td>25</td><td>25</td><td>25</td><td>25</td><td>25</td></tr><tr ><td>02:00~03:00</td><td>26</td><td>26</td><td>26</td><td>26</td><td>26</td></tr> <tr ><td colspan='1' rowspan= '3'>04月18日晚上</td><td>00:00~01:00</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td></tr><tr ><td>01:00~02:00</td><td>25</td><td>25</td><td>25</td><td>25</td><td>25</td></tr><tr ><td>02:00~03:00</td><td>26</td><td>26</td><td>26</td><td>26</td><td>26</td></tr> <tr ><td colspan='1' rowspan= '3'>04月19日凌晨</td><td>00:00~01:00</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td></tr><tr ><td>01:00~02:00</td><td>25</td><td>25</td><td>25</td><td>25</td><td>25</td></tr><tr ><td>02:00~03:00</td><td>26</td><td>26</td><td>26</td><td>26</td><td>26</td></tr> <tr ><td colspan='1' rowspan= '3'>04月19日上午</td><td>00:00~01:00</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td></tr><tr ><td>01:00~02:00</td><td>25</td><td>25</td><td>25</td><td>25</td><td>25</td></tr><tr ><td>02:00~03:00</td><td>26</td><td>26</td><td>26</td><td>26</td><td>26</td></tr> <tr ><td colspan='1' rowspan= '3'>04月19日下午</td><td>00:00~01:00</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td></tr><tr ><td>01:00~02:00</td><td>25</td><td>25</td><td>25</td><td>25</td><td>25</td></tr><tr ><td>02:00~03:00</td><td>26</td><td>26</td><td>26</td><td>26</td><td>26</td></tr> <tr ><td colspan='1' rowspan= '3'>04月19日晚上</td><td>00:00~01:00</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td></tr><tr ><td>01:00~02:00</td><td>25</td><td>25</td><td>25</td><td>25</td><td>25</td></tr><tr ><td>02:00~03:00</td><td>26</td><td>26</td><td>26</td><td>26</td><td>26</td></tr> <
-tr ><td colspan='1' rowspan= '3'>04月20日凌晨</td><td>00:00~01:00</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td></tr><tr ><td>01:00~02:00</td><td>25</td><td>25</td><td>25</t
-d><td>25</td><td>25</td></tr><tr ><td>02:00~03:00</td><td>26</td><td>26</td><td>26</td><td>26</td><td>26</td></tr> <tr ><td colspan='1' rowspan= '3'>04月20日上午</td><td>00:00~01:00</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td></tr><tr ><td>01:00~02:00</td><td>25</td><td>25</td><td>25</td><td>25</td><td>25</td></tr><tr ><td>02:00~03:00</td><td>26</td><td>26</td><td>26</td><td>26</td><td>26</td></tr> <tr ><td colspan='1' rowspan= '3'>04月20日下午</td><td>00:00~01:00</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td></tr><tr ><td>01:00~02:00</td><td>25</td><td>25</td><td>25</td><td>25</td><td>25</td></tr><tr ><td>02:00~03:00</td><td>26</td><td>26</td><td>26</td><td>26</td><td>26</td></tr> <tr ><td colspan='1' rowspan= '3'>04月20日晚上</td><td>00:00~01:00</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td></tr><tr ><td>01:00~02:00</td><td>25</td><td>25</td><td>25</td><td>25</td><td>25</td></tr><tr ><td>02:00~03:00</td><td>26</td><td>26</td><td>26</td><td>26</td><td>26</td></tr> <tr ><td colspan='1' rowspan= '3'>04月21日凌晨</td><td>00:00~01:00</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td></tr><tr ><td>01:00~02:00</td><td>25</td><td>25</td><td>25</td><td>25</td><td>25</td></tr><tr ><td>02:00~03:00</td><td>26</td><td>26</td><td>26</td><td>26</td><td>26</td></tr> <tr ><td colspan='1' rowspan= '3'>04月21日上午</td><td>00:00~01:00</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td></tr><tr ><td>01:00~02:00</td><td>25</td><td>25</td><td>25</td><td>25</td><td>25</td></tr><tr ><td>02:00~03:00</td><td>26</td><td>26</td><td>26</td><td>26</td><td>26</td></tr> <tr ><td colspan='1' rowspan= '3'>04月21日下午</td><td>00:00~01:00</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td></tr><tr ><td>01:00~02:00</td><td>25</td><td>25</td><td>25</td><td>25</td><td>25</td></tr><tr ><td>02:00~03:00</td><td>26</td><td>26</td><td>26</td><td>26</td><td>26</td></tr> <tr ><td colspan='1' rowspan= '3'>04月21日晚上</td><td>00:00~01:00</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td></tr><tr ><td>01:00~02:00</td><td>25</td><td>25</td><td>25</td><td>25</td><td>25</td></tr><tr ><td>02:00~03:00</td><td>26</td><td>26</td><td>26</td><td>26</td><td>26</td></tr> <tr ><td colspan='1' rowspan= '3'>04月22日凌晨</td><td>00:00~01:00</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td></tr><tr ><td>01:00~02:00</td><td>25</td><td>25</td><td>25</td><td>25</td><td>25</td></tr><tr ><td>02:00~03:00</td><td>26</td><td>26</td><td>26</td><td>26</td><td>26</td></tr> <tr ><td colspan='1' rowspan= '3'>04月22日上午</td><td>00:00~01:00</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td></tr><tr ><td>01:00~02:00</td><td>25</td><td>25</td><td>25</td><td>25</td><td>25</td></tr><tr ><td>02:00~03:00</td><td>26</td><td>26</td><td>26</td><td>26</td><td>26</td></tr>
+a,b,c,d = ec_worker.comput_all_data()
+print(d)

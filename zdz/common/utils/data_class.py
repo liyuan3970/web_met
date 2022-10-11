@@ -874,14 +874,18 @@ class zdz_data:
         '''
         1.根据sql语句计算高低温的分布和排序
         '''
-        temp_station_list = ['K8719', 'K8425', 'K8674']
+        temp_station_list =[
+            "58559","K8705","K8706","58652","58653","K8903","58568","K8818","58662","K8821",
+            "58660","K8609","K8282","58665","K8217","K8201","58661","58665","K8301","58663",
+            "58664","K8413","58666","58669","K8611","K8505","58667","58668"
+        ]
         data_temp_max = []
         data_temp_min = []
         for i in temp_station_list:
             single_data_max = {}
             single_data_min = {}
-            station_name = i
-            single_data_max['name'] = i
+            station_name = str(i)
+            single_data_max['name'] = str(i)
             single_data_max['value'] = [self.station_data[i]['lon'].iloc[0], self.station_data[i]['lat'].iloc[0],
                                         self.station_data[i]['T'].max() / 10.0]
             single_data_min['name'] = i
