@@ -5735,25 +5735,25 @@
                                         //     trigger: 'item',
                                         //     formatter: '{b}<br/>{c} (p / km2)'
                                         // },
-                                        visualMap: [{
-                                            type: "piecewise",
-                                            right: "2%",
-                                            bottom: "15%",
-                                            show: true,
-                                            seriesIndex: 0,
-                                            pieces: [
-                                                { min: 50, max: 900, label: '暴雨', color: 'red' },
-                                                { min: 25, max: 50, label: '大雨', color: 'blue' },
-                                                { max: 25, min: 10, label: '中雨', color: 'yellow' },    // 不指定 min，表示 min 为无限大（-Infinity）。
-                                                { max: 10, min: 0, label: '小雨', color: 'green' }
-                                            ]
-                                        },
-                                        {
+                                        // visualMap: [{
+                                        //     type: "piecewise",
+                                        //     right: "2%",
+                                        //     bottom: "15%",
+                                        //     show: true,
+                                        //     seriesIndex: 0,
+                                        //     pieces: [
+                                        //         { min: 50, max: 900, label: '暴雨', color: 'red' },
+                                        //         { min: 25, max: 50, label: '大雨', color: 'blue' },
+                                        //         { max: 25, min: 10, label: '中雨', color: 'yellow' },    // 不指定 min，表示 min 为无限大（-Infinity）。
+                                        //         { max: 10, min: 0, label: '小雨', color: 'green' }
+                                        //     ]
+                                        // },
+                                        // {
 
-                                            show: false,
-                                            seriesIndex: 1
-                                        }
-                                        ],
+                                        //     show: false,
+                                        //     seriesIndex: 1
+                                        // }
+                                        // ],
                                         geo: {
                                             map: 'taizhou',
                                             layoutCenter: ['80%', '45%'],
