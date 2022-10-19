@@ -903,8 +903,8 @@ class zdz_data:
         # date = ['2022-04-14', 200,'低温 浓雾', '降水 大风', 200]
         # 计算时间
         today = dtt.datetime.strptime(date, '%Y-%m-%d')
-        start_time = str(today + datetime.timedelta(days=-1))[0:10] + ' 20:00'
-        end_time = str(today + datetime.timedelta(days=1))[0:10] + ' 08:00'
+        start_time = str(today + dtt.timedelta(days=-1))[0:10] + ' 20:00'
+        end_time = str(today + dtt.timedelta(days=1))[0:10] + ' 08:00'
         data_all = self.station_all
         data_time = data_all[(data_all['tTime'] >= start_time) & (data_all['tTime'] <= end_time)]
 
