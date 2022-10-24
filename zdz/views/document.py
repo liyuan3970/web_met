@@ -98,6 +98,7 @@ def url_data(request):
     return redirect('https://www.baidu.com/')
 
 
+
 # 单站请求数据的URl
 # http://127.0.0.1:8000/station/k8505/
 def station_view(request, station_name):
