@@ -966,6 +966,7 @@ class zdz_data:
 # ec数据的处理和对接
 class ec_data_point:
     def __init__(self,select_time,select_type,select_county):
+        self.select_time = select_time
         self.timelist = [0,2,4,6,8,10,12,14,16,18,20,22,24,25,
                          26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,
                         41,42,43,44,45,46,47,48,49,50,51,52]
@@ -981,16 +982,18 @@ class ec_data_point:
         return county[select_county]
     def read_data(self):
         '''读取基础数据'''
+        #file_path = "/home/liyuan3970/Data/My_Git/2022041700/*.nc" 
+        #file_path = ["/home/liyuan3970/Data/My_Git/2022041700/ecfine.I2022041700.024.F2022041800.nc" ,"/home/liyuan3970/Data/My_Git/2022041700/ecfine.I2022041700.069.F2022041921.nc" ]
         files = os.listdir(self.file_path)
-        f=xr.open_dataset(self.file_path + files[0],decode_times=False)
-        for fileitem in self.timelist[1:]:
-            f0=xr.open_dataset(self.file_path +files[fileitem],decode_times=False)
-            f=xr.concat([f,f0],dim="time")
+        file_path = []
+        for i in self.timelist:
+            file_path.append(self.file_path + files[i])    
+        f = xr.open_mfdataset(file_path, parallel=False)
         # 读取降水和气温的基本数据
-        lsp = f.tp.sel(lonS=slice(118,123),latS=slice(32,26))
-        tmax2 = f.tmax2.sel(lonS=slice(118,123),latS=slice(32,26))
-        tmin2 = f.tmin2.sel(lonS=slice(118,123),latS=slice(32,26))
-        cp = f.cp.sel(lonS=slice(118,123),latS=slice(32,26))
+        lsp = f.tp.sel(lev=1000,lonS=slice(118,123),latS=slice(32,26))
+        tmax2 = f.tmax2.sel(lev=1000,lonS=slice(118,123),latS=slice(32,26))
+        tmin2 = f.tmin2.sel(lev=1000,lonS=slice(118,123),latS=slice(32,26))
+        cp = f.cp.sel(lev=1000,lonS=slice(118,123),latS=slice(32,26))
         # 读取单点的分析图
         u = f.u.sel(lonP=slice(118,123),latP=slice(32,26))
         v = f.v.sel(lonP=slice(118,123),latP=slice(32,26))
@@ -1038,8 +1041,8 @@ class ec_data_point:
         month = int(select_time[4:6])
         day = int(select_time[6:8])
         hour = select_time[8:]
-        start = datetime.date(year, month, day)
-        end = (start + datetime.timedelta(days = 10)).strftime("%Y-%m-%d")
+        start = dtt.date(year, month, day)
+        end = (start + timedelta(days = 10)).strftime("%Y-%m-%d")
         if hour=='12':
             start_day = start.strftime("%Y-%m-%d") +" " + "20:00"
             end_day = end +" " + "20:00"
@@ -1074,7 +1077,7 @@ class ec_data_point:
         ax1.set_ylim(tmean-20,tmean+10)
         #ax2.set_ylim(0,pmax*2.3)
         ax2.set_ylim(0,50)
-        ticks,label = self.decode_time(select_time)
+        ticks,label = self.decode_time(self.select_time)
         plt.xticks(ticks,label)
         ax1.set_xlabel('time')    #设置x轴标题
         ax1.set_ylabel('temperature',color = 'g')   #设置Y1轴标题
@@ -1101,7 +1104,7 @@ class ec_data_point:
         levels = [0,80,85,90,95,100]
         axs1.contourf(X,Y,Z2,cmap=cmaps,add_labels=True)
         axs1.barbs(X, Y, U, V) 
-        ticks,label = self.decode_time(select_time)
+        ticks,label = self.decode_time(self.select_time)
         plt.xticks(ticks,label)
         #plt.show()
         imd = self.decode_base64(plt)
