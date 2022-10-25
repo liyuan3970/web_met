@@ -307,14 +307,17 @@ def ec_single_data(request):
     ec_select_time = request.POST.get('ec_select_time', '')
 
     # 测试
-    select_time, select_type, select_lat, select_lon = '2022041700', 't', 27.5, 125.7
+    select_time,select_type,select_county = '2022041700','rain','仙居'
     # 处理数据逻辑
     global ec_worker
     if ec_worker:
-        ec_worker.comput_all_data()
+        img_rain =  ec_worker.plot_rain(select_county,select_type)
+        #img_wind =  ec_worker.plot_wind(select_county)
     else:
-        ec_worker = data_class.ec_data_point(select_time, select_type, select_lat, select_lon)
-        ec_worker.comput_all_data()
+        ec_worker = data_class.ec_data_point(select_time,select_type,select_county) 
+        print("0606060606okokokokokokokookkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
+        img_rain =  ec_worker.plot_rain(select_county,select_type)
+        #img_wind =  ec_worker.plot_wind(select_county)
 
     # 数据的返回
     context = {

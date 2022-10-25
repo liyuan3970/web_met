@@ -965,485 +965,153 @@ class zdz_data:
 
 # ec数据的处理和对接
 class ec_data_point:
-    def __init__(self, select_time,select_type,select_lat,select_lon): 
-        self.var_list = ['u10','v10','tcc','t2','skt','lsp','cp','tp','r'] # 风向风速、云量、温度、tp（总降水）、相对湿度
-        self.data = { }
-        self.read_data()
-    # 创建对象读取io的核心代码####################################################################
-    def regrid_data(self,data):
-        ds_out = xr.Dataset(
-            {   
-                
-                "lat": (["lat"], np.arange(27.8, 29.5, 0.05)),
-                "lon": (["lon"], np.arange(120, 122, 0.05)),
-            }
-        )
-        regridder = xe.Regridder(data, ds_out, "bilinear")
-        dr_out = regridder(data)
-        return dr_out
+    def __init__(self,select_time,select_type,select_county):
+        self.timelist = [0,2,4,6,8,10,12,14,16,18,20,22,24,25,
+                         26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,
+                        41,42,43,44,45,46,47,48,49,50,51,52]
+        self.county = select_county
+        self.file_path = "/workspace/liyuan3970/Data/My_Git/" + select_time + "/" 
+        self.data  = self.read_data()
+        self.rain = None
+    def county_location(self,select_county):
+        '''用于返回乡镇对应的经纬度'''
+        county = {
+            '仙居':[28.6,121.4]
+        }
+        return county[select_county]
     def read_data(self):
-        file_path = "/home/liyuan3970/Data/My_Git/2022041700/*.nc" 
-        f = xr.open_mfdataset(file_path, parallel=False)
-        # 列表数据--
-        u10 = f.u10.sel(lev=1000,lonS=slice(120,122),latS=slice(29.5,27.8))
-        u10 =  u10.swap_dims({'latS':'lat','lonS':'lon'})
-        v10 = f.v10.sel(lev=1000,lonS=slice(120,122),latS=slice(29.5,27.8))
-        v10 =  v10.swap_dims({'latS':'lat','lonS':'lon'})
-        tcc = f.tcc.sel(lev=1000,lonS=slice(120,122),latS=slice(29.5,27.8))
-        tcc =  tcc.swap_dims({'latS':'lat','lonS':'lon'})
-        t2 = f.t2.sel(lev=1000,lonS=slice(120,122),latS=slice(29.5,27.8))
-        t2 =  t2.swap_dims({'latS':'lat','lonS':'lon'})
-        skt = f.skt.sel(lev=1000,lonS=slice(120,122),latS=slice(29.5,27.8))
-        skt =  skt.swap_dims({'latS':'lat','lonS':'lon'})
-        lsp = f.lsp.sel(lev=1000,lonS=slice(120,122),latS=slice(29.5,27.8))
-        lsp =  lsp.swap_dims({'latS':'lat','lonS':'lon'})
-        cp = f.cp.sel(lev=1000,lonS=slice(120,122),latS=slice(29.5,27.8)) 
-        cp =  cp.swap_dims({'latS':'lat','lonS':'lon'})    
-        tp = f.tp.sel(lev=1000,lonS=slice(120,122),latS=slice(29.5,27.8)) 
-        tp =  tp.swap_dims({'latS':'lat','lonS':'lon'}) 
-        r = f.r.sel(lev=1000,lonP=slice(120,122),latP=slice(29.5,27.8)) # ！！！如果经纬度放大就会报错。。。
-        r =  r.swap_dims({'latP':'lat','lonP':'lon'})
-        r['lon'] = r['lonP']
-        r['lat'] = r['latP']  
-        # print(tp,r)
-        # 空间插值----------------------------------
-        # ----------------------------------------
-        # ----------------------------------------
-        # 此处为空间插值函数0.05
-        grid_u10 = self.regrid_data(u10)
-        grid_v10 = self.regrid_data(v10)
-        grid_tcc = self.regrid_data(tcc)
-        grid_t2 = self.regrid_data(t2)
-        grid_skt = self.regrid_data(skt)
-        grid_lsp = self.regrid_data(lsp)
-        grid_cp = self.regrid_data(cp)
-        grid_tp = self.regrid_data(tp)
-        grid_r = r#self.regrid_data(r)
-        # 数据的重新加载
-        
-        self.data['u10'] = grid_u10
-        self.data['v10'] = grid_v10
-        self.data['tcc'] = grid_tcc
-        self.data['t2'] = grid_t2
-        self.data['skt'] = grid_skt
-        self.data['lsp'] = grid_lsp
-        self.data['cp'] = grid_cp    
-        self.data['tp'] = grid_tp 
-        self.data['r'] = grid_r 
-        # print(grid_vis.sel(lon=121.5, lat=28.5,method='nearest'))    
-    # 以下为处理html表格的核心代码######################################################################################################################
-    #  1. 计算超出指定日期的时间段数
-    def time_point_len(self,times,step):
-        start = str(times[0:10] + ' 00:00:00')
-        t_start =dtt.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
-        end = str(times+':00')
-        t_end =dtt.datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
-        timedelta = (t_end - t_start).seconds
-        hours = timedelta/3600
-        if step == 'hours':
-            if hours <= 6:
-                step_len = 0
-            elif hours >6 and hours <= 12:
-                step_len = 1
-            elif hours >12 and hours <= 18:
-                step_len = 2
-            elif hours >18 and hours <= 24:
-                step_len = 3
-            return step_len
-        elif step == '3hours':
-            if hours <= 3:
-                step_len = 0
-            elif hours >3 and hours <= 6:
-                step_len = 1
-            elif hours >6 and hours <= 9:
-                step_len = 2
-            elif hours >9 and hours <= 12:
-                step_len = 3
-            elif hours >12 and hours <= 15:
-                step_len = 4
-            elif hours >15 and hours <= 18:
-                step_len = 5
-            elif hours >18 and hours <= 21:
-                step_len = 6
-            elif hours >21 and hours <= 24:
-                step_len = 7   
-            return step_len
-        else:
-            if hours <= 6:
-                step_len = 0
-            elif hours >6 and hours <= 12:
-                step_len = 1
-            elif hours >12 and hours <= 18:
-                step_len = 2
-            elif hours >18 and hours <= 24:
-                step_len = 3
-            return step_len  
-    def return_dates_step(self):
-        '''用于返回dates 和start_len,end_len'''
-        # 起始时间
-        start_day = r'2022-04-18 00:00'
-        end_day = r'2022-04-22 13:00'
-        # EC数据
-        single_point_data = {
-            'wind_speed':[i for i in range(241)],
-            'wind_dir':[i for i in range(241)],
-            'tcc':[i for i in range(241)],
-            'skt':[i for i in range(241)],
-            't2':[i for i in range(241)],
-            'lsp':[i for i in range(241)],
-            'cp':[i for i in range(241)],
-            'tp':[i for i in range(241)],
-            'r':[i for i in range(241)]
-            
-        }
-        step = 'hours'
-        time_data = pd.date_range(start='2022-04-17 00:00:00',end='2022-04-27 00:00:00',freq='1H')
-        data_index = [i for i in range(241) ]
-        ts = pd.Series(data_index, time_data)
-        start_len = self.time_point_len(start_day,step)
-        end_len = self.time_point_len(end_day,step)
-        # 计算日期
-        dates = []
-        dt = dtt.datetime.strptime(start_day[0:10], "%Y-%m-%d")
-        date = start_day[0:10] + ' 00:00'
-        while date <= end_day:
-            dates.append(date)
-            dt = dt + dtt.timedelta(1)
-            date = dt.strftime("%Y-%m-%d") + ' 00:00'
-        return dates,start_len,end_len,ts  
-    def return_timestep(self,dates,step,start_len,end_len,ts,single_point_data):
-        step_data = []
-        if step == 'hours':
-            # 6是每段时间的个数
-            day_step = ['凌晨','上午','下午','晚上']
-            step_data_num = 6
-            step_list = [
-                ['00:00~01:00','01:00~02:00','02:00~03:00','03:00~04:00','04:00~05:00','05:00~06:00'],
-                ['06:00~07:00','07:00~08:00','08:00~09:00','09:00~10:00','10:00~11:00','11:00~12:00'],
-                ['12:00~13:00','13:00~14:00','14:00~15:00','15:00~16:00','16:00~17:00','17:00~18:00'],
-                ['18:00~19:00','19:00~20:00','20:00~21:00','21:00~22:00','22:00~23:00','23:00~24:00']
-            ]
-        elif step == '3hours':
-            step_data_num = 1
-            step_list = [
-                ['00:00~03:00'],['03:00~06:00'],['06:00~09:00'],['09:00~12:00'],['12:00~15:00'],['15:00~18:00'],['18:00~21:00'],['21:00~24:00']   
-            ]
-        else:
-            step_data_num = 1
-            step_list = [
-                ['凌晨'],['上午'],['下午'],['晚上']   
-            ]
-        # day_list
-        if step != 'hours':
-            day_list = [(i[5:7] + '月' + i[8:10] + '日') for i in dates]
-        else:
-            day_list = []
-        for i in range(len(dates)):
-            start_date , start_index = dates[i],ts[dates[i]]
-            if i == 0: 
-                # 第一天的数据         
-                if step == 'hours':
-                    # 计算天的段数
-                    day_str = dates[i][5:7] + '月' + dates[i][8:10] + '日'
-                    start_day_list = [day_str + i for i in day_step ]
-                    day_list.extend(start_day_list[start_len:]) 
-                    len_max = 4
-                    for start_num in range(len_max-start_len):
-                        single_step_data = {}   
-                        single_step_data['step_list'] = step_list[(start_num+start_len)]
-                        #  6是每段时间的个数
-                        single_step_data['step_data'] = []
-                        for step_num in range(step_data_num):   
-                            #print(step_num,start_index + (start_num+start_len)*6  + step_num,start_date , start_index)
-                            appen_data = []
-                            appen_data.append(single_point_data['tcc'][start_index + (start_num+start_len)*6  + step_num])
-                            appen_data.append(single_point_data['t2'][start_index + (start_num+start_len)*6  + step_num])
-                            appen_data.append(single_point_data['wind_speed'][start_index + (start_num+start_len)*6  + step_num])
-                            appen_data.append(single_point_data['tp'][start_index + (start_num+start_len)*6  + step_num])
-                            appen_data.append(single_point_data['r'][start_index + (start_num+start_len)*6  + step_num])
-                            single_step_data['step_data'].append(appen_data)
-                        step_data.append(single_step_data)
-                elif step == '3hours':
-                    len_max = 8
-                    for start_num in range(len_max-start_len):
-                        single_step_data = {}
-                        single_step_data['step_list'] = step_list[(start_num+start_len)]   
-                        single_step_data['step_data'] = []
-                        for step_num in range(step_data_num):   
-                            #print(step_num,start_index + (start_num+start_len)*6  + step_num,start_date , start_index)
-                            appen_data = []
-                            appen_data.append(single_point_data['tcc'][start_index + (start_num+start_len)*3  + step_num ])
-                            appen_data.append(single_point_data['t2'][start_index + (start_num+start_len)*3  + step_num ])
-                            appen_data.append(single_point_data['wind_speed'][start_index + (start_num+start_len)*3  + step_num ])
-                            appen_data.append(single_point_data['tp'][start_index + (start_num+start_len)*3  + step_num ])
-                            appen_data.append(single_point_data['r'][start_index + (start_num+start_len)*3  + step_num ])
-                            single_step_data['step_data'].append(appen_data)
-                        step_data.append(single_step_data)
-                else:
-                    len_max = 4  
-                    for start_num in range(len_max-start_len):
-                        single_step_data = {}
-                        single_step_data['step_list'] = step_list[(start_num+start_len)]   
-                        single_step_data['step_data'] = []
-                        for step_num in range(step_data_num):
-                            appen_data = []
-                            appen_data.append(single_point_data['tcc'][start_index + (start_num+start_len)*6  + step_num ])
-                            appen_data.append(single_point_data['t2'][start_index + (start_num+start_len)*6  + step_num ])
-                            appen_data.append(single_point_data['wind_speed'][start_index + (start_num+start_len)*6  + step_num ])
-                            appen_data.append(single_point_data['tp'][start_index + (start_num+start_len)*6  + step_num ])    
-                            appen_data.append(single_point_data['r'][start_index + (start_num+start_len)*6  + step_num ])
-                            single_step_data['step_data'].append(appen_data)
-                        step_data.append(single_step_data)      
-            elif i ==len(dates)-1:    
-                # 最后一天的数据
-                if step == 'hours':
-                    # 最后一天的day
-                    day_str = dates[i][5:7] + '月' + dates[i][8:10] + '日'
-                    end_day_list = [day_str + i for i in day_step ]
-                    day_list.extend(end_day_list[:end_len]) 
-                    for end_num in range(end_len):
-                        single_step_data = {}
-                        single_step_data['step_list'] = step_list[end_num]
-                        single_step_data['step_data'] = []
-                        for step_num in range(step_data_num): 
-                            appen_data = []
-                            appen_data.append(single_point_data['tcc'][start_index + (end_num)*6  + step_num])
-                            appen_data.append(single_point_data['t2'][start_index + (end_num)*6  + step_num])
-                            appen_data.append(single_point_data['wind_speed'][start_index + (end_num)*6  + step_num])
-                            appen_data.append(single_point_data['tp'][start_index + (end_num)*6  + step_num])
-                            appen_data.append(single_point_data['r'][start_index + (end_num)*6  + step_num])
-                            single_step_data['step_data'].append(appen_data)         
-                        step_data.append(single_step_data)
-                elif step == '3hours':
-                    for end_num in range(end_len):
-                        single_step_data = {}
-                        single_step_data['step_list'] = step_list[end_num]
-                        single_step_data['step_data'] = []
-                        for step_num in range(step_data_num): 
-                            appen_data = []
-                            appen_data.append(single_point_data['tcc'][start_index + (end_num)*3  + step_num])
-                            appen_data.append(single_point_data['t2'][start_index + (end_num)*3  + step_num])
-                            appen_data.append(single_point_data['wind_speed'][start_index + (end_num)*3  + step_num])
-                            appen_data.append(single_point_data['tp'][start_index + (end_num)*3  + step_num])
-                            appen_data.append(single_point_data['r'][start_index + (end_num)*3  + step_num])
-                            single_step_data['step_data'].append(appen_data)                                    
-                        step_data.append(single_step_data)
-                else:
-                    for end_num in range(end_len):
-                        single_step_data = {}
-                        single_step_data['step_list'] = step_list[end_num]
-                        single_step_data['step_data'] = []
-                        for step_num in range(step_data_num): 
-                            appen_data = []
-                            appen_data.append(single_point_data['tcc'][start_index + (end_num)*6  + step_num])
-                            appen_data.append(single_point_data['t2'][start_index + (end_num)*6  + step_num])
-                            appen_data.append(single_point_data['wind_speed'][start_index + (end_num)*6  + step_num])
-                            appen_data.append(single_point_data['tp'][start_index + (end_num)*6  + step_num])
-                            appen_data.append(single_point_data['r'][start_index + (end_num)*6  + step_num])
-                            single_step_data['step_data'].append(appen_data)         
-                        step_data.append(single_step_data)
-            else:
-                # 中间天
-                if step == 'hours':
-                    # 添加 数据
-                    day_str = dates[i][5:7] + '月' + dates[i][8:10] + '日'
-                    middle_day_list = [day_str + i for i in day_step ]
-                    day_list.extend(middle_day_list[:]) 
-                    for middle_num in range(len_max):
-                        single_step_data = {}
-                        single_step_data['step_list'] = step_list[middle_num]
-                        single_step_data['step_data'] = []
-                        for step_num in range(step_data_num): 
-                            appen_data = []
-                            appen_data.append(single_point_data['tcc'][start_index + (middle_num+start_len)*6  + step_num])
-                            appen_data.append(single_point_data['t2'][start_index + (middle_num+start_len)*6  + step_num])
-                            appen_data.append(single_point_data['wind_speed'][start_index + (middle_num+start_len)*6  + step_num])
-                            appen_data.append(single_point_data['tp'][start_index + (middle_num+start_len)*6  + step_num])
-                            appen_data.append(single_point_data['r'][start_index + (middle_num+start_len)*6  + step_num])
-                            single_step_data['step_data'].append(appen_data)         
-                        step_data.append(single_step_data)
-                elif step == '3hours':
-                    for middle_num in range(len_max):
-                        single_step_data = {}
-                        single_step_data['step_list'] = step_list[middle_num]
-                        single_step_data['step_data'] = []
-                        for step_num in range(step_data_num):   
-                            #print(step_num,start_index + (start_num+start_len)*6  + step_num,start_date , start_index)
-                            appen_data = []
-                            appen_data.append(single_point_data['tcc'][start_index + (middle_num+start_len)*3  + step_num ])
-                            appen_data.append(single_point_data['t2'][start_index + (middle_num+start_len)*3  + step_num ])
-                            appen_data.append(single_point_data['wind_speed'][start_index + (middle_num+start_len)*3  + step_num ])
-                            appen_data.append(single_point_data['tp'][start_index + (middle_num+start_len)*3  + step_num ])
-                            appen_data.append(single_point_data['r'][start_index + (middle_num+start_len)*3  + step_num ])
-                            single_step_data['step_data'].append(appen_data)
-                        step_data.append(single_step_data)
-                else:
-                    for middle_num in range(len_max):
-                        single_step_data = {}
-                        single_step_data['step_list'] = step_list[middle_num]
-                        single_step_data['step_data'] = []
-                        for step_num in range(step_data_num): 
-                            appen_data = []
-                            appen_data.append(single_point_data['tcc'][start_index + (middle_num+start_len)*6  + step_num])
-                            appen_data.append(single_point_data['t2'][start_index + (middle_num+start_len)*6  + step_num])
-                            appen_data.append(single_point_data['wind_speed'][start_index + (middle_num+start_len)*6  + step_num])
-                            appen_data.append(single_point_data['tp'][start_index + (middle_num+start_len)*6  + step_num])
-                            appen_data.append(single_point_data['r'][start_index + (middle_num+start_len)*6  + step_num])
-                            single_step_data['step_data'].append(appen_data)        
-                        step_data.append(single_step_data)
+        '''读取基础数据'''
+        files = os.listdir(self.file_path)
+        f=xr.open_dataset(self.file_path + files[0],decode_times=False)
+        for fileitem in self.timelist[1:]:
+            f0=xr.open_dataset(self.file_path +files[fileitem],decode_times=False)
+            f=xr.concat([f,f0],dim="time")
+        # 读取降水和气温的基本数据
+        lsp = f.tp.sel(lonS=slice(118,123),latS=slice(32,26))
+        tmax2 = f.tmax2.sel(lonS=slice(118,123),latS=slice(32,26))
+        tmin2 = f.tmin2.sel(lonS=slice(118,123),latS=slice(32,26))
+        cp = f.cp.sel(lonS=slice(118,123),latS=slice(32,26))
+        # 读取单点的分析图
+        u = f.u.sel(lonP=slice(118,123),latP=slice(32,26))
+        v = f.v.sel(lonP=slice(118,123),latP=slice(32,26))
+        r = f.r.sel(lonP=slice(118,123),latP=slice(32,26))
         data = {
-            'day':day_list,
-            'time_step':step_data
+            'lsp':lsp,
+            'tmax':tmax2,
+            'tmin':tmin2,
+            'cp':cp,
+            'u':u,
+            'v':v,
+            'r':r
         }
-        return data   
-    def decode_html_table(self):
-        # 用来解析数据并返回表格的html数据
-        # 日期、间隔
-        step = 'prehours'# 'sixhours';'thrdhours'
-        data = {
-            'day':['29日','30日'],
-            'time_step':[
-                {
-                'step_list':['08:00~09:00','08:00~09:00','08:00~09:00'],
-                'step_data':[
-                    ['多云转阴','25~27°C','东南风6~8级','15mm','80%'], 
-                    ['多云转阴','25~27°C','东南风6~8级','15mm','80%'], 
-                    ['多云转阴','25~27°C','东南风6~8级','15mm','80%']
-                    ]
-                },
-                {
-                'step_list':['08:00~09:00','08:00~09:00','08:00~09:00'],
-                'step_data':[
-                    ['多云转阴','25~27°C','东南风6~8级','15mm','80%'], 
-                    ['多云转阴','25~27°C','东南风6~8级','15mm','80%'], 
-                    ['多云转阴','25~27°C','东南风6~8级','15mm','80%']
-                    ]
-                }
-            ],
-            'blank':[
-                ['','08:00~09:00','多云转阴','25~27°C','东南风6~8级','15mm','80%']
-            ]
-        }
-        len_day = len(data['day'])
-        len_setp = 3#len(data['time_step']['step_list'])
-        html_table = ""
-        for i in data['day']: 
-            day_index = 0
-            if i == 'blank':
-                k = 0
-                html_table = " <tr ><td>" + data['blank'][k][0] + "</td><td>" +  \
-                    "<td>" + data['blank'][k][1] + "</td>" + \
-                    "<td>" + data['blank'][k][2] + "</td>" + \
-                    "<td>" + data['blank'][k][3] + "</td>" + \
-                    "<td>" + data['blank'][k][4] + "</td>" + \
-                    "<td>" + data['blank'][k][5] + "</td>" + \
-                    "</tr>"
-                html_table = html_table + table
-                k = k+1
+        return data
+    def accum_data(self,list_data):
+        '''处理累计降水'''
+        out_list = []
+        for i in range(len(list_data)):
+            if i==0:
+                out_list.append(0)
             else:
-                for j in range(len_setp):
-                    if j==0:
-                        table =" <tr ><td colspan='1' rowspan= "+"'" + str(len_setp) +  "'" + ">" + str(i) + "</td>"+\
-                        "<td>" + data['time_step'][day_index]['step_list'][j] +  "</td>"+\
-                        "<td>" + data['time_step'][day_index]['step_data'][j][0] + "</td>"+\
-                        "<td>" + data['time_step'][day_index]['step_data'][j][1] + "</td>" + \
-                        "<td>" + data['time_step'][day_index]['step_data'][j][2] + "</td>"+\
-                        "<td>" + data['time_step'][day_index]['step_data'][j][3] + "</td>" +\
-                        "<td>" + data['time_step'][day_index]['step_data'][j][4] + "</td></tr>"                        
-                        html_table = html_table + table
-                    else:
-                        table = "<tr >"+"<td>"+ data['time_step'][day_index]['step_list'][j] + "</td>"+\
-                        "<td>" + data['time_step'][day_index]['step_data'][j][0] + "</td>"+\
-                        "<td>" + data['time_step'][day_index]['step_data'][j][1] + "</td>"+\
-                        "<td>" + data['time_step'][day_index]['step_data'][j][2] + "</td>"+\
-                        "<td>" + data['time_step'][day_index]['step_data'][j][3] + "</td>"+\
-                        "<td>" + data['time_step'][day_index]['step_data'][j][4] + "</td>" + "</tr>"
-                
-                        html_table = html_table + table
-                day_index = day_index + 1
-        return html_table
-    # 实例创建后和用户交互的核心代码###############################################################################################
-    def interp1d_data(self,data):
-        ''' 将get_data和get_single_data的数据进行时间插值'''
-        date = data.index.tolist()
-        value = data.tolist()
-        d = pd.DataFrame()
-        d['date'] = pd.to_datetime(date)
-        d['val'] = value
-        helper = pd.DataFrame({'date': pd.date_range(d['date'].min(), d['date'].max(), freq='H')})
-        d = pd.merge(helper, d, on='date', how='left').sort_values('date')
-        d['val'] = d['val'].interpolate(method='linear')        
-        return d['val'].tolist() 
-    def accum_data(self,data):
-        date = data.index.tolist()
-        value = data.tolist()
-        time_data = pd.date_range(start='2022-04-17 00:00:00',end='2022-04-27 00:00:00',freq='1H')
-        data_index =[i for i in range(241) ]
-        ts = pd.Series(data_index, time_data)
-        # 赋值        
-        ts[0:73:3] = value[0:25]
-        ts[78:241:6] = value[25:53]
-        ts_list = []
-        for i in range(len(ts)):
-            if i >= 0 and i<3:
-                ts_list.append(ts[3]/3) 
-            elif i < 72 and i>=3:
-                index = i % 3  # 余数
-                mod = i// 3 # 商
-                ts_list.append(ts[(mod+1)*3]/3 - ts[(mod)*3]/3  )
-            elif i >=72 and i < 78:
-                ts_list.append((ts[78] - ts[72])/6) 
-            elif i>=78 and i <=234:
-                index = i % 6  # 余数
-                mod = i// 6 # 商
-                ts_list.append(ts[(mod+1)*6]/6 - ts[(mod)*6]/6  )
-            if i>=235:
-                ts_list.append((ts[240] - ts[234])/6) 
-        return ts_list 
-    def get_single(self,select_lat,select_lon):
-        '''用于处理特定经纬度数据'''
-        # single_point_data = {
-        #     'vis':vis
-        # }
-        single_point_data = {}
-        single_point_inter1d_data = {}
-        for var in self.var_list:
-            select_data = self.data[var]
-            single_point_data[var] = select_data.sel(lon=select_lon, lat=select_lat,method='nearest').to_pandas()
-            if var in ['u10','v10','tcc','t2','skt','r']:
-                single_point_inter1d_data[var] = self.interp1d_data(single_point_data[var])
-            else:
-                single_point_inter1d_data[var] = self.accum_data(single_point_data[var])
-        return single_point_inter1d_data 
-    # 处理所有数据的核心data #############################################################################################################
-    def comput_all_data(self):
-        '''用于计算所有数据的核心代码
-        1.依据step 返回single_data
-        2.依据step 返回曲线图的data 4个list 一个字典list
-        '''
-        # 计算单点数据
-        # single_point_data = self.get_single(27.5,125.7)
-        single_point_data = {
-            'wind_speed':[i for i in range(241)],
-            'wind_dir':[i for i in range(241)],
-            'tcc':[i for i in range(241)],
-            'skt':[i for i in range(241)],
-            't2':[i for i in range(241)],
-            'lsp':[i for i in range(241)],
-            'cp':[i for i in range(241)],
-            'tp':[i for i in range(241)],
-            'r':[i for i in range(241)]
-            
-        }
-
-        dates,start_len,end_len,ts  = self.return_dates_step()
- 
-        step = 'hours'
-        self.return_timestep(dates,step,start_len,end_len,ts,single_point_data)
-        self.decode_html_table()
-        
-        # 计算datalist
-        wind_list = single_point_data['r']
-        r_list = single_point_data['r']
-        temp_list = single_point_data['r']
-        pre_list = single_point_data['r']
+                out_list.append(list_data[i]-list_data[i-1])
+        return out_list  
+    def decode_data(self,select_county,select_type):
+        '''解析所需数据的列表'''
+        lat = self.county_location(select_county)[0]
+        lon = self.county_location(select_county)[1]
+        if select_type=='rain':
+            cp  = self.data['cp'].sel(lonS=lon, latS=lat,method='nearest').to_pandas().tolist()
+            lsp  = self.data['lsp'].sel(lonS=lon, latS=lat,method='nearest').to_pandas().tolist()
+            tmax_data  = self.data['tmax'].sel(lonS=lon, latS=lat,method='nearest').to_pandas().tolist()
+            tmin_data  = self.data['tmin'].sel(lonS=lon, latS=lat,method='nearest').to_pandas().tolist()
+            cp_data = self.accum_data(cp)
+            pre_data = self.accum_data(lsp)
+            return tmax_data,tmin_data,cp_data,pre_data
+        else:
+            u  = self.data['u'].sel(lonP=lon, latP=lat,method='nearest').transpose('lev', 'time').to_pandas().values
+            v  = self.data['v'].sel(lonP=lon, latP=lat,method='nearest').transpose('lev', 'time').to_pandas().values
+            r  = self.data['r'].sel(lonP=lon, latP=lat,method='nearest').transpose('lev', 'time').to_pandas().values
+            print(self.data['r'].sel(lonP=lon, latP=lat,method='nearest').transpose('lev', 'time'))
+            return u,v,r
+    def decode_time(self,select_time):
+        #2022101612
+        year = int(select_time[0:4])
+        month = int(select_time[4:6])
+        day = int(select_time[6:8])
+        hour = select_time[8:]
+        start = datetime.date(year, month, day)
+        end = (start + datetime.timedelta(days = 10)).strftime("%Y-%m-%d")
+        if hour=='12':
+            start_day = start.strftime("%Y-%m-%d") +" " + "20:00"
+            end_day = end +" " + "20:00"
+        else:
+            start_day = start.strftime("%Y-%m-%d") +" " + "08:00"
+            end_day = end +" " + "08:00"
+        time_data = pd.date_range(start=start_day,end=end_day,freq='24H')
+        ticks = [0,4,8,12,16,20,24,28,32,36,40]
+        label = []
+        for i in time_data:
+            label.append(i.strftime("%Y-%m-%d")[8:10] + "$^{20}$")
+        return ticks,label
+    def plot_rain(self,select_county,select_type):
+        '''用于绘制指定经纬度的降水、高温、低温数据'''
+        # 模拟的数据
+        fig1, ax1 = plt.subplots(figsize=[16,10]) 
+        tmax_data,tmin_data,cp_data,pre_data  = self.decode_data(select_county,select_type)
+        tmean = (np.nanmean(tmax_data) // 2 ) * 2
+        pmax = (np.nanmax(pre_data) // 2 ) * 2
+        print(tmean,pmax)
+        time_line =  [f"{i}" for i in range(0, 41)]  
+        # 画图，plt.bar()可以画柱状图    
+        ax2 = ax1.twinx() 
+        # 画图，plt.bar()可以画柱状图    
+        ax2.bar(time_line, pre_data,color = "blue")
+        ax2.bar(time_line, cp_data,color = "red")
+        ax1.plot(time_line, tmax_data,color = "red")
+        ax1.plot(time_line, tmin_data,color = "blue")
+        # 设置图片名称
+        plt.title("rain")
+        # 设置x轴标签名
+        ax1.set_ylim(tmean-20,tmean+10)
+        #ax2.set_ylim(0,pmax*2.3)
+        ax2.set_ylim(0,50)
+        ticks,label = self.decode_time(select_time)
+        plt.xticks(ticks,label)
+        ax1.set_xlabel('time')    #设置x轴标题
+        ax1.set_ylabel('temperature',color = 'g')   #设置Y1轴标题
+        ax2.set_ylabel('mm',color = 'b')   #设置Y2轴标题
+        #plt.show()
+        imd = self.decode_base64(plt)
+        return imd
+    def plot_wind(self,select_county,select_type):
+        '''用于绘制指定经纬度的风场、相对湿度、等高线数据'''
+        lat = self.county_location(select_county)[0]
+        lon = self.county_location(select_county)[1]
+        u,v,r  = self.decode_data(select_county,select_type)
+        # 模拟的数据     
+        x = np.linspace(0,41 , 41) 
+        y = np.linspace(0,15, 15)#[1000,925,850,700,500,200,100]#np.linspace(0,15, 7) 
+        X, Y = np.meshgrid(x, y) 
+        U, V = u,v
+        Z2 = r
+        fig1, axs1 = plt.subplots(figsize=[16,10]) 
+        #axs1.invert_yaxis() 
+        #axs1.contour(X,Y,Z,8,alpha=0.75,cmap='hot')
+        colorslist = ['#FFFFFF','#B4F0FA','#96D2FA','#50A5F5','#1E78DC']# 相对湿度
+        cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=5)
+        levels = [0,80,85,90,95,100]
+        axs1.contourf(X,Y,Z2,cmap=cmaps,add_labels=True)
+        axs1.barbs(X, Y, U, V) 
+        ticks,label = self.decode_time(select_time)
+        plt.xticks(ticks,label)
+        #plt.show()
+        imd = self.decode_base64(plt)
+        return imd
+    def decode_base64(self,plt):
+        '''解析base64类型的数据'''
+        buffer = BytesIO()
+        plt.savefig(buffer,bbox_inches='tight')  
+        plot_img = buffer.getvalue()
+        imb = base64.b64encode(plot_img) 
+        ims = imb.decode()
+        imd = "data:image/png;base64,"+ims
+        return imd
