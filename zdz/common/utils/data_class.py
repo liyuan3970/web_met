@@ -965,21 +965,15 @@ class zdz_data:
 
 # ec数据的处理和对接
 class ec_data_point:
-    def __init__(self,select_time,select_type,select_county):
+    def __init__(self,select_lon,select_lat,select_time):
         self.select_time = select_time
         self.timelist = [0,2,4,6,8,10,12,14,16,18,20,22,24,25,
                          26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,
                         41,42,43,44,45,46,47,48,49,50,51,52]
-        self.county = select_county
+        #self.county = select_county
         self.file_path = "/workspace/liyuan3970/Data/My_Git/" + select_time + "/" 
         self.data  = self.read_data()
         self.rain = None
-    def county_location(self,select_county):
-        '''用于返回乡镇对应的经纬度'''
-        county = {
-            '仙居':[28.6,121.4]
-        }
-        return county[select_county]
     def read_data(self):
         '''读取基础数据'''
         #file_path = "/home/liyuan3970/Data/My_Git/2022041700/*.nc" 
@@ -1017,10 +1011,10 @@ class ec_data_point:
             else:
                 out_list.append(list_data[i]-list_data[i-1])
         return out_list  
-    def decode_data(self,select_county,select_type):
+    def decode_data(self,select_lon,select_lat,select_type):
         '''解析所需数据的列表'''
-        lat = self.county_location(select_county)[0]
-        lon = self.county_location(select_county)[1]
+        lat = select_lon
+        lon = select_lat
         if select_type=='rain':
             cp  = self.data['cp'].sel(lonS=lon, latS=lat,method='nearest').to_pandas().tolist()
             lsp  = self.data['lsp'].sel(lonS=lon, latS=lat,method='nearest').to_pandas().tolist()
@@ -1055,11 +1049,11 @@ class ec_data_point:
         for i in time_data:
             label.append(i.strftime("%Y-%m-%d")[8:10] + "$^{20}$")
         return ticks,label
-    def plot_rain(self,select_county,select_type):
+    def plot_rain(self,select_lon,select_lat):
         '''用于绘制指定经纬度的降水、高温、低温数据'''
         # 模拟的数据
         fig1, ax1 = plt.subplots(figsize=[16,10]) 
-        tmax_data,tmin_data,cp_data,pre_data  = self.decode_data(select_county,select_type)
+        tmax_data,tmin_data,cp_data,pre_data  = self.decode_data(select_lon,select_lat,'rain')
         tmean = (np.nanmean(tmax_data) // 2 ) * 2
         pmax = (np.nanmax(pre_data) // 2 ) * 2
         print(tmean,pmax)
@@ -1085,21 +1079,17 @@ class ec_data_point:
         #plt.show()
         imd = self.decode_base64(plt)
         return imd
-    def plot_wind(self,select_county,select_type):
+    def plot_wind(self,select_lon,select_lat):
         '''用于绘制指定经纬度的风场、相对湿度、等高线数据'''
-        lat = self.county_location(select_county)[0]
-        lon = self.county_location(select_county)[1]
-        u,v,r  = self.decode_data(select_county,select_type)
+        u,v,r  = self.decode_data(select_lon,select_lat,'wind')
         # 模拟的数据     
         x = np.linspace(0,41 , 41) 
-        y = np.linspace(0,15, 15)#[1000,925,850,700,500,200,100]#np.linspace(0,15, 7) 
+        y = np.linspace(0,15, 15)
         X, Y = np.meshgrid(x, y) 
         U, V = u,v
         Z2 = r
         fig1, axs1 = plt.subplots(figsize=[16,10]) 
-        #axs1.invert_yaxis() 
-        #axs1.contour(X,Y,Z,8,alpha=0.75,cmap='hot')
-        colorslist = ['#FFFFFF','#B4F0FA','#96D2FA','#50A5F5','#1E78DC']# 相对湿度
+        colorslist = ['#FFFFFF','#B4F0FA','#96D2FA','#50A5F5','#1E78DC']
         cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=5)
         levels = [0,80,85,90,95,100]
         axs1.contourf(X,Y,Z2,cmap=cmaps,add_labels=True)

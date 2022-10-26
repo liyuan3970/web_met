@@ -307,86 +307,24 @@ def ec_single_data(request):
     ec_select_time = request.POST.get('ec_select_time', '')
 
     # 测试
-    select_time,select_type,select_county = '2022041700','rain','仙居'
+    #select_time,select_type,select_county = '2022041700','rain','仙居'
+    print("经纬度",lat,"经度:--",lon) 
+    select_lon,select_lat,select_time = lon[3:-2],lat[3:-2],'2022041700'
     # 处理数据逻辑
     global ec_worker
     if ec_worker:
-        img_rain =  ec_worker.plot_rain(select_county,select_type)
-        #img_wind =  ec_worker.plot_wind(select_county)
+        img_rain =  ec_worker.plot_rain(select_lon,select_lat)
+        img_wind =  ec_worker.plot_wind(select_lon,select_lat)
     else:
-        ec_worker = data_class.ec_data_point(select_time,select_type,select_county) 
-        print("0606060606okokokokokokokookkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
-        img_rain =  ec_worker.plot_rain(select_county,select_type)
-        #img_wind =  ec_worker.plot_wind(select_county)
+        ec_worker = data_class.ec_data_point(select_lon,select_lat,select_time) 
+        img_rain =  ec_worker.plot_rain(select_lon,select_lat)
+        img_wind =  ec_worker.plot_wind(select_lon,select_lat)
 
     # 数据的返回
     context = {
         'status': "ok",
-        'date': ['23:00', '01:00', '03:00', '05:00', '07:00', '09:00',
-                 '11:00', '13:00', '15:00', '17:00', '19:00', '21:00'],
-        'pre': [3, 2, 0.8, 1.2, 0.7, 0.1, 0, 0, 0.2, 0.7, 0.4, 2.5],
-        'temp': [12, 15, 16, 17, 19, 18, 17, 17, 16, 16.5, 15, 3],
-        'r': [95, 93, 90, 89, 88, 88, 86.9, 86, 85, 84, 83, 12],
-        'windir': [30, 70, 80, 80, 50, 20, 20, 20, 50, 80, 60, 10],
-        'winspd': [30, 70, 80, 80, 50, 20, 20, 20, 50, 80, 60, 10],
-        'windall': [
-            {
-                'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
-                'symbolRotate': 360,
-                'value': 30
-            },
-            {
-                'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
-                'symbolRotate': 310,
-                'value': 70
-            },
-            {
-                'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
-                'symbolRotate': 270,
-                'value': 80
-            },
-            {
-                'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
-                'symbolRotate': 150,
-                'value': 80
-            },
-            {
-                'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
-                'symbolRotate': 130,
-                'value': 50
-            },
-            {
-                'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
-                'symbolRotate': 240,
-                'value': 20
-            },
-            {
-                'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
-                'symbolRotate': 270,
-                'value': 60
-            },
-            {
-                'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
-                'symbolRotate': 290,
-                'value': 90
-            },
-            {
-                'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
-                'symbolRotate': 210,
-                'value': 70
-            },
-            {
-                'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
-                'symbolRotate': 230,
-                'value': 10
-            },
-            {
-                'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
-                'symbolRotate': 345,
-                'value': 50
-            }
-        ]
-
+        'img_rain':img_rain,
+        'img_wind':img_wind
     }
     return JsonResponse(context)
 

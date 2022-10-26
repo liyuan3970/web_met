@@ -5849,7 +5849,7 @@
                             latlon_ec.innerHTML = "&nbsp;"
                             var lon_ec_h = document.createElement('h4')
                             lon_ec_h.id = "h4_lon"
-                            lon_ec_h.innerText = "经度:27.5度    "
+                            lon_ec_h.innerText = "经度:121.5度"
                             latlon_ec.append(lon_ec_h)
                             var lon_ec_blank = document.createElement('h4')
                             lon_ec_blank.style = "width: 1%; height:100%;"
@@ -5896,156 +5896,25 @@
                                     dataType: "json",
                                     success: function (data) {
                                         console.log("返回成功", data)
-                                        option = {
-                                            color: colors,
-                                            tooltip: {
-                                                trigger: 'axis',
-                                                axisPointer: {
-                                                    type: 'cross'
-                                                }
-                                            },
-                                            grid: {
-                                                left: 60,
-                                                right: 50,
-                                                height: '65%'
-                                            },
-                                            toolbox: {
-                                                feature: {
-                                                    dataView: { show: true, readOnly: false },
-                                                    restore: { show: true },
-                                                    saveAsImage: { show: true }
-                                                }
-                                            },
-                                            legend: {
-                                                data: ['1小时降水', '2米相对湿度', '2米温度', '能见度']
-                                            },
-                                            xAxis: [
-                                                {
-                                                    type: 'category',
-                                                    axisTick: {
-                                                        alignWithLabel: true
-                                                    },
-                                                    // prettier-ignore
-                                                    data: data.date
-                                                }
-                                            ],
-                                            yAxis: [
-                                                {
-                                                    type: 'value',
-                                                    name: '1小时降水',
-                                                    position: 'right',
-                                                    alignTicks: false,
-                                                    axisLabel: {
-                                                        formatter: '{value} ml'
-                                                    },
-                                                    min: 0,
-                                                    max: 3,
-                                                    show: false
-                                                },
-                                                {
-                                                    type: 'value',
-                                                    name: '相对湿度',
-                                                    position: 'right',
-                                                    alignTicks: false,
-                                                    splitLine: {
-                                                        show: false
-                                                    },
-                                                    axisLine: {
-                                                        show: true,
-                                                        lineStyle: {
-                                                            color: '#333333'
-                                                        }
-                                                    },
-                                                    axisLabel: {
-                                                        formatter: '{value} %'
-                                                    },
-                                                    min: 0,
-                                                    max: 100
-                                                },
-                                                {
-                                                    type: 'value',
-                                                    name: '温度',
-                                                    position: 'left',
-                                                    alignTicks: false,
-                                                    splitLine: {
-                                                        lineStyle: {
-                                                            color: '#333333'
-                                                        }
-                                                    },
-                                                    axisLine: {
-                                                        show: true,
-                                                        lineStyle: {
-                                                            color: '#333333'
-                                                        }
-                                                    },
-                                                    axisLabel: {
-                                                        formatter: '{value} °C'
-                                                    },
-                                                    min: 0,
-                                                    max: 18,
-                                                    splitNumber: 6
-                                                },
-                                                {
-                                                    type: 'value',
-                                                    name: '风向',
-                                                    position: 'right',
-                                                    alignTicks: false,
-                                                    // offset: 80,
-                                                    axisLine: {
-                                                        show: true,
-                                                        lineStyle: {
-                                                            color: colors[3]
-                                                        }
-                                                    },
-                                                    axisLabel: {
-                                                        formatter: '{value}'
-                                                    },
-                                                    min: 0,
-                                                    max: 100,
-                                                    show: false
-                                                }
-                                            ],
-                                            series: [
-                                                {
-                                                    name: '1小时降水',
-                                                    type: 'bar',
-                                                    data: data.pre,
-                                                    label: {
-                                                        show: true,
-                                                        position: 'top'
-                                                    }
-                                                },
-                                                {
-                                                    name: '2米相对湿度',
-                                                    type: 'line',
-                                                    yAxisIndex: 1,
-                                                    data: data.r
-                                                },
-                                                {
-                                                    name: '2米温度',
-                                                    type: 'line',
-                                                    yAxisIndex: 2,
-                                                    data: data.temp
-                                                },
-                                                {
-                                                    name: '风向',
-                                                    type: 'scatter',
-                                                    yAxisIndex: 3,
-                                                    // symbol: 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
-                                                    symbolSize: 15,
-                                                    // symbolRotate: 330,//需要设置风向的单独数据
-                                                    // data: data.winspd
-                                                    data: data.windall
-                                                    // markLine: {
-                                                    //     data: [{ type: 'average', name: 'Avg' }]
-                                                    // }
-                                                }
-                                            ]
-                                        };
-
-                                        myChart_ecdata.setOption(option);
-                                        //ec的html内容直接解析导入
+                                        
                                         $("#table_ecworker_html").html(" ")
+                                        // panel-727742   multiple-y-axis
+                                        $("#panel-727742").html(" ") //风场
+                                        $("#panel-578432").html(" ") //降水
+
+                                        var image_rain = new Image()
+                                        image_rain.id = 'image_rain'
+                                        image_rain.src = data.img_rain
+                                        image_rain.style.width = "100%"
+                                        image_rain.style.height = "100%"
+                                        $('#panel-578432').append(image_rain)
+
+                                        var image_wind = new Image()
+                                        image_wind.id = 'image_wind'
+                                        image_wind.src = data.img_wind
+                                        image_wind.style.width = "100%"
+                                        image_wind.style.height = "100%"
+                                        $('#panel-727742').append(image_wind)
 
                                     }
                                 })
@@ -6067,7 +5936,7 @@
                             ec_tabbable_a1 = document.createElement('a')
                             ec_tabbable_a1.setAttribute('href', '#panel-727742')
                             ec_tabbable_a1.setAttribute('data-toggle', 'tab')
-                            ec_tabbable_a1.innerText = "数据表格"
+                            ec_tabbable_a1.innerText = "风场"
                             ec_tabbable_li1.append(ec_tabbable_a1)
 
                             ec_tabbable_li2 = document.createElement('li')
@@ -6075,11 +5944,11 @@
                             ec_tabbable_a2 = document.createElement('a')
                             ec_tabbable_a2.setAttribute('href', '#panel-578432')
                             ec_tabbable_a2.setAttribute('data-toggle', 'tab')
-                            ec_tabbable_a2.innerText = "时序图"
+                            ec_tabbable_a2.innerText = "降水"
                             ec_tabbable_li2.append(ec_tabbable_a2)
 
                             var ec_tabbable_content = document.createElement('div')
-                            ec_tabbable_content.style = "width: 100%;height: 70%;"
+                            ec_tabbable_content.style = "width: 100%;height: 90%;"
                             ec_tabbable_content.setAttribute("class", "tab-content")
                             // ec表格
                             tabbable_content1 = document.createElement('div')
@@ -6098,16 +5967,7 @@
 
                             tabbable_body = document.createElement('tbody')
                             tabbable_body.id = "table_ecworker_html"
-                            tabbable_body.innerHTML = "\
-                                        <tr ><td colspan='1' rowspan='3'>6月29日</td><td>08:00~09:00</td><td>多云转阴</td><td>25~27°C</td><td>8级风</td><td>15mm</td><td>80%</td></tr>\
-                                        <tr ><td>08:00~09:00</td><td>多云转阴</td><td>25~27°C</td><td>8级风</td><td>15mm</td><td>80%</td></tr>\
-                                        <tr ><td>08:00~09:00</td><td>多云转阴</td><td>25~27°C</td><td>8级风</td><td>15mm</td><td>80%</td></tr>\
-                                        <tr ><td colspan='1' rowspan='3'>6月29日</td><td>08:00~09:00</td><td>多云转阴</td><td>25~27°C</td><td>8级风</td><td>15mm</td><td>80%</td></tr>\
-                                        <tr ><td>08:00~09:00</td><td>多云转阴</td><td>25~27°C</td><td>8级风</td><td>15mm</td><td>80%</td></tr>\
-                                        <tr ><td>08:00~09:00</td><td>多云转阴</td><td>25~27°C</td><td>8级风</td><td>15mm</td><td>80%</td></tr>\
-                                        <tr ><td colspan='1' rowspan='3'>6月29日</td><td>08:00~09:00</td><td>多云转阴</td><td>25~27°C</td><td>8级风</td><td>15mm</td><td>80%</td></tr>\
-                                        <tr ><td>08:00~09:00</td><td>多云转阴</td><td>25~27°C</td><td>8级风</td><td>15mm</td><td>80%</td></tr>\
-                                        <tr ><td>08:00~09:00</td><td>多云转阴</td><td>25~27°C</td><td>8级风</td><td>15mm</td><td>80%</td></tr>"
+
 
                             tabbable_table.append(tabbable_head, tabbable_body)
                             tabbable_content1.append(tabbable_h, tabbable_table)
@@ -6144,162 +6004,7 @@
                             product_view.append(map_tool1, position_ec, ec_single_data)
                             // product_view.append(position_ec)
 
-                            var dom_ecdata = document.getElementById("multiple-y-axis");
-                            var myChart_ecdata = echarts.init(dom_ecdata);
-                            var app = {};
-                            var option;
-                            const colors = ['#5470C6', '#91CC75', '#EE6666', '#1E0026'];
-                            option = {
-                                color: colors,
-                                tooltip: {
-                                    trigger: 'axis',
-                                    axisPointer: {
-                                        type: 'cross'
-                                    }
-                                },
-                                grid: {
-                                    left: 60,
-                                    right: 50,
-                                    height: '65%'
-                                },
-                                toolbox: {
-                                    feature: {
-                                        dataView: { show: true, readOnly: false },
-                                        restore: { show: true },
-                                        saveAsImage: { show: true }
-                                    }
-                                },
-                                legend: {
-                                    data: ['1小时降水', '2米相对湿度', '2米温度', '能见度']
-                                },
-                                xAxis: [
-                                    {
-                                        type: 'category',
-                                        axisTick: {
-                                            alignWithLabel: true
-                                        },
-                                        // prettier-ignore
-                                        data: ['23:00', '01:00', '03:00', '05:00', '07:00', '09:00',
-                                            '11:00', '13:00', '15:00', '17:00', '19:00', '21:00']
-                                    }
-                                ],
-                                yAxis: [
-                                    {
-                                        type: 'value',
-                                        name: '1小时降水',
-                                        position: 'right',
-                                        alignTicks: false,
-                                        axisLabel: {
-                                            formatter: '{value} ml'
-                                        },
-                                        min: 0,
-                                        max: 3,
-                                        show: false
-                                    },
-                                    {
-                                        type: 'value',
-                                        name: '相对湿度',
-                                        position: 'right',
-                                        alignTicks: false,
-                                        splitLine: {
-                                            show: false
-                                        },
-                                        axisLine: {
-                                            show: true,
-                                            lineStyle: {
-                                                color: '#333333'
-                                            }
-                                        },
-                                        axisLabel: {
-                                            formatter: '{value} %'
-                                        },
-                                        min: 0,
-                                        max: 100
-                                    },
-                                    {
-                                        type: 'value',
-                                        name: '温度',
-                                        position: 'left',
-                                        alignTicks: false,
-                                        splitLine: {
-                                            lineStyle: {
-                                                color: '#333333'
-                                            }
-                                        },
-                                        axisLine: {
-                                            show: true,
-                                            lineStyle: {
-                                                color: '#333333'
-                                            }
-                                        },
-                                        axisLabel: {
-                                            formatter: '{value} °C'
-                                        },
-                                        min: 0,
-                                        max: 18,
-                                        splitNumber: 6
-                                    },
-                                    {
-                                        type: 'value',
-                                        name: '能见度',
-                                        position: 'right',
-                                        alignTicks: false,
-                                        // offset: 80,
-                                        axisLine: {
-                                            show: true,
-                                            lineStyle: {
-                                                color: colors[3]
-                                            }
-                                        },
-                                        axisLabel: {
-                                            formatter: '{value}'
-                                        },
-                                        min: 0,
-                                        max: 100,
-                                        show: false
-                                    }
-                                ],
-                                series: [
-                                    {
-                                        name: '1小时降水',
-                                        type: 'bar',
-                                        data: [0.3, 2, 0.8, 1.2, 0.7, 0.1, 0, 0, 0.2, 0.7, 0.4, 0.1],
-                                        label: {
-                                            show: true,
-                                            position: 'top'
-                                        }
-                                    },
-                                    {
-                                        name: '2米相对湿度',
-                                        type: 'line',
-                                        yAxisIndex: 1,
-                                        data: [95, 93, 90, 89, 88, 88, 86.9, 86, 85, 84, 83, 82]
-                                    },
-                                    {
-                                        name: '2米温度',
-                                        type: 'line',
-                                        yAxisIndex: 2,
-                                        data: [18, 15, 16, 17, 15, 18, 17, 17, 16, 16.5, 15, 14]
-                                    },
-                                    {
-                                        name: '风向',
-                                        type: 'scatter',
-                                        yAxisIndex: 3,
-                                        symbol: 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
-                                        symbolSize: 15,
-                                        symbolRotate: 330,
-                                        data: [30, 70, 80, 80, 50, 20, 20, 20, 50, 80, 60, 50]
-                                        // markLine: {
-                                        //     data: [{ type: 'average', name: 'Avg' }]
-                                        // }
-                                    }
-                                ]
-                            };
 
-
-                            if (option && typeof option === 'object') {
-                                myChart_ecdata.setOption(option);
-                            }
 
                             //乡镇地图v 
                             var chartDom = document.getElementById('map_tool1');
