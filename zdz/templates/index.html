@@ -5691,6 +5691,15 @@
                                     // var data_xy = [["天台", "仙居", "玉环", "临海", "黄岩", "三门", "温岭", "仙居", "仙居"], [600, 1150, 400, 850, 600, 650, 100, 1150, 100, 700, 600, 800, 500]]
                                     var data_xy = rain_line
                                     chart.setOption({
+                                        legend: {
+                data: ['bar1', 'bar2'],
+                left: '30%',
+                selectedMode: 'single',
+                selected:{
+                    'bar1':false,
+                    'bar2':true,
+                }
+            },
                                         xAxis: [
                                             { geoIndex: 0 },
                                             { data: data_xy[0], gridIndex: 1 }
@@ -5724,29 +5733,8 @@
                                             text: ' 降水分布',
                                             textStyle: { fontSize: 30 },
                                         },
-                                        // tooltip: {
-                                        //     trigger: 'item',
-                                        //     formatter: '{b}<br/>{c} (p / km2)'
-                                        // },
-                                        // visualMap: [{
-                                        //     type: "piecewise",
-                                        //     right: "2%",
-                                        //     bottom: "15%",
-                                        //     show: true,
-                                        //     seriesIndex: 0,
-                                        //     pieces: [
-                                        //         { min: 50, max: 900, label: '暴雨', color: 'red' },
-                                        //         { min: 25, max: 50, label: '大雨', color: 'blue' },
-                                        //         { max: 25, min: 10, label: '中雨', color: 'yellow' },    // 不指定 min，表示 min 为无限大（-Infinity）。
-                                        //         { max: 10, min: 0, label: '小雨', color: 'green' }
-                                        //     ]
-                                        // },
-                                        // {
 
-                                        //     show: false,
-                                        //     seriesIndex: 1
-                                        // }
-                                        // ],
+                            
                                         geo: {
                                             map: 'taizhou',
                                             layoutCenter: ['80%', '45%'],
@@ -5756,13 +5744,8 @@
                                             { left: '5%', bottom: '10%', top: '30%', right: '30%' },
                                             { left: '5%', bottom: '10%', top: '30%', right: '30%' }
                                         ],
-                                        // label: {
-                                        //     show: true,
-                                        //     color: "rgba(50, 44, 44, 1)",
-                                        //     //formatter: '{c}[2]'
-                                        // },
                                         series: [{
-                                            name: '散点分布',
+                                            name: '图片',
                                             type: 'scatter',
                                             coordinateSystem: 'geo',
 
@@ -5772,27 +5755,25 @@
                                             symbolSize: 5,
                                             // color:['red','black'],
                                             data: rain_scatter
-                                            // data: [
 
-                                            //     {
-                                            //         name: "K8517", value: [121.3, 28.7, 210],
-                                            //         symbol: 'circle'
-                                            //     },
-                                            //     {
-                                            //         name: "K8515", value: [121.2, 28.6, 110],
-                                            //         symbol: 'circle'
-                                            //     }
-                                            // ]
 
 
 
                                         },
                                         {
-                                            type: 'bar',
+                                            type: 'bar1',
                                             xAxisIndex: 1,//指定折线图数据显示到：grid坐标系：0
                                             yAxisIndex: 1,
                                             showSymbol: false,
                                             color: 'red',
+                                            data: data_xy[1]//折线图y轴数据赋值
+                                        },
+                                        {
+                                            type: 'bar2',
+                                            xAxisIndex: 1,//指定折线图数据显示到：grid坐标系：0
+                                            yAxisIndex: 1,
+                                            showSymbol: false,
+                                            color: 'blue',
                                             data: data_xy[1]//折线图y轴数据赋值
                                         }
                                         ]

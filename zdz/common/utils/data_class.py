@@ -620,20 +620,77 @@ class zdz_data:
         self.rain_line = None
         self.rain_scatter = None
         self.station_all = self.read_csv()
+        self.img = None
         self.event_data()
         self.rain_data()
-        self.img = self.plot_img()
-    def plot_img(self):
-        x = [1,2,3,4,5,6]
-        y = [1,2,3,4,5,6]
-        plt.plot(y)
+    def plot_img(self,lat,lon,value):
+        #线性插值
+        N = len(value)
+        a = []
+        b = []
+        z = []
+        for i in range(N):
+            if value[i]!=-9999.0:
+                a.append(round(lon[i],2))
+                b.append(round(lat[i],2))
+                z.append(round(value[i],2))
+        lat = np.array(b)
+        lon = np.array(a)
+        Zi = np.array(z)
+        data_max = max(Zi)
+        data_min = min(Zi)
+        np.set_printoptions(precision = 2)
+        x = np.arange(120.0,122.0,0.05)
+        #print(x)
+        y = np.arange(27.8,29.5,0.05)
+        nx0 =len(x)
+        ny0 =len(y)
+        X, Y = np.meshgrid(x, y)#100*100
+        P = np.array([X.flatten(), Y.flatten() ]).transpose()    
+        Pi =  np.array([lon, lat ]).transpose()
+        Z_linear = griddata(Pi, Zi, P, method = "nearest").reshape([ny0,nx0])
+        #绘图
+        colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 降水
+        cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+        levels = [0,10,25,50,70,90,110,230]
+        # plt.rcParams.update({'font.size': 20})
+        fig = plt.figure(figsize=[12,16]) 
+    
+        ax = fig.add_subplot(111)
+        # plt.subplots_adjust(top=1,bottom=0,left=0,right=1,hspace=0,wspace=0)
+        filepath = "/home/liyuan3970/Data/My_Git/web_met/static/data/shpfile/"
+        data_xr = xr.DataArray(Z_linear/10.0, coords=[ y,x], 
+                        dims=["lat", "lon"])
+        shp_da = func.add_shape_coord_from_data_array(data_xr, filepath+"taizhou.shp", "test")
+        awash_da = shp_da.where(shp_da.test<7, other=np.nan)
+        m = Basemap(llcrnrlon=120.0,llcrnrlat=27.8,urcrnrlon=122,urcrnrlat=29.5,resolution = None, projection = 'cyl')
+        # 设置colorbar
+        cbar_kwargs = {'shrink': 0.5}    
+        cs = data_xr.plot.contourf(ax=ax, cmap=cmaps,levels =levels,cbar_kwargs=cbar_kwargs,add_labels=False)
+        m.readshapefile(filepath+'taizhou','taizhou',color='k',linewidth=1.2)
+        parallels = np.arange(27.8,29.5,0.2)
+        # labels = [left,right,top,bottom]
+        #m.drawparallels(parallels,labels=[True,False,True,False],color='dimgrey',dashes=[2, 3],fontsize= 12)  # ha= 'right'
+        meridians = np.arange(120.0,122.0,0.2)
+        #m.drawmeridians(meridians,labels=[False,True,False,True],color='dimgrey',dashes=[2, 3],fontsize= 12)
+        plt.axis('off')
+        len_lat = len(data_xr.lat.data)
+        len_lon = len(data_xr.lon.data)
+        for i in range(len_lon-1):
+            for j in range(len_lat-1):
+                y0 = round(27.8+j*0.05,2)
+                x0 = round(120.0+i*0.05,2)
+                if not isnan(awash_da.data[j,i]):
+                    plt.text(x0,y0,str(int(awash_da.data[j,i])),fontsize= 7,fontweight = 800 ,color ="black")
+        func.basemask(cs, ax, m, filepath+'taizhou')  
+        # 保存为base64数据
         buffer = BytesIO()
         plt.savefig(buffer,bbox_inches='tight')  
-        plot_img = buffer.getvalue()
-        imb = base64.b64encode(plot_img) 
+        plot_img_zdz = buffer.getvalue()
+        imb = base64.b64encode(plot_img_zdz) 
         ims = imb.decode()
-        imd = "data:image/png;base64,"+ims
-        return imd
+        imd_zdz = "data:image/png;base64,"+ims
+        return imd_zdz
     def sql_date(self):
         '''数据库读取sql数据'''
         print('读取数据库数据')
@@ -758,21 +815,33 @@ class zdz_data:
         #          name: "K8515", value: [121.2, 28.6, 110],
         #          symbol: 'circle'
         #         }
+        lat = []
+        lon = []
+        value = []
+        station_list = ['K8734','K8748']
+        pre_county_list = {}
         for i in grouped_IIiii.size().index:
             data = grouped_IIiii.get_group(i)
             data['RR'].replace(-9999, np.nan, inplace=True)
+            #print(data)
+            if data['IIiii'].iloc[0] in station_list:
+                data_rr = data.sort_values('tTime') 
+                StationName = data_rr['StationName'].iloc[0]
+                pre_county_list[StationName] = data_rr['RR'] 
             station_name = str(i)
             data_rain['IIiii_data'][station_name] = data
             single_data = {}
             single_data['name'] = station_name
             single_data['value'] = [data['lon'].iloc[0], data['lat'].iloc[0], data['RR'].sum() / 10.0]
+            lat.append(data['lat'].iloc[0])
+            lon.append(data['lon'].iloc[0])
+            value.append(data['RR'].sum())
             single_data['symble'] = 'circle'
-            rain_scatter.append(single_data)
+            rain_scatter.append(single_data)  
         self.station_data = data_rain['IIiii_data']
         self.rain_line = [data_rain['rain_sum']['time'], data_rain['rain_sum']['data']]
         self.rain_scatter = rain_scatter
-        #self.plot_img()
-
+        self.img = self.plot_img(lat,lon,value)
     def wind_data(self):
         '''
         1.根据sql语句计算8及以上大风的分布和排序
@@ -1015,6 +1084,7 @@ class ec_data_point:
         '''解析所需数据的列表'''
         lat = select_lon
         lon = select_lat
+        print("解析经纬度",lat,lon)
         if select_type=='rain':
             cp  = self.data['cp'].sel(lonS=lon, latS=lat,method='nearest').to_pandas().tolist()
             lsp  = self.data['lsp'].sel(lonS=lon, latS=lat,method='nearest').to_pandas().tolist()
