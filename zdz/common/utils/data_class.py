@@ -812,8 +812,8 @@ class zdz_data:
             data_rain['rain_sum']['time'].append(rain_time)
             data_rain['rain_sum']['data'].append(rain_mean)
             time_index.append(rain_time)
-            station_k8748.append(data[data['IIiii']=='K8748']['RR'].values[0] if len(data[data['IIiii']=='K8748']['RR'].values)==1 else 0.0)
-            station_k8734.append(data[data['IIiii']=='K8734']['RR'].values[0] if len(data[data['IIiii']=='K8734']['RR'].values)==1 else 0.0)
+            station_k8748.append(data[data['IIiii']=='K8748']['RR'].values[0]/1.0 if len(data[data['IIiii']=='K8748']['RR'].values)==1 else 0.0)
+            station_k8734.append(data[data['IIiii']=='K8734']['RR'].values[0]/1.0 if len(data[data['IIiii']=='K8734']['RR'].values)==1 else 0.0)
         self.rain_line = [time_index,station_k8734,station_k8748]
         print(len(time_index),len(station_k8734),len(station_k8748))
         # 导出单站数据

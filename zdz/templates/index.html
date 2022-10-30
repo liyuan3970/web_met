@@ -4251,7 +4251,7 @@
                                     table_wind.setAttribute('class', 'table')
 
                                     var table_head = document.createElement('thead')
-                                    table_head.innerHTML = "<tr><th>日期</th><th>时段</th><th>天况</th><th>气温</th></tr>"
+                                    table_head.innerHTML = "<tr><th>排序</th><th>测站名称</th><th>站号</th><th>风速</th></tr>"
 
                                     var table_body = document.createElement('tbody')
                                     table_body.id = "zdz_wind_table"
@@ -5690,7 +5690,7 @@
                                     echarts.registerMap('taizhou', tz_json, {});
                                     // var data_xy = [["天台", "仙居", "玉环", "临海", "黄岩", "三门", "温岭", "仙居", "仙居"], [600, 1150, 400, 850, 600, 650, 100, 1150, 100]]
                                     var data_xy = rain_line
-                                    console.log('打印单站数据', data_xy)
+                                    console.log('打印单站数据', typeof (data_xy))
                                     chart.setOption(
                                         {
                                             legend: {
@@ -5700,20 +5700,25 @@
                                             },
                                             title: {
                                                 text: ' 降水分布',
-                                                textStyle: { fontSize: 30 },
+                                                textStyle: { fontSize: 10 },
                                             },
                                             xAxis: [
-                                                {
-                                                    data: data_xy[0]// ['Jan', 'Feb', 'Mar', 'Apr', 'May']
-                                                }
+                                                { data: rain_line[0] }
                                             ],
                                             yAxis: [
+
                                                 {
-                                                    type: 'value',
-                                                    position: 'left',
-                                                    alignTicks: true,
+                                                    name: '面雨量',
+                                                    splitLine: { show: false },
                                                 }
                                             ],
+                                            grid: {
+                                                left: "10%",
+                                                top: "10%",
+                                                right: "40%",
+                                                bottom: "15%",
+                                                borderWidth: 1
+                                            },
                                             graphic: [
                                                 {
                                                     type: 'image', // 图形元素类型
@@ -5728,16 +5733,30 @@
                                                     }
                                                 }
                                             ],
+                                            dataZoom: [
+                                                {
+                                                    show: true,
+                                                    start: 0,
+                                                    end: 100
+                                                },
+                                                {
+                                                    type: 'inside',
+                                                    start: 94,
+                                                    end: 100
+                                                }
+                                            ],
                                             series: [
                                                 {
                                                     name: 'bar1',
                                                     type: 'bar',
-                                                    data: data_xy[1]
+                                                    color: 'red',
+                                                    data: rain_line[2]
                                                 },
                                                 {
                                                     name: 'bar2',
-                                                    type: 'line',
-                                                    data: data_xy[1]
+                                                    type: 'bar',
+                                                    color: 'blue',
+                                                    data: rain_line[1]
                                                 }
                                             ]
                                         })
