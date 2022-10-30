@@ -799,7 +799,10 @@ class zdz_data:
             'IIiii_data': {}
 
         }
-        
+        # 县市区单站降水
+        time_index = []
+        station_k8734 = []
+        station_k8748 = []
         grouped_tTime = station_all.groupby('tTime')
         for i in grouped_tTime.size().index:
             data = grouped_tTime.get_group(i)
@@ -808,6 +811,11 @@ class zdz_data:
             rain_time = i
             data_rain['rain_sum']['time'].append(rain_time)
             data_rain['rain_sum']['data'].append(rain_mean)
+            time_index.append(rain_time)
+            station_k8748.append(data[data['IIiii']=='K8748']['RR'].values[0] if len(data[data['IIiii']=='K8748']['RR'].values)==1 else 0.0)
+            station_k8734.append(data[data['IIiii']=='K8734']['RR'].values[0] if len(data[data['IIiii']=='K8734']['RR'].values)==1 else 0.0)
+        self.rain_line = [time_index,station_k8734,station_k8748]
+        print(len(time_index),len(station_k8734),len(station_k8748))
         # 导出单站数据
         grouped_IIiii = station_all.groupby('IIiii')
         rain_scatter = []
@@ -818,16 +826,12 @@ class zdz_data:
         lat = []
         lon = []
         value = []
-        station_list = ['K8734','K8748']
+        station_list = ['K8116','K8748']
+        station_line = []
         pre_county_list = {}
         for i in grouped_IIiii.size().index:
             data = grouped_IIiii.get_group(i)
-            data['RR'].replace(-9999, np.nan, inplace=True)
-            #print(data)
-            if data['IIiii'].iloc[0] in station_list:
-                data_rr = data.sort_values('tTime') 
-                StationName = data_rr['StationName'].iloc[0]
-                pre_county_list[StationName] = data_rr['RR'] 
+            data['RR'].replace(-9999,np.nan, inplace=True)# np.nan
             station_name = str(i)
             data_rain['IIiii_data'][station_name] = data
             single_data = {}
@@ -839,7 +843,7 @@ class zdz_data:
             single_data['symble'] = 'circle'
             rain_scatter.append(single_data)  
         self.station_data = data_rain['IIiii_data']
-        self.rain_line = [data_rain['rain_sum']['time'], data_rain['rain_sum']['data']]
+
         self.rain_scatter = rain_scatter
         self.img = self.plot_img(lat,lon,value)
     def wind_data(self):

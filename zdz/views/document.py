@@ -377,10 +377,9 @@ def tool_zdz_date(request):
         'status': "ok",
         'day_list': zdz_worker.day_list,
         'day_range': [zdz_worker.day_list[0][0], zdz_worker.day_list[-1][0]],
-        'rain_line': zdz_worker.rain_line,
+        'rain_line': json.dumps(zdz_worker.rain_line, cls=NpEncoder),
         'rain_scatter': json.dumps(zdz_worker.rain_scatter),
         'rain_img':zdz_worker.img
-
     }
     return JsonResponse(context)
 

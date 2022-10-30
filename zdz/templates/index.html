@@ -2842,7 +2842,7 @@
                                                     <input type="radio" name="selected_color_1st"
                                                         value="rgb(19, 12, 16)" style="width:20%;height:100%;">
                                                 </div>
-                                            
+
 
                                             </div>
                                             <canvas id="plot_canvas" style="width:90%;height:100%;"></canvas>
@@ -4245,7 +4245,7 @@
 
                                     var table_wind_div = document.createElement('div')
                                     table_wind_div.style = "width: 40%; height:90%;margin:10px;overflow-x: hidden;overflow-y: scroll;"
-                                    table_wind_div.setAttribute("class","scrollbar")
+                                    table_wind_div.setAttribute("class", "scrollbar")
 
                                     var table_wind = document.createElement('table')
                                     table_wind.setAttribute('class', 'table')
@@ -4398,8 +4398,8 @@
                                     map_see_view.style = "width: 60%; height: 100%;"
 
                                     var table_see_view_div = document.createElement('div')
-                                    table_see_view_div.style ="width: 40%; height:90%;margin:10px;overflow-x: hidden;overflow-y: scroll;"
-                                    table_see_view_div.setAttribute("class","scrollbar")
+                                    table_see_view_div.style = "width: 40%; height:90%;margin:10px;overflow-x: hidden;overflow-y: scroll;"
+                                    table_see_view_div.setAttribute("class", "scrollbar")
 
                                     var table_see_view = document.createElement('table')
                                     table_see_view.setAttribute('class', 'table')
@@ -5688,102 +5688,59 @@
                                     // 加载降水图 tz_json
                                     var chart = echarts.init(document.getElementById('map_bar'), 'light');
                                     echarts.registerMap('taizhou', tz_json, {});
-                                    // var data_xy = [["天台", "仙居", "玉环", "临海", "黄岩", "三门", "温岭", "仙居", "仙居"], [600, 1150, 400, 850, 600, 650, 100, 1150, 100, 700, 600, 800, 500]]
+                                    // var data_xy = [["天台", "仙居", "玉环", "临海", "黄岩", "三门", "温岭", "仙居", "仙居"], [600, 1150, 400, 850, 600, 650, 100, 1150, 100]]
                                     var data_xy = rain_line
-                                    chart.setOption({
-                                        legend: {
-                data: ['bar1', 'bar2'],
-                left: '30%',
-                selectedMode: 'single',
-                selected:{
-                    'bar1':false,
-                    'bar2':true,
-                }
-            },
-                                        xAxis: [
-                                            { geoIndex: 0 },
-                                            { data: data_xy[0], gridIndex: 1 }
-
-                                        ],
-                                        yAxis: [
-                                            { geoIndex: 0 },
-                                            {
-                                                name: '面雨量',
-                                                splitLine: { show: false },
-                                                gridIndex: 1
-                                            }
-
-                                        ],
-                                        graphic: [
-                                            {
-                                                type: 'image', // 图形元素类型
-                                                right: '5%', // 根据父元素进行定位 （居中）
-                                                bottom: '15%', // 根据父元素进行定位   （0%）, 如果bottom的值是 0，也可以删除该bottom属性值。
-                                                z: 3,  // 层叠
-                                                bounding: 'all', // 决定此图形元素在定位时，对自身的包围盒计算方式
-                                                style: {
-                                                    image: data.rain_img,//'static/src/温度.png', // 这里一定要注意、注意，必须是https开头的图片路径地址
-                                                    width: 350,
-                                                    height: 350
+                                    console.log('打印单站数据', data_xy)
+                                    chart.setOption(
+                                        {
+                                            legend: {
+                                                data: ['bar1', 'bar2'],
+                                                left: '30%',
+                                                selectedMode: 'single'
+                                            },
+                                            title: {
+                                                text: ' 降水分布',
+                                                textStyle: { fontSize: 30 },
+                                            },
+                                            xAxis: [
+                                                {
+                                                    data: data_xy[0]// ['Jan', 'Feb', 'Mar', 'Apr', 'May']
                                                 }
-                                            }
-                                        ],
-                                        layoutSize: '145%',
-                                        title: {
-                                            text: ' 降水分布',
-                                            textStyle: { fontSize: 30 },
-                                        },
-
-                            
-                                        geo: {
-                                            map: 'taizhou',
-                                            layoutCenter: ['80%', '45%'],
-                                            layoutSize: 250
-                                        },
-                                        grid: [
-                                            { left: '5%', bottom: '10%', top: '30%', right: '30%' },
-                                            { left: '5%', bottom: '10%', top: '30%', right: '30%' }
-                                        ],
-                                        series: [{
-                                            name: '图片',
-                                            type: 'scatter',
-                                            coordinateSystem: 'geo',
-
-
-                                            layoutCenter: ['60%', '80%'],
-                                            layoutSize: 10,
-                                            symbolSize: 5,
-                                            // color:['red','black'],
-                                            data: rain_scatter
-
-
-
-
-                                        },
-                                        {
-                                            type: 'bar1',
-                                            xAxisIndex: 1,//指定折线图数据显示到：grid坐标系：0
-                                            yAxisIndex: 1,
-                                            showSymbol: false,
-                                            color: 'red',
-                                            data: data_xy[1]//折线图y轴数据赋值
-                                        },
-                                        {
-                                            type: 'bar2',
-                                            xAxisIndex: 1,//指定折线图数据显示到：grid坐标系：0
-                                            yAxisIndex: 1,
-                                            showSymbol: false,
-                                            color: 'blue',
-                                            data: data_xy[1]//折线图y轴数据赋值
-                                        }
-                                        ]
-
-
-
-                                    });
-
-
-
+                                            ],
+                                            yAxis: [
+                                                {
+                                                    type: 'value',
+                                                    position: 'left',
+                                                    alignTicks: true,
+                                                }
+                                            ],
+                                            graphic: [
+                                                {
+                                                    type: 'image', // 图形元素类型
+                                                    right: '5%', // 根据父元素进行定位 （居中）
+                                                    bottom: '15%', // 根据父元素进行定位   （0%）, 如果bottom的值是 0，也可以删除该bottom属性值。
+                                                    z: 3,  // 层叠
+                                                    bounding: 'all', // 决定此图形元素在定位时，对自身的包围盒计算方式
+                                                    style: {
+                                                        image: data.rain_img,//'static/src/温度.png', // 这里一定要注意、注意，必须是https开头的图片路径地址
+                                                        width: 350,
+                                                        height: 350
+                                                    }
+                                                }
+                                            ],
+                                            series: [
+                                                {
+                                                    name: 'bar1',
+                                                    type: 'bar',
+                                                    data: data_xy[1]
+                                                },
+                                                {
+                                                    name: 'bar2',
+                                                    type: 'line',
+                                                    data: data_xy[1]
+                                                }
+                                            ]
+                                        })
 
 
 
@@ -5877,7 +5834,7 @@
                                     dataType: "json",
                                     success: function (data) {
                                         console.log("返回成功", data)
-                                        
+
                                         $("#table_ecworker_html").html(" ")
                                         // panel-727742   multiple-y-axis
                                         $("#panel-727742").html(" ") //风场
