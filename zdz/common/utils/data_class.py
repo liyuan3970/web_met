@@ -815,7 +815,6 @@ class zdz_data:
             station_k8748.append(data[data['IIiii']=='K8748']['RR'].values[0]/1.0 if len(data[data['IIiii']=='K8748']['RR'].values)==1 else 0.0)
             station_k8734.append(data[data['IIiii']=='K8734']['RR'].values[0]/1.0 if len(data[data['IIiii']=='K8734']['RR'].values)==1 else 0.0)
         self.rain_line = [time_index,station_k8734,station_k8748]
-        print(len(time_index),len(station_k8734),len(station_k8748))
         # 导出单站数据
         grouped_IIiii = station_all.groupby('IIiii')
         rain_scatter = []
@@ -914,18 +913,17 @@ class zdz_data:
         grouped_IIiii = station_all.groupby('IIiii')
         for i in grouped_IIiii.size().index:
             data = grouped_IIiii.get_group(i)
-            if data['fFy'].max() > 187:
+            data['VV'].replace(-9999, 10000, inplace=True)
+            if data['VV'].min() < 500 :
                 data_single = {}
                 data_single['IIiii'] = data['IIiii'].iloc[0]
                 data_single['county'] = data['county'].iloc[0]
                 data_single['town'] = data['Town'].iloc[0]
-                data_single['value'] = [data['lon'].iloc[0], data['lat'].iloc[0], data['fFy'].max() / 10.0]
-                data_single['symbol'] = 'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z'
-                data_single['symbolRotate'] = data[data['fFy'] == data['fFy'].max()]['dFy'].iloc[0]
+                data_single['value'] = [data['lon'].iloc[0], data['lat'].iloc[0], data['VV'].min()/1.0]
                 sort_data['IIiii'].append(data['IIiii'].iloc[0])
                 sort_data['county'].append(data['county'].iloc[0])
                 sort_data['town'].append(data['Town'].iloc[0])
-                sort_data['value'].append(data['fFy'].max() / 10.0)
+                sort_data['value'].append(data['VV'].min()/1.0 )
                 data_view_list.append(data_single)
         # 对数据进行排序
         max_sort = max(sort_data['value'])

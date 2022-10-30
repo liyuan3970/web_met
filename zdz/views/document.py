@@ -437,11 +437,10 @@ def tool_zdz_temp(request):
     else:
         zdz_worker = data_class.zdz_data(start, end)
         data_temp_max, data_temp_min = zdz_worker.temp_data()
-    # print(data_wind_list)
     context = {
         'status': "ok",
-        'data_temp_max': json.dumps(data_temp_max, cls=NpEncoder),
-        'data_temp_min': json.dumps(data_temp_min, cls=NpEncoder)
+        'data_temp_max': data_temp_max,
+        'data_temp_min': data_temp_min
     }
 
     return JsonResponse(context)

@@ -4425,7 +4425,7 @@
                                             },
                                             dataType: "json",
                                             success: function (data) {
-                                                console.log("返回成功", data)
+                                                // console.log("返回成功", data)
                                                 // 加载大风图 tz_json
 
                                                 //  echarts.registerMap('taizhou',tz_json,{});
@@ -4433,11 +4433,11 @@
                                                 // 加载能见度图 
                                                 var map = echarts.init(document.getElementById('map_see_view'), 'light');
                                                 //  echarts.registerMap('taizhou',tz_json,{});
-
+                                                // console.log(data.data_view_list)
                                                 map.setOption({
                                                     title: {
-                                                        text: '极大风',
-                                                        textStyle: { fontSize: 30 },
+                                                        text: '能见度',
+                                                        textStyle: { fontSize: 15 },
                                                     },
                                                     tooltip: {
                                                         trigger: 'item',
@@ -4454,8 +4454,18 @@
 
 
                                                     },
+                                                    visualMap: {
+                                                        type: "piecewise",
+
+
+                                                        pieces: [
+                                                            { min: 200, max: 500, label: '雾', color: 'yellow' },
+                                                            { min: 50, max: 200, label: '浓雾', color: 'orange' },
+                                                            { max: 50, min: 0, label: '强浓雾', color: 'red' }
+                                                        ],
+                                                    },
                                                     series: [{
-                                                        name: '确诊数量',
+                                                        name: '自动站能见度',
                                                         // type: 'effectScatter',
                                                         type: 'scatter',
                                                         // symble:"triangle",
@@ -4515,13 +4525,13 @@
                                             },
                                             dataType: "json",
                                             success: function (data) {
-                                                console.log("返回成功", data)
+                                                // console.log("返回成功", data)
                                                 // 加载气温
                                                 //加载气温
                                                 // 高温
                                                 var map_high = echarts.init(document.getElementById('maphigt_see_view'), 'light');
                                                 //  echarts.registerMap('taizhou',tz_json,{});
-
+                                                console.log(data.data_temp_max)
                                                 map_high.setOption({
                                                     title: {
                                                         text: '高温',
@@ -4529,7 +4539,14 @@
                                                     },
                                                     tooltip: {
                                                         trigger: 'item',
-                                                        formatter: 'k8505 50(m/s)'
+                                                        formatter: function (params) {
+                                                            if (params['componentType']=='series'){
+                                                                console.log("打印的是",params)
+                                                                var lable_data = params['data']['value'][2]
+                                                                var lable_station = params['data']['name']
+                                                            }
+                                                            return lable_station
+                                                        }
                                                     },
                                                     geo: {
                                                         map: 'taizhou',
@@ -4542,68 +4559,27 @@
 
 
                                                     },
-                                                    // visualMap: {
-                                                    //     type: "piecewise",
-                                                    //     // orient:'horizontal',
-                                                    //     // type:"continuous",
-                                                    //     // min: 0,
-                                                    //     // max: 200,
-                                                    //     // splitNumber = 5,
-                                                    //     // color: ["rgb(255, 255, 255)",
-                                                    //     // "rgb(255, 238, 255)",
-                                                    //     // "rgb(255, 238, 204)",
-                                                    //     // "rgb(255, 204, 153)",
-                                                    //     // "rgb(255, 204, 102)",
-                                                    //     // "rgb(255, 170, 68)",
-                                                    //     // "rgb(153, 255, 136)",
-                                                    //     // "rgb(0, 255, 85)",
-                                                    //     // "rgb(0, 170, 51)",
-                                                    //     // "rgb(0, 170, 255)",
-                                                    //     // "rgb(17, 136, 204)",
-                                                    //     // "rgb(0, 85, 204)",
-                                                    //     // "rgb(0, 68, 221)",
-                                                    //     // "rgb(0, 0, 221)"],
-                                                    //     right: 0,
-                                                    //     padding: 0,
-                                                    //     itemGap: 0,
-                                                    //     textGap: 0,
-                                                    //     textStyle: { fontSize: 8 },
-                                                    //     pieces: [
-                                                    //         { min: 2000, max: 2500, label: '10 到 200', color: "rgb(255, 255, 255)" },
-                                                    //         { min: 1500, max: 2000, label: '10 到 200', color: "rgb(255, 238, 255)" },// 不指定 max，表示 max 为无限大（Infinity）。
-                                                    //         { min: 900, max: 1500, label: '10 到 200', color: "rgb(255, 238, 204)" },
-                                                    //         { min: 310, max: 1000, label: '10 到 200', color: "rgb(255, 204, 153)" },
-                                                    //         { min: 200, max: 300, label: '10 到 200', color: "rgb(255, 204, 102)" },
-                                                    //         { min: 10, max: 200, label: '10 到 200', color: "rgb(255, 170, 68)" },
-                                                    //         { max: 10, min: 5, label: '10 到 200', color: "rgb(153, 255, 136)" },    // 不指定 min，表示 min 为无限大（-Infinity）。
-                                                    //         { max: 5, min: 4, label: '10 到 200', color: "rgb(0, 255, 85)" },
-                                                    //         { max: 4, min: 3, label: '10 到 200', color: "rgb(0, 170, 51)" },
-                                                    //         { max: 3, min: 2, label: '10 到 200', color: "rgb(0, 170, 255)" },
-                                                    //         { max: 2, min: 1, label: '10 到 200', color: "rgb(17, 136, 204)" },
-                                                    //         { max: 1, min: 0, label: '10 到 200', color: "rgb(0, 85, 204)" },
-                                                    //         { max: 0, min: -1, label: '10 到 200', color: "rgb(0, 68, 221)" },
-                                                    //         { max: -1, min: -2, label: '10 到 200', color: "rgb(0, 0, 221)" }
-
-                                                    //     ],
-
-                                                    //     // categories: ['1', '2', '3', '4', '5','6']
-
-                                                    //     // inRange: {
-                                                    //     //     color: ['lightskyblue','yellow', 'orangered']
-                                                    //     // }
-                                                    // },
-                                                    // label: {
-                                                    //             show: true,
-                                                    //             color: "rgba(50, 44, 44, 1)",
-                                                    //             formatter: 'K8505'
-                                                    //         },
+                                                    label: {
+                                                        show: true,
+                                                        color: "black",
+                                                        fontSize:14,
+                                                        formatter: function (params) {
+                                                            if (params['componentType']=='series'){
+                                                                console.log("打印的是",params)
+                                                                var lable_data = params['data']['value'][2]
+                                                                var lable_station = params['data']['name']
+                                                            }
+                                                            return lable_data 
+                                                        }
+                                                    },
                                                     series: [{
                                                         name: '高温',
                                                         // type: 'effectScatter',
                                                         type: 'scatter',
                                                         // symble:"triangle",
                                                         // symbol: "roundRect",
-                                                        // symbolSize:50,
+                                                        symbolSize:5,
+                                                        color:'red',
                                                         coordinateSystem: 'geo',
                                                         // itemStyle: {
                                                         //   color: function (params) {
@@ -4616,9 +4592,9 @@
                                                         // },
                                                         // },
 
+
                                                         // data: [{
-                                                        //     name: "data", value: [121.0, 28.8, 123], url: "url_data",
-                                                        //     symbol: 'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z', symbolSize: 15, symbolRotate: 330
+                                                        //     name: "测试站", value: [121.0, 28.8, 123]
                                                         // }]
                                                         data: data.data_temp_max
 
@@ -4639,7 +4615,14 @@
                                                     },
                                                     tooltip: {
                                                         trigger: 'item',
-                                                        formatter: 'k8505 50(m/s)'
+                                                        formatter: function (params) {
+                                                            if (params['componentType']=='series'){
+                                                                console.log("打印的是",params)
+                                                                var lable_data = params['data']['value'][2]
+                                                                var lable_station = params['data']['name']
+                                                            }
+                                                            return lable_station
+                                                        }
                                                     },
                                                     geo: {
                                                         map: 'taizhou',
@@ -4652,68 +4635,27 @@
 
 
                                                     },
-                                                    // visualMap: {
-                                                    //     type: "piecewise",
-                                                    //     // orient:'horizontal',
-                                                    //     // type:"continuous",
-                                                    //     // min: 0,
-                                                    //     // max: 200,
-                                                    //     // splitNumber = 5,
-                                                    //     // color: ["rgb(255, 255, 255)",
-                                                    //     // "rgb(255, 238, 255)",
-                                                    //     // "rgb(255, 238, 204)",
-                                                    //     // "rgb(255, 204, 153)",
-                                                    //     // "rgb(255, 204, 102)",
-                                                    //     // "rgb(255, 170, 68)",
-                                                    //     // "rgb(153, 255, 136)",
-                                                    //     // "rgb(0, 255, 85)",
-                                                    //     // "rgb(0, 170, 51)",
-                                                    //     // "rgb(0, 170, 255)",
-                                                    //     // "rgb(17, 136, 204)",
-                                                    //     // "rgb(0, 85, 204)",
-                                                    //     // "rgb(0, 68, 221)",
-                                                    //     // "rgb(0, 0, 221)"],
-                                                    //     right: 0,
-                                                    //     padding: 0,
-                                                    //     itemGap: 0,
-                                                    //     textGap: 0,
-                                                    //     textStyle: { fontSize: 8 },
-                                                    //     pieces: [
-                                                    //         { min: 2000, max: 2500, label: '10 到 200', color: "rgb(255, 255, 255)" },
-                                                    //         { min: 1500, max: 2000, label: '10 到 200', color: "rgb(255, 238, 255)" },// 不指定 max，表示 max 为无限大（Infinity）。
-                                                    //         { min: 900, max: 1500, label: '10 到 200', color: "rgb(255, 238, 204)" },
-                                                    //         { min: 310, max: 1000, label: '10 到 200', color: "rgb(255, 204, 153)" },
-                                                    //         { min: 200, max: 300, label: '10 到 200', color: "rgb(255, 204, 102)" },
-                                                    //         { min: 10, max: 200, label: '10 到 200', color: "rgb(255, 170, 68)" },
-                                                    //         { max: 10, min: 5, label: '10 到 200', color: "rgb(153, 255, 136)" },    // 不指定 min，表示 min 为无限大（-Infinity）。
-                                                    //         { max: 5, min: 4, label: '10 到 200', color: "rgb(0, 255, 85)" },
-                                                    //         { max: 4, min: 3, label: '10 到 200', color: "rgb(0, 170, 51)" },
-                                                    //         { max: 3, min: 2, label: '10 到 200', color: "rgb(0, 170, 255)" },
-                                                    //         { max: 2, min: 1, label: '10 到 200', color: "rgb(17, 136, 204)" },
-                                                    //         { max: 1, min: 0, label: '10 到 200', color: "rgb(0, 85, 204)" },
-                                                    //         { max: 0, min: -1, label: '10 到 200', color: "rgb(0, 68, 221)" },
-                                                    //         { max: -1, min: -2, label: '10 到 200', color: "rgb(0, 0, 221)" }
-
-                                                    //     ],
-
-                                                    //     // categories: ['1', '2', '3', '4', '5','6']
-
-                                                    //     // inRange: {
-                                                    //     //     color: ['lightskyblue','yellow', 'orangered']
-                                                    //     // }
-                                                    // },
-                                                    // label: {
-                                                    //             show: true,
-                                                    //             color: "rgba(50, 44, 44, 1)",
-                                                    //             formatter: 'K8505'
-                                                    //         },
+                                                    label: {
+                                                        show: true,
+                                                        color: "black",
+                                                        fontSize:14,
+                                                        formatter: function (params) {
+                                                            if (params['componentType']=='series'){
+                                                                console.log("打印的是",params)
+                                                                var lable_data = params['data']['value'][2]
+                                                                var lable_station = params['data']['name']
+                                                            }
+                                                            return lable_data 
+                                                        }
+                                                    },
                                                     series: [{
                                                         name: '低温',
                                                         // type: 'effectScatter',
                                                         type: 'scatter',
                                                         // symble:"triangle",
                                                         // symbol: "roundRect",
-                                                        // symbolSize:50,
+                                                        symbolSize:5,
+                                                        color:'blue',
                                                         coordinateSystem: 'geo',
                                                         // itemStyle: {
                                                         //   color: function (params) {
@@ -4726,10 +4668,11 @@
                                                         // },
                                                         // },
 
-                                                        data: [{
-                                                            name: "data", value: [121.0, 28.8, 123], url: "url_data",
-                                                            symbol: 'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z', symbolSize: 15, symbolRotate: 330
-                                                        }]
+
+                                                        // data: [{
+                                                        //     name: "测试站", value: [121.0, 28.8, 123]
+                                                        // }]
+                                                        data: data.data_temp_min
 
                                                     }]
 
