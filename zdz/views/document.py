@@ -456,14 +456,14 @@ def tool_zdz_daily(request):
     print('获取的时间', date)
     global zdz_worker
     if zdz_worker:
-        pre_list = zdz_worker.pre_day(date)
+        daily_data = zdz_worker.pre_day(date)
     else:
         zdz_worker = data_class.zdz_data(start, end)
-        pre_list = zdz_worker.pre_day(date)
+        daily_data = zdz_worker.pre_day(date)
     context = {
         'status': "ok",
         'date': str(date),
-        'pre_list': json.dumps(pre_list, cls=NpEncoder)
+        'daily_data': json.dumps(daily_data, cls=NpEncoder)
     }
     return JsonResponse(context)
 

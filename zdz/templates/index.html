@@ -4540,8 +4540,8 @@
                                                     tooltip: {
                                                         trigger: 'item',
                                                         formatter: function (params) {
-                                                            if (params['componentType']=='series'){
-                                                                console.log("打印的是",params)
+                                                            if (params['componentType'] == 'series') {
+                                                                console.log("打印的是", params)
                                                                 var lable_data = params['data']['value'][2]
                                                                 var lable_station = params['data']['name']
                                                             }
@@ -4562,14 +4562,14 @@
                                                     label: {
                                                         show: true,
                                                         color: "black",
-                                                        fontSize:14,
+                                                        fontSize: 14,
                                                         formatter: function (params) {
-                                                            if (params['componentType']=='series'){
-                                                                console.log("打印的是",params)
+                                                            if (params['componentType'] == 'series') {
+                                                                console.log("打印的是", params)
                                                                 var lable_data = params['data']['value'][2]
                                                                 var lable_station = params['data']['name']
                                                             }
-                                                            return lable_data 
+                                                            return lable_data
                                                         }
                                                     },
                                                     series: [{
@@ -4578,8 +4578,8 @@
                                                         type: 'scatter',
                                                         // symble:"triangle",
                                                         // symbol: "roundRect",
-                                                        symbolSize:5,
-                                                        color:'red',
+                                                        symbolSize: 5,
+                                                        color: 'red',
                                                         coordinateSystem: 'geo',
                                                         // itemStyle: {
                                                         //   color: function (params) {
@@ -4616,8 +4616,8 @@
                                                     tooltip: {
                                                         trigger: 'item',
                                                         formatter: function (params) {
-                                                            if (params['componentType']=='series'){
-                                                                console.log("打印的是",params)
+                                                            if (params['componentType'] == 'series') {
+                                                                console.log("打印的是", params)
                                                                 var lable_data = params['data']['value'][2]
                                                                 var lable_station = params['data']['name']
                                                             }
@@ -4638,14 +4638,14 @@
                                                     label: {
                                                         show: true,
                                                         color: "black",
-                                                        fontSize:14,
+                                                        fontSize: 14,
                                                         formatter: function (params) {
-                                                            if (params['componentType']=='series'){
-                                                                console.log("打印的是",params)
+                                                            if (params['componentType'] == 'series') {
+                                                                console.log("打印的是", params)
                                                                 var lable_data = params['data']['value'][2]
                                                                 var lable_station = params['data']['name']
                                                             }
-                                                            return lable_data 
+                                                            return lable_data
                                                         }
                                                     },
                                                     series: [{
@@ -4654,8 +4654,8 @@
                                                         type: 'scatter',
                                                         // symble:"triangle",
                                                         // symbol: "roundRect",
-                                                        symbolSize:5,
-                                                        color:'blue',
+                                                        symbolSize: 5,
+                                                        color: 'blue',
                                                         coordinateSystem: 'geo',
                                                         // itemStyle: {
                                                         //   color: function (params) {
@@ -4703,112 +4703,15 @@
 
                                     var station_list = document.createElement('div')
                                     station_list.id = "station_list"
-                                    station_list.style = style = "width: 600px;height: 380px"
+                                    station_list.style = style = "width: 500px;height: 380px"
 
                                     var station_map = document.createElement('div')
                                     //class="col-md-12 column"
                                     // station_map.setAttribute("class", "col-md-12 column")
-                                    station_map.style = "width: 40%;height: 380px"
-
-                                    // 开始选项卡部分
-                                    var tabbable_daily = document.createElement('div')
-                                    tabbable_daily.setAttribute("class", "tabbable")
-                                    tabbable_daily.id = "tabs-89016"
-
-                                    var navtabs = document.createElement('ul')
-                                    navtabs.setAttribute("class", "nav nav-tabs")
-
-                                    var li_pre = document.createElement('li')
-                                    li_pre.setAttribute("class", "active")
-                                    var a_pre = document.createElement('a')
-                                    a_pre.setAttribute("href", "#panel-477196")
-                                    a_pre.setAttribute("data-toggle", "tab")
-                                    a_pre.innerText = "降水"
-                                    li_pre.append(a_pre)
-
-                                    var li_wind = document.createElement('li')
-                                    var a_wind = document.createElement('a')
-                                    a_wind.setAttribute("href", "#panel-512798")
-                                    a_wind.setAttribute("data-toggle", "tab")
-                                    a_wind.innerText = "风力"
-                                    li_wind.append(a_wind)
-
-                                    var li_view = document.createElement('li')
-                                    var a_view = document.createElement('a')
-                                    a_view.setAttribute("href", "#panel-477197")
-                                    a_view.setAttribute("data-toggle", "tab")
-                                    a_view.innerText = "能见度"
-                                    li_view.append(a_view)
-
-                                    var li_tmax = document.createElement('li')
-                                    var a_tmax = document.createElement('a')
-                                    a_tmax.setAttribute("href", "#panel-512799")
-                                    a_tmax.setAttribute("data-toggle", "tab")
-                                    a_tmax.innerText = "高温"
-                                    li_tmax.append(a_tmax)
-
-                                    var li_tmin = document.createElement('li')
-                                    var a_tmin = document.createElement('a')
-                                    a_tmin.setAttribute("href", "#panel-512795")
-                                    a_tmin.setAttribute("data-toggle", "tab")
-                                    a_tmin.innerText = "低温"
-                                    li_tmin.append(a_tmin)
-
-                                    navtabs.append(li_pre, li_wind, li_view, li_tmax, li_tmin)
-
-                                    //地图显示
-                                    tabcontent = document.createElement('div')
-                                    tabcontent.setAttribute("class", "tab-content")
-
-                                    var map_pre = document.createElement('div')
-                                    map_pre.setAttribute("class", "tab-pane active")
-                                    map_pre.id = "panel-477196"
-
-                                    var pre_div = document.createElement('div')
-                                    pre_div.id = "map_pre_div"
-                                    pre_div.style = "width: 400px; height:350px"
-                                    map_pre.append(pre_div)
+                                    station_map.style = "width: 400px;height: 380px"
+                                    station_map.id = "station_map"
 
 
-                                    var map_wind = document.createElement('div')
-                                    map_wind.setAttribute("class", "tab-pane")
-                                    map_wind.id = "panel-512798"
-
-                                    var wind_div = document.createElement('div')
-                                    wind_div.id = "map_wind_div"
-                                    wind_div.style = "width: 400px; height:350px"
-                                    map_wind.append(wind_div)
-
-                                    var map_view = document.createElement('div')
-                                    map_view.setAttribute("class", "tab-pane")
-                                    map_view.id = "panel-477197"
-
-                                    var view_div = document.createElement('div')
-                                    view_div.id = "map_view_div"
-                                    view_div.style = "width: 400px; height:350px"
-                                    map_view.append(view_div)
-
-                                    var map_tmax = document.createElement('div')
-                                    map_tmax.setAttribute("class", "tab-pane")
-                                    map_tmax.id = "panel-512799"
-
-                                    var tmax_div = document.createElement('div')
-                                    tmax_div.id = "map_tmax_div"
-                                    tmax_div.style = "width: 400px; height:350px"
-                                    map_tmax.append(tmax_div)
-
-                                    var map_tmin = document.createElement('div')
-                                    map_tmin.setAttribute("class", "tab-pane")
-                                    map_tmin.id = "panel-512795"
-
-                                    var tmin_div = document.createElement('div')
-                                    tmin_div.id = "map_tmin_div"
-                                    tmin_div.style = "width: 400px; height:350px"
-                                    map_tmin.append(tmin_div)
-
-                                    tabcontent.append(map_pre, map_wind, map_view, map_tmax, map_tmin)
-                                    tabbable_daily.append(navtabs, tabcontent)
-                                    station_map.append(tabbable_daily)
                                     div_all_daily.append(station_list, station_map)
                                     show_panel_725171.append(div_all_daily)
 
@@ -4989,14 +4892,14 @@
                                                 },
                                                 xAxis: {
                                                     type: 'category',
-                                                    data: []
+                                                    data: [1, 2, 3, 4, 5, 6]
                                                 },
                                                 yAxis: {
                                                     type: 'category',
                                                     type: 'value'
                                                 },
                                                 series: [{
-                                                    data: [],
+                                                    data: [1, 2, 3, 4, 5, 6],
                                                     type: 'bar',
                                                     label: {
                                                         show: true,
@@ -5006,11 +4909,8 @@
                                             }
                                         )
 
-                                        var map_pre = echarts.init(document.getElementById('map_pre_div'), 'light');
-                                        var map_wind = echarts.init(document.getElementById('map_wind_div'), 'dark');
-                                        var map_view = echarts.init(document.getElementById('map_view_div'), 'light');
-                                        var map_tmax = echarts.init(document.getElementById('map_tmax_div'), 'light');
-                                        var map_tmin = echarts.init(document.getElementById('map_tmin_div'), 'light');
+                                        var map_zdz_daily = echarts.init(document.getElementById('station_map'), 'light');
+
                                         var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                                         //日报数据的异步加载
                                         $.ajax({
@@ -5027,21 +4927,20 @@
                                             dataType: "json",
                                             success: function (data) {
                                                 console.log("日报的返回成功")
-                                                // 降水
-                                                map_pre.setOption({
+                                                map_zdz_daily.setOption({
+                                                    legend: {
+                                                        data: ['rain', 'wind', 'temp'],
+                                                        left: '30%',
+                                                        selectedMode: 'single',
+                                                        selected: {
+                                                            'rain': false,
+                                                            'wind': true,
+                                                        }
+                                                    },
                                                     title: {
                                                         text: '降水',
-                                                        textStyle: { fontSize: 25 },
+                                                        textStyle: { fontSize: 15 },
                                                     },
-                                                    tooltip: {
-                                                        trigger: 'item',
-                                                        // formatter: '{c}(m/s)'
-                                                        formatter: function (params) {
-                                                            // do some thing
-                                                            return params.value[2] + params.name
-                                                        }
-                                                    },
-
                                                     geo: {
                                                         map: 'taizhou',
                                                         roam: true,
@@ -5053,564 +4952,227 @@
 
 
                                                     },
-                                                    visualMap: {
-                                                        type: "piecewise",
-
-
-                                                        pieces: [
-                                                            { min: 200, max: 300, label: '大风', color: 'red' },
-                                                            { min: 10, max: 200, label: '降水', color: 'green' },
-                                                            { max: 10, min: -1, label: '能见度', color: 'yellow' }    // 不指定 min，表示 min 为无限大（-Infinity）。
-                                                        ],
+                                                    label: {
+                                                        show: true,
+                                                        color: "black",
+                                                        fontSize: 14,
+                                                        formatter: function (params) {
+                                                            if (params['seriesName'] == 'temp') {
+                                                                console.log("打印的是", params)
+                                                                var lable_data = params['data']['value'][3]
+                                                                return lable_data
+                                                            }
+                                                            else {
+                                                                var lable_data = " "
+                                                                return lable_data
+                                                            }
+                                                        }
                                                     },
-                                                    // label: {
-                                                    //             show: true,
-                                                    //             color: "rgba(50, 44, 44, 1)",
-                                                    //             formatter: 'K8505'
-                                                    //         },
-                                                    series: [{
-                                                        name: '降水',
-                                                        // type: 'effectScatter',
-                                                        type: 'scatter',
-                                                        symble: "circle",
-                                                        // symbol: "roundRect",
-                                                        symbolSize: 10,
-                                                        coordinateSystem: 'geo',
-                                                        // itemStyle: {
-                                                        //   color: function (params) {
-                                                        //       var colorlist = ['black'];
-                                                        //       return colorlist[params.dataIndex];
-                                                        //   },
-                                                        //   symbol: function (params) {
-                                                        //     var symbollist = ['path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z'];
-                                                        //     return symbollist[params.dataIndex];
-                                                        // },
-                                                        // },
-                                                        data: JSON.parse(data.pre_list)
-                                                        // data:[{"name": "K8001", "value": [121.4189, 28.65472, [1, 0, 7, 1, 0, 0, 0], 142], "symble": "circle"}]
+                                                    series: [
+                                                        {
+                                                            name: 'rain',
+                                                            // type: 'effectScatter',
+                                                            type: 'scatter',
+                                                            symble: "circle",
+                                                            // symbol: "roundRect",
+                                                            symbolSize: 10,
+                                                            coordinateSystem: 'geo',
+                                                            data: [
+                                                                {
+                                                                    name: "K8517", value: [121.3, 28.7, [10, 170, 120, 90, 30, 150, 10], 110],
+                                                                    symbol: 'circle', color: '#00FFFF'
+                                                                },
+                                                                {
+                                                                    name: "K8519", value: [121.0, 28.8, [10, 170, 120, 90, 30, 150, 10], 110], url: "url_data",
+                                                                    symbol: 'circle'
+                                                                }
 
-                                                        // data: [
-                                                        //     {
-                                                        //         name: "K8517", value: [121.3, 28.7, [10, 130, 120, 90, 30, 160, 10], 110],
-                                                        //         symbol: 'circle', color: '#00FFFF'
-                                                        //     },
-                                                        //     {
-                                                        //         name: "K8515", value: [121.4, 28.7, [10, 130, 120, 90, 30, 150, 0], 8],
-                                                        //         symbol: 'circle', color: 'balck'
-                                                        //     },
-                                                        //     {
-                                                        //         name: "K8519", value: [121.0, 28.8, [10, 170, 120, 90, 30, 150, 10], 110], url: "url_data",
-                                                        //         symbol: 'circle'
-                                                        //     },
-                                                        //     {
-                                                        //         name: "K8519", value: [121.0, 28.8, [10, 130, 120, 90, 30, 150, 10], 253], url: "url_data",
-                                                        //         symbol: 'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z', symbolSize: 15, symbolRotate: 330
-                                                        //     }
+                                                            ]
 
-                                                        // ]
+                                                        },
+                                                        {
+                                                            name: 'wind',
+                                                            // type: 'effectScatter',
+                                                            type: 'scatter',
+                                                            symble: "circle",
+                                                            // symbol: "roundRect",
+                                                            symbolSize: 10,
+                                                            coordinateSystem: 'geo',
+                                                            data: [
+                                                                {
+                                                                    name: "K8519", value: [121.0, 28.8, [10, 130, 120, 90, 30, 150, 10], [
+                                                                        {
+                                                                            'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
+                                                                            'symbolRotate': 310,
+                                                                            'value': 10
+                                                                        },
+                                                                        {
+                                                                            'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
+                                                                            'symbolRotate': 30,
+                                                                            'value': 130
+                                                                        },
+                                                                        {
+                                                                            'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
+                                                                            'symbolRotate': 360,
+                                                                            'value': 120
+                                                                        },
+                                                                        {
+                                                                            'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
+                                                                            'symbolRotate': 360,
+                                                                            'value': 90
+                                                                        },
+                                                                        {
+                                                                            'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
+                                                                            'symbolRotate': 360,
+                                                                            'value': 30
+                                                                        },
+                                                                        {
+                                                                            'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
+                                                                            'symbolRotate': 360,
+                                                                            'value': 150
+                                                                        },
+                                                                        {
+                                                                            'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
+                                                                            'symbolRotate': 36,
+                                                                            'value': 10
+                                                                        }
+                                                                    ], 253], url: "url_data",
+                                                                    symbol: 'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z', symbolSize: 15, symbolRotate: 330
+                                                                }
 
-                                                    }]
+                                                            ]
+
+                                                        },
+                                                        {
+                                                            name: 'temp',
+                                                            // type: 'effectScatter',
+                                                            type: 'scatter',
+                                                            symble: "circle",
+                                                            // symbol: "roundRect",
+                                                            symbolSize: 10,
+                                                            coordinateSystem: 'geo',
+                                                            data: [
+                                                                {
+                                                                    name: "K8519", value: [121.0, 28.8, [10, 13, 300, 90, 30, 150, 10], 25.3]
+                                                                }
+
+                                                            ]
+
+                                                        }
+                                                    ]
 
 
 
                                                 });
-                                                map_pre.on('click', function (params) {
 
-                                                    // 根据value和
-                                                    console.log("地图加载的数据相应柱状图", params.value[3])
-
-                                                    bar_list.setOption(
-                                                        {
-                                                            title: {
-                                                                text: '自动站',
-                                                                textStyle: { fontSize: 15 },
-                                                            },
-                                                            xAxis: {
-                                                                type: 'category',
-                                                                data: params.value[2]
-                                                            },
-                                                            yAxis: {
-                                                                type: 'value'
-                                                            },
-                                                            series: [{
-                                                                data: params.value[3],
-                                                                type: 'bar',
-                                                                label: {
-                                                                    show: true,
-                                                                    position: 'top'
-                                                                },
-                                                            }]
-                                                        }
-                                                    )
-
-                                                })
-                                                // 大风
-                                                map_wind.setOption({
-                                                    title: {
-                                                        text: '大风',
-                                                        textStyle: { fontSize: 25 },
-                                                    },
-                                                    tooltip: {
-                                                        trigger: 'item',
-                                                        // formatter: '{c}(m/s)'
-                                                        formatter: function (params) {
-                                                            // do some thing
-                                                            return params.value[2] + params.name
-                                                        }
-                                                    },
-
-                                                    geo: {
-                                                        map: 'taizhou',
-                                                        roam: true,
-                                                        // tooltip:{borderColor = '#333'}
-                                                        itemStyle: {
-                                                            color: 'white'
-                                                            // areaColor = '#333',
-                                                        }
-
-
-                                                    },
-                                                    visualMap: {
-                                                        type: "piecewise",
-
-
-                                                        pieces: [
-                                                            { min: 200, max: 300, label: '大风', color: 'red' },
-                                                            { min: 10, max: 200, label: '降水', color: 'green' },
-                                                            { max: 10, min: 5, label: '能见度', color: 'yellow' }    // 不指定 min，表示 min 为无限大（-Infinity）。
-                                                        ],
-                                                    },
-                                                    // label: {
-                                                    //             show: true,
-                                                    //             color: "rgba(50, 44, 44, 1)",
-                                                    //             formatter: 'K8505'
-                                                    //         },
-                                                    series: [{
-                                                        name: '确诊数量',
-                                                        // type: 'effectScatter',
-                                                        type: 'scatter',
-                                                        // symble:"triangle",
-                                                        // symbol: "roundRect",
-                                                        // symbolSize:50,
-                                                        coordinateSystem: 'geo',
-                                                        // itemStyle: {
-                                                        //   color: function (params) {
-                                                        //       var colorlist = ['black'];
-                                                        //       return colorlist[params.dataIndex];
-                                                        //   },
-                                                        //   symbol: function (params) {
-                                                        //     var symbollist = ['path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z'];
-                                                        //     return symbollist[params.dataIndex];
-                                                        // },
-                                                        // },
-
-                                                        data: [
-                                                            // {
-                                                            //     name: "K8517", value: [121.3, 28.7, 110],
-                                                            //     symbol: 'circle', color: '#00FFFF'
-                                                            // },
-                                                            // {
-                                                            //     name: "K8515", value: [121.4, 28.7, 8],
-                                                            //     symbol: 'circle', color: 'balck'
-                                                            // },
-                                                            // {
-                                                            //     name: "K8519", value: [121.0, 28.8, 110], url: "url_data",
-                                                            //     symbol: 'circle'
-                                                            // },
+                                                map_zdz_daily.on('click', function (params) {
+                                                    // console.log("地图加载的数据", params)
+                                                    var series_option = {}
+                                                    if (params['componentType'] == 'series') {
+                                                        console.log("地图的数据类型", params['seriesName'])
+                                                        // 坐标值的区间
+                                                        var x_data = params.value[2]
+                                                        var data_line = params.value[2]
+                                                        // 画图的细节
+                                                        if (params['seriesName'] == 'wind') {
+                                                            // console.log("风场", params['seriesName'])
+                                                            bar_list.clear()
+                                                            series_option =
                                                             {
-                                                                name: "K8519", value: [121.0, 28.8, 253], url: "url_data",
-                                                                symbol: 'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z', symbolSize: 15, symbolRotate: 330
+                                                                title: {
+                                                                    text: '风场',
+                                                                    textStyle: { fontSize: 15 },
+                                                                },
+                                                                xAxis: {
+                                                                    type: 'category',
+                                                                    data: params.value[2]
+                                                                },
+                                                                yAxis: {
+                                                                    type: 'value'
+                                                                },
+                                                                series: [
+                                                                    {
+                                                                        name: "image",
+                                                                        data: params.value[3],
+                                                                        //symbolRotate
+                                                                        type: 'scatter',
+                                                                        color: 'red',
+                                                                    },
+                                                                    {
+                                                                        data: params.value[2],
+                                                                        type: 'bar',
+                                                                        label: {
+                                                                            show: true,
+                                                                            position: 'top',
+                                                                        }
+                                                                    }
+
+                                                                ]
                                                             }
 
-                                                        ]
-
-                                                    }]
-
-
-
-                                                });
-                                                map_wind.on('click', function (params) {
-
-                                                    // 根据value和
-                                                    console.log("地图加载的数据相应柱状图", params.name)
-
-                                                    bar_list.setOption(
-                                                        {
-                                                            title: {
-                                                                text: '自动站',
-                                                                textStyle: { fontSize: 15 },
-                                                            },
-                                                            xAxis: {
-                                                                type: 'category',
-                                                                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-                                                            },
-                                                            yAxis: {
-                                                                type: 'value'
-                                                            },
-                                                            series: [{
-                                                                data: [10, 130, 110, 10, 70, 130, 0],
-                                                                type: 'bar',
-                                                                label: {
-                                                                    show: true,
-                                                                    position: 'top'
-                                                                },
-                                                            }]
                                                         }
-                                                    )
+                                                        else {
 
-                                                })
-
-                                                // 能见度
-                                                map_view.setOption({
-                                                    title: {
-                                                        text: '大风',
-                                                        textStyle: { fontSize: 25 },
-                                                    },
-                                                    tooltip: {
-                                                        trigger: 'item',
-                                                        // formatter: '{c}(m/s)'
-                                                        formatter: function (params) {
-                                                            // do some thing
-                                                            return params.value[2] + params.name
-                                                        }
-                                                    },
-
-                                                    geo: {
-                                                        map: 'taizhou',
-                                                        roam: true,
-                                                        // tooltip:{borderColor = '#333'}
-                                                        itemStyle: {
-                                                            color: 'white'
-                                                            // areaColor = '#333',
-                                                        }
-
-
-                                                    },
-                                                    visualMap: {
-                                                        type: "piecewise",
-
-
-                                                        pieces: [
-                                                            { min: 200, max: 300, label: '大风', color: 'red' },
-                                                            { min: 10, max: 200, label: '降水', color: 'green' },
-                                                            { max: 10, min: 5, label: '能见度', color: 'yellow' }    // 不指定 min，表示 min 为无限大（-Infinity）。
-                                                        ],
-                                                    },
-                                                    // label: {
-                                                    //             show: true,
-                                                    //             color: "rgba(50, 44, 44, 1)",
-                                                    //             formatter: 'K8505'
-                                                    //         },
-                                                    series: [{
-                                                        name: '确诊数量',
-                                                        // type: 'effectScatter',
-                                                        type: 'scatter',
-                                                        // symble:"triangle",
-                                                        // symbol: "roundRect",
-                                                        // symbolSize:50,
-                                                        coordinateSystem: 'geo',
-                                                        // itemStyle: {
-                                                        //   color: function (params) {
-                                                        //       var colorlist = ['black'];
-                                                        //       return colorlist[params.dataIndex];
-                                                        //   },
-                                                        //   symbol: function (params) {
-                                                        //     var symbollist = ['path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z'];
-                                                        //     return symbollist[params.dataIndex];
-                                                        // },
-                                                        // },
-
-                                                        data: [
-                                                            // {
-                                                            //     name: "K8517", value: [121.3, 28.7, 110],
-                                                            //     symbol: 'circle', color: '#00FFFF'
-                                                            // },
-                                                            // {
-                                                            //     name: "K8515", value: [121.4, 28.7, 8],
-                                                            //     symbol: 'circle', color: 'balck'
-                                                            // },
-                                                            // {
-                                                            //     name: "K8519", value: [121.0, 28.8, 110], url: "url_data",
-                                                            //     symbol: 'circle'
-                                                            // },
+                                                            console.log('非风场')
+                                                            series_option =
                                                             {
-                                                                name: "K8519", value: [121.0, 28.8, 253], url: "url_data",
-                                                                symbol: 'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z', symbolSize: 15, symbolRotate: 330
+                                                                title: {
+                                                                    text: '自动站',
+                                                                    textStyle: { fontSize: 15 },
+                                                                },
+                                                                xAxis: {
+                                                                    type: 'category',
+                                                                    data: params.value[2]
+                                                                },
+                                                                yAxis: {
+                                                                    type: 'value'
+                                                                },
+                                                                series: [{
+                                                                    data: params.value[2],
+                                                                    type: 'bar',
+                                                                    label: {
+                                                                        show: true,
+                                                                        position: 'top',
+                                                                    },
+                                                                }]
                                                             }
 
-                                                        ]
-
-                                                    }]
+                                                        }
 
 
+                                                    }
+                                                    else {
+                                                        // 默认情况的xy
+                                                        console.log("不是series")
 
-                                                });
-                                                map_view.on('click', function (params) {
-
-                                                    // 根据value和
-                                                    console.log("地图加载的数据相应柱状图", params.name)
-
-                                                    bar_list.setOption(
-                                                        {
+                                                        var series_option = {
                                                             title: {
-                                                                text: '自动站',
+                                                                text: '点错',
                                                                 textStyle: { fontSize: 15 },
                                                             },
                                                             xAxis: {
                                                                 type: 'category',
-                                                                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                                                                data: [1, 2, 3, 4, 5, 6, 7, 8, 9]
                                                             },
                                                             yAxis: {
                                                                 type: 'value'
                                                             },
                                                             series: [{
-                                                                data: [10, 130, 110, 10, 70, 130, 0],
+                                                                data: [1, 2, 3, 4, 5, 6, 7, 8, 9],
                                                                 type: 'bar',
                                                                 label: {
                                                                     show: true,
-                                                                    position: 'top'
+                                                                    position: 'top',
                                                                 },
                                                             }]
                                                         }
-                                                    )
+
+                                                    }
+                                                    console.log("打印ser", series_option)
+                                                    bar_list.clear()
+                                                    bar_list.setOption(series_option)
 
                                                 })
-
-
-                                                // 高温
-                                                map_tmax.setOption({
-                                                    title: {
-                                                        text: '大风',
-                                                        textStyle: { fontSize: 25 },
-                                                    },
-                                                    tooltip: {
-                                                        trigger: 'item',
-                                                        // formatter: '{c}(m/s)'
-                                                        formatter: function (params) {
-                                                            // do some thing
-                                                            return params.value[2] + params.name
-                                                        }
-                                                    },
-
-                                                    geo: {
-                                                        map: 'taizhou',
-                                                        roam: true,
-                                                        // tooltip:{borderColor = '#333'}
-                                                        itemStyle: {
-                                                            color: 'white'
-                                                            // areaColor = '#333',
-                                                        }
-
-
-                                                    },
-                                                    visualMap: {
-                                                        type: "piecewise",
-
-
-                                                        pieces: [
-                                                            { min: 200, max: 300, label: '大风', color: 'red' },
-                                                            { min: 10, max: 200, label: '降水', color: 'green' },
-                                                            { max: 10, min: 5, label: '能见度', color: 'yellow' }    // 不指定 min，表示 min 为无限大（-Infinity）。
-                                                        ],
-                                                    },
-                                                    // label: {
-                                                    //             show: true,
-                                                    //             color: "rgba(50, 44, 44, 1)",
-                                                    //             formatter: 'K8505'
-                                                    //         },
-                                                    series: [{
-                                                        name: '确诊数量',
-                                                        // type: 'effectScatter',
-                                                        type: 'scatter',
-                                                        // symble:"triangle",
-                                                        // symbol: "roundRect",
-                                                        // symbolSize:50,
-                                                        coordinateSystem: 'geo',
-                                                        // itemStyle: {
-                                                        //   color: function (params) {
-                                                        //       var colorlist = ['black'];
-                                                        //       return colorlist[params.dataIndex];
-                                                        //   },
-                                                        //   symbol: function (params) {
-                                                        //     var symbollist = ['path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z'];
-                                                        //     return symbollist[params.dataIndex];
-                                                        // },
-                                                        // },
-
-                                                        data: [
-                                                            // {
-                                                            //     name: "K8517", value: [121.3, 28.7, 110],
-                                                            //     symbol: 'circle', color: '#00FFFF'
-                                                            // },
-                                                            // {
-                                                            //     name: "K8515", value: [121.4, 28.7, 8],
-                                                            //     symbol: 'circle', color: 'balck'
-                                                            // },
-                                                            // {
-                                                            //     name: "K8519", value: [121.0, 28.8, 110], url: "url_data",
-                                                            //     symbol: 'circle'
-                                                            // },
-                                                            {
-                                                                name: "K8519", value: [121.0, 28.8, 253], url: "url_data",
-                                                                symbol: 'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z', symbolSize: 15, symbolRotate: 330
-                                                            }
-
-                                                        ]
-
-                                                    }]
-
-
-
-                                                });
-                                                map_tmax.on('click', function (params) {
-
-                                                    // 根据value和
-                                                    console.log("地图加载的数据相应柱状图", params.name)
-
-                                                    bar_list.setOption(
-                                                        {
-                                                            title: {
-                                                                text: '自动站',
-                                                                textStyle: { fontSize: 15 },
-                                                            },
-                                                            xAxis: {
-                                                                type: 'category',
-                                                                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-                                                            },
-                                                            yAxis: {
-                                                                type: 'value'
-                                                            },
-                                                            series: [{
-                                                                data: [10, 130, 110, 10, 70, 130, 0],
-                                                                type: 'bar',
-                                                                label: {
-                                                                    show: true,
-                                                                    position: 'top'
-                                                                },
-                                                            }]
-                                                        }
-                                                    )
-
-                                                })
-
-
-
-                                                // 低温
-                                                map_tmin.setOption({
-                                                    title: {
-                                                        text: '大风',
-                                                        textStyle: { fontSize: 25 },
-                                                    },
-                                                    tooltip: {
-                                                        trigger: 'item',
-                                                        // formatter: '{c}(m/s)'
-                                                        formatter: function (params) {
-                                                            // do some thing
-                                                            return params.value[2] + params.name
-                                                        }
-                                                    },
-
-                                                    geo: {
-                                                        map: 'taizhou',
-                                                        roam: true,
-                                                        // tooltip:{borderColor = '#333'}
-                                                        itemStyle: {
-                                                            color: 'white'
-                                                            // areaColor = '#333',
-                                                        }
-
-
-                                                    },
-                                                    visualMap: {
-                                                        type: "piecewise",
-
-
-                                                        pieces: [
-                                                            { min: 200, max: 300, label: '大风', color: 'red' },
-                                                            { min: 10, max: 200, label: '降水', color: 'green' },
-                                                            { max: 10, min: 5, label: '能见度', color: 'yellow' }    // 不指定 min，表示 min 为无限大（-Infinity）。
-                                                        ],
-                                                    },
-                                                    // label: {
-                                                    //             show: true,
-                                                    //             color: "rgba(50, 44, 44, 1)",
-                                                    //             formatter: 'K8505'
-                                                    //         },
-                                                    series: [{
-                                                        name: '确诊数量',
-                                                        // type: 'effectScatter',
-                                                        type: 'scatter',
-                                                        // symble:"triangle",
-                                                        // symbol: "roundRect",
-                                                        // symbolSize:50,
-                                                        coordinateSystem: 'geo',
-                                                        // itemStyle: {
-                                                        //   color: function (params) {
-                                                        //       var colorlist = ['black'];
-                                                        //       return colorlist[params.dataIndex];
-                                                        //   },
-                                                        //   symbol: function (params) {
-                                                        //     var symbollist = ['path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z'];
-                                                        //     return symbollist[params.dataIndex];
-                                                        // },
-                                                        // },
-
-                                                        data: [
-                                                            // {
-                                                            //     name: "K8517", value: [121.3, 28.7, 110],
-                                                            //     symbol: 'circle', color: '#00FFFF'
-                                                            // },
-                                                            // {
-                                                            //     name: "K8515", value: [121.4, 28.7, 8],
-                                                            //     symbol: 'circle', color: 'balck'
-                                                            // },
-                                                            // {
-                                                            //     name: "K8519", value: [121.0, 28.8, 110], url: "url_data",
-                                                            //     symbol: 'circle'
-                                                            // },
-                                                            {
-                                                                name: "K8519", value: [121.0, 28.8, 253], url: "url_data",
-                                                                symbol: 'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z', symbolSize: 15, symbolRotate: 330
-                                                            }
-
-                                                        ]
-
-                                                    }]
-
-
-
-                                                });
-                                                map_tmin.on('click', function (params) {
-
-                                                    // 根据value和
-                                                    console.log("地图加载的数据相应柱状图", params.name)
-
-                                                    bar_list.setOption(
-                                                        {
-                                                            title: {
-                                                                text: '自动站',
-                                                                textStyle: { fontSize: 15 },
-                                                            },
-                                                            xAxis: {
-                                                                type: 'category',
-                                                                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-                                                            },
-                                                            yAxis: {
-                                                                type: 'value'
-                                                            },
-                                                            series: [{
-                                                                data: [10, 130, 110, 10, 70, 130, 0],
-                                                                type: 'bar',
-                                                                label: {
-                                                                    show: true,
-                                                                    position: 'top'
-                                                                },
-                                                            }]
-                                                        }
-                                                    )
-
-                                                })
-
 
 
                                             }
