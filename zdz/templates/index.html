@@ -4926,7 +4926,8 @@
                                             },
                                             dataType: "json",
                                             success: function (data) {
-                                                console.log("日报的返回成功")
+                                                console.log("日报的返回成功",typeof(data.daily_data))
+                                                var rain_daily = JSON.parse(data.daily_data)['rain']
                                                 map_zdz_daily.setOption({
                                                     legend: {
                                                         data: ['rain', 'wind', 'temp'],
@@ -4977,17 +4978,18 @@
                                                             // symbol: "roundRect",
                                                             symbolSize: 10,
                                                             coordinateSystem: 'geo',
-                                                            data: [
-                                                                {
-                                                                    name: "K8517", value: [121.3, 28.7, [10, 170, 120, 90, 30, 150, 10], 110],
-                                                                    symbol: 'circle', color: '#00FFFF'
-                                                                },
-                                                                {
-                                                                    name: "K8519", value: [121.0, 28.8, [10, 170, 120, 90, 30, 150, 10], 110], url: "url_data",
-                                                                    symbol: 'circle'
-                                                                }
+                                                            data:rain_daily
+                                                            // data: [
+                                                            //     {
+                                                            //         name: "K8517", value: [121.3, 28.7, [10, 170, 120, 90, 30, 150, 10], 110],
+                                                            //         symbol: 'circle', color: '#00FFFF'
+                                                            //     },
+                                                            //     {
+                                                            //         name: "K8519", value: [121.0, 28.8, [10, 170, 120, 90, 30, 150, 10], 110], url: "url_data",
+                                                            //         symbol: 'circle'
+                                                            //     }
 
-                                                            ]
+                                                            // ]
 
                                                         },
                                                         {

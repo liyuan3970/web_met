@@ -463,6 +463,11 @@ def tool_zdz_daily(request):
     context = {
         'status': "ok",
         'date': str(date),
+        # 'rain': daily_data['rain'],
+        # 'tmax': daily_data['tmax'],
+        # 'tmin': daily_data['tmin'],
+        # 'view': daily_data['view'],
+        # 'wind': daily_data['wind'],
         'daily_data': json.dumps(daily_data, cls=NpEncoder)
     }
     return JsonResponse(context)
