@@ -665,14 +665,11 @@ class zdz_data:
         awash_da = shp_da.where(shp_da.test<7, other=np.nan)
         m = Basemap(llcrnrlon=120.0,llcrnrlat=27.8,urcrnrlon=122,urcrnrlat=29.5,resolution = None, projection = 'cyl')
         # 设置colorbar
-        cbar_kwargs = {'shrink': 0.5}    
-        cs = data_xr.plot.contourf(ax=ax, cmap=cmaps,levels =levels,cbar_kwargs=cbar_kwargs,add_labels=False)
+        cbar_kwargs = {'shrink': 0.5}  
+        lons, lats = np.meshgrid(x, y)
+        cs =m.contourf(lons,lats,data_xr,ax=ax, cmap=cmaps)
+        #cs = data_xr.plot.contourf(ax=ax, cmap=cmaps,levels =levels,cbar_kwargs=cbar_kwargs,add_labels=False)
         m.readshapefile(filepath+'taizhou','taizhou',color='k',linewidth=1.2)
-        parallels = np.arange(27.8,29.5,0.2)
-        # labels = [left,right,top,bottom]
-        #m.drawparallels(parallels,labels=[True,False,True,False],color='dimgrey',dashes=[2, 3],fontsize= 12)  # ha= 'right'
-        meridians = np.arange(120.0,122.0,0.2)
-        #m.drawmeridians(meridians,labels=[False,True,False,True],color='dimgrey',dashes=[2, 3],fontsize= 12)
         plt.axis('off')
         len_lat = len(data_xr.lat.data)
         len_lon = len(data_xr.lon.data)
@@ -682,15 +679,25 @@ class zdz_data:
                 x0 = round(120.0+i*0.05,2)
                 if not isnan(awash_da.data[j,i]):
                     plt.text(x0,y0,str(int(awash_da.data[j,i])),fontsize= 7,fontweight = 800 ,color ="black")
+        # 在图上绘制色标
+        rect1 = [0.35, 0.25, 0.03, 0.12]         
+        ax2 = plt.axes(rect1,frameon='False' )
+        ax2.set_xticks([])
+        ax2.set_yticks([])
+        ax2.spines['top'].set_visible(False)
+        ax2.spines['bottom'].set_visible(False)
+        ax2.spines['left'].set_visible(False)
+        ax2.spines['right'].set_visible(False)
+        m.colorbar(cs, location='right', size='30%', pad="-100%",ax = ax2)
         func.basemask(cs, ax, m, filepath+'taizhou')  
         # 保存为base64数据
         buffer = BytesIO()
         plt.savefig(buffer,bbox_inches='tight')  
-        plot_img_zdz = buffer.getvalue()
-        imb = base64.b64encode(plot_img_zdz) 
+        plot_img = buffer.getvalue()
+        imb = base64.b64encode(plot_img) 
         ims = imb.decode()
-        imd_zdz = "data:image/png;base64,"+ims
-        return imd_zdz
+        imd_rain = "data:image/png;base64,"+ims
+        return imd_rain
     def sql_date(self):
         '''数据库读取sql数据'''
         print('读取数据库数据')
@@ -842,7 +849,6 @@ class zdz_data:
             single_data['symble'] = 'circle'
             rain_scatter.append(single_data)  
         self.station_data = data_rain['IIiii_data']
-
         self.rain_scatter = rain_scatter
         self.img = self.plot_img(lat,lon,value)
     def wind_data(self):
@@ -978,58 +984,261 @@ class zdz_data:
         end_time = str(today + dtt.timedelta(days=1))[0:10] + ' 08:00'
         data_all = self.station_all
         data_time = data_all[(data_all['tTime'] >= start_time) & (data_all['tTime'] <= end_time)]
-
+        time_index  = pd.date_range(start=start_time,end=end_time,freq='1H')
         grouped_IIiii = data_time.groupby('IIiii')
+        # 指标站名称
+        station_plot = [
+            "K8705","K8706","K8903","K8818","K8821",
+            "K8609","K8282","K8217","K8201","K8301",
+            "K8413","K8611","K8505"
+        ]
         # 所需数据库
         pre_list = []
         wind_list = []
         view_list = []
         tmax_list = []
         tmin_list = []
+        
 
         for i in grouped_IIiii.size().index:
-            data = grouped_IIiii.get_group(i)
-            # print(data)   
-            # 低温
-            if data[data['T'] > -999]['T'].min() < 30:
+            data_rr = grouped_IIiii.get_group(i)
+            data_rr['RR'].replace(-9999, 0.0, inplace=True)
+            data_rr['VV'].replace(-9999, 9999, inplace=True)
+            data = data_rr.sort_values('tTime') 
+            ## 指标站的排序
+            # 低温 
+            if data['IIiii'].iloc[0] in station_plot:
                 tmin_dir = {}
                 tmin_dir['name'] = data['IIiii'].iloc[0]
-                tmin_dir['value'] = [data['lon'].iloc[0], data['lat'].iloc[0], data['T'].tolist(), data['T'].min()]
+                tmin_dir['value'] = [data['lon'].iloc[0], data['lat'].iloc[0], time_index.values, data['T'].tolist(), data['T'].min()]
                 tmin_list.append(tmin_dir)
             # 高温   
-            if data['T'].max() > 350:
                 tmax_dir = {}
                 tmax_dir['name'] = data['IIiii'].iloc[0]
-                tmax_dir['value'] = [data['lon'].iloc[0], data['lat'].iloc[0], data['T'].tolist(), data['T'].max()]
+                tmax_dir['value'] = [data['lon'].iloc[0], data['lat'].iloc[0],time_index.values, data['T'].tolist(), data['T'].max()]
                 tmax_list.append(tmax_dir)
-            # 大风
-            if data[data['fFy'] > 187]['fFy'].max():
-                wind_dir = {}
-                wind_dir['name'] = data['IIiii'].iloc[0]
-                wind_dir['value'] = [data['lon'].iloc[0], data['lat'].iloc[0], data['fFy'].tolist(), data['fFy'].max()]
-                wind_dir['symbol'] = 'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z'
-                wind_dir['symbolRotate'] = data[data['fFy'] == data['fFy'].max()]['dFy'].iloc[0]
-                wind_list.append(wind_dir)
-            # 能见度
-            if data[(data['VV'] < 500) & (data['VV'] > 0)]['VV'].min():
-                view_dir = {}
-                view_dir['name'] = data['IIiii'].iloc[0]
-                view_dir['value'] = [data['lon'].iloc[0], data['lat'].iloc[0], data['VV'].tolist(), data['VV'].min()]
-                view_list.append(view_dir)
-                # 降水
-            if data['RR'].max() > 0:
+            # 降水
                 pre_dir = {}
-                data['RR'].replace(-9999, np.nan, inplace=True)
                 pre_dir['name'] = data['IIiii'].iloc[0]
-                pre_dir['value'] = [data['lon'].iloc[0], data['lat'].iloc[0], data['tTime'].tolist(),
-                                    data['RR'].tolist(), data['RR'].sum()]
+                pre_dir['value'] = [data['lon'].iloc[0], data['lat'].iloc[0], time_index.values,data['RR'].tolist(), data['RR'].sum()]
                 pre_dir['symble'] = "circle"
                 pre_list.append(pre_dir)
-        return pre_list
+            # 大风  
+            if data[data['fFy'] > 187]['fFy'].max():
+                wind_dir = {}
+                wind_line = []
+                wind_dir['name'] = data['IIiii'].iloc[0]
+                wind_dir['value'] = [data['lon'].iloc[0], data['lat'].iloc[0],
+                                     time_index.values,data['dFy'].tolist(),data['fFy'].tolist()]
+                for j in range(len(data['dFy'].tolist())):
+                    wind_line_dir = {}
+                    wind_line_dir['symbol'] = 'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z'
+                    wind_line_dir['symbolRotate'] = data['dFy'].tolist()[j]
+                    wind_line_dir['value'] = data['fFy'].tolist()[j]
+                    wind_line.append(wind_line_dir)
+                wind_dir['value'].append(wind_line)
+                wind_dir['value'].append(data['fFy'].max())
+                wind_list.append(wind_dir)
+            # 能见度  ok 
+            if data['VV'].min()<500:
+                view_dir = {}
+                view_dir['name'] = data['IIiii'].iloc[0]
+                view_dir['value'] = [data['lon'].iloc[0], data['lat'].iloc[0],time_index.values, data['VV'].tolist(), data['VV'].min()]
+                view_list.append(view_dir)
+        pre_data = {
+            'rain':pre_list,
+            'tmax':tmax_list,
+            'tmin':tmin_list,
+            'view':view_list,
+            'wind':wind_list,
+        }
+        return pre_data
 
     def text_data(self):
         '''用来处理风雨情统计数据'''
-        print('用来处理风雨情统计数据')
+        start_time = start 
+        end_time = end
+        time_len =len(pd.date_range(start=start_time,end=end_time,freq='1H')) 
+        station_all = self.station_all 
+        # 计算面雨量
+        grouped_county = station_all.groupby('county')        
+        # 所需数据库
+        pre_county = { }
+        ## 
+        iii_pre = {}
+        iii_pre_data = {}
+        iii_tmin_data = {}
+        iii_tmax_data = {}
+        iii_vvmin_data = {}
+        iii_fmax_data = {}
+        ##
+        town_pre_data = {}
+        # 面雨量   
+        for i in grouped_county.size().index:
+            data = grouped_county.get_group(i)
+            data['RR'].replace(-9999, np.nan, inplace=True)
+            ave = data['RR'].mean() * time_len /10.0
+            pre_county[data['county'].iloc[0]] = ave
+        #逐站统计    
+        grouped_iii = station_all.groupby('IIiii') 
+        for i in grouped_iii.size().index:
+            data = grouped_iii.get_group(i)
+            data['RR'].replace(-9999, np.nan, inplace=True)
+            data['VV'].replace(-9999, np.nan, inplace=True)
+            #data['fFy'].replace(-9999, np.nan, inplace=True)
+            data['T'].replace(-9999, np.nan, inplace=True)
+            # 存储变量
+            iii_pre_data[data['IIiii'].iloc[0]] =  data['RR'].sum()/10.0 # 累计降水
+            iii_tmin_data[data['IIiii'].iloc[0]] =  data['T'].min()      # 高温
+            iii_tmax_data[data['IIiii'].iloc[0]] =  data['T'].max()      # 低温
+            iii_vvmin_data[data['IIiii'].iloc[0]] =  data['VV'].min()    # 能见度
+            iii_fmax_data[data['IIiii'].iloc[0]] =  np.nanmax(data['fFy'])# data['fFy'].max()    # 风力
+        # 乡镇排序
+        grouped_town = station_all.groupby('Town') 
+        for i in grouped_town.size().index:
+            data = grouped_town.get_group(i)
+            data['RR'].replace(-9999, np.nan, inplace=True)
+            town_pre_data[data['Town'].iloc[0]] =  data['RR'].sum()/10.0    
+        # 文字排序的基本逻辑
+        # 1. 降水
+        # 2. 高低温
+        # 3. 能见度
+        # 4. 风
+        # 5. 小时雨强
+        ## 乡镇降水排序
+        town_pre_sort = sorted(town_pre_data.items(), key=lambda x: x[1])
+
+        ## 降水排序
+        iii_pre_sort = sorted(iii_pre_data.items(), key=lambda x: x[1])
+
+        ## 降水站点个数
+        iii_pre_count = {
+            '大于250毫米':len({k:v for k, v in iii_pre_data.items() if v>=51}.items()),
+            '大于100毫米':len({k:v for k, v in iii_pre_data.items() if v>=100}.items()),
+            '大于50毫米':len({k:v for k, v in iii_pre_data.items() if v>=50}.items()),
+            '大于25毫米':len({k:v for k, v in iii_pre_data.items() if v>=25}.items()),
+            '大于10毫米':len({k:v for k, v in iii_pre_data.items() if v>=10}.items()),
+            '大于5毫米':len({k:v for k, v in iii_pre_data.items() if v>=5}.items()),
+            '大于1毫米':len({k:v for k, v in iii_pre_data.items() if v>=0.1}.items())
+        } 
+        ## 风力
+        iii_wind_sort = sorted(iii_fmax_data.items(), key=lambda x: x[1], reverse=True)
+        iii_wind_count = {
+            'wind_rank':[16,15,14,13,12,11,10,9,8],
+            'wind_list':[
+                len({k:v for k, v in iii_fmax_data.items() if v>=51 and v<56}.items()),
+                len({k:v for k, v in iii_fmax_data.items() if v>=47 and v<51}.items()),
+                len({k:v for k, v in iii_fmax_data.items() if v>=42 and v<47}.items()),
+                len({k:v for k, v in iii_fmax_data.items() if v>=37 and v<42}.items()),
+                len({k:v for k, v in iii_fmax_data.items() if v>=32 and v<37}.items()),
+                len({k:v for k, v in iii_fmax_data.items() if v>=27 and v<32}.items()),
+                len({k:v for k, v in iii_fmax_data.items() if v>=22 and v<27}.items()),
+                len({k:v for k, v in iii_fmax_data.items() if v>=17 and v<22}.items()),
+                len({k:v for k, v in iii_fmax_data.items() if v>=12 and v<17}.items())      
+            ] 
+        } 
+        ## 能见度
+        iii_vv_sort = sorted(iii_vvmin_data.items(), key=lambda x: x[1])
+        iii_vv_count = {
+            'vv_rank':["小于50米的强浓雾","小于200米浓雾","小于500米的浓雾"],
+            'vv_list':[
+                len({k:v for k, v in iii_vvmin_data.items() if v>=0 and v<50}.items()),
+                len({k:v for k, v in iii_vvmin_data.items() if v>=50 and v<200}.items()),
+                len({k:v for k, v in iii_vvmin_data.items() if v>=200 and v<500}.items()),
+    
+            ] 
+        } 
+        ## 低温
+        iii_tmin_sort = sorted(iii_tmin_data.items(), key=lambda x: x[1])
+        iii_tmin_count = {
+            'tmin_rank':["小于-3度","小于0度","小于3度"],
+            'tmin_list':[
+                len({k:v for k, v in iii_tmin_data.items() if v>=0 and v<3}.items()),
+                len({k:v for k, v in iii_tmin_data.items() if v>=-3 and v<0}.items()),
+                len({k:v for k, v in iii_tmin_data.items() if v>=-20 and v<-3}.items()),
+    
+            ] 
+        } 
+        ## 高温
+        iii_tmax_sort = sorted(iii_tmax_data.items(), key=lambda x: x[1])
+        iii_tmax_count = {
+            'tmax_rank':["大于35度","小于38度","小于40度"],
+            'tmax_list':[
+                len({k:v for k, v in iii_tmax_data.items() if v>=0 and v<3}.items()),
+                len({k:v for k, v in iii_tmax_data.items() if v>=-3 and v<0}.items()),
+                len({k:v for k, v in iii_tmax_data.items() if v>=-20 and v<-3}.items()),
+    
+            ] 
+        } 
+        
+        
+        # 输出文档内容
+        ## 时间开头
+        text_all = "风雨情通报:"
+        time_text = self.start + "到" + self.end
+        ## 面雨量
+        county_text = "各县市面雨量分别为:"
+        for single in sorted(pre_county.items(), key=lambda x: x[1], reverse=True):
+            single_text = single[0]+ "" + str(round(single[1],2)) + "毫米;"
+            county_text = county_text + single_text  
+        ## 雨量前五
+        iii_pre_text = "单站前五：" + iii_pre_sort[-1][0] + "：" + str(iii_pre_sort[-1][1]) + "毫米,"\
+            + iii_pre_sort[-2][0]+ "：" + str(iii_pre_sort[-2][1]) + "毫米,"\
+            + iii_pre_sort[-3][0]+ "：" + str(iii_pre_sort[-3][1]) + "毫米,"\
+            + iii_pre_sort[-4][0]+ "：" + str(iii_pre_sort[-4][1]) + "毫米,"\
+            + iii_pre_sort[-5][0]+ "：" + str(iii_pre_sort[-5][1]) + "毫米."
+        ## 乡镇降水前五
+        town_pre_text = "乡镇前五：" + town_pre_sort[-1][0] + "：" + str(town_pre_sort[-1][1]) + "毫米,"\
+            + town_pre_sort[-2][0]+ "：" + str(town_pre_sort[-2][1]) + "毫米,"\
+            + town_pre_sort[-3][0]+ "：" + str(town_pre_sort[-3][1]) + "毫米,"\
+            + town_pre_sort[-4][0]+ "：" + str(town_pre_sort[-4][1]) + "毫米,"\
+            + town_pre_sort[-5][0]+ "：" + str(town_pre_sort[-5][1]) + "毫米."        
+        ## 雨强前三
+        ri_pre_text = ""
+        ## 降水站点个数
+        count_pre_text = "其中:"
+        for key, value in iii_pre_count.items():
+            if value!=0:
+                count_pre_text = count_pre_text + key + "有" + str(value) + "站,"
+        ## 大风
+        wind_text = "沿海出现"
+        wind_max = "16级"
+        wind_min = "15"
+        for i in range(len(iii_wind_count['wind_list'])):
+            if iii_wind_count['wind_list'][i]>0:
+                wind_max = str(iii_wind_count['wind_rank'][i]) + "级"
+                break
+        wind_reve = iii_wind_count['wind_list'][::-1]
+        for i in wind_reve:
+            if i>0:
+                index = wind_reve.index(i)
+                wind_min = str(iii_wind_count['wind_rank'][9-index])
+                break  
+        wind_text = wind_text + wind_min + "~" + wind_max + "大风." 
+        wind_text = wind_text + "风力较大的有：" + iii_wind_sort[0][0] + "：" + str(iii_wind_sort[0][1]/10.0) + "米/秒,"\
+            + iii_wind_sort[1][0]+ "：" + str(iii_wind_sort[1][1]/10.0) + "米/秒,"\
+            + iii_wind_sort[2][0]+ "：" + str(iii_wind_sort[2][1]/10.0) + "米/秒,"\
+            + iii_wind_sort[3][0]+ "：" + str(iii_wind_sort[3][1]/10.0) + "米/秒,"\
+            + iii_wind_sort[4][0]+ "：" + str(iii_wind_sort[4][1]/10.0) + "米/秒."    
+        ## 能见度
+        vv_text = ""
+        if iii_vv_count['vv_list'][0]>0:
+            vv_text = vv_text + "沿海出现小于50米的强浓雾。"
+        elif iii_vv_count['vv_list'][1]>0:
+            vv_text = vv_text + "沿海出现小于200米的强浓雾。"
+        else:
+            vv_text = vv_text + "沿海出现小于500米的浓雾。"
+        ## 温度
+        temp_text = "主城区最高温度："
+        temp_text = temp_text + str(iii_tmax_data['K8505']) + "度。" + "主城区最低温度：" + str(iii_tmin_data['K8505']) + "度。"
+        temp_text = temp_text + "其中全市" 
+        for i in range(len(iii_tmin_count['tmin_list'])):
+            if iii_tmin_count['tmin_list'][i]:
+                temp_text = temp_text + iii_tmin_count['tmin_rank'][i] + "的有" + str(iii_tmin_count['tmin_list'][i]) + "站。"
+        for i in range(len(iii_tmax_count['tmax_list'])):
+            if iii_tmax_count['tmax_list'][i]:
+                temp_text = temp_text + iii_tmax_count['tmax_rank'][i] + "的有" + str(iii_tmax_count['tmax_list'][i]) + "站。"      
+        text_all = text_all + time_text+county_text+iii_pre_text+town_pre_text+count_pre_text+wind_text+vv_text+temp_text
 
 
 
