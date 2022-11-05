@@ -4928,10 +4928,14 @@
                                             success: function (data) {
                                                 console.log("日报的返回成功",typeof(data.daily_data))
                                                 var rain_daily = JSON.parse(data.daily_data)['rain']
+                                                var wind_daily = JSON.parse(data.daily_data)['wind']
+                                                var tmax_daily = JSON.parse(data.daily_data)['tmax']
+                                                var tmin_daily = JSON.parse(data.daily_data)['tmin']
+                                                var view_daily = JSON.parse(data.daily_data)['view']
                                                 map_zdz_daily.setOption({
                                                     legend: {
-                                                        data: ['rain', 'wind', 'temp'],
-                                                        left: '30%',
+                                                        data: ['rain','wind','tmax','tmin','view'],
+                                                        left: '10%',
                                                         selectedMode: 'single',
                                                         selected: {
                                                             'rain': false,
@@ -4939,7 +4943,7 @@
                                                         }
                                                     },
                                                     title: {
-                                                        text: '降水',
+                                                        text: '',
                                                         textStyle: { fontSize: 15 },
                                                     },
                                                     geo: {
@@ -4958,12 +4962,17 @@
                                                         color: "black",
                                                         fontSize: 14,
                                                         formatter: function (params) {
-                                                            if (params['seriesName'] == 'temp') {
+                                                            if (params['seriesName'] == 'tmax') {
                                                                 console.log("打印的是", params)
-                                                                var lable_data = params['data']['value'][3]
+                                                                var lable_data = params['data']['value'][4]
                                                                 return lable_data
                                                             }
-                                                            else {
+                                                            else if(params['seriesName'] == 'tmin'){
+                                                                var lable_data = params['data']['value'][4]
+                                                                return lable_data
+                                                            }
+                                                            else
+                                                            {
                                                                 var lable_data = " "
                                                                 return lable_data
                                                             }
@@ -4999,66 +5008,108 @@
                                                             symble: "circle",
                                                             // symbol: "roundRect",
                                                             symbolSize: 10,
+                                                            color:'red',
                                                             coordinateSystem: 'geo',
-                                                            data: [
-                                                                {
-                                                                    name: "K8519", value: [121.0, 28.8, [10, 130, 120, 90, 30, 150, 10], [
-                                                                        {
-                                                                            'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
-                                                                            'symbolRotate': 310,
-                                                                            'value': 10
-                                                                        },
-                                                                        {
-                                                                            'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
-                                                                            'symbolRotate': 30,
-                                                                            'value': 130
-                                                                        },
-                                                                        {
-                                                                            'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
-                                                                            'symbolRotate': 360,
-                                                                            'value': 120
-                                                                        },
-                                                                        {
-                                                                            'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
-                                                                            'symbolRotate': 360,
-                                                                            'value': 90
-                                                                        },
-                                                                        {
-                                                                            'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
-                                                                            'symbolRotate': 360,
-                                                                            'value': 30
-                                                                        },
-                                                                        {
-                                                                            'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
-                                                                            'symbolRotate': 360,
-                                                                            'value': 150
-                                                                        },
-                                                                        {
-                                                                            'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
-                                                                            'symbolRotate': 36,
-                                                                            'value': 10
-                                                                        }
-                                                                    ], 253], url: "url_data",
-                                                                    symbol: 'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z', symbolSize: 15, symbolRotate: 330
-                                                                }
+                                                            data:wind_daily
+                                                            // data: [
+                                                            //     {
+                                                            //         name: "K8519", value: [121.0, 28.8, [10, 130, 120, 90, 30, 150, 10], [
+                                                            //             {
+                                                            //                 'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
+                                                            //                 'symbolRotate': 310,
+                                                            //                 'value': 10
+                                                            //             },
+                                                            //             {
+                                                            //                 'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
+                                                            //                 'symbolRotate': 30,
+                                                            //                 'value': 130
+                                                            //             },
+                                                            //             {
+                                                            //                 'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
+                                                            //                 'symbolRotate': 360,
+                                                            //                 'value': 120
+                                                            //             },
+                                                            //             {
+                                                            //                 'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
+                                                            //                 'symbolRotate': 360,
+                                                            //                 'value': 90
+                                                            //             },
+                                                            //             {
+                                                            //                 'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
+                                                            //                 'symbolRotate': 360,
+                                                            //                 'value': 30
+                                                            //             },
+                                                            //             {
+                                                            //                 'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
+                                                            //                 'symbolRotate': 360,
+                                                            //                 'value': 150
+                                                            //             },
+                                                            //             {
+                                                            //                 'symbol': 'path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z',
+                                                            //                 'symbolRotate': 36,
+                                                            //                 'value': 10
+                                                            //             }
+                                                            //         ], 253], url: "url_data",
+                                                            //         symbol: 'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z', symbolSize: 15, symbolRotate: 330
+                                                            //     }
 
-                                                            ]
+                                                            // ]
 
                                                         },
                                                         {
-                                                            name: 'temp',
+                                                            name: 'tmax',
                                                             // type: 'effectScatter',
                                                             type: 'scatter',
                                                             symble: "circle",
                                                             // symbol: "roundRect",
                                                             symbolSize: 10,
                                                             coordinateSystem: 'geo',
-                                                            data: [
-                                                                {
-                                                                    name: "K8519", value: [121.0, 28.8, [10, 13, 300, 90, 30, 150, 10], 25.3]
-                                                                }
+                                                            data:tmax_daily
+                                                            // data: [
+                                                            //     {
+                                                            //         name: "K8519", value: [121.0, 28.8, [10, 13, 300, 90, 30, 150, 10], 25.3]
+                                                            //     }
 
-                                                            ]
+                                                            // ]
+
+                                                        },
+                                                        {
+                                                            name: 'tmin',
+                                                            // type: 'effectScatter',
+                                                            type: 'scatter',
+                                                            symble: "circle",
+                                                            // symbol: "roundRect",
+                                                            symbolSize: 10,
+                                                            coordinateSystem: 'geo',
+                                                            data:tmin_daily
+                                                            // data: [
+                                                            //     {
+                                                            //         name: "K8519", value: [121.0, 28.8, [10, 13, 300, 90, 30, 150, 10], 25.3]
+                                                            //     }
+
+                                                            // ]
+
+                                                        },
+                                                        {
+                                                            name: 'view',
+                                                            // type: 'effectScatter',
+                                                            type: 'scatter',
+                                                            symble: "circle",
+                                                            // symbol: "roundRect",
+                                                            symbolSize: 10,
+                                                            coordinateSystem: 'geo',
+                                                            data:view_daily
+                                                            // data: [
+                                                            //     {
+                                                            //         name: "K8517", value: [121.3, 28.7, [10, 170, 120, 90, 30, 150, 10], 110],
+                                                            //         symbol: 'circle', color: '#00FFFF'
+                                                            //     },
+                                                            //     {
+                                                            //         name: "K8519", value: [121.0, 28.8, [10, 170, 120, 90, 30, 150, 10], 110], url: "url_data",
+                                                            //         symbol: 'circle'
+                                                            //     }
+
+                                                            // ]
 
                                                         }
                                                     ]
@@ -5095,13 +5146,13 @@
                                                                 series: [
                                                                     {
                                                                         name: "image",
-                                                                        data: params.value[3],
+                                                                        data: params.value[5],
                                                                         //symbolRotate
                                                                         type: 'scatter',
                                                                         color: 'red',
                                                                     },
                                                                     {
-                                                                        data: params.value[2],
+                                                                        data: params.value[4],
                                                                         type: 'bar',
                                                                         label: {
                                                                             show: true,
@@ -5130,7 +5181,7 @@
                                                                     type: 'value'
                                                                 },
                                                                 series: [{
-                                                                    data: params.value[2],
+                                                                    data: params.value[3],
                                                                     type: 'bar',
                                                                     label: {
                                                                         show: true,

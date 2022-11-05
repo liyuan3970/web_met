@@ -1024,12 +1024,15 @@ class zdz_data:
                 pre_dir['symble'] = "circle"
                 pre_list.append(pre_dir)
             # 大风  
-            if data[data['fFy'] > 187]['fFy'].max():
+            if data['fFy'].max()>187:
                 wind_dir = {}
                 wind_line = []
                 wind_dir['name'] = data['IIiii'].iloc[0]
                 wind_dir['value'] = [data['lon'].iloc[0], data['lat'].iloc[0],
                                      time_index.values,data['dFy'].tolist(),data['fFy'].tolist()]
+                wind_dir['symbol'] =  'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z'    
+                wind_dir['symbolSize'] = 15
+                wind_dir['symbolRotate'] = data[data['fFy'] == data['fFy'].max()]['dFy'].iloc[0]    
                 for j in range(len(data['dFy'].tolist())):
                     wind_line_dir = {}
                     wind_line_dir['symbol'] = 'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z'
@@ -1038,6 +1041,7 @@ class zdz_data:
                     wind_line.append(wind_line_dir)
                 wind_dir['value'].append(wind_line)
                 wind_dir['value'].append(data['fFy'].max())
+
                 wind_list.append(wind_dir)
             # 能见度  ok 
             if data['VV'].min()<500:
