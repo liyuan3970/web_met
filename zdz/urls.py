@@ -15,6 +15,8 @@ urlpatterns = [
     path('login', views.login_main),
     path('home', views.home),
     path('quick_look', views.quick_look),
+    # 测试模块的页面
+    path('test_demo', views.test_demo),
     # 自定义绘图
     path('upload_selfplot_data', views.plot_self_data),
     # 自定义画图数据下载

@@ -36,6 +36,9 @@ def kuaibao(request):
     # print(this is a index)
     return render(request, 'kuaibao.html', locals())
 
+def test_demo(request):
+    # print(this is a index)
+    return render(request, 'test_demo.html', locals())
 
 # demo_02是气象快报的核心代码主要用来统计数据
 def index_kb(request):
