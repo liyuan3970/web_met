@@ -14,7 +14,7 @@
 <body>
     <h1>tinymce的测序demo</h1>
     <p>Enter/paste your document here:</p>
-    <textarea id="content" cols="60" rows="10">
+    <textarea id="content" cols="100" rows="10" style ="width: 1000px;height: 1000px">
       <p>We all live in a yellow submarine, yellow submarine, yellow submarine, yellow submarine</p>
       <p>Images can also be exported if you source them as base64 DATA URI.</p>
   
@@ -29,14 +29,16 @@
     <script>
         tinymce.init({
             selector: '#content',
+            language:'zh',
             plugins: [
                 "advlist autolink lists link image charmap print preview anchor",
                 "searchreplace visualblocks code fullscreen fullpage",
-                "insertdatetime media table contextmenu paste"
+                "insertdatetime media table contextmenu paste",
+                'image'
             ],
             toolbar: "insertfile undo redo | styleselect | bold italic | " +
                 "alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | " +
-                "link image"
+                "link image" + 'image'
         });
         document.getElementById('convert').addEventListener('click', function () {
 
