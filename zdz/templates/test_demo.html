@@ -12,50 +12,47 @@
 </head>
 
 <body>
-    <h1>tinymce的测序demo</h1>
-    <p>Enter/paste your document here:</p>
-    <textarea id="content" cols="100" rows="10" style ="width: 1000px;height: 1000px">
-      <p>We all live in a yellow submarine, yellow submarine, yellow submarine, yellow submarine</p>
-      <p>Images can also be exported if you source them as base64 DATA URI.</p>
-  
-    </textarea>
-    <div class="page-orientation">
-        <span>Page orientation:</span>
-        <label><input type="radio" name="orientation" value="portrait" checked>Portrait</label>
-        <label><input type="radio" name="orientation" value="landscape">Landscape</label>
+    <div style="display:flex;position: absolute;width:98%;height:98%;border:3px solid black">
+        <div style="width:50%;height:100%;border:3px solid black">
+            <textarea id="content" cols="100" rows="10" style="width:100%;height: 95%">
+                <p>We all live in a yellow submarine, yellow submarine, yellow submarine, yellow submarine</p>
+                <p>Images can also be exported if you source them as base64 DATA URI.</p>   
+            </textarea>
+            <button id="convert" style="width:100%;height: 3%">Convert</button>
+           
+            <script>
+                tinymce.init({
+                    selector: '#content',
+                    plugins: [
+                        "advlist autolink lists link image charmap print preview anchor",
+                        "searchreplace visualblocks code fullscreen fullpage",
+                        "insertdatetime media table contextmenu paste",
+                        'image'
+                    ],
+                    toolbar: "insertfile undo redo | styleselect | bold italic | " +
+                        "alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | " +
+                        "link image" + 'image'
+                });
+                document.getElementById('convert').addEventListener('click', function () {
+
+                    var contentDocument = tinymce.get('content').getContent();
+                    var converted = htmlDocx.asBlob(contentDocument)
+                    console.log(typeof (converted), converted)
+
+                    // saveAs(converted, 'test.docx')
+
+
+
+
+
+                });
+
+            </script>
+        </div>
+        <div style="display:flex;width:50%;height:100%;border:3px solid black">
+            <!-- 用来展示pdf -->
+        </div>
     </div>
-    <button id="convert">Convert</button>
-    <div id="download-area"></div>
-    <script>
-        tinymce.init({
-            selector: '#content',
-            language:'zh',
-            plugins: [
-                "advlist autolink lists link image charmap print preview anchor",
-                "searchreplace visualblocks code fullscreen fullpage",
-                "insertdatetime media table contextmenu paste",
-                'image'
-            ],
-            toolbar: "insertfile undo redo | styleselect | bold italic | " +
-                "alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | " +
-                "link image" + 'image'
-        });
-        document.getElementById('convert').addEventListener('click', function () {
-
-            var contentDocument = tinymce.get('content').getContent();
-            var converted = htmlDocx.asBlob(contentDocument)
-            console.log(typeof (converted), converted)
-
-            saveAs(converted, 'test.docx')
-
-
-
-
-
-        });
-
-    </script>
-
 </body>
 
 </html>
