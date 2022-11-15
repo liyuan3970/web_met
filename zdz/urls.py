@@ -48,7 +48,8 @@ urlpatterns = [
 ]
 
 router = DefaultRouter()
-router.register(r'user', views.UserViewSet)
+router.register(r"user", views.UserViewSet)
 urlpatterns += [
-    path('', include(router.urls))
+    path("", include(router.urls)),
+    path(r"file/pdf", views.pdf)
 ]
