@@ -17,6 +17,9 @@ urlpatterns = [
     path('quick_look', views.quick_look),
     # 测试模块的页面
     path('test_demo', views.test_demo),
+    # 测试页面的
+    path('pdf_report', views.pdf_report),
+    path('pdf_view', views.pdf_view),
     # 自定义绘图
     path('upload_selfplot_data', views.plot_self_data),
     # 自定义画图数据下载
