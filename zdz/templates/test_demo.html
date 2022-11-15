@@ -35,27 +35,31 @@
                     "link image" + 'image'
             });
             document.getElementById('convert').addEventListener('click', function () {
-                // console.log("ok");
                 //获取html的内容
                 var contentDocument = tinymce.get('content').getContent();
-                var pdf_blob = htmlDocx.asBlob(contentDocument);
-
-                {#var csrf = $('input[name="csrfmiddlewaretoken"]').val();#}
-
-                var form_data = new FormData();
-
-                form_data.append("pdf_blob", pdf_blob);
+                var docBlob = htmlDocx.asBlob(contentDocument);
+                var formData = new FormData();
+                formData.append("pdf_blob", docBlob);
 
                 $.ajax({
                     url: "file/pdf",  // 请求的地址
                     type: "POST",  // 请求方式
-                    data: form_data,
+                    data: formData,
                     processData: false,
                     contentType: false,
+                    enctype: "multipart/form-data",
+                    responseType: "arraybuffer",
+                    mimeType: "text/plain; charset=x-user-defined",
                     success: function (data) {
-                        var datablob = new Blob([data], {type: "application/pdf"})
-                        var pdf = URL.createObjectURL(datablob)
-                        PDFObject.embed(pdf, "#pdf_demo");
+                        var rawLength = data.length;
+                        var array = new Uint8Array(new ArrayBuffer(rawLength));
+                        for (i = 0; i < rawLength; i++) {
+                            array[i] = data.charCodeAt(i) & 0xff;
+                        }
+
+                        var pdfBlob = new Blob([array], {type: "application/pdf;charset=utf-8"})
+                        var pdfFile = URL.createObjectURL(pdfBlob)
+                        PDFObject.embed(pdfFile, "#pdf_demo");
                     }
 
                 })
