@@ -37,9 +37,8 @@
             document.getElementById('convert').addEventListener('click', function () {
                 //获取html的内容
                 var contentDocument = tinymce.get('content').getContent();
-                var docBlob = htmlDocx.asBlob(contentDocument);
                 var formData = new FormData();
-                formData.append("pdf_blob", docBlob);
+                formData.append("document", contentDocument);
 
                 $.ajax({
                     url: "file/pdf",  // 请求的地址
