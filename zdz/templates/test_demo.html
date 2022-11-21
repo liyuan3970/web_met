@@ -10,90 +10,91 @@
     <script src="static/editor/html-docx.js"></script>
     <script src="static/js/pdfobject.js"></script>
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
-    <title>test_demo</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/jquery.datetimepicker.css" />
+    <script src="static/js/jquery.datetimepicker.full.min.js"></script>
+    <title>首页</title>
+    <style type="text/css">
+        .scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
-<div style="display:flex;position: absolute;width:98%;height:98%;border:3px solid black">
-    <div style="width:50%;height:100%;border:3px solid black">
-            <textarea id="content" cols="100" rows="10" style="width:100%;height: 95%">
+    <div
+        style="display: flex;align-content:flex-start;position: absolute; justify-content: center; flex-wrap: wrap; width: 100%;height: 100%;background-color: rgb(213, 217, 230);">
+        <div style="width:100%;height:5%;background-color: rgb(76, 109, 216);"></div>
+        <div style="width:50%;height:95%">
+            <textarea id="content" cols="100" rows="10" style="width:100%;height: 95%;">
                 <p>We all live in a yellow submarine, yellow submarine, yellow submarine, yellow submarine</p>
                 <p>Images can also be exported if you source them as base64 DATA URI.</p>   
             </textarea>
-        <button id="convert" style="width:100%;height: 3%">Convert</button>
-        <script>
-            tinymce.init({
-                selector: '#content',
-                plugins: [
-                    "advlist autolink lists link image charmap print preview anchor",
-                    "searchreplace visualblocks code fullscreen fullpage textcolor",
-                    "insertdatetime media table contextmenu paste",
-                    'image'
-                ],
-                toolbar: "insertfile undo redo | styleselect | bold italic textcolor | " +
-                    "alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | " +
-                    "link image" + 'image'
-            });
-            document.getElementById('convert').addEventListener('click', function () {
-                //获取html的内容
-                var contentDocument = tinymce.get('content').getContent();
-                var formData = new FormData();
-                formData.append("document", contentDocument);
+            <button id="convert" style="width:100%;height: 5%">预览</button>
+            <script>
+                tinymce.init({
+                    selector: '#content',
+                    plugins: [
+                        "advlist autolink lists link image charmap print preview anchor",
+                        "searchreplace visualblocks code fullscreen fullpage textcolor",
+                        "insertdatetime media table contextmenu paste",
+                        'image'
+                    ],
+                    toolbar: "insertfile undo redo | styleselect | bold italic textcolor | " +
+                        "alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | " +
+                        "link image" + 'image'
+                });
+                document.getElementById('convert').addEventListener('click', function () {
+                    //获取html的内容
+                    var contentDocument = tinymce.get('content').getContent();
+                    var formData = new FormData();
+                    formData.append("document", contentDocument);
 
-                $.ajax({
-                    url: "file/pdf",  // 请求的地址
-                    type: "POST",  // 请求方式
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    enctype: "multipart/form-data",
-                    responseType: "arraybuffer",
-                    mimeType: "text/plain; charset=x-user-defined",
-                    success: function (data) {
-                        var rawLength = data.length;
-                        var array = new Uint8Array(new ArrayBuffer(rawLength));
-                        for (i = 0; i < rawLength; i++) {
-                            array[i] = data.charCodeAt(i) & 0xff;
+                    $.ajax({
+                        url: "file/pdf",  // 请求的地址
+                        type: "POST",  // 请求方式
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        enctype: "multipart/form-data",
+                        responseType: "arraybuffer",
+                        mimeType: "text/plain; charset=x-user-defined",
+                        success: function (data) {
+                            var rawLength = data.length;
+                            var array = new Uint8Array(new ArrayBuffer(rawLength));
+                            for (i = 0; i < rawLength; i++) {
+                                array[i] = data.charCodeAt(i) & 0xff;
+                            }
+
+                            var pdfBlob = new Blob([array], { type: "application/pdf;charset=utf-8" })
+                            var pdfFile = URL.createObjectURL(pdfBlob)
+                            const options_pdf = {
+                                forcePDFJS:true,
+                                pdfOpenParams: {
+                                    pagemode: "thumbs",
+                                    navpanes: 0,
+                                    toolbar: 0,
+                                    scrollbar: 0,
+                                    statusbar: 0,
+                                    view: "FitV"
+                                }
+                            }
+
+                            PDFObject.embed(pdfFile, "#pdf_demo", options_pdf);
                         }
 
-                        var pdfBlob = new Blob([array], {type: "application/pdf;charset=utf-8"})
-                        var pdfFile = URL.createObjectURL(pdfBlob)
-                        PDFObject.embed(pdfFile, "#pdf_demo");
-                    }
+                    })
+                });
 
-                })
+            </script>
+        </div>
 
-                // PDFObject.embed("report.pdf", "#pdf_demo", {width: "100%", scrollbars: "0"});
+        <div id="pdf_demo" style="width:50%;height:95%;">
+            <!-- 用来展示pdf -->
+        </div>
 
-
-                var options = {
-                    pdfOpenParams: {
-                        pagemode: "thumbs",
-                        toolbar: 0,
-                        navpanes: 0,
-                        statesbar: 0,
-                        view: "FitV",
-                        scrollbars: "0"
-                    }
-                }
-
-                // console.log(typeof (converted), converted)
-
-                // saveAs(converted, 'test.docx')
-
-
-            });
-
-        </script>
     </div>
-    <!-- <style>
-        .pdf_demo { height: 30rem; border: 1rem solid rgba(0,0,0,.1); }
-    </style> -->
-    <div id="pdf_demo" style="display:flex;width:50%;height:100%;border:3px solid black">
-        <!-- 用来展示pdf -->
-    </div>
-
-</div>
 </body>
 
 </html>
