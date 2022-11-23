@@ -35,7 +35,7 @@ class SelfDefine(BaseModel):
     data = models.JSONField(null=False)
 
     class Meta:
-        verbose_name = verbose_name_plural = '预定义类型'
+        verbose_name = verbose_name_plural = '模块类型'
         db_table = 'selfmode'  # 通过db_table自定义数据表名
 
     def __str__(self):
@@ -94,17 +94,6 @@ class Picture(BaseModel):
     """图片二维码"""
     img = models.ImageField(upload_to='img/')
     name = models.CharField(max_length=200, verbose_name='宣传二维码')
-
-    class Meta:
-        verbose_name = verbose_name_plural = '宣传二维码'
-        db_table = 'picture'  # 通过db_table自定义数据表名
-
-    def __str__(self):
-        return self.name
-
-
-class LeaderData(BaseModel):
-    """呈发送"""
     name = models.CharField(max_length=20, verbose_name='呈送发对象')
     picture_list = models.CharField(
         max_length=20, verbose_name='二维码种类')  # 存放二维码的字典
