@@ -51,7 +51,7 @@
                                     新建材料:
                                 </h4>
                             </div>
-                            <div class="modal-body" style="height: 300px;">
+                            <div class="modal-body" style="height: 500px;">
                                 <div style="display: inline-flex;width:100%;height:100%;">
                                     <div style="width:15%;height:100%;">
 
@@ -83,6 +83,48 @@
                                             <input id="create_doc_date" type="text"
                                                 style="width:60%;height:80%;border:0;text-align: center;"
                                                 ;>
+                                        </div>
+                                        <div style="display:inline-block; ;width:100%;height:15%;;">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模块类型:
+                                            <div style="display:inline-flex;width:60%;height:80%;border:1px solid black">
+                                                <div style="width:10%;height:100%;border:1px solid black">
+                                                    <div style=";width:100%;height:50%">
+                                                        <select id="png_text_add" style="appearance:none;;width:100%;height:100%;background-image: url(static/src/加.png);background-size: 60%;background-repeat: no-repeat;">
+                                                            <option style="display:none;" selected></option> 
+                                                            <option value="段落">段落</option>
+                                                            <option value="图表">图表</option>
+                                                            <option value="列表">列表</option>
+                                                            <option value="短期">短期</option>
+                                                            <option value="十天">七天</option>
+                                                            <option value="建议">建议</option>
+                                                        </select>
+
+                                                    </div>
+                                                    <div style=";width:100%;height:50%">
+                                                        <button id="delete_png_text" style=";width:100%;height:100%;background-image: url(static/src/减.png);background-size: 60%;background-repeat: no-repeat;"></button>
+                                                        
+                                                        
+                                                    </div>
+
+                                                </div>
+                                                <div id = "png_add_list" style="display:inline-flex;width:90%;height:100%;border:1px solid black">
+
+                                                </div>
+                                                <script>
+                                                    $('#png_text_add').change(function() {
+                            
+                                                        var select_div = document.createElement('div');
+                                                        select_div.style = "width:10%;height:100%;background-image: url(static/src/"+$('#png_text_add').val()+".png);background-size: 60%;background-repeat: no-repeat;"
+                                                       $('#png_add_list').append(select_div)
+                                                    })
+                                                    $('#delete_png_text').click(function() {
+                                                        $('#png_add_list').children().eq(-1).remove()
+
+                                                    })
+
+                                                </script>
+                                            </div>
+                                            
                                         </div>
                                         <script>
                                             $('#create_doc_date').datetimepicker({
