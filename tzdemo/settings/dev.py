@@ -1,8 +1,8 @@
 from .base import *
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
 # DEBUG = False
+DEBUG = True
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -16,6 +16,11 @@ DATABASES = {
         # 'HOST': '192.168.192.5',
         'HOST': '127.0.0.1',
         'PORT': '3306',
+        'OPTIONS': {
+            # 外键约束
+            "init_command": "SET foreign_key_checks = 0;",
+
+        }
     }
 }
 

@@ -26,12 +26,286 @@
     <div
         style="display: flex;align-content:flex-start;position: absolute; justify-content: center; flex-wrap: wrap; width: 100%;height: 100%;background-color: rgb(213, 217, 230);">
         <div style="width:100%;height:5%;background-color: rgb(76, 109, 216);"></div>
-        <div style="width:50%;height:95%">
-            <textarea id="content" cols="100" rows="10" style="width:100%;height: 95%;">
-                <p>We all live in a yellow submarine, yellow submarine, yellow submarine, yellow submarine</p>
-                <p>Images can also be exported if you source them as base64 DATA URI.</p>   
-            </textarea>
-            <button id="convert" style="width:100%;height: 5%">预览</button>
+        <div style="display:inline-block;width:50%;height:95%">
+            <div style=" width: 100%; height: 5%;">
+                <a id="modal-000001" href="#modal-container-000001" role="button" class="btn"
+                    data-toggle="modal">新建</a>
+                <a id="modal-000002" href="#modal-container-000002" role="button" class="btn"
+                    data-toggle="modal">打开</a>
+                <a id="modal-000003" href="#modal-container-000003" role="button" class="btn"
+                    data-toggle="modal">删除</a>
+                <a id="modal-000004" href="#modal-container-000004" role="button" class="btn"
+                    data-toggle="modal">配置</a>
+                <h5 style="float:right;width:25%">第47期:一周天气</h5>
+                <h5 style="float:right;width:25%">台州市局</h5>
+                <!-- 新建 -->
+                <div class="modal fade" id="modal-container-000001" role="dialog"
+                    aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"
+                                    aria-hidden="true"></button>
+                                <h4 class="modal-title" id="myModalLabel">
+                                    新建材料:
+                                </h4>
+                            </div>
+                            <div class="modal-body" style="height: 300px;">
+                                <div style="display: inline-flex;width:100%;height:100%;">
+                                    <div style="width:15%;height:100%;">
+
+                                    </div>
+                                    <!-- 新建材料的核心数据 -->
+                                    <div style="width:70%;height:100%;border:1px solid black">
+                                        <div style="width:100%;height:20%;"></div>
+                                        <div style="display:inline-block; ;width:100%;height:15%;">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;材料种类:
+                                            <select id="new_document_type"
+                                                style="width:60%;height:80%;border:0">
+                                            </select>
+                                        </div>
+                                        <div style="display:inline-block; ;width:100%;height:15%;">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;撰稿人:&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <select id="new_document_writer"
+                                                style="width:20%;height:80%;border:0"></select>
+                                            &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;签发人:
+                                            <select id="new_document_publisher"
+                                                style="width:20%;height:80%;border:0"></select>
+                                        </div>
+                                        <div style="display:inline-block; ;width:100%;height:15%;">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发布单位:
+                                            <select id="new_document_unity"
+                                                style="width:60%;height:80%;border:0"></select>
+                                        </div>
+                                        <div style="display:inline-block; ;width:100%;height:15%;">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发布日期:
+                                            <input id="create_doc_date" type="text"
+                                                style="width:60%;height:80%;border:0;text-align: center;"
+                                                ;>
+                                        </div>
+                                        <script>
+                                            $('#create_doc_date').datetimepicker({
+                                                theme: 'dark',
+                                                format: 'Y-m-d H:i'
+                                            }
+                                            );
+                                        </script>
+                                    </div>
+                                    <div style="width:15%;height:100%;">
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default"
+                                    data-dismiss="modal">返回</button>
+                                <button id="new_document_post" type="button" class="btn btn-primary"
+                                    data-dismiss="modal">创建</button>
+                            </div>
+                            <script>
+                                // 后端数据的传输
+                                $('#new_document_post').click(function () {
+                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                    console.log("向后端传输创建信息", $('#new_document_publisher').val())
+                                    // 告诉后端创建一个新的数据，并在前端修改文档标识
+                                    $.ajax({
+                                        url: "create_doc_data",  // 请求的地址
+                                        type: "post",  // 请求方式
+                                        timeout: 250, //设置延迟上限
+                                        data: {
+                                            'csrfmiddlewaretoken': csrf,
+                                            'doc_type': $('#new_document_type').val(),
+                                            'doc_writer': $('#new_document_writer').val(),
+                                            'doc_publisher': $('#new_document_publisher').val(),
+                                            'doc_unity': $('#new_document_unity').val(),
+                                            'doc_date': $('#create_doc_date').val()
+                                        },
+                                        dataType: "json",
+                                        success: function (data) {
+                                            // 侧边栏的功能
+                                            console.log("返回成功", data)
+                                        }
+                                    })
+
+                                })
+                            </script>
+                        </div>
+
+                    </div>
+
+                </div>
+                <script type="text/javascript">
+                    $('#modal-000001').click(function () {
+                        console.log('新建文档')
+                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                        $.ajax({
+                            url: "create_new_doc",  // 请求的地址
+                            type: "post",  // 请求方式
+                            timeout: 250, //设置延迟上限
+                            data: {
+                                'csrfmiddlewaretoken': csrf
+                            },
+                            dataType: "json",
+                            success: function (data) {
+                                // 'data_publisher': data_publisher,
+                                // 'data_writers': data_writers,
+                                // 'data_unity': data_unity,
+                                // 'data_documenttype': data_documenttype
+                                $('#new_document_publisher').html("")
+                                $('#new_document_writer').html("")
+                                $('#new_document_unity').html("")
+                                $('#new_document_type').html("")
+                                for (i = 0; i < data.data_publisher.length; i++) {
+                                    var option_publisher = document.createElement('option');
+                                    option_publisher.value = data.data_publisher[i]
+                                    option_publisher.innerText = data.data_publisher[i]
+                                    $('#new_document_publisher').append(option_publisher)
+                                }
+                                for (j = 0; j < data.data_writers.length; j++) {
+                                    var option_writers = document.createElement('option');
+                                    option_writers.value = data.data_writers[j]
+                                    option_writers.innerText = data.data_writers[j]
+                                    $('#new_document_writer').append(option_writers)
+                                }
+                                for (k = 0; k < data.data_unity.length; k++) {
+                                    var option_unity = document.createElement('option');
+                                    option_unity.value = data.data_unity[k]
+                                    option_unity.innerText = data.data_unity[k]
+                                    option_unity.style.textAlign = 'center'
+                                    $('#new_document_unity').append(option_unity)
+                                }
+                                for (m = 0; m < data.data_documenttype.length; m++) {
+                                    var option_documenttype = document.createElement('option');
+                                    option_documenttype.value = data.data_documenttype[m]
+                                    option_documenttype.innerText = data.data_documenttype[m]
+                                    option_documenttype.style.textAlign = 'center'
+                                    $('#new_document_type').append(option_documenttype)
+                                }
+
+
+
+                            }
+
+                        })
+                    })
+
+
+                </script>
+                <!-- 打开 -->
+                <div class="modal fade" id="modal-container-000002" role="dialog"
+                    aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"
+                                    aria-hidden="true"></button>
+                                <h4 class="modal-title" id="myModalLabel">
+                                    打开材料
+                                </h4>
+                            </div>
+                            <div class="modal-body" style="height: 600px;">
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default"
+                                    data-dismiss="modal">关闭</button> <button type="button"
+                                    class="btn btn-primary">保存</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- 删除 -->
+                <div class="modal fade" id="modal-container-000003" role="dialog"
+                    aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"
+                                    aria-hidden="true"></button>
+                                <h4 class="modal-title" id="myModalLabel">
+                                    删除材料
+                                </h4>
+                            </div>
+                            <div class="modal-body" style="height: 600px;">
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default"
+                                    data-dismiss="modal">关闭</button> <button type="button"
+                                    class="btn btn-primary">保存</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- 配置 -->
+                <div class="modal fade" id="modal-container-000004" role="dialog"
+                    aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"
+                                    aria-hidden="true"></button>
+                                <h4 class="modal-title" id="myModalLabel">
+                                    标题
+                                </h4>
+                            </div>
+                            <div class="modal-body" style="height: 600px;">
+                                <input type="button" value="模块自定义" style="width:100%;height:10%">
+                                <input type="button" value="文档种类" style="width:100%;height:10%">
+                                <input type="button" value="参考网页" style="width:100%;height:10%">
+                                <input type="button" value="密码账号" style="width:100%;height:10%">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default"
+                                    data-dismiss="modal">关闭</button> <button type="button"
+                                    class="btn btn-primary">保存</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+
+
+
+
+                <!-- 文件头 -->
+            </div>
+            <div style="display:inline-flex;width: 100%; height: 90%">
+                <div style="display:inline-block; width: 5%; height: 100%;">
+                    <button type="button" style="width: 90%; height: 50px;background-image: url(static/src/段落.png);background-size: 100%;background-repeat: no-repeat;"></button>
+                    <button type="button" style="width: 90%; height: 50px;background-image: url(static/src/图表.png);background-size: 100%;background-repeat: no-repeat;"></button>
+                    <button type="button" style="width: 90%; height: 50px;background-image: url(static/src/列表.png);background-size: 100%;background-repeat: no-repeat;"></button>
+                    <button type="button" style="width: 90%; height: 50px;background-image: url(static/src/短期.png);background-size: 100%;background-repeat: no-repeat;"></button>
+                    <button type="button" style="width: 90%; height: 50px;background-image: url(static/src/十天.png);background-size: 100%;background-repeat: no-repeat;"></button>
+                    <button type="button" style="width: 90%; height: 50px;background-image: url(static/src/建议.png);background-size: 100%;background-repeat: no-repeat;"></button>
+
+                </div>
+                <textarea id="content" cols="100" rows="10" style="width:95%;height: 100%;">
+                    <p>We all live in a yellow submarine, yellow submarine, yellow submarine, yellow submarine</p>
+                    <p>Images can also be exported if you source them as base64 DATA URI.</p>   
+                </textarea>
+
+
+            </div>
+            <div  style="display: inline-flex;width:100%;height: 5%;"> 
+                <div  style="width:85%;height: 100%;"> </div>
+                <button id="convert3" style="width:40px;height:40px;background-image: url(static/src/合并.png);background-size: 100%;background-repeat: no-repeat;"></button>
+                <div  style="width:2%;height: 100%;"> </div>
+                <button id="convert2" style="width:40px;height:40px;background-image: url(static/src/保存.png);background-size: 100%;background-repeat: no-repeat;"></button>
+                <div  style="width:2%;height: 100%;"> </div>
+                <button id="convert" style="width:40px;height:40px;background-image: url(static/src/预览.png);background-size: 100%;background-repeat: no-repeat;"></button>
+            </div>
+            
             <script>
                 tinymce.init({
                     selector: '#content',
@@ -88,6 +362,7 @@
                 });
 
             </script>
+
         </div>
 
         <div id="pdf_demo" style="width:50%;height:95%;">

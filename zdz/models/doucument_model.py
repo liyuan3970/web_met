@@ -11,7 +11,7 @@ class Document(BaseModel):
     unity = models.CharField(max_length=200, verbose_name='单位')
     pub_date = models.CharField(max_length=200, verbose_name='发布日期')
     verson_content = models.TextField(
-        max_length=21844, verbose_name='版本内容')  # 存放字典用来记录版本信息
+        max_length=21844, verbose_name='模块列表')  # 存放字典用来记录版本信息
     writer = models.CharField(max_length=50, verbose_name='撰稿人')
     publisher = models.CharField(
         max_length=200, verbose_name='签发人', default="翁之梅")
@@ -25,8 +25,13 @@ class Document(BaseModel):
 
 
 class SelfDefine(BaseModel):
-    types = models.CharField(max_length=200, verbose_name='类别')
-    name = models.CharField(max_length=200, verbose_name='名称')
+    '''存放模块内容和更新'''
+    types = models.CharField(max_length=200, verbose_name='材料类别')
+    name = models.CharField(max_length=200, verbose_name='模块名称')
+    item = models.IntegerField(verbose_name='期数')
+    year = models.IntegerField(verbose_name='年份')
+    unity = models.CharField(max_length=200, verbose_name='单位')
+
     data = models.JSONField(null=False)
 
     class Meta:
@@ -52,7 +57,7 @@ class Unity(BaseModel):
 class Publisher(BaseModel):
     """签发人"""
     name = models.CharField(max_length=200, verbose_name='签发人')
-
+    unity = models.CharField(max_length=200, verbose_name='单位')
     class Meta:
         verbose_name = verbose_name_plural = '签发人'
         db_table = 'publisher'  # 通过db_table自定义数据表名
@@ -64,7 +69,7 @@ class Publisher(BaseModel):
 class Writer(BaseModel):
     """撰稿人"""
     name = models.CharField(max_length=200, verbose_name='撰稿人')
-
+    unity = models.CharField(max_length=200, verbose_name='单位')
     class Meta:
         verbose_name = verbose_name_plural = '撰稿人'
         db_table = 'writer'  # 通过db_table自定义数据表名
@@ -76,7 +81,7 @@ class Writer(BaseModel):
 class DocumentType(BaseModel):
     """文档类别"""
     name = models.CharField(max_length=200, verbose_name='材料类型')
-
+    unity = models.CharField(max_length=200, verbose_name='单位')
     class Meta:
         verbose_name = verbose_name_plural = '材料类型'
         db_table = 'documenttype'  # 通过db_table自定义数据表名
@@ -100,7 +105,7 @@ class Picture(BaseModel):
 
 class LeaderData(BaseModel):
     """呈发送"""
-    name = models.CharField(max_length=20, verbose_name='发布版本')
+    name = models.CharField(max_length=20, verbose_name='呈送发对象')
     picture_list = models.CharField(
         max_length=20, verbose_name='二维码种类')  # 存放二维码的字典
     service_name = models.TextField(max_length=21844, verbose_name='呈报对象')
