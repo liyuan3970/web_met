@@ -29,24 +29,21 @@
         <div style="width:100%;height:5%;background-color: rgb(76, 109, 216);"></div>
         <div style="display:inline-block;width:50%;height:95%">
             <div style=" width: 100%; height: 5%;">
-                <a id="modal-000001" href="#modal-container-000001" role="button" class="btn"
-                    data-toggle="modal">新建</a>
-                <a id="modal-000002" href="#modal-container-000002" role="button" class="btn"
-                    data-toggle="modal">打开</a>
-                <a id="modal-000003" href="#modal-container-000003" role="button" class="btn"
-                    data-toggle="modal">删除</a>
-                <a id="modal-000004" href="#modal-container-000004" role="button" class="btn"
-                    data-toggle="modal">配置</a>
-                <h5 style="float:right;width:25%">第47期:一周天气</h5>
-                <h5 style="float:right;width:25%">台州市局</h5>
+                <a id="modal-000001" href="#modal-container-000001" role="button" class="btn" data-toggle="modal">新建</a>
+                <a id="modal-000002" href="#modal-container-000002" role="button" class="btn" data-toggle="modal">打开</a>
+                <a id="modal-000003" href="#modal-container-000003" role="button" class="btn" data-toggle="modal">删除</a>
+                <a id="modal-000004" href="#modal-container-000004" role="button" class="btn" data-toggle="modal">配置</a>
+                <div id="button_type_list" style="display: inline-flex;width:50%;height:80%">
+                    <!-- 用来放置添加列表 -->
+                </div>
+
                 <!-- 新建 -->
-                <div class="modal fade" id="modal-container-000001" role="dialog"
-                    aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal fade" id="modal-container-000001" role="dialog" aria-labelledby="myModalLabel"
+                    aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"
-                                    aria-hidden="true"></button>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                                 <h4 class="modal-title" id="myModalLabel">
                                     新建材料:
                                 </h4>
@@ -61,8 +58,7 @@
                                         <div style="width:100%;height:20%;"></div>
                                         <div style="display:inline-block; ;width:100%;height:15%;">
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;材料种类:
-                                            <select id="new_document_type"
-                                                style="width:60%;height:80%;border:0">
+                                            <select id="new_document_type" style="width:60%;height:80%;border:0">
                                             </select>
                                         </div>
                                         <div style="display:inline-block; ;width:100%;height:15%;">
@@ -81,16 +77,17 @@
                                         <div style="display:inline-block; ;width:100%;height:15%;">
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发布日期:
                                             <input id="create_doc_date" type="text"
-                                                style="width:60%;height:80%;border:0;text-align: center;"
-                                                ;>
+                                                style="width:60%;height:80%;border:0;text-align: center;" ;>
                                         </div>
                                         <div style="display:inline-block; ;width:100%;height:15%;;">
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模块类型:
-                                            <div style="display:inline-flex;width:60%;height:80%;border:1px solid black">
+                                            <div
+                                                style="display:inline-flex;width:60%;height:80%;border:1px solid black">
                                                 <div style="width:10%;height:100%;border:1px solid black">
                                                     <div style=";width:100%;height:50%">
-                                                        <select id="png_text_add" style="appearance:none;;width:100%;height:100%;background-image: url(static/src/加.png);background-size: 60%;background-repeat: no-repeat;">
-                                                            <option style="display:none;" selected></option> 
+                                                        <select id="png_text_add" autocomplete="off"
+                                                            style="appearance:none;;width:100%;height:100%;background-image: url(static/src/加.png);background-size: 60%;background-repeat: no-repeat;">
+                                                            <option style="display:none;" selected></option>
                                                             <option value="段落">段落</option>
                                                             <option value="图表">图表</option>
                                                             <option value="列表">列表</option>
@@ -101,30 +98,38 @@
 
                                                     </div>
                                                     <div style=";width:100%;height:50%">
-                                                        <button id="delete_png_text" style=";width:100%;height:100%;background-image: url(static/src/减.png);background-size: 60%;background-repeat: no-repeat;"></button>
-                                                        
-                                                        
+                                                        <button id="delete_png_text"
+                                                            style=";width:100%;height:100%;background-image: url(static/src/减.png);background-size: 60%;background-repeat: no-repeat;"></button>
+
+
                                                     </div>
 
                                                 </div>
-                                                <div id = "png_add_list" style="display:inline-flex;width:90%;height:100%;border:1px solid black">
+                                                <div id="png_add_list"
+                                                    style="display:inline-flex;width:90%;height:100%;border:1px solid black">
 
                                                 </div>
                                                 <script>
-                                                    $('#png_text_add').change(function() {
-                            
+                                                    let png_add_list = []
+                                                    $('#png_text_add').change(function () {
+
                                                         var select_div = document.createElement('div');
-                                                        select_div.style = "width:10%;height:100%;background-image: url(static/src/"+$('#png_text_add').val()+".png);background-size: 60%;background-repeat: no-repeat;"
-                                                       $('#png_add_list').append(select_div)
+                                                        select_div.style = "width:10%;height:100%;background-image: url(static/src/" + $('#png_text_add').val() + ".png);background-size: 60%;background-repeat: no-repeat;"
+                                                        $('#png_add_list').append(select_div)
+                                                        png_add_list.push($('#png_text_add').val())
+                                                        console.log(png_add_list)
                                                     })
-                                                    $('#delete_png_text').click(function() {
+                                                    $('#delete_png_text').click(function () {
                                                         $('#png_add_list').children().eq(-1).remove()
+                                                        png_add_list.pop()
+                                                        console.log(png_add_list)
 
                                                     })
+
 
                                                 </script>
                                             </div>
-                                            
+
                                         </div>
                                         <script>
                                             $('#create_doc_date').datetimepicker({
@@ -142,16 +147,23 @@
 
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-default"
-                                    data-dismiss="modal">返回</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
                                 <button id="new_document_post" type="button" class="btn btn-primary"
                                     data-dismiss="modal">创建</button>
                             </div>
                             <script>
                                 // 后端数据的传输
+
                                 $('#new_document_post').click(function () {
+
                                     var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                                    console.log("向后端传输创建信息", $('#new_document_publisher').val())
+                                    console.log("向后端传输创建信息", png_add_list)
+                                    var content_doc = ""
+                                    for (var i = 0; i < png_add_list.length; i++) {
+                                        content_doc = content_doc + png_add_list[i] + ","
+
+                                    }
+
                                     // 告诉后端创建一个新的数据，并在前端修改文档标识
                                     $.ajax({
                                         url: "create_doc_data",  // 请求的地址
@@ -163,11 +175,12 @@
                                             'doc_writer': $('#new_document_writer').val(),
                                             'doc_publisher': $('#new_document_publisher').val(),
                                             'doc_unity': $('#new_document_unity').val(),
-                                            'doc_date': $('#create_doc_date').val()
+                                            'doc_date': $('#create_doc_date').val(),
+                                            'doc_list': content_doc
                                         },
                                         dataType: "json",
                                         success: function (data) {
-                                            // 侧边栏的功能
+                                            // 返回以后创建一个对象实例
                                             console.log("返回成功", data)
                                         }
                                     })
@@ -182,6 +195,8 @@
                 <script type="text/javascript">
                     $('#modal-000001').click(function () {
                         console.log('新建文档')
+                        png_add_list = []
+                        $('#png_add_list').html("")
                         var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                         $.ajax({
                             url: "create_new_doc",  // 请求的地址
@@ -237,13 +252,12 @@
 
                 </script>
                 <!-- 打开 -->
-                <div class="modal fade" id="modal-container-000002" role="dialog"
-                    aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal fade" id="modal-container-000002" role="dialog" aria-labelledby="myModalLabel"
+                    aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"
-                                    aria-hidden="true"></button>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                                 <h4 class="modal-title" id="myModalLabel">
                                     打开材料
                                 </h4>
@@ -252,9 +266,8 @@
 
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-default"
-                                    data-dismiss="modal">关闭</button> <button type="button"
-                                    class="btn btn-primary">保存</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> <button
+                                    type="button" class="btn btn-primary">保存</button>
                             </div>
                         </div>
 
@@ -262,13 +275,12 @@
 
                 </div>
                 <!-- 删除 -->
-                <div class="modal fade" id="modal-container-000003" role="dialog"
-                    aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal fade" id="modal-container-000003" role="dialog" aria-labelledby="myModalLabel"
+                    aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"
-                                    aria-hidden="true"></button>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                                 <h4 class="modal-title" id="myModalLabel">
                                     删除材料
                                 </h4>
@@ -277,9 +289,8 @@
 
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-default"
-                                    data-dismiss="modal">关闭</button> <button type="button"
-                                    class="btn btn-primary">保存</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> <button
+                                    type="button" class="btn btn-primary">保存</button>
                             </div>
                         </div>
 
@@ -287,13 +298,12 @@
 
                 </div>
                 <!-- 配置 -->
-                <div class="modal fade" id="modal-container-000004" role="dialog"
-                    aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal fade" id="modal-container-000004" role="dialog" aria-labelledby="myModalLabel"
+                    aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"
-                                    aria-hidden="true"></button>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                                 <h4 class="modal-title" id="myModalLabel">
                                     标题
                                 </h4>
@@ -305,9 +315,8 @@
                                 <input type="button" value="密码账号" style="width:100%;height:10%">
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-default"
-                                    data-dismiss="modal">关闭</button> <button type="button"
-                                    class="btn btn-primary">保存</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> <button
+                                    type="button" class="btn btn-primary">保存</button>
                             </div>
                         </div>
 
@@ -324,7 +333,7 @@
                 <!-- 文件头 -->
             </div>
             <div style="display:inline-flex;width: 100%; height: 90%">
-                <div style="display:inline-block; width: 5%; height: 100%;">
+                <!-- <div style="display:inline-block; width: 5%; height: 100%;">
                     <button type="button" style="width: 90%; height: 50px;background-image: url(static/src/段落.png);background-size: 100%;background-repeat: no-repeat;"></button>
                     <button type="button" style="width: 90%; height: 50px;background-image: url(static/src/图表.png);background-size: 100%;background-repeat: no-repeat;"></button>
                     <button type="button" style="width: 90%; height: 50px;background-image: url(static/src/列表.png);background-size: 100%;background-repeat: no-repeat;"></button>
@@ -332,23 +341,29 @@
                     <button type="button" style="width: 90%; height: 50px;background-image: url(static/src/十天.png);background-size: 100%;background-repeat: no-repeat;"></button>
                     <button type="button" style="width: 90%; height: 50px;background-image: url(static/src/建议.png);background-size: 100%;background-repeat: no-repeat;"></button>
 
-                </div>
-                <textarea id="content" cols="100" rows="10" style="width:95%;height: 100%;">
+                </div> -->
+                <textarea id="content" style="width:100%;height: 100%;">
                     <p>We all live in a yellow submarine, yellow submarine, yellow submarine, yellow submarine</p>
                     <p>Images can also be exported if you source them as base64 DATA URI.</p>   
                 </textarea>
 
 
             </div>
-            <div  style="display: inline-flex;width:100%;height: 5%;"> 
-                <div  style="width:85%;height: 100%;"> </div>
-                <button id="convert3" style="width:40px;height:40px;background-image: url(static/src/合并.png);background-size: 100%;background-repeat: no-repeat;"></button>
-                <div  style="width:2%;height: 100%;"> </div>
-                <button id="convert2" style="width:40px;height:40px;background-image: url(static/src/保存.png);background-size: 100%;background-repeat: no-repeat;"></button>
-                <div  style="width:2%;height: 100%;"> </div>
-                <button id="convert" style="width:40px;height:40px;background-image: url(static/src/预览.png);background-size: 100%;background-repeat: no-repeat;"></button>
+            <div style="display: inline-flex;width:100%;height: 5%;">
+                <div style="width:85%;height: 100%;">
+                    <h5 style="float:left;width:25%">台州市气象局</h5>
+                    <h5 style="float:left;width:25%">第47期:一周天气</h5>
+                </div>
+                <button id="convert3"
+                    style="width:40px;height:40px;background-image: url(static/src/合并.png);background-size: 100%;background-repeat: no-repeat;"></button>
+                <div style="width:2%;height: 100%;"> </div>
+                <button id="convert2"
+                    style="width:40px;height:40px;background-image: url(static/src/保存.png);background-size: 100%;background-repeat: no-repeat;"></button>
+                <div style="width:2%;height: 100%;"> </div>
+                <button id="convert"
+                    style="width:40px;height:40px;background-image: url(static/src/预览.png);background-size: 100%;background-repeat: no-repeat;"></button>
             </div>
-            
+
             <script>
                 tinymce.init({
                     selector: '#content',
@@ -362,6 +377,35 @@
                         "alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | " +
                         "link image" + 'image'
                 });
+                const list_button_object = {
+                        type_list: ['段落', '图表'],
+                        data: "记录类型的样式和模式",
+                        item: 0,
+                        year: 2022,
+                        unity: "台州市气象局",
+                        cerate_div_button: function () {
+                            console.log("cerate_div_button")
+                            for (var i = 0; i < this.type_list.length; i++) {
+                                var button_single = document.createElement("button")
+                                button_single.style = "width: 15%; height: 30px;background-image: url(static/src/" + this.type_list[i] + ".png);background-size: 100%;background-repeat: no-repeat;"
+                                button_single.innerText = this.type_list[i]
+                                button_single.addEventListener("click", function (i) {
+                                    console.log("按钮", i)
+                                    tinymce.remove('#content');
+                                    tinymce.init({
+                                        selector: '#content',
+                                        toolbar: "insertfile undo redo | styleselect | bold italic| "
+                                    });
+                                })
+                                $('#button_type_list').append(button_single)
+                            }
+                            // return this.data + "卧槽"
+                        },
+                        render_data_list: function () {
+                            console.log("cerate_div_button")
+                        }
+                    }
+                list_button_object.cerate_div_button()
                 document.getElementById('convert').addEventListener('click', function () {
                     //获取html的内容
                     var contentDocument = tinymce.get('content').getContent();
@@ -387,7 +431,7 @@
                             var pdfBlob = new Blob([array], { type: "application/pdf;charset=utf-8" })
                             var pdfFile = URL.createObjectURL(pdfBlob)
                             const options_pdf = {
-                                forcePDFJS:true,
+                                forcePDFJS: true,
                                 pdfOpenParams: {
                                     pagemode: "thumbs",
                                     navpanes: 0,

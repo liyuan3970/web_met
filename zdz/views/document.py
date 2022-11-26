@@ -254,7 +254,7 @@ def create_new_doc(request):
     data_writers = [i['name'] for i in writers]
     data_unity = [i['name'] for i in unity]
     data_documenttype = [i['name'] for i in documenttype]
-    print("返回数据",writers)
+    # print("返回数据",writers)
     context = {
         'data_publisher': data_publisher,
         'data_writers': data_writers,
@@ -272,11 +272,14 @@ def create_new_doc_data(request):
     doc_writer = request.POST.get('doc_writer', '')
     doc_publisher = request.POST.get('doc_publisher', '')
     doc_unity = request.POST.get('doc_unity', '')
-    doc_date = request.POST.get('doc_date', '')
+    doc_date = request.POST.get('doc_date', '') 
+    content = request.POST.get('doc_list', '')
     year = doc_date[0:4]
     data = Document.objects.filter(year=year, types=type_doc).last()
-    item = data.item + 1
-    content = []
+    if data==None:
+        item = 0
+    else:
+        item = data.item + 1
     obj = Document.objects.create(
         types=type_doc,
         writer=doc_writer,
@@ -285,9 +288,9 @@ def create_new_doc_data(request):
         pub_date=doc_date,
         item=item,
         year=year,
-        verson_content={
-            'blank': content
-        }
+        verson_content = content,
+        create_user = 0, 
+        update_user = 0
     )
     context = {
         'status': "ok",
