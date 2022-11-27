@@ -294,7 +294,10 @@ def create_new_doc_data(request):
     )
     context = {
         'status': "ok",
-        'type_doc': type_doc
+        'doc_type': type_doc,
+        'doc_item':item,
+        'doc_unity':doc_unity,
+        'doc_year':year
 
     }
     return JsonResponse(context)

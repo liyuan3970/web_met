@@ -153,6 +153,57 @@
                             </div>
                             <script>
                                 // 后端数据的传输
+                                const list_button_object = {
+                                    type_list: ['段落', '图表'],
+                                    type:"一周天气预测",
+                                    data: [],
+                                    item: 0,
+                                    year: 2022,
+                                    unity: "台州市气象局",
+                                    cerate_div_button: function () {
+                                        $('#button_type_list').html("")
+                                        for (var i = 0; i < this.type_list.length; i++) {
+                                            this.data.push(this.render_data_list(i))
+                                            var div_single = document.createElement("div")
+                                            div_single.style = "width: 15%; height: 30px;"
+                                            // div_single.innerText = "\xa0\xa0\xa0\xa0\xa0\xa0"+this.type_list[i]
+                                            var label_singl = document.createElement("label")
+                                            label_singl.setAttribute("for",i.toString() +"checkboxitem")
+                                            label_singl.innerText = "\xa0\xa0\xa0\xa0\xa0\xa0\xa0"+this.type_list[i]
+                                            label_singl.style = "width: 100%; height: 30px;font-size:10px;;background-image: url(static/src/" + this.type_list[i] + ".png);background-size: 30%;background-repeat: no-repeat;"
+                                            var checkboxitem =  document.createElement("input")
+                                            checkboxitem.id = i.toString() +"checkboxitem"
+                                            checkboxitem.value = i
+                                            checkboxitem.setAttribute("name","doc_tyoe_opt")
+                                            checkboxitem.setAttribute("type","radio")
+                                            checkboxitem.style = "display:none;"
+                                            div_single.append(checkboxitem,label_singl)
+                                            div_single.addEventListener("click", function () {  
+                                                // console.log('div',this)     
+                                                // this.style = "width: 15%; height: 30px;border:1px solid black"                                                    
+                                                tinymce.remove('#content');
+                                                tinymce.init({
+                                                    selector: '#content',
+                                                    toolbar: "insertfile undo redo | styleselect | bold italic| "
+                                                });                                    
+                                            })
+                                            $('#button_type_list').append(div_single)
+                                        }
+                                        // return this.data + "卧槽"
+                                    },
+                                    render_data_list: function (item) {
+                                        // console.log("cerate_div_button")
+                                        var doc_type =this.type_list[item]
+                                        var id_number = item 
+                                        var doc_data_obj = {
+                                            type:doc_type,
+                                            id:id_number,
+                                            content:""
+                                        }
+                                        return doc_data_obj
+                                    }
+                                }
+                                
 
                                 $('#new_document_post').click(function () {
 
@@ -181,7 +232,15 @@
                                         dataType: "json",
                                         success: function (data) {
                                             // 返回以后创建一个对象实例
-                                            console.log("返回成功", data)
+                                            // console.log("返回成功", data)
+                                            $('#doc_type').text( data.doc_unity)
+                                            $('#doc_info').text("第" + data.doc_item +"期:  "+data.doc_type)
+                                            list_button_object.year = data.doc_year
+                                            list_button_object.item = data.doc_item
+                                            list_button_object.type = data.doc_type
+                                            list_button_object.type_list = png_add_list
+                                            list_button_object.unity = data.doc_unity
+                                            list_button_object.cerate_div_button()
                                         }
                                     })
 
@@ -351,13 +410,13 @@
             </div>
             <div style="display: inline-flex;width:100%;height: 5%;">
                 <div style="width:85%;height: 100%;">
-                    <h5 style="float:left;width:25%">台州市气象局</h5>
-                    <h5 style="float:left;width:25%">第47期:一周天气</h5>
+                    <h5 id="doc_unity" style="float:left;width:25%">台州市气象局</h5>
+                    <h5 id="doc_info" style="float:left;width:25%">第47期:一周天气</h5>
                 </div>
                 <button id="convert3"
                     style="width:40px;height:40px;background-image: url(static/src/合并.png);background-size: 100%;background-repeat: no-repeat;"></button>
                 <div style="width:2%;height: 100%;"> </div>
-                <button id="convert2"
+                <button id="preview_save"
                     style="width:40px;height:40px;background-image: url(static/src/保存.png);background-size: 100%;background-repeat: no-repeat;"></button>
                 <div style="width:2%;height: 100%;"> </div>
                 <button id="convert"
@@ -377,43 +436,73 @@
                         "alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | " +
                         "link image" + 'image'
                 });
-                const list_button_object = {
-                        type_list: ['段落', '图表'],
-                        data: "记录类型的样式和模式",
-                        item: 0,
-                        year: 2022,
-                        unity: "台州市气象局",
-                        cerate_div_button: function () {
-                            console.log("cerate_div_button")
-                            for (var i = 0; i < this.type_list.length; i++) {
-                                var button_single = document.createElement("button")
-                                button_single.style = "width: 15%; height: 30px;background-image: url(static/src/" + this.type_list[i] + ".png);background-size: 100%;background-repeat: no-repeat;"
-                                button_single.innerText = this.type_list[i]
-                                button_single.addEventListener("click", function (i) {
-                                    console.log("按钮", i)
-                                    tinymce.remove('#content');
-                                    tinymce.init({
-                                        selector: '#content',
-                                        toolbar: "insertfile undo redo | styleselect | bold italic| "
-                                    });
-                                })
-                                $('#button_type_list').append(button_single)
-                            }
-                            // return this.data + "卧槽"
-                        },
-                        render_data_list: function () {
-                            console.log("cerate_div_button")
-                        }
-                    }
-                list_button_object.cerate_div_button()
+
                 document.getElementById('convert').addEventListener('click', function () {
                     //获取html的内容
                     var contentDocument = tinymce.get('content').getContent();
+                
+                    console.log($("input[name='doc_tyoe_opt']:checked").val())
                     var formData = new FormData();
                     formData.append("document", contentDocument);
-
+                   
                     $.ajax({
                         url: "file/pdf",  // 请求的地址
+                        type: "POST",  // 请求方式
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        enctype: "multipart/form-data",
+                        responseType: "arraybuffer",
+                        mimeType: "text/plain; charset=x-user-defined",
+                        success: function (data) {
+                            var rawLength = data.length;
+                            var array = new Uint8Array(new ArrayBuffer(rawLength));
+                            for (i = 0; i < rawLength; i++) {
+                                array[i] = data.charCodeAt(i) & 0xff;
+                            }
+
+                            var pdfBlob = new Blob([array], { type: "application/pdf;charset=utf-8" })
+                            var pdfFile = URL.createObjectURL(pdfBlob)
+                            const options_pdf = {
+                                forcePDFJS: true,
+                                pdfOpenParams: {
+                                    pagemode: "thumbs",
+                                    navpanes: 0,
+                                    toolbar: 0,
+                                    scrollbar: 0,
+                                    statusbar: 0,
+                                    view: "FitV"
+                                }
+                            }
+
+                            PDFObject.embed(pdfFile, "#pdf_demo", options_pdf);
+                        }
+
+                    })
+                });
+                document.getElementById('preview_save').addEventListener('click', function () {
+                    //保存并预览单个模块的内容
+                    var contentDocument = tinymce.get('content').getContent();
+                    //收集上传的数据
+                    var item = $("input[name='doc_tyoe_opt']:checked").val()
+                    var types = list_button_object.type
+                    var name = list_button_object.type_list[item]
+                    var year = list_button_object.year
+                    var data = contentDocument
+                    var items = list_button_object.item
+                    var unity = list_button_object.unity
+                    console.log($("input[name='doc_tyoe_opt']:checked").val())
+                    var formData = new FormData();
+                    formData.append("document", contentDocument);
+                    formData.append("item", item);
+                    formData.append("types", types);
+                    formData.append("name", name);
+                    formData.append("year", year);
+                    formData.append("data", data);  
+                    formData.append("items", items);
+                    formData.append("unity", unity);
+                    $.ajax({
+                        url: "file/preview_save",  // 请求的地址
                         type: "POST",  // 请求方式
                         data: formData,
                         processData: false,

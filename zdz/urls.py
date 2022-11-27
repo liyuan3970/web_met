@@ -51,5 +51,8 @@ router = DefaultRouter()
 router.register(r"user", views.UserViewSet)
 urlpatterns += [
     path("", include(router.urls)),
-    path(r"file/pdf", views.pdf)
+    # 仅预览
+    path(r"file/pdf", views.pdf),
+    # 预览模块并保存
+    path(r"file/preview_save", views.preview_save)
 ]

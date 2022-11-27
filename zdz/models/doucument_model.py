@@ -39,7 +39,7 @@ class SelfDefine(BaseModel):
         db_table = 'selfmode'  # 通过db_table自定义数据表名
 
     def __str__(self):
-        return str(self.type) + ":" + self.name
+        return str(self.types) + ":" + self.name
 
 
 class Unity(BaseModel):
