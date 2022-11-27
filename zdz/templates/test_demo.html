@@ -185,7 +185,9 @@
                                                 tinymce.init({
                                                     selector: '#content',
                                                     toolbar: "insertfile undo redo | styleselect | bold italic| "
-                                                });                                    
+                                                });   
+                                                // tinymce.get('content').setContent("设置内容")  
+                                                $('#content').val(" ")                          
                                             })
                                             $('#button_type_list').append(div_single)
                                         }
