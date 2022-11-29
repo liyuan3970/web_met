@@ -457,20 +457,10 @@
                                     <!-- 文件头 -->
                                 </div>
                                 <div style="display:inline-flex;width: 100%; height: 90%">
-                                    <!-- <div style="display:inline-block; width: 5%; height: 100%;">
-                                        <button type="button" style="width: 90%; height: 50px;background-image: url(static/src/段落.png);background-size: 100%;background-repeat: no-repeat;"></button>
-                                        <button type="button" style="width: 90%; height: 50px;background-image: url(static/src/图表.png);background-size: 100%;background-repeat: no-repeat;"></button>
-                                        <button type="button" style="width: 90%; height: 50px;background-image: url(static/src/列表.png);background-size: 100%;background-repeat: no-repeat;"></button>
-                                        <button type="button" style="width: 90%; height: 50px;background-image: url(static/src/短期.png);background-size: 100%;background-repeat: no-repeat;"></button>
-                                        <button type="button" style="width: 90%; height: 50px;background-image: url(static/src/十天.png);background-size: 100%;background-repeat: no-repeat;"></button>
-                                        <button type="button" style="width: 90%; height: 50px;background-image: url(static/src/建议.png);background-size: 100%;background-repeat: no-repeat;"></button>
-                    
-                                    </div> -->
+
                                     <textarea id="content" style="width:100%;height: 100%;">
-                                        <p>We all live in a yellow submarine, yellow submarine, yellow submarine, yellow submarine</p>
-                                        <p>Images can also be exported if you source them as base64 DATA URI.</p>   
+
                                     </textarea>
-                    
                     
                                 </div>
                                 <div style="display: inline-flex;width:100%;height: 5%;">
@@ -490,23 +480,17 @@
                     
                                 <script>
                                     tinymce.init({
-                                        selector: '#content',
-                                        plugins: [
-                                            "advlist autolink lists link image charmap print preview anchor",
-                                            "searchreplace visualblocks code fullscreen fullpage textcolor",
-                                            "insertdatetime media table contextmenu paste",
-                                            'image'
-                                        ],
-                                        toolbar: "insertfile undo redo | styleselect | bold italic textcolor | " +
-                                            "alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | " +
-                                            "link image" + 'image'
-                                    });
+                                            selector: '#content',
+                                            language: 'zh_CN',
+                                            branding: false,
+                                            menubar:false,
+                                            plugins: "table",
+                                            toolbar: "insertfile undo redo  styleselect bold italic hr table"
+                                        }); 
                     
                                     document.getElementById('convert').addEventListener('click', function () {
                                         //获取html的内容
-                                        var contentDocument = tinymce.get('content').getContent();
-                                    
-                                        console.log($("input[name='doc_tyoe_opt']:checked").val())
+                                        var contentDocument = tinymce.get('content').getContent();                             
                                         var formData = new FormData();
                                         formData.append("document", contentDocument);
                                        

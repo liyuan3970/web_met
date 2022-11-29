@@ -49,32 +49,8 @@ def index_kb(request):
     # print(this is a index)
     
     return render(request, 'post_data.html', locals())
-##################################################此为预览模式###############################################
-pdf_worker = None
-# pdf的demo
-def pdf_report(request):
-    html_data = request.GET.get('html_data', '')
-    crf = request.GET.get('csrfmiddlewaretoken', '')
-    # pdf = HTML(string='''<h1>The title</h1><p>Content goes here''').render()
-    pdf = HTML(string=html_data).render()
-    pdf_file = pdf.write_pdf()
-    response = StreamingHttpResponse(pdf_file)
-    response['content_type'] = "application/octet-stream"
-    response['Content-Disposition'] = 'attachment; filename=' + 'report.pdf'
-    return response
-    # return JsonResponse(context)
 
-# pdf_view的demo
-def pdf_view(request):
-    global pdf_worker
-    print(pdf_worker)
-    pdf = HTML(string=pdf_worker).render()
-    pdf_file = pdf.write_pdf()
-    http_response = HttpResponse(pdf_file, content_type='application/pdf')
-    http_response['Content-Disposition'] = 'filename="report.pdf"'
-    # return JsonResponse(context)
-    return http_response
-###########################################################################################################
+
 def post_data(request):
     # 获取查询数据
     # print(request.POST)
