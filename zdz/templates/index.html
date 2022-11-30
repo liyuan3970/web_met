@@ -373,7 +373,45 @@
                                             })
                                         })
                     
-                    
+                                        $('#modal-000002').click(function () {
+                                            console.log('打开文档')
+
+                                            var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                            $.ajax({
+                                                url: "open_old_doc",  // 请求的地址
+                                                type: "post",  // 请求方式
+                                                timeout: 250, //设置延迟上限
+                                                data: {
+                                                    'csrfmiddlewaretoken': csrf
+                                                },
+                                                dataType: "json",
+                                                success: function (data) {
+                                                    // console.log(data.type,data.year,data.unity)
+                                                    $('#open_select_type').html("")
+                                                    for (i = 0; i < data.type.length; i++) {
+                                                        var option_type = document.createElement('option');
+                                                        option_type.value = data.type[i]
+                                                        option_type.innerText = data.type[i]
+                                                        $('#open_select_type').append(option_type)
+                                                    }
+                                                    $('#open_select_year').html("")
+                                                    for (i = 0; i < data.year.length; i++) {
+                                                        var option_year = document.createElement('option');
+                                                        option_year.value = data.year[i]
+                                                        option_year.innerText = data.year[i]
+                                                        $('#open_select_year').append(option_year)
+                                                    }
+                                                    $('#open_select_unity').html("")
+                                                    for (i = 0; i < data.unity.length; i++) {
+                                                        var option_unity = document.createElement('option');
+                                                        option_unity.value = data.unity[i]
+                                                        option_unity.innerText = data.unity[i]
+                                                        $('#open_select_unity').append(option_unity)
+                                                    }
+                                                    
+                                                }
+                                            })
+                                        })
                                     </script>
                                     <!-- 打开 -->
                                     <div class="modal fade" id="modal-container-000002" role="dialog" aria-labelledby="myModalLabel"
@@ -386,13 +424,115 @@
                                                         打开材料
                                                     </h4>
                                                 </div>
-                                                <div class="modal-body" style="height: 600px;">
+                                                <div class="modal-body" style="height: 300px;">
+                                                    <div style="display:inline-block;width:100%;height: 100%;border: 3px solid black">
+                                                        <!-- <div style="width:100%;height: 25%">
+                                                        </div> -->
+                                                        <!-- 选项栏 -->
+                                                        <div style="display: inline-block;width:100%;height: 15%;border: 3px solid black">
+                                                            <select id="open_select_type" style="width: 30%;height:100%;">
+                                                                
+                                                            </select>
+                                                            <div style="display: inline-block;width: 5%;"></div>
+                                                            <select id="open_select_year"  style="width: 15%;height:100%;">
+                                                                
+                                                            </select>
+                                                            <div style="display: inline-block;width: 5%;"></div>
+                                                            <select id="open_select_unity"  style="width: 30%;height:100%;">
+                                                                
+                                                            </select>
+                                                            <input id="open_document_post" type="button" value="查询" style="width:10%;height:100%"> 
+                                                            <script type="text/javascript">
+
+                                                            </script>
+
+                                                        </div>
+                                                        <script type="text/javascript">
+                                                            $('#open_document_post').click(function () {
+                                                                console.log($('#open_select_type').val())
+                                                                var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                                                
+
+                                                                // 告诉后端打开一个新的数据，并在前端修改文档标识
+                                                                $.ajax({
+                                                                    url: "open_doc_data",  // 请求的地址
+                                                                    type: "post",  // 请求方式
+                                                                    timeout: 250, //设置延迟上限
+                                                                    data: {
+                                                                        'csrfmiddlewaretoken': csrf,
+                                                                        'type': $('#open_select_type').val(),
+                                                                        'unity': $('#open_select_unity').val(),
+                                                                        'year': $('#open_select_year').val(),
+                                                                       
+                                                                    },
+                                                                    dataType: "json",
+                                                                    success: function (data) {
+                                                                        // 返回以后创建一个对象实例
+                                                                        console.log("返回成功", data)
+                                                                        $('#open_item_list').html("")
+                                                                        for (i = 0; i < data.item.length; i++) {
+                                                                            var div_label = document.createElement('div');
+                                                                            div_label.style = "width:100%;height:8%;"
+
+                                                                            var label = document.createElement('label');
+                                                                            label.setAttribute("for","item"+i.toString())
+                                                                            label.innerText = "第" + data.item[i] + "期:" + "-----" + data.type[i] + "----"+ data.writer[i]
+                                                                            
+                                                                            var checkitem = document.createElement('input')
+                                                                            checkitem.setAttribute("type","radio")
+                                                                            checkitem.setAttribute("name","load_doc_list")
+                                                                            checkitem.id = "item"+i.toString()
+                                                                            checkitem.style = "display:none"
+                                                                            checkitem.value = i.toString() + "-" + data.year + "-" + data.unity  + "-" + data.type[i]
+                                                                            div_label.append(label,checkitem)
+
+                                                                            $('#open_item_list').append(div_label)
+                                                                        }
+                                                                        
+                                                                    }
+                                                                })
+
+                                                            })
+
+
+                                                        </script>
+                                                        <!-- 加载的栏目 -->
+                                                        <div id="open_item_list" class="scrollbar" style="width:100%;height: 85%;border: 3px solid black;overflow-x: hidden;overflow-y:scroll;">
+                                                        </div>
+
+                                                    </div>
                     
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> <button
-                                                        type="button" class="btn btn-primary">保存</button>
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> 
+                                                    <button id="open_load_object" type="button" class="btn btn-primary" data-dismiss="modal">加载</button>
                                                 </div>
+                                                <script type="text/javascript">
+                                                    $('#open_load_object').click(function () {
+                                                                // console.log($('#load_open_object').val())
+                                                                var upload_data = $("input[name='load_doc_list']:checked").val()
+                                                                console.log("返回",$("input[name='load_doc_list']:checked").val())
+                                                                var csrf = $('input[name="csrfmiddlewaretoken"]').val();                                                        
+                                                                // 告诉后端打开一个新的数据，并在前端修改文档标识
+                                                                $.ajax({
+                                                                    url: "open_load_object",  // 请求的地址
+                                                                    type: "post",  // 请求方式
+                                                                    timeout: 250, //设置延迟上限
+                                                                    data: {
+                                                                        'csrfmiddlewaretoken': csrf, 
+                                                                        'info':upload_data
+                                                                    },
+                                                                    dataType: "json",
+                                                                    success: function (data) {
+                                                                        // 返回以后创建一个对象实例
+                                                                       
+                                                                        console.log("返回成功", data)                                                                                            
+                                                                    }
+                                                                })
+
+                                                            })
+
+                                                </script>
                                             </div>
                     
                                         </div>

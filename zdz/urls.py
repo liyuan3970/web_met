@@ -23,7 +23,12 @@ urlpatterns = [
     path('self_plot_download', views.self_plot_download),
     # 订正产品
     path('upload_select_taizhou_data', views.upload_select_taizhou_data),
-    # 新建文件
+    # 打开文件（查询select的选项）
+    path('open_old_doc', views.open_old_doc),
+    # 打开所选类型的文档并展开列表
+    path('open_doc_data', views.open_doc_data),
+    # 下载选取文件的数据
+    path('open_load_object', views.open_load_object),
     # 获取创建文件的基本信息
     path('create_new_doc', views.create_new_doc),
     # 像数据库添加文档基本数据

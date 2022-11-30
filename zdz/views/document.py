@@ -19,6 +19,7 @@ from ..models.doucument_model import *
 # pdf的插件
 from weasyprint import HTML
 from django.http import HttpResponse, Http404, StreamingHttpResponse
+import datetime
 
 class NpEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -278,6 +279,66 @@ def create_new_doc_data(request):
     }
     return JsonResponse(context)
 
+
+# 打开文档选项
+def open_old_doc(request):
+    unity = Unity.objects.all().values()
+    documenttype = DocumentType.objects.all().values()
+    year = Document.objects.all().values()
+    today = datetime.datetime.today()
+    year = today.year
+    data_year = [year,year-1,year-2]
+    data_unity = [i['name'] for i in unity]
+    data_documenttype = [i['name'] for i in documenttype]
+    context = {
+        'type': data_documenttype,
+        'year': data_year,
+        'unity': data_unity
+    }
+    return JsonResponse(context)
+# 打开所选文档的列表
+def open_doc_data(request):
+    doc_type = request.POST.get('type', '')
+    doc_unity = request.POST.get('unity', '')
+    doc_year = request.POST.get('year', '') 
+    data = Document.objects.filter(year=doc_year,unity=doc_unity,types=doc_type).all().values()
+    item_list = [i['item'] for i in data]
+    writer_list = [i['writer'] for i in data]
+    type_list = [i['types'] for i in data]
+    context = {
+        'type': type_list,
+        'item':item_list,
+        'writer':writer_list,
+        'unity':doc_unity,
+        'year':doc_year
+
+    }
+    return JsonResponse(context)
+
+# 加载选中的文档数据
+def open_load_object(request):
+    info = request.POST.get('info', '')
+    fields = info.split("-")
+    item = int(fields[0])
+    year = int(fields[1]) 
+    unity = fields[2] 
+    doc_type = fields[3] 
+    data = Document.objects.filter(year=year,item =item,unity=unity,types=doc_type).all().values()
+    verson_content = str(data[0]['verson_content']).split(",")[0:-1]
+    for i in range(len(verson_content)):
+        name = verson_content[i]
+        data_self = SelfDefine.objects.filter(year=year,name=name,item =item,unity=unity,types=doc_type).all().order_by('-create_time').values()
+        for j in data_self:
+            if int(j['data']['id'])==i:
+                print("查找数据",j['name'],j['data']['id'],j['types'],j)
+
+       
+    
+    context = {
+        'info': str(verson_content).split(",")
+
+    }
+    return JsonResponse(context)
 
 # 获取呈送发的数据
 def leader_Data_post(request):

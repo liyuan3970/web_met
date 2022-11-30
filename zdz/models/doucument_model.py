@@ -31,13 +31,10 @@ class SelfDefine(BaseModel):
     item = models.IntegerField(verbose_name='期数')
     year = models.IntegerField(verbose_name='年份')
     unity = models.CharField(max_length=200, verbose_name='单位')
-
     data = models.JSONField(null=False)
-
     class Meta:
         verbose_name = verbose_name_plural = '模块类型'
         db_table = 'selfmode'  # 通过db_table自定义数据表名
-
     def __str__(self):
         return str(self.types) + ":" + self.name
 
