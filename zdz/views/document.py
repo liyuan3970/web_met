@@ -325,18 +325,24 @@ def open_load_object(request):
     doc_type = fields[3] 
     data = Document.objects.filter(year=year,item =item,unity=unity,types=doc_type).all().values()
     verson_content = str(data[0]['verson_content']).split(",")[0:-1]
+    content_list = []
     for i in range(len(verson_content)):
         name = verson_content[i]
+        single_content = ""
         data_self = SelfDefine.objects.filter(year=year,name=name,item =item,unity=unity,types=doc_type).all().order_by('-create_time').values()
         for j in data_self:
             if int(j['data']['id'])==i:
+                single_content = j['data']['data']
+                content_list.append(single_content)
                 print("查找数据",j['name'],j['data']['id'],j['types'],j)
-
-       
-    
+                break
     context = {
-        'info': str(verson_content).split(",")
-
+        'type_list':verson_content,
+        'item':item,
+        'year':year,
+        'type':doc_type,
+        'unity':unity,
+        'content_list':content_list
     }
     return JsonResponse(context)
 

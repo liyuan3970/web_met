@@ -241,23 +241,30 @@
                                                                 checkboxitem.setAttribute("type","radio")
                                                                 checkboxitem.style = "display:none;"
                                                                 div_single.append(checkboxitem,label_singl)
-                                                                div_single.addEventListener("click", function () {  
-                                                                    // console.log('div',this)     
-                                                                    // this.style = "width: 15%; height: 30px;border:1px solid black"                                                    
+                                                                div_single.addEventListener("click", function (doc) {  
+                                                                    console.log('内容',doc.path[0].id.toString()[0])     
+                                                                    // this.style = "width: 15%; height: 30px;border:1px solid black" 
+                                                                    var item = Number(doc.path[0].id.toString()[0])
+                                                                    var content = list_button_object.data[item]                                                   
                                                                     tinymce.remove('#content');
                                                                     tinymce.init({
                                                                         selector: '#content',
-                                                                        toolbar: "insertfile undo redo | styleselect | bold italic| "
+                                                                        language: 'zh_CN',
+                                                                        branding: false,
+                                                                        menubar: false,
+                                                                        plugins: "table",
+                                                                        toolbar: "insertfile undo redo  styleselect bold italic hr table"
                                                                     });   
                                                                     // tinymce.get('content').setContent("设置内容")  
-                                                                    $('#content').val(" ")                          
+                                                                    $('#content').val(content)  
+                                                                                          
                                                                 })
                                                                 $('#button_type_list').append(div_single)
                                                             }
-                                                            // return this.data + "卧槽"
+                                                            
                                                         },
                                                         render_data_list: function (item) {
-                                                            // console.log("cerate_div_button")
+                                                           
                                                             var doc_type =this.type_list[item]
                                                             var id_number = item 
                                                             var doc_data_obj = {
@@ -375,7 +382,7 @@
                     
                                         $('#modal-000002').click(function () {
                                             console.log('打开文档')
-
+                                            $('#open_item_list').html('')
                                             var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                                             $.ajax({
                                                 url: "open_old_doc",  // 请求的地址
@@ -429,7 +436,7 @@
                                                         <!-- <div style="width:100%;height: 25%">
                                                         </div> -->
                                                         <!-- 选项栏 -->
-                                                        <div style="display: inline-block;width:100%;height: 15%;border: 3px solid black">
+                                                        <div  style="display: inline-block;width:100%;height: 15%;">
                                                             <select id="open_select_type" style="width: 30%;height:100%;">
                                                                 
                                                             </select>
@@ -497,7 +504,7 @@
 
                                                         </script>
                                                         <!-- 加载的栏目 -->
-                                                        <div id="open_item_list" class="scrollbar" style="width:100%;height: 85%;border: 3px solid black;overflow-x: hidden;overflow-y:scroll;">
+                                                        <div id="open_item_list" class="scrollbar" style="width:100%;height: 85%;border: 1px solid black;overflow-x: hidden;overflow-y:scroll;">
                                                         </div>
 
                                                     </div>
@@ -525,8 +532,16 @@
                                                                     dataType: "json",
                                                                     success: function (data) {
                                                                         // 返回以后创建一个对象实例
-                                                                       
-                                                                        console.log("返回成功", data)                                                                                            
+                                                                        console.log("返回成功", data)
+                                                                        $('#doc_type').text(data.type)
+                                                                        $('#doc_info').text("第" + data.item + "期:  " + data.type)
+                                                                        list_button_object.year = data.year
+                                                                        list_button_object.item = data.item
+                                                                        list_button_object.type = data.type
+                                                                        list_button_object.type_list = data.type_list
+                                                                        list_button_object.unity = data.unity
+                                                                        list_button_object.cerate_div_button()
+                                                                        list_button_object.data = data.content_list
                                                                     }
                                                                 })
 
