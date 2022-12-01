@@ -220,9 +220,12 @@
                                                         type_list: ['段落', '图表'],
                                                         type:"一周天气预测",
                                                         data: [],
-                                                        item: 0,
+                                                        item: 47,
                                                         year: 2022,
                                                         unity: "台州市气象局",
+                                                        writer:"翁之梅",
+                                                        publisher:"冯坚",
+                                                        time:"2022年8月12日15时",
                                                         cerate_div_button: function () {
                                                             $('#button_type_list').html("")
                                                             for (var i = 0; i < this.type_list.length; i++) {
@@ -251,7 +254,7 @@
                                                                         selector: '#content',
                                                                         language: 'zh_CN',
                                                                         branding: false,
-                                                                        menubar: false,
+                                                                        // menubar: false,
                                                                         plugins: "table",
                                                                         toolbar: "insertfile undo redo  styleselect bold italic hr table"
                                                                     });   
@@ -273,7 +276,25 @@
                                                                 content:""
                                                             }
                                                             return doc_data_obj
-                                                        }
+                                                        },
+                                                        render_head_info:function () {
+                                                           
+                                                           var line1 = '<p style="text-align: center;"><span style="font-size: 36pt; color: rgb(224, 62, 45);">'+this.type+'</span></p>'
+                                                           var line2 = '<p style="text-align: center;"><span style="font-size: 12pt; color: rgb(0, 0, 0); font-family: \'times new roman\', times, serif;">第'+this.item.toString()+'期</span></p>'
+                                                           var line3 = '<table style="border-collapse: collapse; width: 100%; border-width: 1px;" border="1"><colgroup><col style="width: 33.3333%;"><col style="width: 33.3333%;"><col style="width: 33.3333%;"></colgroup>'
+                                                           var line4 = '<tbody><tr><td style="border-width: 1px;">&nbsp;</td><td style="border-width: 1px;">&nbsp;</td>'
+                                                           var line5 = '<td style="border-width: 1px; text-align: right;"><span style="font-family: "times new roman", times, serif;">撰稿人：'+this.writer+'</span></td>'
+                                                           var line6 = '</tr><tr>'
+                                                           var line7 = '<td style="border-width: 1px;"><span style="font-family: \'times new roman\', times, serif;">'+this.time+'</span></td>'
+                                                           var line8 = '<td style="border-width: 1px; text-align: center;">'+this.unity+'</td>'
+                                                           var line9 = '<td style="border-width: 1px; text-align: right;">签发人：'+this.publisher+'</td>'
+                                                           var line10 = '</tr></tbody></table>'
+                                                           var line11 = '<hr style="background-color:  #FF0000;">'
+                                                           var line12= '<p>&nbsp;</p>'
+                                                           var headerInfo = line1 + line2 + line3 + line4 + line5 + line6 + line7 + line8 + line9 + line10 + line11 + line12 
+                                                           
+                                                           return headerInfo
+                                                       }
                                                     }
                                                     
                     
@@ -638,14 +659,18 @@
                                             selector: '#content',
                                             language: 'zh_CN',
                                             branding: false,
-                                            menubar:false,
+                                            // smenubar:false,
                                             plugins: "table",
                                             toolbar: "insertfile undo redo  styleselect bold italic hr table"
                                         }); 
                     
                                     document.getElementById('convert').addEventListener('click', function () {
                                         //获取html的内容
-                                        var contentDocument = tinymce.get('content').getContent();                             
+                                        var contentDocument = tinymce.get('content').getContent();   
+                                        // 加载文件头  
+                                        var hearder = list_button_object.render_head_info()
+                                        contentDocument =hearder + contentDocument 
+                                        console.log(contentDocument)                        
                                         var formData = new FormData();
                                         formData.append("document", contentDocument);
                                        
