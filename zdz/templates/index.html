@@ -290,9 +290,7 @@
                                                            var line9 = '<td style="border-width: 1px; text-align: right;">签发人：'+this.publisher+'</td>'
                                                            var line10 = '</tr></tbody></table>'
                                                            var line11 = '<hr style="background-color:  #FF0000;">'
-                                                           var line12= '<p>&nbsp;</p>'
-                                                           var headerInfo = line1 + line2 + line3 + line4 + line5 + line6 + line7 + line8 + line9 + line10 + line11 + line12 
-                                                           
+                                                           var headerInfo = line1 + line2 + line3 + line4 + line5 + line6 + line7 + line8 + line9 + line10 + line11                                                           
                                                            return headerInfo
                                                        }
                                                     }
@@ -656,24 +654,27 @@
                     
                                 <script>
                                     tinymce.init({
-                                            selector: '#content',
-                                            language: 'zh_CN',
-                                            branding: false,
-                                            // smenubar:false,
-                                            plugins: "table",
-                                            toolbar: "insertfile undo redo  styleselect bold italic hr table"
-                                        }); 
-                    
+                                        selector: '#content',
+                                        language: 'zh_CN',
+                                        branding: false,
+                                        // smenubar:false,
+                                        content_style: 'img {max-width:800px;max-height:800px;}',
+                                        plugins: "table image image-tools code",
+                                        toolbar: "insertfile undo redo  styleselect bold italic hr table image code"                
+                                    });
+
+
+
                                     document.getElementById('convert').addEventListener('click', function () {
                                         //获取html的内容
-                                        var contentDocument = tinymce.get('content').getContent();   
+                                        var contentDocument = tinymce.get('content').getContent();
                                         // 加载文件头  
                                         var hearder = list_button_object.render_head_info()
-                                        contentDocument =hearder + contentDocument 
-                                        console.log(contentDocument)                        
+                                        contentDocument = hearder + contentDocument
+                                        console.log(contentDocument)
                                         var formData = new FormData();
                                         formData.append("document", contentDocument);
-                                       
+
                                         $.ajax({
                                             url: "file/pdf",  // 请求的地址
                                             type: "POST",  // 请求方式
@@ -689,24 +690,24 @@
                                                 for (i = 0; i < rawLength; i++) {
                                                     array[i] = data.charCodeAt(i) & 0xff;
                                                 }
-                    
+
                                                 var pdfBlob = new Blob([array], { type: "application/pdf;charset=utf-8" })
                                                 var pdfFile = URL.createObjectURL(pdfBlob)
                                                 const options_pdf = {
                                                     forcePDFJS: true,
-                                                    pdfOpenParams: {                                         
+                                                    pdfOpenParams: {
                                                         pagemode: "thumbs",
                                                         navpanes: 0,
                                                         toolbar: 0,
-                                                        scrollbar:0,
+                                                        scrollbar: 0,
                                                         statusbar: 0,
                                                         view: "FitV"
                                                     }
                                                 }
-                    
+
                                                 PDFObject.embed(pdfFile, "#product_view", options_pdf);
                                             }
-                    
+
                                         })
                                     });
                                     document.getElementById('preview_save').addEventListener('click', function () {
@@ -727,7 +728,7 @@
                                         formData.append("types", types);
                                         formData.append("name", name);
                                         formData.append("year", year);
-                                        formData.append("data", data);  
+                                        formData.append("data", data);
                                         formData.append("items", items);
                                         formData.append("unity", unity);
                                         $.ajax({
@@ -745,7 +746,7 @@
                                                 for (i = 0; i < rawLength; i++) {
                                                     array[i] = data.charCodeAt(i) & 0xff;
                                                 }
-                    
+
                                                 var pdfBlob = new Blob([array], { type: "application/pdf;charset=utf-8" })
                                                 var pdfFile = URL.createObjectURL(pdfBlob)
                                                 const options_pdf = {
@@ -759,13 +760,13 @@
                                                         view: "FitV"
                                                     }
                                                 }
-                    
+
                                                 PDFObject.embed(pdfFile, "#product_view", options_pdf);
                                             }
-                    
+
                                         })
                                     });
-                    
+
                                 </script>
                     
                             </div>
