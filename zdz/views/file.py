@@ -1,16 +1,18 @@
 from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from weasyprint import HTML
+
 from ..models.doucument_model import *
+
 
 @api_view(["post"])
 def pdf(request):
     # 接收前台数据
     document = request.data["document"]
-    
+
     pdf_file = HTML(string=document)
 
-    pdf_file = pdf_file.write_pdf()
+    pdf_file = pdf_file.write_pdf(presentational_hints=True)
     return HttpResponse(pdf_file, content_type="application/pdf")
 
 
@@ -26,8 +28,8 @@ def preview_save(request):
     data = request.data["data"]
     unity = request.data["unity"]
     context = {
-        "id":item,
-        "data":data
+        "id": item,
+        "data": data
     }
     # 数据存储
     obj = SelfDefine.objects.create(
@@ -35,14 +37,14 @@ def preview_save(request):
         name=name,
         item=items,
         year=year,
-        unity=unity, 
+        unity=unity,
         data=context,
-        create_user = 0, 
-        update_user = 0
+        create_user=0,
+        update_user=0
     )
     print("数据保存成功")
 
     pdf_file = HTML(string=document)
 
-    pdf_file = pdf_file.write_pdf()
+    pdf_file = pdf_file.write_pdf(presentational_hints=True)
     return HttpResponse(pdf_file, content_type="application/pdf")
