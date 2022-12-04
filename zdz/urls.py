@@ -17,6 +17,8 @@ urlpatterns = [
     path('quick_look', views.quick_look),
     # 测试模块的页面
     path('test_demo', views.test_demo),
+    # tinymce插件footer
+    path('tinymce/footer', views.tinymce_footer),
     # 自定义绘图
     path('upload_selfplot_data', views.plot_self_data),
     # 自定义画图数据下载

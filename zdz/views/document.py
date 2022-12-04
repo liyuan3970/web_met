@@ -346,6 +346,37 @@ def open_load_object(request):
     }
     return JsonResponse(context)
 
+# tinymce_footer
+def tinymce_footer(request):
+    
+    versions = LeaderData.objects.all().values()
+
+    # names = Picture.objects.all().values('name')
+    # name_list = []
+    # for name in names:
+    #     name_list.append(name['name'])
+    version_list = []
+    for version in versions:
+        v = {}
+        v['name'] = version['name']
+        v['service_name'] = version['service_name']
+        v['service_unity'] = version['service_unity']
+        v['recive_unity'] = version['recive_unity']
+        version_list.append(v)
+    print("ok--",version_list)
+    datalist = func.decode_footer(version_list )
+    # datalist = [
+    #     { 'value':'data_one', 'text':'气象信息快报' },
+    #     { 'value':'data_two', 'text':'重要气象报告' }
+    #     ]
+    # datalist = [1,2]
+    # print("呈送", version_list, name_list)
+    context = {
+        'status': "ok",
+        'datalist':datalist
+    }
+    return JsonResponse(context)
+
 # 获取呈送发的数据
 def leader_Data_post(request):
     versions = LeaderData.objects.all().values()

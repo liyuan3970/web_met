@@ -146,3 +146,17 @@ def plot_image(lat, lon, value):
     #         if not isnan(awash_da.data[j,i]):
     #             plt.text(x0,y0,str(int(awash_da.data[j,i])),fontsize= 7,fontweight = 800 ,color ="black")
     basemask(cs, ax, m, filepath + 'taizhou')
+
+# 解析tinymce的footer 模块
+def decode_footer(version_list):
+    lineh = '''<div><hr style="background-color: :#000000; size:3px"></div>'''
+    linep = '''<div style="line-height: 1.5;"><div><span style="font-size: 10pt;"><span style="font-family: 仿宋_GB2312;">'''
+    lineend = '''</div></div></div>'''
+    linef = '''</span></div>'''
+    datalist = []
+    for data in version_list:
+        single = {}
+        single['value'] = lineh + linep + "呈</span>:" + data['service_name'] + linef +linep + "送</span>:" + data['service_unity'] + linef +linep + "发</span>:" + data['recive_unity'] + linef+lineend
+        single['text'] = data['name']
+        datalist.append(single)
+    return datalist
