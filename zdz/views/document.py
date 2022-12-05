@@ -348,13 +348,7 @@ def open_load_object(request):
 
 # tinymce_footer
 def tinymce_footer(request):
-    
     versions = LeaderData.objects.all().values()
-
-    # names = Picture.objects.all().values('name')
-    # name_list = []
-    # for name in names:
-    #     name_list.append(name['name'])
     version_list = []
     for version in versions:
         v = {}
@@ -363,17 +357,20 @@ def tinymce_footer(request):
         v['service_unity'] = version['service_unity']
         v['recive_unity'] = version['recive_unity']
         version_list.append(v)
-    print("ok--",version_list)
-    datalist = func.decode_footer(version_list )
-    # datalist = [
-    #     { 'value':'data_one', 'text':'气象信息快报' },
-    #     { 'value':'data_two', 'text':'重要气象报告' }
-    #     ]
-    # datalist = [1,2]
-    # print("呈送", version_list, name_list)
+    datalist = func.decode_footer(version_list)
+    images = Picture.objects.all().values()
+    image_list = []
+    for image in images:
+        single = {
+            'name':image['name'],
+            'src':image['img']
+        }
+        image_list.append(single)
+    html_png = func.footer_png(image_list)
     context = {
         'status': "ok",
-        'datalist':datalist
+        'datalist':datalist,
+        'html_png':html_png
     }
     return JsonResponse(context)
 

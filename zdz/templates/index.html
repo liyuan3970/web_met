@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scrollbar_self">
 
 <head>
     <meta charset="UTF-8">
@@ -35,17 +35,17 @@
     <script src="static/js/jquery.minicolors.js"></script>
     <link rel="stylesheet" href="static/css/jquery.minicolors.css">
     <style type="text/css">
-        .scrollbar::-webkit-scrollbar {
+        .scrollbar_self::-webkit-scrollbar {
             display: none;
         }
     
-        html {
+        /* html {
     
             overflow-x: hidden;
     
             overflow-y: hidden;
     
-        }
+        } */
     </style>
     <title>决策服务模板平台</title>
 
@@ -54,7 +54,7 @@
 <body>
     <!-- 全局布局 -->
     <div
-        style="display: flex;align-content:flex-start;position: absolute; justify-content: center; flex-wrap: wrap; width: 100%;height: 100%;  background-color: rgb(243, 244, 247);">
+        style="display: flex;align-content:flex-start;position: absolute; justify-content: center; flex-wrap: wrap; width: 100%;height: 100%;  background-color: rgb(243, 244, 247)">
         <!-- 导航栏 -->
         {% csrf_token %}
         <div style="background-color:rgb(119, 160, 236); width: 100%; height: 5%;">
@@ -523,7 +523,7 @@
 
                                                         </script>
                                                         <!-- 加载的栏目 -->
-                                                        <div id="open_item_list" class="scrollbar" style="width:100%;height: 85%;border: 1px solid black;overflow-x: hidden;overflow-y:scroll;">
+                                                        <div id="open_item_list" class="scrollbar_self" style="width:100%;height: 85%;border: 1px solid black;overflow-x: hidden;overflow-y:scroll;">
                                                         </div>
 
                                                     </div>
@@ -654,14 +654,23 @@
                     
                                 <script>
                                     tinymce.init({
-                                        selector: '#content',
-                                        language: 'zh_CN',
-                                        branding: false,
-                                        // smenubar:false,
-                                        content_style: 'img {max-width:800px;max-height:800px;}',
-                                        plugins: "table image image-tools code footer",
-                                        toolbar: "insertfile undo redo  styleselect bold italic hr table image code footer"                
-                                    });
+                                            selector: '#content',
+                                            language: 'zh_CN',
+                                            branding: false,
+                                            skin: 'oxide-dark',
+                                            promotion: false,
+                                            plugin_plothtml_width : "300%",
+                                            // menubar:false,
+                                            content_style: 'img {max-width:800px;max-height:800px;}',
+                                            plugins: "table image code footer lists, advlist indent2em plothtml",
+                                            toolbar: ["insertfile undo redo  styleselect bold italic hr table image code",
+                                                "footer bullist numlist indent2em plothtml"],
+                                            table_class_list: [
+                                                { title: '无', value: '' },
+                                                { title: '商务蓝', value: 'table-blue' },
+                                                { title: '中国红', value: 'table-red' }
+                                            ],
+                                        });
 
 
 
@@ -796,7 +805,7 @@
                                         <div class="tab-pane active" id="panel-03001" style="width:100%;height:100%">
                                             <!-- 调整好的布局结构 -->
                                             <div style="width:100%;height:97%;">
-                                                <div class="scrollbar"
+                                                <div class="scrollbar_self"
                                                     style="width:100%;height:80%;overflow-x: hidden;overflow-y:scroll;">
 
                                                     <div class="tool_history_button"
@@ -2297,14 +2306,14 @@
 
                             var self_png_show = document.createElement('div')
                             self_png_show.style = style = " width: 80%;height: 100%;overflow-x: hidden;overflow-y: scroll;"
-                            self_png_show.setAttribute("class", "scrollbar")
+                            self_png_show.setAttribute("class", "scrollbar_self")
 
 
                             self_png_show.id = "self_png_show"
 
                             var body_ul_div = document.createElement('div')
                             body_ul_div.style = style = style = "width: 18%;height: 100%;overflow-x: hidden;overflow-y: scroll;"
-                            body_ul_div.setAttribute("class", "scrollbar")
+                            body_ul_div.setAttribute("class", "scrollbar_self")
                             body_ul_div.id = "body_ul_div"
 
                             var body_ul = document.createElement('ul')
@@ -2609,7 +2618,7 @@
 
                                     var table_wind_div = document.createElement('div')
                                     table_wind_div.style = "width: 40%; height:90%;margin:10px;overflow-x: hidden;overflow-y: scroll;"
-                                    table_wind_div.setAttribute("class", "scrollbar")
+                                    table_wind_div.setAttribute("class", "scrollbar_self")
 
                                     var table_wind = document.createElement('table')
                                     table_wind.setAttribute('class', 'table')
@@ -2763,7 +2772,7 @@
 
                                     var table_see_view_div = document.createElement('div')
                                     table_see_view_div.style = "width: 40%; height:90%;margin:10px;overflow-x: hidden;overflow-y: scroll;"
-                                    table_see_view_div.setAttribute("class", "scrollbar")
+                                    table_see_view_div.setAttribute("class", "scrollbar_self")
 
                                     var table_see_view = document.createElement('table')
                                     table_see_view.setAttribute('class', 'table')
@@ -3712,7 +3721,7 @@
                             var blank_ec = document.createElement('div')
                             blank_ec.id = "blank_ec"
                             blank_ec.style = "width: 85%; height: 35%;margin:15px;border-radius: 20px;;float: left;font-size: 17px;font-weight:900;font-family:'宋体';overflow-x: hidden;overflow-y: scroll;;"
-                            blank_ec.setAttribute("class", "scrollbar")
+                            blank_ec.setAttribute("class", "scrollbar_self")
                             blank_ec.innerHTML = "&nbsp;&nbsp;大麦屿街道，隶属于浙江省台州市玉环市，地处玉环市西南部，东连坎门街道，南与温州市洞头县鹿西乡隔海相望，西、西北临乐清湾，与温州市乐清市城东街道、虹桥镇隔海相眺，北、东北连接玉城街道，辖区总面积74.1平方千米。"
                             var name_ec = document.createElement('div')
                             name_ec.style = "display: inline-flex;width: 100%; height: 20%;"

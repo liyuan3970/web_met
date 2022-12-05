@@ -25,17 +25,22 @@
   <div id="download-area"></div>
 
   <script>
-    tinymce.init({
-      selector: '#content',
-      plugins: [
-        "advlist autolink lists link image charmap print preview anchor",
-        "searchreplace visualblocks code fullscreen fullpage",
-        "insertdatetime media table contextmenu paste"
-      ],
-      toolbar: "insertfile undo redo | styleselect | bold italic | " +
-        "alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | " +
-        "link image"
-    });
+      tinymce.init({
+        selector: '#content',
+        language: 'zh_CN',
+        branding: false,
+        skin: 'oxide-dark',
+        // menubar:false,
+        content_style: 'img {max-width:800px;max-height:800px;}',
+        plugins: "table image code footer",
+        toolbar: ["insertfile undo redo  styleselect bold italic hr table image code",
+          "footer"],
+        table_class_list: [
+          { title: '无', value: '' },
+          { title: '商务蓝', value: 'table-blue' },
+          { title: '中国红', value: 'table-red' }
+        ],
+      });
     document.getElementById('convert').addEventListener('click', function (e) {
       e.preventDefault();
       convertImagesToBase64()
