@@ -668,17 +668,36 @@
                                             skin: 'oxide-dark',
                                             promotion: false,
                                             plugin_plothtml_width: "300%",
-                                            menubar:false,
+                                            menubar: false,
                                             plugins: "newfile openfile advlist anchor autolink autosave charmap code codesample emoticons footer fullscreen help image importcss indent2em insertdatetime link lists media nonbreaking pagebreak plothtml preview quickbars save searchreplace table template visualblocks wordcount",
                                             toolbar: [
-                                                    "newfile openfile plothtml",
-                                                    "insertfile undo redo bold italic underline hr |alignleft aligncenter alignright formatselect fontselect fontsizeselect removeformat subscript superscript charmap searchreplace insertdatetime forecolor backcolor fontsize fontfamily",//段落
-                                                    "image code link unlink rotateleft rotateright flipv fliph editimage imageoptions quickimage | table | bullist numlist| | footer plothtml"                                                                                
+                                                "newfile openfile plothtml urldialog",
+                                                "insertfile undo redo bold italic underline hr |alignleft aligncenter alignright formatselect fontselect fontsizeselect removeformat subscript superscript charmap searchreplace insertdatetime forecolor backcolor fontsize fontfamily",//段落
+                                                "image code link unlink rotateleft rotateright flipv fliph editimage imageoptions quickimage | table | bullist numlist| | footer plothtml"
                                             ],
                                             font_family_formats: "宋体='宋体';仿宋='仿宋';微软雅黑='微软雅黑';楷体='楷体';;隶书='隶书';幼圆='幼圆';Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings",
                                             font_size_formats: '12px 14px 16px 18px 20px 24px 26px 28px 30px 32px 34px 36px 38px',
-                                            
-                                            
+                                            setup: (editor) => {
+                                                editor.ui.registry.addButton('urldialog', {
+                                                    // icon: 'code',
+                                                    text:'网址',
+                                                    onAction: () => editor.windowManager.openUrl({
+                                                        title: '网站测试',
+                                                        url: 'http://127.0.0.1:9001/test_demo',
+                                                        height: 800,
+                                                        width: 1200,
+                                                        buttons:[
+                                                            {
+                                                                type:'cancel',
+                                                                text:'测试',
+                                                                align:'end'
+                                                            }
+                                                        ]
+                                                    })
+                                                })
+                                            },
+
+
                                         });
 
 
