@@ -91,14 +91,13 @@
                         <!-- tinymce -->
                         <div class="tab-pane active" id="panel-1" style="width:100%;height:100%;">
                             <div style="display:inline-block;width:100%;height:100%">
-                                <div style=" width: 100%; height: 5%;">
+                                <!-- 打开功能的实现 -->
+                                <div style="width: 100%; height: 0px;">
                                     <a id="modal-000001" href="#modal-container-000001" role="button" class="btn" data-toggle="modal">新建</a>
                                     <a id="modal-000002" href="#modal-container-000002" role="button" class="btn" data-toggle="modal">打开</a>
                                     <a id="modal-000003" href="#modal-container-000003" role="button" class="btn" data-toggle="modal">删除</a>
                                     <a id="modal-000004" href="#modal-container-000004" role="button" class="btn" data-toggle="modal">配置</a>
-                                    <div id="button_type_list" style="display: inline-flex;width:50%;height:80%">
-                                        <!-- 用来放置添加列表 -->
-                                    </div>
+                                    <!-- <div id="button_type_list" style="display: inline-flex;width:50%;height:80%"></div> -->
                     
                                     <!-- 新建 -->
                                     <div class="modal fade" id="modal-container-000001" role="dialog" aria-labelledby="myModalLabel"
@@ -639,7 +638,7 @@
                     
                                     <!-- 文件头 -->
                                 </div>
-                                <div style="display:inline-flex;width: 100%; height: 90%">
+                                <div style="display:inline-flex;width: 100%; height: 96%">
 
                                     <textarea id="content" style="width:100%;height: 100%;">
 
@@ -648,8 +647,9 @@
                                 </div>
                                 <div style="display: inline-flex;width:100%;height: 5%;">
                                     <div style="width:85%;height: 100%;">
-                                        <h5 id="doc_unity" style="float:left;width:25%">台州市气象局</h5>
-                                        <h5 id="doc_info" style="float:left;width:25%">第47期:一周天气</h5>
+                                        <h5 id="doc_unity" style="float:left;width:20%">台州市气象局</h5>
+                                        <h5 id="doc_info" style="float:left;width:20%">第47期:一周天气</h5>
+                                        <div id="button_type_list" style="display: inline-flex;width:55%;height:80%"></div> 
                                     </div>
                                     <button id="convert3"
                                         style="width:40px;height:40px;background-image: url(static/src/合并.png);background-size: 100%;background-repeat: no-repeat;"></button>
@@ -670,9 +670,9 @@
                                             promotion: false,
                                             plugin_plothtml_width: "300%",
                                             menubar:false,
-                                            plugins: "advlist anchor autolink autosave charmap code codesample emoticons footer fullscreen help image importcss indent2em insertdatetime link lists media nonbreaking pagebreak plothtml preview quickbars save searchreplace table template visualblocks wordcount",
+                                            plugins: "newfile openfile advlist anchor autolink autosave charmap code codesample emoticons footer fullscreen help image importcss indent2em insertdatetime link lists media nonbreaking pagebreak plothtml preview quickbars save searchreplace table template visualblocks wordcount",
                                             toolbar: [
-                                                    "footer bullist numlist indent2em plothtml",
+                                                    "newfile openfile plothtml",
                                                     "insertfile undo redo bold italic underline hr |alignleft aligncenter alignright formatselect fontselect fontsizeselect removeformat subscript superscript charmap searchreplace insertdatetime forecolor backcolor fontsize fontfamily",//段落
                                                     "image code link unlink rotateleft rotateright flipv fliph editimage imageoptions quickimage | table | bullist numlist| | footer plothtml"                                                                                
                                             ],
