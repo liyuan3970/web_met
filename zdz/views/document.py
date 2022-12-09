@@ -42,8 +42,79 @@ def kuaibao(request):
 
 
 def test_demo(request):
-    # print(this is a index)
-    return render(request, 'test_demo.html', locals())
+
+    unitys = WebUnity.objects.all().values()
+    #images = WebPicture.objects.all().values()
+    class_types = WebClass.objects.all().values()
+    class_dir = []
+    view_list = []
+    for unity in unitys:
+        if unity['name']=='台州气象局':
+            img_src = unity['img']
+            check_name = unity['name']
+            for single_class in class_types:
+                single_list = {
+                    'name':single_class['name'],
+                    'src':single_class['img'],
+                    'img_list':[]
+                }            
+                img_name = single_class['name']
+                images = WebPicture.objects.filter(unity=check_name,webclass=img_name).all().values()
+                for img in images:
+                    img_dir = {
+                        'name':img['name'],
+                        'src':img['img']
+                    }
+                    single_list['img_list'].append(img_dir)
+                class_dir.append(single_list)
+    
+    view_list=class_dir[0]['img_list']  
+    print("数据",class_dir,"shuju ",view_list)    
+    content = {
+        'img_src': img_src,
+        'class_dir':class_dir,
+        'first':view_list
+    }  
+        
+    return render(request, 'test_demo.html',locals())
+
+
+def website(request):
+
+    unitys = WebUnity.objects.all().values()
+    #images = WebPicture.objects.all().values()
+    class_types = WebClass.objects.all().values()
+    class_dir = []
+    view_list = []
+    for unity in unitys:
+        if unity['name']=='台州气象局':
+            img_src = unity['img']
+            check_name = unity['name']
+            for single_class in class_types:
+                single_list = {
+                    'name':single_class['name'],
+                    'src':single_class['img'],
+                    'img_list':[]
+                }            
+                img_name = single_class['name']
+                images = WebPicture.objects.filter(unity=check_name,webclass=img_name).all().values()
+                for img in images:
+                    img_dir = {
+                        'name':img['name'],
+                        'src':img['img']
+                    }
+                    single_list['img_list'].append(img_dir)
+                class_dir.append(single_list)
+    
+    view_list=class_dir[0]['img_list']  
+    print("数据",class_dir,"shuju ",view_list)    
+    content = {
+        'img_src': img_src,
+        'class_dir':class_dir,
+        'first':view_list
+    }  
+        
+    return JsonResponse(content)
 
 # demo_02是气象快报的核心代码主要用来统计数据
 def index_kb(request):

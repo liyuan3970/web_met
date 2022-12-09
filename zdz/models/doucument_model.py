@@ -91,15 +91,63 @@ class Picture(BaseModel):
     """图片二维码"""
     img = models.ImageField(upload_to='img/')
     name = models.CharField(max_length=200, verbose_name='宣传二维码')
-
     class Meta:
         verbose_name = verbose_name_plural = '宣传二维码'
         db_table = 'picture'  # 通过db_table自定义数据表名
 
     def __str__(self):
         return self.name
+##################################################网站交互的图片资源##################################################
+class WebPicture(BaseModel):
+    """网站图片"""
+    img = models.ImageField(upload_to='web/')
+    name = models.CharField(max_length=200, verbose_name='网站名称')
+    unity = models.TextField(max_length=21844, verbose_name='单位')
+    webclass = models.TextField(max_length=21844, verbose_name='类别')
+    class Meta:
+        verbose_name = verbose_name_plural = '网站图片'
+        db_table = 'webpicture'  # 通过db_table自定义数据表名
+
+    def __str__(self):
+        return self.name
+
+class WebClass(BaseModel):
+    """网站分类"""
+    img = models.ImageField(upload_to='web/')
+    name = models.CharField(max_length=200, verbose_name='类别')
+    unity = models.TextField(max_length=21844, verbose_name='单位')
+    class Meta:
+        verbose_name = verbose_name_plural = '网站分类'
+        db_table = 'webclass'  # 通过db_table自定义数据表名
+
+    def __str__(self):
+        return self.name
+
+class WebUnity(BaseModel):
+    """单位图片"""
+    img = models.ImageField(upload_to='web/')
+    name = models.CharField(max_length=200, verbose_name='单位图标')
+    class Meta:
+        verbose_name = verbose_name_plural = '单位图标'
+        db_table = 'webunity'  # 通过db_table自定义数据表名
+
+    def __str__(self):
+        return self.name
 
 
+class WebCache(BaseModel):
+    """交互图片"""
+    name = models.CharField(max_length=200, verbose_name='图片名称')
+    unity = models.CharField(max_length=200, verbose_name='单位')
+    data = models.JSONField(null=False)
+    class Meta:
+        verbose_name = verbose_name_plural = '缓存图片'
+        db_table = 'webcache'  # 通过db_table自定义数据表名
+
+    def __str__(self):
+        return self.name
+
+##################################################网站交互的图片资源##################################################
 class LeaderData(BaseModel):
     """呈发送"""
     name = models.CharField(max_length=20, verbose_name='呈送发对象')

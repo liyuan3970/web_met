@@ -19,6 +19,8 @@ urlpatterns = [
     re_path('^media/(?P<path>.*?)$', serve,kwargs={'document_root':'media/'}),
     # 测试模块的页面
     path('test_demo', views.test_demo),
+    # 网址功能
+    path('website', views.website),
     # tinymce插件footer
     path('tinymce/footer', views.tinymce_footer),
     # 自定义绘图

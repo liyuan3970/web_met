@@ -11,3 +11,9 @@ admin.site.register(Picture)
 admin.site.register(LeaderData)
 admin.site.register(Writer)
 admin.site.register(SelfDefine)
+
+# 网站相关
+admin.site.register(WebPicture)
+admin.site.register(WebClass)
+admin.site.register(WebUnity)
+admin.site.register(WebCache)

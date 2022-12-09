@@ -25,23 +25,77 @@
   <div id="download-area"></div>
 
   <script>
-      tinymce.init({
-        selector: '#content',
-        language: 'zh_CN',
-        branding: false,
-        skin: 'oxide-dark',
-        // menubar:false,
-        content_style: 'img {max-width:800px;max-height:800px;}',
-        plugins: "table image code footer",
-        toolbar: ["insertfile undo redo  styleselect bold italic hr table image code fontsizeselect | fontselect",
-          "footer"],
-        fontsize_formats: "8pt 10pt 12pt 14pt 18pt 24pt 36pt", // 第二步
-        table_class_list: [
-          { title: '无', value: '' },
-          { title: '商务蓝', value: 'table-blue' },
-          { title: '中国红', value: 'table-red' }
-        ],
-      });
+    tinymce.init({
+      selector: '#content',
+      language: 'zh_CN',
+      branding: false,
+      skin: 'oxide-dark',
+      // menubar:false,
+      content_style: 'img {max-width:800px;max-height:800px;}',
+      plugins: "table image code footer",
+      toolbar: ["insertfile undo redo  styleselect bold italic hr table image code fontsizeselect | fontselect urldialog",
+        "footer"],
+      fontsize_formats: "8pt 10pt 12pt 14pt 18pt 24pt 36pt", // 第二步
+      setup: (editor) => {
+        editor.ui.registry.addButton('urldialog', {
+          icon: 'code-sample',
+          onAction: (dialogApi) => editor.windowManager.openUrl({
+            title: 'URL Dialog Demo',
+            url: 'www.baidu.com',
+            height: 640,
+            width: 640,
+            buttons: [
+              {
+                type: 'cancel',
+                text: '关闭',
+              },
+              {
+                type: 'custom',
+                text: '提交',
+              }
+            ],
+            initialData: {
+              choosydata: ''
+            },
+            onClose: () => {
+              console.log("6666", this.initialData)
+              // const data = dialogApi.getData();
+              // tinymce.activeEditor.execCommand("66666")
+              // dailog和前端的数据进行通讯
+              window.parent.postMessage({
+                mceAction: 'insertContent',
+                content: 'Some content'
+              }, '*');
+              // dialogApi.close();
+            },
+            onMessage:() => {
+              console.log("6666", this.initialData)
+              // const data = dialogApi.getData();
+              // tinymce.activeEditor.execCommand("66666")
+              // dailog和前端的数据进行通讯
+              window.parent.postMessage({
+                mceAction: 'insertContent',
+                content: 'Some content'
+              }, '*');
+              // dialogApi.close();
+            }
+
+          })
+
+
+        })
+      }
+
+    });
+    window.addEventListener('message', (event) => {
+      var data = event.data;
+      var contentDocument = tinymce.get('content').getContent();
+      contentDocument = contentDocument + data.content
+      tinymce.get('content').setContent(contentDocument)
+      // Do something with the data received here
+      console.log('message received from TinyMCE', data);
+
+    });
     document.getElementById('convert').addEventListener('click', function (e) {
       e.preventDefault();
       convertImagesToBase64()
@@ -53,7 +107,7 @@
       var content = '<!DOCTYPE html>' + contentDocument.documentElement.outerHTML;
       var orientation = document.querySelector('.page-orientation input:checked').value;
       var converted = htmlDocx.asBlob(content, { orientation: orientation });
-      
+
       saveAs(converted, 'test.docx');
 
       var link = document.createElement('a');
@@ -87,19 +141,19 @@
 
   </script>
 
-<!-- <textarea id="content2" cols="60" rows="10">
+  <!-- <textarea id="content2" cols="60" rows="10">
   <p>We all live in a yellow submarine, yellow submarine, yellow submarine, yellow submarine</p>
   <p>Images can also be exported if you source them as base64 DATA URI.</p>
 
 </textarea> -->
-<button id="convert2">Convert2</button>
-<script>
+  <button id="convert2">Convert2</button>
+  <script>
 
     document.getElementById('convert2').addEventListener('click', function () {
-      
-      var contentDocument = tinymce.get('content').getContent() ;
+
+      var contentDocument = tinymce.get('content').getContent();
       var converted = htmlDocx.asBlob(contentDocument)
-      console.log(typeof(converted),converted)
+      console.log(typeof (converted), converted)
 
       // saveAs(converted, 'test.docx')
 
@@ -110,7 +164,7 @@
     });
 
 
-</script>
+  </script>
 
 </body>
 
