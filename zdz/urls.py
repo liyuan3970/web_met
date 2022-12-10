@@ -21,6 +21,8 @@ urlpatterns = [
     path('test_demo', views.test_demo),
     # 网址功能
     path('website', views.website),
+    # 历史文档查阅功能history_file
+    path('history_file', views.history_file),
     # tinymce插件footer
     path('tinymce/footer', views.tinymce_footer),
     # 自定义绘图
@@ -62,5 +64,7 @@ urlpatterns += [
     # 仅预览
     path(r"file/pdf", views.pdf),
     # 预览模块并保存
-    path(r"file/preview_save", views.preview_save)
+    path(r"file/preview_save", views.preview_save),
+    # 查询历史的文档
+    path(r"file/history_save", views.history_save),
 ]

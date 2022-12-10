@@ -78,7 +78,7 @@ def test_demo(request):
         
     return render(request, 'test_demo.html',locals())
 
-
+# 网站预览功能
 def website(request):
 
     unitys = WebUnity.objects.all().values()
@@ -112,6 +112,33 @@ def website(request):
         'img_src': img_src,
         'class_dir':class_dir,
         'first':view_list
+    }  
+        
+    return JsonResponse(content)
+# 历史数据查询
+def history_file(request):
+    unity = "台州市气象局"
+    year = 2022
+    doc_types = DocumentType.objects.filter(unity=unity).all().values()
+    #images = WebPicture.objects.all().values()
+    # class_types = WebClass.objects.all().values()
+    type_list = []
+    for doc_type in doc_types:
+        doc_single = {
+            'name':doc_type['name'],
+            'filelist':[]
+        }
+        doc_all = Document.objects.filter(unity="台州市气象台",year=year,types=doc_type['name']).all().values()
+        for doc in doc_all:
+            doc_dir = {}
+            doc_dir['type'] = doc['types']
+            doc_dir['item'] = doc['item']
+            doc_dir['unity'] = doc['unity']
+            doc_dir['year'] = doc['year']
+            doc_single['filelist'].append(doc_dir)
+        type_list.append(doc_single)   
+    content = {
+        'doc_list': type_list
     }  
         
     return JsonResponse(content)

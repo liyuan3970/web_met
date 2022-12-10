@@ -48,3 +48,15 @@ def preview_save(request):
 
     pdf_file = pdf_file.write_pdf(presentational_hints=True)
     return HttpResponse(pdf_file, content_type="application/pdf")
+
+
+
+@api_view(["post"])
+def history_save(request):
+    # 接收前台数据
+    document = request.data["document"]
+
+    pdf_file = HTML(string=document)
+
+    pdf_file = pdf_file.write_pdf(presentational_hints=True)
+    return HttpResponse(pdf_file, content_type="application/pdf")
