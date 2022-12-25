@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="static/editor/tinymce.min.js"></script>
+    <script src="static/editor/vendor/FileSaver.js"></script>
+    <script src="static/editor/html-docx.js"></script>
+    <script src="static/js/pdfobject.js"></script>
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/jquery.datetimepicker.css" />
+    <script src="static/js/jquery.datetimepicker.full.min.js"></script>
+    <title>网址</title>
+    <style type="text/css">
+        .scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    {% csrf_token %}
+    <div
+        style="display: flex;align-content:flex-start;position: absolute; justify-content: center; flex-wrap: wrap; width: 100%;height: 100%;background-color: rgb(213, 217, 230);">
+        <div style="width:25%;height:100%;border:3px solid black">
+
+            <div style="width:100%;height:35%;border:3px solid black;text-align:center">
+               <img src="media/{{content.img_src}}">
+            </div>
+            <script>
+                let recv = []
+            </script>
+            <div style="width:100%;height:65%;border:3px solid black">
+                {% for single in content.class_dir %}
+                <div class="webcalss"  id = "webcalss{{forloop.counter }}" style = "display: inline-flex;width:100%;height:10%;border:3px solid black">
+                    <img style = "width:40px;height:40px"src="media/{{single.src}}"> <h4>{{single.name}}</h4>      
+                </div>
+                <script >
+                    var data = "{{single.img_list}}"
+                    recv.push(data)
+                                 
+                </script>
+                {% endfor %}     
+            </div>
+            <script>            
+                $(".webcalss").click(function () {
+                    var date = $(this).attr('id');//获取小button的id。
+                    var item = parseInt(date[8])
+                    targetid = "webview" + item.toString()
+                    $(".webviewnone").attr("style","display:none;width:75%;height:100%;border:3px solid black;padding:30px;")
+                    $('#webview').attr("style","display:none;width:75%;height:100%;border:3px solid black;padding:30px;")        
+                    $('#'+targetid).attr("style","display:inline-block;width:75%;height:100%;border:3px solid black;padding:30px;")      
+                });
+            </script>
+        </div>
+
+        <div id="webview" style="display: inline-block;width:75%;height:100%;border:3px solid black;padding:30px;">
+            {% for img in content.first %}
+                <div style = "display: inline-flex;width:20%;height:20%;border:3px solid black;text-align: center">
+                    <img style = "width:100%;height:100%"src="media/{{img.src}}">
+                    <!-- {{img.name}} +{{img.src}}  -->
+                </div>
+            {% endfor %}  
+
+        </div>
+        {% for single in content.class_dir %}
+        <div id = "webview{{forloop.counter }}" class="webviewnone" style="display:none;width:100%;height:100%;border:3px solid black;padding:30px;">
+            {% for img in single.img_list %}
+            <div style = "display: inline-flex;width:20%;height:20%;border:3px solid black;text-align: center">
+                <img style = "width:100%;height:100%"src="media/{{img.src}}">
+                <a href="http://www.baidu.com" target="_Blank">百度</a>
+                <!-- {{img.name}} +{{img.src}}  -->
+            </div>
+            {% endfor %}           
+        </div>
+        {% endfor %}        
+    </div>
+    {% csrf_token %}
+</body>
+
+</html>

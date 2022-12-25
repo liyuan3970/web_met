@@ -5,7 +5,7 @@ let data_canvas = {
     "station_list": ['1', '2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'],
     "station": [
         [120.5, 28.5, 99],
-        [120.92, 28.78, 55],
+        [120.92, 28.78, 58.3],
         [120.47, 28.55, 45],
         [120.91, 29.11, 35],
         [121.46, 28.94, 25],
@@ -73,7 +73,7 @@ function drawMap_self_plot() {
     ctx.fillStyle = 'white'
     ctx.fillRect(0, 0, canvasW_self_plot, canvasH_self_plot)
     drawArea_self_plot()
-    drawText_self_plot()
+    // drawText_self_plot()
 }
 
 // 绘制地图各子区域
@@ -382,7 +382,7 @@ setInterval(function () {
         undefined
         //圆圈移动
         // console.log("ball的长度",parseInt(ballArr.length/3))
-        if (ballArr.length>100){
+        if (ballArr.length>15){
             var num_ball = parseInt(ballArr.length/3)
             // console.log("ball的长度",num_ball)
             ballArr.splice(0,num_ball)

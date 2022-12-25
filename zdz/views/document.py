@@ -78,6 +78,13 @@ def test_demo(request):
         
     return render(request, 'test_demo.html',locals())
 
+
+def canvas_plot(request):
+    content = {
+        'status': "ok"
+    }        
+    return render(request, 'canvas_plot.html',locals())
+
 # 网站预览功能
 def website(request):
 

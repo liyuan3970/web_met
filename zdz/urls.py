@@ -19,6 +19,8 @@ urlpatterns = [
     re_path('^media/(?P<path>.*?)$', serve,kwargs={'document_root':'media/'}),
     # 测试模块的页面
     path('test_demo', views.test_demo),
+    # canvas画图的功能
+    path('canvas_plot', views.canvas_plot),
     # 网址功能
     path('website', views.website),
     # 历史文档查阅功能history_file

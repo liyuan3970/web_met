@@ -680,22 +680,23 @@
                                             setup: (editor) => {
                                                 editor.ui.registry.addButton('urldialog', {
                                                     // icon: 'code',
-                                                    text:'网址',
+                                                    text:'快速画图',
                                                     onAction: () => editor.windowManager.openUrl({
-                                                        title: '网站测试',
-                                                        url: 'http://127.0.0.1:9001/test_demo',
-                                                        height: 800,
-                                                        width: 1200,
+                                                        title: '画图页面',
+                                                        url: 'http://127.0.0.1:9001/canvas_plot',
+                                                        height: 850,
+                                                        width: 1400,
                                                         buttons:[
                                                             {
                                                                 type:'cancel',
-                                                                text:'测试',
+                                                                text:'渲染',
                                                                 align:'end'
                                                             }
                                                         ]
                                                     })
                                                 })
                                             },
+                                            
 
 
                                         });
@@ -1415,7 +1416,7 @@
                                                         }
                                                     );
                                                     $('#self_plot_download').click(function () {
-                                                        // console.log("我被点击了")
+                                                        
                                                         var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                                                         var self_plot_start_time = $('#self_plot_start_time').val();
                                                         var self_plot_end_time = $('#self_plot_end_time').val();
@@ -1460,7 +1461,7 @@
                                                             [121.21, 28.20, 65],
                                                             [121.15, 28.25, 68],
                                                             [120.95, 28.60, 68],
-                                                            [121.00, 28.60, 99]
+                                                            [121.00, 28.60, 99.9]
 
                                                         ]
                                                     }
@@ -1529,7 +1530,6 @@
                                                     $('#plot_1st_tool2').attr("style", "display:none;width:100%;height:80%;border: 1px solid black")
                                                 })
                                                 $('#plot_1st_color').click(function () {
-                                                    console.log("点击颜色成功")
                                                     $('#plot_1st_tool1').attr("style", "display:none;width:100%;height:80%;border: 1px solid black")
                                                     $('#plot_1st_tool2').attr("style", "display:inline-block;width:100%;height:80%;border: 1px solid black")
                                                 })
