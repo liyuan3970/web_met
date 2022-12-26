@@ -114,8 +114,6 @@ function getPos(evt) {
     return {
         x: evt.offsetX,
         y: evt.offsetY
-        // x: evt.clientX,
-        // y: evt.clientY
     }
 }
 
@@ -299,7 +297,7 @@ canvas_quick_plot.addEventListener('click',
 
 canvas_quick_plot.oncontextmenu = function (event) {
     var event = event || window.event;
-    var select_plot_type = $("input[name='taizhou_quick_plot_type']:checked").val()
+    var select_plot_type = 'coutour'//$("input[name='taizhou_quick_plot_type']:checked").val()
     if (select_plot_type == 'coutour') {
         ctx_quick_plot.strokeStyle = $("input[name='selected_color']:checked").val()
         var len_point = countour_rect.x.length

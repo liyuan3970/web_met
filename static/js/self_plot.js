@@ -88,8 +88,6 @@ const self_plot_object = {
     },
     plot: function (csrf) {
         var data_canvas = this.data_canvas
-
-
         // 图片
         $.ajax({
             url: "upload_selfplot_data",  // 请求的地址
