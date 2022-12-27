@@ -32,7 +32,7 @@
     {% csrf_token %}
     <div
         style="display: flex;align-content:flex-start;position: absolute; justify-content: center; flex-wrap: wrap; width: 100%;height: 100%;background-color: rgb(213, 217, 230);">
-                <div class="col-md-12 column" style="width: 100%;height: 100%;">
+                <div class="col-md-12 column" style="width: 100%;height: 100%;padding-top: 15px;">
                     <div class="tabbable" id="tabs-611922" style="width: 100%;height: 100%;">
                         <ul class="nav nav-tabs" style="border: 1px solid">
                             <li class="active">
@@ -210,7 +210,11 @@
                                 <div style="width: 100%;height:700px;border: 1px solid">
                                     <div style="width: 100%;height:700px">
                                         <div style="display: flex;width: 100%;height:100%;border: 1px solid">
+                                            <!-- 底图选项 -->
                                             <div style="width: 20%;height:100%;border: 1px solid">
+                                                <button style="width: 100%;height:30%"></button>
+                                                <button style="width: 100%;height:30%"></button>
+                                                <button style="width: 100%;height:30%"></button>
 
                                             </div>
                                             <div style="width: 80%;height:100%;border: 1px solid">
@@ -221,6 +225,130 @@
                                                 
                                                 <script src='static/js/quick_plot.js'></script>
                                                 <div style="width: 100%;height:15%;border: 1px solid">
+                                                    <!-- 工具栏 -->
+                                                    <div style="display:inline-block;width:100%;height:25%;border: 2px solid black">
+                                                        等值线:&nbsp;<input id="taizhou_quick_plot_contour" type="radio" checked="checked" name="taizhou_quick_plot_type"
+                                                            value="coutour">&nbsp;&nbsp;&nbsp;
+                                                        曲线:&nbsp;<input id="taizhou_quick_plot_line" type="radio" name="taizhou_quick_plot_type"
+                                                            value="line">&nbsp;&nbsp;&nbsp;
+                                                        图标:&nbsp;<input id="taizhou_quick_plot_icon" type="radio" name="taizhou_quick_plot_type"
+                                                            value="scatter_icon">&nbsp;&nbsp;&nbsp;
+                                                        文字:&nbsp;<input id="taizhou_quick_plot_text" type="radio" name="taizhou_quick_plot_type"
+                                                            value="scatter_text">&nbsp;&nbsp;&nbsp;
+                                                        图例:&nbsp;<input id="taizhou_quick_plot_pic" type="radio" name="taizhou_quick_plot_type"
+                                                            value="scatter_pic">&nbsp;&nbsp;&nbsp;
+                                                        <!-- <input id="forward_canvas" type="button" value="前进" style="float: right;">
+                                                        <input id="reback_canvas" type="button" value="撤回" style="float: right;">
+                                                        <input id="flash_canvas" type="button" value="刷新" style="float: right;"> -->
+                                                    
+                                                    </div>
+                                                    <div id="taizhou_quick_plot_type_view0"
+                                                        style="display:inline-block;width:100%;height:70%;">
+                                                        <div style="display:inline-block;width:100%;height: 30%;">
+                                                            颜色1:&nbsp;<input id="" type="radio" class="select_color_bar_type" name="select_color_bar_type" checked="checked"
+                                                                value="1">&nbsp;&nbsp;&nbsp;
+                                                            颜色2:&nbsp;<input id="" type="radio" class="select_color_bar_type" name="select_color_bar_type"
+                                                                value="2">&nbsp;&nbsp;&nbsp;
+                                                            颜色3:&nbsp;<input id="" type="radio" class="select_color_bar_type" name="select_color_bar_type"
+                                                                value="3">&nbsp;&nbsp;&nbsp;
+                                                            颜色4:&nbsp;<input id="" type="radio" class="select_color_bar_type" name="select_color_bar_type"
+                                                                value="4">&nbsp;&nbsp;&nbsp;
+                                                    
+                                                        </div>
+                                                        <div id="select_color_bar1" style="display: inline-block;width:100%;height: 60%;">
+                                                            <div style="display: inline-flex;width: 100%;height:5%"></div>
+                                                            <div style="display: inline-flex;width: 5%;height:40%;background-color:rgb(78, 55, 55);">
+                                                            </div>
+                                                            <div style="display: inline-flex;width: 5%;height:40%;background-color:rgb(0, 255, 221);">
+                                                            </div>
+                                                            <div style="display: inline-flex;width: 5%;height:40%;background-color:rgb(150, 69, 197);">
+                                                            </div>
+                                                            <div style="display: inline-flex;width: 5%;height:40%;background-color:rgb(74, 21, 196);">
+                                                            </div>
+                                                            <div style="display: inline-flex;width: 5%;height:40%;background-color:rgb(214, 235, 96);">
+                                                            </div>
+                                                            <div style="display: inline-flex;width: 5%;height:40%;background-color:red;">
+                                                            </div>
+                                                    
+                                                        </div>
+                                                        <div id="select_color_bar2" style="display: none;width:100%;height: 60%;">
+                                                            <div style="display: inline-flex;width: 100%;height:5%"></div>
+                                                    
+                                                    
+                                                        </div>
+                                                        <div id="select_color_bar3" style="display: none;width:100%;height: 60%;">
+                                                            <div style="display: inline-flex;width: 100%;height:5%"></div>
+                                                    
+                                                    
+                                                        </div>
+                                                        <div id="select_color_bar4" style="display: none;width:100%;height: 60%;">
+                                                            <div style="display: inline-flex;width: 100%;height:5%"></div>
+                                                    
+                                                    
+                                                        </div>
+                                                        <script type="text/javascript">
+                                                            $('input[type=radio][name=select_color_bar_type]').click(function () {
+                                                                console.log($('input[type=radio][name=select_color_bar_type]').val(), this.value)
+                                                                if (this.value == '1') {
+                                                                    console.log("开始你的业务逻辑")
+                                                                }
+                                                                else if (this.value == '2') {
+                                                                    $('#select_color_bar1').css("display", "none")
+                                                                    $('#select_color_bar2').css("display", "inline-block")
+                                                                    $('#select_color_bar3').css("display", "none")
+                                                                    $('#select_color_bar4').css("display", "none")
+                                                                    var color_bar = ['red', 'blue', 'green', 'black']
+                                                                    $('#select_color_bar2').html(" ")
+                                                                    var add_blank_div = document.createElement("div")
+                                                                    add_blank_div.style.display = "inline-flex"
+                                                                    add_blank_div.style.width = "100%"
+                                                                    add_blank_div.style.height = "5%"
+                                                                    $('#select_color_bar2').append(add_blank_div)
+                                                                    for (i = 0; i < color_bar.length; i++) {
+                                                                        var add_div = document.createElement('div')
+                                                                        add_div.style.display = "inline-flex"
+                                                                        add_div.style.width = "5%"
+                                                                        add_div.style.height = "40%"
+                                                                        add_div.style.backgroundColor = color_bar[i]
+                                                                        $('#select_color_bar2').append(add_div)
+                                                                    }
+
+
+                                                                }
+                                                                else if (this.value == '3') {
+                                                                    $('#select_color_bar1').css("display", "none")
+                                                                    $('#select_color_bar2').css("display", "none")
+                                                                    $('#select_color_bar3').css("display", "inline-block")
+                                                                    $('#select_color_bar4').css("display", "none")
+                                                                    var color_bar = ['red', 'blue', 'green', 'black', 'yellow', 'orange']
+                                                                    $('#select_color_bar3').html(" ")
+                                                                    var add_blank_div = document.createElement("div")
+                                                                    add_blank_div.style.display = "inline-flex"
+                                                                    add_blank_div.style.width = "100%"
+                                                                    add_blank_div.style.height = "5%"
+                                                                    $('#select_color_bar3').append(add_blank_div)
+                                                                    for (i = 0; i < color_bar.length; i++) {
+                                                                        var add_div = document.createElement('div')
+                                                                        add_div.style.display = "inline-flex"
+                                                                        add_div.style.width = "5%"
+                                                                        add_div.style.height = "40%"
+                                                                        add_div.style.backgroundColor = color_bar[i]
+                                                                        $('#select_color_bar3').append(add_div)
+                                                                    }
+
+
+                                                                }
+                                                                else if (this.value == '4') {
+
+                                                                }
+
+                                                            })
+                                                                                                // $('.select_color_bar_type').click(function (){
+                                                                                                //    console.log($('.select_color_bar_type').val())
+                                                                                                // })
+                                                        </script>
+                                                    
+                                                    </div>
 
                                                 </div>
 
