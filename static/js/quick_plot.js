@@ -101,7 +101,7 @@ const quick_plot_object = {
         let hScale = this.canvasH / height
         // 计算地图缩放系数
         this.scale = wScale > hScale ? hScale : wScale
-        this.scale = this.scale - 120
+        this.scale = this.scale - 60
         // 获取包围盒中心经纬度坐标
         this.geoCenterX = (E + W) / 2
         this.geoCenterY = (N + S) / 2

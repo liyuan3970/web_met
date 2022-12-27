@@ -671,7 +671,7 @@
                                             menubar: false,
                                             plugins: "newfile openfile advlist anchor autolink autosave charmap code codesample emoticons footer fullscreen help image importcss indent2em insertdatetime link lists media nonbreaking pagebreak plothtml preview quickbars save searchreplace table template visualblocks wordcount",
                                             toolbar: [
-                                                "newfile openfile plothtml urldialog",
+                                                "newfile openfile urldialog",
                                                 "insertfile undo redo bold italic underline hr |alignleft aligncenter alignright formatselect fontselect fontsizeselect removeformat subscript superscript charmap searchreplace insertdatetime forecolor backcolor fontsize fontfamily",//段落
                                                 "image code link unlink rotateleft rotateright flipv fliph editimage imageoptions quickimage | table | bullist numlist| | footer plothtml"
                                             ],
@@ -686,13 +686,16 @@
                                                         url: 'http://127.0.0.1:9001/canvas_plot',
                                                         height: 850,
                                                         width: 1300,
-                                                        buttons:[
-                                                            {
-                                                                type:'cancel',
-                                                                text:'渲染',
-                                                                align:'end'
-                                                            }
-                                                        ]
+                                                        // buttons:[
+                                                        //     {
+                                                        //         type: 'cancel',
+                                                        //         text: '渲染',
+                                                        //         onclick: function () {
+                                                        //             console.log("关闭渲染")
+                                                        //         },
+                                                        //         align: 'end'
+                                                        //     }
+                                                        // ]
                                                     })
                                                 })
                                             },
@@ -701,6 +704,11 @@
 
                                         });
 
+                                    // 接收数据 
+                                    window.addEventListener('message', function (event) {
+                                        var data = event.data;
+                                        console.log('message received from TinyMCE', data);
+                                    });
 
 
                                     document.getElementById('convert').addEventListener('click', function () {

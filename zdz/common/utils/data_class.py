@@ -405,7 +405,6 @@ class plot_tz_product:
         self.plot_type = plot_type
         self.time_len = 0
         self.lat, self.lon, self.time, self.data_xr_nc,self.date = self.read_data()
-
     # 外部函数
     def transform_from_latlon(self, lat, lon):
         lat = np.asarray(lat)

@@ -117,6 +117,7 @@
                                                 <div style="width: 100%;height:30%;border: 1px solid">
                                                     <input id="plot_self_button" type="button" value="绘制" style="width:10%;height: 100%;float:right">
                                                     <input id="plot_self_flash" type="button" value="刷新" style="width:10%;height:100%;float:right">
+                                                    <input id="plot_self_close" type="button" value="关闭" style="width:10%;height:100%;float:right">
                                                 
                                                 </div>
 
@@ -145,6 +146,16 @@
                                     <!-- 自定义画图的核心js -->
                                     <script src='static/js/self_plot.js'></script>
                                     <script>
+                                        // 关闭对话并传参
+                                        $('#plot_self_close').click(function () {
+                                                window.parent.postMessage({
+                                                    mceAction: 'insertContent',
+                                                    content: "关闭选项"
+                                                }, '*');
+                                                window.parent.postMessage({
+                                                    mceAction: 'close'
+                                                }, "*");
+                                            })
 
                                         $('#self_plot_start_time').datetimepicker(
                                             {
@@ -199,6 +210,9 @@
                                 <div style="width: 100%;height:700px;border: 1px solid">
                                     <div style="width: 100%;height:700px">
                                         <div style="display: flex;width: 100%;height:100%;border: 1px solid">
+                                            <div style="width: 20%;height:100%;border: 1px solid">
+
+                                            </div>
                                             <div style="width: 80%;height:100%;border: 1px solid">
                                                 <div style="width: 100%;height:85%;border: 1px solid">
                                                     <canvas id="quick_plot" style="width: 100%;height:100%;background-color: white;"></canvas>
@@ -212,9 +226,7 @@
 
                                             </div>
                                             
-                                            <div style="width: 20%;height:100%;border: 1px solid">
-
-                                            </div>
+                                            
                                             
 
                                         </div>
