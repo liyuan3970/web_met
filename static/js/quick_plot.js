@@ -12,7 +12,7 @@ const quick_plot_object = {
         },
     canvasW:undefined,
     canvasH:undefined,
-    geoData: tz_json,
+    geoData: county_json,
     scale:1.0,
     geoCenterX : 0, 
     geoCenterY : 0 ,

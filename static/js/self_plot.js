@@ -54,7 +54,7 @@ const self_plot_object = {
         ]
     },
     ctx: undefined,
-    geoData_self_plot: tz_json,
+    geoData_self_plot: county_json,
     canvasW_self_plot: undefined,
     canvasH_self_plot: undefined,
     geoCenterX_self_plot: 0,
@@ -98,6 +98,7 @@ const self_plot_object = {
             },
             dataType: "json",
             success: function (data) {
+                $('#self_table').html("")
                 // 得到请求的数据
                 var plotImg = new Image();
                 plotImg.src = data.img
@@ -136,14 +137,14 @@ const self_plot_object = {
                       },
                     xAxis: {
                         type: 'category',
-                        data: ['仙居', '玉环', '三门', '临海', '椒江', '临海', '黄岩']
+                        data: ['路桥', '黄岩', '仙居', '天台', '三门', '临海', '椒江','温岭','玉环']
                     },
                     yAxis: {
                         type: 'value'
                     },
                     series: [
                         {
-                            data: [900, 200, 150, 80, 70, 110, 130],
+                            data: data.pre,
                             type: 'bar'
                         }
                     ]
@@ -154,19 +155,29 @@ const self_plot_object = {
                 table_div.style = "width:100%;height:100%;overflow:auto"
                 var table = document.createElement('table');
                 table.setAttribute("class", "table table-bordered")
-                var caption = document.createElement('caption')
-                caption.innerText = "乡镇排行"
+                
+                var thead = document.createElement('thead')
+                var tr = document.createElement('tr')
+                var th1 = document.createElement('th')
+                th1.innerText = "排名"
+                var th2 = document.createElement('th')
+                th2.innerText = "名称"
+                var th3 = document.createElement('th')
+                th3.innerText = "降水"
+                tr.append(th1,th2,th3)
+                thead.append(tr)
+                
+                var tbody = document.createElement('thead')
+                var content = ""
+                for (var i = 0; i < data.key.length; i++) {
+                    content =content+ "<tr><td>" +i.toString()+ "</td><td>" +data.key[i] +"</td><td>"+ data.value[i].toString() +"</td></tr>"
+
+                }
+                tbody.innerHTML = content
+                table.append(thead,tbody)
                 table_div.append(table)
-                table.append(caption)
-                table.innerHTML = "<thead><tr><th>排名</th><th>名称</th><th>降水</th></tr></thead><tbody>\
-                <tr><td>1</td><td>坎门</td><td>30mm</td></tr>\
-                <tr><td>2</td><td>淡竹</td><td>15mm</td></tr>\
-                <tr><td>3</td><td>淡竹</td><td>15mm</td></tr>\
-                <tr><td>3</td><td>淡竹</td><td>15mm</td></tr>\
-                <tr><td>3</td><td>淡竹</td><td>15mm</td></tr>\
-                <tr><td>3</td><td>淡竹</td><td>15mm</td></tr>\
-                </tbody>"
-                $('#self_table').html("")
+                
+                
                 $('#self_table').append(table_div)
 
             }

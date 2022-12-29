@@ -258,31 +258,20 @@ def quick_look(request):
 def plot_self_data(request):
     plot_self_data = request.POST.get('plot_self_data', '')
     crf = request.POST.get('csrfmiddlewaretoken', '')
+    plot_title,plot_bar  = "降水预报测试画图" ,[0,1,2,3,4,5,6,7]  
     data = json.loads(plot_self_data)
-    lon = []
-    lat = []
-    value = []
-    # (llcrnrlon=120.1,llcrnrlat=27.8,urcrnrlon=122,urcrnrlat=29.5)
-    for i in range(len(data['station'])):
-        x = data['station'][i][0]
-        lon.append(x)
-        y = data['station'][i][1]
-        lat.append(y)
-        value.append(data['station'][i][2] * 10)
-    func.plot_image(lat, lon, value)
-    buffer = BytesIO()
-    plt.savefig(buffer, bbox_inches='tight')
-    plot_img = buffer.getvalue()
-    imb = base64.b64encode(plot_img)
-    ims = imb.decode()
-    imd = "data:image/png;base64," + ims
-    # <img src="{{ img }}">
+    worker = data_class.canvas_plot(data,plot_title,plot_bar)
+    imd = worker.plot_img()
+    key,value = worker.village_data()
+    pre = worker.shp_average()
     context2 = {
-        'data_test': 723.5,
         "img": imd,
+        'key':key,
+        'value':value,
+        'pre':pre
     }
     return JsonResponse(context2)
-    # return render(request,'index.html',context2)
+
 
 
 def upload_select_taizhou_data(request):
