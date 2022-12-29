@@ -33,352 +33,368 @@
     {% csrf_token %}
     <div
         style="display: flex;align-content:flex-start;position: absolute; justify-content: center; flex-wrap: wrap; width: 100%;height: 100%;background-color: rgb(213, 217, 230);">
-                <div class="col-md-12 column" style="width: 100%;height: 100%;padding-top: 15px;">
-                    <div class="tabbable" id="tabs-611922" style="width: 100%;height: 100%;">
-                        <ul class="nav nav-tabs" style="border: 1px solid">
-                            <li class="active">
-                                 <a href="#canvas-1" data-toggle="tab">降水订正</a>
-                            </li>
-                            <li>
-                                 <a id="quick_plot_link" href="#canvas-2" data-toggle="tab">快速绘图</a>
-                            </li>
-                            <li>
-                                <a href="#canvas-3" data-toggle="tab">趋势图</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content" >
-                            <div class="tab-pane active" id="canvas-1" >
-                                <!-- 自定义绘图的位置 -->
-                                <div style="display: flex;width: 100%;height:700px">
-                                    <!-- 自定义绘图 -->
-                                    <div style="width: 50%;height:700px;border: 1px solid">
-                                        <div style="width: 100%;height:5%;border: 1px solid">
-                                            &nbsp;&nbsp;&nbsp;
-                                            <select>
-                                                <option value="+">+</option>
-                                                <option value="-">-</option>
-                                            </select>
-                                            0.1<input checked="checked" type="radio" name="canvas_num" style="width:5%" value="0.1">
-                                            0.3<input type="radio" name="canvas_num" style="width:5%" value="0.3">
-                                            0.5<input type="radio" name="canvas_num" style="width:5%" value="0.5">
-                                            1<input type="radio" name="canvas_num" style="width:5%" value="1">
-                                            3<input type="radio" name="canvas_num" style="width:5%" value="3">
-                                            5<input type="radio" name="canvas_num" style="width:5%" value="5">
-                                            10<input type="radio" name="canvas_num" style="width:5%" value="10">
-                                        
-                                        </div>
-                                        <div style="width: 100%;height:70%;border: 1px solid">
-                                            <canvas id="plot_canvas" style="width:100%;height:100%;background-color: aqua;"></canvas>
-                                        </div>
-                                        
-                                        <div style="display: flex;width: 100%;height:25%;border: 1px solid">
-                                            <!--画图 菜单 -->
-                                            <div style="width: 5%;height:100%;border: 1px solid">
-                                                <button id="plot_1st_data" style="width: 100%;height:20%">1</button>
-                                                <button id="plot_1st_color" style="width: 100%;height:20%">2</button>
-                                                
-
-                                            </div>
-
-                                            <div style="width: 95%;height:100%;border: 1px solid">
-                                                <!-- 工具栏 -->
-                                                <div style="width: 100%;height:70%;border: 1px solid">
-                                                    <div id="plot_1st_tool1" style="display:inline-block;width:100%;height:100%">
-                                                        <div style="width:100%;height:30%;"></div>
-                                                        <div style="width:100%;height:70%;">
-                                                            <label style="width:10%;height:40%;">&nbsp;&nbsp;&nbsp;</label>
-                                                            
-                                                            <select style="width: 10%;height:40%;; text-align:center;vertical-align: middle;align-items: center;">
-                                                                <option>模式</option>
-                                                                <option>自动站</option>
-                                                                <option>市台</option>
-                                                            </select>
-                                                            &nbsp;&nbsp;&nbsp;
-                                               
-                                                            <input id="self_plot_start_time" type="text" placeholder="起始时间"
-                                                                style="width: 20%;height:40%; text-align:center;vertical-align: middle;align-items: center; ">
-                                                            
-                                                            <label>至</label>
-                                                            
-                                                            <input id="self_plot_end_time" type="text" placeholder="结束时间"
-                                                                style="width: 20%;height:40%; text-align:center;vertical-align: middle;align-items: center; ">
-                                                            <label style="width:10%;height:40%;">&nbsp;&nbsp;&nbsp;</label>
-                                                        
-                                                            <button id = "self_plot_download"  style="width: 2.5%;height:40%;;border: 0px ;; text-align:center;vertical-align: middle;align-items: center;background-image: url(static/src/查询.png);background-size: 100%;background-repeat: no-repeat;"></button>
-                                                        
-                                                        </div>
-                                                        
-                                                    </div>
-                                                    <div id="plot_1st_tool2" style="display:none;width:100%;height:100%">
-                                                        2
-                                                    </div>
-
-                                                </div>
-                                                <!-- 按钮 -->
-                                                <div style="width: 100%;height:30%;border: 1px solid">
-                                                    <input id="plot_self_button" type="button" value="绘制" style="width:10%;height: 100%;float:right">
-                                                    <input id="plot_self_flash" type="button" value="刷新" style="width:10%;height:100%;float:right">
-                                                    <input id="plot_self_close" type="button" value="关闭" style="width:10%;height:100%;float:right">
-                                                
-                                                </div>
-
-                                            </div>
-                                            
-
-                                        </div>
-
-                                    </div>
-                                    <!-- 预览 -->
-                                    <div style="width: 50%;height:700px;border: 1px solid">
-                                        <div id="self_plot_div" style="width: 100%;height:75%;border: 1px solid">
-
-                                        </div>
-                                        <div style="display: inline-flex;width: 100%;height:25%;border: 1px solid">
-                                            <div id="self_bar" style="width: 60%;height:100%;border: 1px solid">
-
-                                            </div>
-                                            <div id="self_table" style="width: 40%;height:100%;border: 1px solid">
-
-                                            </div>
-
-                                        </div>
-                                        
-                                    </div>
-                                    <!-- 自定义画图的核心js -->
-                                    <script src='static/js/self_plot.js'></script>
-                                    <script>
-                                        // 关闭对话并传参
-                                        $('#plot_self_close').click(function () {
-                                                window.parent.postMessage({
-                                                    mceAction: 'insertContent',
-                                                    content: "关闭选项"
-                                                }, '*');
-                                                window.parent.postMessage({
-                                                    mceAction: 'close'
-                                                }, "*");
-                                            })
-
-                                        $('#self_plot_start_time').datetimepicker(
-                                            {
-                                                theme: 'dark',
-                                                format: 'Y-m-d H:i',
-                                                minView: "month",
-                                                language: 'zh',
-                                                startView: 2
-
-                                            }
-                                        );
-                                        $("#self_plot_start_time").datetimepicker("setDate", new Date());
-
-                                        $('#self_plot_end_time').datetimepicker(
-                                            {
-                                                theme: 'dark',
-                                                format: 'Y-m-d H:i'
-                                            }
-                                        );
-
-                                        $('#plot_1st_data').click(function () {
-
-                                            $('#plot_1st_tool1').attr("style", "display:inline-block;width:100%;height:100%")
-                                            $('#plot_1st_tool2').attr("style", "display:none;width:100%;height:100%")
-                                        })
-                                        $('#plot_1st_color').click(function () {
-                                            $('#plot_1st_tool1').attr("style", "display:none;width:100%;height:100%")
-                                            $('#plot_1st_tool2').attr("style", "display:inline-block;width:100%;height:100%")
-                                        })
-                                        $('#self_plot_download').click(function () {
-                                            var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                                            var self_plot_start_time = $('#self_plot_start_time').val();
-                                            var self_plot_end_time = $('#self_plot_end_time').val();
-                                            self_plot_object.download(csrf, self_plot_start_time, self_plot_end_time)
-                                            })
-                                        $('#plot_self_button').click(function (){
-                                            var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                                            self_plot_object.plot(csrf)
-
-                                        })
-                                        $('#plot_self_flash').click(function (){
-                                            var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                                            self_plot_object.flush(csrf)
-
-                                        })
-                                    </script>
+        <div class="col-md-12 column" style="width: 100%;height: 100%;padding-top: 15px;">
+            <div class="tabbable" id="tabs-611922" style="width: 100%;height: 100%;">
+                <ul class="nav nav-tabs" style="border: 1px solid">
+                    <li class="active">
+                        <a href="#canvas-1" data-toggle="tab">降水订正</a>
+                    </li>
+                    <li>
+                        <a id="quick_plot_link" href="#canvas-2" data-toggle="tab">快速绘图</a>
+                    </li>
+                    <li>
+                        <a href="#canvas-3" data-toggle="tab">趋势图</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="canvas-1">
+                        <!-- 自定义绘图的位置 -->
+                        <div style="display: flex;width: 100%;height:700px">
+                            <!-- 自定义绘图 -->
+                            <div style="width: 50%;height:700px;border: 1px solid">
+                                <div style="width: 100%;height:5%;border: 1px solid">
+                                    &nbsp;&nbsp;&nbsp;
+                                    <select>
+                                        <option value="+">+</option>
+                                        <option value="-">-</option>
+                                    </select>
+                                    0.1<input checked="checked" type="radio" name="canvas_num" style="width:5%"
+                                        value="0.1">
+                                    0.3<input type="radio" name="canvas_num" style="width:5%" value="0.3">
+                                    0.5<input type="radio" name="canvas_num" style="width:5%" value="0.5">
+                                    1<input type="radio" name="canvas_num" style="width:5%" value="1">
+                                    3<input type="radio" name="canvas_num" style="width:5%" value="3">
+                                    5<input type="radio" name="canvas_num" style="width:5%" value="5">
+                                    10<input type="radio" name="canvas_num" style="width:5%" value="10">
 
                                 </div>
-                            
-                            </div>
-                            <div class="tab-pane" id="canvas-2">
-                                <div style="width: 100%;height:700px;border: 1px solid">
-                                    <div style="width: 100%;height:700px">
-                                        <div style="display: flex;width: 100%;height:100%;border: 1px solid">
-                                            <!-- 底图选项 -->
-                                            <div style="width: 20%;height:100%;border: 1px solid">
-                                                <button style="width: 100%;height:30%"></button>
-                                                <button style="width: 100%;height:30%"></button>
-                                                <button style="width: 100%;height:30%"></button>
+                                <div style="width: 100%;height:70%;border: 1px solid">
+                                    <canvas id="plot_canvas"
+                                        style="width:100%;height:100%;background-color: aqua;"></canvas>
+                                </div>
 
-                                            </div>
-                                            <div style="width: 80%;height:100%;border: 1px solid">
-                                                <div style="width: 100%;height:85%;border: 1px solid">
-                                                    <canvas id="quick_plot" style="width: 100%;height:100%;background-color: white;"></canvas>
+                                <div style="display: flex;width: 100%;height:25%;border: 1px solid">
+                                    <!--画图 菜单 -->
+                                    <div style="width: 5%;height:100%;border: 1px solid">
+                                        <button id="plot_1st_data" style="width: 100%;height:20%">1</button>
+                                        <button id="plot_1st_color" style="width: 100%;height:20%">2</button>
+
+
+                                    </div>
+
+                                    <div style="width: 95%;height:100%;border: 1px solid">
+                                        <!-- 工具栏 -->
+                                        <div style="width: 100%;height:70%;border: 1px solid">
+                                            <div id="plot_1st_tool1"
+                                                style="display:inline-block;width:100%;height:100%">
+                                                <div style="width:100%;height:30%;"></div>
+                                                <div style="width:100%;height:70%;">
+                                                    <label style="width:10%;height:40%;">&nbsp;&nbsp;&nbsp;</label>
+
+                                                    <select
+                                                        style="width: 10%;height:40%;; text-align:center;vertical-align: middle;align-items: center;">
+                                                        <option>模式</option>
+                                                        <option>自动站</option>
+                                                        <option>市台</option>
+                                                    </select>
+                                                    &nbsp;&nbsp;&nbsp;
+
+                                                    <input id="self_plot_start_time" type="text" placeholder="起始时间"
+                                                        style="width: 20%;height:40%; text-align:center;vertical-align: middle;align-items: center; ">
+
+                                                    <label>至</label>
+
+                                                    <input id="self_plot_end_time" type="text" placeholder="结束时间"
+                                                        style="width: 20%;height:40%; text-align:center;vertical-align: middle;align-items: center; ">
+                                                    <label style="width:10%;height:40%;">&nbsp;&nbsp;&nbsp;</label>
+
+                                                    <button id="self_plot_download"
+                                                        style="width: 2.5%;height:40%;;border: 0px ;; text-align:center;vertical-align: middle;align-items: center;background-image: url(static/src/查询.png);background-size: 100%;background-repeat: no-repeat;"></button>
 
                                                 </div>
-                                                
-                                                <script src='static/js/quick_plot.js'></script>
-                                                <div style="width: 100%;height:15%;border: 1px solid">
-                                                    <!-- 工具栏 -->
-                                                    <div style="display:inline-block;width:100%;height:25%;border: 2px solid black">
-                                                        等值线:&nbsp;<input id="taizhou_quick_plot_contour" type="radio" checked="checked" name="taizhou_quick_plot_type"
-                                                            value="coutour">&nbsp;&nbsp;&nbsp;
-                                                        曲线:&nbsp;<input id="taizhou_quick_plot_line" type="radio" name="taizhou_quick_plot_type"
-                                                            value="line">&nbsp;&nbsp;&nbsp;
-                                                        图标:&nbsp;<input id="taizhou_quick_plot_icon" type="radio" name="taizhou_quick_plot_type"
-                                                            value="scatter_icon">&nbsp;&nbsp;&nbsp;
-                                                        文字:&nbsp;<input id="taizhou_quick_plot_text" type="radio" name="taizhou_quick_plot_type"
-                                                            value="scatter_text">&nbsp;&nbsp;&nbsp;
-                                                        图例:&nbsp;<input id="taizhou_quick_plot_pic" type="radio" name="taizhou_quick_plot_type"
-                                                            value="scatter_pic">&nbsp;&nbsp;&nbsp;
-                                                        标题:&nbsp;<input id="taizhou_quick_plot_title" type="radio" name="taizhou_quick_plot_type"
-                                                            value="scatter_title">&nbsp;&nbsp;&nbsp;
-                                                        <!-- <input id="forward_canvas" type="button" value="前进" style="float: right;">
+
+                                            </div>
+                                            <div id="plot_1st_tool2" style="display:none;width:100%;height:100%">
+                                                2
+                                            </div>
+
+                                        </div>
+                                        <!-- 按钮 -->
+                                        <div style="width: 100%;height:30%;border: 1px solid">
+                                            <input id="plot_self_button" type="button" value="绘制"
+                                                style="width:10%;height: 100%;float:right">
+                                            <input id="plot_self_flash" type="button" value="刷新"
+                                                style="width:10%;height:100%;float:right">
+                                            <input id="plot_self_close" type="button" value="关闭"
+                                                style="width:10%;height:100%;float:right">
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                            <!-- 预览 -->
+                            <div style="width: 50%;height:700px;border: 1px solid">
+                                <div id="self_plot_div" style="width: 100%;height:75%;border: 1px solid">
+
+                                </div>
+                                <div style="display: inline-flex;width: 100%;height:25%;border: 1px solid">
+                                    <div id="self_bar" style="width: 60%;height:100%;border: 1px solid">
+
+                                    </div>
+                                    <div id="self_table" style="width: 40%;height:100%;border: 1px solid">
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <!-- 自定义画图的核心js -->
+                            <script src='static/js/self_plot.js'></script>
+                            <script>
+                                // 关闭对话并传参
+                                $('#plot_self_close').click(function () {
+                                    window.parent.postMessage({
+                                        mceAction: 'insertContent',
+                                        content: "关闭选项"
+                                    }, '*');
+                                    window.parent.postMessage({
+                                        mceAction: 'close'
+                                    }, "*");
+                                })
+
+                                $('#self_plot_start_time').datetimepicker(
+                                    {
+                                        theme: 'dark',
+                                        format: 'Y-m-d H:i',
+                                        minView: "month",
+                                        language: 'zh',
+                                        startView: 2
+
+                                    }
+                                );
+                                $("#self_plot_start_time").datetimepicker("setDate", new Date());
+
+                                $('#self_plot_end_time').datetimepicker(
+                                    {
+                                        theme: 'dark',
+                                        format: 'Y-m-d H:i'
+                                    }
+                                );
+
+                                $('#plot_1st_data').click(function () {
+
+                                    $('#plot_1st_tool1').attr("style", "display:inline-block;width:100%;height:100%")
+                                    $('#plot_1st_tool2').attr("style", "display:none;width:100%;height:100%")
+                                })
+                                $('#plot_1st_color').click(function () {
+                                    $('#plot_1st_tool1').attr("style", "display:none;width:100%;height:100%")
+                                    $('#plot_1st_tool2').attr("style", "display:inline-block;width:100%;height:100%")
+                                })
+                                $('#self_plot_download').click(function () {
+                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                    var self_plot_start_time = $('#self_plot_start_time').val();
+                                    var self_plot_end_time = $('#self_plot_end_time').val();
+                                    self_plot_object.download(csrf, self_plot_start_time, self_plot_end_time)
+                                })
+                                $('#plot_self_button').click(function () {
+                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                    self_plot_object.plot(csrf)
+
+                                })
+                                $('#plot_self_flash').click(function () {
+                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                    self_plot_object.flush(csrf)
+
+                                })
+                            </script>
+
+                        </div>
+
+                    </div>
+                    <div class="tab-pane" id="canvas-2">
+                        <div style="width: 100%;height:700px;border: 1px solid">
+                            <div style="width: 100%;height:700px">
+                                <div style="display: flex;width: 100%;height:100%;border: 1px solid">
+                                    <!-- 底图选项 -->
+                                    <div style="width: 20%;height:100%;border: 1px solid">
+                                        <button style="width: 100%;height:30%"></button>
+                                        <button style="width: 100%;height:30%"></button>
+                                        <button style="width: 100%;height:30%"></button>
+
+                                    </div>
+                                    <div style="width: 80%;height:100%;border: 1px solid">
+                                        <div style="width: 100%;height:85%;border: 1px solid">
+                                            <canvas id="quick_plot"
+                                                style="width: 100%;height:100%;background-color: white;"></canvas>
+
+                                        </div>
+
+                                        <script src='static/js/quick_plot.js'></script>
+                                        <div style="width: 100%;height:15%;border: 1px solid">
+                                            <!-- 工具栏 -->
+                                            <div
+                                                style="display:inline-block;width:100%;height:30%;border: 1px solid black">
+                                                等值线:&nbsp;<input id="taizhou_quick_plot_contour" type="radio"
+                                                    checked="checked" name="taizhou_quick_plot_type"
+                                                    value="contour">&nbsp;&nbsp;&nbsp;
+                                                图示:&nbsp;<input id="taizhou_quick_plot_icon" type="radio"
+                                                    name="taizhou_quick_plot_type"
+                                                    value="scatter_icon">&nbsp;&nbsp;&nbsp;
+                                                文字:&nbsp;<input id="taizhou_quick_plot_text" type="radio"
+                                                    name="taizhou_quick_plot_type"
+                                                    value="scatter_text">&nbsp;&nbsp;&nbsp;
+                                                图例:&nbsp;<input id="taizhou_quick_plot_pic" type="radio"
+                                                    name="taizhou_quick_plot_type"
+                                                    value="scatter_pic">&nbsp;&nbsp;&nbsp;
+
+                                                <!-- <input id="forward_canvas" type="button" value="前进" style="float: right;">
                                                         <input id="reback_canvas" type="button" value="撤回" style="float: right;">
                                                         <input id="flash_canvas" type="button" value="刷新" style="float: right;"> -->
-                                                    
-                                                    </div>
-                                                    <div id="taizhou_quick_plot_type_view0"
-                                                        style="display:inline-block;width:100%;height:70%;">
-                                                        <div style="display:inline-block;width:100%;height: 30%;">
-                                                            颜色1:&nbsp;<input id="" type="radio" class="select_color_bar_type" name="select_color_bar_type" checked="checked"
-                                                                value="1">&nbsp;&nbsp;&nbsp;
-                                                            颜色2:&nbsp;<input id="" type="radio" class="select_color_bar_type" name="select_color_bar_type"
-                                                                value="2">&nbsp;&nbsp;&nbsp;
-                                                            颜色3:&nbsp;<input id="" type="radio" class="select_color_bar_type" name="select_color_bar_type"
-                                                                value="3">&nbsp;&nbsp;&nbsp;
-                                                            颜色4:&nbsp;<input id="" type="radio" class="select_color_bar_type" name="select_color_bar_type"
-                                                                value="4">&nbsp;&nbsp;&nbsp;
-                                                    
-                                                        </div>
-                                                        <div id="select_color_bar1" style="display: inline-block;width:100%;height: 60%;">
-                                                            <div style="display: inline-flex;width: 100%;height:5%"></div>
-                                                            <div style="display: inline-flex;width: 5%;height:40%;background-color:rgb(78, 55, 55);">
-                                                            </div>
-                                                            <div style="display: inline-flex;width: 5%;height:40%;background-color:rgb(0, 255, 221);">
-                                                            </div>
-                                                            <div style="display: inline-flex;width: 5%;height:40%;background-color:rgb(150, 69, 197);">
-                                                            </div>
-                                                            <div style="display: inline-flex;width: 5%;height:40%;background-color:rgb(74, 21, 196);">
-                                                            </div>
-                                                            <div style="display: inline-flex;width: 5%;height:40%;background-color:rgb(214, 235, 96);">
-                                                            </div>
-                                                            <div style="display: inline-flex;width: 5%;height:40%;background-color:red;">
-                                                            </div>
-                                                    
-                                                        </div>
-                                                        <div id="select_color_bar2" style="display: none;width:100%;height: 60%;">
-                                                            <div style="display: inline-flex;width: 100%;height:5%"></div>
-                                                    
-                                                    
-                                                        </div>
-                                                        <div id="select_color_bar3" style="display: none;width:100%;height: 60%;">
-                                                            <div style="display: inline-flex;width: 100%;height:5%"></div>
-                                                    
-                                                    
-                                                        </div>
-                                                        <div id="select_color_bar4" style="display: none;width:100%;height: 60%;">
-                                                            <div style="display: inline-flex;width: 100%;height:5%"></div>
-                                                    
-                                                    
-                                                        </div>
-                                                        <script type="text/javascript">
-                                                            $('input[type=radio][name=select_color_bar_type]').click(function () {
-                                                                console.log($('input[type=radio][name=select_color_bar_type]').val(), this.value)
-                                                                if (this.value == '1') {
-                                                                    console.log("开始你的业务逻辑")
-                                                                }
-                                                                else if (this.value == '2') {
-                                                                    $('#select_color_bar1').css("display", "none")
-                                                                    $('#select_color_bar2').css("display", "inline-block")
-                                                                    $('#select_color_bar3').css("display", "none")
-                                                                    $('#select_color_bar4').css("display", "none")
-                                                                    var color_bar = ['red', 'blue', 'green', 'black']
-                                                                    $('#select_color_bar2').html(" ")
-                                                                    var add_blank_div = document.createElement("div")
-                                                                    add_blank_div.style.display = "inline-flex"
-                                                                    add_blank_div.style.width = "100%"
-                                                                    add_blank_div.style.height = "5%"
-                                                                    $('#select_color_bar2').append(add_blank_div)
-                                                                    for (i = 0; i < color_bar.length; i++) {
-                                                                        var add_div = document.createElement('div')
-                                                                        add_div.style.display = "inline-flex"
-                                                                        add_div.style.width = "5%"
-                                                                        add_div.style.height = "40%"
-                                                                        add_div.style.backgroundColor = color_bar[i]
-                                                                        $('#select_color_bar2').append(add_div)
-                                                                    }
-
-
-                                                                }
-                                                                else if (this.value == '3') {
-                                                                    $('#select_color_bar1').css("display", "none")
-                                                                    $('#select_color_bar2').css("display", "none")
-                                                                    $('#select_color_bar3').css("display", "inline-block")
-                                                                    $('#select_color_bar4').css("display", "none")
-                                                                    var color_bar = ['red', 'blue', 'green', 'black', 'yellow', 'orange']
-                                                                    $('#select_color_bar3').html(" ")
-                                                                    var add_blank_div = document.createElement("div")
-                                                                    add_blank_div.style.display = "inline-flex"
-                                                                    add_blank_div.style.width = "100%"
-                                                                    add_blank_div.style.height = "5%"
-                                                                    $('#select_color_bar3').append(add_blank_div)
-                                                                    for (i = 0; i < color_bar.length; i++) {
-                                                                        var add_div = document.createElement('div')
-                                                                        add_div.style.display = "inline-flex"
-                                                                        add_div.style.width = "5%"
-                                                                        add_div.style.height = "40%"
-                                                                        add_div.style.backgroundColor = color_bar[i]
-                                                                        $('#select_color_bar3').append(add_div)
-                                                                    }
-
-
-                                                                }
-                                                                else if (this.value == '4') {
-
-                                                                }
-
-                                                            })
-                                                                                                // $('.select_color_bar_type').click(function (){
-                                                                                                //    console.log($('.select_color_bar_type').val())
-                                                                                                // })
-                                                        </script>
-                                                    
-                                                    </div>
-
-                                                </div>
 
                                             </div>
+                                            <div id="taizhou_quick_plot_type_view0"
+                                                style="display:inline-block;width:100%;height:70%;">
+                                                <select id = "view0_color">
+                                                    <option value="black">黑色</option>
+                                                    <option value="red">红色</option>
+                                                    <option value="blue">蓝色</option>
+                                                </select>
+                                                <select id = "view0_line">
+                                                    <option value="contour">等值线</option>
+                                                    <option value="line">曲线</option>                                               
+                                                </select>
+                                                <label>粗细</label>
+                                                <input id="view0_width" type="number" value=3>
+
+
+                                            </div>
+                                            <div id="taizhou_quick_plot_type_view1"
+                                                style="display:none;width:100%;height:70%;border: 3px solid black">
+                                                <img class="icon_scatter" src="static/src/icon/35到37度.png"
+                                                    style="width:50px;height:50px">
+                                                <img class="icon_scatter" src="static/src/icon/6-8级大风.png"
+                                                    style="width:50px;height:50px">
+                                                <img class="icon_scatter" src="static/src/icon/40度以上.png"
+                                                    style="width:50px;height:50px">
+                                                <img class="icon_scatter" src="static/src/icon/7-9级大风.png"
+                                                    style="width:50px;height:50px">
+                                                <img class="icon_scatter" src="static/src/icon/7~9级雷雨大风.png"
+                                                    style="width:50px;height:50px">
+
+
+                                            </div>
+                                            <div id="taizhou_quick_plot_type_view2"
+                                                style="display:none;width:100%;height:70%;border: 3px solid black">
+                                                内容:&nbsp;<input id="taizhou_quick_plot_text_content" placeholder="请输入文字"
+                                                    value="请输入文字" type="text" style="width: 40%;">
+                                                大小:&nbsp;<input type="number" max="10" min="0" placeholder="3"
+                                                    style="width: 6%;">
+                                                
+
+                                            </div>
+                                            <div id="taizhou_quick_plot_type_view3" style="display:none;width:100%;height:70%;border: 3px solid black">
+                                                <!-- 添加颜色的radio -->
+                                                <div id="color_select_list" style="display: inline-block;width:100%;height: 40%; "></div>
+                                                <div style="width:100%;height: 10%; "></div>
+                                            
+                                                <select style="width: 10%;height: 35%;">
+                                                    <option style="background-color: black;width: 10o%;height: 100%;">黑色</option>
+                                                </select>
+                                                <input id="color_bar_add" type="button" value="添加" onclick="color_bar_add()"
+                                                    style="width: 10%;height: 35%;float: right;">
+                                                <input id="color_bar_del" type="button" value="删除" onclick="color_bar_del()"
+                                                    style="width: 10%;height: 35%;float: right;">
                                             
                                             
+                                            </div>
                                             
+                                            <script type="text/javascript">
+                                                var el = window.document.body; //声明一个变量，默认值为body
+                                                var select_icon_img = []
+                                                window.document.body.onmouseover = function (event) {
+                                                    el = event.target; //鼠标每经过一个元素，就把该元素赋值给变量el
+                                                    var class_name = el.className
+                                                    el.addEventListener("click", function () {
+                                                        if (class_name == 'icon_scatter') {
+                                                            $('.icon_scatter').css("border", "0px")
+                                                            el.setAttribute("border", "3px")
+                                                            el.style.border = "3px solid red"
+                                                            select_icon_img = []
+                                                            select_icon_img.push(el)
+                                                            console.log(el.className)
+
+                                                        }
+
+
+                                                    })
+
+                                                }
+                                                var taizhou_quick_plot_type = $("input[name='taizhou_quick_plot_type']:checked").val()
+
+                                                // 前端绘图模块的
+                                                $('#taizhou_quick_plot_contour').click(function () {
+                                                    $('#taizhou_quick_plot_type_view0').attr("style", "display:inline-block;width:100%;height:70%;border: 3px solid black");
+                                                    $('#taizhou_quick_plot_type_view1').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
+                                                    $('#taizhou_quick_plot_type_view2').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
+                                                    $('#taizhou_quick_plot_type_view3').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
+
+                                                })
+
+                                                $('#taizhou_quick_plot_icon').click(function () {
+                                                    $('#taizhou_quick_plot_type_view0').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
+                                                    $('#taizhou_quick_plot_type_view1').attr("style", "display:inline-block;width:100%;height:70%;border: 3px solid black");
+                                                    $('#taizhou_quick_plot_type_view2').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
+                                                    $('#taizhou_quick_plot_type_view3').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
+
+                                                })
+                                                $('#taizhou_quick_plot_text').click(function () {
+                                                    $('#taizhou_quick_plot_type_view0').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
+                                                    $('#taizhou_quick_plot_type_view1').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
+                                                    $('#taizhou_quick_plot_type_view2').attr("style", "display:inline-block;width:100%;height:70%;border: 3px solid black");
+                                                    $('#taizhou_quick_plot_type_view3').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
+
+                                                })
+                                                $('#taizhou_quick_plot_pic').click(function () {
+                                                    $('#taizhou_quick_plot_type_view0').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
+                                                    $('#taizhou_quick_plot_type_view1').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
+                                                    $('#taizhou_quick_plot_type_view2').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
+                                                    $('#taizhou_quick_plot_type_view3').attr("style", "display:inline-block;width:100%;height:70%;border: 3px solid black");
+                                                })
+
+
+
+                                            </script>
 
                                         </div>
 
                                     </div>
 
+
+
+
                                 </div>
-                                
-                                
+
                             </div>
-                            <div class="tab-pane" id="canvas-3">
-                                <p>
-                                    Howdy, I'm in Section 3.
-                                </p>
-                            </div>
+
                         </div>
+
+
+                    </div>
+                    <div class="tab-pane" id="canvas-3">
+                        <p>
+                            Howdy, I'm in Section 3.
+                        </p>
                     </div>
                 </div>
+            </div>
+        </div>
 
-            
-    
+
+
     </div>
     {% csrf_token %}
 </body>

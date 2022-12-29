@@ -19,6 +19,19 @@ const quick_plot_object = {
     maskCtx: undefined,
     ctx_quick_plot:undefined,
     maskCanvas:undefined,
+    click_type:function (){
+        var select_type = $("input[name='taizhou_quick_plot_type']:checked").val()
+        return select_type
+    },
+    plot_color:function (){
+        return $('#view0_color  option:selected').val()
+    },
+    line_width:function (){
+        return $('#view0_width  option:selected').val()
+    },
+    plot_type:function (){
+        return $('#view0_line  option:selected').val()
+    },
     drawMap:function () {
         this.maskCtx.clearRect(0, 0, this.canvasW, this.canvasH)
         // 画布背景
@@ -114,137 +127,155 @@ const quick_plot_object = {
         }
     },
     move:function (evt) {
-        var select_plot_type = 'coutour'//$("input[name='taizhou_quick_plot_type']:checked").val()
-        if (select_plot_type == 'coutour') {
-            if (!quick_plot_object.isDown) return;
-    
-            const { x, y } = quick_plot_object.getPos(evt);
-            quick_plot_object.points.push({ x, y });
-    
-            if (quick_plot_object.points.length > 3) {
-                const lastTwoPoints = quick_plot_object.points.slice(-2);
-                const controlPoint = lastTwoPoints[0];
-                const endPoint = {
-                    x: (lastTwoPoints[0].x + lastTwoPoints[1].x) / 2,
-                    y: (lastTwoPoints[0].y + lastTwoPoints[1].y) / 2,
+        var select_plot_type =  quick_plot_object.plot_type()
+        var select_click_type = quick_plot_object.click_type()
+        if (select_click_type=='contour'){
+            if (select_plot_type == 'contour') {
+                if (!quick_plot_object.isDown) return;
+        
+                const { x, y } = quick_plot_object.getPos(evt);
+                quick_plot_object.points.push({ x, y });
+        
+                if (quick_plot_object.points.length > 3) {
+                    const lastTwoPoints = quick_plot_object.points.slice(-2);
+                    const controlPoint = lastTwoPoints[0];
+                    const endPoint = {
+                        x: (lastTwoPoints[0].x + lastTwoPoints[1].x) / 2,
+                        y: (lastTwoPoints[0].y + lastTwoPoints[1].y) / 2,
+                    }
+                    quick_plot_object.drawLine(quick_plot_object.beginPoint, controlPoint, endPoint);
+                    quick_plot_object.beginPoint = endPoint;
                 }
-                quick_plot_object.drawLine(quick_plot_object.beginPoint, controlPoint, endPoint);
-                quick_plot_object.beginPoint = endPoint;
             }
-        }
-        else if (select_plot_type == 'line') {
-            if (!quick_plot_object.isDown) return;
-    
-            const { x, y } = quick_plot_object.getPos(evt);
-            quick_plot_object.points.push({ x, y });
-    
-            if (quick_plot_object.points.length > 3) {
-                const lastTwoPoints = quick_plot_object.points.slice(-2);
-                const controlPoint = lastTwoPoints[0];
-                const endPoint = {
-                    x: (lastTwoPoints[0].x + lastTwoPoints[1].x) / 2,
-                    y: (lastTwoPoints[0].y + lastTwoPoints[1].y) / 2,
+            else if (select_plot_type == 'line') {
+                if (!quick_plot_object.isDown) return;
+        
+                const { x, y } = quick_plot_object.getPos(evt);
+                quick_plot_object.points.push({ x, y });
+        
+                if (quick_plot_object.points.length > 3) {
+                    const lastTwoPoints = quick_plot_object.points.slice(-2);
+                    const controlPoint = lastTwoPoints[0];
+                    const endPoint = {
+                        x: (lastTwoPoints[0].x + lastTwoPoints[1].x) / 2,
+                        y: (lastTwoPoints[0].y + lastTwoPoints[1].y) / 2,
+                    }
+                    quick_plot_object.drawLine(this.beginPoint, controlPoint, endPoint);
+                    quick_plot_object.beginPoint = endPoint;
                 }
-                quick_plot_object.drawLine(this.beginPoint, controlPoint, endPoint);
-                quick_plot_object.beginPoint = endPoint;
+        
             }
-    
+
         }
+        
     },
     
     up:function (evt) {
-        var select_plot_type = 'coutour'//$("input[name='taizhou_quick_plot_type']:checked").val()
-        if (select_plot_type == 'coutour') {
-            if (!quick_plot_object.isDown) return;
-            const { x, y } = quick_plot_object.getPos(evt);
-            quick_plot_object.points.push({ x, y });
-    
-            if (quick_plot_object.points.length > 3) {
-                const lastTwoPoints = quick_plot_object.points.slice(-2);
-                const controlPoint = lastTwoPoints[0];
-                const endPoint = lastTwoPoints[1];
-                quick_plot_object.drawLine(quick_plot_object.beginPoint, controlPoint, endPoint);
+        var select_plot_type = quick_plot_object.plot_type()
+        var select_click_type = quick_plot_object.click_type()
+        if (select_click_type=='contour'){
+            if (select_plot_type == 'contour') {
+                if (!quick_plot_object.isDown) return;
+                const { x, y } = quick_plot_object.getPos(evt);
+                quick_plot_object.points.push({ x, y });
+        
+                if (quick_plot_object.points.length > 3) {
+                    const lastTwoPoints = quick_plot_object.points.slice(-2);
+                    const controlPoint = lastTwoPoints[0];
+                    const endPoint = lastTwoPoints[1];
+                    quick_plot_object.drawLine(quick_plot_object.beginPoint, controlPoint, endPoint);
+                }
+                quick_plot_object.beginPoint = null;
+                quick_plot_object.isDown = false;
+                quick_plot_object.points = [];
             }
-            quick_plot_object.beginPoint = null;
-            quick_plot_object.isDown = false;
-            quick_plot_object.points = [];
-        }
-        else if (select_plot_type == 'line') {
-            if (!quick_plot_object.isDown) return;
-            const { x, y } = quick_plot_object.getPos(evt);
-            quick_plot_object.points.push({ x, y });
-    
-            if (quick_plot_object.points.length > 3) {
-                const lastTwoPoints = quick_plot_object.points.slice(-2);
-                const controlPoint = lastTwoPoints[0];
-                const endPoint = lastTwoPoints[1];
-                quick_plot_object.drawLine(quick_plot_object.beginPoint, controlPoint, endPoint);
+            else if (select_plot_type == 'line') {
+                if (!quick_plot_object.isDown) return;
+                const { x, y } = quick_plot_object.getPos(evt);
+                quick_plot_object.points.push({ x, y });
+        
+                if (quick_plot_object.points.length > 3) {
+                    const lastTwoPoints = quick_plot_object.points.slice(-2);
+                    const controlPoint = lastTwoPoints[0];
+                    const endPoint = lastTwoPoints[1];
+                    quick_plot_object.drawLine(quick_plot_object.beginPoint, controlPoint, endPoint);
+                }
+                quick_plot_object.beginPoint = null;
+                quick_plot_object.isDown = false;
+                quick_plot_object.points = [];
+        
             }
-            quick_plot_object.beginPoint = null;
-            quick_plot_object.isDown = false;
-            quick_plot_object.points = [];
-    
+            
         }
+        
     
     
     
     },
     down:function (evt) {
-        var select_plot_type = 'coutour'//$("input[name='taizhou_quick_plot_type']:checked").val()
-        if (select_plot_type == 'coutour') {
-            quick_plot_object.isDown = true;
-            const { x, y } = quick_plot_object.getPos(evt);
-            quick_plot_object.points.push({ x, y });
-            quick_plot_object.beginPoint = { x, y };
+        var select_plot_type = quick_plot_object.plot_type()
+        var select_click_type = quick_plot_object.click_type()
+        if (select_click_type=='contour'){
+            if (select_plot_type == 'contour') {
+                quick_plot_object.isDown = true;
+                const { x, y } = quick_plot_object.getPos(evt);
+                quick_plot_object.points.push({ x, y });
+                quick_plot_object.beginPoint = { x, y };
+            }
+            else if (select_plot_type == 'line') {
+                quick_plot_object.isDown = true;
+                const { x, y } = quick_plot_object.getPos(evt);
+                quick_plot_object.points.push({ x, y });
+                quick_plot_object.beginPoint = { x, y };
+        
+            }
+            
         }
-        else if (select_plot_type == 'line') {
-            quick_plot_object.isDown = true;
-            const { x, y } = quick_plot_object.getPos(evt);
-            quick_plot_object.points.push({ x, y });
-            quick_plot_object.beginPoint = { x, y };
-    
-        }
+        
     },
     
     
     drawLine:function (beginPoint, controlPoint, endPoint) {
         // ctx_quick_plot.lineWidth = 15;
-        var select_plot_type = 'coutour'//$("input[name='taizhou_quick_plot_type']:checked").val()
-        if (select_plot_type == 'coutour') {
-            quick_plot_object.ctx_quick_plot.lineWidth = 3
-    
+        quick_plot_object.ctx_quick_plot.strokeStyle = quick_plot_object.plot_color()
+        var select_plot_type = quick_plot_object.plot_type()
+        var select_click_type = quick_plot_object.click_type()
+        if (select_click_type=='contour'){
+            if (select_plot_type == 'contour') {
+                quick_plot_object.ctx_quick_plot.lineWidth = quick_plot_object.line_width()
+        
+            }
+            else if (select_plot_type == 'line') {
+                quick_plot_object.ctx_quick_plot.lineWidth = quick_plot_object.line_width()
+        
+            }
+        
+            
+            quick_plot_object.countour_rect.x.push(quick_plot_object.beginPoint.x)
+            quick_plot_object.countour_rect.y.push(quick_plot_object.beginPoint.y)
+            quick_plot_object.ctx_quick_plot.beginPath();
+            quick_plot_object.ctx_quick_plot.moveTo(quick_plot_object.beginPoint.x, quick_plot_object.beginPoint.y);
+            quick_plot_object.ctx_quick_plot.quadraticCurveTo(controlPoint.x, controlPoint.y, endPoint.x, endPoint.y);
+            // ctx_quick_plot.lineTo(endPoint.x, endPoint.y);
+            quick_plot_object.ctx_quick_plot.stroke();
+            quick_plot_object.ctx_quick_plot.fill()
+            quick_plot_object.ctx_quick_plot.closePath();
+            
         }
-        else if (select_plot_type == 'line') {
-            quick_plot_object.ctx_quick_plot.lineWidth = 3//$('#plot_text_size').val()
-    
-        }
-    
-        quick_plot_object.ctx_quick_plot.strokeStyle = 'black'//$("input[name='selected_color']:checked").val()
-        quick_plot_object.countour_rect.x.push(quick_plot_object.beginPoint.x)
-        quick_plot_object.countour_rect.y.push(quick_plot_object.beginPoint.y)
-        quick_plot_object.ctx_quick_plot.beginPath();
-        quick_plot_object.ctx_quick_plot.moveTo(quick_plot_object.beginPoint.x, quick_plot_object.beginPoint.y);
-        quick_plot_object.ctx_quick_plot.quadraticCurveTo(controlPoint.x, controlPoint.y, endPoint.x, endPoint.y);
-        // ctx_quick_plot.lineTo(endPoint.x, endPoint.y);
-        quick_plot_object.ctx_quick_plot.stroke();
-        quick_plot_object.ctx_quick_plot.fill()
-        quick_plot_object.ctx_quick_plot.closePath();
+        
     },
     click_fun: function (e) {
         undefined
         this.offsetX_qp = e.offsetX;
         this.offsetY_qp = e.offsetY;
-        var color_style ='red' //$("input[name='selected_color']:checked").val()
         // var canvas_quick_plot_select_value = parseFloat($("input[name='canvas_quick_plot_num']:checked").val());
-        var select_plot_type = 'none'//$("input[name='taizhou_quick_plot_type']:checked").val()
+        var select_plot_type = quick_plot_object.click_type()//'none'//$("input[name='taizhou_quick_plot_type']:checked").val()
         if (select_plot_type == 'scatter_icon') {
-            console.log("开始绘制图标")
-            // select_icon_img[0]
+            // console.log("开始绘制图标")
             var plot_icon = new Image()
             plot_icon = select_icon_img[0]
-
-
-            ctx_quick_plot.drawImage(plot_icon, offsetX_qp - 25, offsetY_qp - 25);
+            // console.log(plot_icon.width, plot_icon.height)
+            quick_plot_object.ctx_quick_plot.drawImage(plot_icon, e.offsetX-35, e.offsetY-plot_icon.height/2);
 
         }
         else if (select_plot_type == 'scatter_pic') {
@@ -253,16 +284,16 @@ const quick_plot_object = {
         else if (select_plot_type == 'scatter_text') {
             console.log("开始绘制文字")
 
-            ctx_quick_plot.font = 'normal 15pt "楷体"';
-            ctx_quick_plot.fillText($('#taizhou_quick_plot_text_content').val(), offsetX_qp, offsetY_qp);
+            quick_plot_object.ctx_quick_plot.font = 'normal 15pt "楷体"';//$('#taizhou_quick_plot_text_content').val()
+            quick_plot_object.ctx_quick_plot.fillText("测试画图", e.offsetX, e.offsetY);
 
         }
     },
     right_fun:function (event) {
         var event = event || window.event;
-        var select_plot_type = 'coutour'//$("input[name='taizhou_quick_plot_type']:checked").val()
-        if (select_plot_type == 'coutour') {
-            quick_plot_object.ctx_quick_plot.strokeStyle = 'red'//$("input[name='selected_color']:checked").val()
+        var select_plot_type = quick_plot_object.plot_type()
+        if (select_plot_type == 'contour') {
+            quick_plot_object.ctx_quick_plot.strokeStyle = quick_plot_object.plot_color()
             var len_point = quick_plot_object.countour_rect.x.length
             for (i = 0; i < len_point; i++) {
                 if (i == 0) {
@@ -274,9 +305,9 @@ const quick_plot_object = {
                 }
                 else {
                     quick_plot_object.ctx_quick_plot.lineTo(quick_plot_object.countour_rect.x[i], quick_plot_object.countour_rect.y[i]);
-                    var color_style = 'red'//$("input[name='selected_color']:checked").val()
-                    quick_plot_object.ctx_quick_plot.fillStyle = color_style
-                    quick_plot_object.ctx_quick_plot.lineWidth = 3;
+                    //var color_style = 'red'//$("input[name='selected_color']:checked").val()
+                    quick_plot_object.ctx_quick_plot.fillStyle = quick_plot_object.plot_color()
+                    quick_plot_object.ctx_quick_plot.lineWidth = quick_plot_object.line_width()
                     quick_plot_object.ctx_quick_plot.fill()
                     quick_plot_object.ctx_quick_plot.stroke()
                     quick_plot_object.ctx_quick_plot.closePath();
@@ -316,15 +347,15 @@ const quick_plot_object = {
         else if (select_plot_type == 'line') {
     
     
-            ctx_quick_plot.font = 'normal 15pt "楷体"';
-            var posx = parseFloat($('#plot_text_clomn').val())
-            var posy = parseFloat($('#plot_text_row').val())
-            // console.log('开始绘制曲线',posy,posx)
-            ctx_quick_plot.fillText($('#plot_text_content').val(), countour_rect.x[0] - posx, countour_rect.y[0] + posy)
-            ctx_quick_plot.fillText($('#plot_text_content').val(), countour_rect.x.slice(-1) - posx, countour_rect.y.slice(-1) + posy)
+            // quick_plot_object.ctx_quick_plot.font = 'normal 15pt "楷体"';
+            // var posx = parseFloat($('#plot_text_clomn').val())
+            // var posy = parseFloat($('#plot_text_row').val())
+            // // console.log('开始绘制曲线',posy,posx)
+            // ctx_quick_plot.fillText($('#plot_text_content').val(), countour_rect.x[0] - posx, countour_rect.y[0] + posy)
+            // ctx_quick_plot.fillText($('#plot_text_content').val(), countour_rect.x.slice(-1) - posx, countour_rect.y.slice(-1) + posy)
             // ctx_quick_plot.fillText('666',countour_rect.x[0]-40,countour_rect.y[0]+10)
-            countour_rect.x = []
-            countour_rect.y = []
+            quick_plot_object.countour_rect.x = []
+            quick_plot_object.countour_rect.y = []
     
             // ctx_quick_plot.drawImage(maskCanvas, 0, 0);
             return false;//屏蔽浏览器自带的右键菜单
@@ -348,17 +379,21 @@ const quick_plot_object = {
         this.maskCanvas.height = this.canvasH 
 
         
-        this.ctx_quick_plot.lineWidth = 1;
+        this.ctx_quick_plot.lineWidth = quick_plot_object.line_width()
         this.maskCtx.globalCompositeOperation = 'xor';
         this.getBoxArea()
 
         
         this.drawMap()
         this.ctx_quick_plot.drawImage(this.maskCanvas, 0, 0);
+        this.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
+        this.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
+        this.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
+        this.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
         
 
 
-        this.ctx_quick_plot.strokeStyle = 'black';
+        //this.ctx_quick_plot.strokeStyle = 'black';
         this.ctx_quick_plot.lineWidth = 3;
         this.ctx_quick_plot.lineJoin = 'round';
         this.ctx_quick_plot.lineCap = 'round';
