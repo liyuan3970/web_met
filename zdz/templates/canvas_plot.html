@@ -228,11 +228,11 @@
                                     </div>
                                     <script>
                                         $("#bg_town").click(function () {
-                                                const quick_plot = document.getElementById("quick_plot");
-                                                quick_plot_object.geoData = tz_json
-                                                quick_plot_object.run(quick_plot)
+                                            const quick_plot = document.getElementById("quick_plot");
+                                            quick_plot_object.geoData = tz_json
+                                            quick_plot_object.run(quick_plot)
 
-                                            })
+                                        })
                                     </script>
                                     <div style="width: 80%;height:100%;border: 1px solid">
                                         <div style="width: 100%;height:85%;border: 1px solid">
@@ -266,14 +266,14 @@
                                             </div>
                                             <div id="taizhou_quick_plot_type_view0"
                                                 style="display:inline-block;width:100%;height:70%;">
-                                                <select id = "view0_color">
+                                                <select id="view0_color">
                                                     <option value="black">黑色</option>
                                                     <option value="red">红色</option>
                                                     <option value="blue">蓝色</option>
                                                 </select>
-                                                <select id = "view0_line">
+                                                <select id="view0_line">
                                                     <option value="contour">等值线</option>
-                                                    <option value="line">曲线</option>                                               
+                                                    <option value="line">曲线</option>
                                                 </select>
                                                 <label>粗细</label>
                                                 <input id="view0_width" type="number" value=3>
@@ -299,28 +299,57 @@
                                                 style="display:none;width:100%;height:70%;border: 3px solid black">
                                                 内容:&nbsp;<input id="taizhou_quick_plot_text_content" placeholder="请输入文字"
                                                     value="请输入文字" type="text" style="width: 40%;">
-                                                大小:&nbsp;<input type="number" max="10" min="0" placeholder="3"
-                                                    style="width: 6%;">
-                                                
+                                                大小:&nbsp;<input id="taizhou_quick_plot_text_size" type="number" max="80"
+                                                    min="0" placeholder="25" style="width: 6%;">
+
 
                                             </div>
-                                            <div id="taizhou_quick_plot_type_view3" style="display:none;width:100%;height:70%;border: 3px solid black">
+                                            <div id="taizhou_quick_plot_type_view3"
+                                                style="display:none;width:100%;height:70%;border: 3px solid black">
                                                 <!-- 添加颜色的radio -->
-                                                <div id="color_select_list" style="display: inline-block;width:100%;height: 40%; "></div>
+                                                <div id="color_select_list"
+                                                    style="display: inline-block;width:100%;height: 40%; "></div>
                                                 <div style="width:100%;height: 10%; "></div>
-                                            
-                                                <select style="width: 10%;height: 35%;">
-                                                    <option style="background-color: black;width: 10o%;height: 100%;">黑色</option>
+
+                                                <select id="color_select_option" style="width: 10%;height: 35%;">
+                                                    <option style="display:none" value="none"></option>
+                                                    <option value="black">黑色</option>
+                                                    <option value="green">绿色</option>
+                                                    <option value="red">红色</option>
+                                                    <option value="blue">蓝色</option>
                                                 </select>
-                                                <input id="color_bar_add" type="button" value="添加" onclick="color_bar_add()"
+                                                
+                                                <input id="color_bar_del" type="button" value="删除"
+                                                    onclick="color_bar_del()"
                                                     style="width: 10%;height: 35%;float: right;">
-                                                <input id="color_bar_del" type="button" value="删除" onclick="color_bar_del()"
-                                                    style="width: 10%;height: 35%;float: right;">
-                                            
-                                            
+
+
                                             </div>
-                                            
+
                                             <script type="text/javascript">
+
+                                                $('#color_select_option').change(function () {
+                                                    var select_color = $('#color_select_option option:selected').val();
+                                                    if (select_color != 'none') {
+                                                        var add_radio = document.createElement('input')
+                                                        add_radio.style.width = "8%"
+                                                        add_radio.style.height = "80%"
+                                                        add_radio.style.backgroundColor = select_color
+                                                        add_radio.style.display = "inline-block"
+                                                        add_radio.style.border = "1px solid black"
+                                                        add_radio.setAttribute("class", "color_bar")
+                                                        add_radio.setAttribute("type", "text")
+                                                        $('#color_select_list').append(add_radio)
+                                                    }
+
+                                                })
+
+                                                function color_bar_del() {
+                                                $('#color_select_list').children().last().remove()
+                                                quick_plot_object.labelinfo.color.pop()
+                                                quick_plot_object.labelinfo.text.pop()
+                                                // console.log($(".color_bar").val())
+                                            }
                                                 var el = window.document.body; //声明一个变量，默认值为body
                                                 var select_icon_img = []
                                                 window.document.body.onmouseover = function (event) {
@@ -341,7 +370,7 @@
                                                     })
 
                                                 }
-                                                var taizhou_quick_plot_type = $("input[name='taizhou_quick_plot_type']:checked").val()
+                                                // var taizhou_quick_plot_type = $("input[name='taizhou_quick_plot_type']:checked").val()
 
                                                 // 前端绘图模块的
                                                 $('#taizhou_quick_plot_contour').click(function () {

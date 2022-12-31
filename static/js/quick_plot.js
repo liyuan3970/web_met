@@ -19,6 +19,21 @@ const quick_plot_object = {
     maskCtx: undefined,
     ctx_quick_plot:undefined,
     maskCanvas:undefined,
+    labelinfo:{
+        "color": [],
+        "text": []
+    },
+    textinfo:function (){
+        //'normal 15pt "楷体"'taizhou_quick_plot_text_size
+        var title ='' +$("#taizhou_quick_plot_text_content").val()
+        var textstr = $("#taizhou_quick_plot_text_size").val()
+        var font = 'normal'+' '+textstr.toString()+'pt "楷体"'
+
+        return {
+            fontSize:font,
+            titleText:title,
+        }
+    },
     click_type:function (){
         var select_type = $("input[name='taizhou_quick_plot_type']:checked").val()
         return select_type
@@ -31,6 +46,14 @@ const quick_plot_object = {
     },
     plot_type:function (){
         return $('#view0_line  option:selected').val()
+    },
+    drowTextInfo:function () {
+        console.log("绘制色标")
+        $(".color_bar").each(function (index, el) {
+            quick_plot_object.labelinfo.text[index] = el.value;
+            quick_plot_object.labelinfo.color[index] = el.style.backgroundColor;
+        });
+
     },
     drawMap:function () {
         this.maskCtx.clearRect(0, 0, this.canvasW, this.canvasH)
@@ -256,9 +279,9 @@ const quick_plot_object = {
             quick_plot_object.ctx_quick_plot.beginPath();
             quick_plot_object.ctx_quick_plot.moveTo(quick_plot_object.beginPoint.x, quick_plot_object.beginPoint.y);
             quick_plot_object.ctx_quick_plot.quadraticCurveTo(controlPoint.x, controlPoint.y, endPoint.x, endPoint.y);
-            // ctx_quick_plot.lineTo(endPoint.x, endPoint.y);
+            quick_plot_object.ctx_quick_plot.lineTo(endPoint.x, endPoint.y);
             quick_plot_object.ctx_quick_plot.stroke();
-            quick_plot_object.ctx_quick_plot.fill()
+            //quick_plot_object.ctx_quick_plot.fill()
             quick_plot_object.ctx_quick_plot.closePath();
             
         }
@@ -274,18 +297,28 @@ const quick_plot_object = {
             // console.log("开始绘制图标")
             var plot_icon = new Image()
             plot_icon = select_icon_img[0]
-            // console.log(plot_icon.width, plot_icon.height)
             quick_plot_object.ctx_quick_plot.drawImage(plot_icon, e.offsetX-35, e.offsetY-plot_icon.height/2);
 
         }
         else if (select_plot_type == 'scatter_pic') {
-            console.log("开始绘制色标", 165, 378)//75,398,80,30
+            // console.log("开始绘制色标")//75,398,80,30
+            quick_plot_object.drowTextInfo()
+            quick_plot_object.ctx_quick_plot.beginPath();
+            for (i = 0; i < quick_plot_object.labelinfo.color.length; i++) {
+                quick_plot_object.ctx_quick_plot.fillStyle = quick_plot_object.labelinfo.color[i]
+                quick_plot_object.ctx_quick_plot.fillRect(e.offsetX, e.offsetY + i * 30, 80, 30)
+                quick_plot_object.ctx_quick_plot.font = 'normal 15pt "楷体"'
+                quick_plot_object.ctx_quick_plot.fillStyle = "black"
+                quick_plot_object.ctx_quick_plot.fillText(quick_plot_object.labelinfo.text[i], e.offsetX + 80 + 8,  e.offsetY + i * 30 + 18)       
+            }
+            quick_plot_object.ctx_quick_plot.closePath();
         }
         else if (select_plot_type == 'scatter_text') {
-            console.log("开始绘制文字")
-
-            quick_plot_object.ctx_quick_plot.font = 'normal 15pt "楷体"';//$('#taizhou_quick_plot_text_content').val()
-            quick_plot_object.ctx_quick_plot.fillText("测试画图", e.offsetX, e.offsetY);
+            // console.log("开始绘制文字")
+            quick_plot_object.ctx_quick_plot.font = quick_plot_object.textinfo().fontSize//'normal 15pt "楷体"';//$('#taizhou_quick_plot_text_content').val()
+            quick_plot_object.ctx_quick_plot.fillStyle = 'black'
+            quick_plot_object.ctx_quick_plot.fillText(quick_plot_object.textinfo().titleText, e.offsetX, e.offsetY);
+            quick_plot_object.ctx_quick_plot.fillStyle = quick_plot_object.plot_color()
 
         }
     },
