@@ -221,11 +221,19 @@
                                 <div style="display: flex;width: 100%;height:100%;border: 1px solid">
                                     <!-- 底图选项 -->
                                     <div style="width: 20%;height:100%;border: 1px solid">
-                                        <button style="width: 100%;height:30%"></button>
+                                        <button id="bg_town" style="width: 100%;height:30%"></button>
                                         <button style="width: 100%;height:30%"></button>
                                         <button style="width: 100%;height:30%"></button>
 
                                     </div>
+                                    <script>
+                                        $("#bg_town").click(function () {
+                                                const quick_plot = document.getElementById("quick_plot");
+                                                quick_plot_object.geoData = tz_json
+                                                quick_plot_object.run(quick_plot)
+
+                                            })
+                                    </script>
                                     <div style="width: 80%;height:100%;border: 1px solid">
                                         <div style="width: 100%;height:85%;border: 1px solid">
                                             <canvas id="quick_plot"
