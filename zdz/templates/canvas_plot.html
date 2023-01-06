@@ -42,9 +42,7 @@
                     <li>
                         <a id="quick_plot_link" href="#canvas-2" data-toggle="tab">快速绘图</a>
                     </li>
-                    <li>
-                        <a href="#canvas-3" data-toggle="tab">趋势图</a>
-                    </li>
+                    
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="canvas-1">
@@ -259,9 +257,9 @@
                                                     name="taizhou_quick_plot_type"
                                                     value="scatter_pic">&nbsp;&nbsp;&nbsp;
 
-                                                <!-- <input id="forward_canvas" type="button" value="前进" style="float: right;">
-                                                        <input id="reback_canvas" type="button" value="撤回" style="float: right;">
-                                                        <input id="flash_canvas" type="button" value="刷新" style="float: right;"> -->
+                                                <input id="forward_canvas" type="button" value="前进" style="float: right;">
+                                                <input id="reback_canvas" type="button" value="撤回" style="float: right;">
+                                                <input id="flash_canvas" type="button" value="刷新" style="float: right;">
 
                                             </div>
                                             <div id="taizhou_quick_plot_type_view0"
@@ -327,6 +325,40 @@
                                             </div>
 
                                             <script type="text/javascript">
+                                                $('#flash_canvas').click(function () { 
+                                                    const quick_plot = document.getElementById("quick_plot");
+                                                    quick_plot_object.geoData = tz_json
+                                                    quick_plot_object.run(quick_plot)
+
+                                                    
+                                                                                               
+                                                })
+                                                
+                                                $('#reback_canvas').click(function () {    
+                                                    if (quick_plot_object.memory_list.length-1>quick_plot_object.click_num){
+                                                        quick_plot_object.ctx_quick_plot.clearRect(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH)                                      
+                                                        quick_plot_object.ctx_quick_plot.putImageData(quick_plot_object.memory_list[quick_plot_object.memory_list.length -2-quick_plot_object.click_num], 0, 0);
+                                                        quick_plot_object.click_num = quick_plot_object.click_num + 1  
+                                                         
+
+                                                    }
+                                                                                               
+                                                })
+
+                                                $('#forward_canvas').click(function () { 
+                                                    if (quick_plot_object.click_num!=0){
+                                                        quick_plot_object.ctx_quick_plot.clearRect(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH)  
+                                                        quick_plot_object.ctx_quick_plot.putImageData(quick_plot_object.memory_list[quick_plot_object.memory_list.length-quick_plot_object.click_num], 0, 0);
+                                                        quick_plot_object.click_num = quick_plot_object.click_num - 1  
+                                                        
+                                                    }
+                                                    else{
+                                                        quick_plot_object.ctx_quick_plot.clearRect(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH)  
+                                                        quick_plot_object.ctx_quick_plot.putImageData(quick_plot_object.memory_list[quick_plot_object.memory_list.length-1], 0, 0);
+
+                                                    }  
+                                                                                                 
+                                                })
 
                                                 $('#color_select_option').change(function () {
                                                     var select_color = $('#color_select_option option:selected').val();
@@ -345,11 +377,11 @@
                                                 })
 
                                                 function color_bar_del() {
-                                                $('#color_select_list').children().last().remove()
-                                                quick_plot_object.labelinfo.color.pop()
-                                                quick_plot_object.labelinfo.text.pop()
-                                                // console.log($(".color_bar").val())
-                                            }
+                                                    $('#color_select_list').children().last().remove()
+                                                    quick_plot_object.labelinfo.color.pop()
+                                                    quick_plot_object.labelinfo.text.pop()
+                                                    // console.log($(".color_bar").val())
+                                                }
                                                 var el = window.document.body; //声明一个变量，默认值为body
                                                 var select_icon_img = []
                                                 window.document.body.onmouseover = function (event) {
@@ -421,11 +453,7 @@
 
 
                     </div>
-                    <div class="tab-pane" id="canvas-3">
-                        <p>
-                            Howdy, I'm in Section 3.
-                        </p>
-                    </div>
+                    
                 </div>
             </div>
         </div>

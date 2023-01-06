@@ -3,6 +3,7 @@ const quick_plot_object = {
     beginPoint :null,
     points :[],
     click_item :0,
+    click_num:0,
     offsetX_qp : 0, 
     offsetY_qp : 0,    
     eventType : '',  
@@ -19,6 +20,8 @@ const quick_plot_object = {
     maskCtx: undefined,
     ctx_quick_plot:undefined,
     maskCanvas:undefined,
+    memory_list:[],
+    memory_status:false,
     labelinfo:{
         "color": [],
         "text": []
@@ -289,111 +292,215 @@ const quick_plot_object = {
     },
     click_fun: function (e) {
         undefined
+        
         this.offsetX_qp = e.offsetX;
-        this.offsetY_qp = e.offsetY;
-        // var canvas_quick_plot_select_value = parseFloat($("input[name='canvas_quick_plot_num']:checked").val());
-        var select_plot_type = quick_plot_object.click_type()//'none'//$("input[name='taizhou_quick_plot_type']:checked").val()
-        if (select_plot_type == 'scatter_icon') {
-            // console.log("开始绘制图标")
-            var plot_icon = new Image()
-            plot_icon = select_icon_img[0]
-            quick_plot_object.ctx_quick_plot.drawImage(plot_icon, e.offsetX-35, e.offsetY-plot_icon.height/2);
-
-        }
-        else if (select_plot_type == 'scatter_pic') {
-            // console.log("开始绘制色标")//75,398,80,30
-            quick_plot_object.drowTextInfo()
-            quick_plot_object.ctx_quick_plot.beginPath();
-            for (i = 0; i < quick_plot_object.labelinfo.color.length; i++) {
-                quick_plot_object.ctx_quick_plot.fillStyle = quick_plot_object.labelinfo.color[i]
-                quick_plot_object.ctx_quick_plot.fillRect(e.offsetX, e.offsetY + i * 30, 80, 30)
-                quick_plot_object.ctx_quick_plot.font = 'normal 15pt "楷体"'
-                quick_plot_object.ctx_quick_plot.fillStyle = "black"
-                quick_plot_object.ctx_quick_plot.fillText(quick_plot_object.labelinfo.text[i], e.offsetX + 80 + 8,  e.offsetY + i * 30 + 18)       
+        this.offsetY_qp = e.offsetY;  
+        var select_plot_type = quick_plot_object.click_type()
+        if (quick_plot_object.click_num!=0){
+            // var delnum  = quick_plot_object.memory_list.length
+            quick_plot_object.memory_list.splice(quick_plot_object.memory_list.length-quick_plot_object.click_num,quick_plot_object.click_num+1);
+            if (select_plot_type == 'scatter_icon') {
+                // console.log("开始绘制图标")
+                var plot_icon = new Image()
+                plot_icon = select_icon_img[0]
+                quick_plot_object.ctx_quick_plot.drawImage(plot_icon, e.offsetX-35, e.offsetY-plot_icon.height/2);
+                quick_plot_object.memory_list.push(quick_plot_object.ctx_quick_plot.getImageData(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH))
+                
+    
             }
-            quick_plot_object.ctx_quick_plot.closePath();
-        }
-        else if (select_plot_type == 'scatter_text') {
-            // console.log("开始绘制文字")
-            quick_plot_object.ctx_quick_plot.font = quick_plot_object.textinfo().fontSize//'normal 15pt "楷体"';//$('#taizhou_quick_plot_text_content').val()
-            quick_plot_object.ctx_quick_plot.fillStyle = 'black'
-            quick_plot_object.ctx_quick_plot.fillText(quick_plot_object.textinfo().titleText, e.offsetX, e.offsetY);
-            quick_plot_object.ctx_quick_plot.fillStyle = quick_plot_object.plot_color()
+            else if (select_plot_type == 'scatter_pic') {
+                // console.log("开始绘制色标")//75,398,80,30
+                quick_plot_object.drowTextInfo()
+                quick_plot_object.ctx_quick_plot.beginPath();
+                for (i = 0; i < quick_plot_object.labelinfo.color.length; i++) {
+                    quick_plot_object.ctx_quick_plot.fillStyle = quick_plot_object.labelinfo.color[i]
+                    quick_plot_object.ctx_quick_plot.fillRect(e.offsetX, e.offsetY + i * 30, 80, 30)
+                    quick_plot_object.ctx_quick_plot.font = 'normal 15pt "楷体"'
+                    quick_plot_object.ctx_quick_plot.fillStyle = "black"
+                    quick_plot_object.ctx_quick_plot.fillText(quick_plot_object.labelinfo.text[i], e.offsetX + 80 + 8,  e.offsetY + i * 30 + 18)       
+                }
+                quick_plot_object.ctx_quick_plot.closePath();
+                quick_plot_object.memory_list.push(quick_plot_object.ctx_quick_plot.getImageData(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH))
+                
+            }
+            else if (select_plot_type == 'scatter_text') {
+                // console.log("开始绘制文字")
+                quick_plot_object.ctx_quick_plot.font = quick_plot_object.textinfo().fontSize//'normal 15pt "楷体"';//$('#taizhou_quick_plot_text_content').val()
+                quick_plot_object.ctx_quick_plot.fillStyle = 'black'
+                quick_plot_object.ctx_quick_plot.fillText(quick_plot_object.textinfo().titleText, e.offsetX, e.offsetY);
+                quick_plot_object.ctx_quick_plot.fillStyle = quick_plot_object.plot_color()
+                quick_plot_object.memory_list.push(quick_plot_object.ctx_quick_plot.getImageData(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH))
+                
+    
+            }
+            quick_plot_object.click_num = 0
+
 
         }
+        else {
+            if (select_plot_type == 'scatter_icon') {
+                // console.log("开始绘制图标")
+                var plot_icon = new Image()
+                plot_icon = select_icon_img[0]
+                quick_plot_object.ctx_quick_plot.drawImage(plot_icon, e.offsetX-35, e.offsetY-plot_icon.height/2);
+                quick_plot_object.memory_list.push(quick_plot_object.ctx_quick_plot.getImageData(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH))
+                
+    
+            }
+            else if (select_plot_type == 'scatter_pic') {
+                // console.log("开始绘制色标")//75,398,80,30
+                quick_plot_object.drowTextInfo()
+                quick_plot_object.ctx_quick_plot.beginPath();
+                for (i = 0; i < quick_plot_object.labelinfo.color.length; i++) {
+                    quick_plot_object.ctx_quick_plot.fillStyle = quick_plot_object.labelinfo.color[i]
+                    quick_plot_object.ctx_quick_plot.fillRect(e.offsetX, e.offsetY + i * 30, 80, 30)
+                    quick_plot_object.ctx_quick_plot.font = 'normal 15pt "楷体"'
+                    quick_plot_object.ctx_quick_plot.fillStyle = "black"
+                    quick_plot_object.ctx_quick_plot.fillText(quick_plot_object.labelinfo.text[i], e.offsetX + 80 + 8,  e.offsetY + i * 30 + 18)       
+                }
+                quick_plot_object.ctx_quick_plot.closePath();
+                quick_plot_object.memory_list.push(quick_plot_object.ctx_quick_plot.getImageData(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH))
+                
+            }
+            else if (select_plot_type == 'scatter_text') {
+                // console.log("开始绘制文字")
+                quick_plot_object.ctx_quick_plot.font = quick_plot_object.textinfo().fontSize//'normal 15pt "楷体"';//$('#taizhou_quick_plot_text_content').val()
+                quick_plot_object.ctx_quick_plot.fillStyle = 'black'
+                quick_plot_object.ctx_quick_plot.fillText(quick_plot_object.textinfo().titleText, e.offsetX, e.offsetY);
+                quick_plot_object.ctx_quick_plot.fillStyle = quick_plot_object.plot_color()
+                quick_plot_object.memory_list.push(quick_plot_object.ctx_quick_plot.getImageData(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH))
+                
+    
+            }
+
+        }
+
+        
+        
     },
     right_fun:function (event) {
         var event = event || window.event;
         var select_plot_type = quick_plot_object.plot_type()
-        if (select_plot_type == 'contour') {
-            quick_plot_object.ctx_quick_plot.strokeStyle = quick_plot_object.plot_color()
-            var len_point = quick_plot_object.countour_rect.x.length
-            for (i = 0; i < len_point; i++) {
-                if (i == 0) {
-                    quick_plot_object.ctx_quick_plot.beginPath();
-                    quick_plot_object.ctx_quick_plot.moveTo(quick_plot_object.countour_rect.x[i], quick_plot_object.countour_rect.y[i]);
+        if (quick_plot_object.click_num!=0){
+            // var delnum  = quick_plot_object.memory_list.length
+            quick_plot_object.memory_list.splice(quick_plot_object.memory_list.length-quick_plot_object.click_num,quick_plot_object.click_num+1);
+            if (select_plot_type == 'contour') {
+                quick_plot_object.ctx_quick_plot.strokeStyle = quick_plot_object.plot_color()
+                var len_point = quick_plot_object.countour_rect.x.length
+                for (i = 0; i < len_point; i++) {
+                    if (i == 0) {
+                        quick_plot_object.ctx_quick_plot.beginPath();
+                        quick_plot_object.ctx_quick_plot.moveTo(quick_plot_object.countour_rect.x[i], quick_plot_object.countour_rect.y[i]);
+                    }
+                    else if (i != len_point - 1) {
+                        quick_plot_object.ctx_quick_plot.lineTo(quick_plot_object.countour_rect.x[i], quick_plot_object.countour_rect.y[i]);
+                    }
+                    else {
+                        quick_plot_object.ctx_quick_plot.lineTo(quick_plot_object.countour_rect.x[i], quick_plot_object.countour_rect.y[i]);
+                        //var color_style = 'red'//$("input[name='selected_color']:checked").val()
+                        quick_plot_object.ctx_quick_plot.fillStyle = quick_plot_object.plot_color()
+                        quick_plot_object.ctx_quick_plot.lineWidth = quick_plot_object.line_width()
+                        quick_plot_object.ctx_quick_plot.fill()
+                        quick_plot_object.ctx_quick_plot.stroke()
+                        quick_plot_object.ctx_quick_plot.closePath();
+                        quick_plot_object.countour_rect.x = []
+                        quick_plot_object.countour_rect.y = []
+                        quick_plot_object.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
+                        quick_plot_object.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
+                        quick_plot_object.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
+                        quick_plot_object.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
+                        quick_plot_object.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
+                        quick_plot_object.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
+                        quick_plot_object.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
+        
+                    }
+        
+        
+        
                 }
-                else if (i != len_point - 1) {
-                    quick_plot_object.ctx_quick_plot.lineTo(quick_plot_object.countour_rect.x[i], quick_plot_object.countour_rect.y[i]);
-                }
-                else {
-                    quick_plot_object.ctx_quick_plot.lineTo(quick_plot_object.countour_rect.x[i], quick_plot_object.countour_rect.y[i]);
-                    //var color_style = 'red'//$("input[name='selected_color']:checked").val()
-                    quick_plot_object.ctx_quick_plot.fillStyle = quick_plot_object.plot_color()
-                    quick_plot_object.ctx_quick_plot.lineWidth = quick_plot_object.line_width()
-                    quick_plot_object.ctx_quick_plot.fill()
-                    quick_plot_object.ctx_quick_plot.stroke()
-                    quick_plot_object.ctx_quick_plot.closePath();
-                    quick_plot_object.countour_rect.x = []
-                    quick_plot_object.countour_rect.y = []
-    
-                }
-    
-    
-    
+                
+                
+                
+                quick_plot_object.memory_list.push(quick_plot_object.ctx_quick_plot.getImageData(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH)) 
+                
+                return false;
+        
             }
-            quick_plot_object.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
-            quick_plot_object.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
-            quick_plot_object.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
-            quick_plot_object.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
-            quick_plot_object.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
-            quick_plot_object.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
-            quick_plot_object.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
-            // 设置栈的个数限制为5
-            // var reback_list_len = reback_list.length
-            // if (click_item!=0){
-            //     console.log("中间插值")
-            //     reback_list.splice(reback_list_len-click_item,0,ctx_quick_plot.getImageData(0, 0, canvasW, canvasH))
-            //     reback_list.splice(reback_list_len-click_item+1,reback_list_len+click_item-1)
-    
-            // }
-            // else{ 
-            //     reback_list.push(ctx_quick_plot.getImageData(0, 0, canvasW, canvasH))
-            // }
+            else if (select_plot_type == 'line') {
+        
+        
             
-    
+                quick_plot_object.countour_rect.x = []
+                quick_plot_object.countour_rect.y = []
+       
+                quick_plot_object.memory_list.push(quick_plot_object.ctx_quick_plot.getImageData(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH)) 
+                
+                return false;//屏蔽浏览器自带的右键菜单
+        
+            }
+            quick_plot_object.click_num = 0
+        }
+        else{
+            if (select_plot_type == 'contour') {
+                quick_plot_object.ctx_quick_plot.strokeStyle = quick_plot_object.plot_color()
+                var len_point = quick_plot_object.countour_rect.x.length
+                for (i = 0; i < len_point; i++) {
+                    if (i == 0) {
+                        quick_plot_object.ctx_quick_plot.beginPath();
+                        quick_plot_object.ctx_quick_plot.moveTo(quick_plot_object.countour_rect.x[i], quick_plot_object.countour_rect.y[i]);
+                    }
+                    else if (i != len_point - 1) {
+                        quick_plot_object.ctx_quick_plot.lineTo(quick_plot_object.countour_rect.x[i], quick_plot_object.countour_rect.y[i]);
+                    }
+                    else {
+                        quick_plot_object.ctx_quick_plot.lineTo(quick_plot_object.countour_rect.x[i], quick_plot_object.countour_rect.y[i]);
+                        //var color_style = 'red'//$("input[name='selected_color']:checked").val()
+                        quick_plot_object.ctx_quick_plot.fillStyle = quick_plot_object.plot_color()
+                        quick_plot_object.ctx_quick_plot.lineWidth = quick_plot_object.line_width()
+                        quick_plot_object.ctx_quick_plot.fill()
+                        quick_plot_object.ctx_quick_plot.stroke()
+                        quick_plot_object.ctx_quick_plot.closePath();
+                        quick_plot_object.countour_rect.x = []
+                        quick_plot_object.countour_rect.y = []
+                        quick_plot_object.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
+                        quick_plot_object.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
+                        quick_plot_object.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
+                        quick_plot_object.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
+                        quick_plot_object.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
+                        quick_plot_object.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
+                        quick_plot_object.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
+        
+                    }
+        
+        
+        
+                }
+                
+                
+                
+                quick_plot_object.memory_list.push(quick_plot_object.ctx_quick_plot.getImageData(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH)) 
+                
+                return false;
+        
+            }
+            else if (select_plot_type == 'line') {
+        
+        
             
-            // click_item = click_item + 1 
-            return false;
-    
+                quick_plot_object.countour_rect.x = []
+                quick_plot_object.countour_rect.y = []
+       
+                quick_plot_object.memory_list.push(quick_plot_object.ctx_quick_plot.getImageData(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH)) 
+                
+                return false;//屏蔽浏览器自带的右键菜单
+        
+            }
+
         }
-        else if (select_plot_type == 'line') {
-    
-    
-            // quick_plot_object.ctx_quick_plot.font = 'normal 15pt "楷体"';
-            // var posx = parseFloat($('#plot_text_clomn').val())
-            // var posy = parseFloat($('#plot_text_row').val())
-            // // console.log('开始绘制曲线',posy,posx)
-            // ctx_quick_plot.fillText($('#plot_text_content').val(), countour_rect.x[0] - posx, countour_rect.y[0] + posy)
-            // ctx_quick_plot.fillText($('#plot_text_content').val(), countour_rect.x.slice(-1) - posx, countour_rect.y.slice(-1) + posy)
-            // ctx_quick_plot.fillText('666',countour_rect.x[0]-40,countour_rect.y[0]+10)
-            quick_plot_object.countour_rect.x = []
-            quick_plot_object.countour_rect.y = []
-    
-            // ctx_quick_plot.drawImage(maskCanvas, 0, 0);
-            return false;//屏蔽浏览器自带的右键菜单
-    
-        }
+        
+
+        
+        
     
     },
 
@@ -401,6 +508,7 @@ const quick_plot_object = {
         
         // quick_plot.style.backgroundColor = "black";
         this.ctx_quick_plot = quick_plot.getContext('2d');
+        
         var widths = $('#quick_plot').actual('width')
         var heights = $('#quick_plot').actual('height')
         this.canvasW = quick_plot.width = widths;
@@ -423,6 +531,8 @@ const quick_plot_object = {
         this.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
         this.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
         this.ctx_quick_plot.drawImage(quick_plot_object.maskCanvas, 0, 0);
+        quick_plot_object.memory_list = []
+        quick_plot_object.memory_list.push(quick_plot_object.ctx_quick_plot.getImageData(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH))
         
 
 
