@@ -34,13 +34,13 @@
     <!-- 数据 -->
     <script src='static/js/taizhou.js'></script>
     <!-- 颜色选择器 -->
-    <!-- <script src="static/js/jquery.minicolors.js"></script> -->
-    <!-- <link rel="stylesheet" href="static/css/jquery.minicolors.css"> -->
+    <script src="static/js/colorpicker.js"></script>
+    <link rel="stylesheet" href="static/css/colorpicker.css">
     <style type="text/css">
         .scrollbar_self::-webkit-scrollbar {
             display: none;
         }
-    
+
         /* html {
     
             overflow-x: hidden;
@@ -95,19 +95,24 @@
                             <div style="display:inline-block;width:100%;height:100%">
                                 <!-- 打开功能的实现 -->
                                 <div style="width: 100%; height: 0px;">
-                                    <a id="modal-000001" href="#modal-container-000001" role="button" class="btn" data-toggle="modal">新建</a>
-                                    <a id="modal-000002" href="#modal-container-000002" role="button" class="btn" data-toggle="modal">打开</a>
-                                    <a id="modal-000003" href="#modal-container-000003" role="button" class="btn" data-toggle="modal">删除</a>
-                                    <a id="modal-000004" href="#modal-container-000004" role="button" class="btn" data-toggle="modal">配置</a>
+                                    <a id="modal-000001" href="#modal-container-000001" role="button" class="btn"
+                                        data-toggle="modal">新建</a>
+                                    <a id="modal-000002" href="#modal-container-000002" role="button" class="btn"
+                                        data-toggle="modal">打开</a>
+                                    <a id="modal-000003" href="#modal-container-000003" role="button" class="btn"
+                                        data-toggle="modal">删除</a>
+                                    <a id="modal-000004" href="#modal-container-000004" role="button" class="btn"
+                                        data-toggle="modal">配置</a>
                                     <!-- <div id="button_type_list" style="display: inline-flex;width:50%;height:80%"></div> -->
-                    
+
                                     <!-- 新建 -->
-                                    <div class="modal fade" id="modal-container-000001" role="dialog" aria-labelledby="myModalLabel"
-                                        aria-hidden="true">
+                                    <div class="modal fade" id="modal-container-000001" role="dialog"
+                                        aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-hidden="true"></button>
                                                     <h4 class="modal-title" id="myModalLabel">
                                                         新建材料:
                                                     </h4>
@@ -115,14 +120,15 @@
                                                 <div class="modal-body" style="height: 500px;">
                                                     <div style="display: inline-flex;width:100%;height:100%;">
                                                         <div style="width:15%;height:100%;">
-                    
+
                                                         </div>
                                                         <!-- 新建材料的核心数据 -->
                                                         <div style="width:70%;height:100%;border:1px solid black">
                                                             <div style="width:100%;height:20%;"></div>
                                                             <div style="display:inline-block; ;width:100%;height:15%;">
                                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;材料种类:
-                                                                <select id="new_document_type" style="width:60%;height:80%;border:0">
+                                                                <select id="new_document_type"
+                                                                    style="width:60%;height:80%;border:0">
                                                                 </select>
                                                             </div>
                                                             <div style="display:inline-block; ;width:100%;height:15%;">
@@ -141,17 +147,20 @@
                                                             <div style="display:inline-block; ;width:100%;height:15%;">
                                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发布日期:
                                                                 <input id="create_doc_date" type="text"
-                                                                    style="width:60%;height:80%;border:0;text-align: center;" ;>
+                                                                    style="width:60%;height:80%;border:0;text-align: center;"
+                                                                    ;>
                                                             </div>
                                                             <div style="display:inline-block; ;width:100%;height:15%;;">
                                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模块类型:
                                                                 <div
                                                                     style="display:inline-flex;width:60%;height:80%;border:1px solid black">
-                                                                    <div style="width:10%;height:100%;border:1px solid black">
+                                                                    <div
+                                                                        style="width:10%;height:100%;border:1px solid black">
                                                                         <div style=";width:100%;height:50%">
                                                                             <select id="png_text_add" autocomplete="off"
                                                                                 style="appearance:none;;width:100%;height:100%;background-image: url(static/src/加.png);background-size: 60%;background-repeat: no-repeat;">
-                                                                                <option style="display:none;" selected></option>
+                                                                                <option style="display:none;" selected>
+                                                                                </option>
                                                                                 <option value="段落">段落</option>
                                                                                 <option value="图表">图表</option>
                                                                                 <option value="列表">列表</option>
@@ -159,24 +168,24 @@
                                                                                 <option value="十天">七天</option>
                                                                                 <option value="建议">建议</option>
                                                                             </select>
-                    
+
                                                                         </div>
                                                                         <div style=";width:100%;height:50%">
                                                                             <button id="delete_png_text"
                                                                                 style=";width:100%;height:100%;background-image: url(static/src/减.png);background-size: 60%;background-repeat: no-repeat;"></button>
-                    
-                    
+
+
                                                                         </div>
-                    
+
                                                                     </div>
                                                                     <div id="png_add_list"
                                                                         style="display:inline-flex;width:90%;height:100%;border:1px solid black">
-                    
+
                                                                     </div>
                                                                     <script>
                                                                         let png_add_list = []
                                                                         $('#png_text_add').change(function () {
-                    
+
                                                                             var select_div = document.createElement('div');
                                                                             select_div.style = "width:10%;height:100%;background-image: url(static/src/" + $('#png_text_add').val() + ".png);background-size: 60%;background-repeat: no-repeat;"
                                                                             $('#png_add_list').append(select_div)
@@ -187,13 +196,13 @@
                                                                             $('#png_add_list').children().eq(-1).remove()
                                                                             png_add_list.pop()
                                                                             console.log(png_add_list)
-                    
+
                                                                         })
-                    
-                    
+
+
                                                                     </script>
                                                                 </div>
-                    
+
                                                             </div>
                                                             <script>
                                                                 $('#create_doc_date').datetimepicker({
@@ -204,14 +213,15 @@
                                                             </script>
                                                         </div>
                                                         <div style="width:15%;height:100%;">
-                    
+
                                                         </div>
-                    
+
                                                     </div>
-                    
+
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+                                                    <button type="button" class="btn btn-default"
+                                                        data-dismiss="modal">返回</button>
                                                     <button id="new_document_post" type="button" class="btn btn-primary"
                                                         data-dismiss="modal">创建</button>
                                                 </div>
@@ -219,14 +229,14 @@
                                                     // 后端数据的传输
                                                     const list_button_object = {
                                                         type_list: ['段落', '图表'],
-                                                        type:"一周天气预测",
+                                                        type: "一周天气预测",
                                                         data: [],
                                                         item: 47,
                                                         year: 2022,
                                                         unity: "台州市气象局",
-                                                        writer:"翁之梅",
-                                                        publisher:"冯坚",
-                                                        time:"2022年8月12日15时",
+                                                        writer: "翁之梅",
+                                                        publisher: "冯坚",
+                                                        time: "2022年8月12日15时",
                                                         cerate_div_button: function () {
                                                             $('#button_type_list').html("")
                                                             for (var i = 0; i < this.type_list.length; i++) {
@@ -235,21 +245,21 @@
                                                                 div_single.style = "width: 15%; height: 30px;"
                                                                 // div_single.innerText = "\xa0\xa0\xa0\xa0\xa0\xa0"+this.type_list[i]
                                                                 var label_singl = document.createElement("label")
-                                                                label_singl.setAttribute("for",i.toString() +"checkboxitem")
-                                                                label_singl.innerText = "\xa0\xa0\xa0\xa0\xa0\xa0\xa0"+this.type_list[i]
+                                                                label_singl.setAttribute("for", i.toString() + "checkboxitem")
+                                                                label_singl.innerText = "\xa0\xa0\xa0\xa0\xa0\xa0\xa0" + this.type_list[i]
                                                                 label_singl.style = "width: 100%; height: 30px;font-size:10px;;background-image: url(static/src/" + this.type_list[i] + ".png);background-size: 30%;background-repeat: no-repeat;"
-                                                                var checkboxitem =  document.createElement("input")
-                                                                checkboxitem.id = i.toString() +"checkboxitem"
+                                                                var checkboxitem = document.createElement("input")
+                                                                checkboxitem.id = i.toString() + "checkboxitem"
                                                                 checkboxitem.value = i
-                                                                checkboxitem.setAttribute("name","doc_tyoe_opt")
-                                                                checkboxitem.setAttribute("type","radio")
+                                                                checkboxitem.setAttribute("name", "doc_tyoe_opt")
+                                                                checkboxitem.setAttribute("type", "radio")
                                                                 checkboxitem.style = "display:none;"
-                                                                div_single.append(checkboxitem,label_singl)
-                                                                div_single.addEventListener("click", function (doc) {  
-                                                                    console.log('内容',doc.path[0].id.toString()[0])     
+                                                                div_single.append(checkboxitem, label_singl)
+                                                                div_single.addEventListener("click", function (doc) {
+                                                                    console.log('内容', doc.path[0].id.toString()[0])
                                                                     // this.style = "width: 15%; height: 30px;border:1px solid black" 
                                                                     var item = Number(doc.path[0].id.toString()[0])
-                                                                    var content = list_button_object.data[item]                                                   
+                                                                    var content = list_button_object.data[item]
                                                                     tinymce.remove('#content');
                                                                     tinymce.init({
                                                                         selector: '#content',
@@ -266,55 +276,55 @@
                                                                         ],
                                                                         font_family_formats: "宋体='宋体';仿宋='仿宋';微软雅黑='微软雅黑';楷体='楷体';;隶书='隶书';幼圆='幼圆';Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings",
                                                                         font_size_formats: '12px 14px 16px 18px 20px 24px 26px 28px 30px 32px 34px 36px 38px',
-                                                                    });   
+                                                                    });
                                                                     // tinymce.get('content').setContent("设置内容")  
-                                                                    $('#content').val(content)  
-                                                                                          
+                                                                    $('#content').val(content)
+
                                                                 })
                                                                 $('#button_type_list').append(div_single)
                                                             }
-                                                            
+
                                                         },
                                                         render_data_list: function (item) {
-                                                           
-                                                            var doc_type =this.type_list[item]
-                                                            var id_number = item 
+
+                                                            var doc_type = this.type_list[item]
+                                                            var id_number = item
                                                             var doc_data_obj = {
-                                                                type:doc_type,
-                                                                id:id_number,
-                                                                content:""
+                                                                type: doc_type,
+                                                                id: id_number,
+                                                                content: ""
                                                             }
                                                             return doc_data_obj
                                                         },
-                                                        render_head_info:function () {
-                                                           
-                                                           var line1 = '<p style="text-align: center;"><span style="font-size: 36pt; color: rgb(224, 62, 45);">'+this.type+'</span></p>'
-                                                           var line2 = '<p style="text-align: center;"><span style="font-size: 12pt; color: rgb(0, 0, 0); font-family: \'times new roman\', times, serif;">第'+this.item.toString()+'期</span></p>'
-                                                           var line3 = '<table style=" width: 100%;border:none;"><colgroup><col style="width: 33.3333%;"><col style="width: 33.3333%;"><col style="width: 33.3333%;"></colgroup>'
-                                                           var line4 = '<tbody><tr><td style="border-width: 1px;">&nbsp;</td><td style="border-width: 1px;">&nbsp;</td>'
-                                                           var line5 = '<td style="border-width: 1px; text-align: right;"><span style="font-family: "times new roman", times, serif;">撰稿人：'+this.writer+'</span></td>'
-                                                           var line6 = '</tr><tr>'
-                                                           var line7 = '<td style="border-width: 1px;"><span style="font-family: \'times new roman\', times, serif;">'+this.time+'</span></td>'
-                                                           var line8 = '<td style="border-width: 1px; text-align: center;">'+this.unity+'</td>'
-                                                           var line9 = '<td style="border-width: 1px; text-align: right;">签发人：'+this.publisher+'</td>'
-                                                           var line10 = '</tr></tbody></table>'
-                                                           var line11 = '<hr style="background-color:  #FF0000;">'
-                                                           var headerInfo = line1 + line2 + line3 + line4 + line5 + line6 + line7 + line8 + line9 + line10 + line11                                                           
-                                                           return headerInfo
-                                                       }
+                                                        render_head_info: function () {
+
+                                                            var line1 = '<p style="text-align: center;"><span style="font-size: 36pt; color: rgb(224, 62, 45);">' + this.type + '</span></p>'
+                                                            var line2 = '<p style="text-align: center;"><span style="font-size: 12pt; color: rgb(0, 0, 0); font-family: \'times new roman\', times, serif;">第' + this.item.toString() + '期</span></p>'
+                                                            var line3 = '<table style=" width: 100%;border:none;"><colgroup><col style="width: 33.3333%;"><col style="width: 33.3333%;"><col style="width: 33.3333%;"></colgroup>'
+                                                            var line4 = '<tbody><tr><td style="border-width: 1px;">&nbsp;</td><td style="border-width: 1px;">&nbsp;</td>'
+                                                            var line5 = '<td style="border-width: 1px; text-align: right;"><span style="font-family: "times new roman", times, serif;">撰稿人：' + this.writer + '</span></td>'
+                                                            var line6 = '</tr><tr>'
+                                                            var line7 = '<td style="border-width: 1px;"><span style="font-family: \'times new roman\', times, serif;">' + this.time + '</span></td>'
+                                                            var line8 = '<td style="border-width: 1px; text-align: center;">' + this.unity + '</td>'
+                                                            var line9 = '<td style="border-width: 1px; text-align: right;">签发人：' + this.publisher + '</td>'
+                                                            var line10 = '</tr></tbody></table>'
+                                                            var line11 = '<hr style="background-color:  #FF0000;">'
+                                                            var headerInfo = line1 + line2 + line3 + line4 + line5 + line6 + line7 + line8 + line9 + line10 + line11
+                                                            return headerInfo
+                                                        }
                                                     }
-                                                    
-                    
+
+
                                                     $('#new_document_post').click(function () {
-                    
+
                                                         var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                                                         console.log("向后端传输创建信息", png_add_list)
                                                         var content_doc = ""
                                                         for (var i = 0; i < png_add_list.length; i++) {
                                                             content_doc = content_doc + png_add_list[i] + ","
-                    
+
                                                         }
-                    
+
                                                         // 告诉后端创建一个新的数据，并在前端修改文档标识
                                                         $.ajax({
                                                             url: "create_doc_data",  // 请求的地址
@@ -333,8 +343,8 @@
                                                             success: function (data) {
                                                                 // 返回以后创建一个对象实例
                                                                 // console.log("返回成功", data)
-                                                                $('#doc_type').text( data.doc_unity)
-                                                                $('#doc_info').text("第" + data.doc_item +"期:  "+data.doc_type)
+                                                                $('#doc_type').text(data.doc_unity)
+                                                                $('#doc_info').text("第" + data.doc_item + "期:  " + data.doc_type)
                                                                 list_button_object.year = data.doc_year
                                                                 list_button_object.item = data.doc_item
                                                                 list_button_object.type = data.doc_type
@@ -343,13 +353,13 @@
                                                                 list_button_object.cerate_div_button()
                                                             }
                                                         })
-                    
+
                                                     })
                                                 </script>
                                             </div>
-                    
+
                                         </div>
-                    
+
                                     </div>
                                     <script type="text/javascript">
                                         $('#modal-000001').click(function () {
@@ -400,14 +410,14 @@
                                                         option_documenttype.style.textAlign = 'center'
                                                         $('#new_document_type').append(option_documenttype)
                                                     }
-                    
-                    
-                    
+
+
+
                                                 }
-                    
+
                                             })
                                         })
-                    
+
                                         $('#modal-000002').click(function () {
                                             console.log('打开文档')
                                             $('#open_item_list').html('')
@@ -443,40 +453,46 @@
                                                         option_unity.innerText = data.unity[i]
                                                         $('#open_select_unity').append(option_unity)
                                                     }
-                                                    
+
                                                 }
                                             })
                                         })
                                     </script>
                                     <!-- 打开 -->
-                                    <div class="modal fade" id="modal-container-000002" role="dialog" aria-labelledby="myModalLabel"
-                                        aria-hidden="true">
+                                    <div class="modal fade" id="modal-container-000002" role="dialog"
+                                        aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-hidden="true"></button>
                                                     <h4 class="modal-title" id="myModalLabel">
                                                         打开材料
                                                     </h4>
                                                 </div>
                                                 <div class="modal-body" style="height: 300px;">
-                                                    <div style="display:inline-block;width:100%;height: 100%;border: 3px solid black">
+                                                    <div
+                                                        style="display:inline-block;width:100%;height: 100%;border: 3px solid black">
                                                         <!-- <div style="width:100%;height: 25%">
                                                         </div> -->
                                                         <!-- 选项栏 -->
-                                                        <div  style="display: inline-block;width:100%;height: 15%;">
-                                                            <select id="open_select_type" style="width: 30%;height:100%;">
-                                                                
+                                                        <div style="display: inline-block;width:100%;height: 15%;">
+                                                            <select id="open_select_type"
+                                                                style="width: 30%;height:100%;">
+
                                                             </select>
                                                             <div style="display: inline-block;width: 5%;"></div>
-                                                            <select id="open_select_year"  style="width: 15%;height:100%;">
-                                                                
+                                                            <select id="open_select_year"
+                                                                style="width: 15%;height:100%;">
+
                                                             </select>
                                                             <div style="display: inline-block;width: 5%;"></div>
-                                                            <select id="open_select_unity"  style="width: 30%;height:100%;">
-                                                                
+                                                            <select id="open_select_unity"
+                                                                style="width: 30%;height:100%;">
+
                                                             </select>
-                                                            <input id="open_document_post" type="button" value="查询" style="width:10%;height:100%"> 
+                                                            <input id="open_document_post" type="button" value="查询"
+                                                                style="width:10%;height:100%">
                                                             <script type="text/javascript">
 
                                                             </script>
@@ -486,7 +502,7 @@
                                                             $('#open_document_post').click(function () {
                                                                 console.log($('#open_select_type').val())
                                                                 var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                                                                
+
 
                                                                 // 告诉后端打开一个新的数据，并在前端修改文档标识
                                                                 $.ajax({
@@ -498,7 +514,7 @@
                                                                         'type': $('#open_select_type').val(),
                                                                         'unity': $('#open_select_unity').val(),
                                                                         'year': $('#open_select_year').val(),
-                                                                       
+
                                                                     },
                                                                     dataType: "json",
                                                                     success: function (data) {
@@ -510,20 +526,20 @@
                                                                             div_label.style = "width:100%;height:8%;"
 
                                                                             var label = document.createElement('label');
-                                                                            label.setAttribute("for","item"+i.toString())
-                                                                            label.innerText = "第" + data.item[i] + "期:" + "-----" + data.type[i] + "----"+ data.writer[i]
-                                                                            
+                                                                            label.setAttribute("for", "item" + i.toString())
+                                                                            label.innerText = "第" + data.item[i] + "期:" + "-----" + data.type[i] + "----" + data.writer[i]
+
                                                                             var checkitem = document.createElement('input')
-                                                                            checkitem.setAttribute("type","radio")
-                                                                            checkitem.setAttribute("name","load_doc_list")
-                                                                            checkitem.id = "item"+i.toString()
+                                                                            checkitem.setAttribute("type", "radio")
+                                                                            checkitem.setAttribute("name", "load_doc_list")
+                                                                            checkitem.id = "item" + i.toString()
                                                                             checkitem.style = "display:none"
-                                                                            checkitem.value = i.toString() + "-" + data.year + "-" + data.unity  + "-" + data.type[i]
-                                                                            div_label.append(label,checkitem)
+                                                                            checkitem.value = i.toString() + "-" + data.year + "-" + data.unity + "-" + data.type[i]
+                                                                            div_label.append(label, checkitem)
 
                                                                             $('#open_item_list').append(div_label)
                                                                         }
-                                                                        
+
                                                                     }
                                                                 })
 
@@ -532,85 +548,91 @@
 
                                                         </script>
                                                         <!-- 加载的栏目 -->
-                                                        <div id="open_item_list" class="scrollbar_self" style="width:100%;height: 85%;border: 1px solid black;overflow-x: hidden;overflow-y:scroll;">
+                                                        <div id="open_item_list" class="scrollbar_self"
+                                                            style="width:100%;height: 85%;border: 1px solid black;overflow-x: hidden;overflow-y:scroll;">
                                                         </div>
 
                                                     </div>
-                    
+
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> 
-                                                    <button id="open_load_object" type="button" class="btn btn-primary" data-dismiss="modal">加载</button>
+                                                    <button type="button" class="btn btn-default"
+                                                        data-dismiss="modal">关闭</button>
+                                                    <button id="open_load_object" type="button" class="btn btn-primary"
+                                                        data-dismiss="modal">加载</button>
                                                 </div>
                                                 <script type="text/javascript">
                                                     $('#open_load_object').click(function () {
-                                                                // console.log($('#load_open_object').val())
-                                                                var upload_data = $("input[name='load_doc_list']:checked").val()
-                                                                console.log("返回",$("input[name='load_doc_list']:checked").val())
-                                                                var csrf = $('input[name="csrfmiddlewaretoken"]').val();                                                        
-                                                                // 告诉后端打开一个新的数据，并在前端修改文档标识
-                                                                $.ajax({
-                                                                    url: "open_load_object",  // 请求的地址
-                                                                    type: "post",  // 请求方式
-                                                                    timeout: 250, //设置延迟上限
-                                                                    data: {
-                                                                        'csrfmiddlewaretoken': csrf, 
-                                                                        'info':upload_data
-                                                                    },
-                                                                    dataType: "json",
-                                                                    success: function (data) {
-                                                                        // 返回以后创建一个对象实例
-                                                                        console.log("返回成功", data)
-                                                                        $('#doc_type').text(data.type)
-                                                                        $('#doc_info').text("第" + data.item + "期:  " + data.type)
-                                                                        list_button_object.year = data.year
-                                                                        list_button_object.item = data.item
-                                                                        list_button_object.type = data.type
-                                                                        list_button_object.type_list = data.type_list
-                                                                        list_button_object.unity = data.unity
-                                                                        list_button_object.cerate_div_button()
-                                                                        list_button_object.data = data.content_list
-                                                                    }
-                                                                })
+                                                        // console.log($('#load_open_object').val())
+                                                        var upload_data = $("input[name='load_doc_list']:checked").val()
+                                                        console.log("返回", $("input[name='load_doc_list']:checked").val())
+                                                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                                        // 告诉后端打开一个新的数据，并在前端修改文档标识
+                                                        $.ajax({
+                                                            url: "open_load_object",  // 请求的地址
+                                                            type: "post",  // 请求方式
+                                                            timeout: 250, //设置延迟上限
+                                                            data: {
+                                                                'csrfmiddlewaretoken': csrf,
+                                                                'info': upload_data
+                                                            },
+                                                            dataType: "json",
+                                                            success: function (data) {
+                                                                // 返回以后创建一个对象实例
+                                                                console.log("返回成功", data)
+                                                                $('#doc_type').text(data.type)
+                                                                $('#doc_info').text("第" + data.item + "期:  " + data.type)
+                                                                list_button_object.year = data.year
+                                                                list_button_object.item = data.item
+                                                                list_button_object.type = data.type
+                                                                list_button_object.type_list = data.type_list
+                                                                list_button_object.unity = data.unity
+                                                                list_button_object.cerate_div_button()
+                                                                list_button_object.data = data.content_list
+                                                            }
+                                                        })
 
-                                                            })
+                                                    })
 
                                                 </script>
                                             </div>
-                    
+
                                         </div>
-                    
+
                                     </div>
                                     <!-- 删除 -->
-                                    <div class="modal fade" id="modal-container-000003" role="dialog" aria-labelledby="myModalLabel"
-                                        aria-hidden="true">
+                                    <div class="modal fade" id="modal-container-000003" role="dialog"
+                                        aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-hidden="true"></button>
                                                     <h4 class="modal-title" id="myModalLabel">
                                                         删除材料
                                                     </h4>
                                                 </div>
                                                 <div class="modal-body" style="height: 600px;">
-                    
+
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> <button
-                                                        type="button" class="btn btn-primary">保存</button>
+                                                    <button type="button" class="btn btn-default"
+                                                        data-dismiss="modal">关闭</button> <button type="button"
+                                                        class="btn btn-primary">保存</button>
                                                 </div>
                                             </div>
-                    
+
                                         </div>
-                    
+
                                     </div>
                                     <!-- 配置 -->
-                                    <div class="modal fade" id="modal-container-000004" role="dialog" aria-labelledby="myModalLabel"
-                                        aria-hidden="true">
+                                    <div class="modal fade" id="modal-container-000004" role="dialog"
+                                        aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-hidden="true"></button>
                                                     <h4 class="modal-title" id="myModalLabel">
                                                         标题
                                                     </h4>
@@ -622,21 +644,22 @@
                                                     <input type="button" value="密码账号" style="width:100%;height:10%">
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> <button
-                                                        type="button" class="btn btn-primary">保存</button>
+                                                    <button type="button" class="btn btn-default"
+                                                        data-dismiss="modal">关闭</button> <button type="button"
+                                                        class="btn btn-primary">保存</button>
                                                 </div>
                                             </div>
-                    
+
                                         </div>
-                    
+
                                     </div>
-                    
-                    
-                    
-                    
-                    
-                    
-                    
+
+
+
+
+
+
+
                                     <!-- 文件头 -->
                                 </div>
                                 <div style="display:inline-flex;width: 100%; height: 96%">
@@ -644,13 +667,14 @@
                                     <textarea id="content" style="width:100%;height: 100%;">
 
                                     </textarea>
-                    
+
                                 </div>
                                 <div style="display: inline-flex;width:100%;height: 5%;">
                                     <div style="width:85%;height: 100%;">
                                         <h5 id="doc_unity" style="float:left;width:20%">台州市气象局</h5>
                                         <h5 id="doc_info" style="float:left;width:20%">第47期:一周天气</h5>
-                                        <div id="button_type_list" style="display: inline-flex;width:55%;height:80%"></div> 
+                                        <div id="button_type_list" style="display: inline-flex;width:55%;height:80%">
+                                        </div>
                                     </div>
                                     <button id="convert3"
                                         style="width:40px;height:40px;background-image: url(static/src/合并.png);background-size: 100%;background-repeat: no-repeat;"></button>
@@ -661,50 +685,50 @@
                                     <button id="convert"
                                         style="width:40px;height:40px;background-image: url(static/src/预览.png);background-size: 100%;background-repeat: no-repeat;"></button>
                                 </div>
-                    
+
                                 <script>
                                     tinymce.init({
-                                            selector: '#content',
-                                            language: 'zh_CN',
-                                            branding: false,
-                                            skin: 'oxide-dark',
-                                            promotion: false,
-                                            plugin_plothtml_width: "300%",
-                                            menubar: false,
-                                            plugins: "newfile openfile advlist anchor autolink autosave charmap code codesample emoticons footer fullscreen help image importcss indent2em insertdatetime link lists media nonbreaking pagebreak plothtml preview quickbars save searchreplace table template visualblocks wordcount",
-                                            toolbar: [
-                                                "newfile openfile urldialog",
-                                                "insertfile undo redo bold italic underline hr |alignleft aligncenter alignright formatselect fontselect fontsizeselect removeformat subscript superscript charmap searchreplace insertdatetime forecolor backcolor fontsize fontfamily",//段落
-                                                "image code link unlink rotateleft rotateright flipv fliph editimage imageoptions quickimage | table | bullist numlist| | footer plothtml"
-                                            ],
-                                            font_family_formats: "宋体='宋体';仿宋='仿宋';微软雅黑='微软雅黑';楷体='楷体';;隶书='隶书';幼圆='幼圆';Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings",
-                                            font_size_formats: '12px 14px 16px 18px 20px 24px 26px 28px 30px 32px 34px 36px 38px',
-                                            setup: (editor) => {
-                                                editor.ui.registry.addButton('urldialog', {
-                                                    // icon: 'code',
-                                                    text:'快速画图',
-                                                    onAction: () => editor.windowManager.openUrl({
-                                                        title: '画图页面',
-                                                        url: 'http://127.0.0.1:9001/canvas_plot',
-                                                        height: 820,
-                                                        width: 1300,
-                                                        // buttons:[
-                                                        //     {
-                                                        //         type: 'cancel',
-                                                        //         text: '渲染',
-                                                        //         onclick: function () {
-                                                        //             console.log("关闭渲染")
-                                                        //         },
-                                                        //         align: 'end'
-                                                        //     }
-                                                        // ]
-                                                    })
+                                        selector: '#content',
+                                        language: 'zh_CN',
+                                        branding: false,
+                                        skin: 'oxide-dark',
+                                        promotion: false,
+                                        plugin_plothtml_width: "300%",
+                                        menubar: false,
+                                        plugins: "newfile openfile advlist anchor autolink autosave charmap code codesample emoticons footer fullscreen help image importcss indent2em insertdatetime link lists media nonbreaking pagebreak plothtml preview quickbars save searchreplace table template visualblocks wordcount",
+                                        toolbar: [
+                                            "newfile openfile urldialog",
+                                            "insertfile undo redo bold italic underline hr |alignleft aligncenter alignright formatselect fontselect fontsizeselect removeformat subscript superscript charmap searchreplace insertdatetime forecolor backcolor fontsize fontfamily",//段落
+                                            "image code link unlink rotateleft rotateright flipv fliph editimage imageoptions quickimage | table | bullist numlist| | footer plothtml"
+                                        ],
+                                        font_family_formats: "宋体='宋体';仿宋='仿宋';微软雅黑='微软雅黑';楷体='楷体';;隶书='隶书';幼圆='幼圆';Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings",
+                                        font_size_formats: '12px 14px 16px 18px 20px 24px 26px 28px 30px 32px 34px 36px 38px',
+                                        setup: (editor) => {
+                                            editor.ui.registry.addButton('urldialog', {
+                                                // icon: 'code',
+                                                text: '快速画图',
+                                                onAction: () => editor.windowManager.openUrl({
+                                                    title: '画图页面',
+                                                    url: 'http://127.0.0.1:9001/canvas_plot',
+                                                    height: 820,
+                                                    width: 1300,
+                                                    // buttons:[
+                                                    //     {
+                                                    //         type: 'cancel',
+                                                    //         text: '渲染',
+                                                    //         onclick: function () {
+                                                    //             console.log("关闭渲染")
+                                                    //         },
+                                                    //         align: 'end'
+                                                    //     }
+                                                    // ]
                                                 })
-                                            },
-                                            
+                                            })
+                                        },
 
 
-                                        });
+
+                                    });
 
                                     // 接收数据 
                                     window.addEventListener('message', function (event) {
@@ -752,7 +776,7 @@
                                                         view: "FitV"
                                                     }
                                                 }
-                                                
+
 
                                                 PDFObject.embed(pdfFile, "#product_view", options_pdf);
                                             }
@@ -817,38 +841,49 @@
                                     });
 
                                 </script>
-                    
+
                             </div>
 
                         </div>
                         <div class="tab-pane" id="panel-2" style="width:100%;height:100%">
                             <div id="history_file" style="width:100%;height:35%;;padding: 15px;">
                                 <div style="display:inline-block;width:100%;height:100%">
-                                    <div id="history_button" style="display:inline-block;width:100%;height:15%;background-color: white;border:1px solid black">
+                                    <div id="history_button"
+                                        style="display:inline-block;width:100%;height:15%;background-color: white;border:1px solid black">
 
                                     </div>
-                                  
-                                    <div id="history_view" class="scrollbar_self" style="display:inline-block;width:100%;height:85%;background-color: white;border:1px solid black;overflow-x: hidden;overflow-y:scroll;">
+
+                                    <div id="history_view" class="scrollbar_self"
+                                        style="display:inline-block;width:100%;height:85%;background-color: white;border:1px solid black;overflow-x: hidden;overflow-y:scroll;">
                                         <div class="tool_history_button"
                                             style="display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 15%;width:100%;;vertical-align: middle;text-align:center;;padding:1px;;border-bottom: 1px solid black;padding-top:10px; ">
-                                            <label  style="width:10%;text-align:center;;vertical-align: middle">第1期</label>
-                                            <label  style="width:65%;text-align:center;vertical-align: middle;">一周天气预测</label>   
-                                            <label  style="width:15%;text-align:center;vertical-align: middle;">翁之梅</label>                                     
-                                        </div> 
-                                        
+                                            <label
+                                                style="width:10%;text-align:center;;vertical-align: middle">第1期</label>
+                                            <label
+                                                style="width:65%;text-align:center;vertical-align: middle;">一周天气预测</label>
+                                            <label
+                                                style="width:15%;text-align:center;vertical-align: middle;">翁之梅</label>
+                                        </div>
+
                                         <div class="tool_history_button"
                                             style="display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 15%;width:100%;;vertical-align: middle;;text-align:center;padding:1px;;border-bottom: 1px solid black;padding-top:10px; ">
-                                            <label  style="width:10%;text-align:center;;vertical-align: middle;">第1期</label>
-                                            <label  style="width:65%;text-align:center;vertical-align: middle;">一周天气预测</label>   
-                                            <label  style="width:15%;text-align:center;vertical-align: middle;">翁之梅</label>                                     
-                                        </div> 
+                                            <label
+                                                style="width:10%;text-align:center;;vertical-align: middle;">第1期</label>
+                                            <label
+                                                style="width:65%;text-align:center;vertical-align: middle;">一周天气预测</label>
+                                            <label
+                                                style="width:15%;text-align:center;vertical-align: middle;">翁之梅</label>
+                                        </div>
 
                                         <div class="tool_history_button"
                                             style="display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 15%;width:100%;;vertical-align: middle;;text-align:center;padding:1px;border-bottom: 1px solid black;padding-top:10px;">
-                                            <label  style="width:10%;text-align:center;;vertical-align: middle;">第1期</label>
-                                            <label  style="width:65%;text-align:center;vertical-align: middle;">一周天气预测</label>   
-                                            <label  style="width:15%;text-align:center;vertical-align: middle;">翁之梅</label>                                     
-                                        </div> 
+                                            <label
+                                                style="width:10%;text-align:center;;vertical-align: middle;">第1期</label>
+                                            <label
+                                                style="width:65%;text-align:center;vertical-align: middle;">一周天气预测</label>
+                                            <label
+                                                style="width:15%;text-align:center;vertical-align: middle;">翁之梅</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -998,7 +1033,7 @@
                                 <div style="width:100%;height:28%;background-color:rgb(220, 222, 226);">
                                     <h2
                                         style="text-align:center;background-color:rgb(45, 104, 221);width:15%;border-top-left-radius: 5px;border-top-right-radius:5px;font-size: 23px;font-weight:900;font-family:'宋体';color:white">
-                                        实况查询</h2>
+                                        周报查询</h2>
                                 </div>
                                 <div style="display: inline-flex;width:100%;height:72%;">
                                     <div style="width:15%;height:100%;"></div>
@@ -1007,8 +1042,8 @@
                                         <label style="width:10%;height:60%;">&nbsp;&nbsp;&nbsp;</label>
                                         <input id="datetimepicker_history1" type="text" placeholder="起始时间"
                                             style="width: 20%;height:60%; text-align:center;vertical-align: middle;align-items: center; ">
-                                        <label style="width:5%;height:60%;">&nbsp;&nbsp;&nbsp;</label>
-                                        <label>&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;</label>
+                                        <label style="width:10%;height:60%;">&nbsp;&nbsp;&nbsp;</label>
+                                        <label>&nbsp;&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;</label>
                                         <label style="width:5%;height:60%;">&nbsp;&nbsp;&nbsp;</label>
                                         <input id="datetimepicker_history2" type="text" placeholder="结束时间"
                                             style="width: 20%;height:60%; text-align:center;vertical-align: middle;align-items: center; ">
@@ -1037,139 +1072,65 @@
 
 
                             </div>
-                            <div style="width:97.5%;height:15%;background-color:white;margin:15px">
+                            <div style="width:97.5%;height:10%;background-color:white;margin:15px">
                                 <script type="text/javascript" src="static/js/乡镇名称.js"></script>
                                 <div style="width:100%;height:100%; ;">
-                                    <div style="width:100%;height:10%;background-color:rgb(220, 222, 226);">
+                                    <div style="width:100%;height:28%;background-color:rgb(220, 222, 226);">
                                         <h2
                                             style="text-align:center;background-color:rgb(45, 104, 221);width:15%;border-top-left-radius: 5px;border-top-right-radius:5px;font-size: 23px;font-weight:900;font-family:'宋体';color:white">
-                                            乡镇预报</h2>
+                                            十天预报</h2>
                                     </div>
-                                    <div style="display:inline-block;width:100%;height:90%;">
-                                        <div style="display:flex;width:100%;height:50%;padding-top:3%;">
-                                            <div style="width:15%;height:100%"></div>
-                                            <div style="display:flex;width:85%;height:100%">
-                                                <label
-                                                    style="padding-top: 0.3%;font-size: 20px;">数据源</label>&nbsp;&nbsp;
-                                                <div style="width:5%;height:100%"></div>
-                                                <select id="ec_data_type" style="width:15%;height:100%;">
-                                                    <option value="ec_data">EC数据</option>
-                                                    <option value="ec_data">市台订正</option>
-                                                </select>
-                                                <div style="width:5%;height:100%"></div>
+                                    <div style="display:inline-flex;width:100%;height:72%;">
+                                        <div style="width:15%;height:100%;"></div>
+                                        <div style="width:65%;height:100%;padding-top:2% ;">
+                                            <select id="ec_map">
+                                                <option value="city">台州市</option>
+                                                <option value="county">县市区</option>
+                                            </select>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <label style="width:10%;height:60%;">&nbsp;&nbsp;&nbsp;</label>
+                                            <input type="text" placeholder="起始时间"
+                                                style="width: 20%;height:60%; text-align:center;vertical-align: middle;align-items: center; ">
+                                            <label style="width:10%;height:60%;">&nbsp;&nbsp;&nbsp;</label>
+                                            <label>&nbsp;&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;</label>
+                                            <label style="width:5%;height:60%;">&nbsp;&nbsp;&nbsp;</label>
+                                            <input type="text" placeholder="结束时间"
+                                                style="width: 20%;height:60%; text-align:center;vertical-align: middle;align-items: center; ">
 
+                                            <input id="tool_ec_button" type="button"
+                                                style="width: 8%;height:60% ;border: 0px ;float: right;background-color: white;background-image: url(static/src/查询.png);background-size: 50%;background-repeat: no-repeat;">
 
-                                                <label id="ec_time_item"
-                                                    style="padding-top: 0.3%;font-size: 20px;">时间间隔</label>&nbsp;&nbsp;
-                                                <div style="width:5%;height:100%"></div>
-                                                <select style="width:15%;height:100%;">
-                                                    <option value="1h">1小时</option>
-                                                    <option value="3h">3小时</option>
-                                                    <option value="6h">6小时</option>
-                                                </select>
-
-                                            </div>
 
                                         </div>
 
-                                        <div style="display:flex;width:100%;height:50%;padding-top:1%;">
-                                            <div style="width:15%;height:100%"></div>
-                                            <div style="display:flex;width:85%;height:100%">
-                                                <label
-                                                    style="padding-top: 0.3%;font-size: 20px;">起报时间</label>&nbsp;&nbsp;
-                                                <div style="width:3%;height:100%"></div>
-                                                <select id="ec_select_time" style="width:9%;height:60%;">
-                                                    <option value="08">08时</option>
-                                                    <option value="20">20时</option>
-                                                </select>
-                                                <div style="width:3%;height:100%"></div>
-                                                <input id="ec_start_time" type="text" placeholder="起始时间"
-                                                    style="width: 20%;height:60%; text-align:center;vertical-align: middle;align-items: center; ">
-                                                <label
-                                                    style="padding-top: 0.3%;;font-size: 20px;">&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;</label>
-                                                <input id="ec_end_time" type="text" placeholder="结束时间"
-                                                    style="width: 20%;height:60%; text-align:center;vertical-align: middle;align-items: center; ">
-                                                <div style="width:1%;height:100%"></div>
 
+                                        <!-- <div style="display:flex;width:100%;height:50%;padding-top:3%;">                                           
+                                                <div id="color_demo" style="width:10%;height:100%;background-color: #0000ff"></div>            
+                                                <script>
+                                                    $(function () {
+                                                        $('#color_demo').ColorPicker({
+                                                            onChange: function (hsb, hex, rgb) {
+                                                                console.log("颜色",hex)
+                                                                $('#color_demo').val("#" + hex);//设置文本框的值为选定的RGB颜色
+                                                                $('#color_demo').css('backgroundColor','#'+hex);//设置文本框的背景颜色为选定的RGB颜色
+                                                            }
+
+                                                        });
+                                                    });                                                    
+                                                </script>
                                                 <input id="tool_ec_button" type="button"
                                                     style="width: 8%;height:60% ;border: 0px ;float: right;background-color: white;background-image: url(static/src/查询.png);background-size: 40%;background-repeat: no-repeat;">
                                             </div>
-                                            <script>
-
-                                                $('#ec_start_time').datetimepicker(
-                                                    {
-                                                        theme: 'dark',
-                                                        format: 'Y-m-d H:i'
-                                                    }
-                                                );
-                                                $("#ec_start_time").datetimepicker("setDate", new Date());
-
-                                                $('#ec_end_time').datetimepicker(
-                                                    {
-                                                        theme: 'dark',
-                                                        format: 'Y-m-d H:i'
-                                                    }
-                                                );
-                                            </script>
+                                        </div> -->
 
 
 
-                                        </div>
+
+
 
 
                                     </div>
-                                    <!-- <div
-                                        style="display: inline-block ;width:100%;height:30%;;vertical-align:middle;font-size: 25px;">
-                                        <h3 style="display: inline-block ;width:15% ;">数据源:</h3>
-                                        EC数据: <input type="radio" name="check_data_source" checked="checked"
-                                            style="width: 5%;height:50%;">
-                                        市台订正: <input type="radio" name="check_data_source"
-                                            style="width: 5%;height:50%;">
-                                    </div>
-                                    <div
-                                        style="display: inline-block ;width:100%;height:25%;;vertical-align:middle;font-size: 25px;">
-                                        <h3 style="display: inline-block ;width:15% ;">时间间隔:</h3>
-                                        逐1小时: <input type="radio" name="check_data_hours" checked="checked"
-                                            style="width: 5%;height:50%;">
-                                        逐3小时: <input type="radio" name="check_data_hours" style="width: 5%;height:50%;">
-                                        逐6小时: <input type="radio" name="check_data_hours" style="width: 5%;height:50%;">
-                                    </div> -->
-                                    <!-- <div
-                                        style="display: inline-block ;width:100%;height:15%;;vertical-align:middle;font-size: 25px;">
-                                        <h3 style="display: inline-block ;width:15% ;">时间:</h3>
-                                        <select>
-                                            <option value="">20220501</option>
-                                            <option value="">20220502</option>
-                                            <option value="">20220503</option>
-                                            <option value="">20220504</option>
-                                        </select>
-                                        <input id="ec_start_time" type="text" placeholder="起始时间"
-                                            style="width:20%;height:80%;">
-                                        <input id="ec_end_time" type="text" placeholder="起始时间"
-                                            style="width:20%;height:80%;">
-                                        <script>
-                                            $('#ec_start_time').datetimepicker(
-                                                {
-                                                    theme: 'dark',
-                                                    format: 'Y-m-d H:i'
-                                                }
-                                            );
-                                            $("#ec_start_time").datetimepicker("setDate", new Date());
-                                            $('#ec_end_time').datetimepicker(
-                                                {
-                                                    theme: 'dark',
-                                                    format: 'Y-m-d H:i'
-                                                }
-                                            );
-                                        </script>
-                                    </div> -->
 
-
-                                    <!-- <div
-                                        style="display: inline-block ;width:100%;height:25%;background-color:rgb;vertical-align:middle;font-size: 25px;">            
-                                        <input id="tool_ec_button" type="button" value="打开"
-                                            style="width: 10%;height:60% ;float: right ;">
-                                    </div> -->
 
 
 
@@ -1200,23 +1161,23 @@
                                         for (i = 0; i < view_first['filelist'].length; i++) {
                                             var divcontenter = document.createElement('div')
                                             divcontenter.style = "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 15%;width:100%;;vertical-align: middle;text-align:center;;padding:1px;;border-bottom: 1px solid black;padding-top:10px; "
-                                            divcontenter.setAttribute("class","tool_history_button")
+                                            divcontenter.setAttribute("class", "tool_history_button")
                                             var labelitem = document.createElement('label')
-                                            labelitem.style ="width:15%;text-align:center;;vertical-align: middle"
-                                            labelitem.innerText = "第"+view_first['filelist'][i]['item'].toString()+"期"
+                                            labelitem.style = "width:15%;text-align:center;;vertical-align: middle"
+                                            labelitem.innerText = "第" + view_first['filelist'][i]['item'].toString() + "期"
 
                                             var labeltype = document.createElement('label')
-                                            labeltype.style ="width:55%;text-align:center;;vertical-align: middle"
+                                            labeltype.style = "width:55%;text-align:center;;vertical-align: middle"
                                             labeltype.innerText = view_first['filelist'][i]['type'].toString()
 
                                             var labelwriter = document.createElement('label')
-                                            labelwriter.style ="width:15%;text-align:center;;vertical-align: middle"
+                                            labelwriter.style = "width:15%;text-align:center;;vertical-align: middle"
                                             labelwriter.innerText = view_first['filelist'][i]['year']
-                                            divcontenter.append(labelitem,labeltype,labelwriter)
+                                            divcontenter.append(labelitem, labeltype, labelwriter)
                                             $('#history_view').append(divcontenter)
 
                                         }
-                                        
+
 
                                         var button_list = data.doc_list
                                         for (var i = 0; i < button_list.length; i++) {
@@ -1224,12 +1185,12 @@
                                             button.style.display = "inline-flex"
                                             button.style.width = "10%"
                                             button.style.height = "100%"
-                                            button.id = "history" +i.toString()
+                                            button.id = "history" + i.toString()
                                             button.innerText = button_list[i]['name']
-                                            button.addEventListener("click", function (e){
+                                            button.addEventListener("click", function (e) {
                                                 $('#history_view').html(" ")
-                                                var item =parseInt(e.path[0].id[7])
-                                                
+                                                var item = parseInt(e.path[0].id[7])
+
                                                 for (i = 0; i < button_list[item]['filelist'].length; i++) {
                                                     var divcontenter = document.createElement('div')
                                                     divcontenter.style = "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 15%;width:100%;;vertical-align: middle;text-align:center;;padding:1px;;border-bottom: 1px solid black;padding-top:10px; "
@@ -1256,11 +1217,11 @@
 
 
                                                 })
-                                                
+
 
                                             })
-                                            
-                                            
+
+
                                             $('#history_button').append(button)
                                         }
 
@@ -1278,8 +1239,8 @@
 
                         </script>
 
-                        
-                        
+
+
                         <div class="tab-pane" id="panel-4"
                             style="width:100%;height:100%;background-color:rgb(8, 116, 167)">
                             <p>
@@ -1293,14 +1254,14 @@
                                 <div id="webbutton" style="width:100%;height:5%;border: 1px solid black">
 
                                 </div>
-                                <div id = "webview" style="width:100%;height:95%;border: 1px solid black">
-                                   
+                                <div id="webview" style="width:100%;height:95%;border: 1px solid black">
+
 
                                 </div>
 
 
 
-                                
+
                                 <!-- <a href="http://www.baidu.com" target="_Blank"
                                     style="display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url(static/src/渔场.png);font-size: 25px;color:red;text-align:center;line-height: 230px; ">百度</a>                            
                                 <a href="http://www.baidu.com" target="_Blank"
@@ -1311,7 +1272,7 @@
                                     style="display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url(static/src/预报.png);font-size: 25px;color:red;text-align:center;line-height: 230px; ">中央台</a> -->
 
                             </div>
-                            
+
                         </div>
                         <script>
                             $('#awebsite').click(function () {
@@ -1329,37 +1290,37 @@
                                         $('#webbutton').html("")
                                         $('#webview').html("")
                                         for (i = 0; i < data.first.length; i++) {
-                                            var imgsrc ="media/" + data.first[i]['src']
+                                            var imgsrc = "media/" + data.first[i]['src']
                                             var singleimg = document.createElement('a')
-                                            singleimg.style = style="display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url("+imgsrc+");font-size: 25px;color:red;text-align:center;line-height: 230px; "      
-                                            singleimg.setAttribute("href","http://www.baidu.com")
-                                            singleimg.setAttribute("target","_Blank")
+                                            singleimg.style = style = "display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url(" + imgsrc + ");font-size: 25px;color:red;text-align:center;line-height: 230px; "
+                                            singleimg.setAttribute("href", "http://www.baidu.com")
+                                            singleimg.setAttribute("target", "_Blank")
                                             $('#webview').append(singleimg)
 
 
                                         }
 
-                                        
+
                                         var button_list = data.class_dir
                                         for (i = 0; i < button_list.length; i++) {
                                             var singlebutton = document.createElement('button')
                                             // background-image: url(static/src/预报.png);
-                                            
+
                                             // singlebutton.style = "width:10%;height:100%;" + "background-image: url(" + imgsrc + ")"+";font-size: 15px;";
-                                            singlebutton.style = "width:10%;height:100%;"+";font-size: 15px;";
-                                            singlebutton.innerText =  button_list[i]['name']
+                                            singlebutton.style = "width:10%;height:100%;" + ";font-size: 15px;";
+                                            singlebutton.innerText = button_list[i]['name']
                                             singlebutton.id = "buttonweb" + i.toString()
                                             singlebutton.addEventListener("click", function (e) {
                                                 $('#webview').html("")
                                                 var item = parseInt(e.path[0].id[9])
-                                                var imglist = data.class_dir[item]["img_list"]                                             
+                                                var imglist = data.class_dir[item]["img_list"]
                                                 for (i = 0; i < imglist.length; i++) {
-                                                    var imgsrc ="media/" + imglist[i]['src']
+                                                    var imgsrc = "media/" + imglist[i]['src']
                                                     var singleimg = document.createElement('a')
-                                                    singleimg.style = style="display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url("+imgsrc+");font-size: 25px;color:red;text-align:center;line-height: 230px; "
+                                                    singleimg.style = style = "display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url(" + imgsrc + ");font-size: 25px;color:red;text-align:center;line-height: 230px; "
                                                     // href="http://www.baidu.com" target="_Blank"
-                                                    singleimg.setAttribute("href","http://www.baidu.com")
-                                                    singleimg.setAttribute("target","_Blank")
+                                                    singleimg.setAttribute("href", "http://www.baidu.com")
+                                                    singleimg.setAttribute("target", "_Blank")
                                                     $('#webview').append(singleimg)
 
                                                 }
@@ -1391,8 +1352,7 @@
             <!-- 预览界面 -->
             <div style="width: 50%; height: 100%;overflow: hidden;">
                 <!-- 产品图片 -->
-                <div id="product_view"
-                    style="background-color:rgb(239, 243, 237); width: 100%; height: 100%;">
+                <div id="product_view" style="background-color:rgb(239, 243, 237); width: 100%; height: 100%;">
                     <!-- 文件头 -->
                     <div style="height:27%;width:100%;position: relative;background-color:white;">
                         <div
@@ -1677,52 +1637,52 @@
                         else if (type == "tool_history") {
                             console.log("历史数据的加载")
                             var contentDocument = tinymce.get('content').getContent();
-                             // 加载文件头  
+                            // 加载文件头  
                             var hearder = list_button_object.render_head_info()
                             contentDocument = hearder + contentDocument
-                            
+
                             var formData = new FormData();
-                            formData.append("document", contentDocument);                           
+                            formData.append("document", contentDocument);
                             var product_view = document.getElementById('product_view')
                             product_view.style = "width:97.5%;height:97%;background-color:white;margin:15px"
                             $.ajax({
-                                    url: "file/history_save",  // 请求的地址
-                                    type: "POST",  // 请求方式
-                                    data: formData,
-                                    processData: false,
-                                    contentType: false,
-                                    enctype: "multipart/form-data",
-                                    responseType: "arraybuffer",
-                                    mimeType: "text/plain; charset=x-user-defined",
-                                    success: function (data) {
-                                        var rawLength = data.length;
-                                        var array = new Uint8Array(new ArrayBuffer(rawLength));
-                                        for (i = 0; i < rawLength; i++) {
-                                            array[i] = data.charCodeAt(i) & 0xff;
+                                url: "file/history_save",  // 请求的地址
+                                type: "POST",  // 请求方式
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                enctype: "multipart/form-data",
+                                responseType: "arraybuffer",
+                                mimeType: "text/plain; charset=x-user-defined",
+                                success: function (data) {
+                                    var rawLength = data.length;
+                                    var array = new Uint8Array(new ArrayBuffer(rawLength));
+                                    for (i = 0; i < rawLength; i++) {
+                                        array[i] = data.charCodeAt(i) & 0xff;
+                                    }
+                                    var pdfBlob = new Blob([array], { type: "application/pdf;charset=utf-8" })
+                                    var pdfFile = URL.createObjectURL(pdfBlob)
+                                    const options_pdf = {
+                                        forcePDFJS: true,
+                                        pdfOpenParams: {
+                                            pagemode: "thumbs",
+                                            navpanes: 0,
+                                            toolbar: 0,
+                                            scrollbar: 0,
+                                            statusbar: 0,
+                                            view: "FitV"
                                         }
-                                        var pdfBlob = new Blob([array], { type: "application/pdf;charset=utf-8" })
-                                        var pdfFile = URL.createObjectURL(pdfBlob)
-                                        const options_pdf = {
-                                            forcePDFJS: true,
-                                            pdfOpenParams: {
-                                                pagemode: "thumbs",
-                                                navpanes: 0,
-                                                toolbar: 0,
-                                                scrollbar: 0,
-                                                statusbar: 0,
-                                                view: "FitV"
-                                                }
-                                            }
-
-                                        PDFObject.embed(pdfFile, "#product_view", options_pdf);
                                     }
 
+                                    PDFObject.embed(pdfFile, "#product_view", options_pdf);
+                                }
+
                             })
-                            
+
                             // $('#product_view').html(" ")
 
 
-                           
+
 
                         }
                         else if (type == "tool_prodict_product") {
@@ -2735,7 +2695,7 @@
                                             },
                                             dataType: "json",
                                             success: function (data) {
-                                                console.log("日报的返回成功",typeof(data.daily_data))
+                                                console.log("日报的返回成功", typeof (data.daily_data))
                                                 var rain_daily = JSON.parse(data.daily_data)['rain']
                                                 var wind_daily = JSON.parse(data.daily_data)['wind']
                                                 var tmax_daily = JSON.parse(data.daily_data)['tmax']
@@ -2743,7 +2703,7 @@
                                                 var view_daily = JSON.parse(data.daily_data)['view']
                                                 map_zdz_daily.setOption({
                                                     legend: {
-                                                        data: ['rain','wind','tmax','tmin','view'],
+                                                        data: ['rain', 'wind', 'tmax', 'tmin', 'view'],
                                                         left: '10%',
                                                         selectedMode: 'single',
                                                         selected: {
@@ -2776,12 +2736,11 @@
                                                                 var lable_data = params['data']['value'][4]
                                                                 return lable_data
                                                             }
-                                                            else if(params['seriesName'] == 'tmin'){
+                                                            else if (params['seriesName'] == 'tmin') {
                                                                 var lable_data = params['data']['value'][4]
                                                                 return lable_data
                                                             }
-                                                            else
-                                                            {
+                                                            else {
                                                                 var lable_data = " "
                                                                 return lable_data
                                                             }
@@ -2796,7 +2755,7 @@
                                                             // symbol: "roundRect",
                                                             symbolSize: 10,
                                                             coordinateSystem: 'geo',
-                                                            data:rain_daily
+                                                            data: rain_daily
                                                             // data: [
                                                             //     {
                                                             //         name: "K8517", value: [121.3, 28.7, [10, 170, 120, 90, 30, 150, 10], 110],
@@ -2817,9 +2776,9 @@
                                                             symble: "circle",
                                                             // symbol: "roundRect",
                                                             symbolSize: 10,
-                                                            color:'red',
+                                                            color: 'red',
                                                             coordinateSystem: 'geo',
-                                                            data:wind_daily
+                                                            data: wind_daily
                                                             // data: [
                                                             //     {
                                                             //         name: "K8519", value: [121.0, 28.8, [10, 130, 120, 90, 30, 150, 10], [
@@ -2873,7 +2832,7 @@
                                                             // symbol: "roundRect",
                                                             symbolSize: 10,
                                                             coordinateSystem: 'geo',
-                                                            data:tmax_daily
+                                                            data: tmax_daily
                                                             // data: [
                                                             //     {
                                                             //         name: "K8519", value: [121.0, 28.8, [10, 13, 300, 90, 30, 150, 10], 25.3]
@@ -2890,7 +2849,7 @@
                                                             // symbol: "roundRect",
                                                             symbolSize: 10,
                                                             coordinateSystem: 'geo',
-                                                            data:tmin_daily
+                                                            data: tmin_daily
                                                             // data: [
                                                             //     {
                                                             //         name: "K8519", value: [121.0, 28.8, [10, 13, 300, 90, 30, 150, 10], 25.3]
@@ -2907,7 +2866,7 @@
                                                             // symbol: "roundRect",
                                                             symbolSize: 10,
                                                             coordinateSystem: 'geo',
-                                                            data:view_daily
+                                                            data: view_daily
                                                             // data: [
                                                             //     {
                                                             //         name: "K8517", value: [121.3, 28.7, [10, 170, 120, 90, 30, 150, 10], 110],
@@ -3141,61 +3100,26 @@
 
                         }
                         else if (type == "tool_ec") {
-                            console.log("---------------模式数据单点导出---------------")
+                            // console.log("---------------ec温度数据导出---------------")
                             $('#product_view').html(" ")
                             var product_view = document.getElementById("product_view")
                             product_view.style = "width:97.5%;height:97%;background-color:white;margin:15px"
                             // 绘图的核心程序
                             var map_tool1 = document.createElement('div')
-                            map_tool1.style = "display: inline-flex;width: 50%; height: 45%;margin:15px;border-radius: 20px;"
+                            map_tool1.style = "display: inline-flex;width: 100%; height: 45%;margin:15px;border-radius: 20px;"
                             map_tool1.id = "map_tool1"
-                            // 映射位置的核心程序
-                            // 图表
-                            var position_ec = document.createElement('div')
-                            position_ec.style = ";width: 45%; height: 45%;;float: right;"
-                            // 文字描述
-                            var blank_ec = document.createElement('div')
-                            blank_ec.id = "blank_ec"
-                            blank_ec.style = "width: 85%; height: 35%;margin:15px;border-radius: 20px;;float: left;font-size: 17px;font-weight:900;font-family:'宋体';overflow-x: hidden;overflow-y: scroll;;"
-                            blank_ec.setAttribute("class", "scrollbar_self")
-                            blank_ec.innerHTML = "&nbsp;&nbsp;大麦屿街道，隶属于浙江省台州市玉环市，地处玉环市西南部，东连坎门街道，南与温州市洞头县鹿西乡隔海相望，西、西北临乐清湾，与温州市乐清市城东街道、虹桥镇隔海相眺，北、东北连接玉城街道，辖区总面积74.1平方千米。"
-                            var name_ec = document.createElement('div')
-                            name_ec.style = "display: inline-flex;width: 100%; height: 20%;"
-                            name_ec.innerHTML = "&nbsp;&nbsp;&nbsp;"
-                            var name_ec_h = document.createElement('h4')
-                            name_ec_h.id = "h4_village"
-                            name_ec_h.style = "font-size: 25px;font-weight:900;font-family:'宋体';color:blue;padding-top:20%"
-                            name_ec_h.innerText = "乡镇名称:仙居"
-                            name_ec.append(name_ec_h)
-                            // 位置
-                            var latlon_ec = document.createElement('div')
-                            latlon_ec.style = "display: inline-flex;width: 100%; height: 20%;font-size: 10px;font-weight:900;font-family:'宋体';color:black;padding-top:10%;padding-left:2%"
-                            latlon_ec.innerHTML = "&nbsp;"
-                            var lon_ec_h = document.createElement('h4')
-                            lon_ec_h.id = "h4_lon"
-                            lon_ec_h.innerText = "经度:121.5度"
-                            latlon_ec.append(lon_ec_h)
-                            var lon_ec_blank = document.createElement('h4')
-                            lon_ec_blank.style = "width: 1%; height:100%;"
-                            lon_ec_blank.innerHTML = "&nbsp;&nbsp;&nbsp; "
-                            latlon_ec.append(lon_ec_blank)
 
-                            // latlon_ec.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;" 
-                            var lat_ec_h = document.createElement('h4')
-                            lat_ec_h.id = "h4_lat"
-                            lat_ec_h.innerText = "纬度:27.5度"
-                            latlon_ec.append(lat_ec_h)
-                            // 添加按钮
+                            //按钮控件
                             var button_ec = document.createElement("div")
-                            button_ec.style = "display: inline-block;width: 100%; height: 20%;padding-top:4%;padding-right:12%;"
+                            button_ec.style = "display: inline-block;width: 100%; height: 5%;"
                             var button_input_ec = document.createElement('input')
                             button_input_ec.setAttribute('type', 'button')
                             button_input_ec.setAttribute('value', '查询')
-                            button_input_ec.style = "width:25%;height:50%;float:right;font-size: 18px;font-weight:900;font-family:'宋体';color:white;background-color:blue;border-radius:10px"
+                            button_input_ec.style = "width:15%;height:100%;float:right;font-size: 18px;font-weight:900;font-family:'宋体';color:white;background-color:blue;border-radius:10px"
                             button_input_ec.id = 'button_input_ec'
                             button_ec.append(button_input_ec)
 
-                            position_ec.append(name_ec, latlon_ec, blank_ec, button_ec)
+
                             // 添加查询按钮的响应事件
                             button_input_ec.addEventListener('click', function () {
                                 // console.log("button_input_ec被点击了",taizhou['features'])
@@ -3245,95 +3169,56 @@
                             })
                             // 数据展示
                             var ec_single_data = document.createElement('div')
-                            ec_single_data.style = "width: 100%; height: 50%;float: right;"
-
-                            var ec_tabbable = document.createElement('div')
-                            ec_tabbable.setAttribute("class", "tabbable")
-                            ec_tabbable.id = "tabs-439149"
-                            ec_tabbable.style = "width: 98%;height: 100%;margin:15px;border-radius: 20px;background-color:rgb(220, 222, 226);"
-
-                            ec_tabbable_ul = document.createElement('ul')
-                            ec_tabbable_ul.setAttribute("class", "nav nav-tabs")
-                            ec_tabbable_ul.style = "width: 100%;height: 10%;background-color:white;"
-
-                            ec_tabbable_li1 = document.createElement('li')
-                            ec_tabbable_a1 = document.createElement('a')
-                            ec_tabbable_a1.setAttribute('href', '#panel-727742')
-                            ec_tabbable_a1.setAttribute('data-toggle', 'tab')
-                            ec_tabbable_a1.innerText = "风场"
-                            ec_tabbable_li1.append(ec_tabbable_a1)
-
-                            ec_tabbable_li2 = document.createElement('li')
-                            ec_tabbable_li2.setAttribute('class', 'active')
-                            ec_tabbable_a2 = document.createElement('a')
-                            ec_tabbable_a2.setAttribute('href', '#panel-578432')
-                            ec_tabbable_a2.setAttribute('data-toggle', 'tab')
-                            ec_tabbable_a2.innerText = "降水"
-                            ec_tabbable_li2.append(ec_tabbable_a2)
-
-                            var ec_tabbable_content = document.createElement('div')
-                            ec_tabbable_content.style = "width: 100%;height: 90%;"
-                            ec_tabbable_content.setAttribute("class", "tab-content")
-                            // ec表格
-                            tabbable_content1 = document.createElement('div')
-                            tabbable_content1.id = "panel-727742"
-                            tabbable_content1.style = "width: 100%;height: 100%;"
-                            tabbable_content1.setAttribute("class", "tab-pane")
-
-                            tabbable_h = document.createElement('h2')
-                            tabbable_h.innerText = "仙居淡竹乡精细化预报:"
-
-                            tabbable_table = document.createElement('table')
-                            tabbable_table.setAttribute('class', 'table table-bordered table-condensed')
-
-                            tabbable_head = document.createElement('thead')
-                            tabbable_head.innerHTML = "<tr><th>时间</th><th>时段</th><th>天况</th><th>气温</th><th>风力</th><th>降水</th><th>相对湿度</th></tr>"
-
-                            tabbable_body = document.createElement('tbody')
-                            tabbable_body.id = "table_ecworker_html"
+                            ec_single_data.style = "width: 100%; height: 47.5%;background-color: white;"
+                            ec_single_data.id = "ec_line"
 
 
-                            tabbable_table.append(tabbable_head, tabbable_body)
-                            tabbable_content1.append(tabbable_h, tabbable_table)
+                            // product_view.append(map_tool1, position_ec, ec_single_data)
+                            product_view.append(map_tool1, button_ec, ec_single_data)
 
+                            // data
+                            const colors = ['#5470C6', '#91CC75', '#EE6666'];
+                            const symbolSize = 20;
+                            const dataobj = [
+                                {
+                                    name: 'bar',
+                                    type: 'circle',
+                                    data: [
+                                        2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
+                                    ],
+                                    xdata: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                                },
+                                {
+                                    name: 'bar',
+                                    type: 'circle',
+                                    data: [
+                                        2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
+                                    ],
+                                    xdata: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                                },
+                                {
+                                    name: 'line',
+                                    type: 'circle',
+                                    data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2],
+                                    xdata: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                                }
+                            ]
 
-
-                            // 时序图
-                            tabbable_content2 = document.createElement('div')
-                            tabbable_content2.id = "panel-578432"
-                            tabbable_content2.style = "width: 100%;height: 100%;"
-                            tabbable_content2.setAttribute("class", "tab-pane active")
-                            content2_h = document.createElement('h3')
-                            content2_h.style = "width: 100%;height:5%;"
-                            content2_h.innerText = "仙居淡竹乡精细化时序图:"
-                            content2_div = document.createElement('div')
-                            content2_div.id = "multiple-y-axis"
-                            content2_div.style = "width: 900px;height:400px"
-                            tabbable_content2.append(content2_h, content2_div)
-                            ec_tabbable_ul.append(ec_tabbable_li1, ec_tabbable_li2)
-                            ec_tabbable_content.append(tabbable_content1, tabbable_content2)
-                            ec_tabbable.append(ec_tabbable_ul, ec_tabbable_content)
-
-
-
-
-
-
-
-
-
-
-
-                            ec_single_data.append(ec_tabbable)
-                            product_view.append(map_tool1, position_ec, ec_single_data)
-                            // product_view.append(position_ec)
 
 
 
                             //乡镇地图v 
+                            if ($('#ec_map').val() == 'city') {
+                                echarts.registerMap('taizhou', taizhou_xian, {});
+                            }
+                            else {
+
+                                echarts.registerMap('taizhou', taizhou, {});
+
+                            }
                             var chartDom = document.getElementById('map_tool1');
                             var map = echarts.init(chartDom, 'light');
-                            echarts.registerMap('taizhou', taizhou, {});
+
                             map.setOption({
                                 title: {
                                     text: '',
@@ -3396,18 +3281,119 @@
                                     var offsetY = params.event.offsetY;
                                     var zuobiao = map.convertFromPixel('geo', [offsetX, offsetY]); // 转换成坐标
                                     var detail = taizhou_xz[params.name]
-                                    console.log("数据----", taizhou_xz[params.name])
+                                    // console.log("数据----", taizhou_xz[params.name])
                                     // var  village
-                                    $('#h4_village').html("乡镇名称:" + " " + params.name)
-                                    $('#h4_lon').html("经度:" + " " + zuobiao[0].toFixed(2))
-                                    $('#h4_lat').html("纬度:" + " " + zuobiao[1].toFixed(2))
-                                    // $('#blank_ec').text("&nbsp;&nbsp;" +detail.toString())
-                                    $('#blank_ec').html("&nbsp;&nbsp;" + detail.toString())
-
+                                    // $('#h4_village').html("名称:" + " " + params.name)
+                                    // $('#h4_lon').html("经度:" + " " + zuobiao[0].toFixed(2))
+                                    // $('#h4_lat').html("纬度:" + " " + zuobiao[1].toFixed(2))
+                                    // // $('#blank_ec').text("&nbsp;&nbsp;" +detail.toString())
+                                    // $('#blank_ec').html("&nbsp;&nbsp;" + detail.toString())
                                 }
                             });
 
-
+                            // 时序图  
+                            const lineChart = echarts.init(document.getElementById("ec_line"));//echarts.init($("#ec_line")[0]);  
+                            lineChart.setOption({
+                                color: colors,
+                                title: {
+                                    text: '数据',
+                                    left: 'center',
+                                    textStyle: {
+                                        color: '#826'
+                                    }
+                                },
+                                tooltip: {
+                                    triggerOn: 'none',
+                                    // formatter: function (params) {
+                                    //     return (
+                                    //         'X: ' +
+                                    //         params.data[0] +
+                                    //         '<br>Y: ' +
+                                    //         params.data[1].toFixed(2)
+                                    //     );
+                                    // }
+                                },
+                                grid: {
+                                    top: '8%',
+                                    right: '6%',
+                                    left: '6%',
+                                    bottom: '8%'
+                                },
+                                xAxis: [
+                                    {
+                                        type: 'category',
+                                        axisTick: {
+                                            alignWithLabel: true
+                                        },
+                                        // prettier-ignore
+                                        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                                    }
+                                ],
+                                yAxis: [{
+                                    type: 'value',
+                                    name: '降水',
+                                    position: 'right',
+                                    alignTicks: true,
+                                    // offset: 80,
+                                    max: function (value) {
+                                        return value.max * 2.5;
+                                    },
+                                    axisLine: {
+                                        show: true,
+                                        lineStyle: {
+                                            color: colors[1]
+                                        }
+                                    },
+                                    axisLabel: {
+                                        formatter: '{value} mm'
+                                    }
+                                },
+                                {
+                                    type: 'value',
+                                    name: '温度',
+                                    position: 'left',
+                                    alignTicks: true,
+                                    max: function (value) {
+                                        return value.max + 3;
+                                    },
+                                    min: function (value) {
+                                        return value.min - 10;
+                                    },
+                                    axisLine: {
+                                        show: true,
+                                        lineStyle: {
+                                            color: colors[2]
+                                        }
+                                    },
+                                    axisLabel: {
+                                        formatter: '{value} °C'
+                                    }
+                                }],
+                                series: [
+                                    {
+                                        name: '降水1',
+                                        id: "a",
+                                        type: 'bar',
+                                        yAxisIndex: 0,
+                                        data: dataobj[0].data
+                                    },
+                                    {
+                                        name: '降水2',
+                                        id: "b",
+                                        type: 'bar',
+                                        yAxisIndex: 0,
+                                        data: dataobj[1].data
+                                    },
+                                    {
+                                        name: '温度',
+                                        id: "c",
+                                        type: 'line',
+                                        smooth: true,
+                                        yAxisIndex: 1,
+                                        data: dataobj[2].data
+                                    }
+                                ]
+                            });
 
                         }
                     }
