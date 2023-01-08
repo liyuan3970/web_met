@@ -3103,11 +3103,19 @@
                             // console.log("---------------ec温度数据导出---------------")
                             $('#product_view').html(" ")
                             var product_view = document.getElementById("product_view")
-                            product_view.style = "width:97.5%;height:97%;background-color:white;margin:15px"
+                            product_view.style = ";width:97.5%;height:97%;background-color:white;margin:15px"
                             // 绘图的核心程序
+                            var topdiv = document.createElement('div')
+                            topdiv.style = "display:inline-flex;width: 100%; height: 50%;border-radius: 10px;"
+
                             var map_tool1 = document.createElement('div')
-                            map_tool1.style = "display: inline-flex;width: 100%; height: 45%;margin:15px;border-radius: 20px;"
+                            map_tool1.style = "width: 48%; height: 90%;margin:15px;border-radius: 20px;"
                             map_tool1.id = "map_tool1"
+
+                            var line_average = document.createElement('div')
+                            line_average.style = "width: 48%; height: 90%;margin:15px;border-radius: 20px;"
+                            line_average.id = "line_average"
+                            topdiv.append(line_average,map_tool1)
 
                             //按钮控件
                             var button_ec = document.createElement("div")
@@ -3169,12 +3177,42 @@
                             })
                             // 数据展示
                             var ec_single_data = document.createElement('div')
-                            ec_single_data.style = "width: 100%; height: 47.5%;background-color: white;"
+                            ec_single_data.style = "width: 97%; height: 47.5%;background-color: white;margin:15px;border-radius: 20px;"
                             ec_single_data.id = "ec_line"
 
 
                             // product_view.append(map_tool1, position_ec, ec_single_data)
-                            product_view.append(map_tool1, button_ec, ec_single_data)
+                            product_view.append(topdiv,ec_single_data)
+
+                            var lineaverage = echarts.init(document.getElementById("line_average"));//document.getElementById('line_average');
+                            lineaverage.setOption({
+                                title: {
+                                    text: '面雨量',
+                                    left: 'center',
+                                    textStyle: {
+                                        color: '#826'
+                                    }
+                                },
+                                backgroundColor: 'rgba(128, 128, 128, 0.1)',
+                                xAxis: {
+                                    data: ['椒江', '路桥', '黄岩', '温岭', '玉环', '天台', '三门', '临海', '仙居']
+                                },
+                                yAxis: {},
+                                grid: {
+                                    top: '6%',
+                                    right: '6%',
+                                    left: '7%',
+                                    bottom: '6%'
+                                },
+                                series: [
+                                    {
+                                        data: [120, 200, 150, 80, 70, 110, 130,110,90],
+                                        type: 'bar'
+                                    }
+                                ]
+                            }
+                            )
+                            
 
                             // data
                             const colors = ['#5470C6', '#91CC75', '#EE6666'];
@@ -3250,7 +3288,7 @@
 
 
                                 series: [{
-                                    name: '确诊数量',
+                                    name: '面雨量',
                                     // type: 'effectScatter',
                                     type: 'scatter',
                                     // symble:"triangle",
@@ -3298,6 +3336,7 @@
                             const lineChart = echarts.init(document.getElementById("ec_line"));//echarts.init($("#ec_line")[0]);  
                             lineChart.setOption({
                                 color: colors,
+                                backgroundColor: 'rgba(128, 128, 128, 0.1)',
                                 title: {
                                     text: '数据',
                                     left: 'left',
