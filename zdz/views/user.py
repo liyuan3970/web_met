@@ -37,6 +37,10 @@ class UserViewSet(viewsets.ModelViewSet):
         data["user_id"] = reg_ser.instance.id
         data["name"] = reg_ser.instance.name
 
+        data["role_type"] = reg_ser.instance.role_type
+        data["company_type"] = reg_ser.instance.company_type
+        data["company_name"] = reg_ser.instance.company_name
+
         return APIResponse(data)
 
     @action(methods=["post"], url_path="test", detail=False, permission_classes=[permissions.IsAuthenticated])

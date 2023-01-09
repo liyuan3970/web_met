@@ -37,6 +37,10 @@ class LoginSerializer(TokenObtainPairSerializer):
         data["user_id"] = self.user.id
         data["name"] = self.user.name
 
+        data["role_type"] = self.user.role_type
+        data["company_type"] = self.user.company_type
+        data["company_name"] = self.user.company_name
+
         ret = {
             "code": status.HTTP_200_OK,
             "msg": "success",

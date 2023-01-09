@@ -1,11 +1,13 @@
 from django.http import HttpResponse
-from rest_framework.decorators import api_view
+from rest_framework import permissions
+from rest_framework.decorators import api_view, permission_classes
 from weasyprint import HTML
 
 from ..models.doucument_model import *
 
 
 @api_view(["post"])
+@permission_classes([permissions.IsAuthenticated])
 def pdf(request):
     # 接收前台数据
     document = request.data["document"]
@@ -17,6 +19,7 @@ def pdf(request):
 
 
 @api_view(["post"])
+@permission_classes([permissions.IsAuthenticated])
 def preview_save(request):
     # 接收前台数据
     document = request.data["document"]
@@ -50,8 +53,8 @@ def preview_save(request):
     return HttpResponse(pdf_file, content_type="application/pdf")
 
 
-
 @api_view(["post"])
+@permission_classes([permissions.IsAuthenticated])
 def history_save(request):
     # 接收前台数据
     document = request.data["document"]

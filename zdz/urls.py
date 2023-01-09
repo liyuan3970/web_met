@@ -1,6 +1,6 @@
 """URL Configuration
 """
-from django.urls import path, include,re_path
+from django.urls import path, include, re_path
 from rest_framework.routers import DefaultRouter
 from django.views.static import serve
 from . import views
@@ -16,7 +16,7 @@ urlpatterns = [
     path('home', views.home),
     path('quick_look', views.quick_look),
     # 可以直接预览媒体文件
-    re_path('^media/(?P<path>.*?)$', serve,kwargs={'document_root':'media/'}),
+    re_path('^media/(?P<path>.*?)$', serve, kwargs={'document_root': 'media/'}),
     # 测试模块的页面
     path('test_demo', views.test_demo),
     # canvas画图的功能
