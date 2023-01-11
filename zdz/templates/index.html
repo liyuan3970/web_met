@@ -3101,341 +3101,420 @@
                         }
                         else if (type == "tool_ec") {
                             // console.log("---------------ec温度数据导出---------------")
-                            $('#product_view').html(" ")
-                            var product_view = document.getElementById("product_view")
-                            product_view.style = ";width:97.5%;height:97%;background-color:white;margin:15px"
-                            // 绘图的核心程序
-                            var topdiv = document.createElement('div')
-                            topdiv.style = "display:inline-flex;width: 100%; height: 50%;border-radius: 10px;"
 
-                            var map_tool1 = document.createElement('div')
-                            map_tool1.style = "width: 48%; height: 90%;margin:15px;border-radius: 20px;"
-                            map_tool1.id = "map_tool1"
-
-                            var line_average = document.createElement('div')
-                            line_average.style = "width: 48%; height: 90%;margin:15px;border-radius: 20px;"
-                            line_average.id = "line_average"
-                            topdiv.append(line_average,map_tool1)
-
-                            //按钮控件
-                            var button_ec = document.createElement("div")
-                            button_ec.style = "display: inline-block;width: 100%; height: 5%;"
-                            var button_input_ec = document.createElement('input')
-                            button_input_ec.setAttribute('type', 'button')
-                            button_input_ec.setAttribute('value', '查询')
-                            button_input_ec.style = "width:15%;height:100%;float:right;font-size: 18px;font-weight:900;font-family:'宋体';color:white;background-color:blue;border-radius:10px"
-                            button_input_ec.id = 'button_input_ec'
-                            button_ec.append(button_input_ec)
-
-
-                            // 添加查询按钮的响应事件
-                            button_input_ec.addEventListener('click', function () {
-                                // console.log("button_input_ec被点击了",taizhou['features'])
-                                var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                                $.ajax({
-                                    url: "ec_single_data",  // 请求的地址
-                                    type: "post",  // 请求方式
-                                    timeout: 25000, //设置延迟上限
-                                    data: {
-                                        'csrfmiddlewaretoken': csrf,
-                                        'ec_village': $('#h4_village').text(),
-                                        'ec_lon': $('#h4_lon').text(),
-                                        'ec_lat': $('#h4_lat').text(),
-                                        'ec_start_time': $('#ec_start_time').val(),
-                                        'ec_end_time': $('#ec_end_time').val(),
-                                        "ec_data_type": $("#ec_data_type").val(),
-                                        "ec_time_item": $("#ec_time_item").val(),
-                                        "ec_select_time": $("#ec_select_time").val()
-
-
-                                    },
-                                    dataType: "json",
-                                    success: function (data) {
-                                        console.log("返回成功", data)
-
-                                        $("#table_ecworker_html").html(" ")
-                                        // panel-727742   multiple-y-axis
-                                        $("#panel-727742").html(" ") //风场
-                                        $("#panel-578432").html(" ") //降水
-
-                                        var image_rain = new Image()
-                                        image_rain.id = 'image_rain'
-                                        image_rain.src = data.img_rain
-                                        image_rain.style.width = "100%"
-                                        image_rain.style.height = "100%"
-                                        $('#panel-578432').append(image_rain)
-
-                                        var image_wind = new Image()
-                                        image_wind.id = 'image_wind'
-                                        image_wind.src = data.img_wind
-                                        image_wind.style.width = "100%"
-                                        image_wind.style.height = "100%"
-                                        $('#panel-727742').append(image_wind)
-
-                                    }
-                                })
-                            })
-                            // 数据展示
-                            var ec_single_data = document.createElement('div')
-                            ec_single_data.style = "width: 97%; height: 47.5%;background-color: white;margin:15px;border-radius: 20px;"
-                            ec_single_data.id = "ec_line"
-
-
-                            // product_view.append(map_tool1, position_ec, ec_single_data)
-                            product_view.append(topdiv,ec_single_data)
-
-                            var lineaverage = echarts.init(document.getElementById("line_average"));//document.getElementById('line_average');
-                            lineaverage.setOption({
-                                title: {
-                                    text: '面雨量',
-                                    left: 'center',
-                                    textStyle: {
-                                        color: '#826'
-                                    }
+                            var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                            $.ajax({
+                                url: "ec_single_data",  // 请求的地址
+                                type: "post",  // 请求方式
+                                timeout: 25000, //设置延迟上限
+                                data: {
+                                    'csrfmiddlewaretoken': csrf,
+                                    'ec_start_time': $('#ec_start_time').val(),
+                                    'ec_end_time': $('#ec_end_time').val()
                                 },
-                                backgroundColor: 'rgba(128, 128, 128, 0.1)',
-                                xAxis: {
-                                    data: ['椒江', '路桥', '黄岩', '温岭', '玉环', '天台', '三门', '临海', '仙居']
-                                },
-                                yAxis: {},
-                                grid: {
-                                    top: '6%',
-                                    right: '6%',
-                                    left: '7%',
-                                    bottom: '6%'
-                                },
-                                series: [
-                                    {
-                                        data: [120, 200, 150, 80, 70, 110, 130,110,90],
-                                        type: 'bar'
-                                    }
-                                ]
-                            }
-                            )
-                            
+                                dataType: "json",
+                                success: function (data) {
+                                    console.log("返回成功", data)
+                                    // var serverdata = JSON.parse(data)
+                                    $('#product_view').html(" ")
+                                    var product_view = document.getElementById("product_view")
+                                    product_view.style = ";width:97.5%;height:97%;background-color:white;margin:15px"
+                                    // 绘图的核心程序
+                                    var topdiv = document.createElement('div')
+                                    topdiv.style = "display:inline-flex;width: 100%; height: 50%;border-radius: 10px;"
 
-                            // data
-                            const colors = ['#5470C6', '#91CC75', '#EE6666'];
-                            const symbolSize = 20;
-                            const dataobj = [
-                                {
-                                    name: 'bar',
-                                    type: 'circle',
-                                    data: [
-                                        2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
-                                    ],
-                                    xdata: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-                                },
-                                {
-                                    name: 'bar',
-                                    type: 'circle',
-                                    data: [
-                                        2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
-                                    ],
-                                    xdata: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-                                },
-                                {
-                                    name: 'line',
-                                    type: 'circle',
-                                    data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2],
-                                    xdata: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-                                }
-                            ]
+                                    var map_tool1 = document.createElement('div')
+                                    map_tool1.style = "width: 48%; height: 90%;margin:15px;border-radius: 20px;"
+                                    map_tool1.id = "map_tool1"
+
+                                    var line_average = document.createElement('div')
+                                    line_average.style = "width: 48%; height: 90%;margin:15px;border-radius: 20px;"
+                                    line_average.id = "line_average"
+                                    topdiv.append(line_average, map_tool1)
 
 
+                                    var ec_single_data = document.createElement('div')
+                                    ec_single_data.style = "width: 97%; height: 47.5%;background-color: white;margin:15px;border-radius: 20px;"
+                                    ec_single_data.id = "ec_line"
 
 
-                            //乡镇地图v 
-                            if ($('#ec_map').val() == 'city') {
-                                echarts.registerMap('taizhou', taizhou_xian, {});
-                            }
-                            else {
+                                    
+                                    product_view.append(topdiv, ec_single_data)
 
-                                echarts.registerMap('taizhou', taizhou, {});
-
-                            }
-                            var chartDom = document.getElementById('map_tool1');
-                            var map = echarts.init(chartDom, 'light');
-
-                            map.setOption({
-                                title: {
-                                    text: '台州市各县市面雨量分布',
-                                    left: 'left',
-                                    textStyle: {
-                                        color: '#826'
-                                    }
-                                },
-                                backgroundColor: 'rgba(128, 128, 128, 0.1)',
-                                tooltip: {
-                                    trigger: 'item',
-                                    // formatter: '{c}(m/s)'
-                                    formatter: function (params) {
-                                        // do some thing
-                                        return params.value[2] + params.name
-                                    }
-                                },
-                                geo: {
-                                    map: 'taizhou',
-                                    roam: true,
-                                    // tooltip:{borderColor = '#333'}
-                                    itemStyle: {
-                                        color: 'white'
-                                        // areaColor = '#333',
-                                    }
-
-
-                                },
-
-
-                                series: [{
-                                    name: '面雨量',
-                                    // type: 'effectScatter',
-                                    type: 'scatter',
-                                    // symble:"triangle",
-                                    // symbol: "roundRect",
-                                    // symbolSize:50,
-                                    coordinateSystem: 'geo'
-                                    // itemStyle: {
-                                    //   color: function (params) {
-                                    //       var colorlist = ['black'];
-                                    //       return colorlist[params.dataIndex];
-                                    //   },
-                                    //   symbol: function (params) {
-                                    //     var symbollist = ['path://M10 10L60 10 60 20 20 20 20 40 60 40 60 50 20 50 20 100 10 100 10 10z'];
-                                    //     return symbollist[params.dataIndex];
-                                    // },
-                                    // },
-
-                                    // data:[{ name:"K8515",value: [121.0, 28.8, 123], url: "url_data",
-                                    // symbol:'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z',symbolSize:15,symbolRotate:330}]
-
-                                }]
-
-
-
-                            });
-                            // ec地图的相应事件
-                            map.on('click', function (params) {
-                                let componentType = params.componentType;   // geo是地图图层
-                                if (componentType == "geo") {
-                                    var offsetX = params.event.offsetX;
-                                    var offsetY = params.event.offsetY;
-                                    var zuobiao = map.convertFromPixel('geo', [offsetX, offsetY]); // 转换成坐标
-                                    var detail = taizhou_xz[params.name]
-                                    // console.log("数据----", taizhou_xz[params.name])
-                                    // var  village
-                                    // $('#h4_village').html("名称:" + " " + params.name)
-                                    // $('#h4_lon').html("经度:" + " " + zuobiao[0].toFixed(2))
-                                    // $('#h4_lat').html("纬度:" + " " + zuobiao[1].toFixed(2))
-                                    // // $('#blank_ec').text("&nbsp;&nbsp;" +detail.toString())
-                                    // $('#blank_ec').html("&nbsp;&nbsp;" + detail.toString())
-                                }
-                            });
-
-                            // 时序图  
-                            const lineChart = echarts.init(document.getElementById("ec_line"));//echarts.init($("#ec_line")[0]);  
-                            lineChart.setOption({
-                                color: colors,
-                                backgroundColor: 'rgba(128, 128, 128, 0.1)',
-                                title: {
-                                    text: '数据',
-                                    left: 'left',
-                                    textStyle: {
-                                        color: '#826'
-                                    }
-                                },
-                                tooltip: {
-                                    triggerOn: 'none',
-                                    // formatter: function (params) {
-                                    //     return (
-                                    //         'X: ' +
-                                    //         params.data[0] +
-                                    //         '<br>Y: ' +
-                                    //         params.data[1].toFixed(2)
-                                    //     );
-                                    // }
-                                },
-                                grid: {
-                                    top: '8%',
-                                    right: '6%',
-                                    left: '6%',
-                                    bottom: '8%'
-                                },
-                                xAxis: [
-                                    {
-                                        type: 'category',
-                                        axisTick: {
-                                            alignWithLabel: true
+                                    var lineaverage = echarts.init(document.getElementById("line_average"));//document.getElementById('line_average');
+                                    lineaverage.setOption({
+                                        title: {
+                                            text: '雨量排序',
+                                            left: 'left',
+                                            textStyle: {
+                                                color: '#826'
+                                            }
                                         },
-                                        // prettier-ignore
-                                        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                                        legend: {
+                                            top: 'bottom'
+                                        },
+                                        toolbox: {
+                                            show: true,
+                                            feature: {
+                                                mark: { show: true },
+                                                dataView: { show: true, readOnly: false },
+                                                restore: { show: true },
+                                                saveAsImage: { show: true }
+                                            }
+                                        },
+                                        series: [
+                                            {
+                                                name: '乡镇排名',
+                                                type: 'pie',
+                                                radius: [10, 120],
+                                                center: ['50%', '50%'],
+                                                roseType: 'area',
+                                                itemStyle: {
+                                                    borderRadius: 8
+                                                },
+                                                data:data.ec_data['rain'] 
+                                                // data: [
+                                                //     { value: 0, name: 'rose 1' },
+                                                //     { value: 8, name: 'rose 2' },
+                                                //     { value: 2, name: 'rose 3' },
+                                                //     { value: 0, name: 'rose 4' },
+                                                //     { value: 0, name: 'rose 5' },
+                                                //     { value: 0, name: 'rose 6' },
+                                                //     { value: 0, name: 'rose 7' },
+                                                //     { value: 1, name: 'rose 8' },
+                                                //     { value: 0, name: 'rose 9' },
+                                                //     { value: 0, name: 'rose 10' }
+                                                // ]
+                                            }
+                                        ]
                                     }
-                                ],
-                                yAxis: [{
-                                    type: 'value',
-                                    name: '降水',
-                                    position: 'right',
-                                    alignTicks: true,
-                                    // offset: 80,
-                                    max: function (value) {
-                                        return value.max * 2.5;
-                                    },
-                                    axisLine: {
-                                        show: true,
-                                        lineStyle: {
-                                            color: colors[1]
+                                    )
+
+
+                                    // data
+                                    const colors = ['#5470C6', '#91CC75', '#EE6666'];
+                                    const symbolSize = 20;
+                                   
+                                    //乡镇地图v 
+                                    if ($('#ec_map').val() == 'city') {
+                                        echarts.registerMap('taizhou', taizhou_xian, {});
+                                    }
+                                    else {
+
+                                        echarts.registerMap('taizhou', taizhou, {});
+
+                                    }
+                                    var chartDom = document.getElementById('map_tool1');
+                                    var map_ec = echarts.init(chartDom, 'light');
+
+                                    map_ec.setOption({
+                                        title: {
+                                            text: '台州市各县市面雨量分布',
+                                            left: 'left',
+                                            textStyle: {
+                                                color: '#826'
+                                            }
+                                        },
+                                        backgroundColor: 'rgba(128, 128, 128, 0.1)',
+                                        tooltip: {
+                                            trigger: 'item',
+                                            // formatter: '{c}(m/s)'
+                                            formatter: function (params) {
+                                                // do some thing
+                                                return params.name + ":" + params.value
+                                            }
+                                        },
+                                        visualMap: {
+                                            show: true,
+                                            x: 'left',
+                                            y: 'bottom',
+                                            pieces: [
+                                                { min: 50, max: 250 }, { min: 25, max: 50 },
+                                                { min: 15, max: 25 }, { min: 10, max: 15 },
+                                                { min: 0.1, max: 10 }, { min: 0, max: 0.1 },
+                                            ],
+                                            color: ['#5475f5', '#9feaa5', '#85daef', '#74e2ca', '#e6ac53', '#9fb5ea']
+                                        },
+                                        geo: {
+                                            map: 'taizhou',
+                                            roam: true,
+                                            // tooltip:{borderColor = '#333'}
+                                            itemStyle: {
+                                                color: 'white'
+                                                // areaColor = '#333',
+                                            }
+
+
+                                        },
+
+
+                                        series: [{
+                                            name: '面雨量',
+                                            // type: 'effectScatter',
+                                            type: 'map',
+                                            map: 'taizhou',
+                                            // coordinateSystem: 'geo',  
+                                            data:data.ec_data['rain']                       
+                                            // data: [
+                                            //     { name: "临海市", value: 50 },
+                                            //     { name: "三门县", value: 150 },
+                                            //     { name: "仙居县", value: 230 },
+                                            //     { name: "天台县", value: 270 },
+                                            //     { name: "黄岩区", value: 250 },
+                                            //     { name: "椒江区", value: 50 },
+                                            //     { name: "路桥区", value: 210 },
+                                            //     { name: "温岭市", value: 220 },
+                                            //     { name: "玉环市", value: 260 }
+                                            // ]
+
+                                        }]
+
+
+
+                                    });
+                                    // ec地图的相应事件
+                                    map_ec.on('click', function (params) {
+                                        // console.log(params)
+                                        let componentType = params.componentType;   // geo是地图图层
+                                        var name = ['三门县','临海市','仙居县','天台县','椒江区','温岭市','玉环市','路桥区','黄岩区']
+                                        var name_en = ['sanmen','linhai','xianju','tiantai','jiaojiang','wenling','yuhuan','luqiao','huangyan']
+
+                                        if (componentType == "series") {
+                                            for (var i = 0; i < data.ec_data.village.length; i++){
+                                                // console.log(params.name)
+                                                if (name[i]==params.name){
+                                                    var villagedata = data.ec_data.village[i]
+                                                    
+                                                    var linedata = data.ec_data[name_en[i]]
+                                                    // bar
+                                                    lineaverage.setOption({
+                                                        series: [
+                                                            {
+                                                                name: '乡镇排名',
+                                                                type: 'pie',
+                                                                radius: [10, 120],
+                                                                center: ['50%', '50%'],
+                                                                roseType: 'area',
+                                                                itemStyle: {
+                                                                    borderRadius: 8
+                                                                },
+                                                                data: villagedata
+                                                                
+                                                            }
+                                                        ]
+
+                                                    })
+           
+                                                    lineChart.setOption({
+                                                        title: {
+                                                            text: params.name,
+                                                            left: 'center',
+                                                            textStyle: {
+                                                                color: '#826'
+                                                            }
+                                                        },
+                                                        xAxis: [
+                                                            {
+                                                                type: 'category',
+                                                                // type: 'value',
+                                                                axisTick: {
+                                                                    alignWithLabel: true
+                                                                },
+                                                                // prettier-ignore
+                                                                data: linedata['time']
+                                                            }
+                                                        ],
+                                                        yAxis: [{
+                                                            type: 'value',
+                                                            name: '降水',
+                                                            position: 'right',
+                                                            alignTicks: true,
+                                                            // offset: 80,
+                                                            max: function (value) {
+                                                                return value.max * 2.5;
+                                                            },
+                                                            axisLine: {
+                                                                show: true,
+                                                                lineStyle: {
+                                                                    color: colors[1]
+                                                                }
+                                                            },
+                                                            axisLabel: {
+                                                                formatter: '{value} mm'
+                                                            }
+                                                        },
+                                                        {
+                                                            type: 'value',
+                                                            name: '温度',
+                                                            position: 'left',
+                                                            alignTicks: true,
+                                                            max: function (value) {
+                                                                return value.max + 3;
+                                                            },
+                                                            min: function (value) {
+                                                                return value.min - 10;
+                                                            },
+                                                            axisLine: {
+                                                                show: true,
+                                                                lineStyle: {
+                                                                    color: colors[2]
+                                                                }
+                                                            },
+                                                            axisLabel: {
+                                                                formatter: '{value} °C'
+                                                            }
+                                                        }],
+                                                        series: [
+                                                            {
+                                                                name: '降水1',
+                                                                id: "a",
+                                                                type: 'bar',
+                                                                yAxisIndex: 0,
+                                                                data: linedata['lsp']
+                                                            },
+                                                            {
+                                                                name: '降水2',
+                                                                id: "b",
+                                                                type: 'bar',
+                                                                yAxisIndex: 0,
+                                                                data: linedata['cp']
+                                                            },
+                                                            {
+                                                                name: '温度',
+                                                                id: "c",
+                                                                type: 'line',
+                                                                smooth: true,
+                                                                yAxisIndex: 1,
+                                                                data: linedata['t2']
+                                                            }
+                                                        ]
+
+                                                    })
+                                                }
+                                                // console.log(data.ec_data.village)
+ 
+                                            }
+
+                                            // var offsetX = params.event.offsetX;
+                                            // var offsetY = params.event.offsetY;
+                                            // var zuobiao = map.convertFromPixel('geo', [offsetX, offsetY]); // 转换成坐标
+                                            // var detail = taizhou_xz[params.name]
+
                                         }
-                                    },
-                                    axisLabel: {
-                                        formatter: '{value} mm'
-                                    }
-                                },
-                                {
-                                    type: 'value',
-                                    name: '温度',
-                                    position: 'left',
-                                    alignTicks: true,
-                                    max: function (value) {
-                                        return value.max + 3;
-                                    },
-                                    min: function (value) {
-                                        return value.min - 10;
-                                    },
-                                    axisLine: {
-                                        show: true,
-                                        lineStyle: {
-                                            color: colors[2]
-                                        }
-                                    },
-                                    axisLabel: {
-                                        formatter: '{value} °C'
-                                    }
-                                }],
-                                series: [
-                                    {
-                                        name: '降水1',
-                                        id: "a",
-                                        type: 'bar',
-                                        yAxisIndex: 0,
-                                        data: dataobj[0].data
-                                    },
-                                    {
-                                        name: '降水2',
-                                        id: "b",
-                                        type: 'bar',
-                                        yAxisIndex: 0,
-                                        data: dataobj[1].data
-                                    },
-                                    {
-                                        name: '温度',
-                                        id: "c",
-                                        type: 'line',
-                                        smooth: true,
-                                        yAxisIndex: 1,
-                                        data: dataobj[2].data
-                                    }
-                                ]
-                            });
+                                    });
+
+                                    // 时序图  
+                                    const lineChart = echarts.init(document.getElementById("ec_line"));//echarts.init($("#ec_line")[0]);  
+                                    lineChart.setOption({
+                                        color: colors,
+                                        backgroundColor: 'rgba(128, 128, 128, 0.1)',
+                                        title: {
+                                            text: '',
+                                            left: 'left',
+                                            textStyle: {
+                                                color: '#826'
+                                            }
+                                        },
+                                        tooltip: {
+                                            triggerOn: 'none',
+                                            // formatter: function (params) {
+                                            //     return (
+                                            //         'X: ' +
+                                            //         params.data[0] +
+                                            //         '<br>Y: ' +
+                                            //         params.data[1].toFixed(2)
+                                            //     );
+                                            // }
+                                        },
+                                        grid: {
+                                            top: '8%',
+                                            right: '6%',
+                                            left: '6%',
+                                            bottom: '8%'
+                                        },
+                                        xAxis: [
+                                            {
+                                                type: 'category',
+                                                // type: 'value',
+                                                axisTick: {
+                                                    alignWithLabel: true
+                                                },
+                                                // prettier-ignore
+                                                data:  data.ec_data['hongjia']['time']
+                                            }
+                                        ],
+                                        yAxis: [{
+                                            type: 'value',
+                                            name: '降水',
+                                            position: 'right',
+                                            alignTicks: true,
+                                            // offset: 80,
+                                            max: function (value) {
+                                                return value.max * 2.5;
+                                            },
+                                            axisLine: {
+                                                show: true,
+                                                lineStyle: {
+                                                    color: colors[1]
+                                                }
+                                            },
+                                            axisLabel: {
+                                                formatter: '{value} mm'
+                                            }
+                                        },
+                                        {
+                                            type: 'value',
+                                            name: '温度',
+                                            position: 'left',
+                                            alignTicks: true,
+                                            max: function (value) {
+                                                return value.max + 3;
+                                            },
+                                            min: function (value) {
+                                                return value.min - 10;
+                                            },
+                                            axisLine: {
+                                                show: true,
+                                                lineStyle: {
+                                                    color: colors[2]
+                                                }
+                                            },
+                                            axisLabel: {
+                                                formatter: '{value} °C'
+                                            }
+                                        }],
+                                        series: [
+                                            {
+                                                name: '降水1',
+                                                id: "a",
+                                                type: 'bar',
+                                                yAxisIndex: 0,
+                                                data: data.ec_data['hongjia']['lsp']
+                                            },
+                                            {
+                                                name: '降水2',
+                                                id: "b",
+                                                type: 'bar',
+                                                yAxisIndex: 0,
+                                                data: data.ec_data['hongjia']['cp']
+                                            },
+                                            {
+                                                name: '温度',
+                                                id: "c",
+                                                type: 'line',
+                                                smooth: true,
+                                                yAxisIndex: 1,
+                                                data: data.ec_data['hongjia']['t2']
+                                            }
+                                        ]
+                                    });
+
+
+
+
+
+                                }
+                            })
 
                         }
                     }

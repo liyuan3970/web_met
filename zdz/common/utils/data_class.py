@@ -1450,147 +1450,189 @@ class zdz_data:
 
 # ec数据的处理和对接
 class ec_data_point:
-    def __init__(self,select_lon,select_lat,select_time):
-        self.select_time = select_time
+    def __init__(self,start_time,end_time):
         self.timelist = [0,2,4,6,8,10,12,14,16,18,20,22,24,25,
                          26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,
                         41,42,43,44,45,46,47,48,49,50,51,52]
-        #self.county = select_county
-        self.file_path = "/workspace/liyuan3970/Data/My_Git/" + select_time + "/" 
-        self.data  = self.read_data()
-        self.rain = None
+        self.test_time = '2022041700'
+        self.file_path = "/workspace/liyuan3970/Data/My_Git/" + self.test_time + "/" 
+        self.lat_list = [27.532,27.832,27.532,27.532,27.532,27.532,27.532,27.532,27.532,27.532]
+        self.lon_list = [121.932,120.932,121.932,121.932,121.932,121.932,121.932,121.932,121.932,121.932]
+        self.name = ['洪家','玉环市','温岭市','椒江区','路桥区','黄岩区','仙居县','三门县','临海市','天台县']
+        self.name_en = ['hongjia','yuhuan','wenling','jiaojiang','luqiao','huangyan','xianju','sanmen','linhai','tiantai']
+        self.name_village = ['sanmen','linhai','xianju','tiantai','jiaojiang','wenling','yuhuan','luqiao','huangyan']
+        self.cp,self.t2,self.lsp = self.read_data()
+    # 外部函数
+    def transform_from_latlon(self,lat, lon):
+        lat = np.asarray(lat)
+        lon = np.asarray(lon)
+        trans = Affine.translation(lon[0], lat[0])
+        scale = Affine.scale(lon[1] - lon[0], lat[1] - lat[0])
+        return trans * scale    
+    def rasterize(self,shapes, coords, latitude='lat', longitude='lon',fill=np.nan, **kwargs):
+        transform = self.transform_from_latlon(coords[latitude], coords[longitude])
+        out_shape = (len(coords[latitude]), len(coords[longitude]))
+        raster = features.rasterize(shapes, out_shape=out_shape,
+                                fill=fill, transform=transform,
+                                dtype=float, **kwargs)
+        spatial_coords = {latitude: coords[latitude], longitude: coords[longitude]}
+        return xr.DataArray(raster, coords=spatial_coords, dims=(latitude, longitude))
+    def add_shape_coord_from_data_array(self,xr_da, shp_path, coord_name):   
+        shp_gpd = gpd.read_file(shp_path)
+        shapes = [(shape, n) for n, shape in enumerate(shp_gpd.geometry)]
+        xr_da[coord_name] = self.rasterize(shapes, xr_da.coords, longitude='lon', latitude='lat')
+        return xr_da
+    # 数据分析
+    def time_today(self):
+        '''用于计算当前日期'''
+        pass
+    def regrid(self,data):
+        # 插值
+        ds_out = xr.Dataset(
+            {   
+                
+                "lat": (["lat"], np.arange(27.0, 30, 0.05)),
+                "lon": (["lon"], np.arange(120, 122.5, 0.05)),
+            }
+        )
+        regridder = xe.Regridder(data, ds_out, "bilinear")
+        dr_out = regridder(data)
+        return dr_out
     def read_data(self):
-        '''读取基础数据'''
-        #file_path = "/home/liyuan3970/Data/My_Git/2022041700/*.nc" 
-        #file_path = ["/home/liyuan3970/Data/My_Git/2022041700/ecfine.I2022041700.024.F2022041800.nc" ,"/home/liyuan3970/Data/My_Git/2022041700/ecfine.I2022041700.069.F2022041921.nc" ]
+        '''读取数据'''
         files = os.listdir(self.file_path)
-        file_path = []
-        for i in self.timelist:
-            file_path.append(self.file_path + files[i])    
-        f = xr.open_mfdataset(file_path, parallel=False)
-        # 读取降水和气温的基本数据
-        lsp = f.tp.sel(lev=1000,lonS=slice(118,123),latS=slice(32,26))
-        tmax2 = f.tmax2.sel(lev=1000,lonS=slice(118,123),latS=slice(32,26))
-        tmin2 = f.tmin2.sel(lev=1000,lonS=slice(118,123),latS=slice(32,26))
-        cp = f.cp.sel(lev=1000,lonS=slice(118,123),latS=slice(32,26))
-        # 读取单点的分析图
-        u = f.u.sel(lonP=slice(118,123),latP=slice(32,26))
-        v = f.v.sel(lonP=slice(118,123),latP=slice(32,26))
-        r = f.r.sel(lonP=slice(118,123),latP=slice(32,26))
-        data = {
-            'lsp':lsp,
-            'tmax':tmax2,
-            'tmin':tmin2,
-            'cp':cp,
-            'u':u,
-            'v':v,
-            'r':r
-        }
-        return data
+        lsp_list = [] 
+        cp_list = [] 
+        t2_list = [] 
+        for fileitem in self.timelist:
+            f=xr.open_dataset(self.file_path +files[fileitem],decode_times=False)
+            lsp = f.lsp.sel(lonS=slice(118,123),latS=slice(32,26))
+            cp = f.cp.sel(lonS=slice(118,123),latS=slice(32,26))
+            t2 = f.t2.sel(lonS=slice(118,123),latS=slice(32,26)) 
+            lsp_list.append(lsp)  
+            cp_list.append(cp)  
+            t2_list.append(t2)
+            del f,lsp,cp,t2  
+        cp_all = xr.concat(cp_list,dim="time")
+        cp_all = self.regrid(cp_all)
+        t2_all = xr.concat(t2_list,dim="time")
+        t2_all = self.regrid(t2_all)
+        lsp_all = xr.concat(lsp_list,dim="time")
+        lsp_all = self.regrid(lsp_all)
+        return cp_all,t2_all,lsp_all
     def accum_data(self,list_data):
         '''处理累计降水'''
         out_list = []
         for i in range(len(list_data)):
             if i==0:
                 out_list.append(0)
+            elif i==1:
+                out_list.append(round(list_data[i],1))
             else:
-                out_list.append(list_data[i]-list_data[i-1])
-        return out_list  
-    def decode_data(self,select_lon,select_lat,select_type):
-        '''解析所需数据的列表'''
-        lat = select_lon
-        lon = select_lat
-        print("解析经纬度",lat,lon)
-        if select_type=='rain':
-            cp  = self.data['cp'].sel(lonS=lon, latS=lat,method='nearest').to_pandas().tolist()
-            lsp  = self.data['lsp'].sel(lonS=lon, latS=lat,method='nearest').to_pandas().tolist()
-            tmax_data  = self.data['tmax'].sel(lonS=lon, latS=lat,method='nearest').to_pandas().tolist()
-            tmin_data  = self.data['tmin'].sel(lonS=lon, latS=lat,method='nearest').to_pandas().tolist()
-            cp_data = self.accum_data(cp)
-            pre_data = self.accum_data(lsp)
-            return tmax_data,tmin_data,cp_data,pre_data
+                out_list.append(round(list_data[i]-list_data[i-1],1))
+        return out_list
+    def rain_data(self,lat,lon,data):
+        list_data= data.sel(lon=lon, lat=lat,method='nearest').to_pandas().tolist()
+        out_list = self.accum_data(list_data)
+        return out_list
+    def plot_line(self,lat,lon):
+        '''返回单点的降水气温曲线图'''
+        cp_line = self.rain_data(lat,lon,self.cp)
+        lsp_line = self.rain_data(lat,lon,self.lsp)
+        t2_line = self.t2.sel(lon=lon, lat=lat,method='nearest').to_pandas().tolist()
+        return cp_line,lsp_line,t2_line
+    def village_data(self,data):
+        data_xr = data
+        shp_path = "static/data/shpfile/"
+        shp_data = gpd.read_file("static/data/shpfile/xiangzhen/xiangzhen.shp", encoding='utf8')
+        village_list = shp_data['NAME'].values
+        county_list = shp_data['COUNTY'].values
+        shp_da = self.add_shape_coord_from_data_array(data_xr, shp_path+"taizhou_village.shp", "country")
+        data_dir = {
+            "village":[],
+            "county":[],
+            "value":[]           
+        }
+        for i in range(len(village_list)):
+            awash_da = shp_da.where(shp_da.country==i, other=np.nan)
+            name = village_list[i]
+            county = county_list[i]
+            if np.isnan(awash_da.mean().values.tolist()):
+                data_dir['value'].append(0)
+            else:
+                data_dir['value'].append(awash_da.mean().values.tolist())
+            data_dir['village'].append(name)
+            data_dir['county'].append(county)
+        village = pd.DataFrame(data_dir)
+        return village 
+    def group_data(self,data):
+        '''排序'''     
+        rain = []
+        village = []
+        grouped = data.groupby('county')
+        for i in grouped.size().index:
+            village_list = []
+            singel_rain = {
+                "name":None,
+                "value":None
+            }
+            county = grouped.get_group(i)
+            sort_data = county.sort_values('value',ascending=False)[0:10]
+            village_data = county.sort_values('value',ascending=False)[0:10]
+            singel_rain['name'] = sort_data.county.tolist()[0]
+            singel_rain['value']= round(county.value.mean(),2)
+            rain.append(singel_rain)
+            # 数据
+            name = sort_data.county.tolist()[0]
+            for j,k in zip(sort_data['village'],sort_data['value']):
+                # print(j,k)
+                singel_village ={}
+                singel_village['value'] = round(k,2)
+                singel_village['name'] = j            
+                village_list.append(singel_village)
+            village.append(village_list)
+        return rain,village
+    def comput_average(self,start_time,end_time):
+        '''计算面雨量'''   
+        data = { }
+        if start_time==0:
+            lsp = self.lsp[end_time,:,:] 
+            comput = self.village_data(lsp)
+            for i in range(len(self.name)):
+                county = {                 
+                    "lsp":None,
+                    "cp":None,
+                    "t2":None,
+                    "time":None    
+                       }
+                cp_line,lsp_line,t2_line = self.plot_line(self.lat_list[i],self.lon_list[i])
+                county['lsp'] = lsp_line
+                county['cp'] = cp_line
+                county['t2'] = t2_line 
+                county['time'] = self.timelist
+                data[self.name_en[i]] = county
+            rain,village= self.group_data(comput) 
+            data["rain"] = rain
+            data["village"] = village
         else:
-            u  = self.data['u'].sel(lonP=lon, latP=lat,method='nearest').transpose('lev', 'time').to_pandas().values
-            v  = self.data['v'].sel(lonP=lon, latP=lat,method='nearest').transpose('lev', 'time').to_pandas().values
-            r  = self.data['r'].sel(lonP=lon, latP=lat,method='nearest').transpose('lev', 'time').to_pandas().values
-            print(self.data['r'].sel(lonP=lon, latP=lat,method='nearest').transpose('lev', 'time'))
-            return u,v,r
-    def decode_time(self,select_time):
-        #2022101612
-        year = int(select_time[0:4])
-        month = int(select_time[4:6])
-        day = int(select_time[6:8])
-        hour = select_time[8:]
-        start = dtt.date(year, month, day)
-        end = (start + timedelta(days = 10)).strftime("%Y-%m-%d")
-        if hour=='12':
-            start_day = start.strftime("%Y-%m-%d") +" " + "20:00"
-            end_day = end +" " + "20:00"
-        else:
-            start_day = start.strftime("%Y-%m-%d") +" " + "08:00"
-            end_day = end +" " + "08:00"
-        time_data = pd.date_range(start=start_day,end=end_day,freq='24H')
-        ticks = [0,4,8,12,16,20,24,28,32,36,40]
-        label = []
-        for i in time_data:
-            label.append(i.strftime("%Y-%m-%d")[8:10] + "$^{20}$")
-        return ticks,label
-    def plot_rain(self,select_lon,select_lat):
-        '''用于绘制指定经纬度的降水、高温、低温数据'''
-        # 模拟的数据
-        fig1, ax1 = plt.subplots(figsize=[16,10]) 
-        tmax_data,tmin_data,cp_data,pre_data  = self.decode_data(select_lon,select_lat,'rain')
-        tmean = (np.nanmean(tmax_data) // 2 ) * 2
-        pmax = (np.nanmax(pre_data) // 2 ) * 2
-        print(tmean,pmax)
-        time_line =  [f"{i}" for i in range(0, 41)]  
-        # 画图，plt.bar()可以画柱状图    
-        ax2 = ax1.twinx() 
-        # 画图，plt.bar()可以画柱状图    
-        ax2.bar(time_line, pre_data,color = "blue")
-        ax2.bar(time_line, cp_data,color = "red")
-        ax1.plot(time_line, tmax_data,color = "red")
-        ax1.plot(time_line, tmin_data,color = "blue")
-        # 设置图片名称
-        plt.title("rain")
-        # 设置x轴标签名
-        ax1.set_ylim(tmean-20,tmean+10)
-        #ax2.set_ylim(0,pmax*2.3)
-        ax2.set_ylim(0,50)
-        ticks,label = self.decode_time(self.select_time)
-        plt.xticks(ticks,label)
-        ax1.set_xlabel('time')    #设置x轴标题
-        ax1.set_ylabel('temperature',color = 'g')   #设置Y1轴标题
-        ax2.set_ylabel('mm',color = 'b')   #设置Y2轴标题
-        #plt.show()
-        imd = self.decode_base64(plt)
-        return imd
-    def plot_wind(self,select_lon,select_lat):
-        '''用于绘制指定经纬度的风场、相对湿度、等高线数据'''
-        u,v,r  = self.decode_data(select_lon,select_lat,'wind')
-        # 模拟的数据     
-        x = np.linspace(0,41 , 41) 
-        y = np.linspace(0,15, 15)
-        X, Y = np.meshgrid(x, y) 
-        U, V = u,v
-        Z2 = r
-        fig1, axs1 = plt.subplots(figsize=[16,10]) 
-        colorslist = ['#FFFFFF','#B4F0FA','#96D2FA','#50A5F5','#1E78DC']
-        cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=5)
-        levels = [0,80,85,90,95,100]
-        axs1.contourf(X,Y,Z2,cmap=cmaps,add_labels=True)
-        axs1.barbs(X, Y, U, V) 
-        ticks,label = self.decode_time(self.select_time)
-        plt.xticks(ticks,label)
-        #plt.show()
-        imd = self.decode_base64(plt)
-        return imd
-    def decode_base64(self,plt):
-        '''解析base64类型的数据'''
-        buffer = BytesIO()
-        plt.savefig(buffer,bbox_inches='tight')  
-        plot_img = buffer.getvalue()
-        imb = base64.b64encode(plot_img) 
-        ims = imb.decode()
-        imd = "data:image/png;base64,"+ims
-        return imd
+            lsp1 = self.lsp[end_time,:,:] 
+            lsp0 = self.lsp[start_time,:,:] 
+            dif = lsp1 - lsp0 
+            comput = self.village_data(dif)
+            for i in range(len(self.name)):
+                county = {                 
+                    "lsp":None,
+                    "cp":None,
+                    "t2":None,
+                    "time":None    
+                       }
+                cp_line,lsp_line,t2_line = self.plot_line(self.lat_list[i],self.lon_list[i])
+                county['lsp'] = lsp_line
+                county['cp'] = cp_line
+                county['t2'] = t2_line 
+                county['time'] = self.timelist
+                data[self.name_en[i]] = county
+            rain,village= self.group_data(comput) 
+            data["rain"] = rain
+            data["village"] = village
+        return data

@@ -500,34 +500,23 @@ ec_worker = None
 
 def ec_single_data(request):
     # 数据的接收 
-    village = request.POST.get('ec_village', '')
-    lat = request.POST.get('ec_lat', '')
-    lon = request.POST.get('ec_lon', '')
+    
     ec_start_time = request.POST.get('ec_start_time', '')
     ec_end_time = request.POST.get('ec_end_time', '')
-    ec_data_type = request.POST.get('ec_data_type', '')
-    ec_time_item = request.POST.get('ec_time_item', '')
-    ec_select_time = request.POST.get('ec_select_time', '')
-
-    # 测试
-    #select_time,select_type,select_county = '2022041700','rain','仙居'
-    print("经纬度",lat,"经度:--",lon) 
-    select_lon,select_lat,select_time = lon[3:-2],lat[3:-2],'2022041700'
+    start_time,end_time = 0,24
+    
     # 处理数据逻辑
     global ec_worker
     if ec_worker:
-        img_rain =  ec_worker.plot_rain(select_lon,select_lat)
-        img_wind =  ec_worker.plot_wind(select_lon,select_lat)
+        data = ec_worker.comput_average(start_time,end_time)
     else:
-        ec_worker = data_class.ec_data_point(select_lon,select_lat,select_time) 
-        img_rain =  ec_worker.plot_rain(select_lon,select_lat)
-        img_wind =  ec_worker.plot_wind(select_lon,select_lat)
-
+        ec_worker = data_class.ec_data_point(start_time,end_time) 
+        data = ec_worker.comput_average(start_time,end_time)
+    print("ec-->ok")
     # 数据的返回
     context = {
         'status': "ok",
-        'img_rain':img_rain,
-        'img_wind':img_wind
+        'ec_data':data
     }
     return JsonResponse(context)
 
