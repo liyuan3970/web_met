@@ -881,7 +881,7 @@ class zdz_data:
                 if not isnan(awash_da.data[j,i]):
                     plt.text(x0,y0,str(int(awash_da.data[j,i])),fontsize= 7,fontweight = 800 ,color ="black")
         # 在图上绘制色标
-        rect1 = [0.35, 0.25, 0.03, 0.12]         
+        rect1 = [0.35, 0.29, 0.05, 0.12]         
         ax2 = plt.axes(rect1,frameon='False' )
         ax2.set_xticks([])
         ax2.set_yticks([])
@@ -1261,8 +1261,8 @@ class zdz_data:
 
     def text_data(self):
         '''用来处理风雨情统计数据'''
-        start_time = start 
-        end_time = end
+        start_time = self.start 
+        end_time = self.end
         time_len =len(pd.date_range(start=start_time,end=end_time,freq='1H')) 
         station_all = self.station_all 
         # 计算面雨量
@@ -1379,7 +1379,7 @@ class zdz_data:
         
         # 输出文档内容
         ## 时间开头
-        text_all = "风雨情通报:"
+        text_all = "【风雨情通报】:"
         time_text = self.start + "到" + self.end
         ## 面雨量
         county_text = "各县市面雨量分别为:"
@@ -1444,6 +1444,8 @@ class zdz_data:
             if iii_tmax_count['tmax_list'][i]:
                 temp_text = temp_text + iii_tmax_count['tmax_rank'][i] + "的有" + str(iii_tmax_count['tmax_list'][i]) + "站。"      
         text_all = text_all + time_text+county_text+iii_pre_text+town_pre_text+count_pre_text+wind_text+vv_text+temp_text
+        #print("风雨情通报:",time_text,county_text,iii_pre_text,town_pre_text,count_pre_text,wind_text+vv_text,temp_text)
+        return text_all
 
 
 

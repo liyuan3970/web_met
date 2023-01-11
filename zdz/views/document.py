@@ -565,13 +565,15 @@ def tool_zdz_date(request):
     end = '2022-02-10 06:00'
     global zdz_worker
     zdz_worker = data_class.zdz_data(start, end)
+    text = zdz_worker.text_data()
     context = {
         'status': "ok",
         'day_list': zdz_worker.day_list,
         'day_range': [zdz_worker.day_list[0][0], zdz_worker.day_list[-1][0]],
         'rain_line': zdz_worker.rain_line,
         'rain_scatter': json.dumps(zdz_worker.rain_scatter),
-        'rain_img':zdz_worker.img
+        'rain_img':zdz_worker.img,
+        'text':text
     }
     return JsonResponse(context)
 
