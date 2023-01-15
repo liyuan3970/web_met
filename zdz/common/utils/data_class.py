@@ -1186,6 +1186,7 @@ class zdz_data:
         data_all = self.station_all
         data_time = data_all[(data_all['tTime'] >= start_time) & (data_all['tTime'] <= end_time)]
         time_index  = pd.date_range(start=start_time,end=end_time,freq='1H')
+        timeindex =  [str(i)[5:16].replace('T' , '-') for i in time_index.values]
         grouped_IIiii = data_time.groupby('IIiii')
         # 指标站名称
         station_plot = [
@@ -1211,17 +1212,17 @@ class zdz_data:
             if data['IIiii'].iloc[0] in station_plot:
                 tmin_dir = {}
                 tmin_dir['name'] = data['IIiii'].iloc[0]
-                tmin_dir['value'] = [data['lon'].iloc[0], data['lat'].iloc[0], time_index.values, data['T'].tolist(), data['T'].min()]
+                tmin_dir['value'] = [data['lon'].iloc[0], data['lat'].iloc[0], timeindex, data['T'].tolist(), data['T'].min()]
                 tmin_list.append(tmin_dir)
             # 高温   
                 tmax_dir = {}
                 tmax_dir['name'] = data['IIiii'].iloc[0]
-                tmax_dir['value'] = [data['lon'].iloc[0], data['lat'].iloc[0],time_index.values, data['T'].tolist(), data['T'].max()]
+                tmax_dir['value'] = [data['lon'].iloc[0], data['lat'].iloc[0],timeindex, data['T'].tolist(), data['T'].max()]
                 tmax_list.append(tmax_dir)
             # 降水
                 pre_dir = {}
                 pre_dir['name'] = data['IIiii'].iloc[0]
-                pre_dir['value'] = [data['lon'].iloc[0], data['lat'].iloc[0], time_index.values,data['RR'].tolist(), data['RR'].sum()]
+                pre_dir['value'] = [data['lon'].iloc[0], data['lat'].iloc[0], timeindex,data['RR'].tolist(), data['RR'].sum()]
                 pre_dir['symble'] = "circle"
                 pre_list.append(pre_dir)
             # 大风  
@@ -1230,7 +1231,7 @@ class zdz_data:
                 wind_line = []
                 wind_dir['name'] = data['IIiii'].iloc[0]
                 wind_dir['value'] = [data['lon'].iloc[0], data['lat'].iloc[0],
-                                     time_index.values,data['dFy'].tolist(),data['fFy'].tolist()]
+                                     timeindex,data['dFy'].tolist(),data['fFy'].tolist()]
                 wind_dir['symbol'] =  'path://M10 10L50 10 50 20 20 20 20 40 50 40 50 50 20 50 20 100 10 100 10 10z'    
                 wind_dir['symbolSize'] = 15
                 wind_dir['symbolRotate'] = data[data['fFy'] == data['fFy'].max()]['dFy'].iloc[0]    
@@ -1248,7 +1249,7 @@ class zdz_data:
             if data['VV'].min()<500:
                 view_dir = {}
                 view_dir['name'] = data['IIiii'].iloc[0]
-                view_dir['value'] = [data['lon'].iloc[0], data['lat'].iloc[0],time_index.values, data['VV'].tolist(), data['VV'].min()]
+                view_dir['value'] = [data['lon'].iloc[0], data['lat'].iloc[0],timeindex, data['VV'].tolist(), data['VV'].min()]
                 view_list.append(view_dir)
         pre_data = {
             'rain':pre_list,

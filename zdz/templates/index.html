@@ -2051,12 +2051,19 @@
                                                 $('#zdz_wind_table').html(data.sort_html)
                                                 map.setOption({
                                                     title: {
-                                                        text: '8级以上大风',
-                                                        textStyle: { fontSize: 30 },
+                                                        text: '大风',
+                                                        textStyle: { fontSize: 20 },
                                                     },
                                                     tooltip: {
                                                         trigger: 'item',
-                                                        formatter: 'k8505 50(m/s)'
+                                                        formatter: function (params) {
+                                                            if (params['componentType'] == 'series') {
+                                                                // console.log("打印的是", params)
+                                                                var lable_data = params['data']['value'][2]
+                                                                var lable_station = params['data']['IIiii']
+                                                            }
+                                                            return lable_station + "站:" + lable_data + "m/s"
+                                                        }
                                                     },
                                                     geo: {
                                                         map: 'taizhou',
@@ -2214,11 +2221,18 @@
                                                     },
                                                     tooltip: {
                                                         trigger: 'item',
-                                                        formatter: 'k8505 50(m/s)'
+                                                        formatter: function (params) {
+                                                            if (params['componentType'] == 'series') {
+                                                                // console.log("打印的是", params)
+                                                                var lable_data = params['data']['value'][2]
+                                                                var lable_station = params['data']['IIiii']
+                                                            }
+                                                            return lable_station + "站:" + lable_data + "m"
+                                                        }
                                                     },
                                                     geo: {
                                                         map: 'taizhou',
-                                                        roam: true,
+                                                        roam: false,
                                                         // tooltip:{borderColor = '#333'}
                                                         itemStyle: {
                                                             color: 'white'
@@ -2229,6 +2243,8 @@
                                                     },
                                                     visualMap: {
                                                         type: "piecewise",
+                                                        right: "10%",
+                                                        bottom: "15%",
 
 
                                                         pieces: [
@@ -2307,14 +2323,14 @@
                                                 console.log(data.data_temp_max)
                                                 map_high.setOption({
                                                     title: {
-                                                        text: '高温',
-                                                        textStyle: { fontSize: 30 },
+                                                        text: '全市高温',
+                                                        textStyle: { fontSize: 25 },
                                                     },
                                                     tooltip: {
                                                         trigger: 'item',
                                                         formatter: function (params) {
                                                             if (params['componentType'] == 'series') {
-                                                                console.log("打印的是", params)
+                                                                // console.log("打印的是", params)
                                                                 var lable_data = params['data']['value'][2]
                                                                 var lable_station = params['data']['name']
                                                             }
@@ -2335,7 +2351,8 @@
                                                     label: {
                                                         show: true,
                                                         color: "black",
-                                                        fontSize: 14,
+                                                        fontSize: 15,
+                                                        position: "top",
                                                         formatter: function (params) {
                                                             if (params['componentType'] == 'series') {
                                                                 console.log("打印的是", params)
@@ -2383,8 +2400,8 @@
 
                                                 map_min.setOption({
                                                     title: {
-                                                        text: '低温',
-                                                        textStyle: { fontSize: 30 },
+                                                        text: '全市低温',
+                                                        textStyle: { fontSize: 25 },
                                                     },
                                                     tooltip: {
                                                         trigger: 'item',
@@ -2411,7 +2428,8 @@
                                                     label: {
                                                         show: true,
                                                         color: "black",
-                                                        fontSize: 14,
+                                                        fontSize: 15,
+                                                        position: "top",
                                                         formatter: function (params) {
                                                             if (params['componentType'] == 'series') {
                                                                 console.log("打印的是", params)
@@ -2498,8 +2516,8 @@
                                     // 风雨情
                                     var result_div = document.createElement('div')
                                     result_div.style = "width: 97.5%; height: 18%;;background-color:white;margin:15px;overflow-x: hidden;overflow-y:scroll;font-family:'楷体';"
-                                    result_div.setAttribute("class","scrollbar_self")
-                                    result_div.innerHTML = "<blockquote><p>风雨情统计</p><small>"+data.text+"</small></blockquote>"
+                                    result_div.setAttribute("class", "scrollbar_self")
+                                    result_div.innerHTML = "<blockquote><p>风雨情统计</p><small>" + data.text + "</small></blockquote>"
 
 
                                     product_view.append(tabbable, result_div, calendar_all)
@@ -2651,7 +2669,7 @@
                                         var get_date = params.value[0]
                                         var get_1st = params.value[2]
                                         var get_2st = params.value[3]
-                                        console.log("数据", get_date)
+                                        // console.log("数据", get_date)
 
                                         //ajax 请求数据
                                         var bar_list = echarts.init(document.getElementById('station_list'), 'light');
@@ -2694,7 +2712,7 @@
                                                     data: [0, 0, 0, 0, 0, 0],
                                                     type: 'bar',
                                                     label: {
-                                                        show: true,
+                                                        show: false,
                                                         position: 'top'
                                                     },
                                                 }]
@@ -2726,12 +2744,12 @@
                                                 var view_daily = JSON.parse(data.daily_data)['view']
                                                 map_zdz_daily.setOption({
                                                     legend: {
-                                                        data: ['rain', 'wind', 'tmax', 'tmin', 'view'],
+                                                        data: ['降水', '大风', '高温', '低温', '能见度'],
                                                         left: '10%',
                                                         selectedMode: 'single',
                                                         selected: {
-                                                            'rain': false,
-                                                            'wind': true,
+                                                            '降水': true,
+                                                            '大风': false,
                                                         }
                                                     },
                                                     title: {
@@ -2752,14 +2770,19 @@
                                                     label: {
                                                         show: true,
                                                         color: "black",
-                                                        fontSize: 14,
+                                                        fontSize: 15,
+                                                        position: "top",
                                                         formatter: function (params) {
-                                                            if (params['seriesName'] == 'tmax') {
-                                                                console.log("打印的是", params)
+                                                            if (params['seriesName'] == '高温') {
+                                                                //console.log("打印的是", params)
                                                                 var lable_data = params['data']['value'][4]
                                                                 return lable_data
                                                             }
-                                                            else if (params['seriesName'] == 'tmin') {
+                                                            else if (params['seriesName'] == '低温') {
+                                                                var lable_data = params['data']['value'][4]
+                                                                return lable_data
+                                                            }
+                                                            else if (params['seriesName'] == '降水') {
                                                                 var lable_data = params['data']['value'][4]
                                                                 return lable_data
                                                             }
@@ -2769,15 +2792,30 @@
                                                             }
                                                         }
                                                     },
+                                                    visualMap: {
+                                                        seriesIndex: 0,
+                                                        show: true,
+                                                        right: '1%',
+                                                        bottom: '1%',
+                                                        orient:"horizontal",                                    
+                                                        pieces: [
+                                                            { min: 100, max: 250, label: '特大暴雨' }, { min: 50, max: 100, label: '大暴雨' },
+                                                            { min: 25, max: 50 , label: '暴雨'}, { min: 10, max: 25, label: '大雨' },
+                                                            { min: 0.1, max: 10, label: '中雨' }, { min: 0, max: 0.1 , label: '小雨'},
+                                                        ],
+                                                        color: ["#800040","#FA00FA","#0000E1","#61B8FF",'#3DBA3D','#A6F28f']
+                                                        
+                                                    },
                                                     series: [
                                                         {
-                                                            name: 'rain',
+                                                            name: '降水',
                                                             // type: 'effectScatter',
                                                             type: 'scatter',
                                                             symble: "circle",
                                                             // symbol: "roundRect",
                                                             symbolSize: 10,
-                                                            coordinateSystem: 'geo',
+                                                            
+                                                            coordinateSystem: 'geo',                                                    
                                                             data: rain_daily
                                                             // data: [
                                                             //     {
@@ -2793,7 +2831,7 @@
 
                                                         },
                                                         {
-                                                            name: 'wind',
+                                                            name: '大风',
                                                             // type: 'effectScatter',
                                                             type: 'scatter',
                                                             symble: "circle",
@@ -2848,7 +2886,7 @@
 
                                                         },
                                                         {
-                                                            name: 'tmax',
+                                                            name: '高温',
                                                             // type: 'effectScatter',
                                                             type: 'scatter',
                                                             symble: "circle",
@@ -2865,7 +2903,7 @@
 
                                                         },
                                                         {
-                                                            name: 'tmin',
+                                                            name: '低温',
                                                             // type: 'effectScatter',
                                                             type: 'scatter',
                                                             symble: "circle",
@@ -2882,7 +2920,7 @@
 
                                                         },
                                                         {
-                                                            name: 'view',
+                                                            name: '能见度',
                                                             // type: 'effectScatter',
                                                             type: 'scatter',
                                                             symble: "circle",
@@ -2910,7 +2948,7 @@
                                                 });
 
                                                 map_zdz_daily.on('click', function (params) {
-                                                    // console.log("地图加载的数据", params)
+                                                    console.log("地图加载的数据", params)
                                                     var series_option = {}
                                                     if (params['componentType'] == 'series') {
                                                         console.log("地图的数据类型", params['seriesName'])
@@ -2918,8 +2956,8 @@
                                                         var x_data = params.value[2]
                                                         var data_line = params.value[2]
                                                         // 画图的细节
-                                                        if (params['seriesName'] == 'wind') {
-                                                            // console.log("风场", params['seriesName'])
+                                                        if (params['seriesName'] == '大风') {
+                                                            console.log("风场", params['seriesName'])
                                                             bar_list.clear()
                                                             series_option =
                                                             {
@@ -2929,10 +2967,31 @@
                                                                 },
                                                                 xAxis: {
                                                                     type: 'category',
-                                                                    data: params.value[2]
+                                                                    data: params.value[2],
+                                                                    axisLine: {
+                                                                        show: true,    // 是否显示坐标轴轴线
+                                                                        symbol: ['none', 'none'],     // 轴线两端箭头，两个值，none表示没有箭头，arrow表示有箭头
+                                                                        symbolSize: [10, 15],     // 轴线两端箭头大小，数值一表示宽度，数值二表示高度
+                                                                        lineStyle: {
+                                                                            color: '#333',    // 坐标轴线线的颜色
+                                                                            width: '1',    // 坐标轴线线宽
+                                                                            type: 'solid',     // 坐标轴线线的类型（'solid'，实线类型；'dashed'，虚线类型；'dotted',点状类型）
+                                                                        },
+                                                                    },
                                                                 },
                                                                 yAxis: {
-                                                                    type: 'value'
+                                                                    // type: 'category',
+                                                                    type: 'value',
+                                                                    axisLine: {
+                                                                        show: true,    // 是否显示坐标轴轴线
+                                                                        symbol: ['none', 'none'],     // 轴线两端箭头，两个值，none表示没有箭头，arrow表示有箭头
+                                                                        symbolSize: [10, 15],     // 轴线两端箭头大小，数值一表示宽度，数值二表示高度
+                                                                        lineStyle: {
+                                                                            color: '#333',    // 坐标轴线线的颜色
+                                                                            width: '1',    // 坐标轴线线宽
+                                                                            type: 'solid',     // 坐标轴线线的类型（'solid'，实线类型；'dashed'，虚线类型；'dotted',点状类型）
+                                                                        },
+                                                                    },
                                                                 },
                                                                 series: [
                                                                     {
@@ -2945,74 +3004,300 @@
                                                                     {
                                                                         data: params.value[4],
                                                                         type: 'bar',
-                                                                        label: {
-                                                                            show: true,
-                                                                            position: 'top',
-                                                                        }
+                                                                        barWidth:'20%',
+                                                                        markPoint: {
+                                                                            data: [
+                                                                                { type: 'max', name: '最大值' },
+                                                                                { type: 'min', name: '最小值' }
+                                                                            ]
+                                                                        },
+                                                                        color:"blue",
+                                                                        
+                                                                        // label: {
+                                                                        //     show: true,
+                                                                        //     position: 'top',
+                                                                        // }
                                                                     }
 
                                                                 ]
                                                             }
 
                                                         }
-                                                        else {
+                                                        else if (params['seriesName'] == '高温') {
 
-                                                            console.log('非风场')
+                                                            
                                                             series_option =
                                                             {
                                                                 title: {
-                                                                    text: '自动站',
+                                                                    text: '高温',
                                                                     textStyle: { fontSize: 15 },
                                                                 },
                                                                 xAxis: {
                                                                     type: 'category',
-                                                                    data: params.value[2]
+                                                                    data: params.value[2],
+                                                                    axisLine: {
+                                                                        show: true,    // 是否显示坐标轴轴线
+                                                                        symbol: ['none', 'none'],     // 轴线两端箭头，两个值，none表示没有箭头，arrow表示有箭头
+                                                                        symbolSize: [10, 15],     // 轴线两端箭头大小，数值一表示宽度，数值二表示高度
+                                                                        lineStyle: {
+                                                                            color: '#333',    // 坐标轴线线的颜色
+                                                                            width: '1',    // 坐标轴线线宽
+                                                                            type: 'solid',     // 坐标轴线线的类型（'solid'，实线类型；'dashed'，虚线类型；'dotted',点状类型）
+                                                                        },
+                                                                    },
                                                                 },
                                                                 yAxis: {
-                                                                    type: 'value'
+                                                                    type: 'category',
+                                                                    type: 'value',
+                                                                    axisLine: {
+                                                                        show: true,    // 是否显示坐标轴轴线
+                                                                        symbol: ['none', 'none'],     // 轴线两端箭头，两个值，none表示没有箭头，arrow表示有箭头
+                                                                        symbolSize: [10, 15],     // 轴线两端箭头大小，数值一表示宽度，数值二表示高度
+                                                                        lineStyle: {
+                                                                            color: '#333',    // 坐标轴线线的颜色
+                                                                            width: '1',    // 坐标轴线线宽
+                                                                            type: 'solid',     // 坐标轴线线的类型（'solid'，实线类型；'dashed'，虚线类型；'dotted',点状类型）
+                                                                        },
+                                                                    },
                                                                 },
                                                                 series: [{
                                                                     data: params.value[3],
-                                                                    type: 'bar',
-                                                                    label: {
-                                                                        show: true,
-                                                                        position: 'top',
-                                                                    },
+                                                                    type: 'line',
+                                                                    markPoint: {
+
+                                                                        data: [
+                                                                            { type: 'max', name: '最大值' },
+                                                                            { type: 'min', name: '最小值' }
+                                                                        ]
+                                                                    }
+                                                                    // label: {
+                                                                    //     show: true,
+                                                                    //     position: 'top',
+                                                                    // },
                                                                 }]
                                                             }
 
                                                         }
 
+                                                        else if (params['seriesName'] == '低温') {
+
+                                                            
+                                                            series_option =
+                                                            {
+                                                                title: {
+                                                                    text: '低温',
+                                                                    textStyle: { fontSize: 15 },
+                                                                },
+                                                                xAxis: {
+                                                                    type: 'category',
+                                                                    data: params.value[2],
+                                                                    axisLine: {
+                                                                        show: true,    // 是否显示坐标轴轴线
+                                                                        symbol: ['none', 'none'],     // 轴线两端箭头，两个值，none表示没有箭头，arrow表示有箭头
+                                                                        symbolSize: [10, 15],     // 轴线两端箭头大小，数值一表示宽度，数值二表示高度
+                                                                        lineStyle: {
+                                                                            color: '#333',    // 坐标轴线线的颜色
+                                                                            width: '1',    // 坐标轴线线宽
+                                                                            type: 'solid',     // 坐标轴线线的类型（'solid'，实线类型；'dashed'，虚线类型；'dotted',点状类型）
+                                                                        },
+                                                                    },
+                                                                },
+                                                                yAxis: {
+                                                                    type: 'category',
+                                                                    type: 'value',
+                                                                    axisLine: {
+                                                                        show: true,    // 是否显示坐标轴轴线
+                                                                        symbol: ['none', 'none'],     // 轴线两端箭头，两个值，none表示没有箭头，arrow表示有箭头
+                                                                        symbolSize: [10, 15],     // 轴线两端箭头大小，数值一表示宽度，数值二表示高度
+                                                                        lineStyle: {
+                                                                            color: '#333',    // 坐标轴线线的颜色
+                                                                            width: '1',    // 坐标轴线线宽
+                                                                            type: 'solid',     // 坐标轴线线的类型（'solid'，实线类型；'dashed'，虚线类型；'dotted',点状类型）
+                                                                        },
+                                                                    },
+                                                                },
+                                                                series: [{
+                                                                    data: params.value[3],
+                                                                    type: 'line',
+                                                                    markPoint: {
+
+                                                                        data: [
+                                                                            { type: 'max', name: '最大值' },
+                                                                            { type: 'min', name: '最小值' }
+                                                                        ]
+                                                                    }
+                                                                    // label: {
+                                                                    //     show: true,
+                                                                    //     position: 'top',
+                                                                    // },
+                                                                }]
+                                                            }
+
+                                                        }
+
+                                                        else if (params['seriesName'] == '能见度') {
+
+                                                            
+                                                            series_option =
+                                                            {
+                                                                title: {
+                                                                    text: '能见度',
+                                                                    textStyle: { fontSize: 15 },
+                                                                },
+                                                                xAxis: {
+                                                                    type: 'category',
+                                                                    data: params.value[2],
+                                                                    axisLine: {
+                                                                        show: true,    // 是否显示坐标轴轴线
+                                                                        symbol: ['none', 'none'],     // 轴线两端箭头，两个值，none表示没有箭头，arrow表示有箭头
+                                                                        symbolSize: [10, 15],     // 轴线两端箭头大小，数值一表示宽度，数值二表示高度
+                                                                        lineStyle: {
+                                                                            color: '#333',    // 坐标轴线线的颜色
+                                                                            width: '1',    // 坐标轴线线宽
+                                                                            type: 'solid',     // 坐标轴线线的类型（'solid'，实线类型；'dashed'，虚线类型；'dotted',点状类型）
+                                                                        },
+                                                                    },
+                                                                },
+                                                                yAxis: {
+                                                                    type: 'category',
+                                                                    type: 'value',
+                                                                    axisLine: {
+                                                                        show: true,    // 是否显示坐标轴轴线
+                                                                        symbol: ['none', 'none'],     // 轴线两端箭头，两个值，none表示没有箭头，arrow表示有箭头
+                                                                        symbolSize: [10, 15],     // 轴线两端箭头大小，数值一表示宽度，数值二表示高度
+                                                                        lineStyle: {
+                                                                            color: '#333',    // 坐标轴线线的颜色
+                                                                            width: '1',    // 坐标轴线线宽
+                                                                            type: 'solid',     // 坐标轴线线的类型（'solid'，实线类型；'dashed'，虚线类型；'dotted',点状类型）
+                                                                        },
+                                                                    },
+                                                                },
+                                                                series: [{
+                                                                    data: params.value[3],
+                                                                    type: 'line',
+                                                                    markPoint: {
+
+                                                                        data: [
+                                                                            { type: 'max', name: '最大值' },
+                                                                            { type: 'min', name: '最小值' }
+                                                                        ]
+                                                                    }
+                                                                    // label: {
+                                                                    //     show: true,
+                                                                    //     position: 'top',
+                                                                    // },
+                                                                }]
+                                                            }
+
+                                                        }
+                                                        else if (params['seriesName'] == '降水') {
+
+                                                            
+                                                            series_option =
+                                                            {
+                                                                title: {
+                                                                    text: '降水',
+                                                                    textStyle: { fontSize: 15 },
+                                                                },
+                                                                xAxis: {
+                                                                    type: 'category',
+                                                                    data: params.value[2],
+                                                                    axisLine: {
+                                                                        show: true,    // 是否显示坐标轴轴线
+                                                                        symbol: ['none', 'none'],     // 轴线两端箭头，两个值，none表示没有箭头，arrow表示有箭头
+                                                                        symbolSize: [10, 15],     // 轴线两端箭头大小，数值一表示宽度，数值二表示高度
+                                                                        lineStyle: {
+                                                                            color: '#333',    // 坐标轴线线的颜色
+                                                                            width: '1',    // 坐标轴线线宽
+                                                                            type: 'solid',     // 坐标轴线线的类型（'solid'，实线类型；'dashed'，虚线类型；'dotted',点状类型）
+                                                                        },
+                                                                    },
+                                                                },
+                                                                yAxis: {
+                                                                    type: 'category',
+                                                                    type: 'value',
+                                                                    axisLine: {
+                                                                        show: true,    // 是否显示坐标轴轴线
+                                                                        symbol: ['none', 'none'],     // 轴线两端箭头，两个值，none表示没有箭头，arrow表示有箭头
+                                                                        symbolSize: [10, 15],     // 轴线两端箭头大小，数值一表示宽度，数值二表示高度
+                                                                        lineStyle: {
+                                                                            color: '#333',    // 坐标轴线线的颜色
+                                                                            width: '1',    // 坐标轴线线宽
+                                                                            type: 'solid',     // 坐标轴线线的类型（'solid'，实线类型；'dashed'，虚线类型；'dotted',点状类型）
+                                                                        },
+                                                                    },
+                                                                },
+                                                                series: [{
+                                                                    data: params.value[3],
+                                                                    type: 'bar',
+                                                                    barWidth:'30%',
+                                                                    color:"blue",
+                                                                    markPoint: {
+
+                                                                        data: [
+                                                                            { type: 'max', name: '最大值' },
+                                                                            { type: 'min', name: '最小值' }
+                                                                        ]
+                                                                    }
+                                                                    // label: {
+                                                                    //     show: true,
+                                                                    //     position: 'top',
+                                                                    // },
+                                                                }]
+                                                            }
+
+                                                        }
 
                                                     }
                                                     else {
                                                         // 默认情况的xy
-                                                        console.log("不是series")
+                                                       // console.log("不是series")
 
                                                         var series_option = {
                                                             title: {
-                                                                text: '点错',
+                                                                text: '',
                                                                 textStyle: { fontSize: 15 },
                                                             },
                                                             xAxis: {
                                                                 type: 'category',
-                                                                data: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+                                                                data: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                                                                axisLine: {
+                                                                    show: true,    // 是否显示坐标轴轴线
+                                                                    symbol: ['none', 'none'],     // 轴线两端箭头，两个值，none表示没有箭头，arrow表示有箭头
+                                                                    symbolSize: [10, 15],     // 轴线两端箭头大小，数值一表示宽度，数值二表示高度
+                                                                    lineStyle: {
+                                                                        color: '#333',    // 坐标轴线线的颜色
+                                                                        width: '1',    // 坐标轴线线宽
+                                                                        type: 'solid',     // 坐标轴线线的类型（'solid'，实线类型；'dashed'，虚线类型；'dotted',点状类型）
+                                                                    },
+                                                                },
                                                             },
                                                             yAxis: {
-                                                                type: 'value'
+                                                                type: 'category',
+                                                                type: 'value',
+                                                                axisLine: {
+                                                                    show: true,    // 是否显示坐标轴轴线
+                                                                    symbol: ['none', 'none'],     // 轴线两端箭头，两个值，none表示没有箭头，arrow表示有箭头
+                                                                    symbolSize: [10, 15],     // 轴线两端箭头大小，数值一表示宽度，数值二表示高度
+                                                                    lineStyle: {
+                                                                        color: '#333',    // 坐标轴线线的颜色
+                                                                        width: '1',    // 坐标轴线线宽
+                                                                        type: 'solid',     // 坐标轴线线的类型（'solid'，实线类型；'dashed'，虚线类型；'dotted',点状类型）
+                                                                    },
+                                                                },
                                                             },
                                                             series: [{
-                                                                data: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                                                                data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
                                                                 type: 'bar',
                                                                 label: {
-                                                                    show: true,
+                                                                    show: false,
                                                                     position: 'top',
                                                                 },
                                                             }]
                                                         }
 
                                                     }
-                                                    console.log("打印ser", series_option)
+                                                    // console.log("打印ser", series_option)
                                                     bar_list.clear()
                                                     bar_list.setOption(series_option)
 
@@ -3049,9 +3334,10 @@
                                                 itemWidth: 4,
                                                 selectedMode: 'single'
                                             },
-                                            
+
                                             xAxis: [
-                                                { data: rain_line[0],
+                                                {
+                                                    data: rain_line[0],
                                                     axisLine: {
                                                         show: true,    // 是否显示坐标轴轴线
                                                         symbol: ['none', 'none'],     // 轴线两端箭头，两个值，none表示没有箭头，arrow表示有箭头
@@ -3107,17 +3393,17 @@
                                                 {
                                                     show: true,
                                                     start: 0,
-                                                    height:20,
-                                                    left:"20%",
-                                                    bottom:10,
+                                                    height: 20,
+                                                    left: "20%",
+                                                    bottom: 10,
                                                     end: 100
                                                 },
                                                 {
                                                     type: 'inside',
                                                     start: 94,
-                                                    height:20,
+                                                    height: 20,
 
-                                                    bottom:10,
+                                                    bottom: 10,
                                                     end: 100
                                                 }
                                             ],
@@ -3236,7 +3522,7 @@
                                     ec_single_data.id = "ec_line"
 
 
-                                    
+
                                     product_view.append(topdiv, ec_single_data)
 
                                     var lineaverage = echarts.init(document.getElementById("line_average"));//document.getElementById('line_average');
@@ -3271,7 +3557,7 @@
                                                 itemStyle: {
                                                     borderRadius: 8
                                                 },
-                                                data:data.ec_data['rain'] 
+                                                data: data.ec_data['rain']
                                                 // data: [
                                                 //     { value: 0, name: 'rose 1' },
                                                 //     { value: 8, name: 'rose 2' },
@@ -3293,7 +3579,7 @@
                                     // data
                                     const colors = ['#5470C6', '#91CC75', '#EE6666'];
                                     const symbolSize = 20;
-                                   
+
                                     //乡镇地图v 
                                     if ($('#ec_map').val() == 'city') {
                                         echarts.registerMap('taizhou', taizhou_xian, {});
@@ -3353,7 +3639,7 @@
                                             type: 'map',
                                             map: 'taizhou',
                                             // coordinateSystem: 'geo',  
-                                            data:data.ec_data['rain']                       
+                                            data: data.ec_data['rain']
                                             // data: [
                                             //     { name: "临海市", value: 50 },
                                             //     { name: "三门县", value: 150 },
@@ -3375,15 +3661,15 @@
                                     map_ec.on('click', function (params) {
                                         // console.log(params)
                                         let componentType = params.componentType;   // geo是地图图层
-                                        var name = ['三门县','临海市','仙居县','天台县','椒江区','温岭市','玉环市','路桥区','黄岩区']
-                                        var name_en = ['sanmen','linhai','xianju','tiantai','jiaojiang','wenling','yuhuan','luqiao','huangyan']
+                                        var name = ['三门县', '临海市', '仙居县', '天台县', '椒江区', '温岭市', '玉环市', '路桥区', '黄岩区']
+                                        var name_en = ['sanmen', 'linhai', 'xianju', 'tiantai', 'jiaojiang', 'wenling', 'yuhuan', 'luqiao', 'huangyan']
 
                                         if (componentType == "series") {
-                                            for (var i = 0; i < data.ec_data.village.length; i++){
+                                            for (var i = 0; i < data.ec_data.village.length; i++) {
                                                 // console.log(params.name)
-                                                if (name[i]==params.name){
+                                                if (name[i] == params.name) {
                                                     var villagedata = data.ec_data.village[i]
-                                                    
+
                                                     var linedata = data.ec_data[name_en[i]]
                                                     // bar
                                                     lineaverage.setOption({
@@ -3398,12 +3684,12 @@
                                                                     borderRadius: 8
                                                                 },
                                                                 data: villagedata
-                                                                
+
                                                             }
                                                         ]
 
                                                     })
-           
+
                                                     lineChart.setOption({
                                                         title: {
                                                             text: params.name,
@@ -3491,7 +3777,7 @@
                                                     })
                                                 }
                                                 // console.log(data.ec_data.village)
- 
+
                                             }
 
                                             // var offsetX = params.event.offsetX;
@@ -3539,7 +3825,7 @@
                                                     alignWithLabel: true
                                                 },
                                                 // prettier-ignore
-                                                data:  data.ec_data['hongjia']['time']
+                                                data: data.ec_data['hongjia']['time']
                                             }
                                         ],
                                         yAxis: [{
