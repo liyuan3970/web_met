@@ -54,6 +54,16 @@
             width: 120px;
             border: 1px solid rgba(0, 0, 0, 0.4);
         }
+        .my-div-icon{
+            font-size:30px;
+            /* border:1px solid black; */
+            /* width: 600px;
+            height:150px; */
+            /*background:red;*/
+            /*width:5px;*/
+            color:rgb(22, 21, 21);
+        }
+        
     
         /* html {
         
@@ -1727,7 +1737,7 @@
                             turf.featureEach(points, function (currentFeature, featureIndex) {
                                 currentFeature.properties = { value: (Math.random() * 100).toFixed(2) };
                             });
-                            // console.log(JSON.stringify(points));
+                       
 
                             var interpolate_options = {
                                 gridType: "points",
@@ -1736,16 +1746,16 @@
                                 weight: 10
                             };
                             let grid = turf.interpolate(points, 0.05, interpolate_options);
-
-                            grid.features.map((i) => (i.properties.value = i.properties.value.toFixed(2)));
-
+                            
+                            //grid.features.map((i) => (i.properties.value = i.properties.value.toFixed(2)));
+                                     
                             var isobands_options = {
                                 zProperty: "value",
                                 commonProperties: {
                                     "fill-opacity": 0.8
                                 },                   
                                 breaksProperties: [
-                                    { fill: "rgb(234,234,234)" },
+                                    { fill: "rgb(255,255,255)" },
                                     { fill: "rgb(140,246,130)" },
                                     { fill: "rgb(0,191,27)" },
                                     { fill: "rgb(62,185,255)" },
@@ -1754,7 +1764,7 @@
                                     { fill: "rgb(140,0,65)" }
                                 ]
                             };
-                            let levelV = [1, 10, 20, 30, 50, 70, 100];
+                            let levelV = [0, 1, 10, 20, 50, 70, 100];
                             let isobands = turf.isobands(
                                 grid,
                                 levelV,
@@ -1768,6 +1778,8 @@
                                 layers: []
                             });
                             map.bounds = turf.bbox(boundaries);
+                            
+                            
 
                             L.geoJSON(boundaries, {
                                 style: function (feature) {
@@ -1842,7 +1854,21 @@
                             }
 
                             //裁剪结果
+                            // 叠加标题
                             let intersection = turf.featureCollection(features);
+                            var myIcon = L.divIcon({
+                                html:"短期降水-12月31日-起报",
+                                className: 'my-div-icon',
+                                iconSize: [600, 105],
+                            });
+                            L.marker([29.4, 120.9], { icon: myIcon }).addTo(map);
+                            // 叠加图片
+                            var imageBounds = [[28.1, 120.1], [28.3, 121.05]];
+                            // 将图片作为自定义图层加载到地图上（类似于Marker）
+                            L.imageOverlay('static/src/logo.png', imageBounds, { opacity: 1, zIndex: 20 }).addTo(map);
+
+                            
+
 
                             var intersectionLay = L.geoJSON(intersection, {
                                 style: function (feature) {
@@ -1852,9 +1878,16 @@
 
 
 
+                            console.log(intersection)
+                            // grid.addTo(map)    
+                            intersectionLay.addTo(map) 
+                            // map.setView(new L.LatLng(28.6, 121.2), 11);
 
 
-                            intersectionLay.addTo(map)                        
+
+
+
+                       
                             // 加载ajax
                             var time_plot_taizhou = $("input[name='tz_self_time']:checked").val()
                             var type_plot_taizhou = $("input[name='tz_self']:checked").val()
