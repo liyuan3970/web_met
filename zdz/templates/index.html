@@ -22,10 +22,13 @@
     <script type="text/javascript" src="static/js/china.js"></script>
     <script type="text/javascript" src="static/js/world.js"></script>
 
-    <!-- 表格 -->
-    <!-- <link rel="stylesheet" href="https://unpkg.com/x-data-spreadsheet@1.1.9/dist/xspreadsheet.css">
-    <script src="https://unpkg.com/x-data-spreadsheet@1.1.9/dist/xspreadsheet.js"></script>
-    <script src="https://unpkg.com/x-data-spreadsheet@1.1.9/dist/locale/zh-cn.js"></script> -->
+    <!-- leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+        integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <!-- 使用unpkg -->
+    <script src="https://unpkg.com/@turf/turf/turf.min.js"></script>
     <!-- tinymce -->
     <script src="static/editor/tinymce.min.js"></script>
     <script src="static/editor/vendor/FileSaver.js"></script>
@@ -33,6 +36,7 @@
     <script src="static/js/pdfobject.js"></script>
     <!-- 数据 -->
     <script src='static/js/taizhou.js'></script>
+    <script src='static/js/taizhoulist.js'></script>
     <!-- 颜色选择器 -->
     <script src="static/js/colorpicker.js"></script>
     <link rel="stylesheet" href="static/css/colorpicker.css">
@@ -40,14 +44,24 @@
         .scrollbar_self::-webkit-scrollbar {
             display: none;
         }
-
+        .menu-ui {
+            background: #fff;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 999;
+            border-radius: 3px;
+            width: 120px;
+            border: 1px solid rgba(0, 0, 0, 0.4);
+        }
+    
         /* html {
-    
-            overflow-x: hidden;
-    
-            overflow-y: hidden;
-    
-        } */
+        
+                overflow-x: hidden;
+        
+                overflow-y: hidden;
+        
+            } */
     </style>
     <title>决策服务模板平台</title>
 
@@ -1690,180 +1704,163 @@
                             $('#product_view').html("")
                             var product_view = document.getElementById('product_view')
                             product_view.style = "width:97.5%;height:97%;background-color:white;margin:15px"
-                            var prodict_head_div = document.createElement('div')
-                            prodict_head_div.style = "width: 100%;height: 5%;background-color:rgb(220, 222, 226);"
-                            var head_h = document.createElement('h1')
-                            head_h.style = "margin:0;text-align:center;background-color:rgb(45, 104, 221);width:15%;height:100%;border-top-left-radius: 5px;border-top-right-radius:5px;font-size: 23px;font-weight:900;font-family:'宋体';color:white;padding-top:1.5%"
-                            head_h.innerText = "市台短期"
-                            prodict_head_div.append(head_h)
+                            //加载数据地图
+                            var tzmap = document.createElement("div")
+                            tzmap.style = "width: 100%;height:100%;border: 1px solid black;"
+                            tzmap.id = "tzmap"
 
-                            var prodict_body_div = document.createElement('div')
-                            prodict_body_div.style = "display: inline-flex;width: 100%;height: 80%;;margin:15px"
+                            var mainui = document.createElement("div")
+                            mainui.style = "position:absolute;text-align: center;width: 8%;height: 60%;top:10%;left:90%;;border: 1px solid black;"
+                            mainui.id = "menu-ui"
 
-                            var self_png_show = document.createElement('div')
-                            self_png_show.style = style = " width: 80%;height: 100%;overflow-x: hidden;overflow-y: scroll;"
-                            self_png_show.setAttribute("class", "scrollbar_self")
+                            product_view.append(tzmap,mainui)
 
+                            let boundaries = {
+                                type: "FeatureCollection",
+                                name: "boundaries",
+                                crs: { type: "name", properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+                                features: taizhoulist
+                            };
 
-                            self_png_show.id = "self_png_show"
+                            let points = turf.randomPoint(400, { bbox: turf.bbox(boundaries) });
 
-                            var body_ul_div = document.createElement('div')
-                            body_ul_div.style = style = style = "width: 18%;height: 100%;overflow-x: hidden;overflow-y: scroll;"
-                            body_ul_div.setAttribute("class", "scrollbar_self")
-                            body_ul_div.id = "body_ul_div"
+                            turf.featureEach(points, function (currentFeature, featureIndex) {
+                                currentFeature.properties = { value: (Math.random() * 100).toFixed(2) };
+                            });
+                            // console.log(JSON.stringify(points));
 
-                            var body_ul = document.createElement('ul')
-                            body_ul.id = "ul_self"
-                            body_ul.setAttribute('class', 'list-group')
-                            body_ul.style = "width: 100%;height: 100%"
-                            body_ul_div.append(body_ul)
-                            prodict_body_div.append(self_png_show, body_ul_div)
+                            var interpolate_options = {
+                                gridType: "points",
+                                property: "value",
+                                units: "degrees",
+                                weight: 10
+                            };
+                            let grid = turf.interpolate(points, 0.05, interpolate_options);
 
+                            grid.features.map((i) => (i.properties.value = i.properties.value.toFixed(2)));
 
-                            var prodict_foot_div = document.createElement('div')
-                            prodict_foot_div.style = "width: 100%;height: 10%;;text-align:center;vertical-align: middle;align-items: center;"
+                            var isobands_options = {
+                                zProperty: "value",
+                                commonProperties: {
+                                    "fill-opacity": 0.8
+                                },                   
+                                breaksProperties: [
+                                    { fill: "rgb(234,234,234)" },
+                                    { fill: "rgb(140,246,130)" },
+                                    { fill: "rgb(0,191,27)" },
+                                    { fill: "rgb(62,185,255)" },
+                                    { fill: "rgb(25,0,235)" },
+                                    { fill: "rgb(255,0,255)" },
+                                    { fill: "rgb(140,0,65)" }
+                                ]
+                            };
+                            let levelV = [1, 10, 20, 30, 50, 70, 100];
+                            let isobands = turf.isobands(
+                                grid,
+                                levelV,
+                                isobands_options
+                            );
 
-                            var foot_input1 = document.createElement('input')
-                            foot_input1.id = "go_on"
-                            foot_input1.style = "border:2px;width: 5%;height: 50%;text-align:center;vertical-align: middle;align-items: center;background-image: url(static/src/前进.png);background-size: 100%;background-repeat: no-repeat;"
-                            foot_input1.setAttribute("type", "button")
-                            // foot_input1.setAttribute("value", "前进")
+                            var map = new L.Map('tzmap', {
+                                center: new L.LatLng(28.6, 121.2),//110.763, 41.376   39.62353145, 121.9937485
+                                zoom:9, //4
+                                attributionControl: false, //是否去除右下角标志
+                                layers: []
+                            });
+                            map.bounds = turf.bbox(boundaries);
 
-                            var foot_input2 = document.createElement('input')
-                            foot_input2.id = "go_back"
-                            foot_input2.style = "border:2px;width: 5%;height: 50%;text-align:center;vertical-align: middle;align-items: center;background-image: url(static/src/后退.png);background-size: 100%;background-repeat: no-repeat;"
-                            foot_input2.setAttribute("type", "button")
-                            // foot_input2.setAttribute("value", "后退")
-
-                            // var foot_input3 = document.createElement('input')
-                            // foot_input3.name = "tool_2_last"
-                            // foot_input3.style = "width: 10%;height: 50%;text-align:center;vertical-align: middle;align-items: center;"
-                            // foot_input3.setAttribute("type", "button")
-                            // foot_input3.setAttribute("value", "导出为git")
-                            // prodict_foot_div.append(foot_input1, foot_input2, foot_input3)
-                            prodict_foot_div.append(foot_input2, foot_input1)
-
-                            product_view.append(prodict_head_div, prodict_body_div, prodict_foot_div)
-
-                            foot_input1.addEventListener("click", function () {
-                                console.log("单机前进按钮")
-                                var select_length = $("input:radio[name='ul_png']").length
-                                var select_item = $("input:radio[name='ul_png']:checked")
-                                var select_data = $("input:radio[name='ul_png']:checked").attr("id").toString()
-                                var select_id = parseInt(select_data[3]) + 1
-                                var select_show_id = "#self_" + select_id.toString()
-                                // console.log($('input:radio[name="ul_png"]:checked').attr("id")) 
-                                console.log(select_length)
-                                if (select_id <= select_length) {
-                                    // $("#self_png_show").animate({scrollTop:$(select_show_id).offset().top},100);
-                                    $("#a_" + select_id.toString())[0].click()
-
-                                    var next_id = "#in_" + select_id.toString()
-                                    $("input:radio[name='ul_png']:checked").attr("checked", false)
-                                    $(next_id).attr("checked", true)
+                            L.geoJSON(boundaries, {
+                                style: function (feature) {
+                                    return { color: '#4264fb', weight: 1, fillOpacity: 0 };
                                 }
-                                else {
-                                    alert("到头了")
-                                }
+                            }).addTo(map);
 
+                            var isobandsLay = L.geoJSON(isobands, {
+                                style: function (feature) {
+                                    return { color: '#4264fb', fillColor: feature.properties.fill, weight: 0.1, fillOpacity: 0.8 };
+                                }
+                            });
+
+
+                            //   裁剪数据
+                            let features = [];//裁剪后的结果集
+                            isobands.features.forEach(function (feature1) {
+                                boundaries.features.forEach(function (feature2) {
+                                    let intersection = null;
+                                    try {
+                                        intersection = turf.intersect(feature1, feature2);
+                                    } catch (e) {
+                                        try {
+                                            //色斑图绘制之后，可能会生成一些非法 Polygon ，例如 在 hole 里存在一些形状（听不懂？去查一下 GeoJSON 的规范），
+                                            //我遇到的一个意外情况大概是这样，这种 Polygon 在做 intersect() 操作的时候会报错，所以在代码中做了个容错操作。
+                                            //解决的方法通常就是做一次 turf.buffer() 操作，这样可以把一些小的碎片 Polygon 清理掉。
+                                            feature1 = turf.buffer(feature1, 0);
+                                            intersection = turf.intersect(feature1, feature2);
+                                        } catch (e) {
+                                            intersection = feature1;//实在裁剪不了就不裁剪了,根据业务需求自行决定
+                                        }
+                                    }
+                                    if (intersection != null) {
+                                        intersection.properties = feature1.properties;
+                                        intersection.id = (Math.random() * 100000).toFixed(0);
+                                        features.push(intersection);
+                                    }
+                                });
+                            });
+
+                            //turf.isobands有点不符合业务预期,只有一个等级时,结果集可能为空,无图形显示,写点程序(找出那一个等级，并添加进结果集)补救下
+                            if (features.length == 0) {
+                                let maxAttribute = getMaxAttribute(levelV, grid, isobands_options.breaksProperties);
+                                let value = maxAttribute[0];
+                                let fill = maxAttribute[1];
+                                if (value != '' && fill != '') {
+                                    //获取网格点Box
+                                    let gridBox = turf.bbox(grid);
+                                    //生成网格点范围的面
+                                    let gridBoxPolygon = [[[gridBox[0], gridBox[1]], [gridBox[0], gridBox[3]], [gridBox[2], gridBox[3]], [gridBox[2], gridBox[1]], [gridBox[0], gridBox[1]]]];
+                                    //获取网格范围的面与行政边界的交集 Polygon
+                                    let intersectPolygon = null;
+                                    let gridoxFeature = { "type": "Feature", "properties": { "fill-opacity": 0.8 }, "geometry": { "type": "Polygon", "coordinates": gridBoxPolygon }, "id": 10 };
+                                    try {
+                                        intersectPolygon = turf.intersect(gridoxFeature, boundaries.features[0]);
+                                    } catch (e) {
+                                        try {
+                                            //色斑图绘制之后，可能会生成一些非法 Polygon ，例如 在 hole 里存在一些形状（听不懂？去查一下 GeoJSON 的规范），
+                                            //我遇到的一个意外情况大概是这样，这种 Polygon 在做 intersect() 操作的时候会报错，所以在代码中做了个容错操作。
+                                            //解决的方法通常就是做一次 turf.buffer() 操作，这样可以把一些小的碎片 Polygon 清理掉。
+                                            gridoxFeature = turf.buffer(gridoxFeature, 0);
+                                            intersectPolygon = turf.intersect(gridoxFeature, boundaries.features[0]);
+                                        } catch (e) {
+                                            intersectPolygon = gridoxFeature;//实在裁剪不了就不裁剪了,根据业务需求自行决定
+                                        }
+                                    }
+                                    //结果添加到结果数组
+                                    if (intersectPolygon != null) {
+                                        features.push({ "type": "Feature", "properties": { "fill-opacity": 0.8, "fill": fill, "value": value }, "geometry": intersectPolygon.geometry, "id": 0 });
+                                    }
+                                }
+                            }
+
+                            //裁剪结果
+                            let intersection = turf.featureCollection(features);
+
+                            var intersectionLay = L.geoJSON(intersection, {
+                                style: function (feature) {
+                                    return { color: '#ffffff', fillColor: feature.properties.fill, weight: 0.1, fillOpacity: 0.6 };
+                                }
                             })
 
-                            foot_input2.addEventListener("click", function () {
-                                console.log("单机前进按钮")
-                                var select_length = $("input:radio[name='ul_png']").length
-                                var select_item = $("input:radio[name='ul_png']:checked")
-                                var select_data = $("input:radio[name='ul_png']:checked").attr("id").toString()
-                                var select_id = parseInt(select_data[3]) - 1
-                                var select_show_id = "#self_" + select_id.toString()
-
-                                if (select_id >= 1) {
-                                    // $("#self_png_show").animate({scrollTop:$(select_show_id).offset().top},100);
-                                    $("#a_" + select_id.toString())[0].click()
-
-                                    var next_id = "#in_" + select_id.toString()
-                                    $("input:radio[name='ul_png']:checked").attr("checked", false)
-                                    $(next_id).attr("checked", true)
-                                }
-                                else {
-                                    alert("到头了")
-                                }
-
-                            })
 
 
 
+
+                            intersectionLay.addTo(map)                        
                             // 加载ajax
                             var time_plot_taizhou = $("input[name='tz_self_time']:checked").val()
                             var type_plot_taizhou = $("input[name='tz_self']:checked").val()
                             var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                             console.log(time_plot_taizhou, type_plot_taizhou)
-
-                            $.ajax({
-                                url: "upload_select_taizhou_data",  // 请求的地址
-                                type: "post",  // 请求方式
-                                timeout: 2500000, //设置延迟上限
-                                data: {
-                                    'csrfmiddlewaretoken': csrf,
-                                    'plot_type': type_plot_taizhou,
-                                    'plot_time': time_plot_taizhou
-                                },
-                                dataType: "json",
-                                success: function (data) {
-                                    // var show_img_list = $
-                                    var server_img_list = data.imd_list
-                                    var server_time_list = data.time_list
-                                    console.log("ajax请求成功返回的数据", server_time_list, server_img_list)
-                                    $("#self_png_show").html(" ")
-                                    $("#ul_self").html(" ")
-                                    for (i = 0; i < server_img_list.length; i++) {
-                                        // 图部分
-                                        var img_item = new Image()
-                                        img_item.id = "self_" + (i + 1).toString()
-                                        img_item.src = server_img_list[i]
-                                        img_item.style.width = "100%"
-                                        img_item.style.height = "100%"
-
-                                        $('#self_png_show').append(img_item)
-                                        var a_item = document.createElement("a")
-                                        a_item.id = "a_" + (i + 1).toString()
-                                        a_item.setAttribute("class", "list-group-item")
-                                        a_item.setAttribute("href", "#self_" + (i + 1).toString())
-                                        // a_item.innerText = "测试"
-                                        a_item.innerText = server_time_list[i]
-                                        var input_item = document.createElement("input")
-                                        input_item.id = "in_" + (i + 1).toString()
-                                        input_item.style.display = "none"
-                                        input_item.setAttribute("type", "radio")
-                                        input_item.setAttribute("name", "ul_png")
-                                        if (i == 0) {
-                                            input_item.setAttribute("checked", "true")
-                                        }
-                                        a_item.appendChild(input_item)
-                                        var click_item = parseInt(i)
-                                        a_item.addEventListener("click", function (click_item) {
-                                            console.log(click_item)
-                                            $("input:radio[name='ul_png']").attr("checked", false)
-                                            a_item.children[0].setAttribute("checked", "true")
-
-                                            // $('#in_'+(i + 1).toString()).attr("checked", true)
-                                            var child_len = $("input:radio[name='ul_png']").length
-                                            for (j = 0; j < child_len; j++) {
-                                                $('#a_' + (j + 1).toString()).attr("style", "color:balck")
-                                            }
-                                            $('#a_' + (j + 1).toString()).attr("style", "color:red")
-
-                                        })
-                                        // $("#ul_self").css("")
-                                        $("#ul_self").append(a_item)
-
-
-
-
-                                    }
-
-                                }
-                            })
-
+                            //
 
                         }
                         else if (type == "tool_zdz") {
@@ -2797,14 +2794,14 @@
                                                         show: true,
                                                         right: '1%',
                                                         bottom: '1%',
-                                                        orient:"horizontal",                                    
+                                                        orient: "horizontal",
                                                         pieces: [
                                                             { min: 100, max: 250, label: '特大暴雨' }, { min: 50, max: 100, label: '大暴雨' },
-                                                            { min: 25, max: 50 , label: '暴雨'}, { min: 10, max: 25, label: '大雨' },
-                                                            { min: 0.1, max: 10, label: '中雨' }, { min: 0, max: 0.1 , label: '小雨'},
+                                                            { min: 25, max: 50, label: '暴雨' }, { min: 10, max: 25, label: '大雨' },
+                                                            { min: 0.1, max: 10, label: '中雨' }, { min: 0, max: 0.1, label: '小雨' },
                                                         ],
-                                                        color: ["#800040","#FA00FA","#0000E1","#61B8FF",'#3DBA3D','#A6F28f']
-                                                        
+                                                        color: ["#800040", "#FA00FA", "#0000E1", "#61B8FF", '#3DBA3D', '#A6F28f']
+
                                                     },
                                                     series: [
                                                         {
@@ -2814,8 +2811,8 @@
                                                             symble: "circle",
                                                             // symbol: "roundRect",
                                                             symbolSize: 10,
-                                                            
-                                                            coordinateSystem: 'geo',                                                    
+
+                                                            coordinateSystem: 'geo',
                                                             data: rain_daily
                                                             // data: [
                                                             //     {
@@ -3004,15 +3001,15 @@
                                                                     {
                                                                         data: params.value[4],
                                                                         type: 'bar',
-                                                                        barWidth:'20%',
+                                                                        barWidth: '20%',
                                                                         markPoint: {
                                                                             data: [
                                                                                 { type: 'max', name: '最大值' },
                                                                                 { type: 'min', name: '最小值' }
                                                                             ]
                                                                         },
-                                                                        color:"blue",
-                                                                        
+                                                                        color: "blue",
+
                                                                         // label: {
                                                                         //     show: true,
                                                                         //     position: 'top',
@@ -3025,7 +3022,7 @@
                                                         }
                                                         else if (params['seriesName'] == '高温') {
 
-                                                            
+
                                                             series_option =
                                                             {
                                                                 title: {
@@ -3081,7 +3078,7 @@
 
                                                         else if (params['seriesName'] == '低温') {
 
-                                                            
+
                                                             series_option =
                                                             {
                                                                 title: {
@@ -3137,7 +3134,7 @@
 
                                                         else if (params['seriesName'] == '能见度') {
 
-                                                            
+
                                                             series_option =
                                                             {
                                                                 title: {
@@ -3192,7 +3189,7 @@
                                                         }
                                                         else if (params['seriesName'] == '降水') {
 
-                                                            
+
                                                             series_option =
                                                             {
                                                                 title: {
@@ -3230,8 +3227,8 @@
                                                                 series: [{
                                                                     data: params.value[3],
                                                                     type: 'bar',
-                                                                    barWidth:'30%',
-                                                                    color:"blue",
+                                                                    barWidth: '30%',
+                                                                    color: "blue",
                                                                     markPoint: {
 
                                                                         data: [
@@ -3251,7 +3248,7 @@
                                                     }
                                                     else {
                                                         // 默认情况的xy
-                                                       // console.log("不是series")
+                                                        // console.log("不是series")
 
                                                         var series_option = {
                                                             title: {
