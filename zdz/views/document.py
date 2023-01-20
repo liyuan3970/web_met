@@ -277,40 +277,14 @@ def plot_self_data(request):
 def upload_select_taizhou_data(request):
     plot_type = request.POST.get('plot_type', '')
     plot_time = request.POST.get('plot_time', '')
-
-    # 设置key
-    key = f"imd_dict_{plot_type}_{plot_time}"
-    imd_dict = cache.get(key)
-    if not imd_dict:
-        print('非缓存方法')
-        # 常规方法获取列表
-        imd_dict = get_imd_dict(request)
-        # 设置缓存
-        cache.set(key, imd_dict, timeout=60 * 60 * 24)
-
+    product = data_class.plot_tz_product(plot_type, plot_time)
+    back_data = product.return_data(0)
     context = {
         'data_test': 723.5,
-        'imd_list': imd_dict.get("imd_list"),
-        'time_list': imd_dict.get("time_list")
+        'back_data':back_data
     }
     return JsonResponse(context)
 
-
-def get_imd_dict(request):
-    # 测试绘制等值线的图
-    os.environ["HDF5_USE_FILE_LOCKING"] = 'FALSE'
-    plot_type = request.POST.get('plot_type', '')
-    plot_time = request.POST.get('plot_time', '')
-
-    print(os.environ["HDF5_USE_FILE_LOCKING"])
-
-    plot_worker = data_class.plot_tz_product(plot_type, plot_time)
-    imd_list, time_list = plot_worker.multy_plot()
-
-    return {
-        "imd_list": imd_list,
-        "time_list": time_list
-    }
 
 
 # 新建文档

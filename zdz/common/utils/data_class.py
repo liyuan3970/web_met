@@ -667,148 +667,44 @@ class plot_tz_product:
         date = "20220402"
         self.time_len = len(time)
         return lat, lon, time, data_xr_nc,date
-
-    def plot_img(self,item):
-        '''绘制逐小时的气温'''
+    def return_data(self,item):
         lat = self.lat
         lon = self.lon
         time = self.time
         data_xr_nc = self.data_xr_nc
-        data_xr = xr.DataArray(data_xr_nc[item,:,:],coords=[lat,lon], dims=["lat", "lon"])
-        # ##########色标和大小#############################
-        cmaps ,levels = self.colormap(self.plot_type)
-        fig = plt.figure(figsize=[10,10]) 
-        ax = fig.add_subplot(111)
-        shp_path = "static/data/shpfile/"
-        shp_da = self.add_shape_coord_from_data_array(data_xr, shp_path+"taizhou.shp", "country")
-        awash_da = shp_da.where(shp_da.country<7, other=np.nan)
-        m = Basemap(llcrnrlon=120.0,
-            llcrnrlat=27.8,
-            urcrnrlon=122,
-            urcrnrlat=29.5,
-            resolution = None, 
-            projection = 'cyl')
-        lons, lats = np.meshgrid(lon, lat)
-        cs =m.contourf(lons,lats,data_xr,ax=ax, cmap=cmaps,levels =levels,add_labels=True)
-        ##########标题#############################
-        label, start_time  = self.label_text(self.plot_type,item)
-        plt.text(120.2,29.4, label,fontsize=15)
-        ##########标题#############################
-        m.readshapefile(shp_path+'taizhou','taizhou',color='k',linewidth=1.2)
-        parallels = np.arange(27.8,29.5,0.2)
-        m.drawparallels(parallels,labels=[True,False,True,False],color='dimgrey',dashes=[2, 3],fontsize= 12)  # ha= 'right'
-        meridians = np.arange(120.0,122.0,0.2)
-        m.drawmeridians(meridians,labels=[False,True,False,True],color='dimgrey',dashes=[2, 3],fontsize= 12)
+        #print("计算time",time)
+        data_xr = xr.DataArray(data_xr_nc[item,:,:],coords=[lat,lon], dims=["lat", "lon"])       
+        #以下是核心api,实质为调用Cmaps基类的listmap()方法
+        basicfile = '/home/liyuan3970/Data/My_Git/web_met/'
+        shp_path = basicfile+"/static/data/shpfile/"
+        shp_da = self.add_shape_coord_from_data_array(data_xr, shp_path+"taizhou.shp", "test")
+        awash_da = shp_da.where(shp_da.test<7, other=0)
         len_lat = len(data_xr.lat.data)
         len_lon = len(data_xr.lon.data)
+        data = []
         for i in range(len_lon-1):
             for j in range(len_lat-1):
                 y0 = round(27.50+j*0.05,2)
                 x0 = round(119.80+i*0.05,2)
-                if not isnan(awash_da.data[j,i]):
-                    plt.text(x0,y0,str(int(awash_da.data[j,i])),fontsize= 7,fontweight = 800 ,color ="black")            
-        # 在图上绘制色标
-        rect1 = [0.35, 0.25, 0.03, 0.12]         
-        ax2 = plt.axes(rect1,frameon='False' )
-        ax2.set_xticks([])
-        ax2.set_yticks([])
-        ax2.spines['top'].set_visible(False)
-        ax2.spines['bottom'].set_visible(False)
-        ax2.spines['left'].set_visible(False)
-        ax2.spines['right'].set_visible(False)
-        m.colorbar(cs, location='right', size='30%', pad="-100%",ax = ax2)
-        self.basemask(cs, ax, m, shp_path+'taizhou') 
-        buffer = BytesIO()
-        plt.savefig(buffer,bbox_inches='tight')  
-        plot_img = buffer.getvalue()
-        imb = base64.b64encode(plot_img) 
-        ims = imb.decode()
-        imd = "data:image/png;base64,"+ims
-        return imd,str(start_time)[:16]
-
+                single = {
+                    "type": "Feature",
+                    "properties": {
+                        "value": str(data_xr.data[j, i])
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [x0, y0]
+                    }
+                }
+                data.append(single)
+        return data        
     def multy_plot(self):
         '''返回图片列表'''
         imd_list = []
-        time_list = []
         for i in range(self.time_len):
-            imd,time = self.plot_img(i)
+            imd = self.return_data(i)
             imd_list.append(imd)
-            time_list.append(time)
-        return imd_list,time_list
-    def colormap(self,plot_type):
-        '''色标的自定义'''
-        # 可选用的绘图类型  
-        ## 降水
-#         colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 降水
-#         cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-#         levels = [0,1,2,3,4,5,6,7]
-        ## 云量
-#         colorslist = ['#FFFFFF',"#F0F0F0","#E6E6E6","#D2D2D2","#BEBEBE","#AAAAAA","#969696","#828282","#6E6E6E","#5A5A5A"]# CLOUND
-#         cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=10)
-#         levels = [0,1,2,3,4,5,6,7,8,9,10]
-        ## 气温
-#         colorslist = ["#264FC7","#286BD9","#2B87EB","#2EA4FD","#48BBF0","#62D3E3","#7DEBD7","#9CEFC0","#BBF3A9","#DBF792","#E7E07C","#F3CB66","#FFB551","#FFBB6A","#FFC184","#FFC89E","#FFDABE","#FFECDE","#FFFFFF"]# CLOUND
-#         cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=19)
-#         levels = [6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40]    
-        if plot_type =="T":
-            # 短期气温
-            colorslist = ["#264FC7","#286BD9","#2B87EB","#2EA4FD","#48BBF0","#62D3E3","#7DEBD7","#9CEFC0","#BBF3A9","#DBF792","#E7E07C","#F3CB66","#FFB551","#FFBB6A","#FFC184","#FFC89E","#FFDABE","#FFECDE","#FFFFFF"]# CLOUND
-            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=19)
-            levels = [6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40] 
-        elif plot_type =="Pr01":
-            # 短期降水
-            colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 降水
-            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-            levels = [0,1,2,3,4,5,6,7]
-        elif plot_type =="Pr12":
-            # 降水
-            colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 降水
-            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-            levels = [0,1,2,3,4,5,6,7]
-        elif plot_type =="TMax24":
-            # 高温
-            colorslist = ["#264FC7","#286BD9","#2B87EB","#2EA4FD","#48BBF0","#62D3E3","#7DEBD7","#9CEFC0","#BBF3A9","#DBF792","#E7E07C","#F3CB66","#FFB551","#FFBB6A","#FFC184","#FFC89E","#FFDABE","#FFECDE","#FFFFFF"]# CLOUND
-            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=19)
-            levels = [6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40] 
-        elif plot_type =="TMin24":
-            # 低温
-            colorslist = ["#264FC7","#286BD9","#2B87EB","#2EA4FD","#48BBF0","#62D3E3","#7DEBD7","#9CEFC0","#BBF3A9","#DBF792","#E7E07C","#F3CB66","#FFB551","#FFBB6A","#FFC184","#FFC89E","#FFDABE","#FFECDE","#FFFFFF"]# CLOUND
-            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=19)
-            levels = [6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40] 
-        elif plot_type =="Cloud":
-            colorslist = ['#FFFFFF',"#F0F0F0","#E6E6E6","#D2D2D2","#BEBEBE","#AAAAAA","#969696","#828282","#6E6E6E","#5A5A5A"]# CLOUND
-            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=10)
-            levels = [0,1,2,3,4,5,6,7,8,9,10]
-        elif plot_type =="Special12":
-            colorslist = ['#FFFFFF',"#F0F0F0","#E6E6E6","#D2D2D2","#BEBEBE","#AAAAAA","#969696","#828282","#6E6E6E","#5A5A5A"]# CLOUND
-            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=10)
-            levels = [0,1,2,3,4,5,6,7,8,9,10]
-        return cmaps,levels
-    def label_text(self,plot_type,item):
-        '''图题'''
-        if plot_type in ["T","Pr01","Cloud"]:
-            # 逐小时
-            print("查看数据",item)
-            start_year = int(self.date[0:4])
-            start_month = int(self.date[4:6])
-            start_day = int(self.date[6:8])   
-            init_time = datetime(start_year, start_month, start_day, int(self.plot_time), 0, 0)
-            start_hours = int(self.time[item]-1)
-            start_time = init_time + timedelta(hours = start_hours)
-            end_time =  start_time + timedelta(hours = 1)
-            label = str(start_time)[:16] + "---" + str(end_time)[10:16]
-        else:
-            # 每天
-            start_year = int(self.date[0:4])
-            start_month = int(self.date[4:6])
-            start_day = int(self.date[6:8])   
-            init_time = datetime(start_year, start_month, start_day, int(self.plot_time), 0, 0)
-            start_hours = int(self.time[item]-1)
-            start_time = init_time + timedelta(hours = start_hours)
-            end_time =  start_time + timedelta(hours = 24)
-            label = str(start_time)[:16] + "---" + str(end_time)[10:16]
-        return label, start_time    
-
+        return imd_list
 # 自动站数据查询的class
 
 class zdz_data:
