@@ -57,7 +57,16 @@
         }
 
         .my-div-icon {
-            font-size: 30px;
+            font-size: 20px;
+            /* border:1px solid black; */
+            /* width: 600px;
+            height:150px; */
+            /*background:red;*/
+            /*width:5px;*/
+            color: rgb(22, 21, 21);
+        }
+        .label_plot_text {
+            font-size: 15px;
             /* border:1px solid black; */
             /* width: 600px;
             height:150px; */
@@ -1712,7 +1721,7 @@
 
                         }
                         else if (type == "tool_prodict_product") {
-                            console.log("市台自订正")
+                            
                             $('#product_view').html("")
                             var product_view = document.getElementById('product_view')
                             product_view.style = "width:97.5%;height:97%;background-color:white;margin:15px"
@@ -1724,7 +1733,7 @@
                             var mainui = document.createElement("div")
                             mainui.style = "position:absolute;text-align: center;width: 8%;height: 50%;top:20%;left:90%;overflow-x: hidden;overflow-y: scroll;border-left:2px solid black;padding-top:10px;"
                             mainui.id = "menu-ui"
-                            mainui.setAttribute("class","scrollbar_self")
+                            mainui.setAttribute("class", "scrollbar_self")
 
                             product_view.append(tzmap, mainui)
 
@@ -1738,10 +1747,14 @@
                             var time_plot_taizhou = $("input[name='tz_self_time']:checked").val()
                             var type_plot_taizhou = $("input[name='tz_self']:checked").val()
                             var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                            var isobandsLay = undefined
+                            var title = undefined
+                            var myIcon = undefined
                             // console.log(time_plot_taizhou, type_plot_taizhou)
                             $.ajax({
                                 url: "upload_select_taizhou_data",  // 请求的地址
                                 type: "post",  // 请求方式
+                                //async: false,
                                 timeout: 25000, //设置延迟上限
                                 data: {
                                     'csrfmiddlewaretoken': csrf,
@@ -1756,12 +1769,12 @@
                                         units: "degrees",
                                         weight: 10
                                     };
-                                    console.log(data.back_data)
-                                    let grid = turf.featureCollection(data.back_data)
+                                    // console.log(data.back_data)
+                                    var grid = turf.featureCollection(data.back_data)
                                     var isobands_options = {
                                         zProperty: "value",
                                         commonProperties: {
-                                            "fill-opacity": 0.8
+                                            "fill-opacity": 0.9
                                         },
                                         breaksProperties: [
                                             { fill: "rgb(255,255,255)" },
@@ -1773,36 +1786,33 @@
                                             { fill: "rgb(140,0,65)" }
                                         ]
                                     };
-                                    let levelV = [5, 6, 7,8, 9, 10, 100];
+                                    let levelV = [5, 6, 7, 8, 9, 10, 100];
                                     let isobands = turf.isobands(
                                         grid,
                                         levelV,
                                         isobands_options
                                     );
-
                                     var map = new L.Map('tzmap', {
                                         center: new L.LatLng(28.6, 121.3),//110.763, 41.376   39.62353145, 121.9937485
                                         zoom: 9, //4
+                                        zoomControl:false,
+                                        dragging:false,
+                                        scrollWheelZoom:false,
+                                        doubleClickZoom:false,
                                         attributionControl: false, //是否去除右下角标志
                                         layers: []
                                     });
                                     map.bounds = turf.bbox(boundaries);
-
-
-
                                     L.geoJSON(boundaries, {
                                         style: function (feature) {
                                             return { color: 'black', weight: 1, fillOpacity: 0.1 };
                                         }
                                     }).addTo(map);
-
-                                    var isobandsLay = L.geoJSON(isobands, {
+                                    isobandsLay = L.geoJSON(isobands, {
                                         style: function (feature) {
                                             return { color: '#4264fb', fillColor: feature.properties.fill, weight: 0.1, fillOpacity: 0.8 };
                                         }
                                     });
-
-
                                     //   裁剪数据
                                     let features = [];//裁剪后的结果集
                                     isobands.features.forEach(function (feature1) {
@@ -1828,7 +1838,6 @@
                                             }
                                         });
                                     });
-
                                     //turf.isobands有点不符合业务预期,只有一个等级时,结果集可能为空,无图形显示,写点程序(找出那一个等级，并添加进结果集)补救下
                                     if (features.length == 0) {
                                         let maxAttribute = getMaxAttribute(levelV, grid, isobands_options.breaksProperties);
@@ -1861,48 +1870,187 @@
                                             }
                                         }
                                     }
-
                                     //裁剪结果
-                                    // 叠加标题
+                                    // 叠加标题              
                                     let intersection = turf.featureCollection(features);
-                                    var myIcon = L.divIcon({
-                                        html: "短期降水-12月31日-起报",
+                                    myIcon = L.divIcon({
+                                        html: data.label,
                                         className: 'my-div-icon',
                                         iconSize: [600, 105],
                                     });
-                                    L.marker([29.4, 120.9], { icon: myIcon }).addTo(map);
+                                    title = L.marker([29.4, 120.9], { icon: myIcon }).addTo(map);
+
+                                    var productIcon = L.divIcon({
+                                        html: "短期气温",
+                                        className: 'my-div-icon',
+                                        iconSize: [300, 55],
+
+                                    });
+
+                                    L.marker([29.45, 122.56], { icon: productIcon }).addTo(map);
                                     // 叠加图片
-                                    var imageBounds = [[27.6, 120.1], [27.8, 121.05]];
+                                    var imageBounds = [[27.6, 121.85], [27.8, 122.45]];
                                     // 将图片作为自定义图层加载到地图上（类似于Marker）
                                     L.imageOverlay('static/src/logo.png', imageBounds, { opacity: 1, zIndex: 20 }).addTo(map);
-
-
-
-
                                     var intersectionLay = L.geoJSON(intersection, {
                                         style: function (feature) {
                                             return { color: '#ffffff', fillColor: feature.properties.fill, weight: 0.1, fillOpacity: 0.6 };
                                         }
-                                    })  
-                                    // isobandsLay.addTo(map)
-                                    // console.log(grid,intersection,data.back_data)
+                                    })
                                     intersectionLay.addTo(map)
+                                    //色标
+                                    function colorlabel(isobands_options,map){
+                                        var coloritem = isobands_options.breaksProperties.length
+                                        var colorinitlat = 28.4
+                                        var colorinitlon = 120.5
+                                        var colorwidth = 0.1
+                                        var colorheight = 0.4/coloritem
+                                        var labellist = ['0~0.1','0.1~1','1~10','10~25','25~50','50~100','100']
+                                        for (var i = 0; i < isobands_options.breaksProperties.length; i++){
+                                            var textIcon = L.divIcon({
+                                                html:labellist[i],
+                                                className: 'label_plot_text'
+                                            });
+                                            var colorlat = colorinitlat-i*colorheight
+                                            var colorlon = colorinitlon
+                                            var latlngs = [[colorlat, colorlon],[colorlat, colorlon+colorwidth],[colorlat-colorheight,colorlon+colorwidth],[colorlat-colorheight, colorlon]]
+                                            var colorstr = isobands_options.breaksProperties[i].fill
+                                            var polygon = L.polygon(latlngs, {color: "black",fillColor: colorstr,fillOpacity: 0.8, weight: 1}).addTo(map)
+                                            L.marker([colorlat-colorheight/3, colorlon+colorwidth+0.05], { icon: textIcon }).addTo(map);
+                                        }
 
+                                    }
+                                    
+                                    colorlabel(isobands_options,map)
                                     //页面设置slider
                                     var sliderui = document.getElementById("menu-ui");
-                                    var labels = ["points", "grid", "isobands", "intersection", "grid", "isobands", "intersection", "grid", "isobands", "intersection", "grid", "isobands", "intersection"];
+                                    var labels = data.btn_index
                                     var layerstr = "";
                                     for (var i = 0; i < labels.length; i++) {
-                                        var id = labels[i];
+                                        var id = "time_silder" + i.toString();
 
                                         var singlebtn = document.createElement("button");
                                         singlebtn.id = id;
                                         singlebtn.style = "width:90%;height: 6%;margin-top:8px; border-radius:8px;"
+                                        singlebtn.innerText = labels[i]
                                         singlebtn.onclick = function (e) {
                                             e.preventDefault();
                                             e.stopPropagation();
-                                            let clickedLayer = this.id;
-                                            console.log(clickedLayer)
+                                            let clickedstr = this.id;
+                                            var index = clickedstr.lastIndexOf("r");
+                                            var item = clickedstr.substring(index + 1, clickedstr.length);
+                                            var time_plot_taizhou = $("input[name='tz_self_time']:checked").val()
+                                            var type_plot_taizhou = $("input[name='tz_self']:checked").val()
+                                            var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                            console.log(parseInt(item))
+                                           
+
+                                            $.ajax({
+                                                url: "upload_select_taizhou_data",  // 请求的地址
+                                                type: "post",  // 请求方式
+                                                async: false,
+                                                timeout: 25000, //设置延迟上限
+                                                data: {
+                                                    'csrfmiddlewaretoken': csrf,
+                                                    'plot_type': type_plot_taizhou,
+                                                    'plot_time': time_plot_taizhou,
+                                                    'plot_item': parseInt(item)
+
+                                                },
+                                                dataType: "json",
+                                                success: function (result) {
+                                                    console.log("ok--", result, item)
+                                                    //开始进行数据的叠加
+                                                    intersectionLay.remove()
+                                                    title.remove() 
+                                                    myIcon = L.divIcon({
+                                                        html: result.click_label,
+                                                        className: 'my-div-icon',
+                                                        iconSize: [600, 105],
+                                                    });
+                                                    title = L.marker([29.4, 120.9], { icon: myIcon }).addTo(map);
+                                                    //L.marker([29.4, 120.9], { icon: myIcon }).addTo(map);
+                                                    
+                                                    var grid = turf.featureCollection(result.click_data)
+
+                                                    let isobands = turf.isobands(
+                                                        grid,
+                                                        levelV,
+                                                        isobands_options
+                                                    );
+                                                    //   裁剪数据
+                                                    let features = [];//裁剪后的结果集
+                                                    isobands.features.forEach(function (feature1) {
+                                                        boundaries.features.forEach(function (feature2) {
+                                                            let intersection = null;
+                                                            try {
+                                                                intersection = turf.intersect(feature1, feature2);
+                                                            } catch (e) {
+                                                                try {
+                                                                    //色斑图绘制之后，可能会生成一些非法 Polygon ，例如 在 hole 里存在一些形状（听不懂？去查一下 GeoJSON 的规范），
+                                                                    //我遇到的一个意外情况大概是这样，这种 Polygon 在做 intersect() 操作的时候会报错，所以在代码中做了个容错操作。
+                                                                    //解决的方法通常就是做一次 turf.buffer() 操作，这样可以把一些小的碎片 Polygon 清理掉。
+                                                                    feature1 = turf.buffer(feature1, 0);
+                                                                    intersection = turf.intersect(feature1, feature2);
+                                                                } catch (e) {
+                                                                    intersection = feature1;//实在裁剪不了就不裁剪了,根据业务需求自行决定
+                                                                }
+                                                            }
+                                                            if (intersection != null) {
+                                                                intersection.properties = feature1.properties;
+                                                                intersection.id = (Math.random() * 100000).toFixed(0);
+                                                                features.push(intersection);
+                                                            }
+                                                        });
+                                                    });
+                                                    //turf.isobands有点不符合业务预期,只有一个等级时,结果集可能为空,无图形显示,写点程序(找出那一个等级，并添加进结果集)补救下
+                                                    if (features.length == 0) {
+                                                        let maxAttribute = getMaxAttribute(levelV, grid, isobands_options.breaksProperties);
+                                                        let value = maxAttribute[0];
+                                                        let fill = maxAttribute[1];
+                                                        if (value != '' && fill != '') {
+                                                            //获取网格点Box
+                                                            let gridBox = turf.bbox(grid);
+                                                            //生成网格点范围的面
+                                                            let gridBoxPolygon = [[[gridBox[0], gridBox[1]], [gridBox[0], gridBox[3]], [gridBox[2], gridBox[3]], [gridBox[2], gridBox[1]], [gridBox[0], gridBox[1]]]];
+                                                            //获取网格范围的面与行政边界的交集 Polygon
+                                                            let intersectPolygon = null;
+                                                            let gridoxFeature = { "type": "Feature", "properties": { "fill-opacity": 0.8 }, "geometry": { "type": "Polygon", "coordinates": gridBoxPolygon }, "id": 10 };
+                                                            try {
+                                                                intersectPolygon = turf.intersect(gridoxFeature, boundaries.features[0]);
+                                                            } catch (e) {
+                                                                try {
+                                                                    //色斑图绘制之后，可能会生成一些非法 Polygon ，例如 在 hole 里存在一些形状（听不懂？去查一下 GeoJSON 的规范），
+                                                                    //我遇到的一个意外情况大概是这样，这种 Polygon 在做 intersect() 操作的时候会报错，所以在代码中做了个容错操作。
+                                                                    //解决的方法通常就是做一次 turf.buffer() 操作，这样可以把一些小的碎片 Polygon 清理掉。
+                                                                    gridoxFeature = turf.buffer(gridoxFeature, 0);
+                                                                    intersectPolygon = turf.intersect(gridoxFeature, boundaries.features[0]);
+                                                                } catch (e) {
+                                                                    intersectPolygon = gridoxFeature;//实在裁剪不了就不裁剪了,根据业务需求自行决定
+                                                                }
+                                                            }
+                                                            //结果添加到结果数组
+                                                            if (intersectPolygon != null) {
+                                                                features.push({ "type": "Feature", "properties": { "fill-opacity": 0.8, "fill": fill, "value": value }, "geometry": intersectPolygon.geometry, "id": 0 });
+                                                            }
+                                                        }
+                                                    }
+                                                    //裁剪结果
+                                                    // 叠加标题              
+                                                    let intersection = turf.featureCollection(features);
+                                                    intersectionLay = L.geoJSON(intersection, {
+                                                        style: function (feature) {
+                                                            return { color: '#ffffff', fillColor: feature.properties.fill, weight: 0.1, fillOpacity: 0.6 };
+                                                        }
+                                                    })
+                                                    intersectionLay.addTo(map)
+
+
+                                                }
+                                            })
+
+
+
                                         }
                                         sliderui.appendChild(singlebtn);
                                     }

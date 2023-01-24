@@ -424,7 +424,6 @@ class canvas_plot:
         self.plot_title = plot_title
         self.plot_bar = plot_bar
         self.data = self.read_data()
-
     # 外部函数
     def transform_from_latlon(self,lat, lon):
         lat = np.asarray(lat)
@@ -705,6 +704,34 @@ class plot_tz_product:
             imd = self.return_data(i)
             imd_list.append(imd)
         return imd_list
+    def label_index(self,item):
+        hours_list = self.time.data.tolist()
+        year = int(self.date[0:4])
+        month = int(self.date[4:6])
+        day = int(self.date[6:8]) 
+        hour = int(self.plot_time)
+        inittime = dtt.datetime(year, month, day, hour)
+        if item==0:
+            start = inittime 
+            end = start + dtt.timedelta(hours = hours_list[item]) 
+        else: 
+            start = inittime + dtt.timedelta(hours = int(hours_list[item-1])) #dtt.datetime(year, month, day, hour)
+            end = start + dtt.timedelta(hours = hours_list[item-1]) 
+        label = str(start)[0:16] +" - "+str(end)[0:16]+" "+self.plot_type
+        return label
+    def btn_index(self):
+        buttn_list = []
+        hours_list = self.time.data.tolist()
+        year = int(self.date[0:4])
+        month = int(self.date[4:6])
+        day = int(self.date[6:8]) 
+        hour = int(self.plot_time)
+        inittime = dtt.datetime(year, month, day, hour)
+        for i in hours_list:
+            start = inittime + dtt.timedelta(hours = int(i))
+            label = str(start)[5:7] +"月"+str(start)[8:10] +"日"+str(start)[11:13]+"时"
+            buttn_list.append(label)
+        return buttn_list
 # 自动站数据查询的class
 
 class zdz_data:

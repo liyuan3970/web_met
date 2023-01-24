@@ -36,7 +36,7 @@ class NpEncoder(json.JSONEncoder):
 
 
 def kuaibao(request):
-    # print(this is a index)
+    # #print(this is a index)
     return render(request, 'kuaibao.html', locals())
 
 
@@ -69,7 +69,7 @@ def test_demo(request):
                 class_dir.append(single_list)
     
     view_list=class_dir[0]['img_list']  
-    print("数据",class_dir,"shuju ",view_list)    
+    #print("数据",class_dir,"shuju ",view_list)    
     content = {
         'img_src': img_src,
         'class_dir':class_dir,
@@ -114,7 +114,7 @@ def website(request):
                 class_dir.append(single_list)
     
     view_list=class_dir[0]['img_list']  
-    print("数据",class_dir,"shuju ",view_list)    
+    #print("数据",class_dir,"shuju ",view_list)    
     content = {
         'img_src': img_src,
         'class_dir':class_dir,
@@ -152,14 +152,14 @@ def history_file(request):
 
 # demo_02是气象快报的核心代码主要用来统计数据
 def index_kb(request):
-    # print(this is a index)
+    # #print(this is a index)
     
     return render(request, 'post_data.html', locals())
 
 
 def post_data(request):
     # 获取查询数据
-    # print(request.POST)
+    # #print(request.POST)
     start = request.POST.get('start', '')
     end = request.POST.get('end', '')
     crf = request.POST.get('csrfmiddlewaretoken', '')
@@ -170,7 +170,7 @@ def post_data(request):
         'crf': crf,
         'city': city,
     }
-    print(dicr, "月份:", start[0:3])
+    #print(dicr, "月份:", start[0:3])
     #
 
     sql = "test"
@@ -178,7 +178,7 @@ def post_data(request):
     RR_County, tmp_max_County, tmp_min_County = sql_worker.comput_county()
     sql_worker.comput_IIiii()
     imd, imd_tmax, imd_tmin, tz_json, RR_sum, RR_rx, level_rain, RR_station_rank, RR_station_bar, tmp_min_scatter, tmp_max_scatter, tmp_event_scatter, tmp_station_bar, VV_min_scatter, fFy_wind7up_scatter, vv_time, vv_value, data_fFy_list = sql_worker.data_output()
-    print(RR_station_rank)
+    #print(RR_station_rank)
     context = {
         'img': imd,
         'img_tmax': imd_tmax,
@@ -208,7 +208,7 @@ def post_data(request):
 
 def url_data(request):
     # 处理点击数据时链接url显示单站数据
-    print("链接url")
+    #print("链接url")
     return redirect('https://www.baidu.com/')
 
 
@@ -233,12 +233,12 @@ def login_main(request):
             passwd = request.POST.get('passwd', '')
             user = request.POST.get('user', '')
             if user == '1' and passwd == '1':
-                print("成功")
+                #print("成功")
                 # return redirect('/index')
                 return render(request, 'index.html')
             else:
-                print("失败")
-                print(request.POST)
+                #print("失败")
+                #print(request.POST)
                 # return redirect('/index/')
                 return render(request, 'login.html')
                 # return HttpResponse("失败")
@@ -250,7 +250,7 @@ def quick_look(request):
     crf = request.POST.get('csrfmiddlewaretoken', '')
     # data_list = request.POST['data_post']
     # 获取核心数据，保存版本、编写解析函数、保存文档为word、
-    print("获取到的预览数据:", data_list)
+    #print("获取到的预览数据:", data_list)
     return render(request, 'index.html')
 
 
@@ -273,17 +273,32 @@ def plot_self_data(request):
     return JsonResponse(context2)
 
 
-
+# 订正产品
 def upload_select_taizhou_data(request):
     plot_type = request.POST.get('plot_type', '')
     plot_time = request.POST.get('plot_time', '')
-    product = data_class.plot_tz_product(plot_type, plot_time)
-    back_data = product.return_data(0)
-    context = {
-        'data_test': 723.5,
-        'back_data':back_data
-    }
-    return JsonResponse(context)
+    plot_item = request.POST.get('plot_item', '')
+    ##print("订正时次",plot_item)
+    if plot_item:
+        product = data_class.plot_tz_product(plot_type, plot_time)
+        back_data = product.return_data(int(plot_item))
+        label = product.label_index(int(plot_item))
+        context = {
+            'click_data': back_data,
+            'click_label': label
+        }
+        return JsonResponse(context)
+    else:
+        product = data_class.plot_tz_product(plot_type, plot_time)
+        back_data = product.return_data(0)
+        label = product.label_index(0)
+        btn_index = product.btn_index()
+        context = {
+            'back_data': back_data,
+            'label': label,
+            'btn_index': btn_index
+        }
+        return JsonResponse(context)
 
 
 
@@ -299,7 +314,7 @@ def create_new_doc(request):
     data_writers = [i['name'] for i in writers]
     data_unity = [i['name'] for i in unity]
     data_documenttype = [i['name'] for i in documenttype]
-    # print("返回数据",writers)
+    # #print("返回数据",writers)
     context = {
         'data_publisher': data_publisher,
         'data_writers': data_writers,
@@ -402,7 +417,7 @@ def open_load_object(request):
             if int(j['data']['id'])==i:
                 single_content = j['data']['data']
                 content_list.append(single_content)
-                print("查找数据",j['name'],j['data']['id'],j['types'],j)
+                #print("查找数据",j['name'],j['data']['id'],j['types'],j)
                 break
     context = {
         'type_list':verson_content,
@@ -459,7 +474,7 @@ def leader_Data_post(request):
         v['recive_unity'] = version['recive_unity']
         version_list.append(v)
 
-    print("呈送", version_list, name_list)
+    #print("呈送", version_list, name_list)
     context = {
         'status': "ok",
         'version': version_list,
@@ -486,7 +501,7 @@ def ec_single_data(request):
     else:
         ec_worker = data_class.ec_data_point(start_time,end_time) 
         data = ec_worker.comput_average(start_time,end_time)
-    print("ec-->ok")
+    #print("ec-->ok")
     # 数据的返回
     context = {
         'status': "ok",
@@ -563,7 +578,7 @@ def tool_zdz_wind(request):
     else:
         zdz_worker = data_class.zdz_data(start, end)
         data_wind_list, sort_html = zdz_worker.wind_data()
-    # print(data_wind_list)
+    # #print(data_wind_list)
     context = {
         'status': "ok",
         'data_wind_list': json.dumps(data_wind_list, cls=NpEncoder),
@@ -584,7 +599,7 @@ def tool_zdz_view(request):
     else:
         zdz_worker = data_class.zdz_data(start, end)
         data_view_list, sort_html = zdz_worker.view_data()
-    # print(data_wind_list)
+    # #print(data_wind_list)
     context = {
         'status': "ok",
         'data_view_list': json.dumps(data_view_list, cls=NpEncoder),
@@ -621,7 +636,7 @@ def tool_zdz_daily(request):
     start = '2022-01-25 20:00'
     end = '2022-02-10 06:00'
     date = request.POST.get('date', '')
-    print('获取的时间', date)
+    #print('获取的时间', date)
     global zdz_worker
     if zdz_worker:
         daily_data = zdz_worker.pre_day(date)
