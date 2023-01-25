@@ -16,10 +16,12 @@ from numpy import random
 
 from zdz.common.utils import data_class, func
 from ..models.doucument_model import *
+from ..models.user_model import *
 # pdf的插件
 from weasyprint import HTML
 from django.http import HttpResponse, Http404, StreamingHttpResponse
 import datetime
+from django.contrib.auth import authenticate
 
 class NpEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -224,7 +226,7 @@ def index_main(request):
     return render(request, 'index.html')
     # return render(request,'main.html',context)
 
-
+# 登录页面的完善
 def login_main(request):
     if request.method == 'GET':
         return render(request, 'login.html')
@@ -232,18 +234,12 @@ def login_main(request):
         if request.method == 'POST':
             passwd = request.POST.get('passwd', '')
             user = request.POST.get('user', '')
-            if user == '1' and passwd == '1':
-                #print("成功")
-                # return redirect('/index')
-                return render(request, 'index.html')
+            userinfo=authenticate(username=user,password=passwd)
+            if userinfo is None:
+                return redirect('/login')             
             else:
-                #print("失败")
-                #print(request.POST)
-                # return redirect('/index/')
-                return render(request, 'login.html')
-                # return HttpResponse("失败")
-    # return render(request,'index.html')
-
+                return redirect('/index')
+                
 
 def quick_look(request):
     data_list = request.POST.get('data_post', '')
