@@ -57,20 +57,35 @@
                                 style="width:15%;height:60%;float:right;margin-right:5%;background-color: brown;" />
                             <script>
                                 
-                                $("#login").click(function(){
-                                    // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                                    $.post(
-                                        "user/login/", 
-                                        {
-                                            // 'csrfmiddlewaretoken': csrf,
-                                            'username': $('#user').val(),
-                                            'password': $('#passwd').val()
-                                        }, 
-                                         function (result) {
-                                            console.log(result)
+                                $("#login").click(function () {
+                                // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                $.post(
+                                    "user/login",
+                                    {
+                                        // 'csrfmiddlewaretoken': csrf,
+                                        'username': $('#user').val(),
+                                        'password': $('#passwd').val()
+                                    },
+                                    function (result) {
+                                        
 
+                                        // {#登录成功#}
+                                        if (result.code === 200) {
+                                            // {#存储人物信息到本地#}
+                                            console.log(result)
+                                            let data = result.data;
+                                            localStorage.setItem("token", data.access);
+                                            localStorage.setItem("companyName", data.company_name);
+                                            localStorage.setItem("companyType", data.company_type);
+                                            localStorage.setItem("name", data.name);
+                                            localStorage.setItem("roleType", data.role_type);
+                                            localStorage.setItem("userId", data.user_id);
                                             window.location.replace('index')
-                                        });
+                                        } else {
+                                            // {#登录不成功信息弹窗#}
+                                            alert(result.err_msg)
+                                        }
+                                    });
                                     // $.ajax({
                                     //     url: "login",  // 请求的地址
                                     //     type: "post",  // 请求方式

@@ -12,8 +12,8 @@ urlpatterns = [
     re_path(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT}, name='static'),
     path('admin', admin.site.urls),
     # rest_framework_simplejwt自带的得到token
-    path('user/login/', LoginView.as_view()),
+    path('user/login', LoginView.as_view()),
     # 刷新jwt
-    path('user/login/refresh/', LoginRefreshView.as_view()),
+    path('user/login/refresh', LoginRefreshView.as_view()),
     path('', include('zdz.urls')),
 ]

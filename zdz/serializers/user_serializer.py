@@ -29,24 +29,19 @@ class LoginSerializer(TokenObtainPairSerializer):
 
     def validate(self, attrs):
         data = super().validate(attrs)
-
         refresh = self.get_token(self.user)
-
         data["refresh"] = str(refresh)
         data["access"] = str(refresh.access_token)
         data["user_id"] = self.user.id
         data["name"] = self.user.name
-
         data["role_type"] = self.user.role_type
         data["company_type"] = self.user.company_type
         data["company_name"] = self.user.company_name
-
         ret = {
             "code": status.HTTP_200_OK,
             "msg": "success",
             "data": data
         }
-
         return ret
 
 
