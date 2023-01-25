@@ -792,6 +792,7 @@
                                             responseType: "arraybuffer",
                                             mimeType: "text/plain; charset=x-user-defined",
                                             success: function (data) {
+                                                console.log(data)
                                                 var rawLength = data.length;
                                                 var array = new Uint8Array(new ArrayBuffer(rawLength));
                                                 for (i = 0; i < rawLength; i++) {

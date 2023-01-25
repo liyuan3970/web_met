@@ -28,7 +28,7 @@
             <!-- 登录的界面 -->
             <div style="display:flex;margin: 15px auto;margin-top: -10%;width:30%;height:35%;; background-color: rgb(55, 55, 209);">
                 <div style="width:100%;height:100%;background-color:rgb(22, 119, 197)">
-                    {% csrf_token %}
+                    <!-- {% csrf_token %} -->
                     <div style="width:100%;height:100%;background-color:rgb(14, 158, 230)">
                         <div style="display:flex;align-items:center;width:100%;height:20%;background-color:rgb(231, 162, 71)">
                             <h3 style="margin: 15px auto">台州市气象决策服务系统</h3>
@@ -58,16 +58,17 @@
                             <script>
                                 
                                 $("#login").click(function(){
-                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                    // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                                     $.post(
-                                        "login", 
+                                        "user/login/", 
                                         {
-                                            'csrfmiddlewaretoken': csrf,
-                                            'user': $('#user').val(),
-                                            'passwd': $('#passwd').val()
+                                            // 'csrfmiddlewaretoken': csrf,
+                                            'username': $('#user').val(),
+                                            'password': $('#passwd').val()
                                         }, 
                                          function (result) {
-                                            console.log("chenggong ")
+                                            console.log(result)
+
                                             window.location.replace('index')
                                         });
                                     // $.ajax({
@@ -90,7 +91,7 @@
                             </script>
                         </div>
                     </div>
-                    {% csrf_token %}
+                    <!-- {% csrf_token %} -->
                 </div>
 
             </div>
