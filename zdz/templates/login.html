@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+          content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes"/>
     <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" /> -->
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
@@ -16,89 +16,104 @@
 </head>
 
 <body>
-    <div
+<div
         style="display: flex;align-content:flex-start;position: absolute; justify-content: center; flex-wrap: wrap; width: 100%;height: 100%; color: black; background-color: rgb(243, 244, 247);">
-        <!-- 页面整体的div -->
-        <!-- 页面的导航栏 -->
-        <div
+    <!-- 页面整体的div -->
+    <!-- 页面的导航栏 -->
+    <div
             style="display:table;width:100%;height:5%;vertical-align:middle; justify-content: center; background-color: rgb(33, 208, 231);">
-            <img style="display: table-cell;vertical-align:middle" src="static/src/logo.png">
-        </div>
-        <div style="display:flex;align-items:center;width:100%;height:95%; background-color: rgb(255, 255, 255);">
-            <!-- 登录的界面 -->
-            <div style="display:flex;margin: 15px auto;margin-top: -10%;width:30%;height:35%;; background-color: rgb(55, 55, 209);">
-                <div style="width:100%;height:100%;background-color:rgb(22, 119, 197)">
-                    <!-- {% csrf_token %} -->
-                    <div style="width:100%;height:100%;background-color:rgb(14, 158, 230)">
-                        <div style="display:flex;align-items:center;width:100%;height:20%;background-color:rgb(231, 162, 71)">
-                            <h3 style="margin: 15px auto">台州市气象决策服务系统</h3>
+        <img style="display: table-cell;vertical-align:middle" src="static/src/logo.png">
+    </div>
+    <div style="display:flex;align-items:center;width:100%;height:95%; background-color: rgb(255, 255, 255);">
+        <!-- 登录的界面 -->
+        <div style="display:flex;margin: 15px auto;margin-top: -10%;width:30%;height:35%;; background-color: rgb(55, 55, 209);">
+            <div style="width:100%;height:100%;background-color:rgb(22, 119, 197)">
+                <!-- {% csrf_token %} -->
+                <div style="width:100%;height:100%;background-color:rgb(14, 158, 230)">
+                    <div style="display:flex;align-items:center;width:100%;height:20%;background-color:rgb(231, 162, 71)">
+                        <h3 style="margin: 15px auto">台州市气象决策服务系统</h3>
+                    </div>
+                    <div style="width:100%;height:60%;">
+                        <div style="width:100%;height:25%"></div>
+                        <div style="width:100%;height:25%;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label style="font-size:25px">账号:</label>
+                            <input id="user" name="user" type="text" placeholder="请输入用户"
+                                   style="width:50%;height:80%;">
                         </div>
-                        <div style="width:100%;height:60%;">
-                            <div style="width:100%;height:25%"></div>
-                            <div style="width:100%;height:25%;">
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <label style="font-size:25px">账号:</label>
-                                <input id="user" name="user" type="text" placeholder="请输入用户"
-                                    style="width:50%;height:80%;">
-                            </div>
-                            <div style="width:100%;height:25%;">
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <label style="font-size:25px">密码:</label>
-                                <input id="passwd" name="passwd" type="password" placeholder="请输入密码" style="width:50%;height:80%;">
-                            </div>
-                        </div>
-                        <div style="width:100%;height:20%;background-color:rgb(231, 162, 71)">
-                            <div style="width:100%;height:20%"></div>
-                            <input id="login" type="submit" value="登录"
-                                style="width:15%;height:60%;float:right;margin-right:5%;background-color: brown;" />
-                            <script>
-                                
-                                $("#login").click(function(){
-                                    // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                                    $.post(
-                                        "user/login/", 
-                                        {
-                                            // 'csrfmiddlewaretoken': csrf,
-                                            'username': $('#user').val(),
-                                            'password': $('#passwd').val()
-                                        }, 
-                                         function (result) {
-                                            console.log(result)
-
-                                            window.location.replace('index')
-                                        });
-                                    // $.ajax({
-                                    //     url: "login",  // 请求的地址
-                                    //     type: "post",  // 请求方式
-                                    //     timeout: 250, //设置延迟上限
-                                    //     data: {
-                                    //         'csrfmiddlewaretoken': csrf,
-                                    //         'user': $('#user').val(),
-                                    //         'passwd': $('#passwd').val()
-                                    //     },
-                                    //     dataType: "json",
-                                    //     success: function (data) {
-                                    //         // 返回以后创建一个对象实例
-                                    //     }
-                                    // })
-
-                                })
-                                
-                            </script>
+                        <div style="width:100%;height:25%;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label style="font-size:25px">密码:</label>
+                            <input id="passwd" name="passwd" type="password" placeholder="请输入密码"
+                                   style="width:50%;height:80%;">
                         </div>
                     </div>
-                    <!-- {% csrf_token %} -->
+                    <div style="width:100%;height:20%;background-color:rgb(231, 162, 71)">
+                        <div style="width:100%;height:20%"></div>
+                        <input id="login" type="submit" value="登录"
+                               style="width:15%;height:60%;float:right;margin-right:5%;background-color: brown;"/>
+                        <script>
+
+                            $("#login").click(function () {
+                                // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                $.post(
+                                    "user/login",
+                                    {
+                                        // 'csrfmiddlewaretoken': csrf,
+                                        'username': $('#user').val(),
+                                        'password': $('#passwd').val()
+                                    },
+                                    function (result) {
+                                        console.log(result)
+
+                                        {#登录成功#}
+                                        if (result.code === 200) {
+                                            {#存储人物信息到本地#}
+                                            let data = result.data.access;
+                                            localStorage.setItem("token", data.access);
+                                            localStorage.setItem("companyName", data.company_name);
+                                            localStorage.setItem("companyType", data.company_type);
+                                            localStorage.setItem("name", data.name);
+                                            localStorage.setItem("roleType", data.role_type);
+                                            localStorage.setItem("userId", data.user_id);
+                                            window.location.replace('index')
+                                        } else {
+                                            {#登录不成功信息弹窗#}
+                                            alert(result.err_msg)
+                                        }
+                                    });
+                                // $.ajax({
+                                //     url: "login",  // 请求的地址
+                                //     type: "post",  // 请求方式
+                                //     timeout: 250, //设置延迟上限
+                                //     data: {
+                                //         'csrfmiddlewaretoken': csrf,
+                                //         'user': $('#user').val(),
+                                //         'passwd': $('#passwd').val()
+                                //     },
+                                //     dataType: "json",
+                                //     success: function (data) {
+                                //         // 返回以后创建一个对象实例
+                                //     }
+                                // })
+
+                            })
+
+                        </script>
+                    </div>
                 </div>
-
+                <!-- {% csrf_token %} -->
             </div>
+
         </div>
-
-
     </div>
+
+
+</div>
 
 </body>
 
