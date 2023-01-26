@@ -60,6 +60,9 @@ urlpatterns = [
     path('tool_zdz_daily', views.tool_zdz_daily),
     # EC站点数据的查询渲染
     path('ec_single_data', views.ec_single_data),
+    # 自订正降水的查询
+    path('select_self_plot', views.select_self_plot),
+
 ]
 
 router = DefaultRouter()

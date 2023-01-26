@@ -11,6 +11,13 @@
     <link rel="stylesheet" type="text/css" href="static/css/jquery.datetimepicker.css" />
     <script src="static/js/jquery.datetimepicker.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.actual/1.0.19/jquery.actual.min.js"></script>
+    <!-- leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+        integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <!-- 使用turf -->
+    <script src="https://unpkg.com/@turf/turf/turf.min.js"></script>
     <!-- echart -->
     <script type="text/javascript" src="static/js/echarts.min.js"></script>
     <script type="text/javascript" src="static/js/echarts-gl.min.js"></script>
@@ -21,6 +28,7 @@
     <!-- 数据 -->
     <script src='static/js/taizhou.js'></script>
     <script src='static/js/county.js'></script>
+    <script src='static/js/taizhoulist.js'></script>
     <title>快速画图</title>
     <style type="text/css">
         .scrollbar::-webkit-scrollbar {
@@ -42,7 +50,7 @@
                     <li>
                         <a id="quick_plot_link" href="#canvas-2" data-toggle="tab">快速绘图</a>
                     </li>
-                    
+
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="canvas-1">
@@ -136,10 +144,10 @@
                             </div>
                             <!-- 预览 -->
                             <div style="width: 50%;height:700px;border: 1px solid">
-                                <div id="self_plot_div" style="width: 100%;height:75%;border: 1px solid">
+                                <div id="self_plot_div" style="width: 100%;height:100%;border: 1px solid">
 
                                 </div>
-                                <div style="display: inline-flex;width: 100%;height:25%;border: 1px solid">
+                                <!-- <div style="display: inline-flex;width: 100%;height:25%;border: 1px solid">
                                     <div id="self_bar" style="width: 60%;height:100%;border: 1px solid">
 
                                     </div>
@@ -147,12 +155,36 @@
 
                                     </div>
 
-                                </div>
+                                </div> -->
 
                             </div>
                             <!-- 自定义画图的核心js -->
                             <script src='static/js/self_plot.js'></script>
                             <script>
+                                // 绘制底图
+                                var boundaries = {
+                                    type: "FeatureCollection",
+                                    name: "boundaries",
+                                    crs: { type: "name", properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+                                    features: taizhoulist
+                                };
+                                var lines = L.geoJSON(boundaries, {
+                                    style: function (feature) {
+                                        return { color: 'black', weight: 1, fillOpacity: 0.1 };
+                                    }
+                                })
+                                var map = new L.Map('self_plot_div', {
+                                    center: new L.LatLng(28.7, 121.1),//110.763, 41.376   39.62353145, 121.9937485
+                                    zoom: 9, //4
+                                    zoomControl: false,
+                                    dragging: false,
+                                    // scrollWheelZoom: false,
+                                    doubleClickZoom: false,
+                                    attributionControl: false, //是否去除右下角标志
+                                    bounds:turf.bbox(boundaries),
+                                    layers: [lines]
+                                });
+
                                 // 关闭对话并传参
                                 $('#plot_self_close').click(function () {
                                     window.parent.postMessage({
@@ -198,13 +230,16 @@
                                     var self_plot_end_time = $('#self_plot_end_time').val();
                                     self_plot_object.download(csrf, self_plot_start_time, self_plot_end_time)
                                 })
+                                //绘制图片时的代码
                                 $('#plot_self_button').click(function () {
-                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                                    self_plot_object.plot(csrf)
+                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();                                                                  
+                                    self_plot_object.plot(csrf,map)
+                                    
+                                    //isobandsLay.addTo(map)
 
                                 })
                                 $('#plot_self_flash').click(function () {
-                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();                                
                                     self_plot_object.flush(csrf)
 
                                 })
@@ -219,9 +254,12 @@
                                 <div style="display: flex;width: 100%;height:100%;border: 1px solid">
                                     <!-- 底图选项 -->
                                     <div style="width: 20%;height:100%;border: 1px solid">
-                                        <button id="bg_town" style="width: 100%;height:30%;background-image: url(static/src/shp_county.png);background-size: 100%;background-repeat: no-repeat;"></button>
-                                        <button style="width: 100%;height:30%;background-image: url(static/src/shp_county.png);background-size: 100%;background-repeat: no-repeat;"></button>
-                                        <button style="width: 100%;height:30%;background-image: url(static/src/shp_county.png);background-size: 100%;background-repeat: no-repeat;"></button>
+                                        <button id="bg_town"
+                                            style="width: 100%;height:30%;background-image: url(static/src/shp_county.png);background-size: 100%;background-repeat: no-repeat;"></button>
+                                        <button
+                                            style="width: 100%;height:30%;background-image: url(static/src/shp_county.png);background-size: 100%;background-repeat: no-repeat;"></button>
+                                        <button
+                                            style="width: 100%;height:30%;background-image: url(static/src/shp_county.png);background-size: 100%;background-repeat: no-repeat;"></button>
 
                                     </div>
                                     <script>
@@ -257,8 +295,10 @@
                                                     name="taizhou_quick_plot_type"
                                                     value="scatter_pic">&nbsp;&nbsp;&nbsp;
 
-                                                <input id="forward_canvas" type="button" value="前进" style="float: right;">
-                                                <input id="reback_canvas" type="button" value="撤回" style="float: right;">
+                                                <input id="forward_canvas" type="button" value="前进"
+                                                    style="float: right;">
+                                                <input id="reback_canvas" type="button" value="撤回"
+                                                    style="float: right;">
                                                 <input id="flash_canvas" type="button" value="刷新" style="float: right;">
 
                                             </div>
@@ -316,7 +356,7 @@
                                                     <option value="red">红色</option>
                                                     <option value="blue">蓝色</option>
                                                 </select>
-                                                
+
                                                 <input id="color_bar_del" type="button" value="删除"
                                                     onclick="color_bar_del()"
                                                     style="width: 10%;height: 35%;float: right;">
@@ -325,39 +365,39 @@
                                             </div>
 
                                             <script type="text/javascript">
-                                                $('#flash_canvas').click(function () { 
+                                                $('#flash_canvas').click(function () {
                                                     const quick_plot = document.getElementById("quick_plot");
                                                     quick_plot_object.geoData = tz_json
                                                     quick_plot_object.run(quick_plot)
 
-                                                    
-                                                                                               
-                                                })
-                                                
-                                                $('#reback_canvas').click(function () {    
-                                                    if (quick_plot_object.memory_list.length-1>quick_plot_object.click_num){
-                                                        quick_plot_object.ctx_quick_plot.clearRect(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH)                                      
-                                                        quick_plot_object.ctx_quick_plot.putImageData(quick_plot_object.memory_list[quick_plot_object.memory_list.length -2-quick_plot_object.click_num], 0, 0);
-                                                        quick_plot_object.click_num = quick_plot_object.click_num + 1  
-                                                         
 
-                                                    }
-                                                                                               
+
                                                 })
 
-                                                $('#forward_canvas').click(function () { 
-                                                    if (quick_plot_object.click_num!=0){
-                                                        quick_plot_object.ctx_quick_plot.clearRect(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH)  
-                                                        quick_plot_object.ctx_quick_plot.putImageData(quick_plot_object.memory_list[quick_plot_object.memory_list.length-quick_plot_object.click_num], 0, 0);
-                                                        quick_plot_object.click_num = quick_plot_object.click_num - 1  
-                                                        
-                                                    }
-                                                    else{
-                                                        quick_plot_object.ctx_quick_plot.clearRect(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH)  
-                                                        quick_plot_object.ctx_quick_plot.putImageData(quick_plot_object.memory_list[quick_plot_object.memory_list.length-1], 0, 0);
+                                                $('#reback_canvas').click(function () {
+                                                    if (quick_plot_object.memory_list.length - 1 > quick_plot_object.click_num) {
+                                                        quick_plot_object.ctx_quick_plot.clearRect(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH)
+                                                        quick_plot_object.ctx_quick_plot.putImageData(quick_plot_object.memory_list[quick_plot_object.memory_list.length - 2 - quick_plot_object.click_num], 0, 0);
+                                                        quick_plot_object.click_num = quick_plot_object.click_num + 1
 
-                                                    }  
-                                                                                                 
+
+                                                    }
+
+                                                })
+
+                                                $('#forward_canvas').click(function () {
+                                                    if (quick_plot_object.click_num != 0) {
+                                                        quick_plot_object.ctx_quick_plot.clearRect(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH)
+                                                        quick_plot_object.ctx_quick_plot.putImageData(quick_plot_object.memory_list[quick_plot_object.memory_list.length - quick_plot_object.click_num], 0, 0);
+                                                        quick_plot_object.click_num = quick_plot_object.click_num - 1
+
+                                                    }
+                                                    else {
+                                                        quick_plot_object.ctx_quick_plot.clearRect(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH)
+                                                        quick_plot_object.ctx_quick_plot.putImageData(quick_plot_object.memory_list[quick_plot_object.memory_list.length - 1], 0, 0);
+
+                                                    }
+
                                                 })
 
                                                 $('#color_select_option').change(function () {
@@ -453,7 +493,7 @@
 
 
                     </div>
-                    
+
                 </div>
             </div>
         </div>

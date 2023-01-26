@@ -39,6 +39,20 @@ class SelfDefine(BaseModel):
         return str(self.types) + ":" + self.name
 
 
+class SelfPlot(BaseModel):
+    '''存放自定义画图的数据'''
+    types = models.CharField(max_length=200, verbose_name='名称')
+    time = models.CharField(max_length=200, verbose_name='时间')
+    data = models.JSONField(null=False)
+    class Meta:
+        verbose_name = verbose_name_plural = '自定义画图'
+        db_table = 'selfplot'  # 通过db_table自定义数据表名
+    def __str__(self):
+        return str(self.types)
+
+
+
+
 class Unity(BaseModel):
     """单位名称"""
     name = models.CharField(max_length=200, verbose_name='单位')

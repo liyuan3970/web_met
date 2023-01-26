@@ -1,6 +1,6 @@
 const self_plot_object = {
     data_canvas: {
-        "station_list": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'],
+        "station_list": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20','21','22','23','24'],
         "station": [
             [120.5, 28.5, 99],
             [120.92, 28.78, 58.3],
@@ -22,7 +22,10 @@ const self_plot_object = {
             [121.21, 28.20, 65],
             [121.15, 28.25, 68],
             [120.95, 28.60, 68],
-            [121.00, 28.60, 99]
+            [121.00, 28.60, 99],
+            [121.00, 29.35, 99],
+            [121.90, 28.70, 69],
+            [122.00, 28.50, 69]
 
         ]
     },
@@ -86,99 +89,162 @@ const self_plot_object = {
             }
         })
     },
-    plot: function (csrf) {
+    plot: function (csrf,map,isobandsLay) {
+        map.eachLayer(function (layer) {
+            if (!layer._container || ('' + jQuery(layer._container).attr('class')).replace(/\s/g, '') != 'leaflet-layer') {
+                layer.remove();
+            }
+        });
+        var grid = undefined
+        var points = undefined
         var data_canvas = this.data_canvas
+        var fea = data_canvas.station.map(i => {
+            return {
+                type: "Feature",
+                properties: {
+                    value: i[2].toString()
+                },
+                geometry: {
+                    type: "Point",
+                    coordinates: [i[0], i[1]]
+                }
+            }
+        }
+        )
+        points = turf.featureCollection(fea);
+        var interpolate_options = {
+            gridType: "points",
+            property: "value",
+            units: "degrees",
+            weight: 10
+          };
+        grid = turf.interpolate(points, 0.05, interpolate_options);
+        
+        var isobands_options = {
+            zProperty: "value",
+            commonProperties: {
+                "fill-opacity": 0.9
+            },
+            breaksProperties: [
+                {fill: "rgb(255,255,255)"},
+                {fill: "rgb(140,246,130)"},
+                {fill: "rgb(0,191,27)"},
+                {fill: "rgb(62,185,255)"},
+                {fill: "rgb(25,0,235)"},
+                {fill: "rgb(255,0,255)"},
+                {fill: "rgb(140,0,65)"}
+            ]
+        };
+        let levelV = [10, 20, 30, 50, 70, 90, 100];
+        let isobands = turf.isobands(
+            grid,
+            levelV,
+            isobands_options
+        );
+        isobandsLay = L.geoJSON(isobands, {
+            style: function (feature) {
+                return {
+                    color: '#4264fb',
+                    fillColor: feature.properties.fill,
+                    weight: 0.1,
+                    fillOpacity: 0.8
+                };
+            }
+        });
+        //   裁剪数据
+        let features = [];//裁剪后的结果集
+        isobands.features.forEach(function (feature1) {
+            boundaries.features.forEach(function (feature2) {
+                let intersection = null;
+                try {
+                    intersection = turf.intersect(feature1, feature2);
+                } catch (e) {
+                    try {
+                        //色斑图绘制之后，可能会生成一些非法 Polygon ，例如 在 hole 里存在一些形状（听不懂？去查一下 GeoJSON 的规范），
+                        //我遇到的一个意外情况大概是这样，这种 Polygon 在做 intersect() 操作的时候会报错，所以在代码中做了个容错操作。
+                        //解决的方法通常就是做一次 turf.buffer() 操作，这样可以把一些小的碎片 Polygon 清理掉。
+                        feature1 = turf.buffer(feature1, 0);
+                        intersection = turf.intersect(feature1, feature2);
+                    } catch (e) {
+                        intersection = feature1;//实在裁剪不了就不裁剪了,根据业务需求自行决定
+                    }
+                }
+                if (intersection != null) {
+                    intersection.properties = feature1.properties;
+                    intersection.id = (Math.random() * 100000).toFixed(0);
+                    features.push(intersection);
+                }
+            });
+        });
+        //turf.isobands有点不符合业务预期,只有一个等级时,结果集可能为空,无图形显示,写点程序(找出那一个等级，并添加进结果集)补救下
+        if (features.length == 0) {
+            let maxAttribute = getMaxAttribute(levelV, grid, isobands_options.breaksProperties);
+            let value = maxAttribute[0];
+            let fill = maxAttribute[1];
+            if (value != '' && fill != '') {
+                //获取网格点Box
+                let gridBox = turf.bbox(grid);
+                //生成网格点范围的面
+                let gridBoxPolygon = [[[gridBox[0], gridBox[1]], [gridBox[0], gridBox[3]], [gridBox[2], gridBox[3]], [gridBox[2], gridBox[1]], [gridBox[0], gridBox[1]]]];
+                //获取网格范围的面与行政边界的交集 Polygon
+                let intersectPolygon = null;
+                let gridoxFeature = {
+                    "type": "Feature",
+                    "properties": {"fill-opacity": 0.8},
+                    "geometry": {"type": "Polygon", "coordinates": gridBoxPolygon},
+                    "id": 10
+                };
+                try {
+                    intersectPolygon = turf.intersect(gridoxFeature, boundaries.features[0]);
+                } catch (e) {
+                    try {
+                        //色斑图绘制之后，可能会生成一些非法 Polygon ，例如 在 hole 里存在一些形状（听不懂？去查一下 GeoJSON 的规范），
+                        //我遇到的一个意外情况大概是这样，这种 Polygon 在做 intersect() 操作的时候会报错，所以在代码中做了个容错操作。
+                        //解决的方法通常就是做一次 turf.buffer() 操作，这样可以把一些小的碎片 Polygon 清理掉。
+                        gridoxFeature = turf.buffer(gridoxFeature, 0);
+                        intersectPolygon = turf.intersect(gridoxFeature, boundaries.features[0]);
+                    } catch (e) {
+                        intersectPolygon = gridoxFeature;//实在裁剪不了就不裁剪了,根据业务需求自行决定
+                    }
+                }
+                //结果添加到结果数组
+                if (intersectPolygon != null) {
+                    features.push({
+                        "type": "Feature",
+                        "properties": {"fill-opacity": 0.8, "fill": fill, "value": value},
+                        "geometry": intersectPolygon.geometry,
+                        "id": 0
+                    });
+                }
+            }
+        }
+        let intersection = turf.featureCollection(features);
+        
+        var intersectionLay = L.geoJSON(intersection, {
+            style: function (feature) {
+                return {
+                    color: 'black',
+                    fillColor: feature.properties.fill,
+                    weight: 0.1,
+                    fillOpacity: 0.7
+                };
+            }
+        })
+        // intersectionLay.remove()
+        intersectionLay.addTo(map)
+        
+        //
         // 图片
         $.ajax({
             url: "upload_selfplot_data",  // 请求的地址
             type: "post",  // 请求方式
             data: {
-                "plot_self_data": JSON.stringify(data_canvas),
+                "plot_self_data": JSON.stringify(grid),
                 'csrfmiddlewaretoken': csrf
             },
             dataType: "json",
             success: function (data) {
-                $('#self_table').html("")
-                // 得到请求的数据
-                var plotImg = new Image();
-                plotImg.src = data.img
-                plotImg.style = "width:100%;height:100%"
-                // js构建前端模板
-                // var self_plot_div = document.getElementById('self_plot_div')
-                $('#self_plot_div').html("")
-                $('#self_plot_div').append(plotImg)
-                // self_plot_div.append(plotImg)
-
-                // 柱状图
-                var chartDom = document.getElementById('self_bar');
-                var myChart_bar = echarts.init(chartDom);
-                var option;
-
-                option = {
-                    tooltip: {
-                        trigger: 'axis',
-                        axisPointer: {
-                            type: 'cross'
-                        }
-                    },
-                    toolbox: {
-                        feature: {
-                            dataView: { show: true, readOnly: false },
-                            restore: { show: true },
-                            saveAsImage: { show: true }
-                        }
-                    },
-                    grid: {
-                        x: 45,
-                        y: 25,
-                        x2: 15,
-                        y2: 35,
-                        borderWidth: 1,
-                      },
-                    xAxis: {
-                        type: 'category',
-                        data: ['路桥', '黄岩', '仙居', '天台', '三门', '临海', '椒江','温岭','玉环']
-                    },
-                    yAxis: {
-                        type: 'value'
-                    },
-                    series: [
-                        {
-                            data: data.pre,
-                            type: 'bar'
-                        }
-                    ]
-                };
-                option && myChart_bar.setOption(option);
-                //表格
-                var table_div = document.createElement('div');
-                table_div.style = "width:100%;height:100%;overflow:auto"
-                var table = document.createElement('table');
-                table.setAttribute("class", "table table-bordered")
-                
-                var thead = document.createElement('thead')
-                var tr = document.createElement('tr')
-                var th1 = document.createElement('th')
-                th1.innerText = "排名"
-                var th2 = document.createElement('th')
-                th2.innerText = "名称"
-                var th3 = document.createElement('th')
-                th3.innerText = "降水"
-                tr.append(th1,th2,th3)
-                thead.append(tr)
-                
-                var tbody = document.createElement('thead')
-                var content = ""
-                for (var i = 0; i < data.key.length; i++) {
-                    content =content+ "<tr><td>" +i.toString()+ "</td><td>" +data.key[i] +"</td><td>"+ data.value[i].toString() +"</td></tr>"
-
-                }
-                tbody.innerHTML = content
-                table.append(thead,tbody)
-                table_div.append(table)
-                
-                
-                $('#self_table').append(table_div)
+                console.log("upload_selfplot_data is ok")
 
             }
 

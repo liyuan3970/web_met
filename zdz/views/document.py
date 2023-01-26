@@ -131,6 +131,10 @@ def history_file(request):
     doc_types = DocumentType.objects.filter(unity=unity).all().values()
     #images = WebPicture.objects.all().values()
     # class_types = WebClass.objects.all().values()
+    title = list(SelfPlot.objects.values('types','id'))[-5:]
+    # tilrev = title.reverse()
+    # title_list = tilrev
+    # print("数据",title[-5:])
     type_list = []
     for doc_type in doc_types:
         doc_single = {
@@ -147,7 +151,8 @@ def history_file(request):
             doc_single['filelist'].append(doc_dir)
         type_list.append(doc_single)   
     content = {
-        'doc_list': type_list
+        'doc_list': type_list,
+        'self_title':title
     }  
         
     return JsonResponse(content)
@@ -254,17 +259,19 @@ def quick_look(request):
 def plot_self_data(request):
     plot_self_data = request.POST.get('plot_self_data', '')
     crf = request.POST.get('csrfmiddlewaretoken', '')
-    plot_title,plot_bar  = "降水预报测试画图" ,[0,1,2,3,4,5,6,7]  
-    data = json.loads(plot_self_data)
-    worker = data_class.canvas_plot(data,plot_title,plot_bar)
-    imd = worker.plot_img()
-    key,value = worker.village_data()
-    pre = worker.shp_average()
+    types = "存储数据"
+    time ="2020年8月12日"
+    obj = SelfPlot.objects.create(
+        types=types, 
+        time=time,
+        data=json.loads(plot_self_data),
+        create_user = 0, 
+        update_user = 0
+    )
+    # obj = SelfPlot(types=types,time=time,data =plot_self_data)
+    # obj.save()
     context2 = {
-        "img": imd,
-        'key':key,
-        'value':value,
-        'pre':pre
+        "status":"ok"
     }
     return JsonResponse(context2)
 
@@ -650,6 +657,19 @@ def tool_zdz_daily(request):
         'daily_data': json.dumps(daily_data, cls=NpEncoder)
     }
     return JsonResponse(context)
+
+# 自订正降水的查询
+def select_self_plot(request):
+    select_id = request.POST.get('select_id', '')
+    data = list(SelfPlot.objects.filter(id=int(select_id)).all().values())
+    #print("自订正降水:",data[0]["data"])
+    context = {
+        'status': "ok",
+        'grid':data[0]["data"]
+
+    }
+    return JsonResponse(context)
+
 
 
 @xframe_options_exempt
