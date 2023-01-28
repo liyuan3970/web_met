@@ -50,6 +50,9 @@
                     <li>
                         <a id="quick_plot_link" href="#canvas-2" data-toggle="tab">快速绘图</a>
                     </li>
+                    <li>
+                        <a href="#canvas-3" data-toggle="tab">趋势图</a>
+                    </li>
 
                 </ul>
                 <div class="tab-content">
@@ -181,7 +184,7 @@
                                     // scrollWheelZoom: false,
                                     doubleClickZoom: false,
                                     attributionControl: false, //是否去除右下角标志
-                                    bounds:turf.bbox(boundaries),
+                                    bounds: turf.bbox(boundaries),
                                     layers: [lines]
                                 });
 
@@ -232,14 +235,14 @@
                                 })
                                 //绘制图片时的代码
                                 $('#plot_self_button').click(function () {
-                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();                                                                  
-                                    self_plot_object.plot(csrf,map)
-                                    
+                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                    self_plot_object.plot(csrf, map)
+
                                     //isobandsLay.addTo(map)
 
                                 })
                                 $('#plot_self_flash').click(function () {
-                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();                                
+                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                                     self_plot_object.flush(csrf)
 
                                 })
@@ -492,6 +495,322 @@
                         </div>
 
 
+                    </div>
+                    <div class="tab-pane" id="canvas-3">
+                        <div style="display: flex;width: 100%;height:700px;border: 1px solid">
+                            <!-- 数据栏 -->
+                            <div style="display: flex;width: 30%;height:700px;border: 1px solid">
+                                <div style="width: 10%;height:700px;border: 1px solid">
+                                    <button id="clonadd" style="width:100%;height: 10%;">加</button>
+                                    <button id="clondel" style="width:100%;height: 10%;">减</button>
+                                </div>
+                                <div style="width: 90%;height:700px;border: 1px solid">
+                                    <div style="width: 100%;height:10%;border: 1px solid">
+                                        <button id="rowadd" style="width:10%;height: 100%;">加</button>
+                                        <button id="rowdel" style="width:10%;height: 100%;">减</button>
+                                    </div>
+                                    <!-- 数据 -->
+                                    <div style=";width: 100%;height:80%;border: 1px solid">
+                                        <div style="display: inline-flex;width: 100%;height:10%;border: 1px solid">
+                                            <div style=";width: 10%;height:100%;border: 1px solid">
+
+                                            </div>
+                                            <div id="series_name" style=";width: 90%;height:100%;border: 1px solid">
+
+                                            </div>
+
+
+                                        </div>
+                                        <div style="display: inline-flex;width: 100%;height:90%;border: 1px solid">
+                                            <div id="index_name" style=";width: 10%;height:100%;border: 1px solid">
+
+                                            </div>
+
+                                            <div id="data_line"
+                                                style="display: flex;;width: 90%;height:100%;border: 1px solid">
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <!-- 选项 -->
+                                    <div style="width: 100%;height:10%;border: 1px solid"></div>
+                                </div>
+                                <script>
+                                    var plot_line_obj = {
+                                        data: [],
+                                        rownum: undefined,
+                                        clonnum: undefined,
+                                        series: undefined,
+                                        xAxis:undefined,
+                                        initfnc: function () {
+                                            this.rownum = 4
+                                            this.clonnum = 7
+                                            var data_line = document.getElementById("data_line")
+                                            var index_div = document.getElementById("index_name")
+                                            for (var j = 0; j < this.clonnum; j++) {
+                                                var index_label = document.createElement("div")
+                                                index_label.innerText = j.toString()
+                                                index_label.style = "width: 100%;height:5%;border: 1px solid"
+                                                index_div.append(index_label)
+
+                                            }
+                                            for (var i = 0; i < this.rownum; i++) {
+                                                var data_single_line = document.createElement("div")
+                                                data_single_line.style = "width: 10%;height:100%;border: 1px solid"
+                                                var series_name_div = document.getElementById("series_name")
+                                                var series_name = document.createElement("label")
+                                                series_name.style = "width: 10%;height:100%;border: 1px solid"
+                                                if (i == 0) {
+                                                    series_name.innerText = "X"
+
+                                                }
+                                                else {
+                                                    series_name.innerText = "y" + i.toString()
+                                                }
+                                                series_name_div.append(series_name)
+                                                for (var j = 0; j < this.clonnum; j++) {
+
+                                                    var single_clon = document.createElement("input")
+                                                    single_clon.style = "width: 100%;height:5%;border: 1px solid"
+                                                    single_clon.setAttribute("class", "plot_value")
+                                                    if(i!=0){
+                                                        single_clon.value = Math.random()*100
+                                                    }
+                                                    
+                                                    data_single_line.append(single_clon)
+                                                }
+                                                data_line.append(data_single_line)
+                                            }
+                                        },
+                                        rowadd: function () {
+                                            this.rownum = this.rownum + 1
+                                            var data_line = document.getElementById("data_line")
+                                            var data_single_line = document.createElement("div")
+                                            data_single_line.style = "width: 10%;height:100%;border: 1px solid"
+                                            for (var j = 0; j < this.clonnum; j++) {
+                                                var single_clon = document.createElement("input")
+                                                single_clon.style = "width: 100%;height:5%;border: 1px solid"
+                                                single_clon.setAttribute("class", "plot_value")
+                                                data_single_line.append(single_clon)
+                                            }
+                                            data_line.append(data_single_line)
+
+                                        },
+                                        clonadd: function () {
+                                            this.clonnum = this.clonnum + 1
+                                            var data_line = document.getElementById("data_line")
+                                            var line_list = data_line.children
+                                            for (var i = 0; i < line_list.length; i++) {
+                                                var single_row = line_list[i]
+                                                var single_clon = document.createElement("input")
+                                                single_clon.style = "width: 100%;height:5%;border: 1px solid"
+                                                single_clon.setAttribute("class", "plot_value")
+                                                single_row.append(single_clon)
+                                            }
+                                        },
+                                        rowdel: function () {
+                                            this.rownum = this.rownum - 1
+                                            var data_line = document.getElementById("data_line")
+                                            data_line.lastChild.remove()
+                                        },
+                                        clondel: function () {
+                                            this.clonnum = this.clonnum - 1
+                                            var data_line = document.getElementById("data_line")
+                                            for (var i = 0; i < data_line.childElementCount; i++) {
+
+                                                var single_line = data_line.children[i]
+                                                single_line.lastChild.remove()
+                                            }
+                                        },
+                                        getdata: function () {
+                                            console.log("fun-getdata")
+                                            var data = []
+                                            $(".plot_value").each(function () {
+                                                data.push(this.value)
+                                            })
+                                            //数据列表
+                                            var return_data = []
+                                            var item_index = 0
+                                            var series = []
+                                            var axisx = undefined
+                                            for (var i = 0; i < this.rownum; i++) {
+                                                var single_list = []
+                                                for (var j = 0; j < this.clonnum; j++) {
+                                                    single_list.push(data[item_index])
+                                                    item_index = item_index + 1
+                                                }
+                                                return_data.push(single_list)
+                                                if (i==0){
+                                                    axisx = single_list
+                                                }
+                                                else{
+                                                    var datasingle = {
+                                                        name: 'data'+i.toString(),
+                                                        type: 'line',
+                                                        yAxisIndex: 0,
+                                                        data: single_list
+                                                    }
+                                                    series.push(datasingle)
+
+                                                }
+                                                
+                                            }
+                                            this.series = series
+                                            this.xAxis = axisx
+                                        },
+                                    }
+                                    plot_line_obj.initfnc()
+                                    $("#rowadd").click(function () {
+                                        plot_line_obj.rowadd()
+                                    })
+                                    $("#clonadd").click(function () {
+                                        plot_line_obj.clonadd()
+                                    })
+                                    $("#rowdel").click(function () {
+                                        plot_line_obj.rowdel()
+                                    })
+                                    $("#clondel").click(function () {
+                                        plot_line_obj.clondel()
+                                    })
+                                </script>
+
+                            </div>
+
+                            <div style="width: 70%;height:700px;border: 1px solid">
+                                <!-- 绘图区 -->
+                                <div id="line_plot" style="width: 100%;height:600px;border: 1px solid">
+
+                                </div>
+                                <!-- 按钮组 -->
+                                <div style="width: 100%;height:100px;border: 1px solid">
+                                    <button id="getdata" style="width: 10%;height:100px;border: 1px solid">获取数据</button>
+                                    <button id="plot" style="width: 10%;height:100px;border: 1px solid">绘图</button>
+
+                                </div>
+                                <script>
+                                    $("#getdata").click(function () {                           
+                                        plot_line_obj.getdata()
+                                    })
+                                    $("#plot").click(function () {
+                                        const colors = ['#5470C6', '#91CC75', '#EE6666'];
+                                        const lineChart = echarts.init(document.getElementById("line_plot"));//echarts.init($("#ec_line")[0]);
+                                        lineChart.setOption({
+                                            color: colors,
+                                            backgroundColor: 'white',
+                                            title: {
+                                                text: '',
+                                                left: 'left',
+                                                textStyle: {
+                                                    color: '#826'
+                                                }
+                                            },
+                                            tooltip: {
+                                                triggerOn: 'none',
+                                                // formatter: function (params) {
+                                                //     return (
+                                                //         'X: ' +
+                                                //         params.data[0] +
+                                                //         '<br>Y: ' +
+                                                //         params.data[1].toFixed(2)
+                                                //     );
+                                                // }
+                                            },
+                                            grid: {
+                                                top: '8%',
+                                                right: '6%',
+                                                left: '6%',
+                                                bottom: '8%'
+                                            },
+                                            xAxis: [
+                                                {
+                                                    type: 'category',
+                                                    // type: 'value',
+                                                    axisTick: {
+                                                        alignWithLabel: true
+                                                    },
+                                                    // prettier-ignore
+                                                    data: plot_line_obj.xAxis
+                                                }
+                                            ],
+                                            yAxis: [{
+                                                type: 'value',
+                                                name: '降水',
+                                                position: 'right',
+                                                alignTicks: true,
+                                                // offset: 80,
+                                                max: function (value) {
+                                                    return value.max * 2.5;
+                                                },
+                                                axisLine: {
+                                                    show: true,
+                                                    lineStyle: {
+                                                        color: "blue"
+                                                    }
+                                                },
+                                                axisLabel: {
+                                                    formatter: '{value} mm'
+                                                }
+                                            },
+                                            {
+                                                type: 'value',
+                                                name: '温度',
+                                                position: 'left',
+                                                alignTicks: true,
+                                                max: function (value) {
+                                                    return value.max + 3;
+                                                },
+                                                min: function (value) {
+                                                    return value.min - 10;
+                                                },
+                                                axisLine: {
+                                                    show: true,
+                                                    lineStyle: {
+                                                        color: "red"
+                                                    }
+                                                },
+                                                axisLabel: {
+                                                    formatter: '{value} °C'
+                                                }
+                                            }],
+                                            series:plot_line_obj.series      
+                                            // series: [
+                                            //     {
+                                            //         name: '降水1',
+                                            //         id: "a",
+                                            //         type: 'bar',
+                                            //         yAxisIndex: 0,
+                                            //         data: [1,2,3,4,5,6,7,8]
+                                            //     },
+                                            //     {
+                                            //         name: '降水2',
+                                            //         id: "b",
+                                            //         type: 'bar',
+                                            //         yAxisIndex: 0,
+                                            //         data: [1,2,3,4,5,6,7,8]
+                                            //     },
+                                            //     {
+                                            //         name: '温度',
+                                            //         id: "c",
+                                            //         type: 'line',
+                                            //         smooth: true,
+                                            //         yAxisIndex: 1,
+                                            //         data: [1,2,3,4,5,6,7,8]
+                                            //     }
+                                            // ]
+                                        });
+
+
+
+                                    })
+                                </script>
+
+                            </div>
+
+
+                        </div>
                     </div>
 
                 </div>
