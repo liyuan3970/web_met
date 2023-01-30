@@ -58,6 +58,7 @@ def preview_save(request):
 def history_save(request):
     # 接收前台数据
     document = request.data["document"]
+    # 查询对应数据库字段的数据再返回
 
     pdf_file = HTML(string=document)
 

@@ -785,7 +785,18 @@
 
                                     document.getElementById('convert').addEventListener('click', function () {
                                         //获取html的内容
-                                        var contentDocument = tinymce.get('content').getContent();
+                                        if (list_button_object.data.length>0){
+                                            var contentDocument = ""
+                                            for(var i=0;i<list_button_object.data.length;i++){
+                                                contentDocument = contentDocument +list_button_object.data[i]
+
+                                            }
+
+                                        }
+                                        else{
+                                            var contentDocument = tinymce.get('content').getContent();
+                                        }
+                                        
                                         // 加载文件头
                                         var hearder = list_button_object.render_head_info()
                                         contentDocument = hearder + contentDocument
@@ -804,7 +815,7 @@
                                             responseType: "arraybuffer",
                                             mimeType: "text/plain; charset=x-user-defined",
                                             success: function (data) {
-                                                console.log(data)
+                                                // console.log(data)
                                                 var rawLength = data.length;
                                                 var array = new Uint8Array(new ArrayBuffer(rawLength));
                                                 for (i = 0; i < rawLength; i++) {
@@ -855,6 +866,7 @@
                                         $.ajax({
                                             url: "file/preview_save",  // 请求的地址
                                             type: "POST",  // 请求方式
+                                            headers: { "Token": "Bearer " + localStorage.getItem("token") },
                                             data: formData,
                                             processData: false,
                                             contentType: false,
@@ -1710,6 +1722,7 @@
                             $.ajax({
                                 url: "file/history_save",  // 请求的地址
                                 type: "POST",  // 请求方式
+                                headers: { "Token": "Bearer " + localStorage.getItem("token") },
                                 data: formData,
                                 processData: false,
                                 contentType: false,
