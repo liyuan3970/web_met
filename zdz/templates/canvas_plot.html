@@ -536,7 +536,12 @@
                                     </div>
 
                                     <!-- 选项 -->
-                                    <div style="width: 100%;height:10%;border: 1px solid"></div>
+                                    <div style="display: inline-flex;width: 100%;height:10%;border: 1px solid">
+                                        <div style="width: 10%;height:100%;border: 1px solid"></div>
+                                        <div id="series_option"
+                                            style="display: inline-flex;width: 90%;height:100%;border: 1px solid"></div>
+
+                                    </div>
                                 </div>
                                 <script>
                                     var plot_line_obj = {
@@ -544,22 +549,24 @@
                                         rownum: undefined,
                                         clonnum: undefined,
                                         series: undefined,
-                                        xAxis:undefined,
+                                        xAxis: undefined,
+                                        indexnum:undefined,
                                         initfnc: function () {
                                             this.rownum = 4
                                             this.clonnum = 7
                                             var data_line = document.getElementById("data_line")
                                             var index_div = document.getElementById("index_name")
+                                            var series_option_div = document.getElementById("series_option")
                                             for (var j = 0; j < this.clonnum; j++) {
                                                 var index_label = document.createElement("div")
                                                 index_label.innerText = j.toString()
-                                                index_label.style = "width: 100%;height:5%;border: 1px solid"
+                                                index_label.style = "width: 100%;height:5%"
                                                 index_div.append(index_label)
 
                                             }
                                             for (var i = 0; i < this.rownum; i++) {
                                                 var data_single_line = document.createElement("div")
-                                                data_single_line.style = "width: 10%;height:100%;border: 1px solid"
+                                                data_single_line.style = "width: 10%;height:100%;"
                                                 var series_name_div = document.getElementById("series_name")
                                                 var series_name = document.createElement("label")
                                                 series_name.style = "width: 10%;height:100%;border: 1px solid"
@@ -568,28 +575,61 @@
 
                                                 }
                                                 else {
-                                                    series_name.innerText = "y" + i.toString()
+                                                    series_name.innerText = "Y" + i.toString()
                                                 }
                                                 series_name_div.append(series_name)
+                                                var series_option = document.createElement("div")
+                                                series_option.style = "width: 10%;height:100%;border: 1px solid"
+                                                //选项卡
+                                                if (i != 0) {
+                                                    var select = this.create_select()
+                                                    series_option.append(select)
+                                                    series_option_div.append(series_option)
+                                                }
+                                                else{
+                                                    series_option_div.append(series_option)
+                                                }
+
+
                                                 for (var j = 0; j < this.clonnum; j++) {
 
                                                     var single_clon = document.createElement("input")
                                                     single_clon.style = "width: 100%;height:5%;border: 1px solid"
                                                     single_clon.setAttribute("class", "plot_value")
-                                                    if(i!=0){
-                                                        single_clon.value = Math.random()*100
+                                                    if (i != 0) {
+                                                        single_clon.value = (Math.random() * 100).toFixed(0)
                                                     }
-                                                    
+
                                                     data_single_line.append(single_clon)
                                                 }
                                                 data_line.append(data_single_line)
                                             }
                                         },
+                                        //列
                                         rowadd: function () {
                                             this.rownum = this.rownum + 1
                                             var data_line = document.getElementById("data_line")
                                             var data_single_line = document.createElement("div")
-                                            data_single_line.style = "width: 10%;height:100%;border: 1px solid"
+                                            var series_name_div = document.getElementById("series_name")
+                                            var series_option_div = document.getElementById("series_option")
+                                            var series_name = document.createElement("label")
+                                            series_name.style = "width: 10%;height:100%;border: 1px solid"
+                                            if (this.rownum == 0) {
+                                                series_name.innerText = "X"
+
+                                            }
+                                            else {
+                                                series_name.innerText = "y" + (this.rownum - 1).toString()
+                                            }
+                                            series_name_div.append(series_name)
+                                            //
+                                            var series_option = document.createElement("div")
+                                            series_option.style = "width: 10%;height:100%;border: 1px solid"
+                                            var select = this.create_select()
+                                            series_option.append(select)
+                                            series_option_div.append(series_option)
+                                            //
+                                            data_single_line.style = "width: 10%;height:100%;"
                                             for (var j = 0; j < this.clonnum; j++) {
                                                 var single_clon = document.createElement("input")
                                                 single_clon.style = "width: 100%;height:5%;border: 1px solid"
@@ -599,10 +639,17 @@
                                             data_line.append(data_single_line)
 
                                         },
+                                        //行
                                         clonadd: function () {
                                             this.clonnum = this.clonnum + 1
                                             var data_line = document.getElementById("data_line")
                                             var line_list = data_line.children
+                                            var index_div = document.getElementById("index_name")
+                                            var index_label = document.createElement("div")
+                                            index_label.innerText = (this.clonnum - 1).toString()
+                                            index_label.style = "width: 100%;height:5%;border: 1px solid"
+                                            index_div.append(index_label)
+
                                             for (var i = 0; i < line_list.length; i++) {
                                                 var single_row = line_list[i]
                                                 var single_clon = document.createElement("input")
@@ -615,18 +662,44 @@
                                             this.rownum = this.rownum - 1
                                             var data_line = document.getElementById("data_line")
                                             data_line.lastChild.remove()
+                                            var series_name_div = document.getElementById("series_name")
+                                            series_name_div.lastChild.remove()
+                                            var select_option = document.getElementById("series_option")
+                                            select_option.lastChild.remove()
                                         },
                                         clondel: function () {
                                             this.clonnum = this.clonnum - 1
                                             var data_line = document.getElementById("data_line")
                                             for (var i = 0; i < data_line.childElementCount; i++) {
-
                                                 var single_line = data_line.children[i]
                                                 single_line.lastChild.remove()
                                             }
+                                            var index_div = document.getElementById("index_name")
+                                            index_div.lastChild.remove()
+                                        },
+                                        create_select: function () {
+                                            var select = document.createElement("select")
+                                            select.style = "width: 100%;height:100%;border: 1px solid"
+                                            var optline = document.createElement("option")
+                                            optline.value = 1
+                                            optline.innerText = "曲线图"
+                                            var optbar = document.createElement("option")
+                                            optbar.value = 0
+                                            optbar.innerText = "柱状图"
+                                            select.setAttribute("class", "select_class")
+                                            select.append(optline, optbar)
+                                            return select
+
+                                        },
+                                        get_select: function () {
+                                            var data = [2]
+                                            $(".select_class").each(function () {
+                                                data.push(this.value)
+                                            })
+                                            this.indexnum = data
                                         },
                                         getdata: function () {
-                                            console.log("fun-getdata")
+                                            this.get_select()
                                             var data = []
                                             $(".plot_value").each(function () {
                                                 data.push(this.value)
@@ -643,24 +716,122 @@
                                                     item_index = item_index + 1
                                                 }
                                                 return_data.push(single_list)
-                                                if (i==0){
+                                                if (i == 0) {
                                                     axisx = single_list
                                                 }
-                                                else{
-                                                    var datasingle = {
-                                                        name: 'data'+i.toString(),
-                                                        type: 'line',
-                                                        yAxisIndex: 0,
+                                                else {
+                                                    if (this.indexnum[i]==0){
+                                                        var plot_type = "bar"
+                                                        var datasingle = {
+                                                        name: 'data' + i.toString(),
+                                                        type: plot_type,
+                                                        // smooth: true,
+                                                        yAxisIndex:this.indexnum[i],
                                                         data: single_list
                                                     }
+                                                    }
+                                                    else{
+                                                        var plot_type = "line"
+                                                        var datasingle = {
+                                                        name: 'data' + i.toString(),
+                                                        type: plot_type,
+                                                        smooth: true,
+                                                        yAxisIndex:this.indexnum[i],
+                                                        data: single_list
+                                                    }
+                                                    }
+                                                   
                                                     series.push(datasingle)
 
                                                 }
-                                                
+
                                             }
                                             this.series = series
                                             this.xAxis = axisx
                                         },
+                                        plot_all: function () {
+                                            const colors = ['#5470C6', '#91CC75', '#EE6666'];
+                                            //清除缓存
+                                            var chartDom = document.getElementById("line_plot")
+                                            if (chartDom.hasAttribute("_echarts_instance_")) {
+                                                chartDom.removeAttribute("_echarts_instance_");
+                                            }
+                                            const lineChart = echarts.init(chartDom);
+                                            lineChart.setOption({
+                                                color: colors,
+                                                backgroundColor: 'white',
+                                                title: {
+                                                    text: '趋势分析',
+                                                    left: 'middle',
+                                                    textStyle: {
+                                                        color: '#826'
+                                                    }
+                                                },
+                                                tooltip: {
+                                                    triggerOn: 'none',
+                                                },
+                                                grid: {
+                                                    top: '8%',
+                                                    right: '6%',
+                                                    left: '6%',
+                                                    bottom: '8%'
+                                                },
+                                                xAxis: [
+                                                    {
+                                                        type: 'category',
+                                                        axisTick: {
+                                                            alignWithLabel: true
+                                                        },
+                                                        data: plot_line_obj.xAxis
+                                                    }
+                                                ],
+                                                yAxis: [{
+                                                    type: 'value',
+                                                    name: '降水',
+                                                    position: 'right',
+                                                    alignTicks: true,
+                                                    max: function (value) {
+                                                        return value.max * 2.5;
+                                                    },
+                                                    axisLine: {
+                                                        show: true,
+                                                        lineStyle: {
+                                                            color: "black"
+                                                        }
+                                                    },
+                                                    axisLabel: {
+                                                        formatter: '{value} mm'
+                                                    }
+                                                },
+                                                {
+                                                    type: 'value',
+                                                    name: '气温',
+                                                    position: 'left',
+                                                    alignTicks: true,
+                                                    max: function (value) {
+                                                        return value.max + 3;
+                                                    },
+                                                    min: function (value) {
+                                                        return value.min - 10;
+                                                    },
+                                                    axisLine: {
+                                                        show: true,
+                                                        lineStyle: {
+                                                            color: "black"
+                                                        }
+                                                    },
+                                                    axisLabel: {
+                                                        formatter: '{value} °C'
+                                                    }
+                                                }],
+                                                series: plot_line_obj.series
+                                            });
+
+
+
+
+                                        }
+
                                     }
                                     plot_line_obj.initfnc()
                                     $("#rowadd").click(function () {
@@ -687,123 +858,17 @@
                                 <!-- 按钮组 -->
                                 <div style="width: 100%;height:100px;border: 1px solid">
                                     <button id="getdata" style="width: 10%;height:100px;border: 1px solid">获取数据</button>
-                                    <button id="plot" style="width: 10%;height:100px;border: 1px solid">绘图</button>
+                                    <button id="plot"
+                                        style="width: 10%;height:95px;border: 1px solid;float:right">绘图</button>
 
                                 </div>
                                 <script>
-                                    $("#getdata").click(function () {                           
-                                        plot_line_obj.getdata()
+                                    $("#getdata").click(function () {
+                                        plot_line_obj.get_select()
                                     })
                                     $("#plot").click(function () {
-                                        const colors = ['#5470C6', '#91CC75', '#EE6666'];
-                                        const lineChart = echarts.init(document.getElementById("line_plot"));//echarts.init($("#ec_line")[0]);
-                                        lineChart.setOption({
-                                            color: colors,
-                                            backgroundColor: 'white',
-                                            title: {
-                                                text: '',
-                                                left: 'left',
-                                                textStyle: {
-                                                    color: '#826'
-                                                }
-                                            },
-                                            tooltip: {
-                                                triggerOn: 'none',
-                                                // formatter: function (params) {
-                                                //     return (
-                                                //         'X: ' +
-                                                //         params.data[0] +
-                                                //         '<br>Y: ' +
-                                                //         params.data[1].toFixed(2)
-                                                //     );
-                                                // }
-                                            },
-                                            grid: {
-                                                top: '8%',
-                                                right: '6%',
-                                                left: '6%',
-                                                bottom: '8%'
-                                            },
-                                            xAxis: [
-                                                {
-                                                    type: 'category',
-                                                    // type: 'value',
-                                                    axisTick: {
-                                                        alignWithLabel: true
-                                                    },
-                                                    // prettier-ignore
-                                                    data: plot_line_obj.xAxis
-                                                }
-                                            ],
-                                            yAxis: [{
-                                                type: 'value',
-                                                name: '降水',
-                                                position: 'right',
-                                                alignTicks: true,
-                                                // offset: 80,
-                                                max: function (value) {
-                                                    return value.max * 2.5;
-                                                },
-                                                axisLine: {
-                                                    show: true,
-                                                    lineStyle: {
-                                                        color: "blue"
-                                                    }
-                                                },
-                                                axisLabel: {
-                                                    formatter: '{value} mm'
-                                                }
-                                            },
-                                            {
-                                                type: 'value',
-                                                name: '温度',
-                                                position: 'left',
-                                                alignTicks: true,
-                                                max: function (value) {
-                                                    return value.max + 3;
-                                                },
-                                                min: function (value) {
-                                                    return value.min - 10;
-                                                },
-                                                axisLine: {
-                                                    show: true,
-                                                    lineStyle: {
-                                                        color: "red"
-                                                    }
-                                                },
-                                                axisLabel: {
-                                                    formatter: '{value} °C'
-                                                }
-                                            }],
-                                            series:plot_line_obj.series      
-                                            // series: [
-                                            //     {
-                                            //         name: '降水1',
-                                            //         id: "a",
-                                            //         type: 'bar',
-                                            //         yAxisIndex: 0,
-                                            //         data: [1,2,3,4,5,6,7,8]
-                                            //     },
-                                            //     {
-                                            //         name: '降水2',
-                                            //         id: "b",
-                                            //         type: 'bar',
-                                            //         yAxisIndex: 0,
-                                            //         data: [1,2,3,4,5,6,7,8]
-                                            //     },
-                                            //     {
-                                            //         name: '温度',
-                                            //         id: "c",
-                                            //         type: 'line',
-                                            //         smooth: true,
-                                            //         yAxisIndex: 1,
-                                            //         data: [1,2,3,4,5,6,7,8]
-                                            //     }
-                                            // ]
-                                        });
-
-
-
+                                        plot_line_obj.getdata()
+                                        plot_line_obj.plot_all()
                                     })
                                 </script>
 
