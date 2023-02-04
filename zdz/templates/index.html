@@ -289,12 +289,12 @@
                                                             for (var i = 0; i < this.type_list.length; i++) {
                                                                 this.data.push(this.render_data_list(i))
                                                                 var div_single = document.createElement("div")
-                                                                div_single.style = "width: 15%; height: 30px;"
+                                                                div_single.style = "width: 15%; height: 30px;;padding-top:6px"
                                                                 // div_single.innerText = "\xa0\xa0\xa0\xa0\xa0\xa0"+this.type_list[i]
                                                                 var label_singl = document.createElement("label")
                                                                 label_singl.setAttribute("for", i.toString() + "checkboxitem")
-                                                                label_singl.innerText = "\xa0\xa0\xa0\xa0\xa0\xa0\xa0" + this.type_list[i]
-                                                                label_singl.style = "width: 100%; height: 30px;font-size:10px;;background-image: url(static/src/" + this.type_list[i] + ".png);background-size: 30%;background-repeat: no-repeat;"
+                                                                // label_singl.innerText = "\xa0\xa0\xa0\xa0\xa0\xa0\xa0" + this.type_list[i]
+                                                                label_singl.style = "width: 100%; height: 30px;background-image: url(static/src/button/" + this.type_list[i] + ".png);background-size: 100%;background-repeat: no-repeat"
                                                                 var checkboxitem = document.createElement("input")
                                                                 checkboxitem.id = i.toString() + "checkboxitem"
                                                                 checkboxitem.value = i
@@ -303,7 +303,7 @@
                                                                 checkboxitem.style = "display:none;"
                                                                 div_single.append(checkboxitem, label_singl)
                                                                 div_single.addEventListener("click", function (doc) {
-                                                                    console.log('内容', doc.path[0].id.toString()[0])
+                                                                    // console.log('内容', doc.path[0].id.toString()[0])
                                                                     // this.style = "width: 15%; height: 30px;border:1px solid black"
                                                                     var item = Number(doc.path[0].id.toString()[0])
                                                                     var content = list_button_object.data[item]
