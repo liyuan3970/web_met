@@ -333,7 +333,6 @@
 
                                                         },
                                                         render_data_list: function (item) {
-
                                                             var doc_type = this.type_list[item]
                                                             var id_number = item
                                                             var doc_data_obj = {
@@ -365,7 +364,7 @@
                                                     $('#new_document_post').click(function () {
 
                                                         var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                                                        console.log("向后端传输创建信息", png_add_list)
+                                                        // console.log("向后端传输创建信息", png_add_list)
                                                         var content_doc = ""
                                                         for (var i = 0; i < png_add_list.length; i++) {
                                                             content_doc = content_doc + png_add_list[i] + ","

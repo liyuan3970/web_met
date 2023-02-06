@@ -127,14 +127,9 @@ def website(request):
 # 历史数据查询
 def history_file(request):
     unity = "台州市气象局"
-    year = 2022
+    year = 2023
     doc_types = DocumentType.objects.filter(unity=unity).all().values()
-    #images = WebPicture.objects.all().values()
-    # class_types = WebClass.objects.all().values()
     title = list(SelfPlot.objects.values('types','id'))[-5:]
-    # tilrev = title.reverse()
-    # title_list = tilrev
-    # print("数据",title[-5:])
     type_list = []
     for doc_type in doc_types:
         doc_single = {
