@@ -665,8 +665,18 @@ def select_self_plot(request):
     }
     return JsonResponse(context)
 
-
-
+# 十天数据
+def longmet(request):
+    context = {
+        'data': "servier_data_long"
+    }
+    return JsonResponse(context)
+# 短期数据
+def shortmet(request):
+    context = {
+        'data': "servier_data_short"
+    }
+    return JsonResponse(context)
 @xframe_options_exempt
 def home(request):
     # return redirect('https://www.baidu.com/')

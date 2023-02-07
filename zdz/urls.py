@@ -27,6 +27,10 @@ urlpatterns = [
     path('history_file', views.history_file),
     # tinymce插件footer
     path('tinymce/footer', views.tinymce_footer),
+    # 十天数据的获取
+    path('tinymce/longmet', views.longmet),
+    # 短期数据的获取
+    path('tinymce/shortmet', views.shortmet),
     # 自定义绘图
     path('upload_selfplot_data', views.plot_self_data),
     # 自定义画图数据下载
@@ -48,6 +52,7 @@ urlpatterns = [
     path('create_doc_data', views.create_new_doc_data),
     # 呈送发的代码
     path('leader_Data_post', views.leader_Data_post),
+    
     # 自动站历史数据的查询交互
     path('tool_zdz_date', views.tool_zdz_date),
     # 自动站历史数据大风的查询
@@ -75,4 +80,6 @@ urlpatterns += [
     path(r"file/preview_save", views.preview_save),
     # 查询历史的文档
     path(r"file/history_save", views.history_save),
+    # 保存所有数据并预览
+    path(r"file/preview_all", views.preview_all),
 ]
