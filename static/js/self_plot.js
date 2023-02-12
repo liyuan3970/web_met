@@ -56,6 +56,102 @@ const self_plot_object = {
 
         ]
     },
+    title:function(){
+        var titlt_str = $("#self_title_content").val()
+        return titlt_str   
+    },
+    color_bar:function(){
+        var father = $('#self_color_select_list')
+        // console.log("开始表演",father.children().length)
+        if (father.children().length>0){
+            var levelV = []
+            var labellist = []
+            var colorlist = []
+            $('.self_color_bar').each(function(){     
+                var orgstr =  this.value
+                colorlist.push({"fill":this.style.backgroundColor})
+                
+                if (orgstr){
+                    var array = orgstr.split('-')  
+                    levelV.push(parseFloat(array[0]))
+                    labellist.push(array[1].toString())
+                }           
+            })
+            // 完全正确
+            if (colorlist.length == labellist.length) {
+                var isobands_options = {
+                    zProperty: "value",
+                    commonProperties: {
+                        "fill-opacity": 0.3
+                    },
+                    breaksProperties: colorlist
+                };
+                return {
+                    isobands_options:isobands_options,
+                    levelV:levelV,
+                    labellist:labellist
+                }
+
+            }
+            // 没有写文字---自定义判断数据大小并分层然后输出
+            else {
+                var isobands_options = {
+                    zProperty: "value",
+                    commonProperties: {
+                        "fill-opacity": 0.3
+                    },
+                    breaksProperties: [
+                        { fill: "rgb(255,255,255)" },
+                        { fill: "rgb(140,246,130)" },
+                        { fill: "rgb(0,191,27)" },
+                        { fill: "rgb(62,185,255)" },
+                        { fill: "rgb(25,0,235)" },
+                        { fill: "rgb(255,0,255)" },
+                        { fill: "rgb(140,0,65)" }
+                    ]
+                };
+                var labellist = ['0~0.1', '0.1~1', '1~10', '10~25', '25~50', '50~100', '100']
+                var levelV = [10, 20, 30, 50, 70, 90, 100, 130];
+                return {
+                    isobands_options: isobands_options,
+                    levelV: levelV,
+                    labellist: labellist
+                }
+
+            }
+        }
+        // 完全错误
+        else {
+            var isobands_options = {
+                zProperty: "value",
+                commonProperties: {
+                    "fill-opacity": 0.3
+                },
+                breaksProperties: [
+                    { fill: "rgb(255,255,255)" },
+                    { fill: "rgb(140,246,130)" },
+                    { fill: "rgb(0,191,27)" },
+                    { fill: "rgb(62,185,255)" },
+                    { fill: "rgb(25,0,235)" },
+                    { fill: "rgb(255,0,255)" },
+                    { fill: "rgb(140,0,65)" }
+                ]
+            };
+            var labellist = ['0~0.1', '0.1~1', '1~10', '10~25', '25~50', '50~100', '100']
+            var levelV = [10, 20, 30, 50, 70, 90, 100, 130];
+            return {
+                isobands_options:isobands_options,
+                levelV:levelV,
+                labellist:labellist
+            }
+        }
+        
+
+
+        
+
+        // return "色标"      
+    },
     ctx: undefined,
     geoData_self_plot: county_json,
     canvasW_self_plot: undefined,
@@ -120,22 +216,26 @@ const self_plot_object = {
           };
         grid = turf.interpolate(points, 0.05, interpolate_options);
         
-        var isobands_options = {
-            zProperty: "value",
-            commonProperties: {
-                "fill-opacity": 0.9
-            },
-            breaksProperties: [
-                {fill: "rgb(255,255,255)"},
-                {fill: "rgb(140,246,130)"},
-                {fill: "rgb(0,191,27)"},
-                {fill: "rgb(62,185,255)"},
-                {fill: "rgb(25,0,235)"},
-                {fill: "rgb(255,0,255)"},
-                {fill: "rgb(140,0,65)"}
-            ]
-        };
-        let levelV = [10, 20, 30, 50, 70, 90, 100];
+        // var isobands_options = {
+        //     zProperty: "value",
+        //     commonProperties: {
+        //         "fill-opacity": 0.3
+        //     },
+        //     breaksProperties: [
+        //         {fill: "rgb(255,255,255)"},
+        //         {fill: "rgb(140,246,130)"},
+        //         {fill: "rgb(0,191,27)"},
+        //         {fill: "rgb(62,185,255)"},
+        //         {fill: "rgb(25,0,235)"},
+        //         {fill: "rgb(255,0,255)"},
+        //         {fill: "rgb(140,0,65)"}
+        //     ]
+        // };
+        // let levelV = [10, 20, 30, 50, 70, 90, 100,130];
+        var isobands_options = self_plot_object.color_bar().isobands_options
+        var levelV = self_plot_object.color_bar().levelV
+
+
         let isobands = turf.isobands(
             grid,
             levelV,
@@ -147,7 +247,7 @@ const self_plot_object = {
                     color: '#4264fb',
                     fillColor: feature.properties.fill,
                     weight: 0.1,
-                    fillOpacity: 0.8
+                    fillOpacity: 0.4
                 };
             }
         });
@@ -223,17 +323,65 @@ const self_plot_object = {
         var intersectionLay = L.geoJSON(intersection, {
             style: function (feature) {
                 return {
-                    color: 'black',
+                    color: feature.properties.fill,
                     fillColor: feature.properties.fill,
-                    weight: 0.1,
-                    fillOpacity: 0.7
+                    weight: 0.9,
+                    fillOpacity: 0.9
                 };
             }
         })
         // intersectionLay.remove()
         intersectionLay.addTo(map)
+        var lines = L.geoJSON(taizhoulist,{
+            style:{
+                "color": "black",
+                "fillColor": "white",
+                "fillOpacity": 0.1,
+                "weight": 1,
+                "opacity": 0.7
+            }
+        }).addTo(map)
+        // 色标
+        function colorlabel(isobands_options, map) {
+            var coloritem = isobands_options.breaksProperties.length
+            var colorinitlat = 28.4
+            var colorinitlon = 120.5
+            var colorwidth = 0.15
+            var colorheight = 0.4 / coloritem
+            var labellist = self_plot_object.color_bar().labellist
+            for (var i = 0; i < isobands_options.breaksProperties.length; i++) {
+                var textIcon = L.divIcon({
+                    html: labellist[i],
+                    className: 'label_plot_text'
+                });
+                var colorlat = colorinitlat - i * colorheight
+                var colorlon = colorinitlon
+                var latlngs = [[colorlat, colorlon], [colorlat, colorlon + colorwidth], [colorlat - colorheight, colorlon + colorwidth], [colorlat - colorheight, colorlon]]
+                var colorstr = isobands_options.breaksProperties[i].fill
+                var polygon = L.polygon(latlngs, {
+                    color: "black",
+                    fillColor: colorstr,
+                    fillOpacity: 0.8,
+                    weight: 1
+                }).addTo(map)
+                L.marker([colorlat - colorheight / 3, colorlon + colorwidth + 0.05], { icon: textIcon }).addTo(map);
+            }
+
+        }
+
+        colorlabel(isobands_options, map)
+        //
+        var productIcon = L.divIcon({
+            html: self_plot_object.title(),
+            className: 'my-div-icon',
+            iconSize: [300, 55],
+
+        });
+
+        L.marker([29.4, 120.9], { icon: productIcon }).addTo(map);
         
         //
+        self_plot_object.color_bar()
         // 图片
         $.ajax({
             url: "upload_selfplot_data",  // 请求的地址
@@ -400,7 +548,8 @@ const self_plot_object = {
 
 
                 var canvas_select_value = parseFloat($("input[name='canvas_num']:checked").val());
-                var canvas_select_method = $("input[name='canvas_var']:checked").val();
+                var canvas_select_method = $("#canvas_var  option:selected").val();
+                
                 for (var i = 0; i < self_plot_object.data_canvas.station.length; i++) {
                     //便利所有自动站中的数据并进行加减  
                     var canvas_position = self_plot_object.return_canvas_position(self_plot_object.data_canvas['station'][i][0], self_plot_object.data_canvas['station'][i][1])
