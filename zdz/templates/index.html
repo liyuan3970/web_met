@@ -37,6 +37,11 @@
     <script src='static/js/taizhou.js'></script>
     <script src='static/js/taizhoulist.js'></script>
     <script src='static/js/taizhouxiangzhen.js'></script>
+    <!-- 引入 layui.css -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/layui/2.7.6/css/layui.css" rel="stylesheet">
+    <!-- 引入 layui.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/layui/2.7.6/layui.js"></script>
+    
     <!-- 颜色选择器 -->
     <script src="static/js/colorpicker.js"></script>
     <link rel="stylesheet" href="static/css/colorpicker.css">
@@ -325,7 +330,7 @@
                                                                                 text: '快速画图',
                                                                                 onAction: () => editor.windowManager.openUrl({
                                                                                     title: '画图页面',
-                                                                                    url: 'http://192.168.192.2:9001/canvas_plot',
+                                                                                    url: 'http://127.0.0.1:9001/canvas_plot',
                                                                                     height: 820,
                                                                                     width: 1300,
                                                                                 })
@@ -767,7 +772,7 @@
                                                 text: '快速画图',
                                                 onAction: () => editor.windowManager.openUrl({
                                                     title: '画图页面',
-                                                    url: 'http://192.168.192.2:9001/canvas_plot',
+                                                    url: 'http://127.0.0.1:9001/canvas_plot',
                                                     height: 820,
                                                     width: 1300,
                                                 })
