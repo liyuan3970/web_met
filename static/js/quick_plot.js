@@ -41,8 +41,11 @@ const quick_plot_object = {
         var select_type = $("input[name='taizhou_quick_plot_type']:checked").val()
         return select_type
     },
-    plot_color:function (){
-        return $('#view0_color  option:selected').val()
+    plotColor:undefined,
+    plot_color:function (color){
+        var retcolor = this.plotColor  
+        this.plotColor = color
+        return retcolor//$('#view0_color  option:selected').val()
     },
     line_width:function (){
         return $('#view0_width  option:selected').val()
@@ -51,7 +54,7 @@ const quick_plot_object = {
         return $('#view0_line  option:selected').val()
     },
     drowTextInfo:function () {
-        console.log("绘制色标")
+        // console.log("绘制色标")
         $(".color_bar").each(function (index, el) {
             quick_plot_object.labelinfo.text[index] = el.value;
             quick_plot_object.labelinfo.color[index] = el.style.backgroundColor;
@@ -263,7 +266,7 @@ const quick_plot_object = {
     
     drawLine:function (beginPoint, controlPoint, endPoint) {
         // ctx_quick_plot.lineWidth = 15;
-        quick_plot_object.ctx_quick_plot.strokeStyle = quick_plot_object.plot_color()
+        quick_plot_object.ctx_quick_plot.strokeStyle =quick_plot_object.plotColor
         var select_plot_type = quick_plot_object.plot_type()
         var select_click_type = quick_plot_object.click_type()
         if (select_click_type=='contour'){
@@ -328,7 +331,7 @@ const quick_plot_object = {
                 quick_plot_object.ctx_quick_plot.font = quick_plot_object.textinfo().fontSize//'normal 15pt "楷体"';//$('#taizhou_quick_plot_text_content').val()
                 quick_plot_object.ctx_quick_plot.fillStyle = 'black'
                 quick_plot_object.ctx_quick_plot.fillText(quick_plot_object.textinfo().titleText, e.offsetX, e.offsetY);
-                quick_plot_object.ctx_quick_plot.fillStyle = quick_plot_object.plot_color()
+                quick_plot_object.ctx_quick_plot.fillStyle = quick_plot_object.plotColor
                 quick_plot_object.memory_list.push(quick_plot_object.ctx_quick_plot.getImageData(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH))
                 
     
@@ -367,7 +370,7 @@ const quick_plot_object = {
                 quick_plot_object.ctx_quick_plot.font = quick_plot_object.textinfo().fontSize//'normal 15pt "楷体"';//$('#taizhou_quick_plot_text_content').val()
                 quick_plot_object.ctx_quick_plot.fillStyle = 'black'
                 quick_plot_object.ctx_quick_plot.fillText(quick_plot_object.textinfo().titleText, e.offsetX, e.offsetY);
-                quick_plot_object.ctx_quick_plot.fillStyle = quick_plot_object.plot_color()
+                quick_plot_object.ctx_quick_plot.fillStyle = quick_plot_object.plotColor
                 quick_plot_object.memory_list.push(quick_plot_object.ctx_quick_plot.getImageData(0, 0, quick_plot_object.canvasW, quick_plot_object.canvasH))
                 
     
@@ -385,7 +388,7 @@ const quick_plot_object = {
             // var delnum  = quick_plot_object.memory_list.length
             quick_plot_object.memory_list.splice(quick_plot_object.memory_list.length-quick_plot_object.click_num,quick_plot_object.click_num+1);
             if (select_plot_type == 'contour') {
-                quick_plot_object.ctx_quick_plot.strokeStyle = quick_plot_object.plot_color()
+                quick_plot_object.ctx_quick_plot.strokeStyle = quick_plot_object.plotColor
                 var len_point = quick_plot_object.countour_rect.x.length
                 for (i = 0; i < len_point; i++) {
                     if (i == 0) {
@@ -398,7 +401,7 @@ const quick_plot_object = {
                     else {
                         quick_plot_object.ctx_quick_plot.lineTo(quick_plot_object.countour_rect.x[i], quick_plot_object.countour_rect.y[i]);
                         //var color_style = 'red'//$("input[name='selected_color']:checked").val()
-                        quick_plot_object.ctx_quick_plot.fillStyle = quick_plot_object.plot_color()
+                        quick_plot_object.ctx_quick_plot.fillStyle = quick_plot_object.plotColor
                         quick_plot_object.ctx_quick_plot.lineWidth = quick_plot_object.line_width()
                         quick_plot_object.ctx_quick_plot.fill()
                         quick_plot_object.ctx_quick_plot.stroke()
@@ -442,7 +445,7 @@ const quick_plot_object = {
         }
         else{
             if (select_plot_type == 'contour') {
-                quick_plot_object.ctx_quick_plot.strokeStyle = quick_plot_object.plot_color()
+                quick_plot_object.ctx_quick_plot.strokeStyle = quick_plot_object.plotColor
                 var len_point = quick_plot_object.countour_rect.x.length
                 for (i = 0; i < len_point; i++) {
                     if (i == 0) {
@@ -455,7 +458,7 @@ const quick_plot_object = {
                     else {
                         quick_plot_object.ctx_quick_plot.lineTo(quick_plot_object.countour_rect.x[i], quick_plot_object.countour_rect.y[i]);
                         //var color_style = 'red'//$("input[name='selected_color']:checked").val()
-                        quick_plot_object.ctx_quick_plot.fillStyle = quick_plot_object.plot_color()
+                        quick_plot_object.ctx_quick_plot.fillStyle = quick_plot_object.plotColor
                         quick_plot_object.ctx_quick_plot.lineWidth = quick_plot_object.line_width()
                         quick_plot_object.ctx_quick_plot.fill()
                         quick_plot_object.ctx_quick_plot.stroke()

@@ -112,10 +112,11 @@
                                 <div style="display: flex;width: 100%;height:25%;border: 1px solid">
                                     <!--画图 菜单 -->
                                     <div style="display:block;width: 7%;height:100%;border: 1px solid">
-                                        <button id="plot_1st_data" class="layui-btn layui-btn-sm layui-btn-primary" >
+                                        <button id="plot_1st_data" class="layui-btn layui-btn-sm layui-btn-primary">
                                             <i class="layui-icon layui-icon-set"></i>
-                                        </button>     
-                                        <button id="plot_1st_color" class="layui-btn layui-btn-sm layui-btn-primary" style="margin:0px">
+                                        </button>
+                                        <button id="plot_1st_color" class="layui-btn layui-btn-sm layui-btn-primary"
+                                            style="margin:0px">
                                             <i class="layui-icon layui-icon-edit"></i>
                                         </button>
 
@@ -153,11 +154,14 @@
                                             <div id="plot_1st_tool2" style="display:none;width:100%;height:100%">
                                                 <div style="width:100%;height:35%;"></div>
                                                 <div style="width:100%;height:30%;padding-left:1%;">
-                                                    <div 
+                                                    <div
                                                         style="display: inline-flex;width:99%;height:100%;border: 1px solid black;;border-radius:15px;padding-left:1.5%;padding-top:1%;padding-right:1%">
                                                         <div id="self_color_select_option"></div>
-                                                        <div id="self_color_select_list" style="width:90%;height:99.5%" ></div>
-                                                        <input id="self_color_bar_del" type="button" value="-"onclick="self_color_bar_del()" style="width: 4%;height: 75%;float: right;">
+                                                        <div id="self_color_select_list" style="width:90%;height:99.5%">
+                                                        </div>
+                                                        <input id="self_color_bar_del" type="button" value="-"
+                                                            onclick="self_color_bar_del()"
+                                                            style="width: 4%;height: 75%;float: right;">
                                                     </div>
                                                 </div>
                                                 <div style="width:100%;height:30%;padding-left:60%;">
@@ -171,7 +175,7 @@
                                                             elem: '#self_color_select_option'
                                                             , color: 'white'
                                                             , predefine: true // 开启预定义颜色
-                                                            , colors: ['rgb(255,255,255)', 'rgb(140,246,130)', 'rgb(0,191,27)', 'rgb(62,185,255)', 'rgb(25,0,235)', 'rgb(255,0,255)', 'rgb(140,0,65)']
+                                                            , colors: [ 'rgb(140,246,130)', 'rgb(0,191,27)', 'rgb(62,185,255)', 'rgb(25,0,235)', 'rgb(255,0,255)', 'rgb(140,0,65)','rgb(255,255,255)']
                                                             , done: function (color) {
                                                                 // console.log("颜色", color)
                                                                 if (color != 'none') {
@@ -191,9 +195,9 @@
                                                         })
                                                     })
                                                     function self_color_bar_del() {
-                                                        $('#self_color_select_list').children().last().remove()                                               
+                                                        $('#self_color_select_list').children().last().remove()
                                                     }
-                                                </script>                                    
+                                                </script>
                                             </div>
 
                                         </div>
@@ -329,26 +333,27 @@
                             <div style="width: 100%;height:700px">
                                 <div style="display: flex;width: 100%;height:100%;border: 1px solid">
                                     <!-- 底图选项 -->
-                                    <div class="scrollbar" style="width: 20%;height:100%;border: 1px solid;overflow-x: hidden;overflow-y:scroll;" >
-                                        <button id="county_json" class ="btn_shp"
+                                    <div class="scrollbar"
+                                        style="width: 20%;height:100%;border: 1px solid;overflow-x: hidden;overflow-y:scroll;">
+                                        <button id="county_json" class="btn_shp"
                                             style="width: 90%;height:25%;background-image: url(static/src/shp_county.png);background-size: 100%;background-repeat: no-repeat;border-radius: 10px;margin:10px;"></button>
-                                        <button id="sm_json" class ="btn_shp"
+                                        <button id="sm_json" class="btn_shp"
                                             style="width: 90%;height:25%;background-image: url(static/src/shp_sm.png);background-size: 100%;background-repeat: no-repeat;border-radius: 10px;margin:10px;"></button>
-                                        <button id="tt_json" class ="btn_shp" 
+                                        <button id="tt_json" class="btn_shp"
                                             style="width: 90%;height:25%;background-image: url(static/src/shp_tt.png);background-size: 100%;background-repeat: no-repeat;border-radius: 10px;margin:10px;"></button>
-                                        <button id="xj_json" class ="btn_shp"
+                                        <button id="xj_json" class="btn_shp"
                                             style="width: 90%;height:25%;background-image: url(static/src/shp_xj.png);background-size: 100%;background-repeat: no-repeat;border-radius: 10px;margin:10px;"></button>
-                                        <button id="lh_json" class ="btn_shp"
+                                        <button id="lh_json" class="btn_shp"
                                             style="width: 90%;height:25%;background-image: url(static/src/shp_lh.png);background-size: 100%;background-repeat: no-repeat;border-radius: 10px;margin:10px;"></button>
-                                        <button id="lq_json" class ="btn_shp"
+                                        <button id="lq_json" class="btn_shp"
                                             style="width: 90%;height:25%;background-image: url(static/src/shp_lq.png);background-size: 100%;background-repeat: no-repeat;border-radius: 10px;margin:10px;"></button>
-                                        <button id="jj_json" class ="btn_shp"
+                                        <button id="jj_json" class="btn_shp"
                                             style="width: 90%;height:25%;background-image: url(static/src/shp_jj.png);background-size: 100%;background-repeat: no-repeat;border-radius: 10px;margin:10px;"></button>
-                                        <button id="hy_json" class ="btn_shp"
+                                        <button id="hy_json" class="btn_shp"
                                             style="width: 90%;height:25%;background-image: url(static/src/shp_hy.png);background-size: 100%;background-repeat: no-repeat;border-radius: 10px;margin:10px;"></button>
-                                        <button id="wl_json" class ="btn_shp"
+                                        <button id="wl_json" class="btn_shp"
                                             style="width: 90%;height:25%;background-image: url(static/src/shp_wl.png);background-size: 100%;background-repeat: no-repeat;border-radius: 10px;margin:10px;"></button>
-                                        <button id="yh_json" class ="btn_shp"
+                                        <button id="yh_json" class="btn_shp"
                                             style="width: 90%;height:25%;background-image: url(static/src/shp_yh.png);background-size: 100%;background-repeat: no-repeat;border-radius: 10px;margin:10px;"></button>
                                     </div>
                                     <script>
@@ -358,31 +363,31 @@
                                             // console.log("当前",this.id,shp_data)
                                             var new_json = {
                                                 type: "FeatureCollection",
-                                                features:[]
+                                                features: []
                                             }
-                                            if (this.id=="yh_json"){
+                                            if (this.id == "yh_json") {
                                                 var sp = eval(this.id)
-                                                for (var i=0;i<sp.geometries.length;i++){
+                                                for (var i = 0; i < sp.geometries.length; i++) {
                                                     var single = {
                                                         type: "Feature",
-                                                        geometry:sp.geometries[i]
+                                                        geometry: sp.geometries[i]
                                                     }
                                                     new_json.features.push(single)
 
                                                 }
                                                 quick_plot_object.geoData = new_json
-                                                console.log("玉环",new_json)
-                                                
+                                                console.log("玉环", new_json)
+
 
                                             }
-                                            else{
+                                            else {
                                                 quick_plot_object.geoData = shp_data
                                             }
-                                            
+
                                             quick_plot_object.run(quick_plot)
 
                                         })
-                                    
+
                                     </script>
                                     <div style="width: 80%;height:100%;border: 1px solid">
                                         <div style="width: 100%;height:85%;border: 1px solid">
@@ -395,30 +400,101 @@
                                         <div style="width: 100%;height:15%;border: 1px solid">
                                             <!-- 工具栏 -->
                                             <div
-                                                style="display:inline-block;width:100%;height:30%;border: 1px solid black">
+                                                style="display:inline-block;width:100%;height:33%;border: 1px solid black">
                                                 等值线:&nbsp;<input id="taizhou_quick_plot_contour" type="radio"
                                                     checked="checked" name="taizhou_quick_plot_type"
                                                     value="contour">&nbsp;&nbsp;&nbsp;
                                                 图示:&nbsp;<input id="taizhou_quick_plot_icon" type="radio"
                                                     name="taizhou_quick_plot_type"
                                                     value="scatter_icon">&nbsp;&nbsp;&nbsp;
-                                                文字:&nbsp;<input id="taizhou_quick_plot_text" type="radio"
+                                                <!-- 文字:&nbsp;<input id="taizhou_quick_plot_text" type="radio"
                                                     name="taizhou_quick_plot_type"
-                                                    value="scatter_text">&nbsp;&nbsp;&nbsp;
+                                                    value="scatter_text">&nbsp;&nbsp;&nbsp; -->
                                                 图例:&nbsp;<input id="taizhou_quick_plot_pic" type="radio"
                                                     name="taizhou_quick_plot_type"
                                                     value="scatter_pic">&nbsp;&nbsp;&nbsp;
 
-                                                <input id="forward_canvas" type="button" value="前进"
-                                                    style="float: right;">
-                                                <input id="reback_canvas" type="button" value="撤回"
-                                                    style="float: right;">
-                                                <input id="flash_canvas" type="button" value="刷新" style="float: right;">
+                                                    
+                                                    <button id="forward_canvas" class="layui-btn layui-btn-sm layui-btn-primary" style="float: right;">
+                                                        <i class="layui-icon layui-icon-next"></i>
+                                                    </button>
+                                                    <button id="reback_canvas" class="layui-btn layui-btn-sm layui-btn-primary" style="float: right;">
+                                                        <i class="layui-icon layui-icon-prev"></i>
+                                                    </button>
+                                                
+                                              
+                                                <button id="flash_canvas" class="layui-btn layui-btn-sm layui-btn-primary" style="float: right;">
+                                                    <i class="layui-icon layui-icon-refresh-3"></i>
+                                                </button>
 
                                             </div>
                                             <div id="taizhou_quick_plot_type_view0"
                                                 style="display:inline-block;width:100%;height:70%;">
-                                                <select id="view0_color">
+                                                <div style="width: 100%;height:20%">
+
+                                                </div>
+                                                <div style="width: 100%;height:55%;padding-left:10%">
+                                                    <div
+                                                        style="width: 80%;height:100%;border: 1px solid black;padding-top: 5px;border-radius:10px;">
+                                                        <select id="view0_line"
+                                                            style="border:none;background-color:rgb(213, 217, 230);">
+                                                            <option value="contour">等值线</option>
+                                                            <option value="line">曲线</option>
+                                                        </select>
+                                                        <label> </label>
+                                                        <label>颜色</label>
+                                                        <div id="quick_color_select_option"></div>
+                                                        <label>粗细</label>
+
+                                                        <input id="view0_width" type="number" value=5
+                                                            style="width: 6%; height:80%;border: none;;border-radius:5px;">
+                                                        <div style="display: inline-block;width:5%;"></div>
+
+                                                        <label>标题:</label>
+                                                        <input id="taizhou_quick_plot_text" type="radio"
+                                                            name="taizhou_quick_plot_type" value="scatter_text">
+
+
+                                                        <input id="taizhou_quick_plot_text_content" placeholder="请输入文字"
+                                                            value="请输入文字" type="text"
+                                                            style="width:40%;height:80%;border-radius:5px;">
+                                                        <label>字体大小:</label>
+                                                        <input id="taizhou_quick_plot_text_size" type="number" max="80"
+                                                            min="0" placeholder="25" value=25
+                                                            style="width: 6%;height:80%;border-radius:5px;">
+
+
+
+                                                    </div>
+
+                                                    <script>
+                                                        layui.use('colorpicker', function () {
+                                                            var $ = layui.$
+                                                                , colorpicker = layui.colorpicker;
+                                                            //常规使用
+                                                            colorpicker.render({
+                                                                elem: '#quick_color_select_option'
+                                                                , color: 'black'
+                                                                , format: "rgb"
+                                                                , predefine: true // 开启预定义颜色
+                                                                , colors: ['rgb(255,255,255)', 'rgb(140,246,130)', 'rgb(0,191,27)', 'rgb(62,185,255)', 'rgb(25,0,235)', 'rgb(255,0,255)', 'rgb(140,0,65)','rgb(255,255,255)']
+                                                                , done: function (color) {
+                                                                    // console.log("颜色", color)
+                                                                    if (color != 'none') {
+                                                                        quick_plot_object.plotColor = color
+                                                                    }
+
+                                                                }
+                                                            })
+                                                        })
+
+                                                    </script>
+
+                                                </div>
+
+
+
+                                                <!-- <select id="view0_color">
                                                     <option value="rgb(255,255,255)">无降水</option>
                                                     <option value="rgb(140,246,130)">零星降水</option>
                                                     <option value="rgb(0,191,27)">小雨</option>
@@ -432,38 +508,92 @@
                                                     <option value="line">曲线</option>
                                                 </select>
                                                 <label>粗细</label>
-                                                <input id="view0_width" type="number" value=3>
+                                                <input id="view0_width" type="number" value=3> -->
 
 
                                             </div>
-                                            <div id="taizhou_quick_plot_type_view1"
-                                                style="display:none;width:100%;height:70%;border: 3px solid black">
+                                            <div id="taizhou_quick_plot_type_view1" class="scrollbar"
+                                                style="display:none;width:100%;height:70%;;overflow-x: hidden;overflow-y:scroll;">
                                                 <img class="icon_scatter" src="static/src/icon/35到37度.png"
-                                                    style="width:50px;height:50px">
+                                                    style="width:45px;height:45px;border-radius:5px;padding:2px;margin:2px">
                                                 <img class="icon_scatter" src="static/src/icon/6-8级大风.png"
-                                                    style="width:50px;height:50px">
+                                                    style="width:45px;height:45px;border-radius:5px;padding:2px;margin:2px">
                                                 <img class="icon_scatter" src="static/src/icon/40度以上.png"
-                                                    style="width:50px;height:50px">
+                                                    style="width:45px;height:45px;border-radius:5px;padding:2px;margin:2px">
                                                 <img class="icon_scatter" src="static/src/icon/7-9级大风.png"
-                                                    style="width:50px;height:50px">
+                                                    style="width:45px;height:45px;border-radius:5px;padding:2px;margin:2px">
                                                 <img class="icon_scatter" src="static/src/icon/7~9级雷雨大风.png"
-                                                    style="width:50px;height:50px">
+                                                    style="width:45px;height:45px;border-radius:5px;padding:2px;margin:2px">
+
 
 
                                             </div>
-                                            <div id="taizhou_quick_plot_type_view2"
-                                                style="display:none;width:100%;height:70%;border: 3px solid black">
+                                            <!-- <div id="taizhou_quick_plot_type_view2"
+                                                style="display:none;width:100%;height:70%;">
                                                 内容:&nbsp;<input id="taizhou_quick_plot_text_content" placeholder="请输入文字"
                                                     value="请输入文字" type="text" style="width: 40%;">
                                                 大小:&nbsp;<input id="taizhou_quick_plot_text_size" type="number" max="80"
                                                     min="0" placeholder="25" style="width: 6%;">
 
 
-                                            </div>
+                                            </div> -->
                                             <div id="taizhou_quick_plot_type_view3"
                                                 style="display:none;width:100%;height:70%;border: 3px solid black">
+                                                <div style="width: 100%;height:20%">
+
+                                                </div>
+                                                <div style="width: 100%;height:55%;padding-left:10%">
+                                                    <div
+                                                        style="width: 80%;height:100%;">
+                                                        <div
+                                                            style="display: inline-flex;width:99%;height:100%;border: 1px solid black;;border-radius:10px;padding-left:1.5%;padding-right:1%;padding-top: 3px;">
+                                                            <div id="color_select_option"></div>
+                                                            <div id="color_select_list" style="width:90%;height:99.5%">
+                                                            </div>
+                                                            <input id="color_bar_del" type="button" value="-"
+                                                                onclick="color_bar_del()"
+                                                                style="width: 4%;height: 75%;float: right;">
+                                                        </div>
+                                                        <script>
+
+                                                            layui.use('colorpicker', function () {
+                                                                var $ = layui.$
+                                                                    , colorpicker = layui.colorpicker;
+                                                                //常规使用
+                                                                colorpicker.render({
+                                                                    elem: '#color_select_option'
+                                                                    , color: 'white'
+                                                                    , predefine: true // 开启预定义颜色
+                                                                    , colors: [ 'rgb(140,246,130)', 'rgb(0,191,27)', 'rgb(62,185,255)', 'rgb(25,0,235)', 'rgb(255,0,255)', 'rgb(140,0,65)','rgb(255,255,255)']
+                                                                    , done: function (color) {
+                                                                        // console.log("颜色", color)
+                                                                        if (color != 'none') {
+                                                                            var add_radio = document.createElement('input')
+                                                                            add_radio.style = "border-radius:5px;margin-right:3px"
+                                                                            add_radio.style.width = "13%"
+                                                                            add_radio.style.height = "90%"
+                                                                            add_radio.style.backgroundColor = color
+                                                                            add_radio.style.display = "inline-block"
+                                                                            add_radio.style.border = "1px solid black"
+                                                                            add_radio.setAttribute("class", "color_bar")
+                                                                            add_radio.setAttribute("type", "text")
+                                                                            $('#color_select_list').append(add_radio)
+                                                                        }
+
+                                                                    }
+                                                                })
+                                                            })
+                                                            function color_bar_del() {
+                                                                $('#color_select_list').children().last().remove()
+                                                            }
+
+
+                                                        </script>
+
+                                                    </div>
+                                                </div>
                                                 <!-- 添加颜色的radio -->
-                                                <div id="color_select_list"
+                                                <!-- <div id="color_select_list"
                                                     style="display: inline-block;width:100%;height: 40%; "></div>
                                                 <div style="width:100%;height: 10%; "></div>
 
@@ -477,7 +607,7 @@
 
                                                 <input id="color_bar_del" type="button" value="删除"
                                                     onclick="color_bar_del()"
-                                                    style="width: 10%;height: 35%;float: right;">
+                                                    style="width: 10%;height: 35%;float: right;"> -->
 
 
                                             </div>
@@ -549,7 +679,7 @@
                                                         if (class_name == 'icon_scatter') {
                                                             $('.icon_scatter').css("border", "0px")
                                                             el.setAttribute("border", "3px")
-                                                            el.style.border = "3px solid red"
+                                                            el.style.border = "1px solid black"
                                                             select_icon_img = []
                                                             select_icon_img.push(el)
                                                             console.log(el.className)
@@ -566,29 +696,29 @@
                                                 $('#taizhou_quick_plot_contour').click(function () {
                                                     $('#taizhou_quick_plot_type_view0').attr("style", "display:inline-block;width:100%;height:70%;border: 3px solid black");
                                                     $('#taizhou_quick_plot_type_view1').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
-                                                    $('#taizhou_quick_plot_type_view2').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
+                                                    // $('#taizhou_quick_plot_type_view2').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
                                                     $('#taizhou_quick_plot_type_view3').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
 
                                                 })
 
                                                 $('#taizhou_quick_plot_icon').click(function () {
                                                     $('#taizhou_quick_plot_type_view0').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
-                                                    $('#taizhou_quick_plot_type_view1').attr("style", "display:inline-block;width:100%;height:70%;border: 3px solid black");
-                                                    $('#taizhou_quick_plot_type_view2').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
+                                                    $('#taizhou_quick_plot_type_view1').attr("style", "display:inline-block;width:100%;height:70%;border: 3px solid black;;overflow-x: hidden;overflow-y:scroll;");
+                                                    // $('#taizhou_quick_plot_type_view2').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
                                                     $('#taizhou_quick_plot_type_view3').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
 
                                                 })
-                                                $('#taizhou_quick_plot_text').click(function () {
-                                                    $('#taizhou_quick_plot_type_view0').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
-                                                    $('#taizhou_quick_plot_type_view1').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
-                                                    $('#taizhou_quick_plot_type_view2').attr("style", "display:inline-block;width:100%;height:70%;border: 3px solid black");
-                                                    $('#taizhou_quick_plot_type_view3').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
+                                                // $('#taizhou_quick_plot_text').click(function () {
+                                                //     $('#taizhou_quick_plot_type_view0').attr("style", "display:inline-block;width:100%;height:70%;border: 3px solid black");
+                                                //     $('#taizhou_quick_plot_type_view1').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
+                                                //     // $('#taizhou_quick_plot_type_view2').attr("style", "display:inline-block;width:100%;height:70%;border: 3px solid black");
+                                                //     $('#taizhou_quick_plot_type_view3').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
 
-                                                })
+                                                // })
                                                 $('#taizhou_quick_plot_pic').click(function () {
                                                     $('#taizhou_quick_plot_type_view0').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
                                                     $('#taizhou_quick_plot_type_view1').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
-                                                    $('#taizhou_quick_plot_type_view2').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
+                                                    // $('#taizhou_quick_plot_type_view2').attr("style", "display:none;width:100%;height:70%;border: 3px solid black");
                                                     $('#taizhou_quick_plot_type_view3').attr("style", "display:inline-block;width:100%;height:70%;border: 3px solid black");
                                                 })
 
