@@ -853,7 +853,7 @@
                                             var contentDocument = ""
                                             for (var i = 0; i < list_button_object.type_list.length; i++) {
                                                 contentDocument = contentDocument + list_button_object.data[i]
-                                                data_list.push(list_button_object.data[i])
+                                                data_list.push(list_button_object.data[i].toString())
 
                                             }
                                             console.log("拼接内容",data_list)
@@ -870,7 +870,7 @@
                                             formData.append("types", types);
                                             formData.append("name", name);
                                             formData.append("year", year);
-                                            formData.append("data", JSON.stringify(data_list));
+                                            formData.append("data", data_list);
                                             formData.append("items", items);
                                             formData.append("unity", unity);
 
@@ -879,6 +879,7 @@
                                                 type: "POST",  // 请求方式
                                                 headers: { "Token": "Bearer " + localStorage.getItem("token") },
                                                 data: formData,
+                                                // traditional:true,
                                                 processData: false,
                                                 contentType: false,
                                                 enctype: "multipart/form-data",

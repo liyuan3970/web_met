@@ -60,14 +60,30 @@ def preview_all(request):
     document = request.data["document"]
     items = request.data["items"]
     types = request.data["types"]
-    #name = request.data["name"]
-    name = request.POST.getlist('name')
+    # name = request.POST["name"]
+    name = request.POST.getlist("name")
     #name = request.query_params.getlist("name")
     year = request.data["year"]
-    data = request.data["data"]
+    data = request.POST.getlist('data',[])
     unity = request.data["unity"]
 
-    print(type(name),name)
+    print(type(name),name[0].split(),len(data),type(data),len(name))
+    for i in range(len(data)):
+        context = {
+            "id": i,
+            "data": data[i]
+        }
+        obj = SelfDefine.objects.create(
+            types=types,
+            name=name[i],
+            item=items,
+            year=year,
+            unity=unity,
+            data=context,
+            create_user=0,
+            update_user=0
+        )
+    print("所有数据保存成功")
     # 数据存储
     # obj = SelfDefine.objects.create(
     #     types=types,
