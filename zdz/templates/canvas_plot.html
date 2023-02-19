@@ -742,29 +742,29 @@
 
                     </div>
                     <div class="tab-pane" id="canvas-3">
-                        <div style="display: flex;width: 100%;height:700px;border: 1px solid">
+                        <div style="display: flex;width: 100%;height:700px;">
                             <!-- 数据栏 -->
-                            <div style="display: flex;width: 20%;height:700px;border: 1px solid">
-                                <div style="width: 5%;height:700px;border: 1px solid;padding-top:85%;">
-                                    <button id="clonadd" style="width:100%;height: 3%;">+</button>
-                                    <button id="clondel" style="width:100%;height: 3%;">-</button>
+                            <div style="display: flex;width: 20%;height:700px;border: 2px solid;border-radius:5px">
+                                <div style="width: 5%;height:700px;padding-top:85%;">
+                                    <button id="clondel" style="width:100%;height: 10%;">-</button>
+                                    <button id="clonadd" style="width:100%;height: 10%;">+</button>                                   
                                 </div>
-                                <div style="width: 90%;height:700px;border: 1px solid">
+                                <div style="width: 90%;height:700px;">
                                     <!-- 行增加 -->
-                                    <div style="width: 100%;height:2%;border: 1px solid;padding-left:45%;">
-                                        <button id="rowadd" style="width:10%;height: 100%;">+</button>
-                                        <button id="rowdel" style="width:10%;height: 100%;">-</button>
+                                    <div style="width: 100%;height:2%;padding-left:25%;margin-bottom: 2px;">
+                                        <button id="rowdel" style="width:30%;height: 100%;line-height:1px;font-size: 1px;">-</button>
+                                        <button id="rowadd" style="width:30%;height: 100%;line-height:1px;font-size: 1px;">+</button>    
                                     </div>
                                     <!-- 选项 -->
-                                    <div style="display: inline-flex;width: 100%;height:6%;border: 1px solid">
+                                    <div style="display: inline-flex;width: 100%;height:6%;margin-top:2px;">
                                         <!-- <div style="width: 10%;height:100%;border: 1px solid"></div> -->
                                         <input type="text" id="series_label" placeholder="请输入图题" style="width: 100%;height: 100%;border-radius: 5px;"></input>
                                     
                                     </div>
                                     <!-- 数据 -->
-                                    <div style=";width: 100%;height:90%;border: 1px solid">
-                                        <div style="display: inline-flex;width: 100%;height:5%;border: 1px solid">
-                                            <div style=";width: 5%;height:100%;border: 1px solid">
+                                    <div style=";width: 100%;height:90%;">
+                                        <div style="display: inline-flex;width: 100%;height:5%;border: 2px solid;border-radius:5px">
+                                            <div style=";width: 5%;height:100%">
 
                                             </div>
                                             <div id="series_name" style=";width: 95%;height:100%;border: 1px solid">
@@ -773,13 +773,13 @@
 
 
                                         </div>
-                                        <div style="display: inline-flex;width: 100%;height:95%;border: 1px solid">
-                                            <div id="index_name" style=";width: 5%;height:100%;border: 1px solid">
+                                        <div style="display: inline-flex;width: 100%;height:95%;border: 2px solid;border-radius:5px">
+                                            <div id="index_name" style=";width: 5%;height:100%;">
 
                                             </div>
 
                                             <div id="data_line"
-                                                style="display: flex;;width: 95%;height:100%;border: 1px solid">
+                                                style="display: flex;;width: 95%;height:100%;border: 2px solid;border-radius:5px">
 
                                             </div>
 
@@ -813,8 +813,8 @@
                                             var series_option_div = document.getElementById("series_option")
                                             for (var j = 0; j < this.clonnum; j++) {
                                                 var index_label = document.createElement("div")
-                                                index_label.innerText = j.toString()
-                                                index_label.style = "width: 100%;height:5%"
+                                                index_label.style = "width: 100%;height:5%;padding-top:8px"
+                                                index_label.innerText = j.toString()                               
                                                 index_div.append(index_label)
 
                                             }
@@ -901,7 +901,7 @@
                                             var index_div = document.getElementById("index_name")
                                             var index_label = document.createElement("div")
                                             index_label.innerText = (this.clonnum - 1).toString()
-                                            index_label.style = "width: 100%;height:5%;border: 1px solid"
+                                            index_label.style = "width: 100%;height:5%;;padding-top:8px"
                                             index_div.append(index_label)
 
                                             for (var i = 0; i < line_list.length; i++) {
@@ -1054,7 +1054,7 @@
                                                 ],
                                                 yAxis: [{
                                                     type: 'value',
-                                                    name: '降水',
+                                                    name: '',
                                                     position: 'right',
                                                     alignTicks: true,
                                                     // max: function (value) {
@@ -1077,7 +1077,7 @@
                                                 },
                                                 {
                                                     type: 'value',
-                                                    name: '气温',
+                                                    name: '',
                                                     position: 'left',
                                                     splitLine: { show: false },
                                                     alignTicks: true,
@@ -1127,24 +1127,35 @@
 
                             </div>
 
-                            <div style="width: 80%;height:700px;border: 1px solid">
+                            <div style="width: 80%;height:700px;">
                                 <!-- 绘图区 -->
-                                <div id="line_plot" style="width: 100%;height:650px;border: 1px solid">
+                                <div id="line_plot" style="width: 100%;height:655px;border: 2px solid;border-radius:10px">
 
                                 </div>
                                 <!-- 按钮组 -->
-                                <div style="width: 100%;height:50px;border: 1px solid">
-                                    <button id="getdata" style="width: 10%;height:45px;border: 1px solid">获取数据</button>
-                                    <button id="plot"
-                                        style="width: 10%;height:45px;border: 1px solid;float:right">绘图</button>
-                                    <button id="flushdata"
-                                        style="width: 10%;height:45px;border: 1px solid;float:right">刷新</button>
+                                <div style="width: 100%;height:45px;border: 2px solid;border-radius:5px;padding-left:80%;padding-top:5px;">
+                                    <!-- <button id="getdata" style="width: 10%;height:45px;border: 1px solid">获取数据</button> -->
+                                    <!-- <button id="plot"
+                                        style="width: 10%;height:45px;border: 1px solid;float:right">绘图</button> -->
+                                    <!-- <button id="flushdata"
+                                        style="width: 10%;height:45px;border: 1px solid;float:right">刷新</button> -->
+                                    <button id="getdata" class="layui-btn layui-btn-sm layui-btn-primary">
+                                        <i class="layui-icon layui-icon-refresh"></i>
+                                    </button>
+
+                                    <button id="flushdata" class="layui-btn layui-btn-sm layui-btn-primary">
+                                        <i class="layui-icon layui-icon-edit"></i>
+                                    </button>
+
+                                    <button id="plot" class="layui-btn layui-btn-sm layui-btn-primary">
+                                        <i class="layui-icon layui-icon-triangle-r"></i>
+                                    </button>
 
                                 </div>
                                 <script>
-                                    $("#getdata").click(function () {
-                                        plot_line_obj.get_select()
-                                    })
+                                    // $("#getdata").click(function () {
+                                    //     plot_line_obj.get_select()
+                                    // })
                                     $("#plot").click(function () {
                                         plot_line_obj.getdata()
                                         plot_line_obj.plot_all()
@@ -1168,66 +1179,61 @@
 
     </div>
     <!-- 隐藏栏目 -->
-    <div id="hidediv" style="display: none;;width:420px;height:600px;position:absolute;top:10%;left:35.5%;z-index:100;background-color: rgb(211, 69, 69);padding-left:50px;padding-top:50px;">
-        <div id="hidelabel" style="width:320px;height:50px;border:3px solid black;padding-top:2%;padding-left:2%;">
-            <h3>参数设置:</h3>
-        </div>
-        <div id="hideseries" style="width:320px;height:350px;border:1px solid black;padding-top:2%;">
-            <!-- <div class="hideseries" style="width:312px;height:30px;border:1px solid black;margin:3px;border-radius: 3px;padding-left:5px;padding-top:3px;">
-                <label>类型:</label>  
-                <select style="width:70px;height:20px;border: none;;background-color: rgb(211, 69, 69);">
-                    <option value="line">等值线</option>
-                    <option value="bar">柱状图</option>
-                </select>
-                <label>颜色:</label> 
-                <select style="width:60px;height:20px;border: none;;background-color: rgb(211, 69, 69);">
-                    <option value="line">红色</option>
-                    <option value="bar">黑色</option>
-                    <option value="bar">蓝色</option>
-                </select>
-                <label>宽度:</label>  
-                <input type="number" style="width:40px;height:20px;;background-color: rgb(211, 69, 69);"></input>
-
+    <div id="hidediv"
+        style="display: none;;width:420px;height:600px;position:absolute;top:10%;left:35.5%;z-index:100;background-color: white;padding-left:50px;padding-top:50px;">
+        <div style="width:325px;height:497px;border: 3px solid black;border-radius:10px;">
+            <div id="hidelabel"
+                style="width:320px;height:50px;;padding-top:5%;padding-left:5%;">
+                <h3>参数设置</h3>
             </div>
-            <div class="hideseries" style="width:312px;height:30px;border:1px solid black;margin:3px;border-radius: 3px;">
-
-            </div> -->
-
-        </div>
-        <div style="width:320px;height:30px;border:3px solid black;padding-left:5px">
-            <label>气温:</label> 
-            &nbsp;
-            <label>最小</label>
-            &nbsp;
-            <input id="tmin" type="number" style="width:45px;height:20px;" value=0></input>
-            <label>最大</label>
-            &nbsp;
-            <input id="tmax" type="number" style="width:45px;height:20px;" value=100></input>
-            <label>间隔</label>
-            &nbsp;
-            <input id="titem" type="number" style="width:45px;height:20px;" value=10></input>
-        </div>
-        <div style="width:320px;height:30px;border:3px solid black;padding-left:5px">
-            <label>降水:</label>
-            &nbsp; 
-            <label>最小</label>
-            &nbsp;
-            <input id="rmin" type="number" style="width:45px;height:20px;" value=0></input>
-            <label>最大</label>
-            &nbsp;
-            <input id="rmax" type="number" style="width:45px;height:20px;" value=100></input>
-            <label>间隔</label>
-            &nbsp;
-            <input id="ritem" type="number" style="width:45px;height:20px;" value=10></input>
-        </div>
-        <div id="hidebutton" style="width:320px;height:30px;border:3px solid black">
-            <button id="self_line_opt_save" style="width:10%;height:100%;float: right;"></button>
-            <button id="self_line_opt_quit" style="width:10%;height:100%;float: right;"></button>
+            <div id="hideseries" style="width:320px;height:330px;border-top: 3px solid black;border-bottom: 3px solid black;padding-top:2%;margin-bottom:15px;">
+            </div>
+            <div style="width:320px;height:30px;;padding-left:5px">
+                <label>气温:</label>
+                &nbsp;
+                <label>最小</label>
+                &nbsp;
+                <input id="tmin" type="number" style="width:45px;height:20px;" value=0></input>
+                <label>最大</label>
+                &nbsp;
+                <input id="tmax" type="number" style="width:45px;height:20px;" value=100></input>
+                <label>间隔</label>
+                &nbsp;
+                <input id="titem" type="number" style="width:45px;height:20px;" value=10></input>
+            </div>
+            <div style="width:320px;height:30px;;padding-left:5px">
+                <label>降水:</label>
+                &nbsp;
+                <label>最小</label>
+                &nbsp;
+                <input id="rmin" type="number" style="width:45px;height:20px;" value=0></input>
+                <label>最大</label>
+                &nbsp;
+                <input id="rmax" type="number" style="width:45px;height:20px;" value=100></input>
+                <label>间隔</label>
+                &nbsp;
+                <input id="ritem" type="number" style="width:45px;height:20px;" value=10></input>
+            </div>
+            <div id="hidebutton" style="width:320px;height:37px;border-top: 5px solid black;padding-right:5%;">
+                <button id="self_line_opt_save" class="layui-btn layui-btn-sm layui-btn-primary" style="float: right">
+                    <i class="layui-icon layui-icon-triangle-r"></i>
+                </button>
+                <!-- <button id="self_line_opt_quit" style="width:10%;height:100%;float: right;"></button> -->
+                <button id="self_line_opt_quit" class="layui-btn layui-btn-sm layui-btn-primary" style="float: right">
+                    <i class="layui-icon layui-icon-logout"></i>
+                </button>
+    
+            </div>
         </div>
 
 
     </div>
     <script>
+        $("#self_line_opt_quit").click(function () { 
+            var hidediv = document.getElementById("hidediv")
+            hidediv.style="display:none;;width:420px;height:600px;position:absolute;top:10%;left:35.5%;z-index:100;background-color: white;padding-left:50px;padding-top:50px;" 
+
+        })
         $("#self_line_opt_save").click(function () {        
             // 数据
             plot_line_obj.getdata()
@@ -1260,13 +1266,13 @@
 
 
             var hidediv = document.getElementById("hidediv")
-            hidediv.style="display:none;;width:420px;height:600px;position:absolute;top:10%;left:35.5%;z-index:100;background-color: rgb(211, 69, 69);padding-left:50px;padding-top:50px;"
+            hidediv.style="display:none;;width:420px;height:600px;position:absolute;top:10%;left:35.5%;z-index:100;background-color: white;padding-left:50px;padding-top:50px;"
             plot_line_obj.plot_all()
         })
         $("#flushdata").click(function () {
             console.log("flushdata")       
             var hidediv = document.getElementById("hidediv")
-            hidediv.style="display: inline-block;;width:420px;height:600px;position:absolute;top:10%;left:35.5%;z-index:100;background-color: rgb(211, 69, 69);padding-left:50px;padding-top:50px;"
+            hidediv.style="display: inline-block;;width:420px;height:600px;position:absolute;top:10%;left:35.5%;z-index:100;background-color: white;padding-left:50px;padding-top:50px;"
             // 开始表演
             plot_line_obj.getdata()
             $("#hideseries").html("")
@@ -1280,7 +1286,7 @@
                 lab_type.innerText = "类型:"
                 lab_type.style = "margin-left:5px"
                 var select_type = document.createElement("select");
-                select_type.style = "width:70px;height:20px;border: none;;background-color: rgb(211, 69, 69);"
+                select_type.style = "width:70px;height:20px;border: none;;background-color: white;"
                 var type_opt1 = document.createElement("option");
                 type_opt1.value = "line"
                 type_opt1.innerText = "等值线"
@@ -1293,7 +1299,7 @@
                 lab_color.style = "margin-left:5px"
                 lab_color.innerText = "颜色:"
                 var select_color = document.createElement("select");
-                select_color.style = "width:60px;height:20px;border: none;;background-color: rgb(211, 69, 69);"
+                select_color.style = "width:60px;height:20px;border: none;;background-color: white;"
                 var color_opt1 = document.createElement("option");
                 color_opt1.value = "red"
                 color_opt1.innerText = "红色"
@@ -1309,7 +1315,7 @@
                 lab_width.style = "margin-left:5px"
                 lab_width.innerText = "宽度: "
                 var input_width = document.createElement("input");
-                input_width.style = "width:40px;height:20px;;background-color: rgb(211, 69, 69);margin-left:10px"
+                input_width.style = "width:40px;height:20px;;background-color: white;margin-left:10px"
                 input_width.setAttribute("type","number")
                 input_width.value = 1
                 // 添加
