@@ -61,13 +61,18 @@ def preview_all(request):
     items = request.data["items"]
     types = request.data["types"]
     # name = request.POST["name"]
-    name = request.POST.getlist("name")
+    name = request.data.getlist("name")
     #name = request.query_params.getlist("name")
     year = request.data["year"]
-    data = request.POST.getlist('data',[])
+    data = request.data["data"]
     unity = request.data["unity"]
 
-    print(type(name),name[0].split(),len(data),type(data),len(name))
+    print(name)
+    print(data)
+    print(type(data),data[0])
+
+
+    print(type(name),name[0])
     for i in range(len(data)):
         context = {
             "id": i,
