@@ -1,9 +1,11 @@
 from django.http import HttpResponse
 from rest_framework import permissions
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.parsers import JSONParser
 from weasyprint import HTML
 
 from ..models.doucument_model import *
+from ..serializers.document_serializer import DocumentSerializer
 
 
 @api_view(["post"])
@@ -52,57 +54,31 @@ def preview_save(request):
     pdf_file = pdf_file.write_pdf(presentational_hints=True)
     return HttpResponse(pdf_file, content_type="application/pdf")
 
+
 # 保存所有文档
 @api_view(["post"])
 @permission_classes([permissions.IsAuthenticated])
 def preview_all(request):
-    # 接收前台数据
-    document = request.data["document"]
-    items = request.data["items"]
-    types = request.data["types"]
-    #name = request.POST["name"]
-    name = request.data.getlist("name")
-    # name = request.query_params.getlist("name")
-    #name = request.query_params.getlist("name")
-    year = request.data["year"]
-    data = request.data["data"]
-    unity = request.data["unity"]
+    doc_ser = DocumentSerializer(data=JSONParser().parse(request))
+    doc_ser.is_valid(raise_exception=True)
 
-    print(name,type(name),list(name))
-    #print(data)
-    #print(type(data),data[0])
+    # for i in range(len(data)):
+    #     context = {
+    #         "id": i,
+    #         "data": data[i]
+    #     }
+    #     obj = SelfDefine.objects.create(
+    #         types=types,
+    #         name=name[i],
+    #         item=items,
+    #         year=year,
+    #         unity=unity,
+    #         data=context,
+    #         create_user=0,
+    #         update_user=0
+    #     )
 
-
-    print(type(name),name[0])
-    for i in range(len(data)):
-        context = {
-            "id": i,
-            "data": data[i]
-        }
-        obj = SelfDefine.objects.create(
-            types=types,
-            name=name[i],
-            item=items,
-            year=year,
-            unity=unity,
-            data=context,
-            create_user=0,
-            update_user=0
-        )
-    print("所有数据保存成功")
-    # 数据存储
-    # obj = SelfDefine.objects.create(
-    #     types=types,
-    #     name=name,
-    #     item=items,
-    #     year=year,
-    #     unity=unity,
-    #     data=context,
-    #     create_user=0,
-    #     update_user=0
-    # )
-    # print("数据保存成功")
-    pdf_file = HTML(string=document)
+    pdf_file = HTML(string=doc_ser.validated_data["document"])
     pdf_file = pdf_file.write_pdf(presentational_hints=True)
     return HttpResponse(pdf_file, content_type="application/pdf")
 
