@@ -60,16 +60,17 @@ def preview_all(request):
     document = request.data["document"]
     items = request.data["items"]
     types = request.data["types"]
-    # name = request.POST["name"]
+    #name = request.POST["name"]
     name = request.data.getlist("name")
+    # name = request.query_params.getlist("name")
     #name = request.query_params.getlist("name")
     year = request.data["year"]
     data = request.data["data"]
     unity = request.data["unity"]
 
-    print(name)
-    print(data)
-    print(type(data),data[0])
+    print(name,type(name),list(name))
+    #print(data)
+    #print(type(data),data[0])
 
 
     print(type(name),name[0])

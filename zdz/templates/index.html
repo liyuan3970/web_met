@@ -849,7 +849,7 @@
                                     document.getElementById('save_doc_all').addEventListener('click', function () {
                                         //保存所有内容
                                         if (list_button_object.type_list.length > 0) {
-                                            var data_list = []
+                                            var data_list = new Array
                                             var contentDocument = ""
                                             for (var i = 0; i < list_button_object.type_list.length; i++) {
                                                 contentDocument = contentDocument + list_button_object.data[i]
@@ -879,7 +879,7 @@
                                                 type: "POST",  // 请求方式
                                                 headers: { "Token": "Bearer " + localStorage.getItem("token") },
                                                 data: formData,
-                                                // traditional:true,
+                                                traditional:true,
                                                 processData: false,
                                                 contentType: false,
                                                 enctype: "multipart/form-data",
