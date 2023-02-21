@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from ..models import SelfDefine
 
 class DocumentSerializer(serializers.Serializer):
     """
@@ -18,6 +18,27 @@ class DocumentSerializer(serializers.Serializer):
         保存数据写在这里
         return **Model.objects.create(validated_data)
         """
+        data = validated_data["data"]
+        name = validated_data["name"]
+        item = validated_data["item"]
+        year = validated_data["year"]
+        unity = validated_data["unity"]
+        type = validated_data["type"]
+        for i in range(len(data)):
+            context = {
+                "id": i,
+                "data": data[i]
+            }
+            obj = SelfDefine.objects.create(
+                types=type,
+                name=name[i],
+                item=item,
+                year=year,
+                unity=unity,
+                data=context,
+                create_user=0,
+                update_user=0
+            )
         return True
 
     def update(self, instance, validated_data):

@@ -61,23 +61,7 @@ def preview_save(request):
 def preview_all(request):
     doc_ser = DocumentSerializer(data=JSONParser().parse(request))
     doc_ser.is_valid(raise_exception=True)
-
-    # for i in range(len(data)):
-    #     context = {
-    #         "id": i,
-    #         "data": data[i]
-    #     }
-    #     obj = SelfDefine.objects.create(
-    #         types=types,
-    #         name=name[i],
-    #         item=items,
-    #         year=year,
-    #         unity=unity,
-    #         data=context,
-    #         create_user=0,
-    #         update_user=0
-    #     )
-
+    doc_ser.save()
     pdf_file = HTML(string=doc_ser.validated_data["document"])
     pdf_file = pdf_file.write_pdf(presentational_hints=True)
     return HttpResponse(pdf_file, content_type="application/pdf")
@@ -89,8 +73,6 @@ def history_save(request):
     # 接收前台数据
     document = request.data["document"]
     # 查询对应数据库字段的数据再返回
-
     pdf_file = HTML(string=document)
-
     pdf_file = pdf_file.write_pdf(presentational_hints=True)
     return HttpResponse(pdf_file, content_type="application/pdf")
