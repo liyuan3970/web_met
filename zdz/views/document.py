@@ -23,6 +23,7 @@ from django.http import HttpResponse, Http404, StreamingHttpResponse
 import datetime
 from django.contrib.auth import authenticate
 
+
 class NpEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, (numpy.int_, numpy.intc, numpy.intp, numpy.int8,
@@ -42,120 +43,122 @@ def kuaibao(request):
     return render(request, 'kuaibao.html', locals())
 
 
-
 def test_demo(request):
-
     unitys = WebUnity.objects.all().values()
-    #images = WebPicture.objects.all().values()
+    # images = WebPicture.objects.all().values()
     class_types = WebClass.objects.all().values()
     class_dir = []
     view_list = []
     for unity in unitys:
-        if unity['name']=='台州气象局':
+        if unity['name'] == '台州气象局':
             img_src = unity['img']
             check_name = unity['name']
             for single_class in class_types:
                 single_list = {
-                    'name':single_class['name'],
-                    'src':single_class['img'],
-                    'img_list':[]
-                }            
+                    'name': single_class['name'],
+                    'src': single_class['img'],
+                    'img_list': []
+                }
                 img_name = single_class['name']
-                images = WebPicture.objects.filter(unity=check_name,webclass=img_name).all().values()
+                images = WebPicture.objects.filter(unity=check_name, web_class=img_name).all().values()
                 for img in images:
                     img_dir = {
-                        'name':img['name'],
-                        'src':img['img']
+                        'name': img['name'],
+                        'src': img['img']
                     }
                     single_list['img_list'].append(img_dir)
                 class_dir.append(single_list)
-    
-    view_list=class_dir[0]['img_list']  
-    #print("数据",class_dir,"shuju ",view_list)    
+
+    view_list = class_dir[0]['img_list']
+    # print("数据",class_dir,"shuju ",view_list)
     content = {
         'img_src': img_src,
-        'class_dir':class_dir,
-        'first':view_list
-    }  
-        
-    return render(request, 'test_demo.html',locals())
+        'class_dir': class_dir,
+        'first': view_list
+    }
+
+    return render(request, 'test_demo.html', locals())
 
 
 def canvas_plot(request):
     content = {
         'status': "ok"
-    }        
-    return render(request, 'canvas_plot.html',locals())
+    }
+    return render(request, 'canvas_plot.html', locals())
+
 
 # 网站预览功能
 def website(request):
-
     unitys = WebUnity.objects.all().values()
-    #images = WebPicture.objects.all().values()
+    # images = WebPicture.objects.all().values()
     class_types = WebClass.objects.all().values()
     class_dir = []
     view_list = []
     for unity in unitys:
-        if unity['name']=='台州气象局':
+        if unity['name'] == '台州气象局':
             img_src = unity['img']
             check_name = unity['name']
             for single_class in class_types:
                 single_list = {
-                    'name':single_class['name'],
-                    'src':single_class['img'],
-                    'img_list':[]
-                }            
+                    'name': single_class['name'],
+                    'src': single_class['img'],
+                    'img_list': []
+                }
                 img_name = single_class['name']
-                images = WebPicture.objects.filter(unity=check_name,webclass=img_name).all().values()
+                images = WebPicture.objects.filter(unity=check_name, web_class=img_name).all().values()
                 for img in images:
                     img_dir = {
-                        'name':img['name'],
-                        'src':img['img']
+                        'name': img['name'],
+                        'src': img['img']
                     }
                     single_list['img_list'].append(img_dir)
                 class_dir.append(single_list)
-    
-    view_list=class_dir[0]['img_list']  
-    #print("数据",class_dir,"shuju ",view_list)    
+
+    view_list = class_dir[0]['img_list']
+    # print("数据",class_dir,"shuju ",view_list)
     content = {
         'img_src': img_src,
-        'class_dir':class_dir,
-        'first':view_list
-    }  
-        
+        'class_dir': class_dir,
+        'first': view_list
+    }
+
     return JsonResponse(content)
+
+
 # 历史数据查询
 def history_file(request):
     unity = "台州市气象局"
     year = 2023
     doc_types = DocumentType.objects.filter(unity=unity).all().values()
-    title = list(SelfPlot.objects.values('types','id'))[-5:]
+    title = list(SelfPlot.objects.values('document_type', 'id'))[-5:]
     type_list = []
     for doc_type in doc_types:
         doc_single = {
-            'name':doc_type['name'],
-            'filelist':[]
+            'name': doc_type['name'],
+            'filelist': []
         }
-        doc_all = Document.objects.filter(unity="台州市气象台",year=year,types=doc_type['name']).all().values()
+        doc_all = Document.objects.filter(unity="台州市气象台", year=year,
+                                          document_type=doc_type['name']).all().values()
         for doc in doc_all:
             doc_dir = {}
-            doc_dir['type'] = doc['types']
+            doc_dir['type'] = doc['type']
             doc_dir['item'] = doc['item']
             doc_dir['unity'] = doc['unity']
             doc_dir['year'] = doc['year']
             doc_single['filelist'].append(doc_dir)
-        type_list.append(doc_single)   
+        type_list.append(doc_single)
     content = {
         'doc_list': type_list,
-        'self_title':title
-    }  
-        
+        'self_title': title
+    }
+
     return JsonResponse(content)
+
 
 # demo_02是气象快报的核心代码主要用来统计数据
 def index_kb(request):
     # #print(this is a index)
-    
+
     return render(request, 'post_data.html', locals())
 
 
@@ -172,7 +175,7 @@ def post_data(request):
         'crf': crf,
         'city': city,
     }
-    #print(dicr, "月份:", start[0:3])
+    # print(dicr, "月份:", start[0:3])
     #
 
     sql = "test"
@@ -180,7 +183,7 @@ def post_data(request):
     RR_County, tmp_max_County, tmp_min_County = sql_worker.comput_county()
     sql_worker.comput_IIiii()
     imd, imd_tmax, imd_tmin, tz_json, RR_sum, RR_rx, level_rain, RR_station_rank, RR_station_bar, tmp_min_scatter, tmp_max_scatter, tmp_event_scatter, tmp_station_bar, VV_min_scatter, fFy_wind7up_scatter, vv_time, vv_value, data_fFy_list = sql_worker.data_output()
-    #print(RR_station_rank)
+    # print(RR_station_rank)
     context = {
         'img': imd,
         'img_tmax': imd_tmax,
@@ -210,9 +213,8 @@ def post_data(request):
 
 def url_data(request):
     # 处理点击数据时链接url显示单站数据
-    #print("链接url")
+    # print("链接url")
     return redirect('https://www.baidu.com/')
-
 
 
 # 单站请求数据的URl
@@ -226,6 +228,7 @@ def index_main(request):
     return render(request, 'index.html')
     # return render(request,'main.html',context)
 
+
 # 登录页面的完善
 def login_main(request):
     if request.method == 'GET':
@@ -234,19 +237,19 @@ def login_main(request):
         if request.method == 'POST':
             passwd = request.POST.get('passwd', '')
             user = request.POST.get('user', '')
-            userinfo=authenticate(username=user,password=passwd)
+            userinfo = authenticate(username=user, password=passwd)
             if userinfo is None:
-                return redirect('/login')             
+                return redirect('/login')
             else:
                 return redirect('/index')
-                
+
 
 def quick_look(request):
     data_list = request.POST.get('data_post', '')
     crf = request.POST.get('csrfmiddlewaretoken', '')
     # data_list = request.POST['data_post']
     # 获取核心数据，保存版本、编写解析函数、保存文档为word、
-    #print("获取到的预览数据:", data_list)
+    # print("获取到的预览数据:", data_list)
     return render(request, 'index.html')
 
 
@@ -255,18 +258,18 @@ def plot_self_data(request):
     plot_self_data = request.POST.get('plot_self_data', '')
     crf = request.POST.get('csrfmiddlewaretoken', '')
     types = "存储数据"
-    time ="2020年8月12日"
+    time = "2020年8月12日"
     obj = SelfPlot.objects.create(
-        types=types, 
+        document_type=types,
         time=time,
         data=json.loads(plot_self_data),
-        create_user = 0, 
-        update_user = 0
+        create_user=0,
+        update_user=0
     )
     # obj = SelfPlot(types=types,time=time,data =plot_self_data)
     # obj.save()
     context2 = {
-        "status":"ok"
+        "status": "ok"
     }
     return JsonResponse(context2)
 
@@ -299,7 +302,6 @@ def upload_select_taizhou_data(request):
         return JsonResponse(context)
 
 
-
 # 新建文档
 
 
@@ -330,32 +332,32 @@ def create_new_doc_data(request):
     doc_writer = request.POST.get('doc_writer', '')
     doc_publisher = request.POST.get('doc_publisher', '')
     doc_unity = request.POST.get('doc_unity', '')
-    doc_date = request.POST.get('doc_date', '') 
+    doc_date = request.POST.get('doc_date', '')
     content = request.POST.get('doc_list', '')
     year = doc_date[0:4]
-    data = Document.objects.filter(year=year, types=type_doc).last()
-    if data==None:
+    data = Document.objects.filter(year=year, document_type=type_doc).last()
+    if data == None:
         item = 0
     else:
         item = data.item + 1
     obj = Document.objects.create(
-        types=type_doc,
+        document_type=type_doc,
         writer=doc_writer,
         publisher=doc_publisher,
         unity=doc_unity,
         pub_date=doc_date,
         item=item,
         year=year,
-        verson_content = content,
-        create_user = 0, 
-        update_user = 0
+        version_content=content,
+        create_user=0,
+        update_user=0
     )
     context = {
         'status': "ok",
         'doc_type': type_doc,
-        'doc_item':item,
-        'doc_unity':doc_unity,
-        'doc_year':year
+        'doc_item': item,
+        'doc_unity': doc_unity,
+        'doc_year': year
 
     }
     return JsonResponse(context)
@@ -364,68 +366,73 @@ def create_new_doc_data(request):
 # 打开文档选项
 def open_old_doc(request):
     unity = Unity.objects.all().values()
-    documenttype = DocumentType.objects.all().values()
+    document_type = DocumentType.objects.all().values()
     year = Document.objects.all().values()
     today = datetime.datetime.today()
     year = today.year
-    data_year = [year,year-1,year-2]
+    data_year = [year, year - 1, year - 2]
     data_unity = [i['name'] for i in unity]
-    data_documenttype = [i['name'] for i in documenttype]
+    data_document_type = [i['name'] for i in document_type]
     context = {
-        'type': data_documenttype,
+        'type': data_document_type,
         'year': data_year,
         'unity': data_unity
     }
     return JsonResponse(context)
+
+
 # 打开所选文档的列表
 def open_doc_data(request):
     doc_type = request.POST.get('type', '')
     doc_unity = request.POST.get('unity', '')
-    doc_year = request.POST.get('year', '') 
-    data = Document.objects.filter(year=doc_year,unity=doc_unity,types=doc_type).all().values()
+    doc_year = request.POST.get('year', '')
+    data = Document.objects.filter(year=doc_year, unity=doc_unity, document_type=doc_type).all().values()
     item_list = [i['item'] for i in data]
     writer_list = [i['writer'] for i in data]
-    type_list = [i['types'] for i in data]
+    type_list = [i['document_type'] for i in data]
     context = {
         'type': type_list,
-        'item':item_list,
-        'writer':writer_list,
-        'unity':doc_unity,
-        'year':doc_year
+        'item': item_list,
+        'writer': writer_list,
+        'unity': doc_unity,
+        'year': doc_year
 
     }
     return JsonResponse(context)
+
 
 # 加载选中的文档数据
 def open_load_object(request):
     info = request.POST.get('info', '')
     fields = info.split("-")
     item = int(fields[0])
-    year = int(fields[1]) 
-    unity = fields[2] 
-    doc_type = fields[3] 
-    data = Document.objects.filter(year=year,item =item,unity=unity,types=doc_type).all().values()
-    verson_content = str(data[0]['verson_content']).split(",")[0:-1]
+    year = int(fields[1])
+    unity = fields[2]
+    doc_type = fields[3]
+    data = Document.objects.filter(year=year, item=item, unity=unity, document_type=doc_type).all().values()
+    version_content = str(data[0]['version_content']).split(",")[0:-1]
     content_list = []
-    for i in range(len(verson_content)):
-        name = verson_content[i]
+    for i in range(len(version_content)):
+        name = version_content[i]
         single_content = ""
-        data_self = SelfDefine.objects.filter(year=year,name=name,item =item,unity=unity,types=doc_type).all().order_by('-create_time').values()
+        data_self = SelfModule.objects.filter(year=year, name=name, item=item, unity=unity,
+                                              document_type=doc_type).all().order_by('-create_time').values()
         for j in data_self:
-            if int(j['data']['id'])==i:
+            if int(j['data']['id']) == i:
                 single_content = j['data']['data']
                 content_list.append(single_content)
-                #print("查找数据",j['name'],j['data']['id'],j['types'],j)
+                # print("查找数据",j['name'],j['data']['id'],j['types'],j)
                 break
     context = {
-        'type_list':verson_content,
-        'item':item,
-        'year':year,
-        'type':doc_type,
-        'unity':unity,
-        'content_list':content_list
+        'type_list': version_content,
+        'item': item,
+        'year': year,
+        'type': doc_type,
+        'unity': unity,
+        'content_list': content_list
     }
     return JsonResponse(context)
+
 
 # tinymce_footer
 def tinymce_footer(request):
@@ -436,24 +443,25 @@ def tinymce_footer(request):
         v['name'] = version['name']
         v['service_name'] = version['service_name']
         v['service_unity'] = version['service_unity']
-        v['recive_unity'] = version['recive_unity']
+        v['receive_unity'] = version['receive_unity']
         version_list.append(v)
     datalist = func.decode_footer(version_list)
     images = Picture.objects.all().values()
     image_list = []
     for image in images:
         single = {
-            'name':image['name'],
-            'src':image['img']
+            'name': image['name'],
+            'src': image['img']
         }
         image_list.append(single)
     html_png = func.footer_png(image_list)
     context = {
         'status': "ok",
-        'datalist':datalist,
-        'html_png':html_png
+        'datalist': datalist,
+        'html_png': html_png
     }
     return JsonResponse(context)
+
 
 # 获取呈送发的数据
 def leader_Data_post(request):
@@ -469,10 +477,10 @@ def leader_Data_post(request):
         v['name'] = version['name']
         v['service_name'] = version['service_name']
         v['service_unity'] = version['service_unity']
-        v['recive_unity'] = version['recive_unity']
+        v['receive_unity'] = version['receive_unity']
         version_list.append(v)
 
-    #print("呈送", version_list, name_list)
+    # print("呈送", version_list, name_list)
     context = {
         'status': "ok",
         'version': version_list,
@@ -487,23 +495,23 @@ ec_worker = None
 
 def ec_single_data(request):
     # 数据的接收 
-    
+
     ec_start_time = request.POST.get('ec_start_time', '')
     ec_end_time = request.POST.get('ec_end_time', '')
-    start_time,end_time = 0,24
-    
+    start_time, end_time = 0, 24
+
     # 处理数据逻辑
     global ec_worker
     if ec_worker:
-        data = ec_worker.comput_average(start_time,end_time)
+        data = ec_worker.comput_average(start_time, end_time)
     else:
-        ec_worker = data_class.ec_data_point(start_time,end_time) 
-        data = ec_worker.comput_average(start_time,end_time)
-    #print("ec-->ok")
+        ec_worker = data_class.ec_data_point(start_time, end_time)
+        data = ec_worker.comput_average(start_time, end_time)
+    # print("ec-->ok")
     # 数据的返回
     context = {
         'status': "ok",
-        'ec_data':data
+        'ec_data': data
     }
     return JsonResponse(context)
 
@@ -559,8 +567,8 @@ def tool_zdz_date(request):
         'day_range': [zdz_worker.day_list[0][0], zdz_worker.day_list[-1][0]],
         'rain_line': zdz_worker.rain_line,
         'rain_scatter': json.dumps(zdz_worker.rain_scatter),
-        'rain_img':zdz_worker.img,
-        'text':text
+        'rain_img': zdz_worker.img,
+        'text': text
     }
     return JsonResponse(context)
 
@@ -634,7 +642,7 @@ def tool_zdz_daily(request):
     start = '2022-01-25 20:00'
     end = '2022-02-10 06:00'
     date = request.POST.get('date', '')
-    #print('获取的时间', date)
+    # print('获取的时间', date)
     global zdz_worker
     if zdz_worker:
         daily_data = zdz_worker.pre_day(date)
@@ -653,17 +661,19 @@ def tool_zdz_daily(request):
     }
     return JsonResponse(context)
 
+
 # 自订正降水的查询
 def select_self_plot(request):
     select_id = request.POST.get('select_id', '')
     data = list(SelfPlot.objects.filter(id=int(select_id)).all().values())
-    #print("自订正降水:",data[0]["data"])
+    # print("自订正降水:",data[0]["data"])
     context = {
         'status': "ok",
-        'grid':data[0]["data"]
+        'grid': data[0]["data"]
 
     }
     return JsonResponse(context)
+
 
 # 十天数据
 def longmet(request):
@@ -684,24 +694,26 @@ def longmet(request):
     temp5 = "8～11度；"
     temp6 = "7～12度；"
     temp7 = "7～13度。"
-    templist = [temp1, temp2, temp3, temp4,temp5,temp6,temp7]
+    templist = [temp1, temp2, temp3, temp4, temp5, temp6, temp7]
     # 包装数据
     head_h = '''<p class="MsoNormal" style="text-align: left;"><span style="font-size: 20px; font-family: 宋体;">'''
     head_f = '''</span></p><table style="border-collapse: collapse; width: 100.433%; height: 235.438px; border-width: 1px; border-style: none;" border="1"><colgroup><col style="width: 19.0939%;"><col style="width: 67.3133%;"><col style="width: 13.5928%;"></colgroup><tbody>'''
-    foot ='''</tbody></table><p class="MsoNormal">&nbsp;</p>'''
-    html =""
+    foot = '''</tbody></table><p class="MsoNormal">&nbsp;</p>'''
+    html = ""
     html = html + head_h + title + head_f
-    for i in range(len(daylist )):
+    for i in range(len(daylist)):
         header = '''<tr style="height: 33.625px; text-align: left;"><td style="height: 33.625px; border-width: 1px; text-align: left;" colspan="2"><span style="font-family: 宋体;">'''
         middle = '''</span></td><td style="height: 33.625px; border-width: 1px; text-align: right;"><span style="font-family: 宋体;">'''
         footer = '''</span></td></tr>'''
         single = header + daylist[i] + middle + templist[i] + footer
         html = html + single
-    html = html +  foot   
+    html = html + foot
     context = {
         'data': html
     }
     return JsonResponse(context)
+
+
 # 短期数据
 def shortmet(request):
     # 调用接口
@@ -721,6 +733,8 @@ def shortmet(request):
         'data': html
     }
     return JsonResponse(context)
+
+
 @xframe_options_exempt
 def home(request):
     # return redirect('https://www.baidu.com/')

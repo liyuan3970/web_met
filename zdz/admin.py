@@ -10,7 +10,7 @@ admin.site.register(DocumentType)
 admin.site.register(Picture)
 admin.site.register(LeaderData)
 admin.site.register(Writer)
-admin.site.register(SelfDefine)
+admin.site.register(SelfModule)
 admin.site.register(SelfPlot)
 # 网站相关
 admin.site.register(WebPicture)

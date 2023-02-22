@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.http import HttpResponse
 from rest_framework import permissions
 from rest_framework.decorators import api_view, permission_classes
@@ -5,7 +6,7 @@ from rest_framework.parsers import JSONParser
 from weasyprint import HTML
 
 from ..models.doucument_model import *
-from ..serializers.document_serializer import DocumentSerializer
+from ..serializers.preview_all_serializer import PreviewAllSerializer
 
 
 @api_view(["post"])
@@ -27,7 +28,7 @@ def preview_save(request):
     document = request.data["document"]
     item = request.data["item"]
     items = request.data["items"]
-    types = request.data["types"]
+    document_type = request.data["types"]
     name = request.data["name"]
     year = request.data["year"]
     data = request.data["data"]
@@ -37,8 +38,8 @@ def preview_save(request):
         "data": data
     }
     # 数据存储
-    obj = SelfDefine.objects.create(
-        types=types,
+    obj = SelfModule.objects.create(
+        document_type=document_type,
         name=name,
         item=items,
         year=year,
@@ -58,8 +59,12 @@ def preview_save(request):
 # 保存所有文档
 @api_view(["post"])
 @permission_classes([permissions.IsAuthenticated])
+@transaction.atomic()
 def preview_all(request):
-    doc_ser = DocumentSerializer(data=JSONParser().parse(request))
+    doc_ser = PreviewAllSerializer(
+        data=JSONParser().parse(request),
+        context={"user_id": request.user.id}
+    )
     doc_ser.is_valid(raise_exception=True)
     doc_ser.save()
     pdf_file = HTML(string=doc_ser.validated_data["document"])
