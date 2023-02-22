@@ -32,12 +32,12 @@ class PreviewAllSerializer(serializers.Serializer):
                 "id": i,
                 "data": data[i]
             }
-            exist_data = SelfModule.objects.filter(year=year, name=name[i], item=item, unity=unity,
-                                                   document_type=document_type).last()
+            existed_instance = SelfModule.objects.filter(year=year, name=name[i], item=item, unity=unity,
+                                                         document_type=document_type).last()
 
-            if exist_data:
+            if existed_instance:
                 validated_data["sorted_data"] = sorted_data
-                self.update(exist_data, validated_data)
+                self.update(existed_instance, validated_data)
             else:
                 self_define_obj = SelfModule(
                     document_type=document_type,
