@@ -1,9 +1,10 @@
 """URL Configuration
 """
 from django.urls import path, include, re_path
-from rest_framework.routers import DefaultRouter
 from django.views.static import serve
+
 from . import views
+from .middleware import StandardRouter
 
 urlpatterns = [
     path('zdz_kuaibao', views.kuaibao),
@@ -52,7 +53,7 @@ urlpatterns = [
     path('create_doc_data', views.create_new_doc_data),
     # 呈送发的代码
     path('leader_Data_post', views.leader_Data_post),
-    
+
     # 自动站历史数据的查询交互
     path('tool_zdz_date', views.tool_zdz_date),
     # 自动站历史数据大风的查询
@@ -70,16 +71,9 @@ urlpatterns = [
 
 ]
 
-router = DefaultRouter()
+router = StandardRouter()
 router.register(r"user", views.UserViewSet)
+router.register(r"file", views.FileViewSet, basename="file")
 urlpatterns += [
-    path("", include(router.urls)),
-    # 仅预览
-    path(r"file/pdf", views.pdf),
-    # 预览模块并保存
-    path(r"file/preview_save", views.preview_save),
-    # 查询历史的文档
-    path(r"file/history_save", views.history_save),
-    # 保存所有数据并预览
-    path(r"file/preview_all", views.preview_all),
+    path("", include(router.urls))
 ]
