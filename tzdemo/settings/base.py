@@ -14,7 +14,6 @@ SECRET_KEY = 'y2%gu@dxkow&f)+rf$dd*y4833tsuxz50ssdfczqms8*j5cu$5'
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -103,6 +102,10 @@ REST_FRAMEWORK = {
     ),
     # 全局配置异常模块
     'EXCEPTION_HANDLER': 'zdz.middleware.custom_exception_handler',
+    # 权限配置
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
 }
 
 # jwt配置
@@ -110,9 +113,7 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
     'UPDATE_LAST_LOGIN': True,
-
     'SIGNING_KEY': SECRET_KEY,
-
     'AUTH_HEADER_NAME': 'HTTP_TOKEN',
 }
 

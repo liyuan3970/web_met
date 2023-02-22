@@ -1,6 +1,6 @@
 from django.db import transaction
 from rest_framework import viewsets, permissions
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -23,7 +23,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
 
     @transaction.atomic()
-    @action(methods=["post"], url_path="register", detail=False)
+    @action(methods=["post"], url_path="register", detail=False, permission_classes=[permissions.AllowAny])
     def register(self, request):
         reg_ser = RegisterSerializer(data=request.data)
         reg_ser.is_valid(raise_exception=True)
@@ -42,7 +42,3 @@ class UserViewSet(viewsets.ModelViewSet):
         data["company_name"] = reg_ser.instance.company_name
 
         return APIResponse(data)
-
-    @action(methods=["post"], url_path="test", detail=False, permission_classes=[permissions.IsAuthenticated])
-    def test(self, request):
-        return Response("ok")
