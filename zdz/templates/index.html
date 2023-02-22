@@ -768,36 +768,56 @@
 
                                 <script>
                                     tinymce.init({
-                                        selector: '#content',
-                                        language: 'zh_CN',
-                                        branding: false,
-                                        skin: 'oxide-dark',
-                                        promotion: false,
-                                        plugin_plothtml_width: "300%",
-                                        menubar: false,
-                                        plugins: "newfile openfile advlist anchor autolink autosave charmap code codesample emoticons footer fullscreen help image importcss indent2em insertdatetime link lists media nonbreaking pagebreak shortmet longmet advicemet preview quickbars save searchreplace table template visualblocks wordcount",
-                                        toolbar: [
-                                            "newfile openfile urldialog",
-                                            "insertfile undo redo bold italic underline hr |alignleft aligncenter alignright formatselect fontselect fontsizeselect removeformat subscript superscript charmap searchreplace insertdatetime forecolor backcolor fontsize fontfamily",//段落
-                                            "image code link unlink rotateleft rotateright flipv fliph editimage imageoptions quickimage | table | bullist numlist| | footer shortmet longmet advicemet"
-                                        ],
-                                        font_family_formats: "宋体='宋体';仿宋='仿宋';微软雅黑='微软雅黑';楷体='楷体';;隶书='隶书';幼圆='幼圆';Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings",
-                                        font_size_formats: '12px 14px 16px 18px 20px 24px 26px 28px 30px 32px 34px 36px 38px',
-                                        setup: (editor) => {
-                                            editor.ui.registry.addButton('urldialog', {
-                                                // icon: 'code',
-                                                text: '快速画图',
-                                                onAction: () => editor.windowManager.openUrl({
-                                                    title: '画图页面',
-                                                    url: 'http://127.0.0.1:9001/canvas_plot',
-                                                    height: 820,
-                                                    width: 1300,
+                                            selector: '#content',
+                                            language: 'zh_CN',
+                                            branding: false,
+                                            skin: 'oxide-dark',
+                                            promotion: false,
+                                            plugin_plothtml_width: "300%",
+                                            menubar: false,
+                                            plugins: "newfile openfile advlist anchor autolink autosave charmap code codesample emoticons footer fullscreen help image importcss indent2em insertdatetime link lists media nonbreaking pagebreak shortmet longmet advicemet preview quickbars save searchreplace table template visualblocks wordcount lineheight",
+                                            toolbar: [
+                                                "newfile openfile urldialog",
+                                                "insertfile undo redo bold italic underline hr |alignleft aligncenter alignright formatselect fontselect fontsizeselect styleselect removeformat subscript superscript charmap searchreplace insertdatetime forecolor backcolor fontsize fontfamily",//段落
+                                                "image code link unlink rotateleft rotateright flipv fliph editimage imageoptions quickimage | table | bullist numlist lineheight| | footer shortmet longmet advicemet"
+                                            ],
+                                            font_family_formats: "宋体='宋体';仿宋='仿宋';微软雅黑='微软雅黑';楷体='楷体';;隶书='隶书';幼圆='幼圆';Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings",
+                                            font_size_formats: '12px 14px 16px 18px 20px 24px 26px 28px 30px 32px 34px 36px 38px',
+                                            style_formats: [
+                                                {
+                                                    title: "行高",
+                                                    items: [
+                                                        { title: "1", block: "p", styles: { "line-height": "1.0" } },
+
+                                                        { title: "1.5", block: "p", styles: { "line-height": "1.5" } },
+
+                                                        { title: "1.75", block: "p", styles: { "line-height": "1.75" } },
+
+                                                        { title: "2", block: "p", styles: { "line-height": "2" } },
+
+                                                        { title: "3", block: "p", styles: { "line-height": "3" } },
+
+                                                        { title: "4", block: "p", styles: { "line-height": "4" } },
+
+                                                        { title: "5", block: "p", styles: { "line-height": "5" } },
+                                                    ],
+                                                },
+                                            ],
+                                            setup: (editor) => {
+                                                editor.ui.registry.addButton('urldialog', {
+                                                    // icon: 'code',
+                                                    text: '快速画图',
+                                                    onAction: () => editor.windowManager.openUrl({
+                                                        title: '画图页面',
+                                                        url: 'http://127.0.0.1:9001/canvas_plot',
+                                                        height: 820,
+                                                        width: 1300,
+                                                    })
                                                 })
-                                            })
-                                        },
+                                            },
 
 
-                                    });
+                                        });
 
                                     // 接收数据
                                     window.addEventListener('message', function (event) {
@@ -819,7 +839,7 @@
                                                     contentDocument = contentDocument + list_button_object.data[i]
                                                 }
 
-                                                contentDocument = contentDocument + list_button_object.data[i]
+                                                // contentDocument = contentDocument + list_button_object.data[i]
                                             }
                                         } else {
                                             var contentDocument = tinymce.get('content').getContent();
