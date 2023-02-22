@@ -1024,12 +1024,12 @@
                             <div id="history_file" style="width:100%;height:35%;;padding: 15px;">
                                 <div style="display:inline-block;width:100%;height:100%">
                                     <div id="history_button"
-                                        style="display:inline-block;width:100%;height:15%;background-color: white;border:1px solid black">
+                                        style="display:inline-block;width:100%;height:10%;background-color:rgb(220, 222, 226);">
 
                                     </div>
 
                                     <div id="history_view" class="scrollbar_self"
-                                        style="display:inline-block;width:100%;height:85%;background-color: white;border:1px solid black;overflow-x: hidden;overflow-y:scroll;">
+                                        style="display:inline-block;width:100%;height:85%;background-color: white;overflow-x: hidden;overflow-y:scroll;">
                                         <div class="tool_history_button"
                                             style="display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 15%;width:100%;;vertical-align: middle;text-align:center;;padding:1px;;border-bottom: 1px solid black;padding-top:10px; ">
                                             <label
@@ -1365,17 +1365,16 @@
                                         var self_title = data.self_title
                                         var view_first = data.doc_list[0]
                                         for (i = 0; i < view_first['filelist'].length; i++) {
+                                            
                                             var divcontenter = document.createElement('div')
-                                            divcontenter.style = "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 15%;width:100%;;vertical-align: middle;text-align:center;;padding:1px;;border-bottom: 1px solid black;padding-top:10px; "
+                                            divcontenter.style = "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 10%;width:98%;text-align:center;;padding-top:1px;border-radius:5px;margin:5px;background-color:rgb(220, 222, 226);"
                                             divcontenter.setAttribute("class", "tool_history_button")
                                             var labelitem = document.createElement('label')
                                             labelitem.style = "width:15%;text-align:center;;vertical-align: middle"
                                             labelitem.innerText = "第" + view_first['filelist'][i]['item'].toString() + "期"
-
                                             var labeltype = document.createElement('label')
                                             labeltype.style = "width:55%;text-align:center;;vertical-align: middle"
                                             labeltype.innerText = view_first['filelist'][i]['type'].toString()
-
                                             var labelwriter = document.createElement('label')
                                             labelwriter.style = "width:15%;text-align:center;;vertical-align: middle"
                                             labelwriter.innerText = view_first['filelist'][i]['year']
@@ -1386,11 +1385,10 @@
 
 
                                         var button_list = data.doc_list
+                                        // 材料类型
                                         for (var i = 0; i < button_list.length; i++) {
                                             var button = document.createElement('button')
-                                            button.style.display = "inline-flex"
-                                            button.style.width = "10%"
-                                            button.style.height = "100%"
+                                            button.style= "display:inline-flex;height:100%;width:15%;padding-top:3px;text-align:center;;background-color:rgb(45, 104, 221);border-top-left-radius: 5px;border-top-right-radius:5px;;font-size: 20px;font-weight:900;font-family:'宋体';color:white;border:none;margin-right:3px"
                                             button.id = "history" + i.toString()
                                             button.innerText = button_list[i]['name']
                                             button.addEventListener("click", function (e) {
@@ -1399,7 +1397,7 @@
 
                                                 for (i = 0; i < button_list[item]['filelist'].length; i++) {
                                                     var divcontenter = document.createElement('div')
-                                                    divcontenter.style = "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 15%;width:100%;;vertical-align: middle;text-align:center;;padding:1px;;border-bottom: 1px solid black;padding-top:10px; "
+                                                    divcontenter.style = "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 10%;width:100%;text-align:center;padding-top:10px; "
                                                     divcontenter.setAttribute("class", "tool_history_button")
                                                     var labelitem = document.createElement('label')
                                                     labelitem.style = "width:15%;text-align:center;;vertical-align: middle"
