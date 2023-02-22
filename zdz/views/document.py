@@ -667,14 +667,58 @@ def select_self_plot(request):
 
 # 十天数据
 def longmet(request):
+    # 解析后的数据
+    title = "台州市主城区具体天气预报如下："
+    day1 = "3日（周一）：晴到多云"
+    day2 = "4日（周二）：晴转多云"
+    day3 = "5日（周三）：多云到阴，下午转阴有时有小雨"
+    day4 = "6日（周四）：阴局部小雨"
+    day5 = "7日（周五）：阴局部小雨 "
+    day6 = "8日（周六）：多云到阴局部小雨"
+    day7 = "9日（周日）：多云"
+    daylist = [day1, day2, day3, day4, day5, day6, day7]
+    temp1 = "5～16度；"
+    temp2 = "6～16度；"
+    temp3 = "10～19度；"
+    temp4 = "9～13度；"
+    temp5 = "8～11度；"
+    temp6 = "7～12度；"
+    temp7 = "7～13度。"
+    templist = [temp1, temp2, temp3, temp4,temp5,temp6,temp7]
+    # 包装数据
+    head_h = '''<p class="MsoNormal" style="text-align: left;"><span style="font-size: 20px; font-family: 宋体;">'''
+    head_f = '''</span></p><table style="border-collapse: collapse; width: 100.433%; height: 235.438px; border-width: 1px; border-style: none;" border="1"><colgroup><col style="width: 19.0939%;"><col style="width: 67.3133%;"><col style="width: 13.5928%;"></colgroup><tbody>'''
+    foot ='''</tbody></table><p class="MsoNormal">&nbsp;</p>'''
+    html =""
+    html = html + head_h + title + head_f
+    for i in range(len(daylist )):
+        header = '''<tr style="height: 33.625px; text-align: left;"><td style="height: 33.625px; border-width: 1px; text-align: left;" colspan="2"><span style="font-family: 宋体;">'''
+        middle = '''</span></td><td style="height: 33.625px; border-width: 1px; text-align: right;"><span style="font-family: 宋体;">'''
+        footer = '''</span></td></tr>'''
+        single = header + daylist[i] + middle + templist[i] + footer
+        html = html + single
+    html = html +  foot   
     context = {
-        'data': "servier_data_long"
+        'data': html
     }
     return JsonResponse(context)
 # 短期数据
 def shortmet(request):
+    # 调用接口
+    # 解析后的数据
+    title = "一、天气预报"
+    weather = "今天白天阴局部小雨转多云，夜里到明天阴有小雨；后天阴转多云。"
+    temp1st = "今天白天最高温度：19～21度；"
+    temp2st = "明天最低温度：7～9度。"
+    wind = "沿海海面：部分海区有雾，南到西南风5-6级阵风7级。"
+    # 包装数据
+    head_h = '''<p style="line-height: 2;"><span style="font-size: 26px;"><strong><span style="font-family: 宋体;">'''
+    head_f = '''</span></strong></span></p>'''
+    content_h = '''<p class="MsoNormal"><span style="font-family: 宋体;">'''
+    content_f = '''</span></p>'''
+    html = head_h + title + head_f + content_h + weather + content_f + content_h + temp1st + content_f + content_h + temp2st + content_f + content_h + wind + content_f
     context = {
-        'data': "servier_data_short"
+        'data': html
     }
     return JsonResponse(context)
 @xframe_options_exempt
