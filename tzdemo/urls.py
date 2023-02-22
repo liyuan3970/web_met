@@ -8,8 +8,6 @@ from django.views import static
 from zdz.views.user import LoginView, LoginRefreshView
 
 urlpatterns = [
-    # debug=false路由静态文件
-    re_path(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT}, name='static'),
     path('admin', admin.site.urls),
     # rest_framework_simplejwt自带的得到token
     path('user/login', LoginView.as_view()),
@@ -17,3 +15,8 @@ urlpatterns = [
     path('user/login/refresh', LoginRefreshView.as_view()),
     path('', include('zdz.urls')),
 ]
+
+# debug=false路由静态文件
+if not settings.DEBUG:
+    urlpatterns.append(
+        re_path(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT}, name='static'))

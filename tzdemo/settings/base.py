@@ -89,17 +89,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-STATIC_ROOT = 'static'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, '/static/'),
-]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 X_FRAME_OPTIONS = 'ALLOWALL'
-
-# 图片二维码的存储地址
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')  # 设置静态文件路径为主目录下的media文件夹
-MEDIA_URL = '/media/'  # url映射
-# MEDIA_ROOT = 'home/liyuan3970/Data/My_Git/web_met/static/'
 
 # drf配置
 REST_FRAMEWORK = {
