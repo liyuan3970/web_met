@@ -38,9 +38,16 @@
     <script src='static/js/taizhoulist.js'></script>
     <script src='static/js/taizhouxiangzhen.js'></script>
     <!-- 引入 layui.css -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/layui/2.7.6/css/layui.css" rel="stylesheet">
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/layui/2.7.6/css/layui.css" rel="stylesheet"> -->
     <!-- 引入 layui.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/layui/2.7.6/layui.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/layui/2.7.6/layui.js"></script> -->
+
+     <!-- 引入 layui.css -->
+     <link href="static/layui/css/layui.css" rel="stylesheet">
+     <!-- 引入 layui.js -->
+     <script src="static/layui/layui.js"></script>
+
+
 
     <!-- 颜色选择器 -->
     <script src="static/js/colorpicker.js"></script>
@@ -1362,6 +1369,7 @@
                                 },
                                 dataType: "json",
                                 success: function (data) {
+                                    console.log("工具箱首页",data.doc_list[0],data.self_title)
                                     var self_title = data.self_title
                                     var view_first = data.doc_list[0]
                                     for (i = 0; i < view_first['filelist'].length; i++) {

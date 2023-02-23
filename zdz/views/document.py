@@ -137,11 +137,11 @@ def history_file(request):
             'name': doc_type['name'],
             'filelist': []
         }
-        doc_all = Document.objects.filter(unity="台州市气象台", year=year,
-                                          document_type=doc_type['name']).all().values()
+        doc_all = Document.objects.filter(unity="台州市气象局", year=year,document_type=doc_type['name']).all().values()
+        print("所有文档",doc_all)
         for doc in doc_all:
             doc_dir = {}
-            doc_dir['type'] = doc['type']
+            doc_dir['type'] = doc['document_type']
             doc_dir['item'] = doc['item']
             doc_dir['unity'] = doc['unity']
             doc_dir['year'] = doc['year']
