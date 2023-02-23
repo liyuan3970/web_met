@@ -6,10 +6,10 @@ class User(AbstractUser):
     """用户表"""
 
     # 删除字段
-    email = None
-    first_name = None
-    last_name = None
-    date_joined = None
+    # email = None
+    # first_name = None
+    # last_name = None
+    # date_joined = None
 
     # 新建字段
     id = models.BigAutoField(primary_key=True, verbose_name="主键")
