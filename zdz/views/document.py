@@ -95,7 +95,7 @@ def website(request):
     class_dir = []
     view_list = []
     for unity in unitys:
-        if unity['name'] == '台州气象局':
+        if unity['name'] == '台州市气象局':
             img_src = unity['img']
             check_name = unity['name']
             for single_class in class_types:
@@ -434,7 +434,7 @@ def open_load_object(request):
     return JsonResponse(context)
 
 
-# tinymce_footer
+# 呈送发的代码
 def tinymce_footer(request):
     versions = LeaderData.objects.all().values()
     version_list = []

@@ -156,7 +156,8 @@ def decode_footer(version_list):
     datalist = []
     for data in version_list:
         single = {}
-        single['value'] = lineh + linep + "呈</span>:" + data['service_name'] + linef +linep + "送</span>:" + data['service_unity'] + linef +linep + "发</span>:" + data['recive_unity'] + linef+lineend
+        single['value'] = lineh + linep + "呈</span>:" + data['service_name'] + linef +linep + "送</span>:" + data['service_unity'] + linef +linep + "发</span>:" 
+        single['value'] = single['value'] + data['receive_unity'] + linef + lineend
         single['text'] = data['name']
         datalist.append(single)
     return datalist
