@@ -15,7 +15,7 @@ from mpl_toolkits.basemap import Basemap
 from ncmaps import Cmaps
 from rasterio import features
 from scipy.interpolate import griddata
-
+import requests as rq
 
 def transform_from_latlon(lat, lon):
     lat = np.asarray(lat)
@@ -177,3 +177,48 @@ def footer_png(images_list):
         html_img = html_img + lineh + src + linem + img['name'] + linee
     html_all = html_all + html_img + linefoot
     return html_all
+
+
+# 爬取短期和十天
+def get_short_data():
+    url = '''http://10.137.4.30:6001/integration/main/ssd-product-publish/getLatestPublish?productCode=dqyb&loginAreaId=34197a647f8111eaae330221860e9b7e&loginOrgId=fd1411e47c3f4dcb87beaa110a21a979&loginUserId=dc739e110dbe4911bb7438da035b5d59'''
+    req =  rq.get(url,timeout=3000)
+    req_json = req.json()
+    req_data = req_json['data']['content'].split("\n") 
+    for i in range(len(req_data)):
+        if req_data[i]=='天气预报：':
+            title = req_data[i]
+            weather = req_data[i+1]
+            temp1st = req_data[i+2] 
+            temp2st = req_data[i+3] 
+            wind = req_data[i+4]  
+    #print(title,weather,temp1st,temp2st,wind)
+    return title,weather,temp1st,temp2st,wind
+
+def get_long_data():
+    url = '''http://10.137.4.30:6001/integration/main/ssd-product-publish/getLatestPublish?productCode=sttq&loginAreaId=34197a647f8111eaae330221860e9b7e&loginOrgId=fd1411e47c3f4dcb87beaa110a21a979&loginUserId=dc739e110dbe4911bb7438da035b5d59'''
+    req =  rq.get(url,timeout=3000)
+    req_json = req.json()
+    req_data = req_json['data']['content'].split("\n") 
+    return_list = []
+    for i in range(len(req_data)):
+        if req_data[i]=='台州主城区十天预报：':
+            title = req_data[i]
+            day1= req_data[i+1].split("，")[-1]
+            temp1 = req_data[i+1].replace(day1,"")
+            day2= req_data[i+2].split("，")[-1]
+            temp2 = req_data[i+2].replace(day2,"")
+            day3= req_data[i+3].split("，")[-1]
+            temp3 = req_data[i+3].replace(day3,"")
+            day4= req_data[i+4].split("，")[-1]
+            temp4 = req_data[i+4].replace(day4,"")
+            day5= req_data[i+5].split("，")[-1]
+            temp5 = req_data[i+5].replace(day5,"")
+            day6= req_data[i+6].split("，")[-1]
+            temp6 = req_data[i+6].replace(day6,"")
+            day7= req_data[i+7].split("，")[-1]
+            temp7 = req_data[i+7].replace(day7,"")
+            daylist = [day1, day2, day3, day4, day5, day6, day7]
+            templist = [temp1, temp2, temp3, temp4, temp5, temp6, temp7]   
+    #print(title,templist,daylist)  
+    return title,templist,daylist

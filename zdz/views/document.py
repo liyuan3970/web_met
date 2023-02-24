@@ -677,6 +677,8 @@ def select_self_plot(request):
 
 # 十天数据
 def longmet(request):
+    # 调用接口
+    #title,templist,daylist = func.get_long_data()
     # 解析后的数据
     title = "台州市主城区具体天气预报如下："
     day1 = "3日（周一）：晴到多云"
@@ -717,6 +719,7 @@ def longmet(request):
 # 短期数据
 def shortmet(request):
     # 调用接口
+    #title,weather,temp1st,temp2st,wind = func.get_short_data()
     # 解析后的数据
     title = "一、天气预报"
     weather = "今天白天阴局部小雨转多云，夜里到明天阴有小雨；后天阴转多云。"
