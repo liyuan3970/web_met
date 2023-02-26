@@ -1909,7 +1909,6 @@
                             // 加载文件头
                             var hearder = list_button_object.render_head_info()
                             contentDocument = hearder + contentDocument
-
                             var formData = new FormData();
                             formData.append("document", contentDocument);
                             var product_view = document.getElementById('product_view')
@@ -1948,10 +1947,7 @@
                                 }
 
                             })
-
                             // $('#product_view').html(" ")
-
-
                         } else if (type == "tool_prodict_product") {
                             $('#product_view').html("")
                             var product_view = document.getElementById('product_view')
