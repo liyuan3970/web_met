@@ -305,7 +305,8 @@
                                                                 // var div_single = document.createElement("div")
                                                                 // div_single.style = "width: 15%; height: 30px;;padding-top:6px"
                                                                 var button_single = document.createElement("button")
-                                                                button_single.setAttribute("class", "layui-btn")
+                                                                button_single.style = "margin-top:3px;border-radius:5px;"
+                                                                button_single.setAttribute("class", "layui-btn layui-btn-sm layui-btn-radius layui-btn-danger")
                                                                 button_single.value = i
                                                                 button_single.innerText = this.type_list[i]
                                                                 // button_single.style = "border-radius:10px;margin-right:5px"
@@ -753,24 +754,28 @@
                                 </div>
                                 <div style="display: inline-flex;width:100%;height: 5%;">
                                     <div style="width:85%;height: 100%;">
-                                        <h4 id="doc_unity" style="float:left;width:15%;padding-top:10px;">台州市气象局</h4>
-                                        <h4 id="doc_info" style="float:left;width:20%;padding-top:10px;">
+                                        <h4 id="doc_unity" style="float:left;width:15%;padding-top:10px;font-size: 15px;font-weight:900;font-family:'宋体';;">台州市气象局</h4>
+                                        <h4 id="doc_info" style="float:left;width:20%;padding-top:10px;font-size: 15px;font-weight:900;font-family:'宋体';;">
                                             第47期:一周天气</h4>
                                         <div id="button_type_list" class="layui-btn-group"
                                             style="display: inline-flex;width:55%;height:80%">
                                         </div>
                                     </div>
-                                    <button id="convert3"
-                                        style="width:40px;height:40px;background-image: url(static/src/合并.png);background-size: 100%;background-repeat: no-repeat;"></button>
-                                    <div style="width:2%;height: 100%;"></div>
-                                    <button id="preview_save"
-                                        style="width:40px;height:40px;background-image: url(static/src/保存.png);background-size: 100%;background-repeat: no-repeat;"></button>
-                                    <div style="width:2%;height: 100%;"></div>
-                                    <button id="save_doc_all"
-                                        style="width:40px;height:40px;background-image: url(static/src/发布.png);background-size: 100%;background-repeat: no-repeat;"></button>
-                                    <div style="width:2%;height: 100%;"></div>
-                                    <button id="convert"
-                                        style="width:40px;height:40px;background-image: url(static/src/预览.png);background-size: 100%;background-repeat: no-repeat;"></button>
+                                    <!-- <button type="button" class="layui-btn layui-btn-normal">按钮</button> -->
+                                    <!-- <button id="convert3"
+                                        style="width:40px;height:40px;background-image: url(static/src/合并.png);background-size: 100%;background-repeat: no-repeat;"></button> -->
+                                    <!-- <div style="width:2%;height: 100%;"></div> -->
+                                    <button id="preview_save" type="button" class="layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal" style="margin-top:5px" >保存当前</button>
+                                    <!-- <button id="preview_save"
+                                        style="width:40px;height:40px;background-image: url(static/src/保存.png);background-size: 100%;background-repeat: no-repeat;"></button> -->
+                                    <!-- <div style="width:2%;height: 100%;"></div> -->
+                                    <button id="save_doc_all" type="button" class="layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal" style="margin-top:5px">保存所有</button>
+                                    <!-- <button id="save_doc_all"
+                                        style="width:40px;height:40px;background-image: url(static/src/发布.png);background-size: 100%;background-repeat: no-repeat;"></button> -->
+                                    <!-- <div style="width:2%;height: 100%;"></div> -->
+                                    <button id="convert" type="button" class="layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal" style="margin-top:5px">预览</button>
+                                    <!-- <button id="convert"
+                                        style="width:40px;height:40px;background-image: url(static/src/预览.png);background-size: 100%;background-repeat: no-repeat;"></button> -->
                                 </div>
 
                                 <script>
