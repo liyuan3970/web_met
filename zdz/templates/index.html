@@ -305,7 +305,7 @@
                                                                 // var div_single = document.createElement("div")
                                                                 // div_single.style = "width: 15%; height: 30px;;padding-top:6px"
                                                                 var button_single = document.createElement("button")
-                                                                button_single.style = "margin-top:3px;border-radius:5px;"
+                                                                button_single.style = "margin-top:1px;border-radius:5px;"
                                                                 button_single.setAttribute("class", "layui-btn layui-btn-sm layui-btn-radius layui-btn-danger")
                                                                 button_single.value = i
                                                                 button_single.innerText = this.type_list[i]
@@ -753,10 +753,19 @@
 
                                 </div>
                                 <div style="display: inline-flex;width:100%;height: 5%;">
-                                    <div style="width:85%;height: 100%;">
-                                        <h4 id="doc_unity" style="float:left;width:15%;padding-top:10px;font-size: 15px;font-weight:900;font-family:'宋体';;">台州市气象局</h4>
+                                    <div style="width:85%;height: 100%">
+                                        <div style="display: inline-flex;width:43%;height: 70%;border: 2px solid black;padding-top: 7px;border-radius:15px;padding-left:5px;margin-top:3px;">
+                                            <h4 id="doc_unity" style="display:block;width:40%;font-size: 15px;font-weight:900;font-family:'宋体';;">
+                                                台州市气象局</h4>
+                                            <h4 id="doc_info" style="display:block;width:60%;font-size: 15px;font-weight:900;font-family:'宋体';;">
+                                                第47期:一周天气</h4>
+                                        
+                                        </div>
+                                        <!-- <h4 id="doc_unity" style="float:left;width:15%;padding-top:10px;font-size: 15px;font-weight:900;font-family:'宋体';;">
+                                            台州市气象局</h4>
                                         <h4 id="doc_info" style="float:left;width:20%;padding-top:10px;font-size: 15px;font-weight:900;font-family:'宋体';;">
                                             第47期:一周天气</h4>
+                                         -->
                                         <div id="button_type_list" class="layui-btn-group"
                                             style="display: inline-flex;width:55%;height:80%">
                                         </div>
@@ -773,7 +782,7 @@
                                     <!-- <button id="save_doc_all"
                                         style="width:40px;height:40px;background-image: url(static/src/发布.png);background-size: 100%;background-repeat: no-repeat;"></button> -->
                                     <!-- <div style="width:2%;height: 100%;"></div> -->
-                                    <button id="convert" type="button" class="layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal" style="margin-top:5px">预览</button>
+                                    <button id="convert" type="button" class="layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal" style="margin-top:5px;margin-right:15px;">预览</button>
                                     <!-- <button id="convert"
                                         style="width:40px;height:40px;background-image: url(static/src/预览.png);background-size: 100%;background-repeat: no-repeat;"></button> -->
                                 </div>
