@@ -1885,8 +1885,6 @@
 
                             ]
                             $('#product_view').html(" ")
-
-
                             for (const i of list_data_all) {
                                 if (i['type'] == '一周天气预测') {
                                     head_div(i)
@@ -1905,8 +1903,6 @@
                                 }
 
                             }
-
-
                         } else if (type == "tool_history") {
                             console.log("历史数据的加载")
                             var contentDocument = tinymce.get('content').getContent();
@@ -1957,7 +1953,6 @@
 
 
                         } else if (type == "tool_prodict_product") {
-
                             $('#product_view').html("")
                             var product_view = document.getElementById('product_view')
                             product_view.style = "width:97.5%;height:97%;background-color:white;margin:15px"
@@ -1965,14 +1960,11 @@
                             var tzmap = document.createElement("div")
                             tzmap.style = "width: 100%;height:100%;border: 1px solid black;"
                             tzmap.id = "tzmap"
-
                             var mainui = document.createElement("div")
                             mainui.style = "position:absolute;text-align: center;width: 8%;height: 50%;top:20%;left:90%;overflow-x: hidden;overflow-y: scroll;border-left:2px solid black;padding-top:10px;"
                             mainui.id = "menu-ui"
                             mainui.setAttribute("class", "scrollbar_self")
-
                             product_view.append(tzmap, mainui)
-
                             let boundaries = {
                                 type: "FeatureCollection",
                                 name: "boundaries",
@@ -2341,10 +2333,6 @@
 
                                 }
                             })
-
-
-                            //
-
                         } else if (type == "tool_zdz") {
                             // console.log("自动站数据加载")
                             var csrf = $('input[name="csrfmiddlewaretoken"]').val();
@@ -3942,11 +3930,8 @@
                                 }
 
                             })
-
-
                         } else if (type == "tool_ec") {
                             // console.log("---------------ec温度数据导出---------------")
-
                             var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                             $.ajax({
                                 url: "ec_single_data",  // 请求的地址
@@ -4358,7 +4343,6 @@
 
                         } else if (type == "select_self_plot") {
                             $('#product_view').html(" ")
-
                             var select_map = $('#self_plot_country').val()
                             var select_id = $('#select_self_plot').val()
                             var csrf = $('input[name="csrfmiddlewaretoken"]').val();
@@ -4577,8 +4561,6 @@
                                     intersectionLay.addTo(map_product)
                                 }
                             })
-
-
                         }
                     }
 
