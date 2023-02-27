@@ -495,23 +495,24 @@ ec_worker = None
 
 def ec_single_data(request):
     # 数据的接收 
-
     ec_start_time = request.POST.get('ec_start_time', '')
     ec_end_time = request.POST.get('ec_end_time', '')
     start_time, end_time = 0, 24
-
     # 处理数据逻辑
-    global ec_worker
-    if ec_worker:
-        data = ec_worker.comput_average(start_time, end_time)
-    else:
-        ec_worker = data_class.ec_data_point(start_time, end_time)
-        data = ec_worker.comput_average(start_time, end_time)
+    # global ec_worker
+    # if ec_worker:
+    #     data = ec_worker.comput_average(start_time, end_time)
+    # else:
+    #     ec_worker = data_class.ec_data_point(start_time, end_time)
+    #     data = ec_worker.comput_average(start_time, end_time)
     # print("ec-->ok")
     # 数据的返回
+    # context = {
+    #     'status': "ok",
+    #     'ec_data': data
+    # }
     context = {
-        'status': "ok",
-        'ec_data': data
+        'status': "ok"
     }
     return JsonResponse(context)
 
