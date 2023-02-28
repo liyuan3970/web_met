@@ -1381,12 +1381,11 @@ class ec_data_point:
                          26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,
                         41,42,43,44,45,46,47,48,49,50,51,52]
         self.test_time = '2022041700'
-        self.file_path = "/home/liyuan3970/Data/My_Git/" + self.test_time + "/" 
-        self.lat_list = [27.532,27.832,27.532,27.532,27.532,27.532,27.532,27.532,27.532,27.532]
-        self.lon_list = [121.932,120.932,121.932,121.932,121.932,121.932,121.932,121.932,121.932,121.932]
-        self.name = ['洪家','玉环市','温岭市','椒江区','路桥区','黄岩区','仙居县','三门县','临海市','天台县']
-        self.name_en = ['hongjia','yuhuan','wenling','jiaojiang','luqiao','huangyan','xianju','sanmen','linhai','tiantai']
-        self.name_village = ['sanmen','linhai','xianju','tiantai','jiaojiang','wenling','yuhuan','luqiao','huangyan']
+        self.file_path = "/workspace/liyuan3970/Data/My_Git/" + self.test_time + "/" 
+        self.lat_list = [27.6, 28.1, 28.4, 29.1, 29.1, 29.8, 28.7, 28.5, 28.5, 28.6]
+        self.lon_list = [120.7, 121.1, 121.3, 121.2, 121.0, 120.7, 121.1, 121.4, 121.4, 121.2]
+        self.name = ["台州", "玉环", "温岭", "三门", "天台", "仙居", "临海", "路桥", "椒江", "黄岩"]
+        self.name_en = ['taizhou','yuhuan','wenling','sanmen','tiantai','xianju','linhai','luqiao','jiaojiang','huangyan']
         self.cp,self.t2,self.lsp = self.read_data()
     # 外部函数
     def transform_from_latlon(self,lat, lon):
@@ -1408,22 +1407,19 @@ class ec_data_point:
         shapes = [(shape, n) for n, shape in enumerate(shp_gpd.geometry)]
         xr_da[coord_name] = self.rasterize(shapes, xr_da.coords, longitude='lon', latitude='lat')
         return xr_da
-    # 数据分析
-    def time_today(self):
-        '''用于计算当前日期'''
-        pass
     def regrid(self,data):
         # 插值
         ds_out = xr.Dataset(
             {   
                 
-                "lat": (["lat"], np.arange(27.0, 30, 0.05)),
-                "lon": (["lon"], np.arange(120, 122.5, 0.05)),
+                "lat": (["lat"], np.arange(27.0, 31, 0.05)),
+                "lon": (["lon"], np.arange(120, 122.9, 0.05)),
             }
         )
         regridder = xe.Regridder(data, ds_out, "bilinear")
         dr_out = regridder(data)
         return dr_out
+    # 读取数据
     def read_data(self):
         '''读取数据'''
         files = os.listdir(self.file_path)
@@ -1446,6 +1442,7 @@ class ec_data_point:
         lsp_all = xr.concat(lsp_list,dim="time")
         lsp_all = self.regrid(lsp_all)
         return cp_all,t2_all,lsp_all
+    # 曲线的读取
     def accum_data(self,list_data):
         '''处理累计降水'''
         out_list = []
@@ -1464,101 +1461,67 @@ class ec_data_point:
     def plot_line(self,lat,lon):
         '''返回单点的降水气温曲线图'''
         cp_line = self.rain_data(lat,lon,self.cp)
-        lsp_line = self.rain_data(lat,lon,self.lsp)
+        totle_line = self.rain_data(lat,lon,self.lsp)
+        lsp_line = []
+        for i in range(len(totle_line)):
+            lsp_line.append(totle_line[i] - cp_line[i])
         t2_line = self.t2.sel(lon=lon, lat=lat,method='nearest').to_pandas().tolist()
         return cp_line,lsp_line,t2_line
-    def village_data(self,data):
-        data_xr = data
-        shp_path = "static/data/shpfile/"
-        shp_data = gpd.read_file("static/data/shpfile/xiangzhen/xiangzhen.shp", encoding='utf8')
-        village_list = shp_data['NAME'].values
-        county_list = shp_data['COUNTY'].values
-        shp_da = self.add_shape_coord_from_data_array(data_xr, shp_path+"taizhou_village.shp", "country")
-        data_dir = {
-            "village":[],
-            "county":[],
-            "value":[]           
-        }
-        for i in range(len(village_list)):
-            awash_da = shp_da.where(shp_da.country==i, other=np.nan)
-            name = village_list[i]
-            county = county_list[i]
-            if np.isnan(awash_da.mean().values.tolist()):
-                data_dir['value'].append(0)
-            else:
-                data_dir['value'].append(awash_da.mean().values.tolist())
-            data_dir['village'].append(name)
-            data_dir['county'].append(county)
-        village = pd.DataFrame(data_dir)
-        return village 
-    def group_data(self,data):
-        '''排序'''     
-        rain = []
-        village = []
-        grouped = data.groupby('county')
-        for i in grouped.size().index:
-            village_list = []
-            singel_rain = {
-                "name":None,
-                "value":None
+    def conuty_data(self):
+        '''将数据整理成json并存储到MySQL'''
+        data_list = []
+        for i in range(len(self.lat_list)):
+            lat = self.lat_list[i]
+            lon = self.lon_list[i]
+            cp_line,lsp_line,t2_line = self.plot_line(lat,lon)
+            data_single = {
+                "name":self.name_en[i],
+                "cp":cp_line,
+                "lsp":lsp_line,
+                "t2":t2_line
             }
-            county = grouped.get_group(i)
-            sort_data = county.sort_values('value',ascending=False)[0:10]
-            village_data = county.sort_values('value',ascending=False)[0:10]
-            singel_rain['name'] = sort_data.county.tolist()[0]
-            singel_rain['value']= round(county.value.mean(),2)
-            rain.append(singel_rain)
-            # 数据
-            name = sort_data.county.tolist()[0]
-            for j,k in zip(sort_data['village'],sort_data['value']):
-                # print(j,k)
-                singel_village ={}
-                singel_village['value'] = round(k,2)
-                singel_village['name'] = j            
-                village_list.append(singel_village)
-            village.append(village_list)
-        return rain,village
-    def comput_average(self,start_time,end_time):
-        '''计算面雨量'''   
-        data = { }
+            data_list.append(data_single)
+        return data_list
+    # 定时任务
+    def to_sql(self):
+        '''将数据传到sql中'''
+        pass
+    # 截面数据的读取
+    def rander_leaflet(self,start_time,end_time):
+        '''返回数据'''
         if start_time==0:
-            lsp = self.lsp[end_time,:,:] 
-            comput = self.village_data(lsp)
-            for i in range(len(self.name)):
-                county = {                 
-                    "lsp":None,
-                    "cp":None,
-                    "t2":None,
-                    "time":None    
-                       }
-                cp_line,lsp_line,t2_line = self.plot_line(self.lat_list[i],self.lon_list[i])
-                county['lsp'] = lsp_line
-                county['cp'] = cp_line
-                county['t2'] = t2_line 
-                county['time'] = self.timelist
-                data[self.name_en[i]] = county
-            rain,village= self.group_data(comput) 
-            data["rain"] = rain
-            data["village"] = village
+            rain = end_rain 
         else:
-            lsp1 = self.lsp[end_time,:,:] 
-            lsp0 = self.lsp[start_time,:,:] 
-            dif = lsp1 - lsp0 
-            comput = self.village_data(dif)
-            for i in range(len(self.name)):
-                county = {                 
-                    "lsp":None,
-                    "cp":None,
-                    "t2":None,
-                    "time":None    
-                       }
-                cp_line,lsp_line,t2_line = self.plot_line(self.lat_list[i],self.lon_list[i])
-                county['lsp'] = lsp_line
-                county['cp'] = cp_line
-                county['t2'] = t2_line 
-                county['time'] = self.timelist
-                data[self.name_en[i]] = county
-            rain,village= self.group_data(comput) 
-            data["rain"] = rain
-            data["village"] = village
+            start_rain = self.lsp[start_time,:,:]
+            end_rain = self.lsp[end_time,:,:]
+            rain = end_rain - start_rain 
+        filepath = "static/data/shpfile/"
+        shp_da = self.add_shape_coord_from_data_array(rain, filepath+"taizhou.shp", "remain") 
+        taizhou = shp_da.where(shp_da.remain<7, other=99999)
+        len_lat = len(taizhou.lat.data)
+        len_lon = len(taizhou.lon.data)
+        data = []
+        for i in range(len_lon-1):
+            for j in range(len_lat-1):
+                #y0 = round(27.00+j*0.05,2)
+                #x0 = round(120.00+i*0.05,2)
+                y0 = taizhou.lat.data[j]
+                x0 = taizhou.lon.data[i]
+                if taizhou.data[j, i]!=99999:
+                    # single = {
+                    #     "Lat":y0,
+                    #     "Lon":x0,
+                    #     "value":str(taizhou.data[j, i])
+                    # }
+                    single = {
+                        "type": "Feature",
+                        "properties": {
+                            "value": str(taizhou.data[j, i])
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [x0, y0]
+                        }
+                    }
+                    data.append(single)  
         return data

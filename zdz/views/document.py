@@ -497,14 +497,16 @@ def ec_single_data(request):
     # 数据的接收 
     ec_start_time = request.POST.get('ec_start_time', '')
     ec_end_time = request.POST.get('ec_end_time', '')
-    start_time, end_time = 0, 24
+    start_time, end_time = 1, 40
     # 处理数据逻辑
-    # global ec_worker
-    # if ec_worker:
-    #     data = ec_worker.comput_average(start_time, end_time)
-    # else:
-    #     ec_worker = data_class.ec_data_point(start_time, end_time)
-    #     data = ec_worker.comput_average(start_time, end_time)
+    global ec_worker
+    if ec_worker:
+        line_data = ec_worker.conuty_data()
+        plot_data = ec_worker.rander_leaflet(start_time, end_time)
+    else:
+        ec_worker = data_class.ec_data_point(start_time, end_time)
+        line_data = ec_worker.conuty_data()
+        plot_data = ec_worker.rander_leaflet(start_time, end_time)
     # print("ec-->ok")
     # 数据的返回
     # context = {
@@ -512,7 +514,9 @@ def ec_single_data(request):
     #     'ec_data': data
     # }
     context = {
-        'status': "ok"
+        'status': "ok",
+        'linedata':line_data,
+        'plotdata':plot_data
     }
     return JsonResponse(context)
 
