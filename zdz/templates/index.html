@@ -1754,6 +1754,16 @@
                 <script type="text/javascript" src='static/js/save_and_vue.js'></script>
                 <script src='static/js/taizhou_village.js'></script>
                 <script>
+                       // 等待加载时间
+                        function showLoad() {
+                            return layer.msg('程序加载....', { icon: 16, shade: [0.5, '#f5f5f5'], scrollbar: false, offset: 'auto', time: 100000 });
+                        }
+                        // 关闭等待加载时间
+                        function closeLoad(index) {
+                            layer.close(index);
+                        }
+                        
+
                     map_toolbox_object = {
                         return_shp: function (boundaries,data) {
                             // data 为poin需要用turf的featureCollection(data)加载
@@ -4126,6 +4136,9 @@
                                     'ec_end_time': $('#ec_end_time').val()
                                 },
                                 dataType: "json",
+                                beforeSend: function (XMLHttpRequest) {
+                                    load = showLoad();
+                                },
                                 success: function (data) {
                                     console.log("tool_ec", data)
                                     // var serverdata = JSON.parse(data)  
@@ -4407,6 +4420,11 @@
                                     };
                                     // 使用刚指定的配置项和数据显示图表。
                                     myChart.setOption(option);
+                                    // 关闭加载界面
+                                    closeLoad(load)
+                                   
+
+
                                     
                                 }
                             })
