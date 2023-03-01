@@ -103,7 +103,14 @@
             width: 880px;
             height: 400px;
             background-color: white;
-            border-radius:15px;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+        .chartzdzmap {
+            width: 550px;
+            height: 450px;
+            /* background-color: white; */
+            border-radius: 15px;
         }
 
 
@@ -761,12 +768,15 @@
                                 </div>
                                 <div style="display: inline-flex;width:100%;height: 5%;">
                                     <div style="width:85%;height: 100%">
-                                        <div style="display: inline-flex;width:43%;height: 70%;border: 2px solid black;padding-top: 7px;border-radius:15px;padding-left:5px;margin-top:3px;">
-                                            <h4 id="doc_unity" style="display:block;width:40%;font-size: 15px;font-weight:900;font-family:'宋体';;">
+                                        <div
+                                            style="display: inline-flex;width:43%;height: 70%;border: 2px solid black;padding-top: 7px;border-radius:15px;padding-left:5px;margin-top:3px;">
+                                            <h4 id="doc_unity"
+                                                style="display:block;width:40%;font-size: 15px;font-weight:900;font-family:'宋体';;">
                                                 台州市气象局</h4>
-                                            <h4 id="doc_info" style="display:block;width:60%;font-size: 15px;font-weight:900;font-family:'宋体';;">
+                                            <h4 id="doc_info"
+                                                style="display:block;width:60%;font-size: 15px;font-weight:900;font-family:'宋体';;">
                                                 第47期:一周天气</h4>
-                                        
+
                                         </div>
                                         <!-- <h4 id="doc_unity" style="float:left;width:15%;padding-top:10px;font-size: 15px;font-weight:900;font-family:'宋体';;">
                                             台州市气象局</h4>
@@ -781,15 +791,21 @@
                                     <!-- <button id="convert3"
                                         style="width:40px;height:40px;background-image: url(static/src/合并.png);background-size: 100%;background-repeat: no-repeat;"></button> -->
                                     <!-- <div style="width:2%;height: 100%;"></div> -->
-                                    <button id="preview_save" type="button" class="layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal" style="margin-top:5px" >保存当前</button>
+                                    <button id="preview_save" type="button"
+                                        class="layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal"
+                                        style="margin-top:5px">保存当前</button>
                                     <!-- <button id="preview_save"
                                         style="width:40px;height:40px;background-image: url(static/src/保存.png);background-size: 100%;background-repeat: no-repeat;"></button> -->
                                     <!-- <div style="width:2%;height: 100%;"></div> -->
-                                    <button id="save_doc_all" type="button" class="layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal" style="margin-top:5px">保存所有</button>
+                                    <button id="save_doc_all" type="button"
+                                        class="layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal"
+                                        style="margin-top:5px">保存所有</button>
                                     <!-- <button id="save_doc_all"
                                         style="width:40px;height:40px;background-image: url(static/src/发布.png);background-size: 100%;background-repeat: no-repeat;"></button> -->
                                     <!-- <div style="width:2%;height: 100%;"></div> -->
-                                    <button id="convert" type="button" class="layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal" style="margin-top:5px;margin-right:15px;">预览</button>
+                                    <button id="convert" type="button"
+                                        class="layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal"
+                                        style="margin-top:5px;margin-right:15px;">预览</button>
                                     <!-- <button id="convert"
                                         style="width:40px;height:40px;background-image: url(static/src/预览.png);background-size: 100%;background-repeat: no-repeat;"></button> -->
                                 </div>
@@ -1507,10 +1523,10 @@
                         </div>
                         <script>
                             layui.config({
-                                    base: 'static/layui/' //假设这是你存放拓展模块的根目录
-                                }).extend({ //设定模块别名
-                                    drawer: 'drawer/drawer'
-                                });
+                                base: 'static/layui/' //假设这是你存放拓展模块的根目录
+                            }).extend({ //设定模块别名
+                                drawer: 'drawer/drawer'
+                            });
 
 
                             //快捷网址
@@ -1544,7 +1560,7 @@
                                             continer.append(inside)
                                             $('#webview').append(continer)
                                         }
-                                        
+
                                         layui.use(['drawer', 'jquery', 'layer', 'element', 'form'], function () {
                                             var layer = layui.layer;
                                             var element = layui.element;
@@ -1740,32 +1756,182 @@
 
                 </div>
                 <!-- ec十天面板 -->
-                <div id="product_ec" style="display:none;background-color:rgb(239, 243, 237); width: 100%; height: 100%;padding:50px;">
+                <div id="product_zdz"
+                    style="display:none;background-color:rgb(239, 243, 237); width: 100%; height: 100%;padding:50px;">
                     <div style="width: 100%;height:100%;">
                         <!-- 地图 -->
-                        <div id="ec_map" style="width: 100%;height:53%;border: 1px solid rgb(75, 73, 73);margin-bottom:15px;border-radius:15px;">
+                        <div id="zdz_webgis"
+                            style="width: 100%;height:53%;border: 1px solid rgb(75, 73, 73);margin-bottom:15px;border-radius:15px;">
+
                         </div>
-                        <!-- 曲线 -->
-                        <div style="width: 100%;height:44%;border: 1px solid rgb(75, 73, 73);;border-radius:15px;"></div>
+                        <!-- 固定栏目 -->
+                        <div
+                            style="display: inline-flex;;width: 100%;height:46%;border: 1px solid rgb(75, 73, 73);;border-radius:15px;">
+                            <!-- 时间线 -->
+                            <div class="scrollbar_self"
+                                style="width: 20%;height:93%;border: 1px solid rgb(75, 73, 73);;border-radius:5px;margin:15px;overflow-x: hidden; overflow-y: scroll; padding-top:10px; padding-bottom:20px;background-color: white;">
+                                <ul class="layui-timeline">
+                                    <li class="layui-timeline-item">
+                                        <i class="layui-icon layui-timeline-axis"></i>
+                                        <div class="layui-timeline-content layui-text">
+                                            <h3 class="layui-timeline-title">概况</h3>
+                                            <div class="layui-btn-group">
+                                                <button type="button" class="layui-btn layui-btn-xs">风</button>
+                                                <button type="button" class="layui-btn layui-btn-xs">雨</button>
+                                                <button type="button" class="layui-btn layui-btn-xs">温</button>
+                                                <button type="button" class="layui-btn layui-btn-xs">雾</button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="layui-timeline-item">
+                                        <i class="layui-icon layui-timeline-axis"></i>
+                                        <div class="layui-timeline-content layui-text">
+                                            <h3 class="layui-timeline-title">8月18日</h3>
+                                            <div class="layui-btn-group">
+                                                <button type="button" class="layui-btn layui-btn-xs">风</button>
+                                                <button type="button" class="layui-btn layui-btn-xs">雨</button>
+                                                <button type="button" class="layui-btn layui-btn-xs">温</button>
+                                                <button type="button" class="layui-btn layui-btn-xs">雾</button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="layui-timeline-item">
+                                        <i class="layui-icon layui-timeline-axis"></i>
+                                        <div class="layui-timeline-content layui-text">
+                                            <h3 class="layui-timeline-title">8月19日</h3>
+                                            <div class="layui-btn-group">
+                                                <button type="button" class="layui-btn layui-btn-xs">风</button>
+                                                <button type="button" class="layui-btn layui-btn-xs">雨</button>
+                                                <button type="button" class="layui-btn layui-btn-xs">温</button>
+                                                <button type="button" class="layui-btn layui-btn-xs">雾</button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="layui-timeline-item">
+                                        <i class="layui-icon layui-timeline-axis"></i>
+                                        <div class="layui-timeline-content layui-text">
+                                            <h3 class="layui-timeline-title">8月20日</h3>
+                                            <div class="layui-btn-group">
+                                                <button type="button" class="layui-btn layui-btn-xs">风</button>
+                                                <button type="button" class="layui-btn layui-btn-xs">雨</button>
+                                                <button type="button" class="layui-btn layui-btn-xs">温</button>
+                                                <button type="button" class="layui-btn layui-btn-xs">雾</button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="layui-timeline-item">
+                                        <i class="layui-icon layui-timeline-axis"></i>
+                                        <div class="layui-timeline-content layui-text">
+                                            <h3 class="layui-timeline-title">8月21日</h3>
+                                            <div class="layui-btn-group">
+                                                <button type="button" class="layui-btn layui-btn-xs">风</button>
+                                                <button type="button" class="layui-btn layui-btn-xs">雨</button>
+                                                <button type="button" class="layui-btn layui-btn-xs">温</button>
+                                                <button type="button" class="layui-btn layui-btn-xs">雾</button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="layui-timeline-item">
+                                        <i class="layui-icon layui-timeline-axis"></i>
+                                        <div class="layui-timeline-content layui-text">
+                                            <h3 class="layui-timeline-title">8月22日</h3>
+                                            <div class="layui-btn-group">
+                                                <button type="button" class="layui-btn layui-btn-xs">风</button>
+                                                <button type="button" class="layui-btn layui-btn-xs">雨</button>
+                                                <button type="button" class="layui-btn layui-btn-xs">温</button>
+                                                <button type="button" class="layui-btn layui-btn-xs">雾</button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- 卡片栏目 -->
+                            <div
+                                style="width: 75%;height:93%;border: 1px solid rgb(75, 73, 73);;margin:15px;margin-left: 0px;padding: 0px;">
+                                <div class="layui-tab layui-tab-card"
+                                    style="background-color: white;width:100%;height:100%;margin:0px;">
+                                    <ul class="layui-tab-title" style="margin: 0px;">
+                                        <li class="layui-this" style="margin: 0px;">文字统计</li>
+                                        <li style="margin: 0px;">数据表</li>
+                                    </ul>
+                                    <div class="layui-tab-content" style="height: 150px;padding:0px">
+                                        <div class="layui-tab-item layui-show">
+                                            <div class="layui-bg-gray" style="padding: 20px;">
+                                                <div class="layui-row layui-col-space15">
+                                                    <div class="layui-col-md12">
+                                                        <div class="layui-card">
+                                                            <!-- <div class="layui-card-header">实况统计:</div> -->
+                                                            <div class="layui-card-body scrollbar_self" style="height:250px;overflow-x: hidden;overflow-y: scroll;">
+                                                                【风雨情通报】:2022-01-25 20:00到2022-02-10 06:00各县市面雨量分别为:仙居县78.82毫米;天台县75.02毫米;三门县68.45毫米;临海市62.95毫米;黄岩区62.64毫米;温岭市47.34毫米;路桥区46.94毫米;椒江区40.8毫米;玉环市38.36毫米;玉环县23.84毫米;单站前五：K8914：127.4毫米,K8785：120.2毫米,K8709：115.0毫米,K8774：114.5毫米,K8924：110.0毫米.乡镇前五：浦坝港镇：814.1毫米,街头镇：808.2毫米,横溪镇：661.7毫米,健跳镇：631.2毫米,白水洋镇：619.9毫米.其中:大于250毫米有338站,大于100毫米有15站,大于50毫米有346站,大于25毫米有434站,大于10毫米有435站,大于5毫米有435站,大于1毫米有435站,沿海出现8~16级大风.风力较大的有：K8629：23.9米/秒,K8546：21.0米/秒,K8627：21.0米/秒,K8304：20.9米/秒,K8407：20.8米/秒.沿海出现小于200米的强浓雾。主城区最高温度：129度。主城区最低温度：28度。其中全市小于-3度的有18站。小于0度的有16站。小于3度的有146站。
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-tab-item">
+                                            <table class="layui-hide" id="zdz_table"></table>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
                     </div>
+
                 </div>
 
                 <!-- 预览界面数据交互的核心代码 -->
                 <script type="text/javascript" src='static/js/save_and_vue.js'></script>
                 <script src='static/js/taizhou_village.js'></script>
                 <script>
-                       // 等待加载时间
-                        function showLoad() {
-                            return layer.msg('程序加载....', { icon: 16, shade: [0.5, '#f5f5f5'], scrollbar: false, offset: 'auto', time: 100000 });
-                        }
-                        // 关闭等待加载时间
-                        function closeLoad(index) {
-                            layer.close(index);
-                        }
-                        
+                    // 等待加载时间
+                    function showLoad() {
+                        return layer.msg('程序加载....', { icon: 16, shade: [0.5, '#f5f5f5'], scrollbar: false, offset: 'auto', time: 100000 });
+                    }
+                    // 关闭等待加载时间
+                    function closeLoad(index) {
+                        layer.close(index);
+                    }
+
 
                     map_toolbox_object = {
-                        return_shp: function (boundaries,data) {
+                        getMaxAttribute: function (inLevelV, inGrid, inBreaksProperties) {
+                            //定义变量
+                            let levelArray = [];
+                            let levelLength = inLevelV.length;
+                            inLevelV.forEach(function (item, index) {
+                                if (index < levelLength - 2) levelArray.push(0);
+                            });
+                            //统计每个等级中网格点数量
+                            inGrid.features.map((i) => {
+                                inLevelV.forEach(function (item, index) {
+                                    if (index < levelLength - 3) {
+                                        if (i.properties.value >= inLevelV[index] && i.properties.value < inLevelV[index + 1]) levelArray[index]++;
+                                    }
+                                    if (index == levelLength - 2) {
+                                        if (i.properties.value >= inLevelV[index]) levelArray[index]++;
+                                    }
+                                });
+                            });
+                            //取等级中网格点最多的值
+                            let maxIndex = -1;
+                            let maxV = 0;
+                            levelArray.forEach(function (item, index) {
+                                if (maxV < item) { maxV = item; maxIndex = index; }
+                            });
+                            let value = '';
+                            let fill = '';
+                            if (maxIndex != -1) {
+                                value = inLevelV[maxIndex] + '-' + inLevelV[maxIndex + 1];
+                                fill = inBreaksProperties[maxIndex].fill;
+                            }
+                            return [value, fill]
+                        },
+                        return_shp: function (boundaries, data) {
                             // data 为poin需要用turf的featureCollection(data)加载
                             var points = turf.featureCollection(data);
                             var interpolate_options = {
@@ -1774,7 +1940,7 @@
                                 units: "degrees",
                                 weight: 10
                             };
-                            
+
                             var isobands_options = {
                                 zProperty: "value",
                                 commonProperties: {
@@ -1896,10 +2062,10 @@
                                 features: shpdata
                             }
                             return {
-                                boundaries: bounddata 
+                                boundaries: bounddata
                             }
                         },
-                        return_colormap:function (isobands_options, map) {
+                        return_colormap: function (isobands_options, map) {
                             var coloritem = isobands_options.breaksProperties.length
                             var colorinitlat = 28.4
                             var colorinitlon = 120.5
@@ -1925,12 +2091,12 @@
                             }
                             var data = ""
                             return {
-                                data:data 
+                                data: data
                             }
                         }
                     }
-                    
-                    
+
+
 
                     // id为product_view的数据交互渲染函数
                     function product_view_show(type) {
@@ -4121,9 +4287,9 @@
                                 }
 
                             })
-                        } else if (type == "tool_ec") {                         
-                            
-                            var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries 
+                        } else if (type == "tool_ec") {
+
+                            var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries
                             $('#product_view').html(" ")
                             var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                             $.ajax({
@@ -4153,7 +4319,7 @@
                                     main_ecmapui.style = "position:absolute;text-align: center;width: 6%;height: 35%;top:10%;left:54%;padding-top:10px;overflow-x: hidden;overflow-y: scroll;"
                                     main_ecmapui.id = "main_ecmapui"
                                     main_ecmapui.setAttribute("class", "scrollbar_self")
-                                    
+
                                     // 按钮组 事件
                                     var labels_ecmapui = ["台州", "玉环", "温岭", "三门", "天台", "仙居", "临海", "路桥", "椒江", "黄岩"]
                                     var layerstr_ecmapui = [taizhou_map, yuhuan_map, wenling_map, sanmen_map, tiantai_map, xianju_map, linhai_map, luqiao_map, jiaojiang_map, huangyan_map]
@@ -4165,7 +4331,7 @@
                                         var id = "ecbt_silder" + i.toString();
                                         singlebtn.setAttribute("class", "layui-btn layui-btn-sm")
                                         singlebtn.style = "width:100%;height: 10%;margin-top:8px; border-radius:8px;margin-left:0px"
-                                        singlebtn.id = id 
+                                        singlebtn.id = id
                                         singlebtn.innerText = labels_ecmapui[i]
                                         singlebtn.onclick = function (e) {
                                             // console.log(this.innerText)
@@ -4178,7 +4344,7 @@
                                             var item = this.id
                                             var ites = item.substring(11, item.length)
                                             //截取数字
-                                            var boundaries_sigle = map_toolbox_object.return_boundaries(layerstr_ecmapui[parseInt(ites)]).boundaries 
+                                            var boundaries_sigle = map_toolbox_object.return_boundaries(layerstr_ecmapui[parseInt(ites)]).boundaries
                                             map.bounds = turf.bbox(boundaries_sigle);
                                             map.setView([Lat[parseInt(ites)], Lon[parseInt(ites)]], zoon[parseInt(ites)])
                                             var lines = L.geoJSON(boundaries_sigle, {
@@ -4187,113 +4353,113 @@
                                                 }
                                             }).addTo(map)
                                             //绘制数据
-                                            var intersectionLay = map_toolbox_object.return_shp(boundaries_sigle,data.plotdata).intersectionLay
+                                            var intersectionLay = map_toolbox_object.return_shp(boundaries_sigle, data.plotdata).intersectionLay
                                             intersectionLay.addTo(map)
                                             // 加载echart数据
 
                                             option = {
-                                        tooltip: {
-                                            trigger: 'axis',
-                                            axisPointer: {
-                                                // Use axis to trigger tooltip
-                                                type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
-                                            }
-                                        },
-                                        grid: {
-                                            top: '8%',
-                                            right: '6%',
-                                            left: '6%',
-                                            bottom: '8%'
-                                        },
-                                        xAxis: [{
-                                            type: 'category',
-                                            axisTick: {
-                                                alignWithLabel: true
-                                            },
-                                            axisLine: {
-                                                show: true,
-                                                lineStyle: {
-                                                    color: "black",
-                                                    width: 2
-                                                }
-                                            },
-                                            data: []
-                                        }],
-                                        yAxis: [{
-                                            type: 'value',
-                                            name: '',
-                                            position: 'left',
-                                            alignTicks: true,
-                                            max: function (value) {
-                                                return value.max + 10;
-                                            },
-                                            // min: function (value) {
-                                            //     return value.min -5;
-                                            // },
-                                            min:0,
-                                            // interval: 50,
-                                            splitLine: { show: false },
-                                            axisLine: {
+                                                tooltip: {
+                                                    trigger: 'axis',
+                                                    axisPointer: {
+                                                        // Use axis to trigger tooltip
+                                                        type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
+                                                    }
+                                                },
+                                                grid: {
+                                                    top: '8%',
+                                                    right: '6%',
+                                                    left: '6%',
+                                                    bottom: '8%'
+                                                },
+                                                xAxis: [{
+                                                    type: 'category',
+                                                    axisTick: {
+                                                        alignWithLabel: true
+                                                    },
+                                                    axisLine: {
                                                         show: true,
                                                         lineStyle: {
                                                             color: "black",
-                                                            width:2
+                                                            width: 2
                                                         }
                                                     },
-                                            axisLabel: {
-                                                formatter: '{value} °C'
-                                            }
-                                        }, {
-                                            type: 'value',
-                                            name: '',
-                                            position: 'right',
-                                            alignTicks: true,
-                                            max: function (value) {
-                                                return value.max * 2.5;
-                                            },
-                                            min: 0,
-                                            interval: 10,
-                                            axisLine: {
-                                                show: true,
-                                                lineStyle: {
-                                                    color: "black",
-                                                    width: 2
-                                                }
-                                            },
-                                            splitLine: { show: false },
-                                            axisLabel: {
-                                                formatter: '{value} mm'
-                                            }
-                                        }],
-                                        series: [{
-                                            name: '插值',
-                                            type: 'bar',
-                                            color:"red",
-                                            stack: 'Ad',
-                                            yAxisIndex: 1,
-                                            data: data.linedata[parseInt(ites)].lsp
-                                        }, {
-                                            name: '对流降水',
-                                            stack: 'Ad',
-                                            type: 'bar',
-                                            yAxisIndex: 1,
-                                            color:"blue",
-                                            data: data.linedata[parseInt(ites)].cp
-                                        }, {
-                                            name: '温度',
-                                            type: 'line',
-                                            yAxisIndex: 0,
-                                            data: data.linedata[parseInt(ites)].t2
-                                        }]
-                                    };
-                                    // 使用刚指定的配置项和数据显示图表。
-                                            
+                                                    data: []
+                                                }],
+                                                yAxis: [{
+                                                    type: 'value',
+                                                    name: '',
+                                                    position: 'left',
+                                                    alignTicks: true,
+                                                    max: function (value) {
+                                                        return value.max + 10;
+                                                    },
+                                                    // min: function (value) {
+                                                    //     return value.min -5;
+                                                    // },
+                                                    min: 0,
+                                                    // interval: 50,
+                                                    splitLine: { show: false },
+                                                    axisLine: {
+                                                        show: true,
+                                                        lineStyle: {
+                                                            color: "black",
+                                                            width: 2
+                                                        }
+                                                    },
+                                                    axisLabel: {
+                                                        formatter: '{value} °C'
+                                                    }
+                                                }, {
+                                                    type: 'value',
+                                                    name: '',
+                                                    position: 'right',
+                                                    alignTicks: true,
+                                                    max: function (value) {
+                                                        return value.max * 2.5;
+                                                    },
+                                                    min: 0,
+                                                    interval: 10,
+                                                    axisLine: {
+                                                        show: true,
+                                                        lineStyle: {
+                                                            color: "black",
+                                                            width: 2
+                                                        }
+                                                    },
+                                                    splitLine: { show: false },
+                                                    axisLabel: {
+                                                        formatter: '{value} mm'
+                                                    }
+                                                }],
+                                                series: [{
+                                                    name: '插值',
+                                                    type: 'bar',
+                                                    color: "red",
+                                                    stack: 'Ad',
+                                                    yAxisIndex: 1,
+                                                    data: data.linedata[parseInt(ites)].lsp
+                                                }, {
+                                                    name: '对流降水',
+                                                    stack: 'Ad',
+                                                    type: 'bar',
+                                                    yAxisIndex: 1,
+                                                    color: "blue",
+                                                    data: data.linedata[parseInt(ites)].cp
+                                                }, {
+                                                    name: '温度',
+                                                    type: 'line',
+                                                    yAxisIndex: 0,
+                                                    data: data.linedata[parseInt(ites)].t2
+                                                }]
+                                            };
+                                            // 使用刚指定的配置项和数据显示图表。
+
                                             myChart.setOption(option);
 
                                         }
                                         main_ecmapui.append(singlebtn)
-                                    }                        
-                                    product_view.append(mapdiv,main_ecmapui)                                              
+                                    }
+                                    product_view.append(mapdiv, main_ecmapui)
                                     // 加载地图
                                     var map = new L.Map('ecmapview', {
                                         center: new L.LatLng(27.6, 120.7),//110.763, 41.376   39.62353145, 121.9937485
@@ -4311,7 +4477,7 @@
                                             return { color: 'black', weight: 1, fillOpacity: 0.1 };
                                         }
                                     }).addTo(map);
-                                    var main_intersectionLay = map_toolbox_object.return_shp(boundaries,data.plotdata).intersectionLay
+                                    var main_intersectionLay = map_toolbox_object.return_shp(boundaries, data.plotdata).intersectionLay
                                     main_intersectionLay.addTo(map)
                                     var chart = L.control({ position: 'bottomright' });
                                     chart.onAdd = function (map) {
@@ -4321,7 +4487,7 @@
                                     };
                                     chart.addTo(map);
                                     // 基于准备好的dom，初始化echarts实例
-                                    var myChart = echarts.init(document.getElementById('chatrecmap'));     
+                                    var myChart = echarts.init(document.getElementById('chatrecmap'));
                                     // 洪家的情况
                                     option = {
                                         tooltip: {
@@ -4362,16 +4528,16 @@
                                             // min: function (value) {
                                             //     return value.min -5;
                                             // },
-                                            min:0,
+                                            min: 0,
                                             // interval: 50,
                                             splitLine: { show: false },
                                             axisLine: {
-                                                        show: true,
-                                                        lineStyle: {
-                                                            color: "black",
-                                                            width:2
-                                                        }
-                                                    },
+                                                show: true,
+                                                lineStyle: {
+                                                    color: "black",
+                                                    width: 2
+                                                }
+                                            },
                                             axisLabel: {
                                                 formatter: '{value} °C'
                                             }
@@ -4400,7 +4566,7 @@
                                         series: [{
                                             name: '插值',
                                             type: 'bar',
-                                            color:"red",
+                                            color: "red",
                                             stack: 'Ad',
                                             yAxisIndex: 1,
                                             data: data.linedata[0].lsp
@@ -4409,7 +4575,7 @@
                                             stack: 'Ad',
                                             type: 'bar',
                                             yAxisIndex: 1,
-                                            color:"blue",
+                                            color: "blue",
                                             data: data.linedata[0].cp
                                         }, {
                                             name: '温度',
@@ -4422,10 +4588,10 @@
                                     myChart.setOption(option);
                                     // 关闭加载界面
                                     closeLoad(load)
-                                   
 
 
-                                    
+
+
                                 }
                             })
 
@@ -4685,15 +4851,173 @@
 
                     // 自动站数据加载
                     $('#tool_zdz_button').click(function () {
-                        var type = "tool_zdz"
-                        product_view_show(type)
+                        $('#product_view').attr("style", "display:none;background-color:rgb(239, 243, 237); width: 100%; height: 100%;")
+                        $('#product_zdz').attr("style", "background-color:rgb(239, 243, 237); width: 100%; height: 100%;padding:30px;")
+                        // 加载地图
+                        var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries
+                        var map = new L.Map('zdz_webgis', {
+                            center: new L.LatLng(28.6, 119.6),//110.763, 41.376   39.62353145, 121.9937485
+                            zoom: 8, //4
+                            zoomControl: false,
+                            dragging: true,
+                            scrollWheelZoom: true,
+                            doubleClickZoom: false,
+                            attributionControl: false, //是否去除右下角标志
+                            layers: []
+                        });
+                        map.bounds = turf.bbox(boundaries);
+                        L.geoJSON(boundaries, {
+                            style: function (feature) {
+                                return { color: 'black', weight: 1, fillOpacity: 0.1 };
+                            }
+                        }).addTo(map);
+                        // 加载表格数据
+                        layui.use('table', function () {
+                            var table = layui.table;
+                            //展示已知数据
+                            table.render({
+                                elem: '#zdz_table'
+                                , cols: [[ //标题栏
+                                    { field: 'id', title: 'ID', width: 60, sort: true }
+                                    , { field: 'username', title: '用户名', width: 70 }
+                                    , { field: 'email', title: '邮箱', minWidth: 100 }
+                                    , { field: 'sign', title: '签名', minWidth: 80 }
+                                    , { field: 'sex', title: '性别', width: 80 }
+                                    , { field: 'city', title: '城市', width: 80 }
+                                    , { field: 'experience', title: '积分', width: 80, sort: true }
+                                ]]
+                                , data: [{
+                                    "id": "10001"
+                                    , "username": "杜甫"
+                                    , "email": "test@email.com"
+                                    , "sex": "男"
+                                    , "city": "浙江杭州"
+                                    , "sign": "人生恰似一场修行"
+                                    , "experience": "116"
+                                    , "ip": "192.168.0.8"
+                                    , "logins": "108"
+                                    , "joinTime": "2016-10-14"
+                                }, {
+                                    "id": "10002"
+                                    , "username": "李白"
+                                    , "email": "test@email.com"
+                                    , "sex": "男"
+                                    , "city": "浙江杭州"
+                                    , "sign": "人生恰似一场修行"
+                                    , "experience": "12"
+                                    , "ip": "192.168.0.8"
+                                    , "logins": "106"
+                                    , "joinTime": "2016-10-14"
+                                    , "LAY_CHECKED": true
+                                }, {
+                                    "id": "10003"
+                                    , "username": "王勃"
+                                    , "email": "test@email.com"
+                                    , "sex": "男"
+                                    , "city": "浙江杭州"
+                                    , "sign": "人生恰似一场修行"
+                                    , "experience": "65"
+                                    , "ip": "192.168.0.8"
+                                    , "logins": "106"
+                                    , "joinTime": "2016-10-14"
+                                }, {
+                                    "id": "10004"
+                                    , "username": "贤心"
+                                    , "email": "test@email.com"
+                                    , "sex": "男"
+                                    , "city": "浙江杭州"
+                                    , "sign": "人生恰似一场修行"
+                                    , "experience": "666"
+                                    , "ip": "192.168.0.8"
+                                    , "logins": "106"
+                                    , "joinTime": "2016-10-14"
+                                }, {
+                                    "id": "10005"
+                                    , "username": "贤心"
+                                    , "email": "test@email.com"
+                                    , "sex": "男"
+                                    , "city": "浙江杭州"
+                                    , "sign": "人生恰似一场修行"
+                                    , "experience": "86"
+                                    , "ip": "192.168.0.8"
+                                    , "logins": "106"
+                                    , "joinTime": "2016-10-14"
+                                }, {
+                                    "id": "10006"
+                                    , "username": "贤心"
+                                    , "email": "test@email.com"
+                                    , "sex": "男"
+                                    , "city": "浙江杭州"
+                                    , "sign": "人生恰似一场修行"
+                                    , "experience": "12"
+                                    , "ip": "192.168.0.8"
+                                    , "logins": "106"
+                                    , "joinTime": "2016-10-14"
+                                }, {
+                                    "id": "10007"
+                                    , "username": "贤心"
+                                    , "email": "test@email.com"
+                                    , "sex": "男"
+                                    , "city": "浙江杭州"
+                                    , "sign": "人生恰似一场修行"
+                                    , "experience": "16"
+                                    , "ip": "192.168.0.8"
+                                    , "logins": "106"
+                                    , "joinTime": "2016-10-14"
+                                }, {
+                                    "id": "10008"
+                                    , "username": "贤心"
+                                    , "email": "test@email.com"
+                                    , "sex": "男"
+                                    , "city": "浙江杭州"
+                                    , "sign": "人生恰似一场修行"
+                                    , "experience": "106"
+                                    , "ip": "192.168.0.8"
+                                    , "logins": "106"
+                                    , "joinTime": "2016-10-14"
+                                }]
+                                , skin: 'line' //表格风格
+                                // , even: true
+                                , page: true //是否显示分页
+                                , limits: [5]
+                                , limit: 5 //每页默认显示的数量
+                            });
+                        });
+                        // 加载echart数据
+                        var chart = L.control({ position: 'topleft' });
+                        chart.onAdd = function (map) {
+                            var div = L.DomUtil.create('div', 'info chartzdzmap');
+                            div.id = "chatrzdzmap";
+                            return div;
+                        };
+                        chart.addTo(map);
+                        var myChart = echarts.init(document.getElementById('chatrzdzmap'));
+                        option = {
+                            xAxis: {
+                                type: 'category',
+                                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                            },
+                            yAxis: {
+                                type: 'value'
+                            },
+                            series: [
+                                {
+                                    data: [150, 230, 224, 218, 135, 147, 260],
+                                    type: 'line'
+                                }
+                            ]
+                        };
+                        myChart.setOption(option);
+                        // func版本的数据对接
+                        // var type = "tool_zdz"
+                        // product_view_show(type)
 
                     })
                     // 精细化EC单点数据加载
                     $('#tool_ec_button').click(function () {
                         // $('#product_view').attr("style", "display:none;background-color:rgb(239, 243, 237); width: 100%; height: 100%;")
                         // $('#product_ec').attr("style", "background-color:rgb(239, 243, 237); width: 100%; height: 100%;padding:30px;") 
-                                        
+
                         // 原始版本
                         var type = "tool_ec"
                         product_view_show(type)
