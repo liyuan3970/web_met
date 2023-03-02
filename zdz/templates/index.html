@@ -1769,7 +1769,7 @@
                             style="display: inline-flex;;width: 100%;height:46%;border: 1px solid rgb(75, 73, 73);;border-radius:15px;">
                             <!-- 时间线 -->
                             <div class="scrollbar_self"
-                                style="width: 20%;height:93%;border: 1px solid rgb(75, 73, 73);;border-radius:5px;margin:15px;overflow-x: hidden; overflow-y: scroll; padding-top:10px; padding-bottom:20px;background-color: white;">
+                                style="width: 20%;height:93%;;border-radius:5px;margin:15px;overflow-x: hidden; overflow-y: scroll; padding-top:10px; padding-left:10px;background-color: white;">
                                 <ul class="layui-timeline">
                                     <li class="layui-timeline-item">
                                         <i class="layui-icon layui-timeline-axis"></i>
@@ -4878,103 +4878,25 @@
                             table.render({
                                 elem: '#zdz_table'
                                 , cols: [[ //标题栏
-                                    { field: 'id', title: 'ID', width: 60, sort: true }
-                                    , { field: 'username', title: '用户名', width: 70 }
-                                    , { field: 'email', title: '邮箱', minWidth: 100 }
-                                    , { field: 'sign', title: '签名', minWidth: 80 }
-                                    , { field: 'sex', title: '性别', width: 80 }
-                                    , { field: 'city', title: '城市', width: 80 }
-                                    , { field: 'experience', title: '积分', width: 80, sort: true }
+                                    { field: 'IIiii', title: '站号', width: 80}
+                                    , { field: 'county', title: '县市', minWidth: 80 }
+                                    , { field: 'StationName', title: '站名', width: 80 }
+                                    , { field: 'fFy', title: '风力', minWidth: 80 , sort: true }
+                                    , { field: 'RR', title: '降水', width: 80 , sort: true }
+                                    , { field: 'Tx', title: '低温', width: 80, sort: true  }
+                                    , { field: 'Tn', title: '高温', width: 80, sort: true  }
+                                    , { field: 'VV', title: '能见度', width: 80, sort: true }
                                 ]]
                                 , data: [{
-                                    "id": "10001"
-                                    , "username": "杜甫"
-                                    , "email": "test@email.com"
-                                    , "sex": "男"
-                                    , "city": "浙江杭州"
-                                    , "sign": "人生恰似一场修行"
-                                    , "experience": "116"
-                                    , "ip": "192.168.0.8"
-                                    , "logins": "108"
-                                    , "joinTime": "2016-10-14"
-                                }, {
-                                    "id": "10002"
-                                    , "username": "李白"
-                                    , "email": "test@email.com"
-                                    , "sex": "男"
-                                    , "city": "浙江杭州"
-                                    , "sign": "人生恰似一场修行"
-                                    , "experience": "12"
-                                    , "ip": "192.168.0.8"
-                                    , "logins": "106"
-                                    , "joinTime": "2016-10-14"
-                                    , "LAY_CHECKED": true
-                                }, {
-                                    "id": "10003"
-                                    , "username": "王勃"
-                                    , "email": "test@email.com"
-                                    , "sex": "男"
-                                    , "city": "浙江杭州"
-                                    , "sign": "人生恰似一场修行"
-                                    , "experience": "65"
-                                    , "ip": "192.168.0.8"
-                                    , "logins": "106"
-                                    , "joinTime": "2016-10-14"
-                                }, {
-                                    "id": "10004"
-                                    , "username": "贤心"
-                                    , "email": "test@email.com"
-                                    , "sex": "男"
-                                    , "city": "浙江杭州"
-                                    , "sign": "人生恰似一场修行"
-                                    , "experience": "666"
-                                    , "ip": "192.168.0.8"
-                                    , "logins": "106"
-                                    , "joinTime": "2016-10-14"
-                                }, {
-                                    "id": "10005"
-                                    , "username": "贤心"
-                                    , "email": "test@email.com"
-                                    , "sex": "男"
-                                    , "city": "浙江杭州"
-                                    , "sign": "人生恰似一场修行"
-                                    , "experience": "86"
-                                    , "ip": "192.168.0.8"
-                                    , "logins": "106"
-                                    , "joinTime": "2016-10-14"
-                                }, {
-                                    "id": "10006"
-                                    , "username": "贤心"
-                                    , "email": "test@email.com"
-                                    , "sex": "男"
-                                    , "city": "浙江杭州"
-                                    , "sign": "人生恰似一场修行"
-                                    , "experience": "12"
-                                    , "ip": "192.168.0.8"
-                                    , "logins": "106"
-                                    , "joinTime": "2016-10-14"
-                                }, {
-                                    "id": "10007"
-                                    , "username": "贤心"
-                                    , "email": "test@email.com"
-                                    , "sex": "男"
-                                    , "city": "浙江杭州"
-                                    , "sign": "人生恰似一场修行"
-                                    , "experience": "16"
-                                    , "ip": "192.168.0.8"
-                                    , "logins": "106"
-                                    , "joinTime": "2016-10-14"
-                                }, {
-                                    "id": "10008"
-                                    , "username": "贤心"
-                                    , "email": "test@email.com"
-                                    , "sex": "男"
-                                    , "city": "浙江杭州"
-                                    , "sign": "人生恰似一场修行"
-                                    , "experience": "106"
-                                    , "ip": "192.168.0.8"
-                                    , "logins": "106"
-                                    , "joinTime": "2016-10-14"
+                                    "IIiii": "K8505"
+                                    , "county": "仙居"
+                                    , "town": "大麦屿"
+                                    , "StationName": "大麦屿"
+                                    , "fFy": "18.7"
+                                    , "RR": "0.3"
+                                    , "Tx": "12.5"
+                                    , "Tn": "12.5"
+                                    , "VV": "500"
                                 }]
                                 , skin: 'line' //表格风格
                                 // , even: true
