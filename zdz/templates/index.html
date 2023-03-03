@@ -4796,6 +4796,7 @@
                     })
                     const zdz_recdata_obj = {
                                 table_data: undefined,
+                                data_all: undefined,
                                 zdz_map:undefined,
                                 rander_table: function (revdata) {
                                     layui.use('table', function (data) {
@@ -4821,9 +4822,6 @@
                                             , limit: 5 //每页默认显示的数量
                                         });
                                     });
-                                },
-                                rander_single_btn:function (){
-
                                 },
                                 rander_btn: function (revdata) {
                                     var ul_zdz = document.getElementById("ul_time_zdz")
@@ -4881,8 +4879,13 @@
                                         ul_zdz.append(li_single)  
                                     }
 
-                                }
+                                },
+                                rander_line: function(){
 
+                                },
+                                rander_marker: function () {
+
+                                }
                             }
 
                     // 自动站数据加载
