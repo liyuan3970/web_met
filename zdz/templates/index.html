@@ -21,6 +21,8 @@
     <script type="text/javascript" src="static/js/dataTool.min.js"></script>
     <script type="text/javascript" src="static/js/china.js"></script>
     <script type="text/javascript" src="static/js/world.js"></script>
+    <!-- hightchart -->
+    <!-- <script src="http://cdn.highcharts.com.cn/highcharts/highcharts.js"></script> -->
     <!-- leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
         integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
@@ -106,6 +108,7 @@
             border-bottom-left-radius: 15px;
             border-bottom-right-radius: 15px;
         }
+
         .chartzdzmap {
             width: 550px;
             height: 450px;
@@ -407,7 +410,7 @@
                                                         }
                                                     }
 
-
+                                                    
                                                     $('#new_document_post').click(function () {
 
                                                         var csrf = $('input[name="csrfmiddlewaretoken"]').val();
@@ -1770,7 +1773,7 @@
                             <!-- 时间线 -->
                             <div class="scrollbar_self"
                                 style="width: 20%;height:93%;;border-radius:5px;margin:15px;overflow-x: hidden; overflow-y: scroll; padding-top:10px; padding-left:10px;background-color: white;">
-                                <ul class="layui-timeline">
+                                <ul id ="ul_time_zdz" class="layui-timeline">
                                     <li class="layui-timeline-item">
                                         <i class="layui-icon layui-timeline-axis"></i>
                                         <div class="layui-timeline-content layui-text">
@@ -1783,66 +1786,7 @@
                                             </div>
                                         </div>
                                     </li>
-                                    <li class="layui-timeline-item">
-                                        <i class="layui-icon layui-timeline-axis"></i>
-                                        <div class="layui-timeline-content layui-text">
-                                            <h3 class="layui-timeline-title">8月18日</h3>
-                                            <div class="layui-btn-group">
-                                                <button type="button" class="layui-btn layui-btn-xs">风</button>
-                                                <button type="button" class="layui-btn layui-btn-xs">雨</button>
-                                                <button type="button" class="layui-btn layui-btn-xs">温</button>
-                                                <button type="button" class="layui-btn layui-btn-xs">雾</button>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="layui-timeline-item">
-                                        <i class="layui-icon layui-timeline-axis"></i>
-                                        <div class="layui-timeline-content layui-text">
-                                            <h3 class="layui-timeline-title">8月19日</h3>
-                                            <div class="layui-btn-group">
-                                                <button type="button" class="layui-btn layui-btn-xs">风</button>
-                                                <button type="button" class="layui-btn layui-btn-xs">雨</button>
-                                                <button type="button" class="layui-btn layui-btn-xs">温</button>
-                                                <button type="button" class="layui-btn layui-btn-xs">雾</button>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="layui-timeline-item">
-                                        <i class="layui-icon layui-timeline-axis"></i>
-                                        <div class="layui-timeline-content layui-text">
-                                            <h3 class="layui-timeline-title">8月20日</h3>
-                                            <div class="layui-btn-group">
-                                                <button type="button" class="layui-btn layui-btn-xs">风</button>
-                                                <button type="button" class="layui-btn layui-btn-xs">雨</button>
-                                                <button type="button" class="layui-btn layui-btn-xs">温</button>
-                                                <button type="button" class="layui-btn layui-btn-xs">雾</button>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="layui-timeline-item">
-                                        <i class="layui-icon layui-timeline-axis"></i>
-                                        <div class="layui-timeline-content layui-text">
-                                            <h3 class="layui-timeline-title">8月21日</h3>
-                                            <div class="layui-btn-group">
-                                                <button type="button" class="layui-btn layui-btn-xs">风</button>
-                                                <button type="button" class="layui-btn layui-btn-xs">雨</button>
-                                                <button type="button" class="layui-btn layui-btn-xs">温</button>
-                                                <button type="button" class="layui-btn layui-btn-xs">雾</button>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="layui-timeline-item">
-                                        <i class="layui-icon layui-timeline-axis"></i>
-                                        <div class="layui-timeline-content layui-text">
-                                            <h3 class="layui-timeline-title">8月22日</h3>
-                                            <div class="layui-btn-group">
-                                                <button type="button" class="layui-btn layui-btn-xs">风</button>
-                                                <button type="button" class="layui-btn layui-btn-xs">雨</button>
-                                                <button type="button" class="layui-btn layui-btn-xs">温</button>
-                                                <button type="button" class="layui-btn layui-btn-xs">雾</button>
-                                            </div>
-                                        </div>
-                                    </li>
+                                    
                                 </ul>
                             </div>
                             <!-- 卡片栏目 -->
@@ -1861,8 +1805,10 @@
                                                     <div class="layui-col-md12">
                                                         <div class="layui-card">
                                                             <!-- <div class="layui-card-header">实况统计:</div> -->
-                                                            <div class="layui-card-body scrollbar_self" style="height:250px;overflow-x: hidden;overflow-y: scroll;">
-                                                                【风雨情通报】:2022-01-25 20:00到2022-02-10 06:00各县市面雨量分别为:仙居县78.82毫米;天台县75.02毫米;三门县68.45毫米;临海市62.95毫米;黄岩区62.64毫米;温岭市47.34毫米;路桥区46.94毫米;椒江区40.8毫米;玉环市38.36毫米;玉环县23.84毫米;单站前五：K8914：127.4毫米,K8785：120.2毫米,K8709：115.0毫米,K8774：114.5毫米,K8924：110.0毫米.乡镇前五：浦坝港镇：814.1毫米,街头镇：808.2毫米,横溪镇：661.7毫米,健跳镇：631.2毫米,白水洋镇：619.9毫米.其中:大于250毫米有338站,大于100毫米有15站,大于50毫米有346站,大于25毫米有434站,大于10毫米有435站,大于5毫米有435站,大于1毫米有435站,沿海出现8~16级大风.风力较大的有：K8629：23.9米/秒,K8546：21.0米/秒,K8627：21.0米/秒,K8304：20.9米/秒,K8407：20.8米/秒.沿海出现小于200米的强浓雾。主城区最高温度：129度。主城区最低温度：28度。其中全市小于-3度的有18站。小于0度的有16站。小于3度的有146站。
+                                                            <div class="layui-card-body scrollbar_self"
+                                                                style="height:250px;overflow-x: hidden;overflow-y: scroll;">
+                                                                【风雨情通报】:2022-01-25 20:00到2022-02-10
+                                                                06:00各县市面雨量分别为:仙居县78.82毫米;天台县75.02毫米;三门县68.45毫米;临海市62.95毫米;黄岩区62.64毫米;温岭市47.34毫米;路桥区46.94毫米;椒江区40.8毫米;玉环市38.36毫米;玉环县23.84毫米;单站前五：K8914：127.4毫米,K8785：120.2毫米,K8709：115.0毫米,K8774：114.5毫米,K8924：110.0毫米.乡镇前五：浦坝港镇：814.1毫米,街头镇：808.2毫米,横溪镇：661.7毫米,健跳镇：631.2毫米,白水洋镇：619.9毫米.其中:大于250毫米有338站,大于100毫米有15站,大于50毫米有346站,大于25毫米有434站,大于10毫米有435站,大于5毫米有435站,大于1毫米有435站,沿海出现8~16级大风.风力较大的有：K8629：23.9米/秒,K8546：21.0米/秒,K8627：21.0米/秒,K8304：20.9米/秒,K8407：20.8米/秒.沿海出现小于200米的强浓雾。主城区最高温度：129度。主城区最低温度：28度。其中全市小于-3度的有18站。小于0度的有16站。小于3度的有146站。
 
                                                             </div>
                                                         </div>
@@ -4848,93 +4794,192 @@
                         product_view_show(type)
 
                     })
+                    const zdz_recdata_obj = {
+                                table_data: undefined,
+                                zdz_map:undefined,
+                                rander_table: function (revdata) {
+                                    layui.use('table', function (data) {
+                                        var table = layui.table;
+                                        //展示已知数据
+                                        table.render({
+                                            elem: '#zdz_table'
+                                            , cols: [[ //标题栏
+                                                { field: 'IIiii', title: '站号', width: 80 }
+                                                , { field: 'county', title: '县市', minWidth: 80 }
+                                                , { field: 'StationName', title: '站名', width: 80 }
+                                                , { field: 'fFy', title: '风力', minWidth: 80, sort: true }
+                                                , { field: 'RR', title: '降水', width: 80, sort: true }
+                                                , { field: 'Tx', title: '低温', width: 80, sort: true }
+                                                , { field: 'Tn', title: '高温', width: 80, sort: true }
+                                                , { field: 'VV', title: '能见度', width: 80, sort: true }
+                                            ]]
+                                            , data: revdata
+                                            , skin: 'line' //表格风格
+                                            // , even: true
+                                            , page: true //是否显示分页
+                                            , limits: [5]
+                                            , limit: 5 //每页默认显示的数量
+                                        });
+                                    });
+                                },
+                                rander_single_btn:function (){
+
+                                },
+                                rander_btn: function (revdata) {
+                                    var ul_zdz = document.getElementById("ul_time_zdz")
+                                    for (var i = 0; i < revdata.length; i++) {
+                                        var li_single = document.createElement("li")
+                                        li_single.setAttribute("class","layui-timeline-item")
+                                        li_single.innerHTML = '<i class="layui-icon layui-timeline-axis"></i>' 
+                                        var div_single = document.createElement("div")
+                                        div_single.setAttribute("class","layui-timeline-content layui-text")
+                                        // 按钮
+                                        var single = revdata[i]
+                                        var title = single["time"]
+                                        var title_h = document.createElement("h3")
+                                        title_h.setAttribute("class","layui-timeline-title")
+                                        title_h.innerText = title
+                                        var rain = single["rain"]
+                                        var wind = single["wind"]
+                                        var tmax = single["tmax"]
+                                        var tmin = single["tmin"]
+                                        var view = single["view"]
+                                        var div_btn = document.createElement("div")
+                                        div_btn.setAttribute("class","layui-btn-group")
+                                        if (view){
+                                            var btn_view = document.createElement("button")
+                                            btn_view.setAttribute("class","layui-btn layui-btn-xs") 
+                                            btn_view.innerText = "雾"
+                                            div_btn.append(btn_view)
+                                        }
+                                        if (wind){
+                                            var btn_wind = document.createElement("button")
+                                            btn_wind.setAttribute("class","layui-btn layui-btn-xs") 
+                                            btn_wind.innerText = "风"
+                                            div_btn.append(btn_wind)
+                                        }
+                                        if (rain){
+                                            var btn_rain = document.createElement("button")
+                                            btn_rain.setAttribute("class","layui-btn layui-btn-xs") 
+                                            btn_rain.innerText = "雨"
+                                            div_btn.append(btn_rain)
+                                        }
+                                        if (tmax){
+                                            var btn_tmax = document.createElement("button")
+                                            btn_tmax.setAttribute("class","layui-btn layui-btn-xs") 
+                                            btn_tmax.innerText = "温"
+                                            div_btn.append(btn_tmax)
+                                        }
+                                        if (tmin){
+                                            var btn_tmin = document.createElement("button")
+                                            btn_tmin.setAttribute("class","layui-btn layui-btn-xs") 
+                                            btn_tmin.innerText = "温"
+                                            div_btn.append(btn_tmin)
+                                        }
+                                        div_single.append(title_h,div_btn)
+                                        li_single.append(div_single)
+                                        ul_zdz.append(li_single)  
+                                    }
+
+                                }
+
+                            }
 
                     // 自动站数据加载
                     $('#tool_zdz_button').click(function () {
-                        $('#product_view').attr("style", "display:none;background-color:rgb(239, 243, 237); width: 100%; height: 100%;")
-                        $('#product_zdz').attr("style", "background-color:rgb(239, 243, 237); width: 100%; height: 100%;padding:30px;")
-                        // 加载地图
-                        var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries
-                        var map = new L.Map('zdz_webgis', {
-                            center: new L.LatLng(28.6, 119.6),//110.763, 41.376   39.62353145, 121.9937485
-                            zoom: 8, //4
-                            zoomControl: false,
-                            dragging: true,
-                            scrollWheelZoom: true,
-                            doubleClickZoom: false,
-                            attributionControl: false, //是否去除右下角标志
-                            layers: []
-                        });
-                        map.bounds = turf.bbox(boundaries);
-                        L.geoJSON(boundaries, {
-                            style: function (feature) {
-                                return { color: 'black', weight: 1, fillOpacity: 0.1 };
+                            var map_z = document.getElementById("zdz_webgis")
+                            console.log(map_z.children.length)
+                            if (map_z.children.length>0){
+                                zdz_recdata_obj.zdz_map.remove()
                             }
-                        }).addTo(map);
-                        // 加载表格数据
-                        layui.use('table', function () {
-                            var table = layui.table;
-                            //展示已知数据
-                            table.render({
-                                elem: '#zdz_table'
-                                , cols: [[ //标题栏
-                                    { field: 'IIiii', title: '站号', width: 80}
-                                    , { field: 'county', title: '县市', minWidth: 80 }
-                                    , { field: 'StationName', title: '站名', width: 80 }
-                                    , { field: 'fFy', title: '风力', minWidth: 80 , sort: true }
-                                    , { field: 'RR', title: '降水', width: 80 , sort: true }
-                                    , { field: 'Tx', title: '低温', width: 80, sort: true  }
-                                    , { field: 'Tn', title: '高温', width: 80, sort: true  }
-                                    , { field: 'VV', title: '能见度', width: 80, sort: true }
-                                ]]
-                                , data: [{
-                                    "IIiii": "K8505"
-                                    , "county": "仙居"
-                                    , "town": "大麦屿"
-                                    , "StationName": "大麦屿"
-                                    , "fFy": "18.7"
-                                    , "RR": "0.3"
-                                    , "Tx": "12.5"
-                                    , "Tn": "12.5"
-                                    , "VV": "500"
-                                }]
-                                , skin: 'line' //表格风格
-                                // , even: true
-                                , page: true //是否显示分页
-                                , limits: [5]
-                                , limit: 5 //每页默认显示的数量
-                            });
-                        });
-                        // 加载echart数据
-                        var chart = L.control({ position: 'topleft' });
-                        chart.onAdd = function (map) {
-                            var div = L.DomUtil.create('div', 'info chartzdzmap');
-                            div.id = "chatrzdzmap";
-                            return div;
-                        };
-                        chart.addTo(map);
-                        var myChart = echarts.init(document.getElementById('chatrzdzmap'));
-                        option = {
-                            xAxis: {
-                                type: 'category',
-                                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-                            },
-                            yAxis: {
-                                type: 'value'
-                            },
-                            series: [
-                                {
-                                    data: [150, 230, 224, 218, 135, 147, 260],
-                                    type: 'line'
+                            // if (map_z.children.length>0){
+                            //     map_zdz.eachLayer(function (layer) {
+                            //         if (!layer._container || ('' + jQuery(layer._container).attr('class')).replace(/\s/g, '') != 'leaflet-layer') {
+                            //             layer.remove();
+                            //         }
+                            //     });
+                            // }
+                            $('#product_view').attr("style", "display:none;background-color:rgb(239, 243, 237); width: 100%; height: 100%;")
+                            $('#product_zdz').attr("style", "background-color:rgb(239, 243, 237); width: 100%; height: 100%;padding:30px;")
+                            var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                            $.ajax({
+                                url: "tool_zdz_date",  // 请求的地址
+                                type: "post",  // 请求方式
+                                timeout: 25000, //设置延迟上限
+                                data: {
+                                    'csrfmiddlewaretoken': csrf,
+                                    'start_time': $('#datetimepicker_history1').val(),
+                                    'end_time': $('#datetimepicker_history2').val()
+                                },
+                                dataType: "json",
+                                beforeSend: function (XMLHttpRequest) {
+                                    load = showLoad();
+                                },
+                                success: function (data) {
+                                    console.log("自动站成功", JSON.parse(data.table_data))
+                                    // 加载地图
+                                    var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries
+                                
+                                    
+                                    var map_zdz = new L.Map('zdz_webgis', {
+                                        center: new L.LatLng(28.6, 119.6),//110.763, 41.376   39.62353145, 121.9937485
+                                        zoom: 8, //4
+                                        zoomControl: false,
+                                        dragging: true,
+                                        scrollWheelZoom: true,
+                                        doubleClickZoom: false,
+                                        attributionControl: false, //是否去除右下角标志
+                                        layers: []
+                                    });
+                                    map_zdz.bounds = turf.bbox(boundaries);
+                                    L.geoJSON(boundaries, {
+                                        style: function (feature) {
+                                            return { color: 'black', weight: 1, fillOpacity: 0.1 };
+                                        }
+                                    }).addTo(map_zdz);
+                                    // 加载echart数据
+                                    var chart = L.control({ position: 'topleft' });
+                                    chart.onAdd = function (map_zdz) {
+                                        var div = L.DomUtil.create('div', 'info chartzdzmap');
+                                        div.id = "chatrzdzmap";
+                                        return div;
+                                    };
+                                    chart.addTo(map_zdz);
+                                    var myChart = echarts.init(document.getElementById('chatrzdzmap'));
+                                    option = {
+                                        xAxis: {
+                                            type: 'category',
+                                            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                                        },
+                                        yAxis: {
+                                            type: 'value'
+                                        },
+                                        series: [
+                                            {
+                                                data: [150, 230, 224, 218, 135, 147, 260],
+                                                type: 'line'
+                                            }
+                                        ]
+                                    };
+                                    myChart.setOption(option);
+                                    // 加载表格数据
+                                    var datatable = JSON.parse(data.table_data)                                
+                                    // zdz_recdata_obj.table_data = data_tabel                                
+                                    zdz_recdata_obj.rander_table(datatable)
+                                    // 加载 时间线
+                                    zdz_recdata_obj.rander_btn(data.daily_btn_list)
+                                    zdz_recdata_obj.zdz_map = map_zdz
+                                    
+                                    //关闭
+                                    closeLoad(load)
                                 }
-                            ]
-                        };
-                        myChart.setOption(option);
-                        // func版本的数据对接
-                        // var type = "tool_zdz"
-                        // product_view_show(type)
-
-                    })
+                            })
+                           
+                            // func版本的数据对接
+                            // var type = "tool_zdz"
+                            // product_view_show(type)
+                            
+                        })
                     // 精细化EC单点数据加载
                     $('#tool_ec_button').click(function () {
                         // $('#product_view').attr("style", "display:none;background-color:rgb(239, 243, 237); width: 100%; height: 100%;")
