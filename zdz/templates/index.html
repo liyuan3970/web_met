@@ -1908,6 +1908,7 @@
                             };
                             var grid = turf.interpolate(points, 0.05, interpolate_options);
                             var levelV = [0, 1, 10, 30, 50, 70, 100];
+                            // var levelV = [0, 1, 18, 19, 20, 21, 100];
                             var isobands = turf.isobands(
                                 grid,
                                 levelV,
@@ -4828,9 +4829,11 @@
                                 intersectionLay.addTo(zdz_recdata_obj.zdz_map)
                             }
                             else if (click_type == "wind"){
+                                console.log("绘制封场")
                                 zdz_recdata_obj.data_all.forEach(function (item) {
                                     if (item.fFy != "-9999.0") {
                                         // 渲染颜色
+                                        console.log(item.fFy,[parseFloat(item.lon), parseFloat(item.lat)])
                                         var single_point = {
                                             type: "Feature",
                                             "properties": {
