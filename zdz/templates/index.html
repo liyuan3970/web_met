@@ -22,12 +22,17 @@
     <script type="text/javascript" src="static/js/china.js"></script>
     <script type="text/javascript" src="static/js/world.js"></script>
     <!-- hightchart -->
-    <!-- <script src="http://cdn.highcharts.com.cn/highcharts/highcharts.js"></script> -->
+    <script src="static/js/highcharts.js"></script>
+    <script src="static/js/windbarb.js"></script>
+    <script src="static/js/exporting.js"></script>
+    <script src="static/js/export-data.js"></script>
+    <script src="static/js/accessibility.js"></script>
     <!-- leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
-        integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
         integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <script type="text/javascript" src="static/js/leaflet-windbarb.js"></script>
+    <script src="static/js/leaflet.canvaslabel.js"></script>
     <!-- 使用turf -->
     <script src="https://unpkg.com/@turf/turf/turf.min.js"></script>
     <!-- tinymce -->
@@ -110,20 +115,11 @@
         }
 
         .chartzdzmap {
-            width: 550px;
-            height: 450px;
+            width: 600px;
+            height: 440px;
             /* background-color: white; */
-            border-radius: 15px;
+            /* border-radius: 15px; */
         }
-
-
-        /* html {
-
-                overflow-x: hidden;
-
-                overflow-y: hidden;
-
-            } */
     </style>
     <title>决策服务模板平台</title>
 
@@ -410,7 +406,7 @@
                                                         }
                                                     }
 
-                                                    
+
                                                     $('#new_document_post').click(function () {
 
                                                         var csrf = $('input[name="csrfmiddlewaretoken"]').val();
@@ -1773,32 +1769,36 @@
                             <!-- 时间线 -->
                             <div class="scrollbar_self"
                                 style="width: 20%;height:93%;;border-radius:5px;margin:15px;overflow-x: hidden; overflow-y: scroll; padding-top:10px; padding-left:10px;background-color: white;">
-                                <ul id ="ul_time_zdz" class="layui-timeline">
+                                <ul id="ul_time_zdz" class="layui-timeline">
                                     <li class="layui-timeline-item">
                                         <i class="layui-icon layui-timeline-axis"></i>
                                         <div class="layui-timeline-content layui-text">
                                             <h3 class="layui-timeline-title">概况</h3>
                                             <div class="layui-btn-group">
-                                                <button type="button" class="layui-btn layui-btn-xs">风</button>
-                                                <button type="button" class="layui-btn layui-btn-xs">雨</button>
-                                                <button type="button" class="layui-btn layui-btn-xs">温</button>
-                                                <button type="button" class="layui-btn layui-btn-xs">雾</button>
+                                                <button type="button" value="wind_all"
+                                                    class="layui-btn layui-btn-xs wind">风</button>
+                                                <button type="button" value="rain_all"
+                                                    class="layui-btn layui-btn-xs rain">雨</button>
+                                                <button type="button" value="temp_all"
+                                                    class="layui-btn layui-btn-xs temp">温</button>
+                                                <button type="button" value="view_all"
+                                                    class="layui-btn layui-btn-xs view">雾</button>
                                             </div>
                                         </div>
                                     </li>
-                                    
+
                                 </ul>
                             </div>
                             <!-- 卡片栏目 -->
-                            <div
-                                style="width: 75%;height:93%;border: 1px solid rgb(75, 73, 73);;margin:15px;margin-left: 0px;padding: 0px;">
+                            <div style="width: 75%;height:93%;;margin:15px;margin-left: 0px;padding: 0px;">
                                 <div class="layui-tab layui-tab-card"
                                     style="background-color: white;width:100%;height:100%;margin:0px;">
                                     <ul class="layui-tab-title" style="margin: 0px;">
                                         <li class="layui-this" style="margin: 0px;">文字统计</li>
                                         <li style="margin: 0px;">数据表</li>
+                                        <li id="li_zdz_line_chart" style="margin: 0px;">单站曲线</li>
                                     </ul>
-                                    <div class="layui-tab-content" style="height: 150px;padding:0px">
+                                    <div class="layui-tab-content" style="padding:0px">
                                         <div class="layui-tab-item layui-show">
                                             <div class="layui-bg-gray" style="padding: 20px;">
                                                 <div class="layui-row layui-col-space15">
@@ -1818,6 +1818,10 @@
                                         </div>
                                         <div class="layui-tab-item">
                                             <table class="layui-hide" id="zdz_table"></table>
+                                        </div>
+                                        <div id="continer_zdz_line_chart" class="layui-tab-item"
+                                            style="padding: 0px;height: 310px;">
+
                                         </div>
                                     </div>
                                 </div>
@@ -1992,6 +1996,7 @@
                                         color: 'black',
                                         fillColor: feature.properties.fill,
                                         weight: 0.1,
+                                        zIndex: 800,
                                         fillOpacity: 0.7
                                     };
                                 }
@@ -4795,194 +4800,510 @@
 
                     })
                     const zdz_recdata_obj = {
-                                table_data: undefined,
-                                data_all: undefined,
-                                zdz_map:undefined,
-                                rander_table: function (revdata) {
-                                    layui.use('table', function (data) {
-                                        var table = layui.table;
-                                        //展示已知数据
-                                        table.render({
-                                            elem: '#zdz_table'
-                                            , cols: [[ //标题栏
-                                                { field: 'IIiii', title: '站号', width: 80 }
-                                                , { field: 'county', title: '县市', minWidth: 80 }
-                                                , { field: 'StationName', title: '站名', width: 80 }
-                                                , { field: 'fFy', title: '风力', minWidth: 80, sort: true }
-                                                , { field: 'RR', title: '降水', width: 80, sort: true }
-                                                , { field: 'Tx', title: '低温', width: 80, sort: true }
-                                                , { field: 'Tn', title: '高温', width: 80, sort: true }
-                                                , { field: 'VV', title: '能见度', width: 80, sort: true }
-                                            ]]
-                                            , data: revdata
-                                            , skin: 'line' //表格风格
-                                            // , even: true
-                                            , page: true //是否显示分页
-                                            , limits: [5]
-                                            , limit: 5 //每页默认显示的数量
-                                        });
-                                    });
-                                },
-                                rander_btn: function (revdata) {
-                                    var ul_zdz = document.getElementById("ul_time_zdz")
-                                    for (var i = 0; i < revdata.length; i++) {
-                                        var li_single = document.createElement("li")
-                                        li_single.setAttribute("class","layui-timeline-item")
-                                        li_single.innerHTML = '<i class="layui-icon layui-timeline-axis"></i>' 
-                                        var div_single = document.createElement("div")
-                                        div_single.setAttribute("class","layui-timeline-content layui-text")
-                                        // 按钮
-                                        var single = revdata[i]
-                                        var title = single["time"]
-                                        var title_h = document.createElement("h3")
-                                        title_h.setAttribute("class","layui-timeline-title")
-                                        title_h.innerText = title
-                                        var rain = single["rain"]
-                                        var wind = single["wind"]
-                                        var tmax = single["tmax"]
-                                        var tmin = single["tmin"]
-                                        var view = single["view"]
-                                        var div_btn = document.createElement("div")
-                                        div_btn.setAttribute("class","layui-btn-group")
-                                        if (view){
-                                            var btn_view = document.createElement("button")
-                                            btn_view.setAttribute("class","layui-btn layui-btn-xs") 
-                                            btn_view.innerText = "雾"
-                                            div_btn.append(btn_view)
+                        table_data: undefined,
+                        data_all: undefined,
+                        zdz_map: undefined,
+                        plot_data: undefined,
+                        boundaries_taizhou: undefined,
+                        plot: function (click_type) {
+                            var points = []
+                            if (click_type == "rain") {
+                                zdz_recdata_obj.data_all.forEach(function (item) {
+                                    if (item.RR != "-9999.0") {
+                                        // 渲染颜色
+                                        var single_point = {
+                                            type: "Feature",
+                                            "properties": {
+                                                "value": item.RR
+                                            },
+                                            "geometry": {
+                                                "type": "Point",
+                                                "coordinates": [parseFloat(item.lon), parseFloat(item.lat)]
+                                            }
                                         }
-                                        if (wind){
-                                            var btn_wind = document.createElement("button")
-                                            btn_wind.setAttribute("class","layui-btn layui-btn-xs") 
-                                            btn_wind.innerText = "风"
-                                            div_btn.append(btn_wind)
-                                        }
-                                        if (rain){
-                                            var btn_rain = document.createElement("button")
-                                            btn_rain.setAttribute("class","layui-btn layui-btn-xs") 
-                                            btn_rain.innerText = "雨"
-                                            div_btn.append(btn_rain)
-                                        }
-                                        if (tmax){
-                                            var btn_tmax = document.createElement("button")
-                                            btn_tmax.setAttribute("class","layui-btn layui-btn-xs") 
-                                            btn_tmax.innerText = "温"
-                                            div_btn.append(btn_tmax)
-                                        }
-                                        if (tmin){
-                                            var btn_tmin = document.createElement("button")
-                                            btn_tmin.setAttribute("class","layui-btn layui-btn-xs") 
-                                            btn_tmin.innerText = "温"
-                                            div_btn.append(btn_tmin)
-                                        }
-                                        div_single.append(title_h,div_btn)
-                                        li_single.append(div_single)
-                                        ul_zdz.append(li_single)  
+                                        points.push(single_point)
                                     }
+                                })
+                                var intersectionLay = map_toolbox_object.return_shp(zdz_recdata_obj.boundaries_taizhou, points).intersectionLay
+                                intersectionLay.addTo(zdz_recdata_obj.zdz_map)
+                            }
+                            else if (click_type == "wind"){
+                                zdz_recdata_obj.data_all.forEach(function (item) {
+                                    if (item.fFy != "-9999.0") {
+                                        // 渲染颜色
+                                        var single_point = {
+                                            type: "Feature",
+                                            "properties": {
+                                                "value": item.fFy
+                                            },
+                                            "geometry": {
+                                                "type": "Point",
+                                                "coordinates": [parseFloat(item.lon), parseFloat(item.lat)]
+                                            }
+                                        }
+                                        points.push(single_point)
+                                    }
+                                })
+                                var intersectionLay = map_toolbox_object.return_shp(zdz_recdata_obj.boundaries_taizhou, points).intersectionLay
+                                intersectionLay.addTo(zdz_recdata_obj.zdz_map)
 
-                                },
-                                rander_line: function(){
+                            }
+                            
+                        },
+                        rander_table: function (revdata) {
+                            layui.use('table', function (data) {
+                                var table = layui.table;
+                                //展示已知数据
+                                table.render({
+                                    elem: '#zdz_table'
+                                    , cols: [[ //标题栏
+                                        { field: 'IIiii', title: '站号', width: 80 }
+                                        , { field: 'county', title: '县市', minWidth: 80 }
+                                        , { field: 'StationName', title: '站名', width: 80 }
+                                        , { field: 'fFy', title: '风力', minWidth: 80, sort: true }
+                                        , { field: 'RR', title: '降水', width: 80, sort: true }
+                                        , { field: 'Tx', title: '低温', width: 80, sort: true }
+                                        , { field: 'Tn', title: '高温', width: 80, sort: true }
+                                        , { field: 'VV', title: '能见度', width: 80, sort: true }
+                                    ]]
+                                    , data: revdata
+                                    , skin: 'line' //表格风格
+                                    // , even: true
+                                    , page: true //是否显示分页
+                                    , limits: [5]
+                                    , limit: 5 //每页默认显示的数量
+                                });
+                            });
+                        },
+                        rander_btn: function (revdata) {
+                            var ul_zdz = document.getElementById("ul_time_zdz")
+                            for (var i = 0; i < revdata.length; i++) {
+                                var li_single = document.createElement("li")
+                                li_single.setAttribute("class", "layui-timeline-item")
+                                li_single.innerHTML = '<i class="layui-icon layui-timeline-axis"></i>'
+                                var div_single = document.createElement("div")
+                                div_single.setAttribute("class", "layui-timeline-content layui-text")
+                                // 按钮
+                                var single = revdata[i]
+                                var title = single["time"]
+                                var title_h = document.createElement("h3")
+                                title_h.setAttribute("class", "layui-timeline-title")
+                                title_h.innerText = title
+                                var rain = single["rain"]
+                                var wind = single["wind"]
+                                var tmax = single["tmax"]
+                                var tmin = single["tmin"]
+                                var view = single["view"]
+                                var div_btn = document.createElement("div")
+                                div_btn.setAttribute("class", "layui-btn-group")
+                                if (view) {
+                                    var btn_view = document.createElement("button")
+                                    btn_view.setAttribute("class", "layui-btn layui-btn-xs")
+                                    btn_view.innerText = "雾"
+                                    div_btn.append(btn_view)
+                                }
+                                if (wind) {
+                                    var btn_wind = document.createElement("button")
+                                    btn_wind.setAttribute("class", "layui-btn layui-btn-xs")
+                                    btn_wind.innerText = "风"
+                                    div_btn.append(btn_wind)
+                                }
+                                if (rain) {
+                                    var btn_rain = document.createElement("button")
+                                    btn_rain.setAttribute("class", "layui-btn layui-btn-xs")
+                                    btn_rain.innerText = "雨"
+                                    div_btn.append(btn_rain)
+                                }
+                                if (tmax) {
+                                    var btn_tmax = document.createElement("button")
+                                    btn_tmax.setAttribute("class", "layui-btn layui-btn-xs")
+                                    btn_tmax.innerText = "温"
+                                    div_btn.append(btn_tmax)
+                                }
+                                if (tmin) {
+                                    var btn_tmin = document.createElement("button")
+                                    btn_tmin.setAttribute("class", "layui-btn layui-btn-xs")
+                                    btn_tmin.innerText = "温"
+                                    div_btn.append(btn_tmin)
+                                }
+                                div_single.append(title_h, div_btn)
+                                li_single.append(div_single)
+                                ul_zdz.append(li_single)
+                            }
 
-                                },
-                                rander_marker: function () {
+                        },
+                        rander_line: function (plot_type, plot_time, plot_list, plot_name) {
+                            if (plot_type == "rain") {
+                                $("#li_zdz_line_chart").click()
+                                var myChart = echarts.init(document.getElementById('continer_zdz_line_chart'));
+                                option = {
+                                    tooltip: {
+                                        trigger: 'axis'
+                                    },
+                                    grid: {
+                                        top: '10%',
+                                        right: '6%',
+                                        left: '9%',
+                                        bottom: '20%'
+                                    },
+                                    dataZoom: [
+                                        {
+                                            show: true,
+                                            start: 0,
+                                            height: 20,
+                                            bottom: 10,
+                                            end: 100
+                                        },
+                                        {
+                                            type: 'inside',
+                                            start: 94,
+                                            height: 20,
+                                            bottom: 10,
+                                            end: 100
+                                        }
+                                    ],
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            axisTick: {
+                                                alignWithLabel: true
+                                            },
+                                            axisLine: {
+                                                show: true,
+                                                lineStyle: {
+                                                    color: "black",
+                                                    width: 2
+                                                }
+                                            },
+                                            data: plot_time
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            type: 'value',
+                                            name: plot_name,
+                                            position: 'left',
+                                            splitLine: { show: false },
+                                            alignTicks: true,
+                                            max: function (value) {
+                                                return value.max + 10;
+                                            },
+                                            min: 0,
+                                            // interval: plot_line_obj.titem,
+                                            axisLine: {
+                                                show: true,
+                                                lineStyle: {
+                                                    color: "black",
+                                                    width: 2
+                                                }
+                                            },
+                                            axisLabel: {
+                                                formatter: '{value} mm'
+                                            }
+                                        }],
+                                    series: [
+                                        {
+                                            name: 'rain',
+                                            type: "bar",
+                                            color: "blue",
+                                            barWidth: 3,
+                                            // smooth: true,
+                                            data: plot_list
+                                        }
+                                    ]
 
                                 }
+                                myChart.setOption(option);
                             }
+                            else if (plot_type == "wind") {
+                                $("#li_zdz_line_chart").click()
+                                Highcharts.chart('continer_zdz_line_chart', {
+                                    title: {
+                                        text: plot_time
+                                    },
+                                    chart: {
+                                        zoomType: 'x'
+                                    },
+                                    xAxis: {
+                                        type: 'datetime',
+                                        offset: 40
+                                    },
+                                    plotOptions: {
+                                        series: {
+                                            pointStart: Date.UTC(2022,0,24,19),
+                                            // pointStart: Date.UTC(2017, 0, 29),
+                                            pointInterval: 36e5
+                                        }
+                                    },
+                                    series: [
+                                        // {
+                                        //     type: 'windbarb',
+                                        //     data: plot_list,
+                                        //     name: 'Wind',
+                                        //     color: Highcharts.getOptions().colors[1],
+                                        //     showInLegend: true,
+                                        //     tooltip: {
+                                        //         valueSuffix: ' m/s'
+                                        //     }
+                                        // },
+                                        {
+                                            type: 'area',
+                                            keys: ['y', 'rotation'], // rotation is not used here
+                                            data: plot_list,
+                                            color: Highcharts.getOptions().colors[0],
+                                            fillColor: {
+                                                linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+                                                stops: [
+                                                    [0, Highcharts.getOptions().colors[0]],
+                                                    [
+                                                        1,
+                                                        Highcharts.color(Highcharts.getOptions().colors[0])
+                                                            .setOpacity(0.25).get()
+                                                    ]
+                                                ]
+                                            },
+                                            name: '',
+                                            tooltip: {
+                                                valueSuffix: ' m/s'
+                                            },
+                                            states: {
+                                                inactive: {
+                                                    opacity: 1
+                                                }
+                                            }
+                                        }
+                                    ]
+
+                                })
+                            }
+                        },
+                        rander_marker: function (click_type, click_time) {
+                            // 
+                            var points = []
+                            if (click_type == "rain") {
+                                if (click_time == "all") {
+                                    zdz_recdata_obj.plot(click_type)
+                                    // 轮询   
+                                    zdz_recdata_obj.data_all.forEach(function (item) {
+                                        if (item.RR != "-9999.0") {
+                                            // 渲染站点                     
+                                            var latlng = L.latLng(item.lat, item.lon);
+                                            var c = L.circleMarker(latlng, {
+                                                name: item.IIiii,
+                                                station: item.StationName,
+                                                timelist: item.time_list,
+                                                rainlist: item.rain_list,
+                                                weight: 0,
+                                                radius: 7,
+                                                opacity: 1,
+                                                fill: false,
+                                                labelStyle: {
+                                                    text: item.StationName,
+                                                    weight: 10,
+                                                    rotation: 0,
+                                                    color: "rgb(239, 243, 237)",
+                                                    zIndex: 60
+                                                }
+                                            }).addTo(zdz_recdata_obj.zdz_map).on("click", function (e) {
+                                                /// 叠加echart绘图
+                                                // console.log(e.sourceTarget.options.timelist,e.sourceTarget.options.rainlist)
+                                                var plot_type = "rain"
+                                                var plot_time = e.sourceTarget.options.timelist
+                                                var plot_list = e.sourceTarget.options.rainlist
+                                                var plot_name = e.sourceTarget.options.station
+                                                zdz_recdata_obj.rander_line(plot_type, plot_time, plot_list, plot_name)
+
+                                            });
+
+                                        }
+                                    })
+
+                                }
+                                else {
+
+                                }
+
+                            }
+                            else if (click_type == "wind") {
+                                if (click_time == "all") {
+                                    zdz_recdata_obj.plot(click_type)
+                                    // 轮询   
+                                    zdz_recdata_obj.data_all.forEach(function (item) {
+                                        if (item.fFy!="-9999.0") {
+                                            var latlng = L.latLng(item.lat, item.lon);
+                                            var icon = L.WindBarb.icon({ 
+                                                deg: 360-item.dFy, 
+                                                pointRadius: 4, 
+                                                strokeLength: 5,
+                                                fillColor:"red",
+                                                speed: item.fFy*2.5 
+                                            });
+                                            var marker = L.marker([item.lat, item.lon], { 
+                                                icon: icon,
+                                                name: item.IIiii,
+                                                deg:item.dFy,
+                                                sped:item.fFy,
+                                                station: item.StationName,
+                                                timelist: item.time_list,
+                                                fFylist: item.fFy_list,
+                                                dFylist: item.dFy_list
+                                            }).addTo(zdz_recdata_obj.zdz_map).on("click",function (e) {
+                                                // console.log(e.sourceTarget.options.station,e.sourceTarget.options.deg,e.sourceTarget.options.sped)
+                                                //整理datalist
+                                                var plot_type = "wind"
+                                                var plot_time = e.sourceTarget.options.timelist
+                                                var plot_list = []
+                                                var plot_name = e.sourceTarget.options.station
+                                                for (var i=0;i<e.sourceTarget.options.timelist.length;i++){
+                                                    var single_list = [e.sourceTarget.options.fFylist[i]/10.0,e.sourceTarget.options.dFylist[i]]
+                                                    plot_list.push(single_list) 
+                                                }
+                                                zdz_recdata_obj.rander_line(plot_type, plot_time, plot_list, plot_name)
+                                            })
+
+                                        }
+                                    })
+
+
+                                }
+                                else {
+
+                                }
+
+                            }
+                            else if (click_type == "temp") {
+
+                            }
+                            else if (click_type == "view") {
+
+                            }
+
+                        }
+                    }
+                    // 风
+                    $('.wind').click(function () {
+                        if (this.value == "wind_all") {
+                            console.log(this.value)
+                            var click_type = "wind"
+                            var click_time = "all"
+                            zdz_recdata_obj.rander_marker(click_type, click_time)
+                        }
+                        else {
+                            console.log("single")
+                        }
+                    })
+                    // 雨
+                    $('.rain').click(function () {
+                        if (this.value == "rain_all") {
+                            console.log(this.value)
+                            var click_type = "rain"
+                            var click_time = "all"
+                            zdz_recdata_obj.rander_marker(click_type, click_time)
+                        }
+                        else {
+                            console.log("single")
+                        }
+                    })
 
                     // 自动站数据加载
                     $('#tool_zdz_button').click(function () {
-                            var map_z = document.getElementById("zdz_webgis")
-                            console.log(map_z.children.length)
-                            if (map_z.children.length>0){
-                                zdz_recdata_obj.zdz_map.remove()
+                        var map_z = document.getElementById("zdz_webgis")
+                        console.log(map_z.children.length)
+                        if (map_z.children.length > 0) {
+                            zdz_recdata_obj.zdz_map.remove()
+                        }
+                        $('#product_view').attr("style", "display:none;background-color:rgb(239, 243, 237); width: 100%; height: 100%;")
+                        $('#product_zdz').attr("style", "background-color:rgb(239, 243, 237); width: 100%; height: 100%;padding:30px;")
+                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                        $.ajax({
+                            url: "tool_zdz_date",  // 请求的地址
+                            type: "post",  // 请求方式
+                            timeout: 25000, //设置延迟上限
+                            data: {
+                                'csrfmiddlewaretoken': csrf,
+                                'start_time': $('#datetimepicker_history1').val(),
+                                'end_time': $('#datetimepicker_history2').val()
+                            },
+                            dataType: "json",
+                            beforeSend: function (XMLHttpRequest) {
+                                load = showLoad();
+                            },
+                            success: function (data) {
+                                // console.log("自动站成功", JSON.parse(data.table_data))
+                                // 加载地图
+                                var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries
+                                zdz_recdata_obj.boundaries_taizhou = boundaries
+                                var canvasLabel = new L.CanvasLabel({
+                                    defaultLabelStyle: {
+                                        collisionFlg: true,
+                                        scale: 1,
+                                        strokeStyle: "#000",
+                                        fillStyle: "#fff",
+                                        lineWidth: 3
+                                    }
+
+                                });
+                                var map_zdz = new L.Map('zdz_webgis', {
+                                    center: new L.LatLng(28.6, 120.9),//110.763, 41.376   39.62353145, 121.9937485
+                                    renderer: canvasLabel,
+                                    zoom: 8, //4
+                                    zoomControl: false,
+                                    dragging: true,
+                                    scrollWheelZoom: true,
+                                    doubleClickZoom: false,
+                                    attributionControl: false, //是否去除右下角标志
+                                    layers: []
+                                });
+                                map_zdz.bounds = turf.bbox(boundaries);
+                                L.geoJSON(boundaries, {
+                                    style: function (feature) {
+                                        return { color: 'black', weight: 1, fillOpacity: 0.1 };
+                                    }
+                                }).addTo(map_zdz);
+                                // 加载echart数据
+                                // var chart = L.control({ position: 'topleft' });
+                                // chart.onAdd = function (map_zdz) {
+                                //     var div = L.DomUtil.create('div', 'info chartzdzmap');
+                                //     div.id = "chatrzdzmap";
+                                //     return div;
+                                // };
+                                // chart.addTo(map_zdz);
+                                // var myChart = echarts.init(document.getElementById('chatrzdzmap'));
+                                // option = {
+                                //     xAxis: {
+                                //         type: 'category',
+                                //         data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                                //     },
+                                //     yAxis: {
+                                //         type: 'value'
+                                //     },
+                                //     series: [
+                                //         {
+                                //             data: [150, 230, 224, 218, 135, 147, 260],
+                                //             type: 'line'
+                                //         }
+                                //     ]
+                                // };
+                                // myChart.setOption(option);
+                                // 加载表格数据
+                                var datatable = JSON.parse(data.table_data)
+                                zdz_recdata_obj.data_all = datatable
+                                // zdz_recdata_obj.table_data = data_tabel                                
+                                zdz_recdata_obj.rander_table(datatable)
+                                // 加载 时间线
+                                zdz_recdata_obj.rander_btn(data.daily_btn_list)
+                                zdz_recdata_obj.zdz_map = map_zdz
+
+                                //关闭
+                                closeLoad(load)
                             }
-                            // if (map_z.children.length>0){
-                            //     map_zdz.eachLayer(function (layer) {
-                            //         if (!layer._container || ('' + jQuery(layer._container).attr('class')).replace(/\s/g, '') != 'leaflet-layer') {
-                            //             layer.remove();
-                            //         }
-                            //     });
-                            // }
-                            $('#product_view').attr("style", "display:none;background-color:rgb(239, 243, 237); width: 100%; height: 100%;")
-                            $('#product_zdz').attr("style", "background-color:rgb(239, 243, 237); width: 100%; height: 100%;padding:30px;")
-                            var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                            $.ajax({
-                                url: "tool_zdz_date",  // 请求的地址
-                                type: "post",  // 请求方式
-                                timeout: 25000, //设置延迟上限
-                                data: {
-                                    'csrfmiddlewaretoken': csrf,
-                                    'start_time': $('#datetimepicker_history1').val(),
-                                    'end_time': $('#datetimepicker_history2').val()
-                                },
-                                dataType: "json",
-                                beforeSend: function (XMLHttpRequest) {
-                                    load = showLoad();
-                                },
-                                success: function (data) {
-                                    console.log("自动站成功", JSON.parse(data.table_data))
-                                    // 加载地图
-                                    var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries
-                                
-                                    
-                                    var map_zdz = new L.Map('zdz_webgis', {
-                                        center: new L.LatLng(28.6, 119.6),//110.763, 41.376   39.62353145, 121.9937485
-                                        zoom: 8, //4
-                                        zoomControl: false,
-                                        dragging: true,
-                                        scrollWheelZoom: true,
-                                        doubleClickZoom: false,
-                                        attributionControl: false, //是否去除右下角标志
-                                        layers: []
-                                    });
-                                    map_zdz.bounds = turf.bbox(boundaries);
-                                    L.geoJSON(boundaries, {
-                                        style: function (feature) {
-                                            return { color: 'black', weight: 1, fillOpacity: 0.1 };
-                                        }
-                                    }).addTo(map_zdz);
-                                    // 加载echart数据
-                                    var chart = L.control({ position: 'topleft' });
-                                    chart.onAdd = function (map_zdz) {
-                                        var div = L.DomUtil.create('div', 'info chartzdzmap');
-                                        div.id = "chatrzdzmap";
-                                        return div;
-                                    };
-                                    chart.addTo(map_zdz);
-                                    var myChart = echarts.init(document.getElementById('chatrzdzmap'));
-                                    option = {
-                                        xAxis: {
-                                            type: 'category',
-                                            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-                                        },
-                                        yAxis: {
-                                            type: 'value'
-                                        },
-                                        series: [
-                                            {
-                                                data: [150, 230, 224, 218, 135, 147, 260],
-                                                type: 'line'
-                                            }
-                                        ]
-                                    };
-                                    myChart.setOption(option);
-                                    // 加载表格数据
-                                    var datatable = JSON.parse(data.table_data)                                
-                                    // zdz_recdata_obj.table_data = data_tabel                                
-                                    zdz_recdata_obj.rander_table(datatable)
-                                    // 加载 时间线
-                                    zdz_recdata_obj.rander_btn(data.daily_btn_list)
-                                    zdz_recdata_obj.zdz_map = map_zdz
-                                    
-                                    //关闭
-                                    closeLoad(load)
-                                }
-                            })
-                           
-                            // func版本的数据对接
-                            // var type = "tool_zdz"
-                            // product_view_show(type)
-                            
                         })
+
+                        // func版本的数据对接
+                        // var type = "tool_zdz"
+                        // product_view_show(type)
+
+                    })
                     // 精细化EC单点数据加载
                     $('#tool_ec_button').click(function () {
                         // $('#product_view').attr("style", "display:none;background-color:rgb(239, 243, 237); width: 100%; height: 100%;")

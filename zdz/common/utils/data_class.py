@@ -765,9 +765,9 @@ class zdz_data:
             dt = dt + dtt.timedelta(1)
             date = dt.strftime("%Y-%m-%d")
         return dates
-    def day_button(self,city):
+    def day_button(self,city,station_data):
         '''返回按钮组'''
-        station_all = self.read_csv()
+        station_all = station_data
         dates = self.return_daylist()
         dailylist = []
         for i in range(len(dates)):
@@ -802,10 +802,10 @@ class zdz_data:
                     daily["wind"] = True
                 dailylist.append(daily)
         return dailylist
-    def rain_data(self,start,end):
+    def rain_data(self,start,end,station_data):
         '''返回点击绘图所需的数据'''
         # 采集数据 可以是sql
-        station_all = self.read_csv()
+        station_all = station_data
         grouped_tTime = station_all.groupby('IIiii')
         points = []
         table_data = []  
@@ -845,18 +845,23 @@ class zdz_data:
     def index_data(self):
         '''返回所有数据'''
         city = "taizhou"
-        daily_btn_list = self.day_button(city)
         station_all = self.read_csv()
+        daily_btn_list = self.day_button(city,station_all)
         grouped_tTime = station_all.groupby('IIiii')
         table_data = []  
         points = []
         for i in grouped_tTime.size().index:
             data = grouped_tTime.get_group(i)
+            time = data.sort_values(by="tTime")["tTime"].to_list()
             RR = data[(data['RR'] > 0.0) & (data['RR'] < 8888)]['RR'].sum()/10.0
             tmin = data[(data['T'] >-400) & (data['T'] < 8888)]['T'].min()/10.0
             tmax = data[(data['T'] >-400) & (data['T'] < 8888)]['T'].max()/10.0
             vv = data[(data['VV'] >0) & (data['VV'] < 1000)]['VV'].min()
-            wind = data[data['fFy'] > 187]['fFy'].max()/10.0
+            wind = data[data['fFy'] > 180]['fFy'].max()/10.0
+            index =  data[data['fFy'] == data['fFy'].max()].index.tolist()[0]
+            #print(index,"---",wind,"--",data['dFy'][index])
+            #deg = data[data['fFy'] == data['fFy'].max()]['dFy'].iloc[0]
+            deg = data['dFy'][index]
             rain_data = {
                 "type": "Feature",
                 "properties": {
@@ -866,26 +871,56 @@ class zdz_data:
                     "type": "Point",
                     "coordinates": [data['lon'].iloc[0], data['lat'].iloc[0]]
                 }
-            }
-            points.append(rain_data)
-            rain = data.sort_values(by="tTime")["RR"].to_list()
-            time = data.sort_values(by="tTime")["tTime"].to_list()
+            }        
+            # 雨
             if np.isnan(RR):
                 RR=-9999.0
+                rain = False
+            else:
+                rain_data = {
+                    "type": "Feature",
+                    "properties": {
+                        "value": str(RR)
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [data['lon'].iloc[0], data['lat'].iloc[0]]
+                    }
+                }
+                points.append(rain_data)
+                rain = data.sort_values(by="tTime")["RR"].to_list()
+            # 风
             if np.isnan(wind):
                 wind=-9999.0
+                fFy = False
+                dFy = False
+            else:
+                fFy = data.sort_values(by="tTime")["fFy"].to_list()
+                dFy = data.sort_values(by="tTime")["dFy"].to_list()
+            # 温
             if np.isnan(tmax):
                 tmax=-9999.0
+                tx = False
+            else:
+                tx = data.sort_values(by="tTime")["Tx"].to_list()
             if np.isnan(tmin):
                 tmin=-9999.0
+                tn = False
+            else:
+                tn = data.sort_values(by="tTime")["Tn"].to_list()
+            # 雾
             if np.isnan(vv):
                 vv=-9999.0
+                view = False
+            else:
+                view = data.sort_values(by="tTime")["VV"].to_list()
             single = {
                 "IIiii":str(data['IIiii'].iloc[0]),
                 "county":str(data['county'].iloc[0]),
                 "town":str(data['Town'].iloc[0]),
                 "StationName":str(data['StationName'].iloc[0]),
                 "fFy":str(wind),
+                "dFy":str(deg),
                 "RR":str(RR),
                 "Tx":str(tmax),
                 "Tn":str(tmin),
@@ -893,6 +928,11 @@ class zdz_data:
                 "lat":str(data['lat'].iloc[0]),
                 "lon":str(data['lon'].iloc[0]),
                 "rain_list":rain,
+                "tmax_list":tx,
+                "tmin_list":tn,
+                "fFy_list":fFy,
+                "dFy_list":dFy,
+                "view_list":view,
                 "time_list":time
                 }
             table_data.append(single)
