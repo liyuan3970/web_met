@@ -5019,7 +5019,7 @@
                                 $("#li_zdz_line_chart").click()
                                 Highcharts.chart('continer_zdz_line_chart', {
                                     title: {
-                                        text: plot_time
+                                        text: plot_name.toString()
                                     },
                                     chart: {
                                         zoomType: 'x'
@@ -5036,16 +5036,16 @@
                                         }
                                     },
                                     series: [
-                                        // {
-                                        //     type: 'windbarb',
-                                        //     data: plot_list,
-                                        //     name: 'Wind',
-                                        //     color: Highcharts.getOptions().colors[1],
-                                        //     showInLegend: true,
-                                        //     tooltip: {
-                                        //         valueSuffix: ' m/s'
-                                        //     }
-                                        // },
+                                        {
+                                            type: 'windbarb',
+                                            data: plot_list,
+                                            name: 'Wind',
+                                            color: Highcharts.getOptions().colors[1],
+                                            showInLegend: true,
+                                            tooltip: {
+                                                valueSuffix: ' m/s'
+                                            }
+                                        },
                                         {
                                             type: 'area',
                                             keys: ['y', 'rotation'], // rotation is not used here
