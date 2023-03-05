@@ -95,7 +95,6 @@ class sql_data:
             'tmin': [],
             'rmax': []
         }
-
     def comput_county(self):
         '计算面最大雨强、累计降水、最高、最低气温'
         self.station_county_comput = []
@@ -121,7 +120,6 @@ class sql_data:
             tmp_min_County.append({"name": i['county'], "value": i['Tn']})
             RR_County.append({"name": i['county'], "value": i['RR']})
         return RR_County, tmp_max_County, tmp_min_County
-
     def data_gevent(self, data):
         # print("data_gevent")
 
@@ -256,7 +254,6 @@ class sql_data:
         # print(self.data_station)
 
         # return station_list,data_station
-
     def read_shp_json(self):
         with open('static/json/taizhou.json', encoding='utf-8') as f:
             line = f.readline()
@@ -264,12 +261,9 @@ class sql_data:
             tz_json = json.dumps(tz_json)
             f.close()
         return tz_json
-
     def comput_IIiii(self):
         '返回pandas、字典串、列表'
-
         # print("运行commput")
-
         for i in self.grouped_IIiii.size().index:
             # print("i:",i)
             data = self.grouped_IIiii.get_group(i)
@@ -307,7 +301,6 @@ class sql_data:
         ]
 
         # g = gevent.spawn(data_gevent, data)
-
     # 数据排序
     def return_data_sort(self, sort_data, value_str):
         max_sort = max(sort_data[value_str])
@@ -337,9 +330,7 @@ class sql_data:
                             }
                 list_data.append(dic_iter)
         return list_data, level_sort
-
     # 数据绘图
-
     def plot_imd(self, plot_data, value_str):
         # value_str = 'rsum'
         lat = plot_data['lat']
@@ -353,7 +344,6 @@ class sql_data:
         ims = imb.decode()
         imd = "data:image/png;base64," + ims
         return imd
-
     # 返回第一个页面的回调数据
     def data_output(self):
         # 排序
@@ -877,17 +867,17 @@ class zdz_data:
                 RR=-9999.0
                 rain = False
             else:
-                rain_data = {
-                    "type": "Feature",
-                    "properties": {
-                        "value": str(RR)
-                    },
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [data['lon'].iloc[0], data['lat'].iloc[0]]
-                    }
-                }
-                points.append(rain_data)
+                # rain_data = {
+                #     "type": "Feature",
+                #     "properties": {
+                #         "value": str(RR)
+                #     },
+                #     "geometry": {
+                #         "type": "Point",
+                #         "coordinates": [data['lon'].iloc[0], data['lat'].iloc[0]]
+                #     }
+                # }
+                # points.append(rain_data)
                 rain = data.sort_values(by="tTime")["RR"].to_list()
             # 风
             if np.isnan(wind):

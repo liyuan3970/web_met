@@ -4938,85 +4938,91 @@
                         rander_line: function (plot_type, plot_time, plot_list, plot_name) {
                             if (plot_type == "rain") {
                                 $("#li_zdz_line_chart").click()
-                                var myChart = echarts.init(document.getElementById('continer_zdz_line_chart'));
-                                option = {
-                                    tooltip: {
-                                        trigger: 'axis'
+                                // hightchatr 
+                                chart = Highcharts.chart('continer_zdz_line_chart', {
+                                    chart: {
+                                        type: 'column',
+                                        zoomType: 'x'
                                     },
-                                    grid: {
-                                        top: '10%',
-                                        right: '6%',
-                                        left: '9%',
-                                        bottom: '20%'
+                                    title: {
+                                        text: plot_name.toString()
+                                    },                            
+                                    xAxis: {
+                                        type: 'datetime',
+                                        dateTimeLabelFormats: {
+                                            millisecond: '%H:%M:%S.%L',
+                                            second: '%H:%M:%S',
+                                            minute: '%H:%M',
+                                            hour: '%H:%M',
+                                            day: '%m-%d',
+                                            week: '%m-%d',
+                                            month: '%Y-%m',
+                                            year: '%Y'
+                                        }
                                     },
-                                    dataZoom: [
-                                        {
-                                            show: true,
-                                            start: 0,
-                                            height: 20,
-                                            bottom: 10,
-                                            end: 100
+                                    // tooltip: {
+                                    //     dateTimeLabelFormats: {
+                                    //         millisecond: '%H:%M:%S.%L',
+                                    //         second: '%H:%M:%S',
+                                    //         minute: '%H:%M',
+                                    //         hour: '%H:%M',
+                                    //         day: '%Y-%m-%d',
+                                    //         week: '%m-%d',
+                                    //         month: '%Y-%m',
+                                    //         year: '%Y'
+                                    //     }
+                                    // },
+                                    yAxis: {
+                                        title: {
+                                            text: '降雨量'
+                                        }
+                                    },
+                                    legend: {
+                                        enabled: false
+                                    },
+                                    plotOptions: {
+                                        column: {
+                                            borderWidth: 0
                                         },
-                                        {
-                                            type: 'inside',
-                                            start: 94,
-                                            height: 20,
-                                            bottom: 10,
-                                            end: 100
+                                        series: {
+                                            pointStart: Date.UTC(2022,0,24,19),
+                                            // pointStart: Date.UTC(2017, 0, 29),
+                                            pointInterval: 36e5
+                                        },
+                                        area: {
+                                            fillColor: {
+                                                linearGradient: {
+                                                    x1: 0,
+                                                    y1: 0,
+                                                    x2: 0,
+                                                    y2: 1
+                                                },
+                                                stops: [
+                                                    [0, new Highcharts.getOptions().colors[0]],
+                                                    [1, new Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                                                ]
+                                            },
+                                            // marker: {
+                                            //     radius: 2
+                                            // },
+                                            // lineWidth: 1,
+                                            // states: {
+                                            //     hover: {
+                                            //         lineWidth: 1
+                                            //     }
+                                            // },
+                                            barWidth: 1,
+                                            threshold: null
                                         }
-                                    ],
-                                    xAxis: [
-                                        {
-                                            type: 'category',
-                                            axisTick: {
-                                                alignWithLabel: true
-                                            },
-                                            axisLine: {
-                                                show: true,
-                                                lineStyle: {
-                                                    color: "black",
-                                                    width: 2
-                                                }
-                                            },
-                                            data: plot_time
-                                        }
-                                    ],
-                                    yAxis: [
-                                        {
-                                            type: 'value',
-                                            name: plot_name,
-                                            position: 'left',
-                                            splitLine: { show: false },
-                                            alignTicks: true,
-                                            max: function (value) {
-                                                return value.max + 10;
-                                            },
-                                            min: 0,
-                                            // interval: plot_line_obj.titem,
-                                            axisLine: {
-                                                show: true,
-                                                lineStyle: {
-                                                    color: "black",
-                                                    width: 2
-                                                }
-                                            },
-                                            axisLabel: {
-                                                formatter: '{value} mm'
-                                            }
-                                        }],
-                                    series: [
-                                        {
-                                            name: 'rain',
-                                            type: "bar",
-                                            color: "blue",
-                                            barWidth: 3,
-                                            // smooth: true,
-                                            data: plot_list
-                                        }
-                                    ]
+                                    },
+                                    series: [{
+                                        // type: 'area',
+                                        name: '降水过程',
+                                        data: plot_list
+                                    }]
+                                });
 
-                                }
-                                myChart.setOption(option);
+
                             }
                             else if (plot_type == "wind") {
                                 $("#li_zdz_line_chart").click()
@@ -5078,6 +5084,172 @@
                                     ]
 
                                 })
+                            }
+                            else if (plot_type == "temp") {
+                                $("#li_zdz_line_chart").click()
+                                
+                                chart = Highcharts.chart('continer_zdz_line_chart', {
+                                    chart: {
+                                        zoomType: 'x'
+                                    },
+                                    title: {
+                                        text: plot_name.toString()
+                                    },                            
+                                    xAxis: {
+                                        type: 'datetime',
+                                        dateTimeLabelFormats: {
+                                            millisecond: '%H:%M:%S.%L',
+                                            second: '%H:%M:%S',
+                                            minute: '%H:%M',
+                                            hour: '%H:%M',
+                                            day: '%m-%d',
+                                            week: '%m-%d',
+                                            month: '%Y-%m',
+                                            year: '%Y'
+                                        }
+                                    },
+                                    // tooltip: {
+                                    //     dateTimeLabelFormats: {
+                                    //         millisecond: '%H:%M:%S.%L',
+                                    //         second: '%H:%M:%S',
+                                    //         minute: '%H:%M',
+                                    //         hour: '%H:%M',
+                                    //         day: '%Y-%m-%d',
+                                    //         week: '%m-%d',
+                                    //         month: '%Y-%m',
+                                    //         year: '%Y'
+                                    //     }
+                                    // },
+                                    yAxis: {
+                                        title: {
+                                            text: '气温'
+                                        }
+                                    },
+                                    legend: {
+                                        enabled: false
+                                    },
+                                    plotOptions: {
+                                        series: {
+                                            pointStart: Date.UTC(2022,0,24,19),
+                                            // pointStart: Date.UTC(2017, 0, 29),
+                                            pointInterval: 36e5
+                                        },
+                                        area: {
+                                            fillColor: {
+                                                linearGradient: {
+                                                    x1: 0,
+                                                    y1: 0,
+                                                    x2: 0,
+                                                    y2: 1
+                                                },
+                                                stops: [
+                                                    [0, new Highcharts.getOptions().colors[0]],
+                                                    [1, new Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                                                ]
+                                            },
+                                            marker: {
+                                                radius: 2
+                                            },
+                                            lineWidth: 1,
+                                            states: {
+                                                hover: {
+                                                    lineWidth: 1
+                                                }
+                                            },
+                                            threshold: null
+                                        }
+                                    },
+                                    series: [{
+                                        type: 'area',
+                                        name: '温度曲线',
+                                        data: plot_list
+                                    }]
+                                });
+
+                            }
+                            else if (plot_type == "view") {
+                                $("#li_zdz_line_chart").click()
+                                
+                                chart = Highcharts.chart('continer_zdz_line_chart', {
+                                    chart: {
+                                        type: 'column',
+                                        zoomType: 'x'
+                                    },
+                                    title: {
+                                        text: plot_name.toString()
+                                    },                            
+                                    xAxis: {
+                                        type: 'datetime',
+                                        dateTimeLabelFormats: {
+                                            millisecond: '%H:%M:%S.%L',
+                                            second: '%H:%M:%S',
+                                            minute: '%H:%M',
+                                            hour: '%H:%M',
+                                            day: '%m-%d',
+                                            week: '%m-%d',
+                                            month: '%Y-%m',
+                                            year: '%Y'
+                                        }
+                                    },
+                                    // tooltip: {
+                                    //     dateTimeLabelFormats: {
+                                    //         millisecond: '%H:%M:%S.%L',
+                                    //         second: '%H:%M:%S',
+                                    //         minute: '%H:%M',
+                                    //         hour: '%H:%M',
+                                    //         day: '%Y-%m-%d',
+                                    //         week: '%m-%d',
+                                    //         month: '%Y-%m',
+                                    //         year: '%Y'
+                                    //     }
+                                    // },
+                                    yAxis: {
+                                        title: {
+                                            text: '能见度'
+                                        }
+                                    },
+                                    legend: {
+                                        enabled: false
+                                    },
+                                    plotOptions: {
+                                        series: {
+                                            pointStart: Date.UTC(2022,0,24,19),
+                                            // pointStart: Date.UTC(2017, 0, 29),
+                                            pointInterval: 36e5
+                                        },
+                                        area: {
+                                            fillColor: {
+                                                linearGradient: {
+                                                    x1: 0,
+                                                    y1: 0,
+                                                    x2: 0,
+                                                    y2: 1
+                                                },
+                                                stops: [
+                                                    [0, new Highcharts.getOptions().colors[0]],
+                                                    [1, new Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                                                ]
+                                            },
+                                            marker: {
+                                                radius: 2
+                                            },
+                                            lineWidth: 1,
+                                            states: {
+                                                hover: {
+                                                    lineWidth: 1
+                                                }
+                                            },
+                                            threshold: null
+                                        }
+                                    },
+                                    series: [{
+                                        type: 'area',
+                                        name: '能见度曲线',
+                                        data: plot_list
+                                    }]
+                                });
+
+
                             }
                         },
                         rander_marker: function (click_type, click_time) {
@@ -5175,18 +5347,220 @@
 
                             }
                             else if (click_type == "temp") {
+                                if (click_time == "all") {
+                                    zdz_recdata_obj.plot(click_type)
+                                    // 轮询   
+                                    zdz_recdata_obj.data_all.forEach(function (item) {
+                                        if (item.tmax!="-9999.0" || item.tmin!="-9999.0") {
+                                            var latlng = L.latLng(item.lat, item.lon);                       
+                                            var marker = L.circleMarker(latlng, {
+                                                name: item.IIiii,
+                                                station: item.StationName,
+                                                timelist: item.time_list,
+                                                templist: item.tmax_list,
+                                                tempmax:item.Tx,
+                                                tempmin:item.Tn,
+                                                weight: 0,
+                                                radius: 5,
+                                                opacity: 1,
+                                                fill: false,
+                                                labelStyle: {
+                                                    text: item.StationName+':'+item.Tx.toString(),
+                                                    weight: 1,
+                                                    rotation: 0,
+                                                    color: "rgb(239, 243, 237)",
+                                                    zIndex: 800
+                                                }
+                                            }).addTo(zdz_recdata_obj.zdz_map).on("click",function (e) {
+                                                // console.log(e.sourceTarget.options.station,e.sourceTarget.options.deg,e.sourceTarget.options.sped)
+                                                //整理datalist
+                                                var plot_type = "temp"
+                                                var plot_time = e.sourceTarget.options.timelist
+                                                var plot_list = e.sourceTarget.options.templist
+                                                var plot_name = e.sourceTarget.options.station
+                                                // console.log(e.sourceTarget.options.station,e.sourceTarget.options.tempmax,e.sourceTarget.options.tempmin)
+                                                zdz_recdata_obj.rander_line(plot_type, plot_time, plot_list, plot_name)
+                                            })
+
+                                        }
+                                    })
+
+
+                                }
+                                else {
+
+                                }
+                                 
 
                             }
                             else if (click_type == "view") {
+                                if (click_time == "all") {
+                                    zdz_recdata_obj.plot(click_type)
+                                    // 轮询   
+                                    zdz_recdata_obj.data_all.forEach(function (item) {
+                                        if (item.VV!="-9999.0") {
+                                            var latlng = L.latLng(item.lat, item.lon);                       
+                                            var marker = L.circleMarker(latlng, {
+                                                name: item.IIiii,
+                                                station: item.StationName,
+                                                timelist: item.time_list,
+                                                viewlist: item.view_list,
+                                                VV:item.VV,
+                                                weight: 0,
+                                                radius: 5,
+                                                opacity: 1,
+                                                fill: false,
+                                                labelStyle: {
+                                                    text: item.StationName+':'+item.VV.toString(),
+                                                    weight: 1,
+                                                    opacity: 1,
+                                                    rotation: 0,
+                                                    color: "yellow",
+                                                    zIndex: 800
+                                                }
+                                            }).addTo(zdz_recdata_obj.zdz_map).on("click",function (e) {
+                                                // console.log(e.sourceTarget.options.station,e.sourceTarget.options.deg,e.sourceTarget.options.sped)
+                                                //整理datalist
+                                                var plot_type = "view"
+                                                var plot_time = e.sourceTarget.options.timelist
+                                                var plot_list = e.sourceTarget.options.viewlist
+                                                var plot_name = e.sourceTarget.options.station
+                                                // console.log(e.sourceTarget.options.station,e.sourceTarget.options.tempmax,e.sourceTarget.options.tempmin)
+                                                zdz_recdata_obj.rander_line(plot_type, plot_time, plot_list, plot_name)
+                                            })
+
+                                        }
+                                    })
+
+
+                                }
+                                else {
+
+                                }
+                                 
 
                             }
 
-                        }
+                        },
+                        rander_data_group: function (recvdata,key) {
+                            // key 是需要分组的键 data是json数据，功能是用来分组聚合
+                            var id = key
+                            var map = {},
+                                dest = [];
+                            for (var i = 0; i < recvdata.length; i++) {
+                                var ai = recvdata[i];
+                                if (!map[ai[id]]) {
+                                    dest.push({
+                                        id: ai[id],
+                                        data: [ai]
+                                    });
+                                    map[ai[id]] = ai;
+                                } else {
+                                    for (var j = 0; j < dest.length; j++) {
+                                        var dj = dest[j];
+                                        if (dj.id == ai[key]) {
+                                            dest[j].data.push(ai)
+                                            dj.data.push(ai);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            // console.log(dest);
+                            return dest
+                        },
+                        randar_data_average:function(recvdata){
+                            for (var i=0;i<recvdata.length;i++){
+                                var name = recvdata[i].id
+                                var single_data = recvdata[i].data
+                                var total = single_data.reduce((t, l) => t + l.RR,0)
+                                var len = single_data.length
+                                recvdata[i].average = (total / len)/10.0
+                            }
+                            return recvdata
+                        },
+                        rander_data_range:function (recvdata,range){
+                            var len = range.length
+                            if (len ==1){
+                                var start = range[0]
+                                recvdata.forEach(function(item){
+                                    if (item.RR>start){
+                                        count = count + 1 
+                                    }
+                                })
+
+                            }
+                            else{
+                                var start = range[0]
+                                var end = range[1]
+                                var count = 0
+                                recvdata.forEach(function(item){
+                                    if (item.RR>start && item.RR<end){
+                                        count = count + 1 
+                                    }
+                                })
+                            }
+                            return count
+
+                        },
+                        randar_rain_text:function (click_time){
+                            if (click_time == "all") {
+                                // 升序排列
+                                function up(a, b) {
+                                    return a.RR - b.RR
+                                }
+                                // 降序排列
+                                function down(a, b) {
+                                    return b.RR - a.RR
+                                }
+                                // 定义数据层
+                                var wash_data = []
+                                // var 
+                                zdz_recdata_obj.data_all.forEach(function (item){
+                                    // console.log(item)
+                                    if (item.RR != "-9999") {
+                                        if (parseFloat(item.RR) != 0) {
+                                            var single = {
+                                                "IIiii": item.IIiii,
+                                                "county": item.county,
+                                                "town": item.town,
+                                                "StationName": item.StationName,
+                                                "RR": parseFloat(item.RR),
+                                                "lat": item.lat,
+                                                "lon": item.lon
+                                            }
+                                            wash_data.push(single)
+                                        }
+                                    }
+                                })
+                                // sort 会直接对原数据排序
+                                // wash_data.sort(down)
+                                // 求和
+                                // let total = wash_data.reduce((t, l) => t + l.score,0)
+                                var key = "county"
+                                var county =  zdz_recdata_obj.rander_data_group(wash_data,key)
+                                // 面雨量
+                                var average = zdz_recdata_obj.randar_data_average(county)
+                                // 单站前五前五排序
+                                var station = wash_data.sort(down).slice(0, 5)
+                                // 乡镇前五排序
+                                var keytown = "town"
+                                var town = zdz_recdata_obj.rander_data_group(wash_data,keytown)
+                                var town_average  =  zdz_recdata_obj.randar_data_average(town).sort(down).slice(0, 5)
+                                // 量级---返回大于某一个量级的个数
+                                var range = [10,50]
+                                var count = zdz_recdata_obj.rander_data_range(wash_data,range)
+                                
+                            }
+                            else{
+
+                            }
+
+                        },            
                     }
                     // 风
-                    $('.wind').click(function () {
+                    $('.wind').click(function (click_type,click_time) {
                         if (this.value == "wind_all") {
-                            console.log(this.value)
                             var click_type = "wind"
                             var click_time = "all"
                             zdz_recdata_obj.rander_marker(click_type, click_time)
@@ -5198,8 +5572,33 @@
                     // 雨
                     $('.rain').click(function () {
                         if (this.value == "rain_all") {
-                            console.log(this.value)
+                            // console.log(this.value)
                             var click_type = "rain"
+                            var click_time = "all"
+                            zdz_recdata_obj.randar_rain_text(click_time)
+                            zdz_recdata_obj.rander_marker(click_type, click_time)
+                        }
+                        else {
+                            console.log("single")
+                        }
+                    })
+                    // 温
+                    $('.temp').click(function () {
+                        if (this.value == "temp_all") {
+                            console.log(this.value)
+                            var click_type = "temp"
+                            var click_time = "all"
+                            zdz_recdata_obj.rander_marker(click_type, click_time)
+                        }
+                        else {
+                            console.log("single")
+                        }
+                    })
+                    // 雾
+                    $('.view').click(function () {
+                        if (this.value == "view_all") {
+                            console.log(this.value)
+                            var click_type = "view"
                             var click_time = "all"
                             zdz_recdata_obj.rander_marker(click_type, click_time)
                         }
@@ -5211,7 +5610,6 @@
                     // 自动站数据加载
                     $('#tool_zdz_button').click(function () {
                         var map_z = document.getElementById("zdz_webgis")
-                        console.log(map_z.children.length)
                         if (map_z.children.length > 0) {
                             zdz_recdata_obj.zdz_map.remove()
                         }
@@ -5263,31 +5661,8 @@
                                         return { color: 'black', weight: 1, fillOpacity: 0.1 };
                                     }
                                 }).addTo(map_zdz);
-                                // 加载echart数据
-                                // var chart = L.control({ position: 'topleft' });
-                                // chart.onAdd = function (map_zdz) {
-                                //     var div = L.DomUtil.create('div', 'info chartzdzmap');
-                                //     div.id = "chatrzdzmap";
-                                //     return div;
-                                // };
-                                // chart.addTo(map_zdz);
-                                // var myChart = echarts.init(document.getElementById('chatrzdzmap'));
-                                // option = {
-                                //     xAxis: {
-                                //         type: 'category',
-                                //         data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-                                //     },
-                                //     yAxis: {
-                                //         type: 'value'
-                                //     },
-                                //     series: [
-                                //         {
-                                //             data: [150, 230, 224, 218, 135, 147, 260],
-                                //             type: 'line'
-                                //         }
-                                //     ]
-                                // };
-                                // myChart.setOption(option);
+                                // 加载降水平面图
+
                                 // 加载表格数据
                                 var datatable = JSON.parse(data.table_data)
                                 zdz_recdata_obj.data_all = datatable
@@ -5296,6 +5671,10 @@
                                 // 加载 时间线
                                 zdz_recdata_obj.rander_btn(data.daily_btn_list)
                                 zdz_recdata_obj.zdz_map = map_zdz
+                                // 降水图绘制
+                                var click_type = "rain"
+                                var click_time = "all"
+                                zdz_recdata_obj.rander_marker(click_type, click_time)
 
                                 //关闭
                                 closeLoad(load)
