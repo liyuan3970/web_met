@@ -1810,17 +1810,21 @@
                                                         time: 20000, //20s后自动关闭
                                                         btn: ['大风', '降水', '气温', '能见度'],
                                                         btn1:function (index, layero){
-                                                            console.log("大风",index, layero)
+                                                            var type = "wind"
+                                                            zdz_recdata_obj.randar_single_table(type)
                                                             layer.closeAll();
                                                         },
                                                         btn2:function (index, layero){
-                                                            console.log("降水",index, layero)
+                                                            var type = "rain"
+                                                            zdz_recdata_obj.randar_single_table(type)
                                                         },
                                                         btn3:function (index, layero){
-                                                            console.log("气温",index, layero)
+                                                            var type = "temp"
+                                                            zdz_recdata_obj.randar_single_table(type)
                                                         },
                                                         btn4:function (index, layero){
-                                                            console.log("能见度",index, layero)
+                                                            var type = "view"
+                                                            zdz_recdata_obj.randar_single_table(type)
                                                         },
                                                     });
                                                 },
@@ -5388,6 +5392,120 @@
                             }
                             
                         },
+                        randar_single_table:function(type){
+                            // 升序排列
+                            function up(a, b) {
+                                return a.RR - b.RR
+                            }
+                            // 降序排列
+                            function down(a, b) {
+                                return b.RR - a.RR
+                            }
+                            if (type == "wind") {
+                                var sort_data = zdz_recdata_obj.data_all.sort(down)
+                                layui.use('table', function (data) {
+                                    var table = layui.table;
+                                    //展示已知数据
+                                    table.render({
+                                        elem: '#zdz_table'
+                                        , cols: [[ //标题栏
+                                            { field: 'IIiii', title: '站号', width: 80 }
+                                            , { field: 'county', title: '县市', minWidth: 80 }
+                                            , { field: 'StationName', title: '站名', width: 80 }
+                                            , { field: 'town', title: '站名', width: 80 }
+                                            , { field: 'lat', title: '纬度', width: 80 }
+                                            , { field: 'lon', title: '经度', width: 80 }
+                                            , { field: 'fFy', title: '风力', minWidth: 80, sort: true }
+                                        ]]
+                                        , data: sort_data
+                                        , skin: 'line' //表格风格
+                                        // , even: true
+                                        , page: true //是否显示分页
+                                        , limits: [5]
+                                        , limit: 5 //每页默认显示的数量
+                                    });
+                                });
+                            }
+                            else if (type == "rain") {
+                                var sort_data = zdz_recdata_obj.data_all.sort(down)
+                                layui.use('table', function (data) {
+                                    var table = layui.table;
+                                    //展示已知数据
+                                    table.render({
+                                        elem: '#zdz_table'
+                                        , cols: [[ //标题栏
+                                            { field: 'IIiii', title: '站号', width: 80 }
+                                            , { field: 'county', title: '县市', minWidth: 80 }
+                                            , { field: 'StationName', title: '站名', width: 80 }
+                                            , { field: 'town', title: '站名', width: 80 }
+                                            , { field: 'lat', title: '纬度', width: 80 }
+                                            , { field: 'lon', title: '经度', width: 80 }
+                                            , { field: 'RR', title: '降雨', minWidth: 80, sort: true }
+                                        ]]
+                                        , data: sort_data
+                                        , skin: 'line' //表格风格
+                                        // , even: true
+                                        , page: true //是否显示分页
+                                        , limits: [5]
+                                        , limit: 5 //每页默认显示的数量
+                                    });
+                                });
+
+                            }
+                            else if (type == "temp") {
+                                var sort_data = zdz_recdata_obj.data_all.sort(down)
+                                layui.use('table', function (data) {
+                                    var table = layui.table;
+                                    //展示已知数据
+                                    table.render({
+                                        elem: '#zdz_table'
+                                        , cols: [[ //标题栏
+                                            { field: 'IIiii', title: '站号', width: 80 }
+                                            , { field: 'county', title: '县市', minWidth: 80 }
+                                            , { field: 'StationName', title: '站名', width: 80 }
+                                            , { field: 'town', title: '站名', width: 80 }
+                                            , { field: 'lat', title: '纬度', width: 80 }
+                                            , { field: 'lon', title: '经度', width: 80 }
+                                            , { field: 'Tn', title: '气温', minWidth: 80, sort: true }
+                                        ]]
+                                        , data: sort_data
+                                        , skin: 'line' //表格风格
+                                        // , even: true
+                                        , page: true //是否显示分页
+                                        , limits: [5]
+                                        , limit: 5 //每页默认显示的数量
+                                    });
+                                });
+
+                            }     
+                            else if (type == "view") {
+                                var sort_data = zdz_recdata_obj.data_all.sort(down)
+                                layui.use('table', function (data) {
+                                    var table = layui.table;
+                                    //展示已知数据
+                                    table.render({
+                                        elem: '#zdz_table'
+                                        , cols: [[ //标题栏
+                                            { field: 'IIiii', title: '站号', width: 80 }
+                                            , { field: 'county', title: '县市', minWidth: 80 }
+                                            , { field: 'StationName', title: '站名', width: 80 }
+                                            , { field: 'town', title: '站名', width: 80 }
+                                            , { field: 'lat', title: '纬度', width: 80 }
+                                            , { field: 'lon', title: '经度', width: 80 }
+                                            , { field: 'VV', title: '能见度', minWidth: 80, sort: true }
+                                        ]]
+                                        , data: sort_data
+                                        , skin: 'line' //表格风格
+                                        // , even: true
+                                        , page: true //是否显示分页
+                                        , limits: [5]
+                                        , limit: 5 //每页默认显示的数量
+                                    });
+                                });
+
+                            }             
+                            
+                        },
                         rander_table: function (revdata) {
                             layui.use('table', function (data) {
                                 var table = layui.table;
@@ -6083,6 +6201,30 @@
                             return count
 
                         },
+                        randar_status_range:function(status,unity){
+                            var text = "其中，"
+                            if (unity=="米/秒"){
+                                var unitys = "级"
+                            }
+                            else if(unity=="米"){
+                                var unitys = "度"
+                            }
+                            else if(unity=="毫米"){
+                                var unitys = "毫米"
+                            }
+                            else if(unity=="度"){
+                                var unitys = "度"
+                            }
+                            for (key  in status){
+                                if (key!="text"){
+                                    if(status[key]>0){
+                                        text = text + key.toString().slice(4) + unitys + "以上的有"+status[key].toString()+"站;"
+                                    }                                
+                                }
+                                
+                            }
+                            return text 
+                        },
                         randar_data_text:function(data,unity){
                             var text = ""
                             var index = 0
@@ -6117,8 +6259,7 @@
                             function down(a, b) {
                                 return b.RR - a.RR
                             }
-                            if (click_time == "all") {
-                                
+                            if (click_time == "all") {                
                                 // 定义数据层
                                 var wash_data = []
                                 // var 
@@ -6147,6 +6288,10 @@
                                 var county =  zdz_recdata_obj.rander_data_group(wash_data,key)
                                 // 面雨量
                                 var average = zdz_recdata_obj.randar_data_average(county)
+                                var totle_sum = 0
+                                average.forEach(function(item){
+                                    totle_sum = totle_sum + item.average
+                                })
                                 // 单站前五前五排序
                                 var station = wash_data.sort(down).slice(0, 5)
                                 // 乡镇前五排序
@@ -6156,17 +6301,15 @@
                                 // 量级---返回大于某一个量级的个数
                                 var range = [10,50]
                                 var count = zdz_recdata_obj.rander_data_range(wash_data,range)
-                                var rain_text = ""
+                                var rain_text = "全市面雨量："
                                 var unity = "毫米"
                                 var text_average = zdz_recdata_obj.randar_data_text(average,unity)
                                 var text_station = zdz_recdata_obj.randar_data_text(station,unity)
                                 var text_town = zdz_recdata_obj.randar_data_text(town_average,unity)
-                                rain_text = rain_text + "各县面雨量：" + text_average + "单站前五分别是：" + text_station + "乡镇前五为：" + text_town 
+                                rain_text = rain_text + (totle_sum/9).toFixed(2).toString() + "毫米。" + "各县面雨量：" + text_average + "单站前五分别是：" + text_station + "乡镇前五为：" + text_town 
                                 return rain_text                               
                             }
-                            else{
-
-                            }
+                            else{    }
 
                         }, 
                         randar_wind_text: function (click_time) {
@@ -6180,12 +6323,65 @@
                             }
                             if (click_time == "all") {
                                 // 定义数据层
+                                var status = {
+                                    "text":"",
+                                    "wind17":0,
+                                    "wind16":0,
+                                    "wind15":0,
+                                    "wind14":0,
+                                    "wind13":0,
+                                    "wind12":0,
+                                    "wind11":0,
+                                    "wind10":0,
+                                    "wind9":0,
+                                    "wind8":0
+                                }
                                 var wash_data = []
                                 // var 
                                 zdz_recdata_obj.data_all.forEach(function (item){
                                     // console.log(item)
                                     if (item.fFy != "-9999") {
-                                        if (parseFloat(item.fFy) != 0) {
+                                        if (parseFloat(item.fFy) != 0) {                                     
+                                            if ((parseFloat(item.fFy) >17.1) && (parseFloat(item.fFy) <20.7)){
+                                                status.text = "全市出现8级大风。"
+                                                status.wind8 = status.wind8 + 1               
+                                            }
+                                            else if ((parseFloat(item.fFy) >20.7) && (parseFloat(item.fFy) <24.4)){
+                                                status.text = "全市出现8-9级大风。"
+                                                status.wind9 = status.wind9 + 1
+                                            }
+                                            else if ((parseFloat(item.fFy) >24.4) && (parseFloat(item.fFy) <28.4)){
+                                                status.text = "全市出现8-10级大风。"
+                                                status.wind10 = status.wind10 + 1
+                                            }
+                                            else if ((parseFloat(item.fFy) >28.4) && (parseFloat(item.fFy) <32.6)){
+                                                status.text = "全市出现8-11级大风。"
+                                                status.wind11 = status.wind11 + 1
+                                            }
+                                            else if ((parseFloat(item.fFy) >32.6) && (parseFloat(item.fFy) <36.9)){
+                                                status.text = "全市出现8-12级大风。"
+                                                status.wind12 = status.wind12 + 1
+                                            }
+                                            else if ((parseFloat(item.fFy) >36.9) && (parseFloat(item.fFy) <41.4)){
+                                                status.text = "全市出现8-13级大风。"
+                                                status.wind13 = status.wind13 + 1
+                                            }
+                                            else if ((parseFloat(item.fFy) >41.4) && (parseFloat(item.fFy) <46.1)){
+                                                status.text = "全市出现8-14级大风。"
+                                                status.wind14 = status.wind14 + 1
+                                            }
+                                            else if ((parseFloat(item.fFy) >46.1) && (parseFloat(item.fFy) <50.9)){
+                                                status.text = "全市出现8-15级大风。"
+                                                status.wind15 = status.wind15 + 1
+                                            }
+                                            else if ((parseFloat(item.fFy) >50.9) && (parseFloat(item.fFy) <56.0)){
+                                                status.text = "全市出现8-16级大风。"
+                                                status.wind16 = status.wind16 + 1
+                                            }
+                                            else if (parseFloat(item.fFy) >56.0){
+                                                status.text = "全市出现8-17级大风。"
+                                                status.wind17 = status.wind17 + 1
+                                            }
                                             var single = {
                                                 "IIiii": item.IIiii,
                                                 "county": item.county,
@@ -6201,9 +6397,10 @@
                                 })
                                 var station = wash_data.sort(down).slice(0, 5)
                                 var unity = "米/秒"
-                                var wind_text = "风力较大的有:"
+                                var text_count = zdz_recdata_obj.randar_status_range(status,unity)                        
+                                var wind_text = status.text + text_count
                                 var text_station = zdz_recdata_obj.randar_data_text(station,unity)
-                                wind_text = wind_text +  text_station 
+                                wind_text = wind_text + "风力较大的有:"+  text_station 
                                 return wind_text
                             }
                             else {
@@ -6287,13 +6484,66 @@
                                 return b.RR - a.RR
                             }
                             if (click_time == "all") {
+                                var wash_data = []
                                 var status = {
                                     "text":"",
-                                    "temp0":false,
-                                    "temp55":false,
-                                    "temp35":false,
-                                    "temp38":false
+                                    "temp0":0,
+                                    "temp3":0,
+                                    "temp5":0,
+                                    "temp35":0,
+                                    "temp38":0
                                 }
+                                zdz_recdata_obj.data_all.forEach(function (item){
+                                    // console.log(item)
+                                    if (item.Tn && item.Tx) {
+                                        if (parseFloat(item.Tn) < 0) {
+                                            status.temp0 = status.temp0 + 1
+                                        }
+                                        if ((parseFloat(item.Tn) > 0) && (parseFloat(item.Tn)<3)) {
+                                            status.temp3 = status.temp3 + 1
+                                        }
+                                        if ((parseFloat(item.Tn) > 3) && (parseFloat(item.Tn)<5)) {
+                                            status.temp5 = status.temp5 + 1
+                                        }
+                                        if ((parseFloat(item.Tx) > 35) && (parseFloat(item.Tx)<38)) {
+                                            status.temp35 = status.temp35 + 1
+                                        }
+                                        if (parseFloat(item.Tx) > 38) {
+                                            status.temp38 = status.temp38 + 1
+                                        }                                 
+                                    }
+                                })
+                                var text = ""
+                                for (key in status) {
+                                    if (key != "text") {
+                                        if (status[key] > 0) {
+                                            if (key=="temp0"){}
+                                            text = text +"出现冰冻（0度以下）的有" + status[key].toString() + "站;"
+                                        }
+                                        if (status[key] > 0) {
+                                            if (key=="temp3"){}
+                                            text = text +"出现薄冰（3度以下）的有" + status[key].toString() + "站;"
+                                        }
+                                        if (status[key] > 0) {
+                                            if (key=="temp5"){}
+                                            text = text +"出现霜（5度以下）的有" + status[key].toString() + "站;"
+                                        }
+                                        if (status[key] > 0) {
+                                            if (key=="temp35"){}
+                                            text = text +"出现高温（35度以上）的有" + status[key].toString() + "站;"
+                                        }
+                                        if (status[key] > 0) {
+                                            if (key=="temp38"){}
+                                            text = text +"出现酷暑（38度以上）的有" + status[key].toString() + "站;"
+                                        }
+                                }
+                                if (text){
+                                    text = "【气温】" + text
+                                }
+                                return text 
+                                
+                            }
+
 
                             }
                             else {
@@ -6302,7 +6552,7 @@
 
                         },
                         randar_text:function (){
-                            var rander_test = "【实况通报】" + "\n"
+                            var rander_test = "【实况通报】" 
                             /// 开始表演
                             var click_time = "all"
                             var rain_text = zdz_recdata_obj.randar_rain_text(click_time)
@@ -6311,6 +6561,8 @@
                             rander_test = rander_test + wind_text
                             var view_text = zdz_recdata_obj.randar_view_text(click_time)
                             rander_test = rander_test + view_text 
+                            var temp_text = zdz_recdata_obj.randar_temp_text(click_time)
+                            rander_test = rander_test + temp_text
                             // 最后赋值
                             $("#zdz_text_info").html("")
                             $("#zdz_text_info").html(rander_test )
