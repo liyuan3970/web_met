@@ -43,43 +43,6 @@ def kuaibao(request):
     return render(request, 'kuaibao.html', locals())
 
 
-def test_demo(request):
-    unitys = WebUnity.objects.all().values()
-    # images = WebPicture.objects.all().values()
-    class_types = WebClass.objects.all().values()
-    class_dir = []
-    view_list = []
-    for unity in unitys:
-        if unity['name'] == '台州气象局':
-            img_src = unity['img']
-            check_name = unity['name']
-            for single_class in class_types:
-                single_list = {
-                    'name': single_class['name'],
-                    'src': single_class['img'],
-                    'img_list': []
-                }
-                img_name = single_class['name']
-                images = WebPicture.objects.filter(unity=check_name, web_class=img_name).all().values()
-                for img in images:
-                    img_dir = {
-                        'name': img['name'],
-                        'src': img['img']
-                    }
-                    single_list['img_list'].append(img_dir)
-                class_dir.append(single_list)
-
-    view_list = class_dir[0]['img_list']
-    # print("数据",class_dir,"shuju ",view_list)
-    content = {
-        'img_src': img_src,
-        'class_dir': class_dir,
-        'first': view_list
-    }
-
-    return render(request, 'test_demo.html', locals())
-
-
 def canvas_plot(request):
     content = {
         'status': "ok"
@@ -89,19 +52,17 @@ def canvas_plot(request):
 
 # 网站预览功能
 def website(request):
-    unitys = WebUnity.objects.all().values()
+    unitys = Unity.objects.all().values()
     # images = WebPicture.objects.all().values()
     class_types = WebClass.objects.all().values()
     class_dir = []
     view_list = []
     for unity in unitys:
         if unity['name'] == '台州市气象局':
-            img_src = unity['img']
             check_name = unity['name']
             for single_class in class_types:
                 single_list = {
                     'name': single_class['name'],
-                    'src': single_class['img'],
                     'img_list': []
                 }
                 img_name = single_class['name']
@@ -109,7 +70,8 @@ def website(request):
                 for img in images:
                     img_dir = {
                         'name': img['name'],
-                        'src': img['img']
+                        'src': img['img'],
+                        'url':img['url']
                     }
                     single_list['img_list'].append(img_dir)
                 class_dir.append(single_list)
@@ -117,7 +79,6 @@ def website(request):
     view_list = class_dir[0]['img_list']
     # print("数据",class_dir,"shuju ",view_list)
     content = {
-        'img_src': img_src,
         'class_dir': class_dir,
         'first': view_list
     }
@@ -740,10 +701,9 @@ def shortmet(request):
     }
     return JsonResponse(context)
 
-
+# 网页链接的请求
 @xframe_options_exempt
 def home(request):
-    # return redirect('https://www.baidu.com/')
-    # return redirect('http://192.168.192.2:9001/index')
-    return redirect('http://www.tz121.com/index.php')
-    # return render(request, 'www.baidu.com')
+    print("get请求",request)
+    return redirect('http://127.0.0.1:9001/index')
+

@@ -1471,7 +1471,7 @@
                                             var singleimg = document.createElement('button')
                                             singleimg.style = "display:inline-block;width:100%;height:100%;background-image: url(" + imgsrc + ");font-size: 25px;color:black;text-align:center;line-height: 180px; ;background-repeat: no-repeat;"
                                             singleimg.setAttribute("class", "drawerIframe")
-                                            singleimg.value = data.first[i]['name']
+                                            singleimg.value = data.first[i]['url']
                                             singleimg.innerText = data.first[i]['name']
                                             var continer = document.createElement('div')
                                             continer.setAttribute("class", "layui-col-md3")
@@ -1490,14 +1490,16 @@
                                             var $ = layui.jquery;
                                             var form = layui.form;
                                             $('.drawerIframe').click(function () {
-                                                console.log("打印测试抽屉传值", this.value)
+                                                // console.log("打印测试抽屉传值", this.value)
                                                 drawer.open({
-                                                    title: ["测试", 'font-size:16px;color:#2d8cf0'],
+                                                    title: ["网址", 'font-size:16px;color:#2d8cf0'],
                                                     closeBtn: 1,
                                                     offset: "r",
                                                     area: "90%",
-                                                    iframe: "login",
-                                                    content: "抽屉内容"
+                                                    iframe: "home?" + this.value,
+                                                    // src:this.value,
+                                                    // url:"home" ,
+                                                    // content: "抽屉内容"
                                                 })
                                             })
 
@@ -6637,6 +6639,8 @@
                                 closeLoad(load)
                             }
                         })
+                        
+
                     })
                     // 精细化EC单点数据加载
                     $('#tool_ec_button').click(function () {

@@ -15,5 +15,4 @@ admin.site.register(SelfPlot)
 # 网站相关
 admin.site.register(WebPicture)
 admin.site.register(WebClass)
-admin.site.register(WebUnity)
 admin.site.register(WebCache)

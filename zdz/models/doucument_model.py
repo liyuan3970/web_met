@@ -124,6 +124,7 @@ class WebPicture(BaseModel):
     """网站图片"""
     img = models.ImageField(upload_to="web/")
     name = models.CharField(max_length=200, verbose_name="网站名称")
+    url = models.CharField(max_length=200, verbose_name="网站地址")
     unity = models.TextField(max_length=21844, verbose_name="单位")
     web_class = models.TextField(max_length=21844, verbose_name="类别")
 
@@ -137,26 +138,12 @@ class WebPicture(BaseModel):
 
 class WebClass(BaseModel):
     """网站分类"""
-    img = models.ImageField(upload_to="web/")
     name = models.CharField(max_length=200, verbose_name="类别")
     unity = models.TextField(max_length=21844, verbose_name="单位")
 
     class Meta:
         verbose_name = verbose_name_plural = "网站分类"
         db_table = "web_class"  # 通过db_table自定义数据表名
-
-    def __str__(self):
-        return self.name
-
-
-class WebUnity(BaseModel):
-    """单位图片"""
-    img = models.ImageField(upload_to="web/")
-    name = models.CharField(max_length=200, verbose_name="单位图标")
-
-    class Meta:
-        verbose_name = verbose_name_plural = "单位图标"
-        db_table = "web_unity"  # 通过db_table自定义数据表名
 
     def __str__(self):
         return self.name

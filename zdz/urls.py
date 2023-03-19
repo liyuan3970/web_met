@@ -18,8 +18,6 @@ urlpatterns = [
     path('quick_look', views.quick_look),
     # 可以直接预览媒体文件
     re_path('^media/(?P<path>.*?)$', serve, kwargs={'document_root': 'media/'}),
-    # 测试模块的页面
-    path('test_demo', views.test_demo),
     # canvas画图的功能
     path('canvas_plot', views.canvas_plot),
     # 网址功能
