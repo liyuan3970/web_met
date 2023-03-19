@@ -133,14 +133,14 @@
         style="display: flex;align-content:flex-start;position: absolute; justify-content: center; flex-wrap: wrap; width: 100%;height: 100%;  background-color: rgb(243, 244, 247)">
         <!-- 导航栏 -->
         {% csrf_token %}
-        <div style="background-color:rgba(150, 143, 245, 0.76); width: 100%; height: 4%;">
+        <div style="background-color:rgba(57,61,73); width: 100%; height: 4%;">
             <div class="tabbable" id="tabs-01" style="display:flex;width: 100%; height: 100%;">
-                <ul class="nav nav-tabs" style="border-bottom: 0px;;font-size: 14px;font-weight:900;font-family:'宋体';">
+                <ul class="nav nav-tabs" style="border-bottom: 0px;;font-size: 14px;font-weight:900;font-family:'宋体';color: white;">
                     <li class="active">
-                        <a href="#panel-1" data-toggle="tab" style="height:35px">材料制作</a>
+                        <a href="#panel-1" data-toggle="tab" style="height:35px;color: red">材料制作</a>
                     </li>
                     <li>
-                        <a id="toolbox" href="#panel-2" data-toggle="tab" style="height:35px">工具箱</a>
+                        <a id="toolbox" href="#panel-2" data-toggle="tab" style="height:35px;color: red;">工具箱</a>
                     </li>
                     <!-- <li>
 
@@ -148,11 +148,11 @@
                     </li> -->
                     <li>
                         <!-- 另外添加一个说明文档 -->
-                        <a id="awebsite" href="#panel-5" data-toggle="tab" style="height:35px">快捷网址</a>
+                        <a id="awebsite" href="#panel-5" data-toggle="tab" style="height:35px;color: red;">快捷网址</a>
                     </li>
                     <li style="float: right;">
                         <!-- 另外添加一个说明文档 -->
-                        <a href="#panel-4" data-toggle="tab" style="height:35px;float: right;">帮助</a>
+                        <a href="#panel-4" data-toggle="tab" style="height:35px;float: right;color: red;">帮助</a>
                     </li>
                 </ul>
             </div>
