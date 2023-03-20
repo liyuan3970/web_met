@@ -704,6 +704,7 @@ def shortmet(request):
 # 网页链接的请求
 @xframe_options_exempt
 def home(request):
-    print("get请求",request)
-    return redirect('http://127.0.0.1:9001/index')
+    url = request.GET.get('url')
+    url = "https://" + url
+    return redirect(url)
 

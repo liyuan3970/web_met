@@ -1496,7 +1496,7 @@
                                                     closeBtn: 1,
                                                     offset: "r",
                                                     area: "90%",
-                                                    iframe: "home?" + this.value,
+                                                    iframe: "home/?url=" + this.value,
                                                     // src:this.value,
                                                     // url:"home" ,
                                                     // content: "抽屉内容"
@@ -4850,21 +4850,24 @@
                                 var rain_list = false 
                                 var RR = -9999.0
                             }
-                            // 风速
+                            // 风速风向
                             if (item.fFy_list){
                                 var fFy_list = item.fFy_list.slice(index_date,slicenum)
                                 var wind = fFy_list.reduce((x, y) => x > y ? x : y)
+                                var dFy_list = item.dFy_list.slice(index_date,slicenum)
+                                var index = fFy_list.indexOf(wind)
+                                if (index!=-1){
+                                    var windir = dFy_list[index]
+                                }
+                                else {
+                                    var windir = dFy_list[0]
+                                }
                             }
                             else {
                                 var fFy_list = false 
                                 var wind = -9999.0
-                            }
-
-                            if (item.dFy_list){
-                                var dFy_list = item.dFy_list.slice(index_date,slicenum)
-                            }
-                            else {
-                                var dFy_list = false 
+                                var windir = -9999.0
+                                var dFy_list = false
                             }
                             // 高温
                             if (item.tmax_list){
@@ -4902,7 +4905,8 @@
                                 "Tx":tmax,
                                 "Tn":tmin,
                                 "VV":view,
-                                "fFy":wind,
+                                "fFy":wind/10.0,
+                                "dFy":windir,
                                 "RR":RR,
                                 "time": item.time_list.slice(index_date, slicenum),
                                 "dFy_list": dFy_list,
@@ -4916,42 +4920,37 @@
 
                             }
                             //刷新地图数据· 
+                            function return_index(date,item) {
+                                var arr = [];
+                                for (var i = 0; i < item.time_list.length; i++) {
+                                    if (item.time_list[i].match(date) != null) {
+                                        arr.push(item.time_list[i]);
+                                    }
+                                }
+                                return [arr[0],arr[arr.length - 1]];
+                            }
                             zdz_recdata_obj.flush_map()
                             var data_single = []
                             // 解析单日数据
-                            zdz_recdata_obj.data_all.forEach(function (item) {        
+                            zdz_recdata_obj.data_all.forEach(function (item) {      
                                 var len_time = item.time_list.length
                                 var yestorday = getNextDate(date,-1)
-                                var index_date = item.time_list.indexOf(yestorday+" 20:00:00")
-                                if (index_date==-1){
-                                    // 如果是第一个
-                                    index_date = item.time_list.indexOf(date+" 20:00:00")
-                                    var slicenum = index_date + 24
-                                    var single = single_data_fun(item,index_date,slicenum)
-                                }
-                                else if (len_time-index_date<24){
-                                    // 如果是最后一个
-                                    index_date = item.time_list.indexOf(yestorday+" 20:00:00")
-                                    console.log("最后一天",index_date,len_time)
-                                    var slicenum = - 1
-                                    var single = single_data_fun(item,index_date,slicenum)
-
-                                }  
-                                else {
-                                    //中间的
-                                    index_date = item.time_list.indexOf(yestorday+" 20:00:00")
-                                    var slicenum = index_date + 24
-                                    var single = single_data_fun(item,index_date,slicenum)
-                                }  
-                                data_single.push(single) 
+                                var index = return_index(date,item)
                                 
+                                if (index[0] != index[1]){
+                                    var index_start = item.time_list.indexOf(index[0])
+                                    var index_end = item.time_list.indexOf(index[1])
+                                    // console.log("日期",date,index,index_start,index_end)  
+                                    var single = single_data_fun(item,index_start,index_end)
+                                    data_single.push(single) 
+                                }                             
                             })
                             zdz_recdata_obj.data_single = data_single
                             if (type=="view"){
                                 // ------------------------------开始绘图---------------------------------
                                 zdz_recdata_obj.flush_map()
                                 var points = []
-                                zdz_recdata_obj.data_single.forEach(function (item) {
+                                data_single.forEach(function (item) {
                                     if (item.VV != -9999.0) {           
                                         // 渲染颜色
                                         var single_point = {
@@ -4970,14 +4969,13 @@
                                 var intersectionLay = map_toolbox_object.return_shp(zdz_recdata_obj.boundaries_taizhou, points).intersectionLay
                                 intersectionLay.addTo(zdz_recdata_obj.zdz_map)
                                 zdz_recdata_obj.current_layer = intersectionLay 
-                                zdz_recdata_obj.data_single.forEach(function (item) {
+                                data_single.forEach(function (item) {
                                     if (item.VV != -9999.0) {
                                          // 绘制单点
                                         var latlng = L.latLng(item.lat, item.lon);                       
                                             var marker = L.circleMarker(latlng, {
-                                                name: item.IIiii,
                                                 station: item.StationName,
-                                                timelist: item.time_list,
+                                                timelist: item.time,
                                                 viewlist: item.view_list,
                                                 VV:item.VV,
                                                 weight: 0,
@@ -5000,7 +4998,7 @@
                                                 var plot_time = e.sourceTarget.options.timelist
                                                 var plot_list = e.sourceTarget.options.viewlist
                                                 var plot_name = e.sourceTarget.options.station
-                                                // console.log(e.sourceTarget.options.station,e.sourceTarget.options.tempmax,e.sourceTarget.options.tempmin)
+                                                // console.log("能见度单点数据",plot_time,plot_name)
                                                 zdz_recdata_obj.rander_line(plot_type, plot_time, plot_list, plot_name)
                                             })
                                             zdz_recdata_obj.marker_list.push(marker)
@@ -5036,7 +5034,7 @@
                                         var c = L.circleMarker(latlng, {
                                             name: item.IIiii,
                                             station: item.StationName,
-                                            timelist: item.time_list,
+                                            timelist: item.time,
                                             rainlist: item.rain_list,
                                             weight: 0,
                                             radius: 7,
@@ -5066,7 +5064,7 @@
                                 zdz_recdata_obj.flush_map()
                                 var points = []
                                 zdz_recdata_obj.data_single.forEach(function (item) {
-                                    if (item.fFy != -9999.0) {
+                                    if (item.fFy_list) {
                                         // 渲染颜色
                                         // console.log(item.fFy,[parseFloat(item.lon), parseFloat(item.lat)])
                                         var single_point = {
@@ -5086,7 +5084,7 @@
                                 intersectionLay.addTo(zdz_recdata_obj.zdz_map)
                                 zdz_recdata_obj.current_layer = intersectionLay
                                 zdz_recdata_obj.data_single.forEach(function (item) {
-                                        if (item.fFy!=-9999.0) {
+                                        if (item.fFy_list) {
                                             var latlng = L.latLng(item.lat, item.lon);
                                             var icon = L.WindBarb.icon({ 
                                                 deg: 360-item.dFy, 
@@ -5101,7 +5099,7 @@
                                                 deg:item.dFy,
                                                 sped:item.fFy,
                                                 station: item.StationName,
-                                                timelist: item.time_list,
+                                                timelist: item.time,
                                                 fFylist: item.fFy_list,
                                                 dFylist: item.dFy_list
                                             }).addTo(zdz_recdata_obj.zdz_map).on("click",function (e) {
@@ -5154,7 +5152,7 @@
                                             var marker = L.circleMarker(latlng, {
                                                 name: item.IIiii,
                                                 station: item.StationName,
-                                                timelist: item.time_list,
+                                                timelist: item.time,
                                                 templist: item.tmax_list,
                                                 tempmax:item.Tx,
                                                 tempmin:item.Tn,
@@ -5595,6 +5593,13 @@
 
                         },
                         rander_line: function (plot_type, plot_time, plot_list, plot_name) {
+                            //2022-01-25 20:00:00
+                            var date_str = plot_time[0].toString()                          
+                            var date_year = parseInt(date_str.slice(0,4)) 
+                            var date_month = parseInt(date_str.slice(5,7))-1
+                            var date_day = parseInt(date_str.slice(8,10))
+                            var date_hour = parseInt(date_str.slice(11,13))
+                            // console.log("画图的起始日期",date_str,plot_time[plot_time.length-1],date_year,date_month,date_day,date_hour)
                             if (plot_type == "rain") {
                                 $("#li_zdz_line_chart").click()
                                 // hightchatr 
@@ -5644,7 +5649,7 @@
                                             borderWidth: 0
                                         },
                                         series: {
-                                            pointStart: Date.UTC(2022,0,24,19),
+                                            pointStart: Date.UTC(date_year,date_month,date_day,date_hour),
                                             // pointStart: Date.UTC(2017, 0, 29),
                                             pointInterval: 36e5
                                         },
@@ -5698,7 +5703,7 @@
                                     },
                                     plotOptions: {
                                         series: {
-                                            pointStart: Date.UTC(2022,0,24,19),
+                                            pointStart: Date.UTC(date_year,date_month,date_day,date_hour),
                                             // pointStart: Date.UTC(2017, 0, 29),
                                             pointInterval: 36e5
                                         }
@@ -5789,7 +5794,7 @@
                                     },
                                     plotOptions: {
                                         series: {
-                                            pointStart: Date.UTC(2022,0,24,19),
+                                            pointStart: Date.UTC(date_year,date_month,date_day,date_hour),
                                             // pointStart: Date.UTC(2017, 0, 29),
                                             pointInterval: 36e5
                                         },
@@ -5872,7 +5877,7 @@
                                     },
                                     plotOptions: {
                                         series: {
-                                            pointStart: Date.UTC(2022,0,24,19),
+                                            pointStart: Date.UTC(date_year,date_month,date_day,date_hour),
                                             // pointStart: Date.UTC(2017, 0, 29),
                                             pointInterval: 36e5
                                         },
