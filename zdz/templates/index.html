@@ -1131,10 +1131,12 @@
                                                     <div class="layui-input-inline">
                                                         <input type="text" autocomplete="off" id="zdz-startDate-1" class="layui-input" placeholder="开始日期">
                                                     </div>
-                                                    <div class="layui-form-mid">-</div>
+                                                    <div class="layui-form-mid">:</div>
+                                                    -
                                                     <div class="layui-input-inline">
                                                         <input type="text" autocomplete="off" id="zdz-endDate-1" class="layui-input" placeholder="结束日期">
                                                     </div>
+                                                    
                                                 </div>
                                                 <button id="tool_zdz_button" type="button" class="layui-btn layui-btn-primary layui-btn">
                                                     <i class="layui-icon layui-icon-search"></i>
@@ -1154,7 +1156,8 @@
                                                     <div class="layui-input-inline">
                                                         <input type="text" autocomplete="off" id="test-startDate-1" class="layui-input" placeholder="开始日期">
                                                     </div>
-                                                    <div class="layui-form-mid">-</div>
+                                                    <div class="layui-form-mid">:</div>
+                                                    -
                                                     <div class="layui-input-inline">
                                                         <input type="text" autocomplete="off" id="test-endDate-1" class="layui-input" placeholder="结束日期">
                                                     </div>
@@ -1195,6 +1198,8 @@
                                         var d = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
                                         var h = today.getHours() < 10 ? "0" + today.getHours() + ":00:00" : today.getHours() + ":00:00";
                                         var today_str = y + "-" + m + "-" + d + " " + h;
+                                        var seven_day = getNextDate(today_str, day=-7) 
+                                        seven_day = seven_day + " " + h
                                         function date_to_str(date){
                                             var year = date.year 
                                             var month = date.month < 10 ? "0" +date.month.toString(): date.month.toString()
@@ -1210,11 +1215,13 @@
                                             ,type:'datetime'
                                             ,theme: 'molv'
                                             ,max:today_str
-                                            ,value: [today_str,today_str]
+                                            ,min:seven_day
+                                            ,value: [seven_day,today_str]
                                             ,isInitValue: true
                                             ,done:function (value, date, endDate){                                                   
                                                 zdz_recdata_obj.start_date = date_to_str(date)
                                                 zdz_recdata_obj.end_date = date_to_str(endDate)
+                                                console.log(seven_day)
                                             }
                                             , range: ['#zdz-startDate-1', '#zdz-endDate-1']
                                         });
