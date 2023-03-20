@@ -522,6 +522,7 @@ def tool_zdz_date(request):
     start_time = request.POST.get('start_time', '')
     end_time = request.POST.get('end_time', '')
     # 用于测试
+    # print("自动站查询的时间",start_time,end_time)
     start = '2022-01-25 20:00'
     end = '2022-02-10 06:00'
     global zdz_worker
