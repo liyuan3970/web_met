@@ -34,6 +34,7 @@ from matplotlib.colors import ListedColormap,LinearSegmentedColormap
 
 from pylab import *
 from matplotlib.font_manager import FontProperties
+import pymysql
 # 查询历史数据的calss
 class sql_data:
     def __init__(self, sql):
@@ -740,6 +741,17 @@ class zdz_data:
         # station_all = pd.read_csv("data_zdz_height.csv")
         station_all = pd.read_csv("static/data/data_zdz_height.csv")
         return station_all
+    def sql_data(self):
+        conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="ZJSZDZDB")
+        start = self.start 
+        end = self.end 
+        #print(start,end)
+        sql_location = "select b.StationName,b.county,b.Town,b.lat,b.lon,b.IIiii,b.Height,tTime,dFy,fFy,T,Tx,Tn,VV,RR from\
+            TAB_Mws2019 as a left join TAB_StationInfo as b on a.IIiii=b.IIiii where\
+            (b.IIiii in (select IIiii from TAB_StationInfo where(City = '台州') and tTime between"
+        sql_location = sql_location + " " + "'" +  start + "'" +  "  " + "and" + " " + "'" +  end + "'" + "))"
+        df_location = pd.read_sql(sql_location , con=conn)
+        return df_location
     def return_daylist(self):
         '''
         返回日期列表
@@ -835,7 +847,8 @@ class zdz_data:
     def index_data(self):
         '''返回所有数据'''
         city = "taizhou"
-        station_all = self.read_csv()
+        #station_all = self.read_csv()
+        station_all = self.sql_data()
         daily_btn_list = self.day_button(city,station_all)
         grouped_tTime = station_all.groupby('IIiii')
         table_data = []  
