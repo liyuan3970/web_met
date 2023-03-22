@@ -66,10 +66,10 @@
 <body>
     {% csrf_token %}
     <div
-        style="display: flex;align-content:flex-start;position: absolute; justify-content: center; flex-wrap: wrap; width: 100%;height: 100%;background-color: rgb(213, 217, 230);">
+        style="display: flex;align-content:flex-start;position: absolute; justify-content: center; flex-wrap: wrap; width: 100%;height: 100%;background-color: white">
         <div class="col-md-12 column" style="width: 100%;height: 100%;padding-top: 15px;">
             <div class="tabbable" id="tabs-611922" style="width: 100%;height: 100%;">
-                <ul class="nav nav-tabs" style="border: 1px solid">
+                <ul class="nav nav-tabs" style="text-align:center;font-size: 16px;font-weight:900;font-family:'宋体';color:blue">
                     <li class="active">
                         <a href="#canvas-1" data-toggle="tab">降水订正</a>
                     </li>
@@ -84,12 +84,14 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="canvas-1">
                         <!-- 自定义绘图的位置 -->
-                        <div style="display: flex;width: 100%;height:700px">
+                        <div style="display: flex;width: 100%;height:700px;border: 1px solid black;">
                             <!-- 自定义绘图 -->
-                            <div style="width: 50%;height:700px;border: 1px solid;">
-                                <div style="width: 100%;height:5%;padding-top:8px;">
-                                    &nbsp;&nbsp;&nbsp;
-                                    <select id="canvas_var" style="border:none;background-color:rgb(213, 217, 230);">
+                            <div style="width: 50%;height:700px;">
+                                
+                                <div style="width: 100%;height:5%;padding-top:8px;border-bottom: 1px solid black;">
+                                    <span>&nbsp;&nbsp;</span>
+                                    <span>&nbsp;&nbsp;</span>
+                                    <select id="canvas_var" style="border:none;background-color:white;">
                                         <option value="+">加</option>
                                         <option value="-">减</option>
                                     </select>
@@ -102,16 +104,17 @@
                                     <span>3</span><input type="radio" name="canvas_num" style="width:5%" value="3">
                                     <span>5</span><input type="radio" name="canvas_num" style="width:5%" value="5">
                                     <span>10</span><input type="radio" name="canvas_num" style="width:5%" value="10">
+                                    
 
                                 </div>
-                                <div style="width: 100%;height:70%;border: 1px solid">
+                                <div style="width: 100%;height:70%">
                                     <canvas id="plot_canvas"
-                                        style="width:100%;height:100%;background-color: aqua;"></canvas>
+                                        style="width:100%;height:100%;"></canvas>
                                 </div>
 
-                                <div style="display: flex;width: 100%;height:25%;border: 1px solid">
+                                <div style="display: flex;width: 100%;height:25%;border-top: 1px solid black;">
                                     <!--画图 菜单 -->
-                                    <div style="display:block;width: 7%;height:100%;border: 1px solid">
+                                    <div style="display:block;width: 7%;height:100%;border-right: 1px solid;padding-left:3px;">
                                         <button id="plot_1st_data" class="layui-btn layui-btn-sm layui-btn-primary">
                                             <i class="layui-icon layui-icon-set"></i>
                                         </button>
@@ -123,15 +126,15 @@
 
                                     </div>
 
-                                    <div style="width: 93%;height:100%;border: 1px solid">
+                                    <div style="width: 93%;height:100%">
                                         <!-- 工具栏 -->
-                                        <div style="width: 100%;height:70%;border: 1px solid">
+                                        <div style="width: 100%;height:70%;">
                                             <div id="plot_1st_tool1"
                                                 style="display:inline-block;width:100%;height:100%;">
-                                                <div style="width:100%;height:35%;"></div>
+                                                <div style="width:100%;height:30%;"></div>
                                                 <div
                                                     style="display: inline-flex;;width:100%;height:30%;border-radius:15px;padding-left:3%;">
-                                                    <select
+                                                    <!-- <select
                                                         style="width: 15%;height:100%;; text-align:center;vertical-align: middle;align-items: center;border:none;background-color:rgb(213, 217, 230);">
                                                         <option>自动站</option>
                                                         <option>模式</option>
@@ -147,7 +150,72 @@
                                                     <div style="width:15%;height:100%;">
                                                         <button id="self_plot_download"
                                                             style="width: 100%;height:100%;;border: 0px ;; text-align:center;vertical-align: middle;align-items: center;border-radius:10px;">查询</button>
+                                                    </div> -->
+                                                    <div class="layui-card-body" style="">                                                                                    
+                                                        <label class="layui-form-label" >数据</label>                                                                                                                                                       
+                                                        <div class="layui-inline" id="plot_date_range">
+                                                            <div class="layui-input-inline">
+                                                                <input type="text" autocomplete="off" id="plot-startDate-1" class="layui-input" placeholder="开始日期">
+                                                            </div>
+                                                            <div class="layui-form-mid">:</div>
+                                                            -
+                                                            <div class="layui-input-inline">
+                                                                <input type="text" autocomplete="off" id="plot-endDate-1" class="layui-input" placeholder="结束日期">
+                                                            </div>
+                                                            <button id="self_plot_download" type="button" class="layui-btn layui-btn-radius" style="float: right;">
+                                                                <i class="layui-icon layui-icon-search"></i>
+                                                            </button>                                                        
+                                                        </div>
+                                                                                                                            
                                                     </div>
+                                                    <script>
+                                                        function getNextDate(date, day) {
+                                                                var dd = new Date(date);
+                                                                dd.setDate(dd.getDate() + day);
+                                                                var y = dd.getFullYear();
+                                                                var m = dd.getMonth() + 1 < 10 ? "0" + (dd.getMonth() + 1) : dd.getMonth() + 1;
+                                                                var d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate();
+                                                                return y + "-" + m + "-" + d;
+                                                            };
+                                                        // 周报日期                            
+                                                        layui.use('laydate', function () {
+                                                            var laydate = layui.laydate;
+                                                            //日期范围
+                                                            var today = new Date()
+                                                            var y = today.getFullYear();
+                                                            var m = today.getMonth() + 1 < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1;
+                                                            var d = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
+                                                            var h = today.getHours() < 10 ? "0" + today.getHours() + ":00:00" : today.getHours() + ":00:00";
+                                                            var today_str = y + "-" + m + "-" + d + " " + h;
+                                                            var seven_day = getNextDate(today_str, day = -7)
+                                                            seven_day = seven_day + " " + h
+                                                            function date_to_str(date) {
+                                                                var year = date.year
+                                                                var month = date.month < 10 ? "0" + date.month.toString() : date.month.toString()
+                                                                var day = date.date < 10 ? "0" + date.date.toString() : date.date.toString()
+                                                                var hour = date.hours < 10 ? "0" + date.hours.toString() + ":00:00" : date.hours.toString() + ":00:00"
+                                                                date_str = year + "-" + month + "-" + day + " " + hour;
+                                                                return date_str
+                                                            }
+                                                            laydate.render({
+                                                                elem: '#plot_date_range'
+                                                                //设置开始日期、日期日期的 input 选择器
+                                                                //数组格式为 2.6.6 开始新增，之前版本直接配置 true 或任意分割字符即可
+                                                                , type: 'datetime'
+                                                                , theme: 'molv'
+                                                                , max: today_str
+                                                                , min: seven_day
+                                                                , value: [seven_day, today_str]
+                                                                , isInitValue: true
+                                                                , done: function (value, date, endDate) {
+                                                                    // zdz_recdata_obj.start_date = date_to_str(date)
+                                                                    // zdz_recdata_obj.end_date = date_to_str(endDate)
+                                                                    // console.log(seven_day)
+                                                                }
+                                                                , range: ['#plot-startDate-1', '#plot-endDate-1']
+                                                            });
+                                                        })
+                                                    </script>
                                                 </div>
 
                                             </div>
@@ -202,16 +270,18 @@
 
                                         </div>
                                         <!-- 按钮 -->
-                                        <div style="width: 100%;height:30%;border: 1px solid;padding:8px;">
+                                        <div style="width: 100%;height:30%;border-top: 1px solid black;padding:8px;">
+
 
                                             <input id="self_title_content" type="text"
-                                                style="width:70%;height: 100%;float:left;" placeholder="请输入标题">
+                                                style="width:65%;height: 100%;float:left;" placeholder="请输入标题">
+                                            
                                             <input id="plot_self_button" type="button" value="绘制"
-                                                style="width:10%;height: 100%;float:right;">
+                                                style="width:10%;height: 100%;float:right;background-color:rgb(0,150,136);border: none;margin-right:3px;border-radius:3px;">
                                             <input id="plot_self_flash" type="button" value="刷新"
-                                                style="width:10%;height:100%;float:right;">
+                                                style="width:10%;height:100%;float:right;;background-color:rgb(0,150,136);;border: none;margin-right:3px;;border-radius:3px;">
                                             <input id="plot_self_close" type="button" value="关闭"
-                                                style="width:10%;height:100%;float:right;">
+                                                style="width:10%;height:100%;float:right;;background-color:rgb(0,150,136);;border: none;;margin-right:3px;;border-radius:3px">
 
                                         </div>
 
@@ -222,10 +292,9 @@
 
                             </div>
                             <!-- 预览 -->
-                            <div style="width: 50%;height:700px;border: 1px solid">
+                            <div style="width: 50%;height:700px;border-left: 1px solid black;;border-bottom: 1px solid black;">
                                 <div id="self_plot_div"
-                                    style="width: 100%;height:100%;border: 1px solid;;background-color: white;">
-
+                                    style="width: 100%;height:100%;;background-color: white;">
                                 </div>
                                 <!-- <div style="display: inline-flex;width: 100%;height:25%;border: 1px solid">
                                     <div id="self_bar" style="width: 60%;height:100%;border: 1px solid">
@@ -329,12 +398,12 @@
 
                     </div>
                     <div class="tab-pane" id="canvas-2">
-                        <div style="width: 100%;height:700px;border: 1px solid">
+                        <div style="width: 100%;height:700px;border: 1px solid black">
                             <div style="width: 100%;height:700px">
-                                <div style="display: flex;width: 100%;height:100%;border: 1px solid">
+                                <div style="display: flex;width: 100%;height:100%;">
                                     <!-- 底图选项 -->
                                     <div class="scrollbar"
-                                        style="width: 20%;height:100%;border: 1px solid;overflow-x: hidden;overflow-y:scroll;">
+                                        style="width: 20%;height:100%;border-right: 1px solid black;overflow-x: hidden;overflow-y:scroll;border-bottom: 1px solid black;">
                                         <button id="county_json" class="btn_shp"
                                             style="width: 90%;height:25%;background-image: url(static/src/shp_county.png);background-size: 100%;background-repeat: no-repeat;border-radius: 10px;margin:10px;"></button>
                                         <button id="sm_json" class="btn_shp"
@@ -389,18 +458,18 @@
                                         })
 
                                     </script>
-                                    <div style="width: 80%;height:100%;border: 1px solid">
-                                        <div style="width: 100%;height:85%;border: 1px solid">
+                                    <div style="width: 80%;height:100%;border-bottom: 1px solid black;">
+                                        <div style="width: 100%;height:85%;border-bottom: 1px solid black">
                                             <canvas id="quick_plot"
                                                 style="width: 100%;height:100%;background-color: white;"></canvas>
 
                                         </div>
 
                                         <script src='static/js/quick_plot.js'></script>
-                                        <div style="width: 100%;height:15%;border: 1px solid">
+                                        <div style="width: 100%;height:15%;">
                                             <!-- 工具栏 -->
                                             <div
-                                                style="display:inline-block;width:100%;height:33%;border: 1px solid black">
+                                                style="display:inline-block;width:100%;height:33%;border-bottom: 1px solid black">
                                                 等值线:&nbsp;<input id="taizhou_quick_plot_contour" type="radio"
                                                     checked="checked" name="taizhou_quick_plot_type"
                                                     value="contour">&nbsp;&nbsp;&nbsp;
@@ -437,7 +506,7 @@
                                                     <div
                                                         style="width: 80%;height:100%;border: 1px solid black;padding-top: 5px;border-radius:10px;">
                                                         <select id="view0_line"
-                                                            style="border:none;background-color:rgb(213, 217, 230);">
+                                                            style="border:none;">
                                                             <option value="contour">等值线</option>
                                                             <option value="line">曲线</option>
                                                         </select>
@@ -452,7 +521,7 @@
 
                                                         <label>标题:</label>
                                                         <input id="taizhou_quick_plot_text" type="radio"
-                                                            name="taizhou_quick_plot_type" value="scatter_text">
+                                                            name="taizhou_quick_plot_type" value="scatter_text" style="margin-right:10px;">
 
 
                                                         <input id="taizhou_quick_plot_text_content" placeholder="请输入文字"

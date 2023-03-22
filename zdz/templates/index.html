@@ -1498,11 +1498,9 @@
                                         var select_self_plot = document.getElementById("select_self_plot")
                                         for (var i = 0; i < self_title.length; i++) {
                                             var option_plot = document.createElement("option")
-                                            option_plot.innerText = self_title[i].types
+                                            option_plot.innerText = self_title[i].document_type
                                             option_plot.value = self_title[i].id
-
                                             select_self_plot.append(option_plot)
-
                                         }
 
                                         // console.log(data)
