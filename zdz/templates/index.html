@@ -134,7 +134,7 @@
         {% csrf_token %}
         <div style="background-color:rgba(57,61,73); width: 100%; height: 4%;">
             <div class="tabbable" id="tabs-01" style="display:flex;width: 100%; height: 100%;">
-                <ul class="nav nav-tabs" style="border-bottom: 0px;;font-size: 14px;font-weight:900;font-family:'宋体';color: white;">
+                <ul class="nav nav-tabs" style="border-bottom: 0px;;font-size: 14px;font-weight:900;font-family:'宋体';width: 100%;">
                     <li class="active">
                         <a href="#panel-1" data-toggle="tab" style="height:35px;color: red">材料制作</a>
                     </li>
@@ -151,8 +151,8 @@
                     </li>
                     <li style="float: right;">
                         <!-- 另外添加一个说明文档 -->
-                        <a href="#panel-4" data-toggle="tab" style="height:35px;float: right;color: red;">帮助</a>
-                    </li>
+                        <a href="#panel-4" data-toggle="tab" style="height:35px;color: red;">帮助</a>
+                    </li>                 
                 </ul>
             </div>
         </div>
@@ -354,7 +354,7 @@
                                                                                 text: '快速画图',
                                                                                 onAction: () => editor.windowManager.openUrl({
                                                                                     title: '画图页面',
-                                                                                    url: 'http://127.0.0.1:9001/canvas_plot',
+                                                                                    url: 'http://127.0.0.1:9991/canvas_plot',
                                                                                     height: 820,
                                                                                     width: 1300,
                                                                                 })
@@ -766,7 +766,7 @@
                                     </textarea>
 
                                 </div>
-                                <div style="display: inline-flex;width:100%;height: 5%;">
+                                <div style="display: inline-flex;width:100%;height: 5%;background-color: rgb(247, 248, 248);">
                                     <div style="width:85%;height: 100%">
                                         <div
                                             style="display: inline-flex;width:43%;height: 70%;border: 2px solid black;padding-top: 7px;border-radius:15px;padding-left:5px;margin-top:3px;">
@@ -853,7 +853,7 @@
                                                 text: '快速画图',
                                                 onAction: () => editor.windowManager.openUrl({
                                                     title: '画图页面',
-                                                    url: 'http://127.0.0.1:9001/canvas_plot',
+                                                    url: 'http://127.0.0.1:9991/canvas_plot',
                                                     height: 820,
                                                     width: 1300,
                                                 })
@@ -1903,6 +1903,107 @@
 
 
                     const map_toolbox_object = {
+                        colot_level:function () {
+                            // 降水
+                            var rain_options = {
+                                zProperty: "value",
+                                commonProperties: {
+                                    "fill-opacity": 0.9
+                                },
+                                breaksProperties: [
+                                    { fill: "rgb(255,255,255)" },// 0 mm
+                                    { fill: "rgb(140,246,130)" },// 0.1
+                                    { fill: "rgb(0,191,27)" },// 10
+                                    { fill: "rgb(62,185,255)" },// 25
+                                    { fill: "rgb(25,0,235)" },// 50
+                                    { fill: "rgb(255,0,255)" },// 100
+                                    { fill: "rgb(140,0,65)" } //250
+                                ]
+                            };
+                            // 气温
+                            var temp_options = {
+                                zProperty: "value",
+                                commonProperties: {
+                                    "fill-opacity": 0.9
+                                },
+                                breaksProperties: [
+                                    { fill: "rgb(141,172,216)" },// -10
+                                    { fill: "rgb(147,178,205)" },// -8
+                                    { fill: "rgb(144,187,206)" },// -6
+                                    { fill: "rgb(147,194,199)" },// -4
+                                    { fill: "rgb(150,209,187)" },// -2
+                                    { fill: "rgb(199,199,141)" },// 0
+                                    { fill: "rgb(208,206,132)" }, // 2 
+                                    { fill: "rgb(207,207,132)" },// 4
+                                    { fill: "rgb(214,205,117)" },// 6
+                                    { fill: "rgb(215,195,108)" },// 8 
+                                    { fill: "rgb(210,177,80)" },// 10 
+                                    { fill: "rgb(203,155,58)" },// 12
+                                    { fill: "rgb(206,139,45)" },// 14
+                                    { fill: "rgb(206,139,45)" }, // 16
+                                    { fill: "rgb(211,116,59)" },//  18
+                                    { fill: "rgb(197,99,49)" },// 20
+                                    { fill: "rgb(205,89,61)" },// 22
+                                    { fill: "rgb(205,63,53)" },// 24
+                                    { fill: "rgb(190,70,50)" },// 26
+                                    { fill: "rgb(204,62,59)" },// 28
+                                    { fill: "rgb(170,54,54)" }, // 30
+                                    { fill: "rgb(165,41,51)" },// 32
+                                    { fill: "rgb(158,37,50)" },// 34
+                                    { fill: "rgb(153,35,54)" },// 35
+                                    { fill: "rgb(122,36,65)" },// 37
+                                    { fill: "rgb(93,38,67)" },// 40
+                                    { fill: "rgb(63,38,67)" }                           
+                                ]
+                            };
+                            // 能见度
+                            var view_options = {
+                                zProperty: "value",
+                                commonProperties: {
+                                    "fill-opacity": 0.9
+                                },
+                                breaksProperties: [
+                                    { fill: "rgb(58,88,148)" },// 50
+                                    { fill: "rgb(75,111,159)" },// 200
+                                    { fill: "rgb(104,135,161)" },// 500
+                                    { fill: "rgb(145,161,174)" },// 1000
+                                    { fill: "rgb(147,186,149)" }// 2000
+                                ]
+                            };
+                            // 能见度
+                            var view_options = {
+                                zProperty: "value",
+                                commonProperties: {
+                                    "fill-opacity": 0.9
+                                },
+                                breaksProperties: [
+                                    { fill: "rgb(58,88,148)" },// 50
+                                    { fill: "rgb(75,111,159)" },// 200
+                                    { fill: "rgb(104,135,161)" },// 500
+                                    { fill: "rgb(145,161,174)" },// 1000
+                                    { fill: "rgb(147,186,149)" }// 2000
+                                ]
+                            };
+                            // 风力
+                            var wind_options = {
+                                zProperty: "value",
+                                commonProperties: {
+                                    "fill-opacity": 0.9
+                                },
+                                breaksProperties: [
+                                    { fill: "rgb(219,212,204)" },// 0 
+                                    { fill: "rgb(193,192,198)" },// 0.3
+                                    { fill: "rgb(167,210,203)" },// 1.6
+                                    { fill: "rgb(219,220,162)" },// 3.4 
+                                    { fill: "rgb(223,193,155)" },// 5.5
+                                    { fill: "rgb(217,158,115)" },// 8 
+                                    { fill: "rgb(226,106,78)" },// 10.8
+                                    { fill: "rgb(217,64,64)" },// 13.9
+                                    { fill: "rgb(190,47,574)" }// 17.2
+                                ]
+                            };
+
+                        },
                         getMaxAttribute: function (inLevelV, inGrid, inBreaksProperties) {
                             //定义变量
                             let levelArray = [];

@@ -217,9 +217,11 @@ def quick_look(request):
 # canvas 三点数据自定义绘图
 def plot_self_data(request):
     self_data = request.POST.get('plot_self_data', '')
+    time = request.POST.get('time', '')
+    title = request.POST.get('title', '')
     crf = request.POST.get('csrfmiddlewaretoken', '')
-    types = "存储数据"
-    time = "2020年8月12日"
+    print(time,title)
+    types = time + "----" + title
     obj = SelfPlot.objects.create(
         document_type=types,
         time=time,

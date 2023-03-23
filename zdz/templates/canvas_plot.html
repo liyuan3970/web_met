@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="static/js/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/jquery.datetimepicker.css" />
     <script src="static/js/jquery.datetimepicker.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.actual/1.0.19/jquery.actual.min.js"></script>
@@ -114,19 +114,22 @@
 
                                 <div style="display: flex;width: 100%;height:25%;border-top: 1px solid black;">
                                     <!--画图 菜单 -->
-                                    <div style="display:block;width: 7%;height:100%;border-right: 1px solid;padding-left:3px;">
-                                        <button id="plot_1st_data" class="layui-btn layui-btn-sm layui-btn-primary">
-                                            <i class="layui-icon layui-icon-set"></i>
+                                    <div style="display:block;width: 8%;height:100%;border-right: 1px solid;padding-left:3px;">
+                                        <button id="plot_1st_data" class="layui-btn layui-btn-sm " style="margin-bottom:3px;margin-top:3px">
+                                            模式
                                         </button>
-                                        <button id="plot_1st_color" class="layui-btn layui-btn-sm layui-btn-primary"
-                                            style="margin:0px">
-                                            <i class="layui-icon layui-icon-edit"></i>
+                                        <button id="plot_2st_data" class="layui-btn layui-btn-sm " style="margin:0px;margin-bottom:3px">
+                                            实况
+                                        </button>
+                                        <button id="plot_1st_color" class="layui-btn layui-btn-sm "
+                                            style="margin:0px;margin-bottom:3px">
+                                            颜色
                                         </button>
 
 
                                     </div>
 
-                                    <div style="width: 93%;height:100%">
+                                    <div style="width: 92%;height:100%">
                                         <!-- 工具栏 -->
                                         <div style="width: 100%;height:70%;">
                                             <div id="plot_1st_tool1"
@@ -134,25 +137,9 @@
                                                 <div style="width:100%;height:30%;"></div>
                                                 <div
                                                     style="display: inline-flex;;width:100%;height:30%;border-radius:15px;padding-left:3%;">
-                                                    <!-- <select
-                                                        style="width: 15%;height:100%;; text-align:center;vertical-align: middle;align-items: center;border:none;background-color:rgb(213, 217, 230);">
-                                                        <option>自动站</option>
-                                                        <option>模式</option>
-                                                        <option>市台</option>
-                                                    </select>
-                                                    <div style="width:60%;height:100%;">
-                                                        <input id="self_plot_start_time" type="text" placeholder="起始时间"
-                                                            style="width: 45%;height:100%; text-align:center;vertical-align: middle;align-items: center;border-radius:10px; ">
-                                                        <label>至</label>
-                                                        <input id="self_plot_end_time" type="text" placeholder="结束时间"
-                                                            style="width: 45%;height:100%; text-align:center;vertical-align: middle;align-items: center;border-radius:10px; ">
-                                                    </div>
-                                                    <div style="width:15%;height:100%;">
-                                                        <button id="self_plot_download"
-                                                            style="width: 100%;height:100%;;border: 0px ;; text-align:center;vertical-align: middle;align-items: center;border-radius:10px;">查询</button>
-                                                    </div> -->
+                                                   
                                                     <div class="layui-card-body" style="">                                                                                    
-                                                        <label class="layui-form-label" >数据</label>                                                                                                                                                       
+                                                        <label class="layui-form-label" >模式</label>                                                                                                                                                       
                                                         <div class="layui-inline" id="plot_date_range">
                                                             <div class="layui-input-inline">
                                                                 <input type="text" autocomplete="off" id="plot-startDate-1" class="layui-input" placeholder="开始日期">
@@ -219,6 +206,72 @@
                                                 </div>
 
                                             </div>
+                                            <div id="plot_2st_tool1"
+                                                style="display:none;;width:100%;height:100%;">
+                                                <div style="width:100%;height:30%;"></div>
+                                                <div
+                                                    style="display: inline-flex;;width:100%;height:30%;border-radius:15px;padding-left:3%;">                                                 
+                                                    <div class="layui-card-body" style="">                                                                                    
+                                                        <label class="layui-form-label" >实况</label>                                                                                                                                                       
+                                                        <div class="layui-inline" id="zdz_date_range">
+                                                            <div class="layui-input-inline">
+                                                                <input type="text" autocomplete="off" id="zdz-startDate-1" class="layui-input" placeholder="开始日期">
+                                                            </div>
+                                                            <div class="layui-form-mid">:</div>
+                                                            -
+                                                            <div class="layui-input-inline">
+                                                                <input type="text" autocomplete="off" id="zdz-endDate-1" class="layui-input" placeholder="结束日期">
+                                                            </div>
+                                                            <button id="self_plot_download" type="button" class="layui-btn layui-btn-radius" style="float: right;">
+                                                                <i class="layui-icon layui-icon-search"></i>
+                                                            </button>                                                        
+                                                        </div>
+                                                                                                                            
+                                                    </div>
+                                                    <script>
+                                                        
+                                                        // 周报日期                            
+                                                        layui.use('laydate', function () {
+                                                            var laydate = layui.laydate;
+                                                            //日期范围
+                                                            var today = new Date()
+                                                            var y = today.getFullYear();
+                                                            var m = today.getMonth() + 1 < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1;
+                                                            var d = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
+                                                            var h = today.getHours() < 10 ? "0" + today.getHours() + ":00:00" : today.getHours() + ":00:00";
+                                                            var today_str = y + "-" + m + "-" + d + " " + h;
+                                                            var seven_day = getNextDate(today_str, day = -7)
+                                                            seven_day = seven_day + " " + h
+                                                            function date_to_str(date) {
+                                                                var year = date.year
+                                                                var month = date.month < 10 ? "0" + date.month.toString() : date.month.toString()
+                                                                var day = date.date < 10 ? "0" + date.date.toString() : date.date.toString()
+                                                                var hour = date.hours < 10 ? "0" + date.hours.toString() + ":00:00" : date.hours.toString() + ":00:00"
+                                                                date_str = year + "-" + month + "-" + day + " " + hour;
+                                                                return date_str
+                                                            }
+                                                            laydate.render({
+                                                                elem: '#zdz_date_range'
+                                                                //设置开始日期、日期日期的 input 选择器
+                                                                //数组格式为 2.6.6 开始新增，之前版本直接配置 true 或任意分割字符即可
+                                                                , type: 'datetime'
+                                                                , theme: 'molv'
+                                                                , max: today_str
+                                                                , min: seven_day
+                                                                , value: [seven_day, today_str]
+                                                                , isInitValue: true
+                                                                , done: function (value, date, endDate) {
+                                                                    // zdz_recdata_obj.start_date = date_to_str(date)
+                                                                    // zdz_recdata_obj.end_date = date_to_str(endDate)
+                                                                    // console.log(seven_day)
+                                                                }
+                                                                , range: ['#zdz-startDate-1', '#zdz-endDate-1']
+                                                            });
+                                                        })
+                                                    </script>
+                                                </div>
+
+                                            </div>
                                             <div id="plot_1st_tool2" style="display:none;width:100%;height:100%">
                                                 <div style="width:100%;height:35%;"></div>
                                                 <div style="width:100%;height:30%;padding-left:1%;">
@@ -232,7 +285,8 @@
                                                             style="width: 4%;height: 75%;float: right;">
                                                     </div>
                                                 </div>
-                                                <div style="width:100%;height:30%;padding-left:60%;">
+                                                <div style="width:100%;height:30%;padding-left:20%;padding-top:10px;">
+                                                     每个颜色框内填写{颜色}-{解释} eg:10-小雨
                                                 </div>
                                                 <script>
                                                     layui.use('colorpicker', function () {
@@ -367,11 +421,18 @@
                                 $('#plot_1st_data').click(function () {
 
                                     $('#plot_1st_tool1').attr("style", "display:inline-block;width:100%;height:100%")
+                                    $('#plot_2st_tool1').attr("style", "display:none;width:100%;height:100%")
                                     $('#plot_1st_tool2').attr("style", "display:none;width:100%;height:100%")
                                 })
                                 $('#plot_1st_color').click(function () {
                                     $('#plot_1st_tool1').attr("style", "display:none;width:100%;height:100%")
+                                    $('#plot_2st_tool1').attr("style", "display:none;width:100%;height:100%")
                                     $('#plot_1st_tool2').attr("style", "display:inline-block;width:100%;height:100%")
+                                })
+                                $('#plot_2st_data').click(function () {
+                                    $('#plot_1st_tool1').attr("style", "display:none;width:100%;height:100%")
+                                    $('#plot_2st_tool1').attr("style", "display:inline-block;width:100%;height:100%")
+                                    $('#plot_1st_tool2').attr("style", "display:none;width:100%;height:100%")
                                 })
                                 $('#self_plot_download').click(function () {
                                     var csrf = $('input[name="csrfmiddlewaretoken"]').val();
@@ -381,11 +442,19 @@
                                 })
                                 //绘制图片时的代码
                                 $('#plot_self_button').click(function () {
+                                    var plot_title = "请输入标题"
+                                    var today = new Date()
+                                    var y = today.getFullYear();
+                                    var m = today.getMonth() + 1 < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1;
+                                    var d = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
+                                    var h = today.getHours() < 10 ? "0" + today.getHours() + ":00:00" : today.getHours() + ":00";
+                                    var time = y + "-" + m + "-" + d + " " + h;                            
+                                    if($("#self_title_content").val()){
+                                        plot_title = $("#self_title_content").val()
+                                    }
+                                    console.log(plot_title,time)
                                     var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                                    self_plot_object.plot(csrf, map)
-
-                                    //isobandsLay.addTo(map)
-
+                                    self_plot_object.plot(csrf, map,plot_title,time)
                                 })
                                 $('#plot_self_flash').click(function () {
                                     var csrf = $('input[name="csrfmiddlewaretoken"]').val();

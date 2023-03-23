@@ -152,6 +152,38 @@ const self_plot_object = {
 
         // return "色标"      
     },
+    getMaxAttribute: function (inLevelV, inGrid, inBreaksProperties) {
+        //定义变量
+        let levelArray = [];
+        let levelLength = inLevelV.length;
+        inLevelV.forEach(function (item, index) {
+            if (index < levelLength - 2) levelArray.push(0);
+        });
+        //统计每个等级中网格点数量
+        inGrid.features.map((i) => {
+            inLevelV.forEach(function (item, index) {
+                if (index < levelLength - 3) {
+                    if (i.properties.value >= inLevelV[index] && i.properties.value < inLevelV[index + 1]) levelArray[index]++;
+                }
+                if (index == levelLength - 2) {
+                    if (i.properties.value >= inLevelV[index]) levelArray[index]++;
+                }
+            });
+        });
+        //取等级中网格点最多的值
+        let maxIndex = -1;
+        let maxV = 0;
+        levelArray.forEach(function (item, index) {
+            if (maxV < item) { maxV = item; maxIndex = index; }
+        });
+        let value = '';
+        let fill = '';
+        if (maxIndex != -1) {
+            value = inLevelV[maxIndex] + '-' + inLevelV[maxIndex + 1];
+            fill = inBreaksProperties[maxIndex].fill;
+        }
+        return [value, fill]
+    },
     ctx: undefined,
     geoData_self_plot: county_json,
     canvasW_self_plot: undefined,
@@ -185,7 +217,7 @@ const self_plot_object = {
             }
         })
     },
-    plot: function (csrf,map,isobandsLay) {
+    plot: function (csrf,map,plot_title,time) {
         map.eachLayer(function (layer) {
             if (!layer._container || ('' + jQuery(layer._container).attr('class')).replace(/\s/g, '') != 'leaflet-layer') {
                 layer.remove();
@@ -278,7 +310,7 @@ const self_plot_object = {
         });
         //turf.isobands有点不符合业务预期,只有一个等级时,结果集可能为空,无图形显示,写点程序(找出那一个等级，并添加进结果集)补救下
         if (features.length == 0) {
-            let maxAttribute = getMaxAttribute(levelV, grid, isobands_options.breaksProperties);
+            let maxAttribute = self_plot_object.getMaxAttribute(levelV, grid, isobands_options.breaksProperties);
             let value = maxAttribute[0];
             let fill = maxAttribute[1];
             if (value != '' && fill != '') {
@@ -388,17 +420,15 @@ const self_plot_object = {
             type: "post",  // 请求方式
             data: {
                 "plot_self_data": JSON.stringify(grid),
+                "time":time,
+                "title":plot_title,
                 'csrfmiddlewaretoken': csrf
             },
             dataType: "json",
             success: function (data) {
-                console.log("upload_selfplot_data is ok")
-
+                
             }
-
-
         })
-
     },
     flush: function (csrf) { 
         this.data_canvas =  JSON.parse(JSON.stringify(this.data_flush))
@@ -485,10 +515,10 @@ const self_plot_object = {
                 })
             })
             // 此处为变相的修改缩放比例
-            W = W - 0.06
+            W = W - 0.01
             E = E + 0.03
-            N = N + 0.03
-            S = S - 0.06
+            N = N + 0.01
+            S = S - 0.03
         })
         // 计算包围盒的宽高
         let width = Math.abs(E - W)
