@@ -3241,7 +3241,6 @@
                                                 }
                                             });
                                             //id
-
                                             var item = this.id
                                             var ites = item.substring(11, item.length)
                                             //截取数字
@@ -3260,20 +3259,16 @@
                                             }).addTo(map_product)
                                             var intersectionLay = return_layers(grid, boundaries)
                                             intersectionLay.addTo(map_product)
-
-
                                         }
                                         mainui.append(singlebtn)
                                     }
                                     product_view.append(tzmap, mainui)
-
                                     var boundaries = {
                                         type: "FeatureCollection",
                                         name: "boundaries",
                                         crs: { type: "name", properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" } },
                                         features: taizhoulist
                                     };
-
                                     var map_product = new L.Map('product_self', {
                                         center: new L.LatLng(28.7, 121.1),//110.763, 41.376   39.62353145, 121.9937485
                                         zoom: 9, //4
@@ -3289,7 +3284,6 @@
                                             return { color: 'black', weight: 1, fillOpacity: 0.1 };
                                         }
                                     }).addTo(map_product)
-
                                     map_product.bounds = turf.bbox(boundaries);
                                     var grid = data.grid
                                     var intersectionLay = return_layers(grid, boundaries)
@@ -3298,7 +3292,6 @@
                             })
                         }
                     }
-
                     // 自定义材料加载
                     $('#product_show_button').click(function () {
                         var type = "product_show"
