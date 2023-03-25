@@ -1519,9 +1519,9 @@
                         <div class="tab-pane" id="panel-5"
                             style="width:100%;height:100%;background-color:white;overflow: auto ;">
                             <div id="website"
-                                style="display:flex;flex-wrap: wrap;align-content:flex-start;width:100%;height:100%;justify-content: center;align-items: center;;border-right: 2px solid black;">
+                                style="display:flex;flex-wrap: wrap;align-content:flex-start;width:100%;height:100%;justify-content: center;align-items: center;;border-right: 1px solid rgb(220, 222, 226);;">
                                 <div id="webbutton"
-                                    style="width:100%;height:5%;margin-bottom: 1px;border-bottom: 2px solid black;;padding-top:3px;">
+                                    style="width:100%;height:5%;margin-bottom: 1px;;padding-top:3px;border-bottom: 1px solid rgb(220, 222, 226);">
 
                                 </div>
                                 <div id="webview" class="layui-row layui-col-space15"
@@ -1557,7 +1557,7 @@
                                         for (i = 0; i < data.first.length; i++) {
                                             var imgsrc = "media/" + data.first[i]['src']
                                             var singleimg = document.createElement('button')
-                                            singleimg.style = "display:inline-block;width:100%;height:100%;background-image: url(" + imgsrc + ");font-size: 25px;color:black;text-align:center;line-height: 180px; ;background-repeat: no-repeat;"
+                                            singleimg.style = "display:inline-block;width:100%;height:100%;background-image: url(" + imgsrc + ");font-size: 25px;color:black;text-align:center;line-height: 180px; ;background-repeat: no-repeat;border:1px solid rgb(220, 222, 226)"
                                             singleimg.setAttribute("class", "drawerIframe")
                                             singleimg.value = data.first[i]['url']
                                             singleimg.innerText = data.first[i]['name']
@@ -1570,7 +1570,6 @@
                                             continer.append(inside)
                                             $('#webview').append(continer)
                                         }
-
                                         layui.use(['drawer', 'jquery', 'layer', 'element', 'form'], function () {
                                             var layer = layui.layer;
                                             var element = layui.element;
@@ -1580,81 +1579,64 @@
                                             $('.drawerIframe').click(function () {
                                                 // console.log("打印测试抽屉传值", this.value)
                                                 drawer.open({
-                                                    title: ["网址", 'font-size:16px;color:#2d8cf0'],
+                                                    title: [this.innerText, 'font-size:16px;color:#2d8cf0'],
                                                     closeBtn: 1,
                                                     offset: "r",
                                                     area: "90%",
-                                                    iframe: "home/?url=" + this.value,
-                                                    // src:this.value,
-                                                    // url:"home" ,
-                                                    // content: "抽屉内容"
+                                                    iframe: "home/?url=" + this.value
                                                 })
                                             })
-
-                                        })
-
-
+                                        })                                                                    
                                         var button_list = data.class_dir
                                         for (i = 0; i < button_list.length; i++) {
                                             var singlebutton = document.createElement('button')
-                                            // background-image: url(static/src/预报.png);
-                                            // singlebutton.style = "width:10%;height:100%;" + "background-image: url(" + imgsrc + ")"+";font-size: 15px;";
-
                                             singlebutton.setAttribute("class", "layui-btn")
                                             singlebutton.style = "margin-left:5px";
                                             singlebutton.innerText = button_list[i]['name']
                                             singlebutton.id = "buttonweb" + i.toString()
                                             singlebutton.addEventListener("click", function (e) {
-                                                $('#webview').html("")
-                                                var item = parseInt(e.path[0].id[9])
-                                                var imglist = data.class_dir[item]["img_list"]
-                                                for (i = 0; i < imglist.length; i++) {
-                                                    var imgsrc = "media/" + imglist[i]['src']
-                                                    var singleimg = document.createElement('a')
-                                                    singleimg.style = style = "display:inline-block;width:24.5%;height:25%;border:3px solid black;background-image: url(" + imgsrc + ");font-size: 25px;color:red;text-align:center;line-height: 230px; "
-                                                    // href="http://www.baidu.com" target="_Blank"
-                                                    singleimg.setAttribute("href", "http://www.baidu.com")
-                                                    singleimg.setAttribute("target", "_Blank")
-                                                    $('#webview').append(singleimg)
-
+                                            $('#webview').html("")
+                                            var item = this.id.substring(9, this.id.length) //this.id[9]//parseInt(e.path[0].id[9])
+                                            var imglist = data.class_dir[item]["img_list"]
+                                            for (i = 0; i < imglist.length; i++) {
+                                                var imgsrc = "media/" + imglist[i]['src']
+                                                var singleimg = document.createElement('button')
+                                                singleimg.style = "display:inline-block;width:100%;height:100%;background-image: url(" + imgsrc + ");font-size: 25px;color:black;text-align:center;line-height: 180px; ;background-repeat: no-repeat;border:1px solid rgb(220, 222, 226)"
+                                                singleimg.setAttribute("class", "drawerIframe")
+                                                singleimg.value = data.first[i]['url']
+                                                singleimg.innerText = data.first[i]['name']
+                                                var continer = document.createElement('div')
+                                                continer.setAttribute("class", "layui-col-md3")
+                                                var inside = document.createElement('div')
+                                                inside.setAttribute("class", "layui-panel")
+                                                inside.style = "height:200px;"
+                                                inside.append(singleimg)
+                                                continer.append(inside)
+                                                $('#webview').append(continer)
                                                 }
-                                                console.log(data)
-
+                                            layui.use(['drawer', 'jquery', 'layer', 'element', 'form'], function () {
+                                                var layer = layui.layer;
+                                                var element = layui.element;
+                                                var drawer = layui.drawer;
+                                                var $ = layui.jquery;
+                                                var form = layui.form;
+                                                $('.drawerIframe').click(function () {
+                                                    drawer.open({
+                                                        title: [this.innerText, 'font-size:16px;color:#2d8cf0'],
+                                                        closeBtn: 1,
+                                                        offset: "r",
+                                                        area: "90%",
+                                                        iframe: "home/?url=" + this.value
+                                                    })
+                                                })
                                             })
-
-                                            $('#webbutton').append(singlebutton)
-
+                                            })
+                                            $('#webbutton').append(singlebutton)                                            
                                         }
                                     }
                                 })
                             })
-
-                        // // 抽屉功能的完善
-                        // layui.config({
-                        //         base: 'static/layui/' //假设这是你存放拓展模块的根目录
-                        //     }).extend({ //设定模块别名
-                        //         drawer: 'drawer/drawer'
-                        //     });
-                        //     layui.use(['drawer', 'jquery', 'layer', 'element', 'form'], function () {
-                        //             var layer = layui.layer;
-                        //             var element = layui.element;
-                        //             var drawer = layui.drawer;
-                        //             var $ = layui.jquery;
-                        //             var form = layui.form;
-                        //             $('.drawerIframe').click(function () {
-                        //                 console.log("打印测试抽屉传值",this.value)
-                        //             drawer.open({
-                        //                 title: ["测试", 'font-size:16px;color:#2d8cf0'],
-                        //                 closeBtn: 1,
-                        //                 offset: "r",
-                        //                 area: "90%",
-                        //                 iframe: "login",
-                        //                 content: "抽屉内容"
-                        //             })
-                        //         })
-
-                        //         })
-
+                            
                         </script>
 
                     </div>
