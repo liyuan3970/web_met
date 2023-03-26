@@ -23,7 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-    'django_crontab',  # 定时任务
+    'django_apscheduler',
     'zdz',
 ]
 
@@ -123,6 +123,10 @@ AUTHENTICATION_BACKENDS = (
 )
 
 AUTH_USER_MODEL = 'zdz.User'
+
+# 定时任务
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
 
 # 日志配置
 # 日志文件夹初始化
