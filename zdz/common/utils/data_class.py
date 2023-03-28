@@ -1044,11 +1044,14 @@ class ec_data_point:
             lat = self.lat_list[i]
             lon = self.lon_list[i]
             cp_line,lsp_line,t2_line = self.plot_line(lat,lon)
+            cp = [0 if np.isnan(x) else x for x in cp_line]
+            lsp = [0 if np.isnan(x) else x for x in lsp_line]
+            t2 = [0 if np.isnan(x) else x for x in t2_line]
             data_single = {
                 "name":self.name_en[i],
-                "cp":cp_line,
-                "lsp":lsp_line,
-                "t2":t2_line
+                "cp":cp,
+                "lsp":lsp,
+                "t2":t2
             }
             data_list.append(data_single)
         return data_list

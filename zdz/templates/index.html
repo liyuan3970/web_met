@@ -354,7 +354,7 @@
                                                                                 text: '快速画图',
                                                                                 onAction: () => editor.windowManager.openUrl({
                                                                                     title: '画图页面',
-                                                                                    url: 'http://127.0.0.1:10001/canvas_plot',
+                                                                                    url: 'http://127.0.0.1:9991/canvas_plot',
                                                                                     height: 820,
                                                                                     width: 1300,
                                                                                 })
@@ -848,7 +848,7 @@
                                                 text: '快速画图',
                                                 onAction: () => editor.windowManager.openUrl({
                                                     title: '画图页面',
-                                                    url: 'http://127.0.0.1:10001/canvas_plot',
+                                                    url: 'http://127.0.0.1:9991/canvas_plot',
                                                     height: 820,
                                                     width: 1300,
                                                 })
@@ -1289,6 +1289,13 @@
                         <script>
                             $('#toolbox').click(function () {
                                 // $('#history_file').html(" ")
+                                // $("select_self_plot").html(" ")
+                                var select_plot = document.getElementById("select_self_plot")
+                                if (select_plot.children.length > 0) {
+                                    for (var i = 0; i < select_plot.children.length; i++) {
+                                        select_plot.children[i].remove()
+                                    }
+                                }
                                 $('#history_button').html(" ")
                                 $('#history_view').html(" ")
                                 var csrf = $('input[name="csrfmiddlewaretoken"]').val();
@@ -1359,8 +1366,8 @@
                                             console.log("tool_history_button")
                                             product_view_show(type)
                                         })
-                                        $("select_self_plot").html("")
-                                        var select_self_plot = document.getElementById("select_self_plot")
+                                        
+                                        var select_self_plot = document.getElementById("select_self_plot")                               
                                         for (var i = 0; i < self_title.length; i++) {
                                             var option_plot = document.createElement("option")
                                             option_plot.innerText = self_title[i].document_type
