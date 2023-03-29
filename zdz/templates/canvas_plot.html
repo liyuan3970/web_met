@@ -882,56 +882,43 @@
                     <div class="tab-pane" id="canvas-3">
                         <div style="display: flex;width: 100%;height:700px;">
                             <!-- 数据栏 -->
-                            <div style="display: flex;width: 20%;height:700px;border: 2px solid;border-radius:5px">
+                            <div style="display: flex;width: 20%;height:700px;border: 2px solid ;border-right: none;">
                                 <div style="width: 5%;height:700px;padding-top:85%;">
-                                    <!-- <button id="clondel" style="width:100%;height: 10%;">-</button>
-                                    <button id="clonadd" style="width:100%;height: 10%;">+</button>                                    -->
+                                                                      
                                 </div>
                                 <div style="width: 90%;height:700px;">
                                     <!-- 行增加 -->
                                     <div style="width: 100%;height:2%;padding-left:25%;margin-bottom: 2px;">
-                                        <!-- <button id="rowdel" style="width:30%;height: 100%;line-height:1px;font-size: 1px;">-</button>
-                                        <button id="rowadd" style="width:30%;height: 100%;line-height:1px;font-size: 1px;">+</button>     -->
+                                        
                                     </div>
                                     <!-- 选项 -->
-                                    <div style="display: inline-flex;width: 100%;height:6%;margin-top:2px;">
+                                    <div style="display: inline-flex;width: 100%;height:6%;margin-top:2px;;border: 1px solid ">
                                         <!-- <div style="width: 10%;height:100%;border: 1px solid"></div> -->
-                                        <input type="text" id="series_label" placeholder="请输入图题" style="width: 100%;height: 100%;border-radius: 5px;"></input>
+                                        <input type="text" id="series_label" placeholder="请输入图题" style="width: 100%;height: 100%;"></input>
                                     
                                     </div>
                                     <!-- 数据 -->
-                                    <div style=";width: 100%;height:90%;">
-                                        <div style="display: inline-flex;width: 100%;height:5%;border: 2px solid;border-radius:5px">
+                                    <div style=";width: 100%;height:90%;;border: 2px solid ;border-top:none">
+                                        <div style="display: inline-flex;width: 100%;height:5%">
                                             <div style=";width: 5%;height:100%">
-
                                             </div>
-                                            <div id="series_name" style=";width: 95%;height:100%;border: 1px solid">
-
+                                            <div id="series_name" style=";width: 95%;height:100%;padding-top:5px">
                                             </div>
-
-
                                         </div>
-                                        <div style="display: flex;width: 100%;height:90%;border: 2px solid;border-radius:5px">
-                                            <div id="index_name" style=";width: 5%;height:100%;">
-
+                                        <div style="display: flex;width: 100%;height:90%;">
+                                            <div id="index_name" style=";width: 5%;height:100%;border-top: 2px solid ;padding-top: 5px;">
                                             </div>
-
                                             <div id="data_line"
-                                                style="display: flex;;width: 100%;height:100%;border: 2px solid;border-radius:5px">
-
-                                            </div>
-                                        
+                                                style="display: flex;;width: 100%;height:100%;border-top: 2px solid ;padding-top: 5px;">
+                                            </div>                                     
                                         </div>
-                                        <div style="display: flex;width: 100%;height:5%;border: 2px solid;border-radius:5px;padding-top: 3px;padding-left: 10%;">
+                                        <div style="display: flex;width: 100%;height:5%;border-top: 2px solid ;padding-top: 3px;">
                                             <button type="button" id="clonadd" class="layui-btn layui-btn-xs" >添加行</button>
                                             <button type="button" id="clondel" class="layui-btn layui-btn-xs layui-border-orange" >删除行</button>
                                             <button type="button" id="rowadd" class="layui-btn layui-btn-xs" >添加列</button>
                                             <button type="button" id="rowdel" class="layui-btn layui-btn-xs layui-border-orange" >删除列</button>
                                         </div>
-
-                                    </div>
-
-                                    
+                                    </div>                             
                                 </div>
                                 <script>
                                     var plot_line_obj = {
@@ -1268,21 +1255,14 @@
                                         plot_line_obj.clondel()
                                     })
                                 </script>
-
                             </div>
-
                             <div style="width: 80%;height:700px;">
                                 <!-- 绘图区 -->
-                                <div id="line_plot" style="width: 100%;height:655px;border: 2px solid;border-radius:10px">
+                                <div id="line_plot" style="width: 100%;height:655px;border: 2px solid ;border-bottom: none;">
 
                                 </div>
                                 <!-- 按钮组 -->
-                                <div style="width: 100%;height:45px;border: 2px solid;border-radius:5px;padding-left:80%;padding-top:5px;">
-                                    <!-- <button id="getdata" style="width: 10%;height:45px;border: 1px solid">获取数据</button> -->
-                                    <!-- <button id="plot"
-                                        style="width: 10%;height:45px;border: 1px solid;float:right">绘图</button> -->
-                                    <!-- <button id="flushdata"
-                                        style="width: 10%;height:45px;border: 1px solid;float:right">刷新</button> -->
+                                <div style="width: 100%;height:45px;border: 2px solid ;;padding-left:80%;padding-top:5px;">                              
                                     <button id="getdata" class="layui-btn layui-btn-sm layui-btn-primary">
                                         <i class="layui-icon layui-icon-refresh"></i>
                                     </button>
