@@ -10,17 +10,13 @@ from ..serializers.preview_all_serializer import PreviewAllSerializer
 
 
 class FileViewSet(viewsets.ViewSet):
-
     @action(methods=["post"], url_path="pdf", detail=False)
     def pdf(self, request):
         # 接收前台数据
         document = request.data["document"]
-
         pdf_file = HTML(string=document)
-
         pdf_file = pdf_file.write_pdf(presentational_hints=True)
         return HttpResponse(pdf_file, content_type="application/pdf")
-
     @action(methods=["post"], url_path="preview_save", detail=False)
     def preview_save(self, request):
         # 接收前台数据

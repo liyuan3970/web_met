@@ -242,7 +242,6 @@ def upload_select_taizhou_data(request):
     plot_type = request.POST.get('plot_type', '')
     plot_time = request.POST.get('plot_time', '')
     plot_item = request.POST.get('plot_item', '')
-    # print("订正时次",plot_item)
     if plot_item:
         product = data_class.plot_tz_product(plot_type, plot_time)
         back_data = product.return_data(int(plot_item))
@@ -258,6 +257,7 @@ def upload_select_taizhou_data(request):
         label = product.label_index(0)
         btn_index = product.btn_index()
         context = {
+            'plot_type':plot_type,
             'back_data': back_data,
             'label': label,
             'btn_index': btn_index

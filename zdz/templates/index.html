@@ -96,8 +96,17 @@
             color: rgb(22, 21, 21);
         }
 
-        .label_plot_text {
+        .label_plot_rain {
             font-size: 15px;
+            /* border:1px solid black; */
+            /* width: 600px;
+            height:150px; */
+            /*background:red;*/
+            /*width:5px;*/
+            color: rgb(22, 21, 21);
+        }
+        .label_plot_temp {
+            font-size: 5px;
             /* border:1px solid black; */
             /* width: 600px;
             height:150px; */
@@ -1182,7 +1191,15 @@
                                 
                                 </div>
                                 <script>
-                                    // 周报日期                            
+                                    // 周报日期 
+                                    function getNextDate(date, day) {
+                                            var dd = new Date(date);
+                                            dd.setDate(dd.getDate() + day);
+                                            var y = dd.getFullYear();
+                                            var m = dd.getMonth() + 1 < 10 ? "0" + (dd.getMonth() + 1) : dd.getMonth() + 1;
+                                            var d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate();
+                                            return y + "-" + m + "-" + d;
+                                        };                           
                                     layui.use('laydate', function () {
                                         var laydate = layui.laydate;
                                         //日期范围
@@ -1215,7 +1232,7 @@
                                             ,done:function (value, date, endDate){                                                   
                                                 zdz_recdata_obj.start_date = date_to_str(date)
                                                 zdz_recdata_obj.end_date = date_to_str(endDate)
-                                                console.log(seven_day)
+                                                // console.log(seven_day)
                                             }
                                             , range: ['#zdz-startDate-1', '#zdz-endDate-1']
                                         });
@@ -1746,12 +1763,70 @@
 
 
                     const map_toolbox_object = {
+                        label_map:function(isobands_options, map,plot_type){
+                            if (plot_type=="rain"){
+                                var colorinitlat = 28.4
+                                var colorinitlon = 120.5
+                                var labellist = ["0","0.1","10","25","50","100","250"]
+                                var coloritem = isobands_options.breaksProperties.length
+                                var colorwidth = 0.1
+                                var colorheight = 0.4 / coloritem                            
+                                for (var i = 0; i < isobands_options.breaksProperties.length; i++) {
+                                    var textIcon = L.divIcon({
+                                        html: labellist[i],
+                                        className: 'label_plot_rain'
+                                    });
+                                    var colorlat = colorinitlat - i * colorheight
+                                    var colorlon = colorinitlon
+                                    var latlngs = [[colorlat, colorlon], [colorlat, colorlon + colorwidth], [colorlat - colorheight, colorlon + colorwidth], [colorlat - colorheight, colorlon]]
+                                    var colorstr = isobands_options.breaksProperties[i].fill
+                                    var polygon = L.polygon(latlngs, {
+                                        color: "black",
+                                        fillColor: colorstr,
+                                        fillOpacity: 0.8,
+                                        weight: 1
+                                    }).addTo(map)
+                                    L.marker([colorlat - colorheight / 3, colorlon + colorwidth + 0.05], { icon: textIcon }).addTo(map);
+                                }
+
+                            }
+                            else if (plot_type=="temp"){
+                                var labellist = ["-10","-8","-6","-4","-2","0","2","4","6","8","10"
+                                    ,"12","14","16","18","20","22","24","26","28","30","32","34","35","37","40","41"
+                                ]
+                                var colorinitlat = 28.4
+                                var colorinitlon = 120.1
+                                var coloritem = isobands_options.breaksProperties.length
+                                var colorwidth = 0.1
+                                var colorheight = 0.8 / coloritem                            
+                                for (var i = 0; i < isobands_options.breaksProperties.length; i++) {
+                                    var textIcon = L.divIcon({
+                                        html: labellist[i],
+                                        className: 'label_plot_temp'
+                                    });
+                                    var colorlat = colorinitlat - i * colorheight
+                                    var colorlon = colorinitlon
+                                    var latlngs = [[colorlat, colorlon], [colorlat, colorlon + colorwidth], [colorlat - colorheight, colorlon + colorwidth], [colorlat - colorheight, colorlon]]
+                                    var colorstr = isobands_options.breaksProperties[i].fill
+                                    var polygon = L.polygon(latlngs, {
+                                        color: "black",
+                                        fillColor: colorstr,
+                                        fillOpacity: 0.8,
+                                        weight: 1
+                                    }).addTo(map)
+                                    L.marker([colorlat - colorheight / 3, colorlon + colorwidth + 0.05], { icon: textIcon }).addTo(map);
+                                }
+
+
+                            }
+
+                        },
                         color_level:function (plot_type) {
                             // 降水
                             var rain_options = {
                                 zProperty: "value",
                                 commonProperties: {
-                                    "fill-opacity": 0.9
+                                    "fill-opacity": 1
                                 },
                                 breaksProperties: [
                                     { fill: "rgb(255,255,255)" },// 0 mm
@@ -1767,7 +1842,7 @@
                             var temp_options = {
                                 zProperty: "value",
                                 commonProperties: {
-                                    "fill-opacity": 0.9
+                                    "fill-opacity": 1
                                 },
                                 breaksProperties: [
                                     { fill: "rgb(141,172,216)" },// -10
@@ -1959,47 +2034,47 @@
                                 });
                             });
                             //turf.isobands有点不符合业务预期,只有一个等级时,结果集可能为空,无图形显示,写点程序(找出那一个等级，并添加进结果集)补救下
-                            // if (features.length == 0) {
-                            //     var maxAttribute = getMaxAttribute(levelV, grid, isobands_options.breaksProperties);
-                            //     var value = maxAttribute[0];
-                            //     var fill = maxAttribute[1];
-                            //     if (value != '' && fill != '') {
-                            //         //获取网格点Box
-                            //         var gridBox = turf.bbox(grid);
-                            //         //生成网格点范围的面
-                            //         var gridBoxPolygon = [[[gridBox[0], gridBox[1]], [gridBox[0], gridBox[3]], [gridBox[2], gridBox[3]], [gridBox[2], gridBox[1]], [gridBox[0], gridBox[1]]]];
-                            //         //获取网格范围的面与行政边界的交集 Polygon
-                            //         var intersectPolygon = null;
-                            //         var gridoxFeature = {
-                            //             "type": "Feature",
-                            //             "properties": { "fill-opacity": 0.8 },
-                            //             "geometry": { "type": "Polygon", "coordinates": gridBoxPolygon },
-                            //             "id": 10
-                            //         };
-                            //         try {
-                            //             intersectPolygon = turf.intersect(gridoxFeature, boundaries.features[0]);
-                            //         } catch (e) {
-                            //             try {
-                            //                 //色斑图绘制之后，可能会生成一些非法 Polygon ，例如 在 hole 里存在一些形状（听不懂？去查一下 GeoJSON 的规范），
-                            //                 //我遇到的一个意外情况大概是这样，这种 Polygon 在做 intersect() 操作的时候会报错，所以在代码中做了个容错操作。
-                            //                 //解决的方法通常就是做一次 turf.buffer() 操作，这样可以把一些小的碎片 Polygon 清理掉。
-                            //                 gridoxFeature = turf.buffer(gridoxFeature, 0);
-                            //                 intersectPolygon = turf.intersect(gridoxFeature, boundaries.features[0]);
-                            //             } catch (e) {
-                            //                 intersectPolygon = gridoxFeature;//实在裁剪不了就不裁剪了,根据业务需求自行决定
-                            //             }
-                            //         }
-                            //         //结果添加到结果数组
-                            //         if (intersectPolygon != null) {
-                            //             features.push({
-                            //                 "type": "Feature",
-                            //                 "properties": { "fill-opacity": 0.8, "fill": fill, "value": value },
-                            //                 "geometry": intersectPolygon.geometry,
-                            //                 "id": 0
-                            //             });
-                            //         }
-                            //     }
-                            // }
+                            if (features.length == 0) {
+                                var maxAttribute = map_toolbox_object.getMaxAttribute(levelV, grid, isobands_options.breaksProperties);
+                                var value = maxAttribute[0];
+                                var fill = maxAttribute[1];
+                                if (value != '' && fill != '') {
+                                    //获取网格点Box
+                                    var gridBox = turf.bbox(grid);
+                                    //生成网格点范围的面
+                                    var gridBoxPolygon = [[[gridBox[0], gridBox[1]], [gridBox[0], gridBox[3]], [gridBox[2], gridBox[3]], [gridBox[2], gridBox[1]], [gridBox[0], gridBox[1]]]];
+                                    //获取网格范围的面与行政边界的交集 Polygon
+                                    var intersectPolygon = null;
+                                    var gridoxFeature = {
+                                        "type": "Feature",
+                                        "properties": { "fill-opacity": 0.8 },
+                                        "geometry": { "type": "Polygon", "coordinates": gridBoxPolygon },
+                                        "id": 10
+                                    };
+                                    try {
+                                        intersectPolygon = turf.intersect(gridoxFeature, boundaries.features[0]);
+                                    } catch (e) {
+                                        try {
+                                            //色斑图绘制之后，可能会生成一些非法 Polygon ，例如 在 hole 里存在一些形状（听不懂？去查一下 GeoJSON 的规范），
+                                            //我遇到的一个意外情况大概是这样，这种 Polygon 在做 intersect() 操作的时候会报错，所以在代码中做了个容错操作。
+                                            //解决的方法通常就是做一次 turf.buffer() 操作，这样可以把一些小的碎片 Polygon 清理掉。
+                                            gridoxFeature = turf.buffer(gridoxFeature, 0);
+                                            intersectPolygon = turf.intersect(gridoxFeature, boundaries.features[0]);
+                                        } catch (e) {
+                                            intersectPolygon = gridoxFeature;//实在裁剪不了就不裁剪了,根据业务需求自行决定
+                                        }
+                                    }
+                                    //结果添加到结果数组
+                                    if (intersectPolygon != null) {
+                                        features.push({
+                                            "type": "Feature",
+                                            "properties": { "fill-opacity": 0.8, "fill": fill, "value": value },
+                                            "geometry": intersectPolygon.geometry,
+                                            "id": 0
+                                        });
+                                    }
+                                }
+                            }
                             var intersection = turf.featureCollection(features);
                             var intersectionLay = L.geoJSON(intersection, {
                                 style: function (feature) {
@@ -2037,7 +2112,7 @@
                             for (var i = 0; i < isobands_options.breaksProperties.length; i++) {
                                 var textIcon = L.divIcon({
                                     html: labellist[i],
-                                    className: 'label_plot_text'
+                                    className: 'label_plot_rain'
                                 });
                                 var colorlat = colorinitlat - i * colorheight
                                 var colorlon = colorinitlon
@@ -2294,7 +2369,7 @@
                             var time_plot_taizhou = self_tz_product.select_state// $("input[name='tz_self_time']:checked").val()
                             
                             var type_plot_taizhou = self_tz_product.select_type//$("input[name='tz_self']:checked").val()
-                            console.log("加载数据的时间",time_plot_taizhou,type_plot_taizhou)
+                            // console.log("加载数据的时间",time_plot_taizhou,type_plot_taizhou)
                             var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                             var isobandsLay = undefined
                             var title = undefined
@@ -2312,6 +2387,19 @@
                                 },
                                 dataType: "json",
                                 success: function (data) {
+                                    var select_type = data.plot_type
+                                    if (select_type == "T" || select_type == "TMax24" || select_type == "TMin24"){
+                                        var pl_type = "temp"
+                                        var show_title = "气温"
+                                        var levelV = map_toolbox_object.color_level(pl_type).levelV
+                                        var isobands_options = map_toolbox_object.color_level(pl_type).isobands_options
+                                    }
+                                    else {
+                                        var pl_type = "rain"
+                                        var show_title = "降水"
+                                        var levelV = map_toolbox_object.color_level(pl_type).levelV
+                                        var isobands_options = map_toolbox_object.color_level(pl_type).isobands_options
+                                    }
                                     var interpolate_options = {
                                         gridType: "points",
                                         property: "value",
@@ -2320,22 +2408,7 @@
                                     };
                                     // console.log(data.back_data)
                                     var grid = turf.featureCollection(data.back_data)
-                                    var isobands_options = {
-                                        zProperty: "value",
-                                        commonProperties: {
-                                            "fill-opacity": 0.9
-                                        },
-                                        breaksProperties: [
-                                            { fill: "rgb(255,255,255)" },
-                                            { fill: "rgb(140,246,130)" },
-                                            { fill: "rgb(0,191,27)" },
-                                            { fill: "rgb(62,185,255)" },
-                                            { fill: "rgb(25,0,235)" },
-                                            { fill: "rgb(255,0,255)" },
-                                            { fill: "rgb(140,0,65)" }
-                                        ]
-                                    };
-                                    let levelV = [5, 6, 7, 8, 9, 10, 100];
+                                    
                                     let isobands = turf.isobands(
                                         grid,
                                         levelV,
@@ -2352,11 +2425,11 @@
                                         layers: []
                                     });
                                     map.bounds = turf.bbox(boundaries);
-                                    L.geoJSON(boundaries, {
-                                        style: function (feature) {
-                                            return { color: 'black', weight: 1, fillOpacity: 0.1 };
-                                        }
-                                    }).addTo(map);
+                                    // L.geoJSON(boundaries, {
+                                    //     style: function (feature) {
+                                    //         return { color: 'black', weight: 1, fillOpacity: 0.1 };
+                                    //     }
+                                    // }).addTo(map);
                                     isobandsLay = L.geoJSON(isobands, {
                                         style: function (feature) {
                                             return {
@@ -2394,7 +2467,7 @@
                                     });
                                     //turf.isobands有点不符合业务预期,只有一个等级时,结果集可能为空,无图形显示,写点程序(找出那一个等级，并添加进结果集)补救下
                                     if (features.length == 0) {
-                                        let maxAttribute = getMaxAttribute(levelV, grid, isobands_options.breaksProperties);
+                                        let maxAttribute = map_toolbox_object.getMaxAttribute(levelV, grid, isobands_options.breaksProperties);
                                         let value = maxAttribute[0];
                                         let fill = maxAttribute[1];
                                         if (value != '' && fill != '') {
@@ -2445,7 +2518,7 @@
                                     title = L.marker([29.4, 120.9], { icon: myIcon }).addTo(map);
 
                                     var productIcon = L.divIcon({
-                                        html: "短期气温",
+                                        html: show_title,
                                         className: 'my-div-icon',
                                         iconSize: [300, 55],
 
@@ -2459,44 +2532,22 @@
                                     var intersectionLay = L.geoJSON(intersection, {
                                         style: function (feature) {
                                             return {
-                                                color: '#ffffff',
+                                                color: feature.properties.fill,
                                                 fillColor: feature.properties.fill,
-                                                weight: 0.1,
-                                                fillOpacity: 0.6
+                                                weight: 1.0,
+                                                fillOpacity: 0.9
                                             };
                                         }
                                     })
                                     intersectionLay.addTo(map)
-
-                                    //色标
-                                    function colorlabel(isobands_options, map) {
-                                        var coloritem = isobands_options.breaksProperties.length
-                                        var colorinitlat = 28.4
-                                        var colorinitlon = 120.5
-                                        var colorwidth = 0.1
-                                        var colorheight = 0.4 / coloritem
-                                        var labellist = ['0~0.1', '0.1~1', '1~10', '10~25', '25~50', '50~100', '100']
-                                        for (var i = 0; i < isobands_options.breaksProperties.length; i++) {
-                                            var textIcon = L.divIcon({
-                                                html: labellist[i],
-                                                className: 'label_plot_text'
-                                            });
-                                            var colorlat = colorinitlat - i * colorheight
-                                            var colorlon = colorinitlon
-                                            var latlngs = [[colorlat, colorlon], [colorlat, colorlon + colorwidth], [colorlat - colorheight, colorlon + colorwidth], [colorlat - colorheight, colorlon]]
-                                            var colorstr = isobands_options.breaksProperties[i].fill
-                                            var polygon = L.polygon(latlngs, {
-                                                color: "black",
-                                                fillColor: colorstr,
-                                                fillOpacity: 0.8,
-                                                weight: 1
-                                            }).addTo(map)
-                                            L.marker([colorlat - colorheight / 3, colorlon + colorwidth + 0.05], { icon: textIcon }).addTo(map);
+                                    L.geoJSON(boundaries, {
+                                        style: function (feature) {
+                                            return { color: 'black', weight: 1, fillOpacity: 0.1 };
                                         }
+                                    }).addTo(map);
 
-                                    }
-
-                                    colorlabel(isobands_options, map)
+                                    //色标                                   
+                                    map_toolbox_object.label_map(isobands_options, map,pl_type)                                
                                     //页面设置slider
                                     var sliderui = document.getElementById("menu-ui");
                                     var labels = data.btn_index
@@ -2580,7 +2631,7 @@
                                                     });
                                                     //turf.isobands有点不符合业务预期,只有一个等级时,结果集可能为空,无图形显示,写点程序(找出那一个等级，并添加进结果集)补救下
                                                     if (features.length == 0) {
-                                                        let maxAttribute = getMaxAttribute(levelV, grid, isobands_options.breaksProperties);
+                                                        let maxAttribute = map_toolbox_object.getMaxAttribute(levelV, grid, isobands_options.breaksProperties);
                                                         let value = maxAttribute[0];
                                                         let fill = maxAttribute[1];
                                                         if (value != '' && fill != '') {
@@ -2636,11 +2687,16 @@
                                                                 color: '#ffffff',
                                                                 fillColor: feature.properties.fill,
                                                                 weight: 0.1,
-                                                                fillOpacity: 0.6
+                                                                fillOpacity: 1.0
                                                             };
                                                         }
                                                     })
                                                     intersectionLay.addTo(map)
+                                                    L.geoJSON(boundaries, {
+                                                        style: function (feature) {
+                                                            return { color: 'black', weight: 1, fillOpacity: 0.1 };
+                                                        }
+                                                    }).addTo(map);
 
 
                                                 }
@@ -3044,7 +3100,7 @@
                                         });
                                         //turf.isobands有点不符合业务预期,只有一个等级时,结果集可能为空,无图形显示,写点程序(找出那一个等级，并添加进结果集)补救下
                                         if (features.length == 0) {
-                                            var maxAttribute = getMaxAttribute(levelV, grid, isobands_options.breaksProperties);
+                                            var maxAttribute = map_toolbox_object.getMaxAttribute(levelV, grid, isobands_options.breaksProperties);
                                             var value = maxAttribute[0];
                                             var fill = maxAttribute[1];
                                             if (value != '' && fill != '') {
@@ -3271,14 +3327,7 @@
                                 weekdays: ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期天"]
                             }
                         }); 
-                    function getNextDate(date, day) {
-                            var dd = new Date(date);
-                            dd.setDate(dd.getDate() + day);
-                            var y = dd.getFullYear();
-                            var m = dd.getMonth() + 1 < 10 ? "0" + (dd.getMonth() + 1) : dd.getMonth() + 1;
-                            var d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate();
-                            return y + "-" + m + "-" + d;
-                        };
+                    
 
                     const zdz_recdata_obj = {
                         start_date:undefined,
@@ -5096,6 +5145,20 @@
                         $('#product_view').attr("style", "display:none;background-color:rgb(239, 243, 237); width: 100%; height: 100%;")
                         $('#product_zdz').attr("style", "background-color:rgb(239, 243, 237); width: 100%; height: 100%;padding:30px;")
                         var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                        // 如果日期为空
+                        if (!zdz_recdata_obj.start_date){
+                            var today = new Date()
+                            var y = today.getFullYear();
+                            var m = today.getMonth() + 1 < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1;
+                            var d = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
+                            var h = today.getHours() < 10 ? "0" + today.getHours() + ":00:00" : today.getHours() + ":00:00";
+                            var today_str = y + "-" + m + "-" + d + " " + h;
+                            var seven_day = getNextDate(today_str, day=-7)
+                            zdz_recdata_obj.start_date = seven_day
+                            zdz_recdata_obj.end_date = today_str
+
+
+                        }
                         $.ajax({
                             url: "tool_zdz_date",  // 请求的地址
                             type: "post",  // 请求方式

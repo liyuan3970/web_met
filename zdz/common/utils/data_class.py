@@ -703,12 +703,10 @@ class plot_tz_product:
         hour = int(self.plot_time)
         inittime = dtt.datetime(year, month, day, hour)
         if item==0:
-            start = inittime 
-            end = start + dtt.timedelta(hours = hours_list[item]) 
+            start = inittime         
         else: 
-            start = inittime + dtt.timedelta(hours = int(hours_list[item-1])) #dtt.datetime(year, month, day, hour)
-            end = start + dtt.timedelta(hours = hours_list[item-1]) 
-        label = str(start)[0:16] +" - "+str(end)[0:16]+" "+self.plot_type
+            start = inittime + dtt.timedelta(hours = int(hours_list[item-1])) 
+        label = str(start)[0:16] + " - " + self.plot_type
         return label
     def btn_index(self):
         buttn_list = []
