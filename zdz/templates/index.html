@@ -192,22 +192,23 @@
                                     <div class="modal fade" id="modal-container-000001" role="dialog"
                                         aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
-                                            <div class="modal-content">
+                                            <div class="modal-content" style="background-color:rgb(57,61,73);">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal"
                                                         aria-hidden="true"></button>
-                                                    <h4 class="modal-title" id="myModalLabel">
-                                                        新建材料:
+                                                    <h4 class="modal-title" id="myModalLabel" style="font-size: 20px; font-weight:800;color:white">
+                                                        新建材料
                                                     </h4>
                                                 </div>
-                                                <div class="modal-body" style="height: 450px;">
+                                                <div class="modal-body" style="height: 400px;background-color: rgb(220,222,226);">
+                                                    <!-- 新建材料的内容展示区 -->
                                                     <div style="display: inline-flex;width:100%;height:100%;">
                                                         <div style="width:15%;height:100%;">
 
                                                         </div>
-                                                        <!-- 新建材料的核心数据 -->
-                                                        <div style="width:70%;height:100%;border:1px solid black">
-                                                            <div style="width:100%;height:13%;"></div>
+                                                        <!-- 新建材料的内容展示区 -->
+                                                        <div style="width:70%;height:100%;border: 1px solid rgb(243, 244, 247);border-radius: 15px;background-color:white">
+                                                            <div style="width:100%;height:15%;"></div>
                                                             <div style="display:inline-block; ;width:100%;height:15%;">
                                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;材料种类:
                                                                 <select id="new_document_type"
@@ -225,7 +226,9 @@
                                                             <div style="display:inline-block; ;width:100%;height:15%;">
                                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发布单位:
                                                                 <select id="new_document_unity"
-                                                                    style="width:60%;height:80%;border:0"></select>
+                                                                    style="width:36%;height:80%;border:0"></select>
+                                                                期数:&nbsp;&nbsp;&nbsp;<input type="number" id="document_item" style="width:10%;border:0">
+                                                                
                                                             </div>
                                                             <div style="display:inline-block; ;width:100%;height:15%;">
                                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发布日期:
@@ -239,11 +242,10 @@
                                                                 <div style="display:inline-flex;width:60%;height:80%">
                                                                     <div
                                                                         style="width:10%;height:100%;;border:1px solid black">
-                                                                        <div style=";width:100%;height:50%">
+                                                                        <div style=";width:100%;height:40%">
                                                                             <select id="png_text_add" autocomplete="off"
                                                                                 style="appearance:none;border: none;width:100%;height:100%;background-image: url(static/src/加.png);background-size: 50%;background-repeat: no-repeat;">
-                                                                                <option style="display:none;" selected>
-                                                                                </option>
+                                                                                <option style="display:none;" selected></option>
                                                                                 <option value="段落">段落</option>
                                                                                 <option value="图表">图表</option>
                                                                                 <option value="列表">列表</option>
@@ -253,7 +255,7 @@
                                                                             </select>
 
                                                                         </div>
-                                                                        <div style=";width:100%;height:50%">
+                                                                        <div style=";width:100%;height:50%;padding-top:1px">
                                                                             <button id="delete_png_text"
                                                                                 style=";width:100%;border: none;background-color:white;height:100%;background-image: url(static/src/减.png);background-size: 60%;background-repeat: no-repeat;"></button>
                                                                         </div>
@@ -265,10 +267,13 @@
                                                                     </div>
                                                                     <script>
                                                                         let png_add_list = []
+                                                                        // <span class="layui-badge layui-bg-green">绿</span>
                                                                         $('#png_text_add').change(function () {
-                                                                            var select_div = document.createElement('div');
-                                                                            select_div.style = "display:inline-block;;width:15%;height:100%;background-image: url(static/src/" + $('#png_text_add').val() + ".png);background-size: 80%;background-repeat: no-repeat;"
-                                                                            $('#png_add_list').append(select_div)
+                                                                            var select_span = document.createElement('span');
+                                                                            select_span.setAttribute("class","layui-badge layui-bg-green")
+                                                                            select_span.innerText = $('#png_text_add').val()
+                                                                            select_span.style = "margin-right:5px"
+                                                                            $('#png_add_list').append(select_span)
                                                                             png_add_list.push($('#png_text_add').val())
                                                                             // 取消select 文字
                                                                             $('#png_text_add').prop('selectedIndex', 0);
@@ -286,19 +291,15 @@
 
                                                             </div>
                                                             <script>
-                                                                $('#create_doc_date').datetimepicker({
-                                                                    theme: 'dark',
+                                                                $('#create_doc_date').datetimepicker({                                                                    
                                                                     format: 'Y-m-d H:i'
                                                                 }
                                                                 );
                                                             </script>
                                                         </div>
-                                                        <div style="width:15%;height:100%;">
-
-                                                        </div>
-
+                                                        
                                                     </div>
-
+                                             
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-default"
@@ -563,48 +564,37 @@
                                     <div class="modal fade" id="modal-container-000002" role="dialog"
                                         aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
-                                            <div class="modal-content">
+                                            <div class="modal-content"  style="background-color:rgb(57,61,73);">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal"
                                                         aria-hidden="true"></button>
-                                                    <h4 class="modal-title" id="myModalLabel">
+                                                    <h4 class="modal-title" id="myModalLabel" style="font-size: 20px; font-weight:800;color:white">
                                                         打开材料
                                                     </h4>
                                                 </div>
                                                 <div class="modal-body" style="height: 300px;">
                                                     <div
-                                                        style="display:inline-block;width:100%;height: 100%;border: 3px solid black">
+                                                        style="display:inline-block;width:100%;height: 100%;border: 1px solid rgb(243, 244, 247);background-color: white;">
                                                         <!-- <div style="width:100%;height: 25%">
                                                         </div> -->
                                                         <!-- 选项栏 -->
-                                                        <div style="display: inline-block;width:100%;height: 15%;">
+                                                        <div style="display: inline-block;width:100%;height: 12%;">
                                                             <select id="open_select_type"
-                                                                style="width: 30%;height:100%;">
-
-                                                            </select>
-                                                            <div style="display: inline-block;width: 5%;"></div>
+                                                                style="width: 35%;height:100%;border:0;padding-left:10px;">
+                                                            </select>                                                            
                                                             <select id="open_select_year"
-                                                                style="width: 15%;height:100%;">
-
-                                                            </select>
-                                                            <div style="display: inline-block;width: 5%;"></div>
+                                                                style="width: 15%;height:100%;;border:0;">
+                                                            </select>                                                        
                                                             <select id="open_select_unity"
-                                                                style="width: 30%;height:100%;">
-
+                                                                style="width: 35%;height:100%;;border:0;;padding-left:10px">
                                                             </select>
                                                             <input id="open_document_post" type="button" value="查询"
-                                                                style="width:10%;height:100%">
-                                                            <script type="text/javascript">
-
-                                                            </script>
-
+                                                                style="width:10%;height:90%;background-color: rgb(17, 147, 223);color: white;border:0;border-radius:5px;">
                                                         </div>
                                                         <script type="text/javascript">
                                                             $('#open_document_post').click(function () {
-                                                                console.log($('#open_select_type').val())
+                                                                // console.log($('#open_select_type').val())
                                                                 var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-
-
                                                                 // 告诉后端打开一个新的数据，并在前端修改文档标识
                                                                 $.ajax({
                                                                     url: "open_doc_data",  // 请求的地址
@@ -615,7 +605,6 @@
                                                                         'type': $('#open_select_type').val(),
                                                                         'unity': $('#open_select_unity').val(),
                                                                         'year': $('#open_select_year').val(),
-
                                                                     },
                                                                     dataType: "json",
                                                                     success: function (data) {
@@ -624,12 +613,18 @@
                                                                         $('#open_item_list').html("")
                                                                         for (i = 0; i < data.item.length; i++) {
                                                                             var div_label = document.createElement('div');
-                                                                            div_label.style = "width:100%;height:8%;"
-
+                                                                            div_label.style = "width:100%;height:8%;border-radius:5px;margin-top:5px;;margin-bottom:5px;background-color:rgb(0,150,136);padding-left:10%;color:white"
                                                                             var label = document.createElement('label');
                                                                             label.setAttribute("for", "item" + i.toString())
-                                                                            label.innerText = "第" + data.item[i] + "期:" + "-----" + data.type[i] + "----" + data.writer[i]
-
+                                                                            label.setAttribute("class", "single_load_document")                                                        
+                                                                            label.innerText = "第" + data.item[i] + "期" + "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0" + data.type[i] 
+                                                                            div_label.addEventListener('click',function(){
+                                                                                for (var i=0; i<$('#open_item_list').children().length; i++){
+                                                                                    var child = $('#open_item_list').children()[i]
+                                                                                    child.style = "width:100%;height:8%;border-radius:5px;margin-top:5px;;margin-bottom:5px;background-color:rgb(0,150,136);padding-left:10%;color:white"
+                                                                                }
+                                                                                this.style = "width:100%;height:8%;border-radius:5px;margin-top:5px;;margin-bottom:5px;background-color:rgb(255,87,34);padding-left:10%;color:white"
+                                                                            })
                                                                             var checkitem = document.createElement('input')
                                                                             checkitem.setAttribute("type", "radio")
                                                                             checkitem.setAttribute("name", "load_doc_list")
@@ -637,20 +632,18 @@
                                                                             checkitem.style = "display:none"
                                                                             checkitem.value = i.toString() + "-" + data.year + "-" + data.unity + "-" + data.type[i]
                                                                             div_label.append(label, checkitem)
-
                                                                             $('#open_item_list').append(div_label)
                                                                         }
-
                                                                     }
                                                                 })
-
                                                             })
-
-
+                                                            $(".single_load_document").click(function(){
+                                                                this.style = "width:100%;height:8%;border-radius:5px;margin-top:5px;;margin-bottom:5px;background-color:rgb(255,87,34);padding-left:10%;color:white"
+                                                            })                                                    
                                                         </script>
                                                         <!-- 加载的栏目 -->
                                                         <div id="open_item_list" class="scrollbar_self"
-                                                            style="width:100%;height: 85%;border: 1px solid black;overflow-x: hidden;overflow-y:scroll;">
+                                                            style="width:100%;height: 87%;border-top: 1px solid black;;overflow-x: hidden;overflow-y:scroll;">
                                                         </div>
 
                                                     </div>

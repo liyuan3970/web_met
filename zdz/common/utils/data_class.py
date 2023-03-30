@@ -557,10 +557,6 @@ class canvas_plot:
         ##########标题#############################
         m.readshapefile(shp_path+'taizhou','taizhou',color='k',linewidth=1.2)
         plt.axis('off') 
-#         parallels = np.arange(27.8,29.5,0.2)
-#         m.drawparallels(parallels,labels=[True,False,True,False],color='dimgrey',dashes=[2, 3],fontsize= 12)  # ha= 'right'
-#         meridians = np.arange(120.0,122.0,0.2)
-#         m.drawmeridians(meridians,labels=[False,True,False,True],color='dimgrey',dashes=[2, 3],fontsize= 12)
         len_lat = len(data_xr.lat.data)
         len_lon = len(data_xr.lon.data)
         for i in range(len_lon-1):
@@ -665,7 +661,7 @@ class plot_tz_product:
         #print("计算time",time)
         data_xr = xr.DataArray(data_xr_nc[item,:,:],coords=[lat,lon], dims=["lat", "lon"])       
         #以下是核心api,实质为调用Cmaps基类的listmap()方法
-        basicfile = '/home/liyuan3970/Data/My_Git/web_met/'
+        basicfile = '/home/workspace/Data/My_Git/web_met/'
         shp_path = basicfile+"/static/data/shpfile/"
         shp_da = self.add_shape_coord_from_data_array(data_xr, shp_path+"taizhou.shp", "test")
         awash_da = shp_da.where(shp_da.test<7, other=0)
@@ -949,7 +945,7 @@ class ec_data_point:
                          26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,
                         41,42,43,44,45,46,47,48,49,50,51,52]
         self.test_time = '2022041700'
-        self.file_path = "/workspace/liyuan3970/Data/My_Git/" + self.test_time + "/" 
+        self.file_path = "/home/workspace/Data/My_Git/" + self.test_time + "/" 
         self.lat_list = [27.6, 28.1, 28.4, 29.1, 29.1, 29.8, 28.7, 28.5, 28.5, 28.6]
         self.lon_list = [120.7, 121.1, 121.3, 121.2, 121.0, 120.7, 121.1, 121.4, 121.4, 121.2]
         self.name = ["台州", "玉环", "温岭", "三门", "天台", "仙居", "临海", "路桥", "椒江", "黄岩"]
