@@ -1,9 +1,10 @@
 import datetime
 import os
 
+from django.db import connection
+
 from tzdemo.settings import base
 from zdz.common.utils import db_utils
-from django.db import connection
 
 if not os.environ.get("DJANGO_SETTINGS_MODULE"):
     os.environ.setdefault("DJANGO_SETTINGS_MODULE",
@@ -65,7 +66,7 @@ def sync_station_data():
         group by st.IIiii, sd.fFy) as wind
         group by wind.IIiii) as r2 on r2.IIiii = r1.IIiii
         """
-        print(query)
+
         results = remote_connector.execute_query(query=query)
 
         if results:
@@ -93,16 +94,4 @@ def sync_station_data():
 
 
 if __name__ == '__main__':
-    # now = datetime.datetime.now()
-    # one_day_delta = datetime.timedelta(days=1)
-    # date = now.date()
-    # start_time = (date - one_day_delta).strftime("%Y-%m-%d") + " 21:00:00"
-    # end_time = date.strftime("%Y-%m-%d") + " 20:59:59"
-    # if now.time().hour > 20:
-    #     date = date + one_day_delta
-    #     start_time = date.strftime("%Y-%m-%d") + " 21:00:00"
-    #     end_time = (date + one_day_delta).strftime("%Y-%m-%d") + " 20:59:59"
-    #
-    # print(start_time)
-    # print(end_time)
     sync_station_data()
