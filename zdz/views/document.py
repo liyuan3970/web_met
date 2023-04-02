@@ -487,27 +487,14 @@ def ec_single_data(request):
 def self_plot_download(request):
     self_plot_start_time = request.POST.get('self_plot_start_time', '')
     self_plot_end_time = request.POST.get('self_plot_end_time', '')
+    self_plot_select_type = request.POST.get('self_plot_select_type', '')
     # 编写数据查询的后端逻辑
-    data = pd.read_csv('static/data/' + 'rect_station_info_tz.csv', encoding='ISO-8859-1')
-    data_canvas = {
-        "station_list": [],
-        "station": []
-    }
-    length = data.shape[0]
-
-    for i in range(length):
-        station_data = []
-        if i < 41:
-            data_canvas['station_list'].append(data.iloc[i, 4])
-            station_data.append(data.iloc[i, 3])
-            station_data.append(data.iloc[i, 2])
-            station_data.append(random.randint(100))
-            data_canvas['station'].append(station_data)
-        else:
-            station_data.append(data.iloc[i, 3])
-            station_data.append(data.iloc[i, 2])
-            station_data.append(random.randint(100))
-            data_canvas['station'].append(station_data)
+    # zdz    
+    start_time,end_time,select_type = self_plot_start_time,self_plot_end_time,self_plot_select_type 
+    # ec
+    # start_time,end_time,select_type = 1,25,"ec"
+    sql_worker = data_class.sql_plot(start_time,end_time,select_type)
+    data_canvas = sql_worker.return_data()
     context = {
         'status': "ok",
         'data_canvas': data_canvas
@@ -712,6 +699,5 @@ def shortmet(request):
 @xframe_options_exempt
 def home(request):
     url = request.GET.get('url')
-    url = "https://" + url
     return redirect(url)
 

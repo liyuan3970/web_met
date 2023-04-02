@@ -149,22 +149,23 @@
                                                             <div class="layui-input-inline">
                                                                 <input type="text" autocomplete="off" id="plot-endDate-1" class="layui-input" placeholder="结束日期">
                                                             </div>
-                                                            <button id="self_plot_download" type="button" class="layui-btn layui-btn-radius" style="float: right;">
-                                                                <i class="layui-icon layui-icon-search"></i>
-                                                            </button>                                                        
+                                                                                                                 
                                                         </div>
+                                                        <button id="self_plot_download_ec" type="button" class="layui-btn layui-btn-radius" style="float: right;">
+                                                            <i class="layui-icon layui-icon-search"></i>
+                                                        </button>  
                                                                                                                             
                                                     </div>
                                                     <script>
                                                         function getNextDate(date, day) {
-                                                                var dd = new Date(date);
-                                                                dd.setDate(dd.getDate() + day);
-                                                                var y = dd.getFullYear();
-                                                                var m = dd.getMonth() + 1 < 10 ? "0" + (dd.getMonth() + 1) : dd.getMonth() + 1;
-                                                                var d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate();
-                                                                return y + "-" + m + "-" + d;
-                                                            };
-                                                        // 周报日期                            
+                                                            var dd = new Date(date);
+                                                            dd.setDate(dd.getDate() + day);
+                                                            var y = dd.getFullYear();
+                                                            var m = dd.getMonth() + 1 < 10 ? "0" + (dd.getMonth() + 1) : dd.getMonth() + 1;
+                                                            var d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate();
+                                                            return y + "-" + m + "-" + d;
+                                                        };
+                                                        // ec模式                            
                                                         layui.use('laydate', function () {
                                                             var laydate = layui.laydate;
                                                             //日期范围
@@ -172,10 +173,12 @@
                                                             var y = today.getFullYear();
                                                             var m = today.getMonth() + 1 < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1;
                                                             var d = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
-                                                            var h = today.getHours() < 10 ? "0" + today.getHours() + ":00:00" : today.getHours() + ":00:00";
+                                                            var h = today.getHours() < 16 ? "20:00:00" : "08:00:00";
                                                             var today_str = y + "-" + m + "-" + d + " " + h;
-                                                            var seven_day = getNextDate(today_str, day = -7)
-                                                            seven_day = seven_day + " " + h
+                                                            var yestorday = getNextDate(today_str, day = -1)
+                                                            var init_day = today.getHours() < 16 ? yestorday + " 20:00:00" : today_str;
+                                                            var ten_day = getNextDate(init_day, day = 10)
+                                                            ten_day = today.getHours() < 16 ? ten_day + " 20:00:00" : ten_day + " 08:00:00"
                                                             function date_to_str(date) {
                                                                 var year = date.year
                                                                 var month = date.month < 10 ? "0" + date.month.toString() : date.month.toString()
@@ -184,20 +187,41 @@
                                                                 date_str = year + "-" + month + "-" + day + " " + hour;
                                                                 return date_str
                                                             }
+                                                            function date_to_index(date) {
+                                                                var hours_list = [
+                                                                    0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 63, 66, 69, 72,
+                                                                    78, 84, 90, 96, 102, 108, 114, 120, 126, 132, 138, 144, 150, 156, 162, 168, 174, 180, 186, 192, 198, 204, 210, 216, 222, 228, 234, 240
+                                                                ]
+                                                                var date_str = date_to_str(date)
+                                                                var date_dt = new Date(date_str)
+                                                                var init_dt = new Date(init_day)
+                                                                var totle_hour = parseInt(date_dt - init_dt) / 1000 / 60 / 60;
+                                                                var del_hours = []
+                                                                for (var i = 0; i < hours_list.length; i++) {
+                                                                    var single = totle_hour - hours_list[i]
+                                                                    if (single < 0) {
+                                                                        single = -single
+                                                                    }
+                                                                    del_hours.push(single)
+                                                                }
+                                                                var min_hour = del_hours.reduce((a, b) => a > b ? b : a)
+                                                                var index_min = del_hours.findIndex(x => x === min_hour)
+                                                                return index_min
+                                                            }
                                                             laydate.render({
                                                                 elem: '#plot_date_range'
                                                                 //设置开始日期、日期日期的 input 选择器
                                                                 //数组格式为 2.6.6 开始新增，之前版本直接配置 true 或任意分割字符即可
                                                                 , type: 'datetime'
                                                                 , theme: 'molv'
-                                                                , max: today_str
-                                                                , min: seven_day
-                                                                , value: [seven_day, today_str]
+                                                                , max: ten_day
+                                                                , min: init_day
+                                                                , value: [init_day, ten_day]
                                                                 , isInitValue: true
                                                                 , done: function (value, date, endDate) {
-                                                                    // zdz_recdata_obj.start_date = date_to_str(date)
-                                                                    // zdz_recdata_obj.end_date = date_to_str(endDate)
-                                                                    // console.log(seven_day)
+                                                                    self_plot_object.start = date_to_index(date)
+                                                                    self_plot_object.end = date_to_index(endDate)
+                                                                    self_plot_object.select_type = "ec"
                                                                 }
                                                                 , range: ['#plot-startDate-1', '#plot-endDate-1']
                                                             });
@@ -222,15 +246,16 @@
                                                             <div class="layui-input-inline">
                                                                 <input type="text" autocomplete="off" id="zdz-endDate-1" class="layui-input" placeholder="结束日期">
                                                             </div>
-                                                            <button id="self_plot_download" type="button" class="layui-btn layui-btn-radius" style="float: right;">
-                                                                <i class="layui-icon layui-icon-search"></i>
-                                                            </button>                                                        
+                                                                                                                  
                                                         </div>
+                                                        <button id="self_plot_download_zdz" type="button" class="layui-btn layui-btn-radius" style="float: right;">
+                                                            <i class="layui-icon layui-icon-search"></i>
+                                                        </button>  
                                                                                                                             
                                                     </div>
                                                     <script>
                                                         
-                                                        // 周报日期                            
+                                                        // 自动站                           
                                                         layui.use('laydate', function () {
                                                             var laydate = layui.laydate;
                                                             //日期范围
@@ -243,7 +268,7 @@
                                                             var seven_day = getNextDate(today_str, day = -7)
                                                             seven_day = seven_day + " " + h
                                                             function date_to_str(date) {
-                                                                var year = date.year
+                                                                var year = "2019"//date.year
                                                                 var month = date.month < 10 ? "0" + date.month.toString() : date.month.toString()
                                                                 var day = date.date < 10 ? "0" + date.date.toString() : date.date.toString()
                                                                 var hour = date.hours < 10 ? "0" + date.hours.toString() + ":00:00" : date.hours.toString() + ":00:00"
@@ -261,9 +286,9 @@
                                                                 , value: [seven_day, today_str]
                                                                 , isInitValue: true
                                                                 , done: function (value, date, endDate) {
-                                                                    // zdz_recdata_obj.start_date = date_to_str(date)
-                                                                    // zdz_recdata_obj.end_date = date_to_str(endDate)
-                                                                    // console.log(seven_day)
+                                                                    self_plot_object.start = date_to_str(date)
+                                                                    self_plot_object.end = date_to_str(endDate)
+                                                                    self_plot_object.select_type = "zdz"
                                                                 }
                                                                 , range: ['#zdz-startDate-1', '#zdz-endDate-1']
                                                             });
@@ -408,24 +433,10 @@
                                     
                                 })
 
-                                $('#self_plot_start_time').datetimepicker(
-                                    {
-                                        theme: 'dark',
-                                        format: 'Y-m-d H:i',
-                                        minView: "month",
-                                        language: 'zh',
-                                        startView: 2
+                                
+                                
 
-                                    }
-                                );
-                                $("#self_plot_start_time").datetimepicker("setDate", new Date());
-
-                                $('#self_plot_end_time').datetimepicker(
-                                    {
-                                        theme: 'dark',
-                                        format: 'Y-m-d H:i'
-                                    }
-                                );
+                                
 
                                 $('#plot_1st_data').click(function () {
 
@@ -443,11 +454,13 @@
                                     $('#plot_2st_tool1').attr("style", "display:inline-block;width:100%;height:100%")
                                     $('#plot_1st_tool2').attr("style", "display:none;width:100%;height:100%")
                                 })
-                                $('#self_plot_download').click(function () {
-                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                                    var self_plot_start_time = $('#self_plot_start_time').val();
-                                    var self_plot_end_time = $('#self_plot_end_time').val();
-                                    self_plot_object.download(csrf, self_plot_start_time, self_plot_end_time)
+                                $('#self_plot_download_ec').click(function () {                               
+                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();   
+                                    self_plot_object.download(csrf)
+                                })
+                                $('#self_plot_download_zdz').click(function () {                               
+                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();      
+                                    self_plot_object.download(csrf)
                                 })
                                 //绘制图片时的代码
                                 $('#plot_self_button').click(function () {
@@ -582,7 +595,7 @@
                                                 </div>
                                                 <div style="width: 100%;height:55%;padding-left:10%">
                                                     <div
-                                                        style="width: 80%;height:100%;border: 1px solid black;padding-top: 5px;border-radius:10px;">
+                                                        style="width: 90%;height:100%;border: 1px solid black;padding-top: 5px;border-radius:10px;">
                                                         <select id="view0_line"
                                                             style="border:none;">
                                                             <option value="contour">等值线</option>
@@ -1313,8 +1326,8 @@
     </div>
     <!-- 隐藏栏目 -->
     <div id="hidediv"
-        style="display: none;;width:420px;height:600px;position:absolute;top:10%;left:35.5%;z-index:100;background-color: white;padding-left:50px;padding-top:50px;">
-        <div style="width:325px;height:497px;border: 3px solid black;border-radius:10px;">
+        style="display: none;;width:420px;height:600px;position:absolute;top:10%;left:35.5%;z-index:100;background-color: rgb(57,61,73);padding-left:50px;padding-top:50px;">
+        <div style="width:325px;height:497px;border: 3px solid black;border-radius:10px;background-color: white;">
             <div id="hidelabel"
                 style="width:320px;height:50px;;padding-top:5%;padding-left:5%;">
                 <h3>参数设置</h3>
@@ -1364,7 +1377,7 @@
     <script>
         $("#self_line_opt_quit").click(function () { 
             var hidediv = document.getElementById("hidediv")
-            hidediv.style="display:none;;width:420px;height:600px;position:absolute;top:10%;left:35.5%;z-index:100;background-color: white;padding-left:50px;padding-top:50px;" 
+            hidediv.style="display:none;;width:420px;height:600px;position:absolute;top:10%;left:35.5%;z-index:100;background-color: rgb(57,61,73);padding-left:50px;padding-top:50px;" 
 
         })
         $("#self_line_opt_save").click(function () {        
@@ -1372,7 +1385,6 @@
             plot_line_obj.getdata()
             var item = 0
             $(".hideseries").each(function () {
-                console.log(this.children[1].value)
                 var type = this.children[1].value
                 var color = this.children[3].value
                 var width = this.children[5].value
@@ -1405,7 +1417,7 @@
         $("#flushdata").click(function () {
             console.log("flushdata")       
             var hidediv = document.getElementById("hidediv")
-            hidediv.style="display: inline-block;;width:420px;height:600px;position:absolute;top:10%;left:35.5%;z-index:100;background-color: white;padding-left:50px;padding-top:50px;"
+            hidediv.style="display: inline-block;;width:420px;height:600px;position:absolute;top:10%;left:35.5%;z-index:100;background-color: rgb(57,61,73);padding-left:50px;padding-top:50px;"
             // 开始表演
             plot_line_obj.getdata()
             $("#hideseries").html("")
@@ -1450,7 +1462,7 @@
                 var input_width = document.createElement("input");
                 input_width.style = "width:40px;height:20px;;background-color: white;margin-left:10px"
                 input_width.setAttribute("type","number")
-                input_width.value = 1
+                input_width.value = 10
                 // 添加
                 singleseries.append(lab_type,select_type,lab_color,select_color,lab_width,input_width)
                 $("#hideseries").append(singleseries)

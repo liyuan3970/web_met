@@ -110,8 +110,8 @@ const self_plot_object = {
                         { fill: "rgb(140,0,65)" }
                     ]
                 };
-                var labellist = ['0~0.1', '0.1~1', '1~10', '10~25', '25~50', '50~100', '100']
-                var levelV = [10, 20, 30, 50, 70, 90, 100, 130];
+                var labellist = ['0~0.1', '0.1~10', '10~25', '25~50', '50~100', '100~250', '250']
+                var levelV =[0, 0.1, 10, 25, 50, 100, 250]
                 return {
                     isobands_options: isobands_options,
                     levelV: levelV,
@@ -137,8 +137,8 @@ const self_plot_object = {
                     { fill: "rgb(140,0,65)" }
                 ]
             };
-            var labellist = ['0~0.1', '0.1~1', '1~10', '10~25', '25~50', '50~100', '100']
-            var levelV = [10, 20, 30, 50, 70, 90, 100, 130];
+            var labellist = ['0~0.1', '0.1~10', '10~25', '25~50', '50~100', '100~250', '250']
+            var levelV =[0, 0.1, 10, 25, 50, 100, 250]
             return {
                 isobands_options:isobands_options,
                 levelV:levelV,
@@ -194,26 +194,25 @@ const self_plot_object = {
     scale_self_plot_y: 1.0,
     map_box: [],
     r: 100,
-    download: function (csrf, self_plot_start_time, self_plot_end_time) {
+    start:"2019-03-10 20:00",
+    end:"2019-03-15 20:00",
+    select_type:"zdz",
+    download: function (csrf) {
         // 下载数据       
         $.ajax({
             url: "self_plot_download",  // 请求的地址
             type: "post",  // 请求方式
-            timeout: 250, //设置延迟上限
+            timeout: 25000, //设置延迟上限
             data: {
                 'csrfmiddlewaretoken': csrf,
-                'self_plot_start_time': self_plot_start_time,
-                'self_plot_end_time': self_plot_end_time
+                'self_plot_start_time': self_plot_object.start,
+                'self_plot_end_time': self_plot_object.end,
+                'self_plot_select_type': self_plot_object.select_type
             },
             dataType: "json",
             success: function (data) {
-                // console.log("下载数据陈工")
                 self_plot_object.data_canvas = data.data_canvas
-                self_plot_object.data_flush = JSON.parse(JSON.stringify(data.data_canvas))
-                
-                // data_canvas = data.data_canvas
-
-                // plot_self_flash_data = data.data_canvas
+                self_plot_object.data_flush = JSON.parse(JSON.stringify(data.data_canvas))        
             }
         })
     },
