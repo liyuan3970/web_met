@@ -712,16 +712,9 @@ class ec_data_point:
         data = []
         for i in range(len_lon-1):
             for j in range(len_lat-1):
-                #y0 = round(27.00+j*0.05,2)
-                #x0 = round(120.00+i*0.05,2)
                 y0 = taizhou.lat.data[j]
                 x0 = taizhou.lon.data[i]
                 if taizhou.data[j, i]!=99999:
-                    # single = {
-                    #     "Lat":y0,
-                    #     "Lon":x0,
-                    #     "value":str(taizhou.data[j, i])
-                    # }
                     single = {
                         "type": "Feature",
                         "properties": {

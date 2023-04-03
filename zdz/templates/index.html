@@ -2704,6 +2704,48 @@
                                 }
                             })
                         } else if (type == "tool_ec") {
+                            function label_of_ectime(data){
+                                var today = new Date()
+                                var y = today.getFullYear();
+                                var m = today.getMonth() + 1 < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1;
+                                var d = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
+                                var h = today.getHours() < 10 ? "0" + today.getHours() + ":00:00" : today.getHours() + ":00:00";
+                                var today_str = y + "-" + m + "-" + d + " " + h;
+                                var init_day = getNextDate(today_str, day=-1) 
+                                var label_x = []
+                                // 坐标
+                                for (var i = 0;i<41;i++){
+                                    if (i%4==0){
+                                        var day_item = i/4
+                                        var label_day = getNextDate(init_day, day=day_item)
+                                        var label = label_day.substring(5,12) + "-20:00"
+                                        label_x.push(label)
+                                        //console.log(i/4)
+                                    }
+                                    else{
+                                        var label = " " 
+                                        label_x.push(label)
+                                    }
+                                }
+                                // 气温
+                                var tempmax = Math.max.apply(null,data.t2)
+                                var tempmin = Math.min.apply(null,data.t2)
+                                var tempave = (tempmax + tempmin)/2.0
+                                var labmax = (tempave * 1.5).toFixed(0)
+                                var labmin = (tempmin - (tempave * 1.5 - tempmin)*1.8 ).toFixed(0)
+                                // 降水
+                                var lspmax = Math.max.apply(null,data.lsp)
+                                var cpmax = Math.max.apply(null,data.cp)
+                                if (lspmax>cpmax){
+                                    var rainmax = lspmax
+                                }
+                                else{
+                                    var rainmax = cpmax
+                                }
+                                var rainlabel = (rainmax*2.3).toFixed(0)
+                                // console.log(,Math.max.apply(null,data.cp),data)
+                                return [label_x,labmax,rainlabel,labmin]
+                            }
 
                             var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries
                             $('#product_view').html(" ")
@@ -2722,7 +2764,8 @@
                                     load = showLoad();
                                 },
                                 success: function (data) {
-                                    // console.log("tool_ec", data)
+                                    console.log("tool_ec", data)
+                                    var labelthings = label_of_ectime(data.linedata[0])
                                     // var serverdata = JSON.parse(data)  
                                     var product_view = document.getElementById("product_view")
                                     product_view.style = ";width:100%;height:100%;background-color:white;;padding:30px;"
@@ -2745,6 +2788,7 @@
                                     for (var i = 0; i < labels_ecmapui.length; i++) {
                                         var singlebtn = document.createElement("button");
                                         var id = "ecbt_silder" + i.toString();
+                                        
                                         singlebtn.setAttribute("class", "layui-btn layui-btn-sm")
                                         singlebtn.style = "width:100%;height: 10%;margin-top:8px; border-radius:8px;margin-left:0px"
                                         singlebtn.id = id
@@ -2759,6 +2803,7 @@
                                             //id
                                             var item = this.id
                                             var ites = item.substring(11, item.length)
+                                            var charttings = label_of_ectime(data.linedata[parseInt(ites)])
                                             //截取数字
                                             var boundaries_sigle = map_toolbox_object.return_boundaries(layerstr_ecmapui[parseInt(ites)]).boundaries
                                             map.bounds = turf.bbox(boundaries_sigle);
@@ -2775,12 +2820,22 @@
                                             // 加载echart数据
 
                                             option = {
-                                                tooltip: {
-                                                    trigger: 'axis',
-                                                    axisPointer: {
-                                                        // Use axis to trigger tooltip
-                                                        type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
-                                                    }
+                                                // tooltip: {
+                                                //     trigger: 'axis',
+                                                //     axisPointer: {
+                                                //         // Use axis to trigger tooltip
+                                                //         type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
+                                                //     }
+                                                // },
+                                                title: {
+                                                    text: labels_ecmapui[parseInt(ites)],
+                                                    textStyle: {
+                                                        align: 'center',
+                                                        color: 'black',
+                                                        fontSize: 25,
+                                                    },
+                                                    top: '5%',
+                                                    left: '8%',
                                                 },
                                                 grid: {
                                                     top: '8%',
@@ -2800,20 +2855,15 @@
                                                             width: 2
                                                         }
                                                     },
-                                                    data: []
+                                                    data: charttings[0]
                                                 }],
                                                 yAxis: [{
                                                     type: 'value',
                                                     name: '',
                                                     position: 'left',
                                                     alignTicks: true,
-                                                    max: function (value) {
-                                                        return value.max + 10;
-                                                    },
-                                                    // min: function (value) {
-                                                    //     return value.min -5;
-                                                    // },
-                                                    min: 0,
+                                                    max: charttings[1],
+                                                    min: charttings[3],
                                                     // interval: 50,
                                                     splitLine: { show: false },
                                                     axisLine: {
@@ -2831,17 +2881,16 @@
                                                     name: '',
                                                     position: 'right',
                                                     alignTicks: true,
-                                                    max: function (value) {
-                                                        return value.max * 2.5;
-                                                    },
+                                                    max:  charttings[2],
                                                     min: 0,
-                                                    interval: 10,
+                                                    // interval: 10,
                                                     axisLine: {
                                                         show: true,
                                                         lineStyle: {
                                                             color: "black",
                                                             width: 2
-                                                        }
+                                                        },
+                                                        onZero:false
                                                     },
                                                     splitLine: { show: false },
                                                     axisLabel: {
@@ -2849,7 +2898,7 @@
                                                     }
                                                 }],
                                                 series: [{
-                                                    name: '插值',
+                                                    name: '总降水',
                                                     type: 'bar',
                                                     color: "red",
                                                     stack: 'Ad',
@@ -2908,12 +2957,22 @@
                                     var myChart = echarts.init(document.getElementById('chatrecmap'));
                                     // 洪家的情况
                                     option = {
-                                        tooltip: {
-                                            trigger: 'axis',
-                                            axisPointer: {
-                                                // Use axis to trigger tooltip
-                                                type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
-                                            }
+                                        // tooltip: {
+                                        //     trigger: 'axis',
+                                        //     axisPointer: {
+                                        //         // Use axis to trigger tooltip
+                                        //         type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
+                                        //     }
+                                        // },
+                                        title: {
+                                            text: "台州",
+                                            textStyle: {
+                                                align: 'center',
+                                                color: 'black',
+                                                fontSize: 25,
+                                            },
+                                            top: '5%',
+                                            left: '8%',
                                         },
                                         grid: {
                                             top: '8%',
@@ -2926,28 +2985,32 @@
                                             axisTick: {
                                                 alignWithLabel: true
                                             },
+                                            axisLabel: {
+                                                inside: false,
+                                                textStyle: {
+                                                    color: '#000',
+                                                    fontSize: '10',
+                                                    itemSize: ''
+
+                                                }
+                                            },
                                             axisLine: {
                                                 show: true,
                                                 lineStyle: {
                                                     color: "black",
                                                     width: 2
-                                                }
+                                                },
+                                                onZero:false                                                                     
                                             },
-                                            data: []
+                                            data:labelthings[0]
                                         }],
                                         yAxis: [{
                                             type: 'value',
                                             name: '',
                                             position: 'left',
                                             alignTicks: true,
-                                            max: function (value) {
-                                                return value.max + 10;
-                                            },
-                                            // min: function (value) {
-                                            //     return value.min -5;
-                                            // },
-                                            min: 0,
-                                            // interval: 50,
+                                            max: labelthings[1],
+                                            min: labelthings[3],
                                             splitLine: { show: false },
                                             axisLine: {
                                                 show: true,
@@ -2964,11 +3027,9 @@
                                             name: '',
                                             position: 'right',
                                             alignTicks: true,
-                                            max: function (value) {
-                                                return value.max * 2.5;
-                                            },
+                                            max: labelthings[2],
                                             min: 0,
-                                            interval: 10,
+                                            // interval: 10,
                                             axisLine: {
                                                 show: true,
                                                 lineStyle: {
@@ -2982,7 +3043,7 @@
                                             }
                                         }],
                                         series: [{
-                                            name: '插值',
+                                            name: '总雨量',
                                             type: 'bar',
                                             color: "red",
                                             stack: 'Ad',
@@ -3084,9 +3145,11 @@
                                                     }
                                                 }
                                                 if (intersection != null) {
+                                                
                                                     intersection.properties = feature1.properties;
                                                     intersection.id = (Math.random() * 100000).toFixed(0);
                                                     features.push(intersection);
+                                                    
                                                 }
                                             });
                                         });
@@ -3129,9 +3192,11 @@
                                                         "geometry": intersectPolygon.geometry,
                                                         "id": 0
                                                     });
+                                                    
                                                 }
                                             }
                                         }
+                                        
                                         var intersection = turf.featureCollection(features);
                                         var intersectionLay = L.geoJSON(intersection, {
                                             style: function (feature) {
@@ -3196,6 +3261,36 @@
                                             }).addTo(map_product)
                                             var intersectionLay = return_layers(grid, boundaries)
                                             intersectionLay.addTo(map_product)
+                                            if (labels[parseInt(ites)] != "台州") {
+                                                // 格点的裁剪
+                                                var shp = []
+                                                grid.features.forEach(function (feature1) {
+                                                    boundaries.features.forEach(function (feature2) {
+                                                        var point = feature1.geometry.coordinates
+                                                        var value = feature1.properties.value
+                                                        var points = turf.points([point]);
+                                                        var ptsWithin = turf.pointsWithinPolygon(feature1, feature2);
+                                                        if (ptsWithin.features.length > 0) {
+                                                            shp.push(ptsWithin)
+                                                        }
+                                                    })
+                                                })
+                                                var shpgrid = turf.featureCollection(shp);
+                                                var gridLay = L.geoJSON(shpgrid, {
+                                                    pointToLayer: function (feature, latlng) {
+                                                        //marker的icon文字
+                                                        var myIcon = L.divIcon({
+                                                            html: "<div style='color:black;font-size: 5px;'>" + feature.properties.value.toFixed(1) + "</div>",
+                                                            className: '',
+                                                            iconSize: 1
+                                                        });
+                                                        return L.marker(latlng, { icon: myIcon });
+                                                    }
+                                                });
+                                                gridLay.addTo(map_product)
+
+                                            }
+                                            
                                         }
                                         mainui.append(singlebtn)
                                     }
@@ -3222,8 +3317,8 @@
                                         }
                                     }).addTo(map_product)
                                     map_product.bounds = turf.bbox(boundaries);
-                                    var grid = data.grid
-                                    var intersectionLay = return_layers(grid, boundaries)
+                                    var grid = data.grid                                
+                                    var intersectionLay = return_layers(grid, boundaries)                                
                                     intersectionLay.addTo(map_product)
                                 }
                             })
