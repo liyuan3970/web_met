@@ -179,3 +179,18 @@ class LeaderData(BaseModel):
 
     def __str__(self):
         return "呈送发:" + self.name
+
+
+class EcData(BaseModel):
+    """存放自定义画图的数据"""
+    model_type = models.CharField(max_length=100, verbose_name="模式种类")
+    model_city = models.CharField(max_length=100, verbose_name="城市")
+    time = models.CharField(max_length=200, verbose_name="起报时间")
+    data = models.JSONField(null=False)
+
+    class Meta:
+        verbose_name = verbose_name_plural = "模式预报"
+        db_table = "ec_data"  # 通过db_table自定义数据表名
+
+    def __str__(self):
+        return str(self.model_type) +":"+ self.time

@@ -220,7 +220,6 @@ def plot_self_data(request):
     time = request.POST.get('time', '')
     title = request.POST.get('title', '')
     crf = request.POST.get('csrfmiddlewaretoken', '')
-    print(time,title)
     types = time + "----" + title
     obj = SelfPlot.objects.create(
         document_type=types,
