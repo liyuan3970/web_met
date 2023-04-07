@@ -19,3 +19,4 @@ admin.site.register(WebCache)
 # 数据相关
 admin.site.register(EcData)
 admin.site.register(SelfPlot)
+admin.site.register(DocumentAdvice)

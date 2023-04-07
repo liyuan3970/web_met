@@ -194,3 +194,18 @@ class EcData(BaseModel):
 
     def __str__(self):
         return str(self.model_type) +":"+ self.time
+
+class DocumentAdvice(BaseModel):
+    """存放材料建议的数据表"""
+    doc_city = models.CharField(max_length=100, verbose_name="创建单位")
+    doc_name = models.CharField(max_length=100, verbose_name="名称")
+    doc_time = models.CharField(max_length=200, verbose_name="创建时间")
+    doc_content = models.CharField(max_length=200, verbose_name="内容")
+    doc_label = models.CharField(max_length=200, verbose_name="标签")
+
+    class Meta:
+        verbose_name = verbose_name_plural = "材料建议库"
+        db_table = "doc_advice"  # 通过db_table自定义数据表名
+
+    def __str__(self):
+        return str(self.doc_city) +":"+ self.doc_name   
