@@ -66,9 +66,7 @@
                                         'username': $('#user').val(),
                                         'password': $('#passwd').val()
                                     },
-                                    function (result) {
-                                        
-
+                                    function (result) {                                    
                                         // {#登录成功#}
                                         if (result.code === 200) {
                                             // {#存储人物信息到本地#}
@@ -82,25 +80,9 @@
                                             localStorage.setItem("userId", data.user_id);
                                             window.location.replace('index')
                                         } else {
-                                            // {#登录不成功信息弹窗#}
                                             alert(result.err_msg)
                                         }
                                     });
-                                    // $.ajax({
-                                    //     url: "login",  // 请求的地址
-                                    //     type: "post",  // 请求方式
-                                    //     timeout: 250, //设置延迟上限
-                                    //     data: {
-                                    //         'csrfmiddlewaretoken': csrf,
-                                    //         'user': $('#user').val(),
-                                    //         'passwd': $('#passwd').val()
-                                    //     },
-                                    //     dataType: "json",
-                                    //     success: function (data) {
-                                    //         // 返回以后创建一个对象实例
-                                    //     }
-                                    // })
-
                             })
 
                         </script>

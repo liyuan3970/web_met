@@ -144,8 +144,8 @@
         <div style="background-color:rgba(57,61,73); width: 100%; height: 4%;">
             <div class="tabbable" id="tabs-01" style="display:flex;width: 100%; height: 100%;">
                 <ul class="nav nav-tabs" style="border-bottom: 0px;;font-size: 14px;font-weight:900;font-family:'宋体';width: 100%;">
-                    <li class="active">
-                        <a href="#panel-1" data-toggle="tab" style="height:35px;color: red">材料制作</a>
+                    <li >
+                        <a id="href_panel1" href="#panel-1" data-toggle="tab" style="height:35px;color: red">材料制作</a>
                     </li>
                     <li>
                         <a id="toolbox" href="#panel-2" data-toggle="tab" style="height:35px;color: red;">工具箱</a>
@@ -158,9 +158,9 @@
                         <!-- 另外添加一个说明文档 -->
                         <a id="awebsite" href="#panel-5" data-toggle="tab" style="height:35px;color: red;">快捷网址</a>
                     </li>
-                    <li style="float: right;">
+                    <li class="active" style="float: right;">
                         <!-- 另外添加一个说明文档 -->
-                        <a href="#panel-4" data-toggle="tab" style="height:35px;color: red;">登录</a>
+                        <a id="href_panel4" href="#panel-4" data-toggle="tab" style="height:35px;color: red;">登录</a>
                     </li>                 
                 </ul>
             </div>
@@ -174,7 +174,7 @@
                     <!-- 材料类型选项卡 -->
                     <div class="tab-content" style="display:block;width: 100%; height: 100%;">
                         <!-- tinymce -->
-                        <div class="tab-pane active" id="panel-1" style="width:100%;height:100%;">
+                        <div class="tab-pane" id="panel-1" style="width:100%;height:100%;">
                             <div style="display:inline-block;width:100%;height:100%">
                                 <!-- 打开功能的实现 -->
                                 <div style="width: 100%; height: 0px;">
@@ -364,7 +364,7 @@
                                                                                 text: '快速画图',
                                                                                 onAction: () => editor.windowManager.openUrl({
                                                                                     title: '画图页面',
-                                                                                    url: 'http://127.0.0.1:9991/canvas_plot',
+                                                                                    url: 'http://127.0.0.1:10001/canvas_plot',
                                                                                     height: 820,
                                                                                     width: 1300,
                                                                                 })
@@ -816,6 +816,8 @@
                                         promotion: false,
                                         plugin_plothtml_width: "300%",
                                         menubar: false,
+                                        height:1000,
+                                        autoresize_min_height:950,
                                         plugins: "newfile openfile advlist anchor autolink autosave charmap code codesample emoticons footer fullscreen help image importcss indent2em insertdatetime link lists media nonbreaking pagebreak shortmet longmet advicemet preview quickbars save searchreplace table template visualblocks wordcount lineheight selfmode",
                                         toolbar: [
                                             "newfile openfile urldialog",
@@ -850,7 +852,7 @@
                                                 text: '快速画图',
                                                 onAction: () => editor.windowManager.openUrl({
                                                     title: '画图页面',
-                                                    url: 'http://127.0.0.1:9991/canvas_plot',
+                                                    url: 'http://127.0.0.1:10001/canvas_plot',
                                                     height: 820,
                                                     width: 1300,
                                                 })
@@ -1388,11 +1390,60 @@
                                 })
                             })
                         </script>
-                        <div class="tab-pane" id="panel-4"
-                            style="width:100%;height:100%;background-color:rgb(8, 116, 167)">
-                            <p>
-                               登录
-                            </p>
+                        <div class="tab-pane  active" id="panel-4"
+                            style="width:100%;height:100%;background-image: url(static/src/metobg.png);background-size: 100%;background-repeat: no-repeat;padding-top: 30%;padding-left: 25%;">
+                            <form style="display: inline-block;width:65%;height:50%;background-color: rgb(184, 218, 91);border-radius: 15px;">
+                                <div style="width: 100%;height: 25%;text-align: center;padding-top: 15px;margin-top: 10%;">
+                                    <h2>决策材料制作系统</h2>
+                                </div>
+                                <div class="layui-form-item">    
+                                    <label class="layui-form-label" style="font-size: 25px;width: 30%;">账号:</label>
+                                    <input id="user" style="width:50%" type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入账户" class="layui-input">                              
+                                </div>
+                                <div class="layui-form-item">    
+                                    <label class="layui-form-label" style="font-size: 25px;width: 30%;">密码:</label>
+                                    <input id="passwd" style="width:50%" type="password" name="title" lay-verify="title" autocomplete="off" placeholder="请输入密码" class="layui-input">                              
+                                </div>
+                                <div style="width: 100%;height: 25%;padding-left: 55%;padding-top: 3%;">
+                                    <button type="button" class="layui-btn layui-btn">注销</button>
+                                    <button id="login" type="button" class="layui-btn layui-btn">登录</button>                                
+                                </div>
+                            </form>   
+                            <script>
+                                
+                                $("#login").click(function () {
+                                // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                $.post(
+                                    "user/login",
+                                    {
+                                        // 'csrfmiddlewaretoken': csrf,
+                                        'username': $('#user').val(),
+                                        'password': $('#passwd').val()
+                                    },
+                                    function (result) {                                    
+                                        // {#登录成功#}
+                                        if (result.code === 200) {
+                                            // {#存储人物信息到本地#}
+                                            console.log(result)
+                                            let data = result.data;
+                                            localStorage.setItem("token", data.access);
+                                            localStorage.setItem("companyName", data.company_name);
+                                            localStorage.setItem("companyType", data.company_type);
+                                            localStorage.setItem("name", data.name);
+                                            localStorage.setItem("roleType", data.role_type);
+                                            localStorage.setItem("userId", data.user_id);
+                                            console.log(data.name,data)
+                                            $("#href_panel4").html("")
+                                            $("#href_panel4").html("台州市")
+                                            $("#href_panel1").click()            
+                                            //window.location.replace('index')
+                                        } else {
+                                            alert(result.err_msg)
+                                        }
+                                    });
+                            })
+
+                        </script>                    
                         </div>
                         <div class="tab-pane" id="panel-5"
                             style="width:100%;height:100%;background-color:rgb(220,222,226);overflow: auto ;">
