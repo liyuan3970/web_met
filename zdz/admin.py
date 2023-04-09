@@ -16,6 +16,7 @@ admin.site.register(SelfModule)
 admin.site.register(WebPicture)
 admin.site.register(WebClass)
 admin.site.register(WebCache)
+admin.site.register(DocumentSelfDefine)
 # 数据相关
 admin.site.register(EcData)
 admin.site.register(SelfPlot)

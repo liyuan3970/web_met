@@ -53,6 +53,9 @@
     <link href="static/layui/css/layui.css" rel="stylesheet">
     <!-- 引入 layui.js -->
     <script src="static/layui/layui.js"></script>
+    <!-- 引入弹窗 -->
+    <script src="static/layui/layer.js"></script>
+
 
 
 
@@ -788,7 +791,7 @@
                                     <!-- <button id="convert3"
                                         style="width:40px;height:40px;background-image: url(static/src/合并.png);background-size: 100%;background-repeat: no-repeat;"></button> -->
                                     <!-- <div style="width:2%;height: 100%;"></div> -->
-                                    <button id="preview_save" type="button"
+                                    <button id="preview_save" type="button" data-method="preview_save_select"
                                         class="layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal"
                                         style="margin-top:5px">保存当前</button>
                                     <!-- <button id="preview_save"
@@ -995,66 +998,216 @@
 
                                     })
                                     //保存并预览单个模块的内容
-                                    document.getElementById('preview_save').addEventListener('click', function () {
-                                        //保存并预览单个模块的内容
-                                        var contentDocument = tinymce.get('content').getContent();
-                                        //收集上传的数据
+                                    layui.use('layer', function () { //独立版的layer无需执行这一句
+                                            // var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+                                            var layer = layui.layer;
 
-                                        var item = list_button_object.localitem
-                                        list_button_object.data[item] = contentDocument
-                                        var types = list_button_object.type
-                                        var name = list_button_object.type_list[item]
-                                        var year = list_button_object.year
-                                        var data = contentDocument
-                                        var items = list_button_object.item
-                                        var unity = list_button_object.unity
-                                        var hearder = list_button_object.render_head_info()
-                                        contentDocument = hearder + contentDocument
-                                        var formData = new FormData();
-                                        formData.append("document", contentDocument);
-                                        formData.append("item", item);
-                                        formData.append("types", types);
-                                        formData.append("name", name);
-                                        formData.append("year", year);
-                                        formData.append("data", data);
-                                        formData.append("items", items);
-                                        formData.append("unity", unity);
-                                        $.ajax({
-                                            url: "file/preview_save",  // 请求的地址
-                                            type: "POST",  // 请求方式
-                                            headers: { "Token": "Bearer " + localStorage.getItem("token") },
-                                            data: formData,
-                                            processData: false,
-                                            contentType: false,
-                                            enctype: "multipart/form-data",
-                                            responseType: "arraybuffer",
-                                            mimeType: "text/plain; charset=x-user-defined",
-                                            success: function (data) {
-                                                var rawLength = data.length;
-                                                var array = new Uint8Array(new ArrayBuffer(rawLength));
-                                                for (i = 0; i < rawLength; i++) {
-                                                    array[i] = data.charCodeAt(i) & 0xff;
-                                                }
+                                            //触发事件
+                                            var active = {
+                                                preview_save_select: function () {
+                                                    //配置一个透明的询问框
+                                                    layer.msg('是否保存为模板', {
+                                                        time: 20000, //20s后自动关闭
+                                                        btn: ['是', '否'],
+                                                        btn1: function (index, layero) {
+                                                            // 保存到模板
+                                                            layer.prompt({ title: '请输入模板名称', formType: 2,area: ['250px', '50px']  }, function (text, index) {
+                                                            // alert('演示完毕！您填写的的测试口令为：' + text);
 
-                                                var pdfBlob = new Blob([array], { type: "application/pdf;charset=utf-8" })
-                                                var pdfFile = URL.createObjectURL(pdfBlob)
-                                                const options_pdf = {
-                                                    forcePDFJS: true,
-                                                    pdfOpenParams: {
-                                                        pagemode: "thumbs",
-                                                        navpanes: 0,
-                                                        toolbar: 0,
-                                                        scrollbar: 0,
-                                                        statusbar: 0,
-                                                        view: "FitV"
-                                                    }
-                                                }
+                                                            var contentDocument = tinymce.get('content').getContent();
+                                                            //收集上传的数据
+                                                            var item = list_button_object.localitem
+                                                            list_button_object.data[item] = contentDocument
+                                                            var types = list_button_object.type
+                                                            var name = list_button_object.type_list[item]
+                                                            var year = list_button_object.year
+                                                            var data = contentDocument
+                                                            var items = list_button_object.item
+                                                            var unity = list_button_object.unity
+                                                            var hearder = list_button_object.render_head_info()
+                                                            var title = text
+                                                            contentDocument = hearder + contentDocument
+                                                            var formData = new FormData();
+                                                            formData.append("document", contentDocument);
+                                                            formData.append("item", item);
+                                                            formData.append("types", types);
+                                                            formData.append("name", name);
+                                                            formData.append("year", year);
+                                                            formData.append("data", data);
+                                                            formData.append("items", items);
+                                                            formData.append("unity", unity);
+                                                            formData.append("title", title);
+                                                            $.ajax({
+                                                                url: "file/preview_save",  // 请求的地址
+                                                                type: "POST",  // 请求方式
+                                                                headers: { "Token": "Bearer " + localStorage.getItem("token") },
+                                                                data: formData,
+                                                                processData: false,
+                                                                contentType: false,
+                                                                enctype: "multipart/form-data",
+                                                                responseType: "arraybuffer",
+                                                                mimeType: "text/plain; charset=x-user-defined",
+                                                                success: function (data) {
+                                                                    var rawLength = data.length;
+                                                                    var array = new Uint8Array(new ArrayBuffer(rawLength));
+                                                                    for (i = 0; i < rawLength; i++) {
+                                                                        array[i] = data.charCodeAt(i) & 0xff;
+                                                                    }
 
-                                                PDFObject.embed(pdfFile, "#product_view", options_pdf);
-                                            }
+                                                                    var pdfBlob = new Blob([array], { type: "application/pdf;charset=utf-8" })
+                                                                    var pdfFile = URL.createObjectURL(pdfBlob)
+                                                                    const options_pdf = {
+                                                                        forcePDFJS: true,
+                                                                        pdfOpenParams: {
+                                                                            pagemode: "thumbs",
+                                                                            navpanes: 0,
+                                                                            toolbar: 0,
+                                                                            scrollbar: 0,
+                                                                            statusbar: 0,
+                                                                            view: "FitV"
+                                                                        }
+                                                                    }
 
-                                        })
-                                    });
+                                                                    PDFObject.embed(pdfFile, "#product_view", options_pdf);
+                                                                    layer.close(index)
+                                                                    layer.closeAll();
+                                                                }
+
+                                                            })
+                                                                
+                                                            });                                                                                                           
+                                                        },
+                                                        btn2: function (index, layero) {
+                                                            // 仅保存
+                                                            var contentDocument = tinymce.get('content').getContent();
+                                                            //收集上传的数据
+                                                            var item = list_button_object.localitem
+                                                            list_button_object.data[item] = contentDocument
+                                                            var types = list_button_object.type
+                                                            var name = list_button_object.type_list[item]
+                                                            var year = list_button_object.year
+                                                            var data = contentDocument
+                                                            var items = list_button_object.item
+                                                            var unity = list_button_object.unity
+                                                            var hearder = list_button_object.render_head_info()
+                                                            contentDocument = hearder + contentDocument
+                                                            var formData = new FormData();
+                                                            formData.append("document", contentDocument);
+                                                            formData.append("item", item);
+                                                            formData.append("types", types);
+                                                            formData.append("name", name);
+                                                            formData.append("year", year);
+                                                            formData.append("data", data);
+                                                            formData.append("items", items);
+                                                            formData.append("unity", unity);
+                                                            $.ajax({
+                                                                url: "file/preview_save",  // 请求的地址
+                                                                type: "POST",  // 请求方式
+                                                                headers: { "Token": "Bearer " + localStorage.getItem("token") },
+                                                                data: formData,
+                                                                processData: false,
+                                                                contentType: false,
+                                                                enctype: "multipart/form-data",
+                                                                responseType: "arraybuffer",
+                                                                mimeType: "text/plain; charset=x-user-defined",
+                                                                success: function (data) {
+                                                                    var rawLength = data.length;
+                                                                    var array = new Uint8Array(new ArrayBuffer(rawLength));
+                                                                    for (i = 0; i < rawLength; i++) {
+                                                                        array[i] = data.charCodeAt(i) & 0xff;
+                                                                    }
+
+                                                                    var pdfBlob = new Blob([array], { type: "application/pdf;charset=utf-8" })
+                                                                    var pdfFile = URL.createObjectURL(pdfBlob)
+                                                                    const options_pdf = {
+                                                                        forcePDFJS: true,
+                                                                        pdfOpenParams: {
+                                                                            pagemode: "thumbs",
+                                                                            navpanes: 0,
+                                                                            toolbar: 0,
+                                                                            scrollbar: 0,
+                                                                            statusbar: 0,
+                                                                            view: "FitV"
+                                                                        }
+                                                                    }
+
+                                                                    PDFObject.embed(pdfFile, "#product_view", options_pdf);
+                                                                }
+
+                                                            })
+
+                                                        }
+                                                    });
+                                                },
+
+                                            };
+
+                                            $('#preview_save').on('click', function () {
+                                                var othis = $(this), method = othis.data('method');
+                                                active[method] ? active[method].call(this, othis) : '';
+                                            });
+                                        });
+                                    // document.getElementById('preview_save').addEventListener('click', function () {
+                                    //     //保存并预览单个模块的内容
+                                    //     var contentDocument = tinymce.get('content').getContent();
+                                    //     //收集上传的数据
+                                    //     var item = list_button_object.localitem
+                                    //     list_button_object.data[item] = contentDocument
+                                    //     var types = list_button_object.type
+                                    //     var name = list_button_object.type_list[item]
+                                    //     var year = list_button_object.year
+                                    //     var data = contentDocument
+                                    //     var items = list_button_object.item
+                                    //     var unity = list_button_object.unity
+                                    //     var hearder = list_button_object.render_head_info()
+                                    //     contentDocument = hearder + contentDocument
+                                    //     var formData = new FormData();
+                                    //     formData.append("document", contentDocument);
+                                    //     formData.append("item", item);
+                                    //     formData.append("types", types);
+                                    //     formData.append("name", name);
+                                    //     formData.append("year", year);
+                                    //     formData.append("data", data);
+                                    //     formData.append("items", items);
+                                    //     formData.append("unity", unity);
+                                    //     $.ajax({
+                                    //         url: "file/preview_save",  // 请求的地址
+                                    //         type: "POST",  // 请求方式
+                                    //         headers: { "Token": "Bearer " + localStorage.getItem("token") },
+                                    //         data: formData,
+                                    //         processData: false,
+                                    //         contentType: false,
+                                    //         enctype: "multipart/form-data",
+                                    //         responseType: "arraybuffer",
+                                    //         mimeType: "text/plain; charset=x-user-defined",
+                                    //         success: function (data) {
+                                    //             var rawLength = data.length;
+                                    //             var array = new Uint8Array(new ArrayBuffer(rawLength));
+                                    //             for (i = 0; i < rawLength; i++) {
+                                    //                 array[i] = data.charCodeAt(i) & 0xff;
+                                    //             }
+
+                                    //             var pdfBlob = new Blob([array], { type: "application/pdf;charset=utf-8" })
+                                    //             var pdfFile = URL.createObjectURL(pdfBlob)
+                                    //             const options_pdf = {
+                                    //                 forcePDFJS: true,
+                                    //                 pdfOpenParams: {
+                                    //                     pagemode: "thumbs",
+                                    //                     navpanes: 0,
+                                    //                     toolbar: 0,
+                                    //                     scrollbar: 0,
+                                    //                     statusbar: 0,
+                                    //                     view: "FitV"
+                                    //                 }
+                                    //             }
+
+                                    //             PDFObject.embed(pdfFile, "#product_view", options_pdf);
+                                    //         }
+
+                                    //     })
+
+
+                                    // });
 
                                 </script>
 
@@ -1204,7 +1357,7 @@
                                         var d = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
                                         var h = today.getHours() < 10 ? "0" + today.getHours() + ":00:00" : today.getHours() + ":00:00";
                                         var today_str = y + "-" + m + "-" + d + " " + h;
-                                        var seven_day = getNextDate(today_str, day=-7) 
+                                        var seven_day = getNextDate(today_str, day=-30) 
                                         seven_day = seven_day + " " + h
                                         function date_to_str(date){
                                             var year = date.year 
@@ -2019,7 +2172,8 @@
                                 weight: 10
                             };
                             var isobands_options = map_toolbox_object.color_level(plot_type).isobands_options 
-                            var levelV = map_toolbox_object.color_level(plot_type).levelV;         
+                            var levelV = map_toolbox_object.color_level(plot_type).levelV;
+                            // var levelV = [0, 0.1, 10, 25, 50, 100, 250]         
                             // var isobands_options = {
                             //     zProperty: "value",
                             //     commonProperties: {

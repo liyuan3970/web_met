@@ -167,8 +167,6 @@ class WebCache(BaseModel):
 class LeaderData(BaseModel):
     """呈发送"""
     name = models.CharField(max_length=20, verbose_name="呈送发对象")
-    picture_list = models.CharField(
-        max_length=20, verbose_name="二维码种类")  # 存放二维码的字典
     service_name = models.TextField(max_length=21844, verbose_name="呈报对象")
     service_unity = models.TextField(max_length=21844, verbose_name="发布单位")
     receive_unity = models.TextField(max_length=21844, verbose_name="抄送单位")
@@ -209,3 +207,20 @@ class DocumentAdvice(BaseModel):
 
     def __str__(self):
         return str(self.doc_city) +":"+ self.doc_name   
+
+
+class DocumentSelfDefine(BaseModel):
+    """存放自定义材料模块"""
+    document_type = models.CharField(max_length=200, verbose_name="材料类别")
+    name = models.CharField(max_length=200, verbose_name="模块名称")
+    item = models.IntegerField(verbose_name="期数")
+    year = models.IntegerField(verbose_name="年份")
+    unity = models.CharField(max_length=200, verbose_name="单位")
+    data = models.JSONField(null=False)
+
+    class Meta:
+        verbose_name = verbose_name_plural = "自定义材料"
+        db_table = "doc_self_mode"  # 通过db_table自定义数据表名
+
+    def __str__(self):
+        return str(self.document_type) + ":" + self.name

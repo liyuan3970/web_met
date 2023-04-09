@@ -408,22 +408,28 @@ def tinymce_footer(request):
         v['receive_unity'] = version['receive_unity']
         version_list.append(v)
     datalist = func.decode_footer(version_list)
-    images = Picture.objects.all().values()
-    image_list = []
-    for image in images:
-        single = {
-            'name': image['name'],
-            'src': image['img']
-        }
-        image_list.append(single)
-    html_png = func.footer_png(image_list)
     context = {
         'status': "ok",
-        'datalist': datalist,
-        'html_png': html_png
+        'datalist': datalist
     }
     return JsonResponse(context)
 
+# 自定义模块的代码
+def tinymce_selfmode(request):
+    versions = DocumentSelfDefine.objects.all().values()
+    version_list = []
+    for version in versions:
+        print("-----------------------",version)
+        v = {}
+        v['value'] = version['data']['data']
+        v['text'] = version['name']
+        version_list.append(v)
+    # datalist = func.decode_footer(version_list)
+    context = {
+        'status': "ok",
+        'datalist':version_list
+    }
+    return JsonResponse(context)
 
 # 获取呈送发的数据
 def leader_Data_post(request):

@@ -26,6 +26,8 @@ urlpatterns = [
     path('history_file', views.history_file),
     # tinymce插件footer
     path('tinymce/footer', views.tinymce_footer),
+    # tinymce插件selfmode
+    path('tinymce/selfmode', views.tinymce_selfmode),
     # 十天数据的获取
     path('tinymce/longmet', views.longmet),
     # 短期数据的获取
@@ -38,7 +40,6 @@ urlpatterns = [
     path('upload_select_taizhou_data', views.upload_select_taizhou_data),
     # 订正时次
     path('upload_select_taizhou_data/item', views.upload_select_taizhou_data),
-
     # 打开文件（查询select的选项）
     path('open_old_doc', views.open_old_doc),
     # 打开所选类型的文档并展开列表

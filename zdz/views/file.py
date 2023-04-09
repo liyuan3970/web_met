@@ -28,6 +28,7 @@ class FileViewSet(viewsets.ViewSet):
         year = request.data["year"]
         data = request.data["data"]
         unity = request.data["unity"]
+        title = request.data["title"]
         context = {
             "id": item,
             "data": data
@@ -44,9 +45,19 @@ class FileViewSet(viewsets.ViewSet):
             update_user=0
         )
         print("数据保存成功")
-
+        # 保存模板
+        if title:
+            obj = DocumentSelfDefine.objects.create(
+                document_type=document_type,
+                name=title,
+                item=items,
+                year=year,
+                unity=unity,
+                data=context,
+                create_user=0,
+                update_user=0
+            )
         pdf_file = HTML(string=document)
-
         pdf_file = pdf_file.write_pdf(presentational_hints=True)
         return HttpResponse(pdf_file, content_type="application/pdf")
 
