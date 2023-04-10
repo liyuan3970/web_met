@@ -703,7 +703,7 @@
                                         </div>
 
                                     </div>
-                                    <!-- 删除 -->
+                                    <!-- 建议模块 -->
                                     <div class="modal fade" id="modal-container-000003" role="dialog"
                                         aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -722,7 +722,7 @@
                                                     <button type="button" class="btn btn-default"
                                                         data-dismiss="modal">关闭
                                                     </button>
-                                                    <button type="button" class="btn btn-primary">保存
+                                                    <button id="doc_advice_save" data-dismiss="modal" type="button" class="btn btn-primary">保存
                                                     </button>
                                                 </div>
                                             </div>
@@ -864,12 +864,22 @@
 
 
                                     });
-
+                                    
+                                    const tinymce_obj = {
+                                        data:undefined
+                                    }    
                                     // tinymce接收数据
                                     window.addEventListener('message', function (event) {
                                         var data = event.data;
+                                        tinymce_obj.data = data
+                                        // editor.insertContent(data);
                                         // console.log('message received from TinyMCE', data);
                                     });
+                                    // 保存按钮的加载数据
+                                    $("#doc_advice_save").click(function () {
+                                        var editor = tinymce.get('content')
+                                        editor.insertContent(tinymce_obj.data);
+                                    })
 
                                     //仅预览内容
                                     document.getElementById('convert').addEventListener('click', function () {

@@ -26,6 +26,8 @@ urlpatterns = [
     path('history_file', views.history_file),
     # tinymce插件footer
     path('tinymce/footer', views.tinymce_footer),
+    # tinymce插件advicemet
+    path('tinymce/advicemet', views.tinymce_advicemet),
     # tinymce插件selfmode
     path('tinymce/selfmode', views.tinymce_selfmode),
     # 十天数据的获取

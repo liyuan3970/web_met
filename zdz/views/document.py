@@ -414,6 +414,24 @@ def tinymce_footer(request):
     }
     return JsonResponse(context)
 
+# 建议库的代码
+def tinymce_advicemet(request):
+    versions = DocumentAdvice.objects.all().values()
+    version_list = []
+    for version in versions:
+        v = {}
+        v['value'] = version['doc_content']
+        v['title'] = version['doc_name']
+        v['disabled'] = ""
+        v['checked'] = ""
+        v['label'] = version['doc_label']
+        version_list.append(v)
+    context = {
+        'status': "ok",
+        'datalist':version_list
+    }
+    return JsonResponse(context)
+
 # 自定义模块的代码
 def tinymce_selfmode(request):
     versions = DocumentSelfDefine.objects.all().values()
