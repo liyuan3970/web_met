@@ -861,8 +861,6 @@
                                                 })
                                             })
                                         },
-
-
                                     });
                                     
                                     const tinymce_obj = {
@@ -2961,7 +2959,6 @@
                                 // console.log(,Math.max.apply(null,data.cp),data)
                                 return [label_x,labmax,rainlabel,labmin]
                             }
-
                             var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries
                             $('#product_view').html(" ")
                             var csrf = $('input[name="csrfmiddlewaretoken"]').val();
@@ -2979,25 +2976,29 @@
                                     load = showLoad();
                                 },
                                 success: function (data) {
-                                    console.log("tool_ec", data)
+                                    // console.log("tool_ec", data)
                                     var labelthings = label_of_ectime(data.linedata[0])
                                     // var serverdata = JSON.parse(data)  
                                     var product_view = document.getElementById("product_view")
                                     product_view.style = ";width:100%;height:100%;background-color:white;;padding:30px;"
                                     // 绘图的核心程序
                                     var mapdiv = document.createElement('div')
-                                    mapdiv.style = "width: 100%;height:100%;border: 1px solid rgb(75, 73, 73);margin-bottom:15px;border-radius:15px;"
+                                    mapdiv.style = "width: 100%;height:50%;border: 1px solid rgb(75, 73, 73);margin-bottom:15px;border-radius:15px;"
                                     mapdiv.id = "ecmapview"
                                     // 按钮组
                                     var main_ecmapui = document.createElement("div")
                                     main_ecmapui.style = "position:absolute;text-align: center;width: 6%;height: 35%;top:10%;left:54%;padding-top:10px;overflow-x: hidden;overflow-y: scroll;"
                                     main_ecmapui.id = "main_ecmapui"
                                     main_ecmapui.setAttribute("class", "scrollbar_self")
+                                    // 显示组合
+                                    var main_line = document.createElement("div")
+                                    main_line.style = "width: 100%;height:50%;border: 1px solid rgb(75, 73, 73);margin-bottom:15px;border-radius:15px;"
+                                    main_line.id = "chatrecmap"
 
                                     // 按钮组 事件
                                     var labels_ecmapui = ["台州", "玉环", "温岭", "三门", "天台", "仙居", "临海", "路桥", "椒江", "黄岩"]
                                     var layerstr_ecmapui = [taizhou_map, yuhuan_map, wenling_map, sanmen_map, tiantai_map, xianju_map, linhai_map, luqiao_map, jiaojiang_map, huangyan_map]
-                                    var Lat = [27.6, 27.9, 28.1, 28.8, 28.91, 28.25, 28.3, 28.4, 28.4, 28.3]
+                                    var Lat = [28.5, 28.2, 28.4, 29.0, 29.11, 28.7, 28.8, 28.55, 28.65, 28.55]
                                     var Lon = [120.7, 121.2, 121.3, 121.4, 121.0, 120.70, 121.1, 121.4, 121.4, 121.0]
                                     var zoon = [8, 10, 10, 10, 10, 9, 9, 11, 10, 10, 10]
                                     for (var i = 0; i < labels_ecmapui.length; i++) {
@@ -3140,10 +3141,10 @@
                                         }
                                         main_ecmapui.append(singlebtn)
                                     }
-                                    product_view.append(mapdiv, main_ecmapui)
+                                    product_view.append(mapdiv, main_ecmapui,main_line)
                                     // 加载地图
                                     var map = new L.Map('ecmapview', {
-                                        center: new L.LatLng(27.6, 120.7),//110.763, 41.376   39.62353145, 121.9937485
+                                        center: new L.LatLng(28.5, 120.7),//110.763, 41.376   39.62353145, 121.9937485
                                         zoom: 8, //4
                                         zoomControl: false,
                                         dragging: true,
@@ -3161,24 +3162,24 @@
                                     var plot_type = "rain"
                                     var main_intersectionLay = map_toolbox_object.return_shp(boundaries, data.plotdata,plot_type).intersectionLay
                                     main_intersectionLay.addTo(map)
-                                    var chart = L.control({ position: 'bottomright' });
-                                    chart.onAdd = function (map) {
-                                        var div = L.DomUtil.create('div', 'info chartecmap');
-                                        div.id = "chatrecmap";
-                                        return div;
-                                    };
-                                    chart.addTo(map);
+                                    // var chart = L.control({ position: 'bottomright' });
+                                    // chart.onAdd = function (map) {
+                                    //     var div = L.DomUtil.create('div', 'info chartecmap');
+                                    //     div.id = "chatrecmap";
+                                    //     return div;
+                                    // };
+                                    // chart.addTo(map);
                                     // 基于准备好的dom，初始化echarts实例
                                     var myChart = echarts.init(document.getElementById('chatrecmap'));
                                     // 洪家的情况
                                     option = {
-                                        // tooltip: {
-                                        //     trigger: 'axis',
-                                        //     axisPointer: {
-                                        //         // Use axis to trigger tooltip
-                                        //         type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
-                                        //     }
-                                        // },
+                                        tooltip: {
+                                            trigger: 'axis',
+                                            axisPointer: {
+                                                // Use axis to trigger tooltip
+                                                type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
+                                            }
+                                        },
                                         title: {
                                             text: "台州",
                                             textStyle: {
