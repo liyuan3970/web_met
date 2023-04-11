@@ -287,6 +287,16 @@
                                                                             // console.log(png_add_list)
 
                                                                         })
+                                                                        $("#new_document_type").change(function () {
+                                                                            // console.log(this.value)
+                                                                            var select_value = this.value
+                                                                            for (var i=0;i<doc_item_obj.selecttlist.length;i++){
+                                                                                if (doc_item_obj.selecttlist[i].doctype==select_value){
+                                                                                    var item = document.getElementById("document_item")
+                                                                                    item.value = doc_item_obj.selecttlist[i].docitem + 1
+                                                                                }
+                                                                            }
+                                                                        })
 
 
                                                                     </script>
@@ -428,9 +438,7 @@
                                                         var content_doc = ""
                                                         for (var i = 0; i < png_add_list.length; i++) {
                                                             content_doc = content_doc + png_add_list[i] + ","
-
                                                         }
-
                                                         // 告诉后端创建一个新的数据，并在前端修改文档标识
                                                         $.ajax({
                                                             url: "create_doc_data",  // 请求的地址
@@ -467,7 +475,11 @@
                                         </div>
 
                                     </div>
+                                    
                                     <script type="text/javascript">
+                                        const doc_item_obj  = {
+                                            selecttlist :undefined
+                                        }
                                         $('#modal-000001').click(function () {
                                             // console.log('新建文档')
                                             png_add_list = []
@@ -486,10 +498,14 @@
                                                     // 'data_writers': data_writers,
                                                     // 'data_unity': data_unity,
                                                     // 'data_documenttype': data_documenttype
+                                                    doc_item_obj.selecttlist = data.data_item
                                                     $('#new_document_publisher').html("")
                                                     $('#new_document_writer').html("")
                                                     $('#new_document_unity').html("")
                                                     $('#new_document_type').html("")
+                                                    
+                                                    var doc_item = document.getElementById("document_item")
+                                                    doc_item.value = data.data_item[0].docitem +1
                                                     for (i = 0; i < data.data_publisher.length; i++) {
                                                         var option_publisher = document.createElement('option');
                                                         option_publisher.value = data.data_publisher[i]

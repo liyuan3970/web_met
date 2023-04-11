@@ -276,12 +276,26 @@ def create_new_doc(request):
     data_writers = [i['name'] for i in writers]
     data_unity = [i['name'] for i in unity]
     data_documenttype = [i['name'] for i in documenttype]
-    # #print("返回数据",writers)
+    data_item = []
+    for doc_type in data_documenttype:
+        ite = SelfModule.objects.filter(document_type=doc_type).order_by('-item')
+        if ite:
+            singleitem = {
+                'docitem':ite[0].item,
+                'doctype':doc_type
+            }
+        else:
+            singleitem = {
+                'docitem':1,
+                'doctype':doc_type
+            }  
+        data_item.append(singleitem)  
     context = {
         'data_publisher': data_publisher,
         'data_writers': data_writers,
         'data_unity': data_unity,
-        'data_documenttype': data_documenttype
+        'data_documenttype': data_documenttype,
+        'data_item':data_item
     }
     return JsonResponse(context)
 
