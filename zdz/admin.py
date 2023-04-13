@@ -21,3 +21,5 @@ admin.site.register(DocumentSelfDefine)
 admin.site.register(EcData)
 admin.site.register(SelfPlot)
 admin.site.register(DocumentAdvice)
+# 用户
+admin.site.register(User)

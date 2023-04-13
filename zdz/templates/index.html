@@ -1501,7 +1501,7 @@
                                         var view_first = data.doc_list[0]
                                         for (i = 0; i < view_first['filelist'].length; i++) {
                                             var divcontenter = document.createElement('div')
-                                            divcontenter.style = "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 10%;width:98%;text-align:center;;padding-top:1px;border-radius:5px;margin:5px;background-color:rgb(0,150,136);"
+                                            divcontenter.style = "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 10%;width:98%;text-align:center;;padding-top:5px;border-radius:5px;margin:5px;background-color:rgb(0,150,136);"
                                             divcontenter.setAttribute("class", "tool_history_button")
                                             var labelitem = document.createElement('label')
                                             labelitem.style = "width:15%;text-align:center;;vertical-align: middle;color:white"
@@ -1519,7 +1519,7 @@
                                         // 材料类型
                                         for (var i = 0; i < button_list.length; i++) {
                                             var button = document.createElement('button')
-                                            button.style = "display:inline-flex;height:100%;width:15%;padding-top:3px;text-align:center;;background-color:rgb(45, 104, 221);border-top-left-radius: 5px;border-top-right-radius:5px;;font-size: 20px;font-weight:900;font-family:'宋体';color:white;border:none;margin-right:3px;"
+                                            button.style = "display:inline-flex;height:100%;width:15%;padding-top:8px;text-align:center;;background-color:rgb(45, 104, 221);border-top-left-radius: 5px;border-top-right-radius:5px;;font-size: 20px;font-weight:900;font-family:'宋体';color:white;border:none;margin-right:3px;"
                                             button.id = "history" + i.toString()
                                             button.innerText = button_list[i]['name']
                                             button.addEventListener("click", function (e) {
@@ -1569,7 +1569,7 @@
                         </script>
                         <div class="tab-pane  active" id="panel-4"
                             style="width:100%;height:100%;background-image: url(static/src/metobg.png);background-size: 100%;background-repeat: no-repeat;padding-top: 30%;padding-left: 25%;">
-                            <form style="display: inline-block;width:65%;height:50%;background-color: rgb(184, 218, 91);border-radius: 15px;">
+                            <form id="login_form" style="display: inline-block;width:65%;height:50%;background-color: rgb(184, 218, 91);border-radius: 15px;">
                                 <div style="width: 100%;height: 25%;text-align: center;padding-top: 15px;margin-top: 10%;">
                                     <h2>决策材料制作系统</h2>
                                 </div>
@@ -1582,43 +1582,101 @@
                                     <input id="passwd" style="width:50%" type="password" name="title" lay-verify="title" autocomplete="off" placeholder="请输入密码" class="layui-input">                              
                                 </div>
                                 <div style="width: 100%;height: 25%;padding-left: 55%;padding-top: 3%;">
-                                    <button type="button" class="layui-btn layui-btn">注销</button>
+                                    <button id="register" type="button" class="layui-btn layui-btn">注册</button>
                                     <button id="login" type="button" class="layui-btn layui-btn">登录</button>                                
                                 </div>
-                            </form>   
+                            </form>  
+                            <!-- 注册 -->
+                            <form id="form_register" class="layui-form layui-form-pane" style="display:none" >
+                                <div style="width: 100%;height: 15%;padding-top: 10px;margin-top: 1%;padding-left:30px;">
+                                    <h3>注册界面</h3>
+                                </div>
+                                <div class="layui-form-item">    
+                                    <label class="layui-form-label" style="font-size: 25px;width: 30%;;background-color: rgb(184, 218, 91);">用户:</label>
+                                    <input  style="width:64%" type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入账户" class="layui-input">                              
+                                </div>
+                                <div class="layui-form-item">    
+                                    <label class="layui-form-label" style="font-size: 25px;width: 30%;;background-color: rgb(184, 218, 91);">密码:</label>
+                                    <input style="width:64%" type="password" name="title" lay-verify="title" autocomplete="off" placeholder="请输入密码" class="layui-input">                            
+                                </div>
+                                <div class="layui-form-item">    
+                                    <label class="layui-form-label" style="font-size: 25px;width: 30%;;background-color: rgb(184, 218, 91);">确认:</label> 
+                                    <input style="width:64%" type="password" name="title" lay-verify="title" autocomplete="off" placeholder="请输入密码" class="layui-input">                              
+                                </div>
+                                <div class="layui-form-item">    
+                                    <label class="layui-form-label" style="font-size: 25px;width: 30%;;background-color: rgb(184, 218, 91);">姓名:</label>
+                                    <input style="width:64%" type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入密码" class="layui-input">                              
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label"  style="font-size: 25px;width: 30%;;background-color: rgb(184, 218, 91);">选项:</label>
+                                    <div class="layui-input-inline" style="width: 20%;">
+                                        <select >                                     
+                                            <option value="省级" selected="">省级</option>
+                                            <option value="市级">市级</option>
+                                            <option value="县级">县级</option>
+                                        </select>
+                                    </div>
+                                    <div class="layui-input-inline" style="width: 20%;">
+                                        <select >
+                                            <option value="领导">领导</option>
+                                            <option value="高工">高工</option>
+                                            <option value="预报员">预报员</option>
+                                        </select>
+                                    </div>
+                                    <div class="layui-input-inline" style="width: 20%;">
+                                        <select >                                       
+                                            <option value="台州市">台州市</option>
+                                            <option value="绍兴市">绍兴市</option>
+                                            <option value="温州市">温州市</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div style="width: 100%;height: 25%;padding-left: 60%;padding-top: 3%;">
+                                    <button id="reg_back" type="button" class="layui-btn layui-btn">返回</button>
+                                    <button id="reg_post" type="button" class="layui-btn layui-btn">注册</button>                                
+                                </div>
+                            </form> 
                             <script>
-                                
+                                $("#register").click(function () {
+                                    // login_form
+                                    $("#form_register").attr("style","display: inline-block;width:70%;height:60%;background-color: rgb(184, 218, 91);border-radius: 15px;")
+                                    $("#login_form").attr("style","display:none;width:65%;height:50%;background-color: rgb(184, 218, 91);border-radius: 15px;")
+                                })
+                                $("#reg_back").click(function () {
+                                    $("#form_register").attr("style","display:none;width:65%;height:50%;background-color: rgb(184, 218, 91);border-radius: 15px;")
+                                    $("#login_form").attr("style","display:inline-block;width:65%;height:50%;background-color: rgb(184, 218, 91);border-radius: 15px;")
+                                })
                                 $("#login").click(function () {
-                                // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                                $.post(
-                                    "user/login",
-                                    {
-                                        // 'csrfmiddlewaretoken': csrf,
-                                        'username': $('#user').val(),
-                                        'password': $('#passwd').val()
-                                    },
-                                    function (result) {                                    
-                                        // {#登录成功#}
-                                        if (result.code === 200) {
-                                            // {#存储人物信息到本地#}
-                                            console.log(result)
-                                            let data = result.data;
-                                            localStorage.setItem("token", data.access);
-                                            localStorage.setItem("companyName", data.company_name);
-                                            localStorage.setItem("companyType", data.company_type);
-                                            localStorage.setItem("name", data.name);
-                                            localStorage.setItem("roleType", data.role_type);
-                                            localStorage.setItem("userId", data.user_id);
-                                            console.log(data.name,data)
-                                            $("#href_panel4").html("")
-                                            $("#href_panel4").html("台州市")
-                                            $("#href_panel1").click()            
-                                            //window.location.replace('index')
-                                        } else {
-                                            alert(result.err_msg)
-                                        }
-                                    });
-                            })
+                                        // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                        $.post(
+                                            "user/login",
+                                            {
+                                                // 'csrfmiddlewaretoken': csrf,
+                                                'username': $('#user').val(),
+                                                'password': $('#passwd').val()
+                                            },
+                                            function (result) {
+                                                // {#登录成功#}
+                                                if (result.code === 200) {
+                                                    // {#存储人物信息到本地#}
+                                                    console.log("登录成功", result)
+                                                    let data = result.data;
+                                                    localStorage.setItem("token", data.access);
+                                                    localStorage.setItem("companyName", data.company_name);
+                                                    localStorage.setItem("companyType", data.company_type);
+                                                    localStorage.setItem("name", data.name);
+                                                    localStorage.setItem("roleType", data.role_type);
+                                                    localStorage.setItem("userId", data.user_id);
+
+                                                    $("#href_panel4").html("")
+                                                    $("#href_panel4").html("台州市")
+                                                    $("#href_panel1").click()
+                                                    //window.location.replace('index')
+                                                } else {
+                                                    alert(result.err_msg)
+                                                }
+                                            });
+                                    })
 
                         </script>                    
                         </div>
