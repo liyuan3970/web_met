@@ -2,9 +2,7 @@ from django.contrib.auth.hashers import make_password
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers, status
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
-
 from ..models import User
-
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,19 +12,16 @@ class RegisterSerializer(serializers.ModelSerializer):
             "password",
             "name"
         ]
-
     def validate(self, attrs):
         # todo 参数校验
         # 密码加密
         attrs["password"] = make_password(attrs["password"])
         return attrs
 
-
 class LoginSerializer(TokenObtainPairSerializer):
     default_error_messages = {
         "no_active_account": _("No active account found with the given credentials")
     }
-
     def validate(self, attrs):
         data = super().validate(attrs)
         refresh = self.get_token(self.user)
@@ -44,19 +39,17 @@ class LoginSerializer(TokenObtainPairSerializer):
         }
         return ret
 
-
 class LoginRefreshSerializer(TokenRefreshSerializer):
     default_error_messages = {
         "no_active_account": _("No active account found with the given credentials")
     }
-
     def validate(self, attrs):
         data = super().validate(attrs)
-
         ret = {
             "code": status.HTTP_200_OK,
             "msg": "success",
             "data": data
         }
-
         return ret
+
+

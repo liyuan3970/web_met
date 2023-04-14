@@ -779,8 +779,7 @@
                                     <!-- 文件头 -->
                                 </div>
                                 <div style="display:inline-flex;width: 100%; height: 96%">
-                                    <textarea id="content" style="width:100%;height: 100%;">
-                                    </textarea>
+                                    <textarea id="content" style="width:100%;height: 100%;"></textarea>
                                 </div>
                                 <div style="display: inline-flex;width:100%;height: 5%;background-color: rgb(247, 248, 248);">
                                     <div style="width:85%;height: 100%">
@@ -898,6 +897,7 @@
                                     //仅预览内容
                                     document.getElementById('convert').addEventListener('click', function () {
                                         //获取html的内容
+                                        console.log("预览测试",localStorage.getItem('name'))
                                         if (list_button_object.data.length > 0) {
                                             var contentDocument = ""
                                             for (var i = 0; i < list_button_object.data.length; i++) {
@@ -907,8 +907,6 @@
                                                 } else {
                                                     contentDocument = contentDocument + list_button_object.data[i]
                                                 }
-
-                                                // contentDocument = contentDocument + list_button_object.data[i]
                                             }
                                         } else {
                                             var contentDocument = tinymce.get('content').getContent();
@@ -919,7 +917,6 @@
                                         //console.log(contentDocument)
                                         var formData = new FormData();
                                         formData.append("document", contentDocument);
-
                                         $.ajax({
                                             url: "file/pdf",  // 请求的地址
                                             type: "POST",  // 请求方式
@@ -1569,7 +1566,7 @@
                         </script>
                         <div class="tab-pane  active" id="panel-4"
                             style="width:100%;height:100%;background-image: url(static/src/metobg.png);background-size: 100%;background-repeat: no-repeat;padding-top: 30%;padding-left: 25%;">
-                            <form id="login_form" style="display: inline-block;width:65%;height:50%;background-color: rgb(184, 218, 91);border-radius: 15px;">
+                            <form id="login_form" style="display: inline-block;width:65%;height:50%;background-color: rgb(184, 218, 91,0.1);border-radius: 15px;">
                                 <div style="width: 100%;height: 25%;text-align: center;padding-top: 15px;margin-top: 10%;">
                                     <h2>决策材料制作系统</h2>
                                 </div>
@@ -1588,43 +1585,43 @@
                             </form>  
                             <!-- 注册 -->
                             <form id="form_register" class="layui-form layui-form-pane" style="display:none" >
-                                <div style="width: 100%;height: 15%;padding-top: 10px;margin-top: 1%;padding-left:30px;">
-                                    <h3>注册界面</h3>
+                                <div style="width: 100%;height: 15%;padding-top: 10px;margin-top: 1%;padding-left:30px;;text-align: center;">
+                                    <h2>注册界面</h2>
                                 </div>
                                 <div class="layui-form-item">    
-                                    <label class="layui-form-label" style="font-size: 25px;width: 30%;;background-color: rgb(184, 218, 91);">用户:</label>
-                                    <input  style="width:64%" type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入账户" class="layui-input">                              
+                                    <label class="layui-form-label" style="font-size: 25px;width: 30%;background-color: rgb(184, 218, 91,0);;border: none;">用户:</label>
+                                    <input id="reg_user"  style="width:55%" type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入账户" class="layui-input">                              
                                 </div>
                                 <div class="layui-form-item">    
-                                    <label class="layui-form-label" style="font-size: 25px;width: 30%;;background-color: rgb(184, 218, 91);">密码:</label>
-                                    <input style="width:64%" type="password" name="title" lay-verify="title" autocomplete="off" placeholder="请输入密码" class="layui-input">                            
+                                    <label class="layui-form-label" style="font-size: 25px;width: 30%;background-color: rgb(184, 218, 91,0);border: none;">密码:</label>
+                                    <input id="reg_password" style="width:55%" type="password" name="title" lay-verify="title" autocomplete="off" placeholder="请输入密码" class="layui-input">                            
                                 </div>
                                 <div class="layui-form-item">    
-                                    <label class="layui-form-label" style="font-size: 25px;width: 30%;;background-color: rgb(184, 218, 91);">确认:</label> 
-                                    <input style="width:64%" type="password" name="title" lay-verify="title" autocomplete="off" placeholder="请输入密码" class="layui-input">                              
+                                    <label class="layui-form-label" style="font-size: 25px;width: 30%;background-color: rgb(184, 218, 91,0);border: none;">确认:</label> 
+                                    <input id="reg_rpassword" style="width:55%" type="password" name="title" lay-verify="title" autocomplete="off" placeholder="请输入密码" class="layui-input">                              
                                 </div>
                                 <div class="layui-form-item">    
-                                    <label class="layui-form-label" style="font-size: 25px;width: 30%;;background-color: rgb(184, 218, 91);">姓名:</label>
-                                    <input style="width:64%" type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入密码" class="layui-input">                              
+                                    <label class="layui-form-label" style="font-size: 25px;width: 30%;background-color: rgb(184, 218, 91,0);border: none;">姓名:</label>
+                                    <input id="reg_name" style="width:55%" type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入姓名" class="layui-input">                              
                                 </div>
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label"  style="font-size: 25px;width: 30%;;background-color: rgb(184, 218, 91);">选项:</label>
-                                    <div class="layui-input-inline" style="width: 20%;">
-                                        <select >                                     
+                                    <label class="layui-form-label"  style="font-size: 25px;width: 30%;background-color: rgb(184, 218, 91,0);border: none;">选项:</label>
+                                    <div class="layui-input-inline" style="width: 17%;">
+                                        <select id="reg_province" >                                     
                                             <option value="省级" selected="">省级</option>
                                             <option value="市级">市级</option>
                                             <option value="县级">县级</option>
                                         </select>
                                     </div>
-                                    <div class="layui-input-inline" style="width: 20%;">
-                                        <select >
+                                    <div class="layui-input-inline" style="width: 17%;">
+                                        <select id="reg_charter">
                                             <option value="领导">领导</option>
                                             <option value="高工">高工</option>
                                             <option value="预报员">预报员</option>
                                         </select>
                                     </div>
-                                    <div class="layui-input-inline" style="width: 20%;">
-                                        <select >                                       
+                                    <div class="layui-input-inline" style="width: 17%;">
+                                        <select id="reg_city">                                       
                                             <option value="台州市">台州市</option>
                                             <option value="绍兴市">绍兴市</option>
                                             <option value="温州市">温州市</option>
@@ -1639,12 +1636,36 @@
                             <script>
                                 $("#register").click(function () {
                                     // login_form
-                                    $("#form_register").attr("style","display: inline-block;width:70%;height:60%;background-color: rgb(184, 218, 91);border-radius: 15px;")
-                                    $("#login_form").attr("style","display:none;width:65%;height:50%;background-color: rgb(184, 218, 91);border-radius: 15px;")
+                                    $("#form_register").attr("style","display: inline-block;width:65%;height:60%;background-color: rgb(184, 218, 91,0.1);border-radius: 15px;")
+                                    $("#login_form").attr("style","display:none;width:65%;height:50%;background-color: rgb(184, 218, 91,0.1);border-radius: 15px;")
                                 })
                                 $("#reg_back").click(function () {
-                                    $("#form_register").attr("style","display:none;width:65%;height:50%;background-color: rgb(184, 218, 91);border-radius: 15px;")
-                                    $("#login_form").attr("style","display:inline-block;width:65%;height:50%;background-color: rgb(184, 218, 91);border-radius: 15px;")
+                                    $("#form_register").attr("style","display:none;width:65%;height:50%;background-color: rgb(184, 218, 91,0.1);border-radius: 15px;")
+                                    $("#login_form").attr("style","display:inline-block;width:65%;height:50%;background-color: rgb(184, 218, 91,0.1);border-radius: 15px;")
+                                })
+                                $("#reg_post").click(function () {
+                                    $.post(
+                                            "user/register",
+                                            {
+                                                // 'csrfmiddlewaretoken': csrf,
+                                                'username': $('#reg_user').val(),
+                                                'password': $('#reg_password').val(),
+                                                'name':$('#reg_name').val(),
+                                                'role_type':$('#reg_province').val(),
+                                                'company_name':$('#reg_city').val(),
+                                                'company_type':$('#reg_province').val()
+                                            },
+                                            function (result) {
+                                                // {#登录成功#}
+                                                if (result.code === 200) {
+                                                    // {#存储人物信息到本地#}
+                                                    console.log("注册成功", result)
+                                                } else {
+                                                    alert(result.err_msg)
+                                                }
+                                            });
+                                    
+
                                 })
                                 $("#login").click(function () {
                                         // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
@@ -1669,7 +1690,7 @@
                                                     localStorage.setItem("userId", data.user_id);
 
                                                     $("#href_panel4").html("")
-                                                    $("#href_panel4").html("台州市")
+                                                    $("#href_panel4").html(data.name)
                                                     $("#href_panel1").click()
                                                     //window.location.replace('index')
                                                 } else {

@@ -262,7 +262,6 @@ class plot_tz_product:
         shapes = [(shape, n) for n, shape in enumerate(shp_gpd.geometry)]
         xr_da[coord_name] = self.rasterize(shapes, xr_da.coords, longitude='lon', latitude='lat')
         return xr_da
-
     def basemask(self, cs, ax, map, shpfile):
         sf = shapefile.Reader(shpfile)
         vertices = []
@@ -285,7 +284,6 @@ class plot_tz_product:
     def makedegreelabel(self, degreelist):
         labels = [str(x) + u'°E' for x in degreelist]
         return labels
-
     def read_data(self):
         os.environ["HDF5_USE_FILE_LOCKING"] = 'FALSE'
         file_path = "static/data/TZ_self/"
