@@ -1532,6 +1532,7 @@
                                                 for (i = 0; i < button_list[item]['filelist'].length; i++) {
                                                     var divcontenter = document.createElement('div')
                                                     divcontenter.style = "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 10%;width:98%;text-align:center;;padding-top:5px;border-radius:5px;margin:5px;background-color:rgb(0,150,136);"
+                                                    divcontenter.id = button_list[item]['filelist'][i]['item'].toString() + "-" + button_list[item]['filelist'][i]['type'].toString() + "-" + button_list[item]['filelist'][i]['year'].toString()
                                                     divcontenter.setAttribute("class", "tool_history_button")
                                                     var labelitem = document.createElement('label')
                                                     labelitem.style = "width:15%;text-align:center;;vertical-align: middle;color:white"
@@ -1546,18 +1547,57 @@
                                                     $('#history_view').append(divcontenter)
                                                 }
                                                 $('.tool_history_button').click(function () {
-                                                    var type = "tool_history"
-                                                    product_view_show(type)
+                                                    var info = this.id
+                                                    var hearder = list_button_object.render_head_info()
+                                                    var formData = new FormData();
+                                                    formData.append("info", info);
+                                                    formData.append("hearder", hearder);
+                                                    $.ajax({
+                                                        url: "file/history_tz",  // 请求的地址
+                                                        type: "post",  // 请求方式
+                                                        timeout: 250, //设置延迟上限
+                                                        headers: { "Token": "Bearer " + localStorage.getItem("token") },
+                                                        data: formData,
+                                                        processData: false,
+                                                        contentType: false,
+                                                        enctype: "multipart/form-data",
+                                                        responseType: "arraybuffer",
+                                                        mimeType: "text/plain; charset=x-user-defined",
+                                                        success: function (data) {
+                                                            // 加载首页
+                                                            var rawLength = data.length;
+                                                            var array = new Uint8Array(new ArrayBuffer(rawLength));
+                                                            for (i = 0; i < rawLength; i++) {
+                                                                array[i] = data.charCodeAt(i) & 0xff;
+                                                            }
+                                                            var pdfBlob = new Blob([array], { type: "application/pdf;charset=utf-8" })
+                                                            var pdfFile = URL.createObjectURL(pdfBlob)
+                                                            const options_pdf = {
+                                                                forcePDFJS: true,
+                                                                pdfOpenParams: {
+                                                                    pagemode: "thumbs",
+                                                                    navpanes: 0,
+                                                                    toolbar: 0,
+                                                                    scrollbar: 0,
+                                                                    statusbar: 0,
+                                                                    view: "FitV"
+                                                                }
+                                                            }
+                                                            PDFObject.embed(pdfFile, "#product_view", options_pdf);
+                                                        }
+                                                    })
+
                                                 })
                                             })
                                             $('#history_button').append(button)
                                         }
                                         // 首页的加载数据
                                         $('.tool_history_button').click(function () {
-                                            var type = "tool_history"
                                             var info = this.id 
+                                            var hearder = list_button_object.render_head_info()
                                             var formData = new FormData();
                                             formData.append("info", info);
+                                            formData.append("hearder", hearder);
                                             $.ajax({
                                                 url: "file/history_tz",  // 请求的地址
                                                 type: "post",  // 请求方式

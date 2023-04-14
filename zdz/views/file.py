@@ -118,11 +118,12 @@ class FileViewSet(viewsets.ViewSet):
             item = int(fields[0])
             doc_type = str(fields[1])
             year = int(fields[2])
+            hearder = request.POST.get('hearder', '')
             data = Document.objects.filter(
                 year=year, unity=unity, document_type=doc_type).all().values()
             version_content = str(data[0]['version_content']).split(",")[0:-1]
             content_list = []
-            content_str = ""
+            content_str = hearder + ""
             for i in range(len(version_content)):
                 name = version_content[i]
                 single_content = ""
