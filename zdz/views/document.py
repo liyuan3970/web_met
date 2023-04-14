@@ -88,32 +88,61 @@ def website(request):
 
 # 历史数据查询
 def history_file(request):
-    unity = "台州市气象局"
-    year = 2023
-    doc_types = DocumentType.objects.filter(unity=unity).all().values()
-    title = list(SelfPlot.objects.values('document_type', 'id'))[-5:]
-    type_list = []
-    for doc_type in doc_types:
-        doc_single = {
-            'name': doc_type['name'],
-            'filelist': []
+    info = request.POST.get('info', '')
+    if info =='none':        
+        unity = "台州市气象局"
+        year = 2023
+        doc_types = DocumentType.objects.filter(unity=unity).all().values()
+        title = list(SelfPlot.objects.values('document_type', 'id'))[-5:]
+        type_list = []
+        for doc_type in doc_types:
+            doc_single = {
+                'name': doc_type['name'],
+                'filelist': []
+            }
+            doc_all = Document.objects.filter(unity="台州市气象局", year=year,document_type=doc_type['name']).all().values()
+            for doc in doc_all:
+                doc_dir = {}
+                doc_dir['type'] = doc['document_type']
+                doc_dir['item'] = doc['item']
+                doc_dir['unity'] = doc['unity']
+                doc_dir['year'] = doc['year']
+                doc_single['filelist'].append(doc_dir)
+            type_list.append(doc_single)
+        content = {
+            'doc_list': type_list,
+            'self_title': title
         }
-        doc_all = Document.objects.filter(unity="台州市气象局", year=year,document_type=doc_type['name']).all().values()
-        print("所有文档",doc_all)
-        for doc in doc_all:
-            doc_dir = {}
-            doc_dir['type'] = doc['document_type']
-            doc_dir['item'] = doc['item']
-            doc_dir['unity'] = doc['unity']
-            doc_dir['year'] = doc['year']
-            doc_single['filelist'].append(doc_dir)
-        type_list.append(doc_single)
-    content = {
-        'doc_list': type_list,
-        'self_title': title
-    }
-
-    return JsonResponse(content)
+        return JsonResponse(content)
+    else:
+        fields = info.split("-")
+        unity = "台州市气象局"
+        item = int(fields[0])
+        doc_type = str(fields[1])
+        year = int(fields[2])
+        data = Document.objects.filter(year=year, unity=unity, document_type=doc_type).all().values()
+        version_content = str(data[0]['version_content']).split(",")[0:-1]
+        content_list = []
+        for i in range(len(version_content)):
+            name = version_content[i]
+            single_content = ""
+            data_self = SelfModule.objects.filter(year=year, name=name, item=item, unity=unity,document_type=doc_type).all().order_by('-create_time').values()
+            for j in data_self:
+                if int(j['data']['id']) == i:
+                    single_content = j['data']['data']
+                    content_list.append(single_content)
+                    # print("查找数据",j['name'],j['data']['id'],j['types'],j)
+                    break
+        content = {
+            'status': "ok",
+            'type_list': version_content,
+            'item': item,
+            'year': year,
+            'type': doc_type,
+            'unity': unity,
+            'content_list': content_list
+        }
+        return JsonResponse(content)
 
 
 # demo_02是气象快报的核心代码主要用来统计数据
