@@ -1547,6 +1547,8 @@
                                                     $('#history_view').append(divcontenter)
                                                 }
                                                 $('.tool_history_button').click(function () {
+                                                    $('.tool_history_button').attr('style', "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 10%;width:98%;text-align:center;;padding-top:5px;border-radius:5px;margin:5px;background-color:rgb(0,150,136);")
+                                                    this.style = "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 10%;width:98%;text-align:center;;padding-top:5px;border-radius:5px;margin:5px;background-color:rgb(255,87,34);"
                                                     var info = this.id
                                                     var hearder = list_button_object.render_head_info()
                                                     var formData = new FormData();
@@ -1592,7 +1594,9 @@
                                             $('#history_button').append(button)
                                         }
                                         // 首页的加载数据
-                                        $('.tool_history_button').click(function () {
+                                        $('.tool_history_button').click(function () {                                     
+                                            $('.tool_history_button').attr('style', "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 10%;width:98%;text-align:center;;padding-top:5px;border-radius:5px;margin:5px;background-color:rgb(0,150,136);")
+                                            this.style = "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 10%;width:98%;text-align:center;;padding-top:5px;border-radius:5px;margin:5px;background-color:rgb(255,87,34);"
                                             var info = this.id 
                                             var hearder = list_button_object.render_head_info()
                                             var formData = new FormData();
