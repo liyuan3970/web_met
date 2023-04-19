@@ -588,6 +588,8 @@ class ec_data_point:
         self.file_path = "/home/workspace/Data/My_Git/" + self.test_time + "/" 
         self.lat_list = [27.6, 28.1, 28.4, 29.1, 29.1, 29.8, 28.7, 28.5, 28.5, 28.6]
         self.lon_list = [120.7, 121.1, 121.3, 121.2, 121.0, 120.7, 121.1, 121.4, 121.4, 121.2]
+        self.exlat = [120.2,121.9]
+        self.exlon = [27.3,30.6]
         self.name = ["台州", "玉环", "温岭", "三门", "天台", "仙居", "临海", "路桥", "椒江", "黄岩"]
         self.name_en = ['taizhou','yuhuan','wenling','sanmen','tiantai','xianju','linhai','luqiao','jiaojiang','huangyan']
         self.cp,self.t2,self.lsp = self.read_data()
@@ -708,6 +710,26 @@ class ec_data_point:
         len_lat = len(taizhou.lat.data)
         len_lon = len(taizhou.lon.data)
         data = []
+        exdata = []
+        for j in range(len(self.exlat)):
+            exlat = self.exlat[j]
+            exlon = self.exlon[j]
+            value = rain.sel(lon=exlon, lat=exlat,method='nearest').to_pandas().tolist()
+            # value = np.around(value,decimals=2)
+            if not value:
+                value = 0
+            exsingle = {
+                "type": "Feature",
+                "properties": {
+                    "value": str(value)
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [exlat,exlon ]
+                }
+            }
+            exdata.append(exsingle)
+        #print("数据测试",data)
         for i in range(len_lon-1):
             for j in range(len_lat-1):
                 y0 = taizhou.lat.data[j]
@@ -724,7 +746,8 @@ class ec_data_point:
                         }
                     }
                     data.append(single)  
-        return data
+        alldata = data + exdata
+        return alldata
 
 
 

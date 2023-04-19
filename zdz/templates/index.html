@@ -805,19 +805,19 @@
                                         style="width:40px;height:40px;background-image: url(static/src/合并.png);background-size: 100%;background-repeat: no-repeat;"></button> -->
                                     <!-- <div style="width:2%;height: 100%;"></div> -->
                                     <button id="preview_save" type="button" data-method="preview_save_select"
-                                        class="layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal"
+                                        class="layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal documentclick"
                                         style="margin-top:5px">保存当前</button>
                                     <!-- <button id="preview_save"
                                         style="width:40px;height:40px;background-image: url(static/src/保存.png);background-size: 100%;background-repeat: no-repeat;"></button> -->
                                     <!-- <div style="width:2%;height: 100%;"></div> -->
                                     <button id="save_doc_all" type="button"
-                                        class="layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal"
+                                        class="layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal documentclick"
                                         style="margin-top:5px">保存所有</button>
                                     <!-- <button id="save_doc_all"
                                         style="width:40px;height:40px;background-image: url(static/src/发布.png);background-size: 100%;background-repeat: no-repeat;"></button> -->
                                     <!-- <div style="width:2%;height: 100%;"></div> -->
                                     <button id="convert" type="button"
-                                        class="layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal"
+                                        class="layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal documentclick"
                                         style="margin-top:5px;margin-right:15px;">预览</button>
                                     <!-- <button id="convert"
                                         style="width:40px;height:40px;background-image: url(static/src/预览.png);background-size: 100%;background-repeat: no-repeat;"></button> -->
@@ -895,7 +895,9 @@
                                     //仅预览内容
                                     document.getElementById('convert').addEventListener('click', function () {
                                         //获取html的内容
-                                        console.log("预览测试",localStorage.getItem('name'))
+                                        $('.documentclick').attr('class','layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal documentclick')
+                                        this.setAttribute("class","layui-btn  layui-btn-sm layui-btn-radius layui-btn-danger  documentclick ")
+                                        // console.log("预览测试",localStorage.getItem('name'))
                                         if (list_button_object.data.length > 0) {
                                             var contentDocument = ""
                                             for (var i = 0; i < list_button_object.data.length; i++) {
@@ -956,6 +958,8 @@
 
                                     // 全部保存
                                     document.getElementById('save_doc_all').addEventListener('click', function () {
+                                        $('.documentclick').attr('class','layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal documentclick')
+                                        this.setAttribute("class","layui-btn  layui-btn-sm layui-btn-radius layui-btn-danger  documentclick ")
                                         //保存所有内容
                                         if (list_button_object.type_list.length > 0) {
                                             var data_list = [];
@@ -1164,69 +1168,10 @@
                                             $('#preview_save').on('click', function () {
                                                 var othis = $(this), method = othis.data('method');
                                                 active[method] ? active[method].call(this, othis) : '';
+                                                $('.documentclick').attr('class','layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal documentclick')
+                                                this.setAttribute("class","layui-btn  layui-btn-sm layui-btn-radius layui-btn-danger  documentclick ")
                                             });
                                         });
-                                    // document.getElementById('preview_save').addEventListener('click', function () {
-                                    //     //保存并预览单个模块的内容
-                                    //     var contentDocument = tinymce.get('content').getContent();
-                                    //     //收集上传的数据
-                                    //     var item = list_button_object.localitem
-                                    //     list_button_object.data[item] = contentDocument
-                                    //     var types = list_button_object.type
-                                    //     var name = list_button_object.type_list[item]
-                                    //     var year = list_button_object.year
-                                    //     var data = contentDocument
-                                    //     var items = list_button_object.item
-                                    //     var unity = list_button_object.unity
-                                    //     var hearder = list_button_object.render_head_info()
-                                    //     contentDocument = hearder + contentDocument
-                                    //     var formData = new FormData();
-                                    //     formData.append("document", contentDocument);
-                                    //     formData.append("item", item);
-                                    //     formData.append("types", types);
-                                    //     formData.append("name", name);
-                                    //     formData.append("year", year);
-                                    //     formData.append("data", data);
-                                    //     formData.append("items", items);
-                                    //     formData.append("unity", unity);
-                                    //     $.ajax({
-                                    //         url: "file/preview_save",  // 请求的地址
-                                    //         type: "POST",  // 请求方式
-                                    //         headers: { "Token": "Bearer " + localStorage.getItem("token") },
-                                    //         data: formData,
-                                    //         processData: false,
-                                    //         contentType: false,
-                                    //         enctype: "multipart/form-data",
-                                    //         responseType: "arraybuffer",
-                                    //         mimeType: "text/plain; charset=x-user-defined",
-                                    //         success: function (data) {
-                                    //             var rawLength = data.length;
-                                    //             var array = new Uint8Array(new ArrayBuffer(rawLength));
-                                    //             for (i = 0; i < rawLength; i++) {
-                                    //                 array[i] = data.charCodeAt(i) & 0xff;
-                                    //             }
-
-                                    //             var pdfBlob = new Blob([array], { type: "application/pdf;charset=utf-8" })
-                                    //             var pdfFile = URL.createObjectURL(pdfBlob)
-                                    //             const options_pdf = {
-                                    //                 forcePDFJS: true,
-                                    //                 pdfOpenParams: {
-                                    //                     pagemode: "thumbs",
-                                    //                     navpanes: 0,
-                                    //                     toolbar: 0,
-                                    //                     scrollbar: 0,
-                                    //                     statusbar: 0,
-                                    //                     view: "FitV"
-                                    //                 }
-                                    //             }
-
-                                    //             PDFObject.embed(pdfFile, "#product_view", options_pdf);
-                                    //         }
-
-                                    //     })
-
-
-                                    // });
 
                                 </script>
 
@@ -1281,11 +1226,11 @@
                                         <div class="layui-card" style="height: 120px">
                                             <div class="layui-card-header" style="border-bottom: 1px solid rgb(220, 222, 226);"><h3 style="text-align:center;;padding-top: 5px;width:120px;font-size: 23px;font-weight:900;font-family:'宋体';color:blue">市台短期</h3></div>
                                             <div class="layui-card-body" style="padding-left: 150px;padding-top: 17px;">                                              
-                                                <button type="button" data-method="product_date" value="T" id="T_short" class="layui-btn layui-btn-radius tool_prodict_product">短期气温</button>
-                                                <button type="button" data-method="product_date" value="Pr01" id="Pr01_short" class="layui-btn layui-btn-radius tool_prodict_product">短期降水</button>
-                                                <button type="button" data-method="product_date" value="Pr12" id="Pr24_short" class="layui-btn layui-btn-radius tool_prodict_product">降水</button>
-                                                <button type="button" data-method="product_date" id="TMax24_short" value="TMax24"  class="layui-btn layui-btn-radius tool_prodict_product">高温</button>
-                                                <button type="button" data-method="product_date" id="TMin24_short" value="TMin24"  class="layui-btn layui-btn-radius tool_prodict_product">低温</button>             
+                                                <button type="button" data-method="product_date" value="T" id="T_short" class="layui-btn layui-btn-radius tool_prodict_product toolboxclick">短期气温</button>
+                                                <button type="button" data-method="product_date" value="Pr01" id="Pr01_short" class="layui-btn layui-btn-radius tool_prodict_product toolboxclick">短期降水</button>
+                                                <button type="button" data-method="product_date" value="Pr12" id="Pr24_short" class="layui-btn layui-btn-radius tool_prodict_product toolboxclick" >降水</button>
+                                                <button type="button" data-method="product_date" id="TMax24_short" value="TMax24"  class="layui-btn layui-btn-radius tool_prodict_product toolboxclick">高温</button>
+                                                <button type="button" data-method="product_date" id="TMin24_short" value="TMin24"  class="layui-btn layui-btn-radius tool_prodict_product toolboxclick">低温</button>             
                                             </div>
 
                                         </div>
@@ -1308,7 +1253,7 @@
                                                     </div>
                                                     
                                                 </div>
-                                                <button id="tool_zdz_button" type="button" class="layui-btn layui-btn-radius" style="float: right;margin-right:45px">
+                                                <button id="tool_zdz_button" type="button" class="layui-btn layui-btn-radius  toolboxclick" style="float: right;margin-right:45px">
                                                     <i class="layui-icon layui-icon-search"></i>
                                                 </button>                                                                    
                                             </div>
@@ -1332,7 +1277,7 @@
                                                         <input type="text" autocomplete="off" id="ec-endDate-1" class="layui-input" placeholder="结束日期">
                                                     </div>
                                                 </div>
-                                                <button id="tool_ec_button" type="button" class="layui-btn layui-btn-radius" style="float: right;margin-right:45px">
+                                                <button id="tool_ec_button" type="button" class="layui-btn layui-btn-radius toolboxclick" style="float: right;margin-right:45px">
                                                     <i class="layui-icon layui-icon-search"></i>
                                                 </button>                                                                   
                                             </div>
@@ -1349,7 +1294,7 @@
                                                 <select id="select_self_plot" type="text"
                                                     style="width: 46%;height:35px; text-align:center;vertical-align: middle;align-items: center;margin-top:3px;margin-right: 100px;">
                                                 </select>
-                                                <button id="tool_selfplot_button" type="button" class="layui-btn layui-btn-radius" style="float: right;margin-right:45px">
+                                                <button id="tool_selfplot_button" type="button" class="layui-btn layui-btn-radius toolboxclick" style="float: right;margin-right:45px">
                                                     <i class="layui-icon layui-icon-search"></i>
                                                 </button> 
                                             </div>
@@ -1595,9 +1540,9 @@
                                         }
                                         // 首页的加载数据
                                         $('.tool_history_button').click(function () {                                     
-                                            $('.tool_history_button').attr('style', "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 10%;width:98%;text-align:center;;padding-top:5px;border-radius:5px;margin:5px;background-color:rgb(0,150,136);")
+                                           $('.tool_history_button').attr('style', "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 10%;width:98%;text-align:center;;padding-top:5px;border-radius:5px;margin:5px;background-color:rgb(0,150,136);")
                                             this.style = "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 10%;width:98%;text-align:center;;padding-top:5px;border-radius:5px;margin:5px;background-color:rgb(255,87,34);"
-                                            var info = this.id 
+                                            var info = this.id
                                             var hearder = list_button_object.render_head_info()
                                             var formData = new FormData();
                                             formData.append("info", info);
@@ -2362,25 +2307,7 @@
                             };
                             var isobands_options = map_toolbox_object.color_level(plot_type).isobands_options 
                             var levelV = map_toolbox_object.color_level(plot_type).levelV;
-                            // var levelV = [0, 0.1, 10, 25, 50, 100, 250]         
-                            // var isobands_options = {
-                            //     zProperty: "value",
-                            //     commonProperties: {
-                            //         "fill-opacity": 0.9
-                            //     },
-                            //     breaksProperties: [
-                            //         { fill: "rgb(255,255,255)" },
-                            //         { fill: "rgb(140,246,130)" },
-                            //         { fill: "rgb(0,191,27)" },
-                            //         { fill: "rgb(62,185,255)" },
-                            //         { fill: "rgb(25,0,235)" },
-                            //         { fill: "rgb(255,0,255)" },
-                            //         { fill: "rgb(140,0,65)" }
-                            //     ]
-                            // };
                             var grid = turf.interpolate(points, 0.05, interpolate_options);
-                            
-                            // var levelV = [0, 1, 18, 19, 20, 21, 100];
                             var isobands = turf.isobands(
                                 grid,
                                 levelV,
@@ -2734,6 +2661,7 @@
                             })
                             // $('#product_view').html(" ")
                         } else if (type == "tool_prodict_product") {
+
                             $('#product_view').html("")
                             var product_view = document.getElementById('product_view')
                             product_view.style = "width:97.5%;height:97%;background-color:white;margin:15px"
@@ -3157,7 +3085,7 @@
                                     load = showLoad();
                                 },
                                 success: function (data) {
-                                    // console.log("tool_ec", data)
+                                    console.log("tool_ec", data)
                                     var labelthings = label_of_ectime(data.linedata[0])
                                     // var serverdata = JSON.parse(data)  
                                     var product_view = document.getElementById("product_view")
@@ -3776,6 +3704,9 @@
                             };
 
                             $('.tool_prodict_product').on('click', function () {
+                                $('.toolboxclick').attr('class','layui-btn layui-btn-radius toolboxclick')
+                                this.setAttribute("class","layui-btn layui-btn-danger layui-btn-radius toolboxclick ")
+                                //this.style = "float: right;margin-right:45px;;background-color:rgb(255,87,34)"
                                 var othis = $(this), method = othis.data('method');
                                 active[method] ? active[method].call(this, othis) : '';
                                 self_tz_product.select_type = this.value
@@ -5622,6 +5553,10 @@
               
                     // 自动站数据加载
                     $('#tool_zdz_button').click(function () {
+                        $('.toolboxclick').attr('class','layui-btn layui-btn-radius toolboxclick')
+                        this.setAttribute("class","layui-btn layui-btn-danger layui-btn-radius toolboxclick ")
+                        // $('.toolboxclick').attr('style','background-color:rgb(0,150,136)')
+                        // this.style = "float: right;margin-right:45px;;background-color:rgb(255,87,34)"
                         var map_z = document.getElementById("zdz_webgis")
                         if (map_z.children.length > 0) {
                             zdz_recdata_obj.zdz_map.remove()
@@ -5680,8 +5615,10 @@
                     })
                     // 精细化EC单点数据加载
                     $('#tool_ec_button').click(function () {
-                        // $('#product_view').attr("style", "display:none;background-color:rgb(239, 243, 237); width: 100%; height: 100%;")
-                        // $('#product_ec').attr("style", "background-color:rgb(239, 243, 237); width: 100%; height: 100%;padding:30px;") 
+                        // $('.toolboxclick').attr('style','background-color:rgb(0,150,136)')
+                        // this.style = "float: right;margin-right:45px;;background-color:rgb(255,87,34)"
+                        $('.toolboxclick').attr('class','layui-btn layui-btn-radius toolboxclick')
+                        this.setAttribute("class","layui-btn layui-btn-danger layui-btn-radius toolboxclick ")
 
                         // 原始版本
                         var type = "tool_ec"
@@ -5690,6 +5627,10 @@
 
                     // 降水订正
                     $('#tool_selfplot_button').click(function () {
+                        // $('.toolboxclick').attr('style','background-color:rgb(0,150,136)')
+                        // this.style = "float: right;margin-right:45px;;background-color:rgb(255,87,34)"
+                        $('.toolboxclick').attr('class','layui-btn layui-btn-radius toolboxclick')
+                        this.setAttribute("class","layui-btn layui-btn-danger layui-btn-radius toolboxclick ")
                         var type = "select_self_plot"
                         product_view_show(type)
 
