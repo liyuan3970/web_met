@@ -147,7 +147,7 @@
         <div style="background-color:rgba(57,61,73); width: 100%; height: 4%;">
             <div class="tabbable" id="tabs-01" style="display:flex;width: 100%; height: 100%;">
                 <ul class="nav nav-tabs" style="border-bottom: 0px;;font-size: 14px;font-weight:900;font-family:'宋体';width: 100%;">
-                    <li >
+                    <li id="document_li" >
                         <a id="href_panel1" href="#panel-1" data-toggle="tab" style="height:35px;color: red">材料制作</a>
                     </li>
                     <li>
@@ -161,7 +161,7 @@
                         <!-- 另外添加一个说明文档 -->
                         <a id="awebsite" href="#panel-5" data-toggle="tab" style="height:35px;color: red;">外源平台</a>
                     </li>
-                    <li class="active" style="float: right;">
+                    <li id="login_li" class="active" style="float: right;">
                         <!-- 另外添加一个说明文档 -->
                         <a id="href_panel4" href="#panel-4" data-toggle="tab" style="height:35px;color: red;">登录</a>
                     </li>                 
@@ -879,7 +879,7 @@
                                     const tinymce_obj = {
                                         data:undefined
                                     }    
-                                    // tinymce接收数据
+                                    // tinymce接收数据 监听
                                     window.addEventListener('message', function (event) {
                                         var data = event.data;
                                         tinymce_obj.data = data
@@ -891,7 +891,23 @@
                                         var editor = tinymce.get('content')
                                         editor.insertContent(tinymce_obj.data);
                                     })
-
+                                    window.addEventListener("load", function (e) { 
+                                            var logingherf = $("#href_panel4").text()                                     
+                                            var logingname = localStorage.getItem("name")                                         
+                                            if (logingname){
+                                                $("#document_li").attr("calss","active")  
+                                                $("#login_li").attr("calss"," ")  
+                                                $("#panel-1").attr("calss","tab-pane active")  
+                                                $("#panel-4").attr("calss","tab-pane")        
+                                                $("#href_panel4").html(logingname)
+                                                $("#href_panel1").click()                                             
+                                            }
+                                            else{  
+                                                //默认登陆界面  
+                                                $("#href_panel4").html("登录")                                        
+                                                $("#href_panel4").click()
+                                            }
+                                        });
                                     //仅预览内容
                                     document.getElementById('convert').addEventListener('click', function () {
                                         //获取html的内容
@@ -1292,7 +1308,7 @@
                                                 <label class="layui-form-label" style="width: 100px;margin-right: 15px;">市台降水</label> 
                                                 <div class="layui-form-mid">:</div>
                                                 <select id="select_self_plot" type="text"
-                                                    style="width: 46%;height:35px; text-align:center;vertical-align: middle;align-items: center;margin-top:3px;margin-right: 100px;">
+                                                    style="width: 46%;height:35px; text-align:center;vertical-align: middle;align-items: center;margin-top:3px;margin-right: 100px;border:none">
                                                 </select>
                                                 <button id="tool_selfplot_button" type="button" class="layui-btn layui-btn-radius toolboxclick" style="float: right;margin-right:45px">
                                                     <i class="layui-icon layui-icon-search"></i>
@@ -2702,6 +2718,18 @@
                                 },
                                 dataType: "json",
                                 success: function (data) {
+                                    var datalist = []
+                                    var datamin = Math.min(...datalist)
+                                    var datamax = Math.max(...datalist)                                                                   
+                                    data.back_data.forEach(function(item){
+                                        if (item.properties.value!='NaN'){
+                                            datalist.push(parseFloat(item.properties.value))
+                                        }
+                                        else{
+                                            console.log(parseFloat(item.properties.value))
+                                        }                                                                       
+                                    })
+                                    //console.log(Math.max(...datalist),Math.min(...datalist))
                                     var select_type = data.plot_type
                                     if (select_type == "T" || select_type == "TMax24" || select_type == "TMin24"){
                                         var pl_type = "temp"
@@ -2872,12 +2900,16 @@
 
                                         var singlebtn = document.createElement("button");
                                         singlebtn.id = id;
-                                        singlebtn.style = "width:90%;height: 6%;margin-top:8px; border-radius:8px;"
+                                        singlebtn.setAttribute("class","self_product_single_button")
+
+                                        singlebtn.style = "width:90%;height: 6%;margin-top:8px; border-radius:8px;background-color:rgb(0,150,136)"
                                         singlebtn.innerText = labels[i]
                                         singlebtn.onclick = function (e) {
                                             e.preventDefault();
                                             e.stopPropagation();
                                             let clickedstr = this.id;
+                                            $('.self_product_single_button').attr('style','width:90%;height: 6%;margin-top:8px; border-radius:8px;background-color:rgb(0,150,136)')
+                                            this.style = "width:90%;height: 6%;margin-top:8px; border-radius:8px;background-color:rgb(255,87,34)"
                                             var index = clickedstr.lastIndexOf("r");
                                             var item = clickedstr.substring(index + 1, clickedstr.length);
                                             var time_plot_taizhou = self_tz_product.select_state// $("input[name='tz_self_time']:checked").val()
@@ -3114,12 +3146,16 @@
                                         var singlebtn = document.createElement("button");
                                         var id = "ecbt_silder" + i.toString();
                                         
-                                        singlebtn.setAttribute("class", "layui-btn layui-btn-sm")
-                                        singlebtn.style = "width:100%;height: 10%;margin-top:8px; border-radius:8px;margin-left:0px"
+                                        singlebtn.setAttribute("class", "layui-btn layui-btn-sm ecbt_silder_calss")
+                                        singlebtn.style = "width:100%;height: 10%;margin-top:8px; border-radius:8px;margin-left:0px;"
                                         singlebtn.id = id
                                         singlebtn.innerText = labels_ecmapui[i]
                                         singlebtn.onclick = function (e) {
                                             // console.log(this.innerText)
+                                            $('.ecbt_silder_calss').attr("layui-btn layui-btn-sm ecbt_silder_calss") 
+                                            $('.ecbt_silder_calss').attr("style","width:100%;height: 10%;margin-top:8px; border-radius:8px;margin-left:0px;") 
+                                            this.style = "width:100%;height: 10%;margin-top:8px; border-radius:8px;margin-left:0px;background-color:rgb(255,87,34);"
+
                                             map.eachLayer(function (layer) {
                                                 if (!layer._container || ('' + jQuery(layer._container).attr('class')).replace(/\s/g, '') != 'leaflet-layer') {
                                                     layer.remove();
@@ -3559,9 +3595,13 @@
                                         var id = "self_silder" + i.toString();
                                         var singlebtn = document.createElement("button");
                                         singlebtn.id = id;
-                                        singlebtn.style = "width:10%;height: 100%;margin-top:8px; border-radius:8px;"
+                                        singlebtn.style = "width:10%;height: 100%;margin-top:8px; border-radius:8px;background-color:rgb(0,150,136);"
+                                        singlebtn.setAttribute('class','self_silder_single')
                                         singlebtn.innerText = labels[i]
                                         singlebtn.onclick = function (e) {
+                                            $('.self_silder_single').attr('class','self_silder_single')
+                                            $('.self_silder_single').attr('style','width:10%;height: 100%;margin-top:8px; border-radius:8px;background-color:rgb(0,150,136);')
+                                            this.style = "width:10%;height: 100%;margin-top:8px; border-radius:8px;background-color:rgb(255,87,34);"
                                             map_product.eachLayer(function (layer) {
                                                 if (!layer._container || ('' + jQuery(layer._container).attr('class')).replace(/\s/g, '') != 'leaflet-layer') {
                                                     layer.remove();

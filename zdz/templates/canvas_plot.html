@@ -412,10 +412,45 @@
                                 // 关闭对话并传参
                                 $('#plot_self_close').click(function () {
                                     var png = undefined
-                                    html2canvas(document.querySelector("#self_plot_div")).then(canvas => {
+                                    var htmlDom = document.getElementById('self_plot_div')
+                                    const canvas = document.createElement('canvas') // 创建一个canvas节点
+                                    const shareContent = document.getElementById('self_plot_div') // 需要截图的包裹的（原生的）DOM 对象
+                                    const width = shareContent.offsetWidth // 获取dom 宽度
+                                    const height = shareContent.offsetHeight // 获取dom 高度
+                                    canvas.width = width
+                                    canvas.height = height;
+                                    canvas.style.width = width + 'px';
+		                            canvas.style.height = height + 'px';
+                                    const scale = 1 // 定义任意放大倍数 支持小数
+                                    var context = canvas.getContext('2d');
+                                    context.scale(scale, scale)
+                                    const rect = shareContent.getBoundingClientRect() // 获取元素相对于视口的
+                                    context.translate(-rect.left, -rect.top);
+                                    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop // 获取滚动轴滚动的长度
+                                    // document.querySelector("#self_plot_div")
+                                    html2canvas(htmlDom
+                                    , {
+                                        // x: rect.left,
+                                        // y: rect.top,                                    
+                                        // // scrollX: scrollTop,// 滚动的长度
+                                        // scrollY: -scrollTop,
+                                        // scale: scale, // 添加的scale 参数
+                                        // width: width, // dom 原始宽度
+                                        // height: height,
+                                        // useCORS: true, // 开启跨域
+                                    // canvas: canvas,
+                                    // // logging: false, //日志开关，便于查看html2canvas的内部执行流程
+                                    // width:500, //dom 原始宽度
+                                    // height: 500,
+                                    scrollY: -100, 
+                                    // scrollX:0,
+                                    useCORS: true // 【重要】开启跨域配置
+                                    }
+                                    ).then(canvas => {
                                         // console.log("图片转换",canvas.toDataURL())
                                         // var show = document.getElementById("show")
-                                        // show.append(canvas)  
+                                        // show.append(canvas)
+                                          
                                         png = canvas.toDataURL()
                                         png = "<img src=" + png +  ">"
                                         window.parent.postMessage({
