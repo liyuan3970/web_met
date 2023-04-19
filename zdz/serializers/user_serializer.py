@@ -39,10 +39,12 @@ class LoginSerializer(TokenObtainPairSerializer):
         }
         return ret
 
+
 class LoginRefreshSerializer(TokenRefreshSerializer):
     default_error_messages = {
         "no_active_account": _("No active account found with the given credentials")
     }
+
     def validate(self, attrs):
         data = super().validate(attrs)
         ret = {
