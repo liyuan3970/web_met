@@ -2110,6 +2110,19 @@
 
 
                     const map_toolbox_object = {
+                        color_numbers:undefined,
+                        temp_labellist:[-10,-8,-6,-4,-2,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,35,37,40,42],
+                        temp_labelstr:undefined,
+                        temp_indexfun:function(nums){
+                            var dellist = []
+                            for (var i = 0 ;i<map_toolbox_object.temp_labellist.length;i++){
+                                var delnum = Math.abs(nums-map_toolbox_object.temp_labellist[i])
+                                dellist.push(delnum)
+                            }
+                            var minindex = Math.min(...dellist)
+                            var index = dellist.indexOf(minindex)
+                            return index
+                        },
                         label_map:function(isobands_options, map,plot_type){
                             if (plot_type=="rain"){
                                 var colorinitlat = 28.4
@@ -2138,9 +2151,15 @@
 
                             }
                             else if (plot_type=="temp"){
-                                var labellist = ["-10","-8","-6","-4","-2","0","2","4","6","8","10"
+                                if (map_toolbox_object.temp_labelstr){
+                                    var labellist = map_toolbox_object.temp_labelstr
+                                }
+                                else{
+                                    var labellist = ["-10","-8","-6","-4","-2","0","2","4","6","8","10"
                                     ,"12","14","16","18","20","22","24","26","28","30","32","34","35","37","40","41"
                                 ]
+                                }
+                                
                                 var colorinitlat = 28.4
                                 var colorinitlon = 120.1
                                 var coloritem = isobands_options.breaksProperties.length
@@ -2261,9 +2280,67 @@
                                 }
                             }
                             else if (plot_type=="temp"){
+                                if(map_toolbox_object.color_numbers){
+                                    var tmax = map_toolbox_object.color_numbers[2]
+                                    var tmin = map_toolbox_object.color_numbers[0]
+                                    var tmid = map_toolbox_object.color_numbers[1]
+                                    if((tmax-tmin)>6){
+                                        var nums = parseInt((tmax - tmin)/2)+1
+                                        var index = map_toolbox_object.temp_indexfun(tmin)
+                                        var levelV = []
+                                        var levelVstr = []
+                                        for (var i = 0;i <nums;i++){
+                                            levelV.push(tmin-2+i*2)
+                                            
+                                        }
+                                        for (var i = 0;i <levelV.length;i++){
+                                            levelVstr.push(levelV[i].toString())
+                                        }
+
+                                        map_toolbox_object.temp_labelstr = levelVstr
+                                        var color_oplist=temp_options.breaksProperties.slice(index,index+nums)
+                                        var isobands_options = {
+                                            zProperty: "value",
+                                            commonProperties: {
+                                                "fill-opacity": 1
+                                            },
+                                            breaksProperties:color_oplist
+                                        }
+                                        
+                                        console.log("索引",color_oplist,levelV,tmin,tmax)                                
+                                    }
+                                    else{
+                                        var nums = (tmax - tmin)+1
+                                        var index = map_toolbox_object.temp_indexfun(tmin)
+                                        var levelV = []
+                                        var levelVstr = []
+                                        for (var i = 0;i <nums;i++){
+                                            levelV.push(tmin-2+i*1)                                        
+                                        }
+                                        for (var i = 0;i <levelV.length;i++){
+                                            levelVstr.push(levelV[i].toString())
+                                        }
+                                        map_toolbox_object.temp_labelstr = levelVstr
+                                        var color_oplist=temp_options.breaksProperties.slice(index,index+nums)
+                                        var isobands_options = {
+                                            zProperty: "value",
+                                            commonProperties: {
+                                                "fill-opacity": 1
+                                            },
+                                            breaksProperties:color_oplist
+                                        }
+                                       // console.log("索引",nums,color_oplist,levelV)
+
+                                    }
+
+                                }
+                                else{
+                                    var levelV=[-10,-8, -6, -4, -2, 0, 2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,35,37,40]
+                                    var isobands_options=temp_options
+                                }
                                 return {
-                                    levelV:[-10,-8, -6, -4, -2, 0, 2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,35,37,40],
-                                    isobands_options:temp_options
+                                    levelV:levelV,
+                                    isobands_options:isobands_options
                                 }
                             }
                             else if (plot_type=="wind"){
@@ -2718,20 +2795,23 @@
                                 },
                                 dataType: "json",
                                 success: function (data) {
-                                    var datalist = []
-                                    var datamin = Math.min(...datalist)
-                                    var datamax = Math.max(...datalist)                                                                   
-                                    data.back_data.forEach(function(item){
-                                        if (item.properties.value!='NaN'){
-                                            datalist.push(parseFloat(item.properties.value))
-                                        }
-                                        else{
-                                            console.log(parseFloat(item.properties.value))
-                                        }                                                                       
-                                    })
+                                    var datalist = []                                                                                                                                 
                                     //console.log(Math.max(...datalist),Math.min(...datalist))
                                     var select_type = data.plot_type
                                     if (select_type == "T" || select_type == "TMax24" || select_type == "TMin24"){
+                                        data.back_data.forEach(function (item) {
+                                            if (item.properties.value != 'NaN') {
+                                                datalist.push(parseFloat(item.properties.value))
+                                            }
+                                            else {
+                                                console.log(parseFloat(item.properties.value))
+                                            }
+                                        })
+                                        var datamin = parseInt(Math.min(...datalist)) - 2 
+                                        var datamax = parseInt(Math.max(...datalist)) + 2
+                                        var datamiddle = (0.5*(datamin+datamax))%2==0?(0.5*(datamin+datamax)):(0.5*(datamin+datamax))-1
+                                        map_toolbox_object.color_numbers = [datamin,datamiddle,datamax]              
+                                        //console.log(datamin%2,datamin,datamiddle)
                                         var pl_type = "temp"
                                         var show_title = "气温"
                                         var levelV = map_toolbox_object.color_level(pl_type).levelV
@@ -2915,9 +2995,6 @@
                                             var time_plot_taizhou = self_tz_product.select_state// $("input[name='tz_self_time']:checked").val()
                                             var type_plot_taizhou = self_tz_product.select_type //$("input[name='tz_self']:checked").val()
                                             var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                                            console.log(parseInt(item))
-
-
                                             $.ajax({
                                                 url: "upload_select_taizhou_data",  // 请求的地址
                                                 type: "post",  // 请求方式
@@ -2932,8 +3009,8 @@
                                                 },
                                                 dataType: "json",
                                                 success: function (result) {
-                                                    // console.log("ok--", result, item)
-                                                    //开始进行数据的叠加
+                                                    
+                                                    //开始进行数据的叠加                                                                                        
                                                     intersectionLay.remove()
                                                     title.remove()
                                                     myIcon = L.divIcon({
@@ -3044,6 +3121,7 @@
                                                             return { color: 'black', weight: 1, fillOpacity: 0.1 };
                                                         }
                                                     }).addTo(map);
+                                                    
 
 
                                                 }
