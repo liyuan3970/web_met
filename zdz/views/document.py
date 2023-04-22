@@ -272,7 +272,7 @@ def upload_select_taizhou_data(request):
     plot_item = request.POST.get('plot_item', '')
     if plot_item:
         product = data_class.plot_tz_product(plot_type, plot_time)
-        back_data = product.return_data(int(plot_item))
+        back_data,data_min,data_max = product.return_data(int(plot_item))
         label = product.label_index(int(plot_item))
         context = {
             'click_data': back_data,
@@ -281,14 +281,16 @@ def upload_select_taizhou_data(request):
         return JsonResponse(context)
     else:
         product = data_class.plot_tz_product(plot_type, plot_time)
-        back_data = product.return_data(0)
+        back_data,data_min,data_max = product.return_data(0)
         label = product.label_index(0)
         btn_index = product.btn_index()
         context = {
             'plot_type':plot_type,
             'back_data': back_data,
             'label': label,
-            'btn_index': btn_index
+            'btn_index': btn_index,
+            'data_min':float(data_min),
+            'data_max':float(data_max)
         }
         return JsonResponse(context)
 
@@ -415,6 +417,9 @@ def open_load_object(request):
     unity = fields[2]
     doc_type = fields[3]
     data = Document.objects.filter(year=year, item=item, unity=unity, document_type=doc_type).all().values()
+    date = data[0]['pub_date']
+    writer = data[0]['writer']
+    publisher = data[0]['publisher']
     version_content = str(data[0]['version_content']).split(",")[0:-1]
     content_list = []
     for i in range(len(version_content)):
@@ -434,6 +439,9 @@ def open_load_object(request):
         'year': year,
         'type': doc_type,
         'unity': unity,
+        'date':date,
+        'writer':writer,
+        'publisher':publisher,
         'content_list': content_list
     }
     return JsonResponse(context)

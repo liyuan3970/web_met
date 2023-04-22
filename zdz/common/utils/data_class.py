@@ -303,7 +303,8 @@ class plot_tz_product:
         lon = self.lon
         time = self.time
         data_xr_nc = self.data_xr_nc
-        #print("计算time",time)
+        data_min = data_xr_nc[:,:,:].min()
+        data_max = data_xr_nc[:,:,:].max()
         data_xr = xr.DataArray(data_xr_nc[item,:,:],coords=[lat,lon], dims=["lat", "lon"])       
         #以下是核心api,实质为调用Cmaps基类的listmap()方法
         basicfile = '/home/workspace/Data/My_Git/web_met/'
@@ -328,7 +329,7 @@ class plot_tz_product:
                     }
                 }
                 data.append(single)
-        return data        
+        return data,data_min,data_max        
     def multy_plot(self):
         '''返回图片列表'''
         imd_list = []

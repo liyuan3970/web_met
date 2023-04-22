@@ -118,12 +118,28 @@ class FileViewSet(viewsets.ViewSet):
             item = int(fields[0])
             doc_type = str(fields[1])
             year = int(fields[2])
-            hearder = request.POST.get('hearder', '')
+            # hearder = request.POST.get('hearder', '')# 加载头文件
             data = Document.objects.filter(
-                year=year, unity=unity, document_type=doc_type).all().values()
+                year=year, unity=unity, item=item, document_type=doc_type).all().values()
+            date = data[0]['pub_date']
+            pub_date = str(date)[0:4] + "年" + str(date)[5:7] + "月" + str(date)[8:10] + "日" + str(date)[11:13] + "时"
+            writer = data[0]['writer']
+            publisher = data[0]['publisher']
+            line1 = '<p style="text-align: center;"><span style="font-size: 36pt; color: rgb(224, 62, 45);">' + doc_type + '</span></p>'
+            line2 = '<p style="text-align: center;"><span style="font-size: 12pt; color: rgb(0, 0, 0); font-family: \'times new roman\', times, serif;">第' + str(item) + '期</span></p>'
+            line3 = '<table style=" width: 100%;border:none;"><colgroup><col style="width: 33.3333%;"><col style="width: 33.3333%;"><col style="width: 33.3333%;"></colgroup>'
+            line4 = '<tbody><tr><td style="border-width: 1px;">&nbsp;</td><td style="border-width: 1px;">&nbsp;</td>'
+            line5 = '<td style="border-width: 1px; text-align: right;"><span style="font-family: "times new roman", times, serif;">撰稿人：' + writer + '</span></td>'
+            line6 = '</tr><tr>'
+            line7 = '<td style="border-width: 1px;"><span style="font-family: \'times new roman\', times, serif;">' + pub_date+ '</span></td>'
+            line8 = '<td style="border-width: 1px; text-align: center;">' + unity + '</td>'
+            line9 = '<td style="border-width: 1px; text-align: right;">签发人：' + publisher + '</td>'
+            line10 = '</tr></tbody></table>'
+            line11 = '<hr style="background-color:  #FF0000;">'
+            headerInfo = line1 + line2 + line3 + line4 + line5 + line6 + line7 + line8 + line9 + line10 + line11
             version_content = str(data[0]['version_content']).split(",")[0:-1]
             content_list = []
-            content_str = hearder + ""
+            content_str = headerInfo + ""
             for i in range(len(version_content)):
                 name = version_content[i]
                 single_content = ""

@@ -339,16 +339,11 @@
                                                             $('#button_type_list').html("")
                                                             for (var i = 0; i < this.type_list.length; i++) {
                                                                 this.data.push(this.render_data_list(i))
-                                                                // var div_single = document.createElement("div")
-                                                                // div_single.style = "width: 15%; height: 30px;;padding-top:6px"
                                                                 var button_single = document.createElement("button")
-                                                                button_single.style = "margin-top:1px;border-radius:5px;"
+                                                                button_single.style = "margin-top:5px;border-radius:5px;"
                                                                 button_single.setAttribute("class", "layui-btn layui-btn-sm layui-btn-radius layui-btn-danger")
                                                                 button_single.value = i
                                                                 button_single.innerText = this.type_list[i]
-                                                                // button_single.style = "border-radius:10px;margin-right:5px"
-
-                                                                // div_single.append(button_single)
                                                                 button_single.addEventListener("click", function (doc) {
                                                                     // console.log('内容', doc,this)
                                                                     var item = Number(this.value)
@@ -386,19 +381,10 @@
 
 
                                                                     });
-                                                                    // var contentDocument = tinymce.get('content').getContent();
-                                                                    // if(content==contentDocument){
-                                                                    //     console.log("有内容")
-
-                                                                    // }
-                                                                    // else{
-                                                                    //     console.log("无内容")
-                                                                    // }
                                                                     $('#content').val(content)
 
                                                                 })
                                                                 $('#button_type_list').append(button_single)
-                                                                // $('#button_type_list').append(div_single)
                                                             }
 
                                                         },
@@ -413,7 +399,6 @@
                                                             return doc_data_obj
                                                         },
                                                         render_head_info: function () {
-
                                                             var line1 = '<p style="text-align: center;"><span style="font-size: 36pt; color: rgb(224, 62, 45);">' + this.type + '</span></p>'
                                                             var line2 = '<p style="text-align: center;"><span style="font-size: 12pt; color: rgb(0, 0, 0); font-family: \'times new roman\', times, serif;">第' + this.item.toString() + '期</span></p>'
                                                             var line3 = '<table style=" width: 100%;border:none;"><colgroup><col style="width: 33.3333%;"><col style="width: 33.3333%;"><col style="width: 33.3333%;"></colgroup>'
@@ -457,6 +442,9 @@
                                                             success: function (data) {
                                                                 // 返回以后创建一个对象实例
                                                                 // console.log("返回成功", data)
+                                                                var doc_date = $('#create_doc_date').val().toString()
+                                                                console.log(doc_date.substring(0,4),doc_date.substring(5,7),doc_date.substring(8,10),doc_date.substring(11,13))
+                                                                var pub_date = doc_date.substring(0,4) + "年" + doc_date.substring(5,7) + "月" + doc_date.substring(8,10) + "日" +doc_date.substring(11,13) + "时"  
                                                                 $('#doc_type').text(data.doc_unity)
                                                                 $('#doc_info').text("第" + data.doc_item + "期:  " + data.doc_type)
                                                                 list_button_object.year = data.doc_year
@@ -464,6 +452,9 @@
                                                                 list_button_object.type = data.doc_type
                                                                 list_button_object.type_list = png_add_list
                                                                 list_button_object.unity = data.doc_unity
+                                                                list_button_object.writer = $('#new_document_writer').val()
+                                                                list_button_object.time = pub_date
+                                                                list_button_object.publisher = $('#new_document_publisher').val()
                                                                 list_button_object.cerate_div_button()
                                                             }
                                                         })
@@ -692,7 +683,9 @@
                                                             dataType: "json",
                                                             success: function (res) {
                                                                 // 返回以后创建一个对象实例
-                                                                // console.log("返回成功", res)
+                                                                console.log("返回成功", res)
+                                                                var doc_date = res.date
+                                                                var pub_date = doc_date.substring(0,4) + "年" + doc_date.substring(5,7) + "月" + doc_date.substring(8,10) + "日" +doc_date.substring(11,13) + "时"
                                                                 $('#doc_type').text(res.type)
                                                                 $('#doc_info').text("第" + res.item + "期:  " + res.type)
                                                                 list_button_object.year = res.year
@@ -700,6 +693,9 @@
                                                                 list_button_object.type = res.type
                                                                 list_button_object.type_list = res.type_list
                                                                 list_button_object.unity = res.unity
+                                                                list_button_object.writer = res.writer
+                                                                list_button_object.publisher = res.publisher
+                                                                list_button_object.time = pub_date
                                                                 list_button_object.cerate_div_button()
                                                                 list_button_object.data = res.content_list
                                                                 list_button_object.localitem = 0
@@ -779,48 +775,31 @@
                                 <div style="display:inline-flex;width: 100%; height: 96%">
                                     <textarea id="content" style="width:100%;height: 100%;"></textarea>
                                 </div>
-                                <div style="display: inline-flex;width:100%;height: 5%;background-color: rgb(247, 248, 248);">
+                                <div style="display: inline-flex;width:100%;height: 5%;background-color: rgb(57,61,73);">
                                     <div style="width:85%;height: 100%">
                                         <div
-                                            style="display: inline-flex;width:43%;height: 70%;border: 2px solid black;padding-top: 7px;border-radius:15px;padding-left:5px;margin-top:3px;">
+                                            style="display: inline-flex;width:43%;height: 70%;padding-top: 7px;border-radius:15px;padding-left:5px;margin-top:3px;">
                                             <h4 id="doc_unity"
-                                                style="display:block;width:40%;font-size: 15px;font-weight:900;font-family:'宋体';;">
+                                                style="display:block;width:40%;font-size: 15px;font-weight:900;font-family:'宋体';color: white;">
                                                 台州市气象局</h4>
                                             <h4 id="doc_info"
-                                                style="display:block;width:60%;font-size: 15px;font-weight:900;font-family:'宋体';;">
+                                                style="display:block;width:60%;font-size: 15px;font-weight:900;font-family:'宋体';color: white;;">
                                                 第47期:一周天气</h4>
 
                                         </div>
-                                        <!-- <h4 id="doc_unity" style="float:left;width:15%;padding-top:10px;font-size: 15px;font-weight:900;font-family:'宋体';;">
-                                            台州市气象局</h4>
-                                        <h4 id="doc_info" style="float:left;width:20%;padding-top:10px;font-size: 15px;font-weight:900;font-family:'宋体';;">
-                                            第47期:一周天气</h4>
-                                         -->
                                         <div id="button_type_list" class="layui-btn-group"
-                                            style="display: inline-flex;width:55%;height:80%">
+                                            style="display: inline-flex;width:55%;height:80%;">
                                         </div>
                                     </div>
-                                    <!-- <button type="button" class="layui-btn layui-btn-normal">按钮</button> -->
-                                    <!-- <button id="convert3"
-                                        style="width:40px;height:40px;background-image: url(static/src/合并.png);background-size: 100%;background-repeat: no-repeat;"></button> -->
-                                    <!-- <div style="width:2%;height: 100%;"></div> -->
                                     <button id="preview_save" type="button" data-method="preview_save_select"
                                         class="layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal documentclick"
                                         style="margin-top:5px">保存当前</button>
-                                    <!-- <button id="preview_save"
-                                        style="width:40px;height:40px;background-image: url(static/src/保存.png);background-size: 100%;background-repeat: no-repeat;"></button> -->
-                                    <!-- <div style="width:2%;height: 100%;"></div> -->
                                     <button id="save_doc_all" type="button"
                                         class="layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal documentclick"
                                         style="margin-top:5px">保存所有</button>
-                                    <!-- <button id="save_doc_all"
-                                        style="width:40px;height:40px;background-image: url(static/src/发布.png);background-size: 100%;background-repeat: no-repeat;"></button> -->
-                                    <!-- <div style="width:2%;height: 100%;"></div> -->
                                     <button id="convert" type="button"
                                         class="layui-btn  layui-btn-sm layui-btn-radius layui-btn-normal documentclick"
                                         style="margin-top:5px;margin-right:15px;">预览</button>
-                                    <!-- <button id="convert"
-                                        style="width:40px;height:40px;background-image: url(static/src/预览.png);background-size: 100%;background-repeat: no-repeat;"></button> -->
                                 </div>
 
                                 <script>
@@ -1459,7 +1438,6 @@
                                     },
                                     dataType: "json",
                                     success: function (data) {
-                                        console.log(data)
                                         var self_title = data.self_title
                                         var view_first = data.doc_list[0]
                                         // 首页
@@ -1556,7 +1534,7 @@
                                         }
                                         // 首页的加载数据
                                         $('.tool_history_button').click(function () {                                     
-                                           $('.tool_history_button').attr('style', "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 10%;width:98%;text-align:center;;padding-top:5px;border-radius:5px;margin:5px;background-color:rgb(0,150,136);")
+                                            $('.tool_history_button').attr('style', "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 10%;width:98%;text-align:center;;padding-top:5px;border-radius:5px;margin:5px;background-color:rgb(0,150,136);")
                                             this.style = "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 10%;width:98%;text-align:center;;padding-top:5px;border-radius:5px;margin:5px;background-color:rgb(255,87,34);"
                                             var info = this.id
                                             var hearder = list_button_object.render_head_info()
@@ -2160,7 +2138,7 @@
                                 ]
                                 }
                                 
-                                var colorinitlat = 28.4
+                                var colorinitlat = 28.3
                                 var colorinitlon = 120.1
                                 var coloritem = isobands_options.breaksProperties.length
                                 var colorwidth = 0.1
@@ -2307,7 +2285,7 @@
                                             breaksProperties:color_oplist
                                         }
                                         
-                                        console.log("索引",color_oplist,levelV,tmin,tmax)                                
+                                        // console.log("索引",color_oplist,levelV,tmin,tmax)                                
                                     }
                                     else{
                                         var nums = (tmax - tmin)+1
@@ -2796,7 +2774,7 @@
                                 dataType: "json",
                                 success: function (data) {
                                     var datalist = []                                                                                                                                 
-                                    //console.log(Math.max(...datalist),Math.min(...datalist))
+                                    console.log(data.data_max,data.data_min)
                                     var select_type = data.plot_type
                                     if (select_type == "T" || select_type == "TMax24" || select_type == "TMin24"){
                                         data.back_data.forEach(function (item) {
@@ -2807,8 +2785,11 @@
                                                 console.log(parseFloat(item.properties.value))
                                             }
                                         })
-                                        var datamin = parseInt(Math.min(...datalist)) - 2 
-                                        var datamax = parseInt(Math.max(...datalist)) + 2
+                                        // var datamin = parseInt(Math.min(...datalist)) - 2 
+                                        // var datamax = parseInt(Math.max(...datalist)) + 2
+                                        // var datamiddle = (0.5*(datamin+datamax))%2==0?(0.5*(datamin+datamax)):(0.5*(datamin+datamax))-1
+                                        var datamin = parseInt(data.data_min) - 2 
+                                        var datamax = parseInt(data.data_max) + 2
                                         var datamiddle = (0.5*(datamin+datamax))%2==0?(0.5*(datamin+datamax)):(0.5*(datamin+datamax))-1
                                         map_toolbox_object.color_numbers = [datamin,datamiddle,datamax]              
                                         //console.log(datamin%2,datamin,datamiddle)
