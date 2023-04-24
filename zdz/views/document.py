@@ -309,15 +309,17 @@ def create_new_doc(request):
     data_documenttype = [i['name'] for i in documenttype]
     data_item = []
     for doc_type in data_documenttype:
-        ite = SelfModule.objects.filter(document_type=doc_type).order_by('-item')
+        ite = Document.objects.filter(document_type=doc_type).order_by('-item')
         if ite:
+            # print("查找数据---",ite,ite[0].item)
             singleitem = {
                 'docitem':ite[0].item,
                 'doctype':doc_type
             }
         else:
+            # print("查找数据---")
             singleitem = {
-                'docitem':1,
+                'docitem':0,
                 'doctype':doc_type
             }  
         data_item.append(singleitem)  

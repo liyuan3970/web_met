@@ -17,6 +17,7 @@ class FileViewSet(viewsets.ViewSet):
         pdf_file = HTML(string=document)
         pdf_file = pdf_file.write_pdf(presentational_hints=True)
         return HttpResponse(pdf_file, content_type="application/pdf")
+    @transaction.atomic()   
     @action(methods=["post"], url_path="preview_save", detail=False)
     def preview_save(self, request):
         # 接收前台数据
@@ -33,6 +34,7 @@ class FileViewSet(viewsets.ViewSet):
             "id": item,
             "data": data
         }
+        
         # 数据存储
         obj = SelfModule.objects.create(
             document_type=document_type,
@@ -44,8 +46,9 @@ class FileViewSet(viewsets.ViewSet):
             create_user=0,
             update_user=0
         )
+        # print("保存数据----",obj)
         # 保存模板
-        if title:
+        if title!='none':
             obj = DocumentSelfDefine.objects.create(
                 document_type=document_type,
                 name=title,
