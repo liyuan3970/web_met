@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.parsers import JSONParser
-from weasyprint import HTML
+from weasyprint import HTML,Attachment
 
 from ..models.doucument_model import *
 from ..serializers.preview_all_serializer import PreviewAllSerializer
@@ -59,9 +59,13 @@ class FileViewSet(viewsets.ViewSet):
                 create_user=0,
                 update_user=0
             )
-        pdf_file = HTML(string=document)
-        pdf_file = pdf_file.write_pdf(presentational_hints=True)
-        return HttpResponse(pdf_file, content_type="application/pdf")
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'inline; filename="My.pdf"'
+        HTML(string=document).write_pdf(response,presentational_hints=True)
+        # pdf_file = HTML(string=document)
+        # pdf_file = pdf_file.write_pdf(presentational_hints=True)
+        # return HttpResponse(pdf_file, content_type="application/pdf")
+        return response
 
     # 保存所有文档
     @transaction.atomic()
@@ -101,7 +105,7 @@ class FileViewSet(viewsets.ViewSet):
                     'filelist': []
                 }
                 doc_all = Document.objects.filter(
-                    unity="台州市气象局", year=year, document_type=doc_type['name']).all().values()
+                    unity="台州市气象局", year=year, document_type=doc_type['name']).all().values().order_by('-item')
                 for doc in doc_all:
                     doc_dir = {}
                     doc_dir['type'] = doc['document_type']
