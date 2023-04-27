@@ -5670,8 +5670,6 @@
                     $('#tool_zdz_button').click(function () {
                         $('.toolboxclick').attr('class','layui-btn layui-btn-radius toolboxclick')
                         this.setAttribute("class","layui-btn layui-btn-danger layui-btn-radius toolboxclick ")
-                        // $('.toolboxclick').attr('style','background-color:rgb(0,150,136)')
-                        // this.style = "float: right;margin-right:45px;;background-color:rgb(255,87,34)"
                         var map_z = document.getElementById("zdz_webgis")
                         if (map_z.children.length > 0) {
                             zdz_recdata_obj.zdz_map.remove()
@@ -5698,7 +5696,8 @@
                             data: {
                                 'csrfmiddlewaretoken': csrf,
                                 'start_time':  zdz_recdata_obj.start_date,
-                                'end_time': zdz_recdata_obj.end_date
+                                'end_time': zdz_recdata_obj.end_date,
+                                'click_type':'zdz_index'
                             },
                             dataType: "json",
                             beforeSend: function (XMLHttpRequest) {

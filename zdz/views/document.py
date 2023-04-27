@@ -586,25 +586,27 @@ zdz_worker = None
 def tool_zdz_date(request):
     start_time = request.POST.get('start_time', '')
     end_time = request.POST.get('end_time', '')
+    click_type = request.POST.get('click_type', '')
     # 用于测试
-    print("自动站查询的时间",start_time,end_time)
+    # print("自动站查询的时间",start_time,end_time)
     # start = '2022-01-25 20:00'
     # end = '2022-02-10 06:00'
-    start = "2019" + start_time[4:]
-    end = "2019" + end_time[4:]
-    #start = start_time
-    #end = end_time
-    global zdz_worker
-    zdz_worker = data_class.zdz_data(start, end)
-    table_data,points,daily_btn_list = zdz_worker.index_data()
-    context = {
-        'status': "ok",
-        'table_data':json.dumps(table_data, cls=NpEncoder),
-        # 'table_data':table_data,
-        'points':points,
-        'daily_btn_list':daily_btn_list
-    }
-    return JsonResponse(context)
+    # start = start_time
+    # end = end_time
+    if click_type=='zdz_index':
+        start = "2019" + start_time[4:]
+        end = "2019" + end_time[4:]
+        global zdz_worker
+        zdz_worker = data_class.zdz_data(start, end)
+        table_data,points,daily_btn_list = zdz_worker.index_data()
+        context = {
+            'status': "ok",
+            'table_data': json.dumps(table_data, cls=NpEncoder),
+            # 'table_data':table_data,
+            'points': points,
+            'daily_btn_list': daily_btn_list
+        }
+        return JsonResponse(context)
 
 
 # 自动站历史数据大风的查询
