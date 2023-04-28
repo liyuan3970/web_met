@@ -364,221 +364,267 @@ class plot_tz_product:
             buttn_list.append(label)
         return buttn_list
 # 自动站数据查询的class
+
+# 过程统计数据查询
 class zdz_data:
     def __init__(self, start, end):
         self.start = start
         self.end = end  
-    def read_csv(self):
-        '''
-        1.数据读取---此方法为测试方法
-        2.数据分段---每天
-        3.每天统计
-        '''
-        #         station_Mws = pd.read_csv("Mws_15.csv")
-        #         station_Aws = pd.read_csv("Aws_15.csv")
-        #         station_all = pd.concat([station_Aws, station_Mws])
-        # station_all = pd.read_csv("data_zdz_height.csv")
-        station_all = pd.read_csv("static/data/data_zdz_height.csv")
-        return station_all
-    def sql_data(self):
-        conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="ZJSZDZDB")
+    def sql_index(self):
+        dailylist = self.day_button()
+        conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="tzweb")
+        sql_location = f"""select lat,lon,sd.station_name, sd.station_no as station_no, sd.w_max as wind, max(w_dir) as w_dir,
+        sum(p_total) as rain,
+        min(if(vis>0,vis,9999)) as view ,
+        min(t_min) as t_min ,
+        max(t_max) as t_max 
+        from (select station_no,max(if(w_max>0,w_max,null)) as wind from station_data where (datatime between '{self.start}' and '{self.end}') group by station_no) as wind
+        inner join station_data as sd on sd.station_no = wind.station_no where( sd.w_max = wind.wind and datatime between '{self.start}' and '{self.end}')
+        group by sd.datatime, sd.station_no, sd.w_max,lat,lon,station_name"""
+        df_location = pd.read_sql(sql_location , con=conn)  
+        point = []  
+        table_data = []
+        for i in range(len(df_location)):
+            # 面雨量
+            rain_data = {
+                "type": "Feature",
+                "properties": {
+                    "value": str(df_location.iloc[i,6])
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [df_location.iloc[i,1], df_location.iloc[i,0]]
+                }
+            } 
+            point.append(rain_data)
+            # 数据表
+            single = {
+                "IIiii":str(df_location.iloc[i,3]),
+                "county":"台州市",
+                "StationName":str(df_location.iloc[i,2]),
+                "fFy":str(df_location.iloc[i,4]),
+                "dFy":str(df_location.iloc[i,5]),
+                "RR":str(df_location.iloc[i,6]),
+                "Tx":str(df_location.iloc[i,9]),
+                "Tn":str(df_location.iloc[i,8]),
+                "VV":str(df_location.iloc[i,7]),
+                "lat":str(df_location.iloc[i,0]),
+                "lon":str(df_location.iloc[i,1]),
+                }
+            table_data.append(single)
+        return table_data,point,dailylist
+    def day_button(self):
+        conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="tzweb")
         start = self.start 
         end = self.end 
-        #print(start,end)
-        sql_location = "select b.StationName,b.county,b.Town,b.lat,b.lon,b.IIiii,b.Height,tTime,dFy,fFy,T,Tx,Tn,VV,RR from\
-            TAB_Mws2019 as a left join TAB_StationInfo as b on a.IIiii=b.IIiii where\
-            (b.IIiii in (select IIiii from TAB_StationInfo where(City = '台州') and tTime between"
-        sql_location = sql_location + " " + "'" +  start + "'" +  "  " + "and" + " " + "'" +  end + "'" + "))"
-        df_location = pd.read_sql(sql_location , con=conn)
-        return df_location
-    def return_daylist(self):
-        '''
-        返回日期列表
-        '''
-        dates = []
-        #         dt = datetime.datetime.strptime(self.start, "%Y-%m-%d")
-        dt = dtt.datetime.strptime(self.start[0:10], "%Y-%m-%d")
-        date = self.start[:10]
-        yesday = dt+dtt.timedelta(-1)
-        dates.append(yesday.strftime("%Y-%m-%d")[:10])
-        while date <= self.end[:10]:
-            dates.append(date)
-            dt = dt + dtt.timedelta(1)
-            date = dt.strftime("%Y-%m-%d")
-        return dates
-    def day_button(self,city,station_data):
-        '''返回按钮组'''
-        station_all = station_data
-        dates = self.return_daylist()
+        select_rain = 'p_total' 
+        select_tmax = 't_max'
+        select_tmin = 't_min'
+        select_wind = 'w_max'
+        select_vis = 'vis'
+        select_lat = 'lat'
+        select_lon = 'lon'
+        db_table = 'station_data'
+        sql = f"""select datatime,station_no,
+        {select_rain} ,{select_tmax},{select_tmin} ,{select_wind},{select_vis} 
+        from {db_table}
+        where (datatime between "{start}" and "{end}")"""
+        df_location = pd.read_sql(sql , con=conn)
+        df_location['day'] = df_location['datatime'].dt.day
+        df_location['year'] = df_location['datatime'].dt.year
+        df_location['month'] = df_location['datatime'].dt.month
+        datagroup = df_location.groupby(['month','day','year'])
         dailylist = []
-        for i in range(len(dates)):
+        for i in datagroup.size().index:
+            df = datagroup.get_group(i)
             daily = {
-                "time":None,
+                "time":str(df['datatime'].dt.year.iloc[0]) +"年"+ str(df['datatime'].dt.month.iloc[0]) + "月" + str(df['datatime'].dt.day.iloc[0]) + "日",
                 "rain":False,
                 "wind":False,
                 "tmax":False,
                 "tmin":False,
                 "view":False,
             }
-            if i!=0:
-                s_date = dates[i-1] + ' ' + '20:00'
-                e_date = dates[i] + ' ' + '20:00'
-                daily["time"] = dates[i]
-                df_preday = station_all[(station_all['tTime'] >= s_date) & (station_all['tTime'] <= e_date)]
-                # 统计标量
-                temp_min = df_preday[(df_preday['Height'] < 6000) & (df_preday['T'] > -400)]['T'].min()
-                temp_max = df_preday[(df_preday['Height'] < 6000) & (df_preday['T'] > -400)]['T'].max()
-                vv = df_preday[(df_preday['VV'] > 0.1) & (df_preday['VV'] < 500)]['VV'].count()
-                RR = df_preday[(df_preday['RR'] > 0.1) & (df_preday['RR'] < 8888)]['RR'].count()
-                wind = df_preday[df_preday['fFy'] > 187]['fFy'].count()    
-                if temp_min<0:
-                    daily["tmin"] = True
-                if temp_max>350:
-                    daily["tmax"] = True
-                if vv >0:
-                    daily["view"] = True
-                if RR >0:
-                    daily["rain"] = True
-                if wind >0:
-                    daily["wind"] = True
-                dailylist.append(daily)
+            if df[(df['vis']>0) & (df['vis']<750)]['vis'].count() >0:
+                daily['view'] = True
+            if df[df['t_max']>370]['t_max'].count()>0:
+                daily['tmax'] = True
+            if df[df['t_min']<-100]['t_min'].count() >0:
+                daily['tmin'] = True
+            if df[df['w_max']>108]['w_max'].count() >0:
+                daily['wind'] = True
+            if df[df['p_total']>0]['p_total'].count() >0:
+                daily['rain'] = True
+            dailylist.append(daily)
         return dailylist
-    def rain_data(self,start,end,station_data):
-        '''返回点击绘图所需的数据'''
-        # 采集数据 可以是sql
-        station_all = station_data
-        grouped_tTime = station_all.groupby('IIiii')
-        points = []
-        table_data = []  
-        for i in grouped_tTime.size().index:
-            data = grouped_tTime.get_group(i)
-            RR = data[(data['RR'] > 0.0) & (data['RR'] < 8888)]['RR'].sum()/10.0
-            if RR > 0:
-                single = {
-                    "type": "Feature",
-                    "properties": {
-                        "value": str(RR)
-                    },
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [data['lon'].iloc[0], data['lat'].iloc[0]]
-                    }
-                }
-                points.append(single)  
-                # 采集marker和表格的数据
-                rain = data.sort_values(by="tTime")["RR"].to_list()
-                time = data.sort_values(by="tTime")["tTime"].to_list()
-                ## 自己定义表格的数据形式
-                single_rain = {
-                    "IIiii":data['IIiii'].iloc[0],
-                    "county":data['county'].iloc[0],
-                    "town":data['Town'].iloc[0],
-                    "StationName":data['StationName'].iloc[0],
-                    "RR":RR,
-                    "lat":data['lat'].iloc[0],
-                    "lon":data['lon'].iloc[0],
-                    "height":data['Height'].iloc[0],
-                    "rain_list":rain,
-                    "time_list":time
-                }
-                table_data.append(single_rain)  
-        return points
-    def index_data(self):
-        '''返回所有数据'''
-        city = "taizhou"
-        #station_all = self.read_csv()
-        station_all = self.sql_data()
-        daily_btn_list = self.day_button(city,station_all)
-        grouped_tTime = station_all.groupby('IIiii')
-        table_data = []  
-        points = []
-        for i in grouped_tTime.size().index:
-            data = grouped_tTime.get_group(i)
-            time = data.sort_values(by="tTime")["tTime"].to_list()
-            RR = data[(data['RR'] > 0.0) & (data['RR'] < 8888)]['RR'].sum()/10.0
-            tmin = data[(data['T'] >-400) & (data['T'] < 8888)]['T'].min()/10.0
-            tmax = data[(data['T'] >-400) & (data['T'] < 8888)]['T'].max()/10.0
-            vv = data[(data['VV'] >0) & (data['VV'] < 1000)]['VV'].min()
-            wind = data[data['fFy'] > 180]['fFy'].max()/10.0
-            index =  data[data['fFy'] == data['fFy'].max()].index.tolist()[0]
-            #print(index,"---",wind,"--",data['dFy'][index])
-            #deg = data[data['fFy'] == data['fFy'].max()]['dFy'].iloc[0]
-            deg = data['dFy'][index]
+    def sql_wind(self,start,end):
+        conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="tzweb")
+        sql_location = f"""select lat,lon,sd.station_name, sd.station_no as station_no, sd.w_max as wind, max(w_dir) as w_dir from
+        (select station_no,max(if(w_max>0,w_max,null)) as wind from station_data where (datatime between '{start}' and '{end}') group by station_no) as wind
+        inner join station_data as sd on sd.station_no = wind.station_no where( sd.w_max = wind.wind and datatime between '{start}' and '{end}')
+        group by sd.datatime, sd.station_no, sd.w_max,lat,lon,station_name"""
+        df_location = pd.read_sql(sql_location , con=conn)
+        point = []  
+        table_data = []
+        for i in range(len(df_location)):
+            # 面雨量
             rain_data = {
                 "type": "Feature",
                 "properties": {
-                    "value": str(RR)
+                    "value": str(df_location.iloc[i,4])
                 },
                 "geometry": {
                     "type": "Point",
-                    "coordinates": [data['lon'].iloc[0], data['lat'].iloc[0]]
+                    "coordinates": [df_location.iloc[i,1], df_location.iloc[i,0]]
                 }
-            }        
-            # 雨
-            if np.isnan(RR):
-                RR=-9999.0
-                rain = False
-            else:
-                # rain_data = {
-                #     "type": "Feature",
-                #     "properties": {
-                #         "value": str(RR)
-                #     },
-                #     "geometry": {
-                #         "type": "Point",
-                #         "coordinates": [data['lon'].iloc[0], data['lat'].iloc[0]]
-                #     }
-                # }
-                # points.append(rain_data)
-                rain = data.sort_values(by="tTime")["RR"].to_list()
-            # 风
-            if np.isnan(wind):
-                wind=-9999.0
-                fFy = False
-                dFy = False
-            else:
-                fFy = data.sort_values(by="tTime")["fFy"].to_list()
-                dFy = data.sort_values(by="tTime")["dFy"].to_list()
-            # 温
-            if np.isnan(tmax):
-                tmax=-9999.0
-                tx = False
-            else:
-                tx = data.sort_values(by="tTime")["Tx"].to_list()
-            if np.isnan(tmin):
-                tmin=-9999.0
-                tn = False
-            else:
-                tn = data.sort_values(by="tTime")["Tn"].to_list()
-            # 雾
-            if np.isnan(vv):
-                vv=-9999.0
-                view = False
-            else:
-                view = data.sort_values(by="tTime")["VV"].to_list()
+            } 
+            point.append(rain_data)
+            # 数据表
             single = {
-                "IIiii":str(data['IIiii'].iloc[0]),
-                "county":str(data['county'].iloc[0]),
-                "town":str(data['Town'].iloc[0]),
-                "StationName":str(data['StationName'].iloc[0]),
-                "fFy":str(wind),
-                "dFy":str(deg),
-                "RR":str(RR),
-                "Tx":str(tmax),
-                "Tn":str(tmin),
-                "VV":str(vv),
-                "lat":str(data['lat'].iloc[0]),
-                "lon":str(data['lon'].iloc[0]),
-                "rain_list":rain,
-                "tmax_list":tx,
-                "tmin_list":tn,
-                "fFy_list":fFy,
-                "dFy_list":dFy,
-                "view_list":view,
-                "time_list":time
+                "IIiii":str(df_location.iloc[i,3]),
+                "county":"台州市",
+                "start":start,
+                "end":end,
+                "StationName":str(df_location.iloc[i,2]),
+                "fFy":str(df_location.iloc[i,4]),
+                "dFy":str(df_location.iloc[i,5]),
+                "lat":str(df_location.iloc[i,0]),
+                "lon":str(df_location.iloc[i,1]),
                 }
-            table_data.append(single)
-        return table_data,points,daily_btn_list
+            table_data.append(single)       
+        return table_data , point
+    def sql_rain(self,start,end):
+        conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="tzweb")
+        sql_location = f"""select lat,lon, station_name,station_no,
+        sum(p_total>0) as rain
+        from station_data where( datatime between '{start}' and '{end}' ) 
+        group by lat,lon, station_name,station_no"""
+        df_location = pd.read_sql(sql_location , con=conn)
+        point = []  
+        table_data = []
+        for i in range(len(df_location)):
+            # 面雨量
+            rain_data = {
+                "type": "Feature",
+                "properties": {
+                    "value": str(df_location.iloc[i,4])
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [df_location.iloc[i,1], df_location.iloc[i,0]]
+                }
+            } 
+            point.append(rain_data)
+            # 数据表
+            single = {
+                "IIiii":str(df_location.iloc[i,3]),
+                "county":"台州市",
+                "start":start,
+                "end":end,
+                "StationName":str(df_location.iloc[i,2]),
+                "RR":str(df_location.iloc[i,4]),
+                "lat":str(df_location.iloc[i,0]),
+                "lon":str(df_location.iloc[i,1]),
+                }
+            table_data.append(single)       
+        return table_data , point      
+    def sql_temp(self,start,end,temp):
+        if temp =="max":
+            tempind = 5
+        else:
+            tempind = 4
+        conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="tzweb")
+        sql_location = f"""select lat,lon, station_name,station_no,
+        min(t_min) as t_min ,
+        max(t_max) as t_max 
+        from station_data where( datatime between '{start}' and '{end}' ) 
+        group by lat,lon, station_name,station_no"""
+        df_location = pd.read_sql(sql_location , con=conn)
+        point = []  
+        table_data = []
+        for i in range(len(df_location)):
+            # 面雨量
+            rain_data = {
+                "type": "Feature",
+                "properties": {
+                    "value": str(df_location.iloc[i,tempind])
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [df_location.iloc[i,1], df_location.iloc[i,0]]
+                }
+            } 
+            point.append(rain_data)
+            # 数据表
+            single = {
+                "IIiii":str(df_location.iloc[i,3]),
+                "county":"台州市",
+                "start":start,
+                "end":end,
+                "StationName":str(df_location.iloc[i,2]),
+                "t_min":str(df_location.iloc[i,4]),
+                "t_max":str(df_location.iloc[i,5]),
+                "lat":str(df_location.iloc[i,0]),
+                "lon":str(df_location.iloc[i,1]),
+                }
+            table_data.append(single)       
+        return table_data , point 
+    def sql_view(self,start,end):
+        conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="tzweb")
+        sql_location = f"""select lat,lon, station_name,station_no,
+        min(vis) as rain
+        from station_data where( datatime between '{start}' and '{end}' ) 
+        group by lat,lon, station_name,station_no"""
+        df_location = pd.read_sql(sql_location , con=conn)
+        point = []  
+        table_data = []
+        for i in range(len(df_location)):
+            # 面雨量
+            rain_data = {
+                "type": "Feature",
+                "properties": {
+                    "value": str(df_location.iloc[i,4])
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [df_location.iloc[i,1], df_location.iloc[i,0]]
+                }
+            } 
+            point.append(rain_data)
+            # 数据表
+            single = {
+                "IIiii":str(df_location.iloc[i,3]),
+                "county":"台州市",
+                "start":start,
+                "end":end,
+                "StationName":str(df_location.iloc[i,2]),
+                "VV":str(df_location.iloc[i,4]),
+                "lat":str(df_location.iloc[i,0]),
+                "lon":str(df_location.iloc[i,1]),
+                }
+            table_data.append(single)       
+        return table_data,point
+    def sql_click(self,start,end,station,click_type):
+        conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="ZJSZDZDB")
+        if click_type!='wind':
+            if station[0]!='K':
+                sql_location = f"""select tTime,{click_type} from TAB_Aws2019 where ( IIiii={station} and tTime between '{start}' and '{end}')"""
+            else:
+                sql_location = f"""select tTime,{click_type} from TAB_Mws2019 where ( IIiii='{station}' and tTime between '{start}' and '{end}')"""
+        else:
+            if station[0]!='K':
+                sql_location = f"""select tTime,dFy,fFy from TAB_Aws2019 where ( IIiii={station} and tTime between '{start}' and '{end}')"""
+            else:
+                sql_location = f"""select tTime,dFy,fFy from TAB_Mws2019 where ( IIiii='{station}' and tTime between '{start}' and '{end}')"""
+        
+        df_location = pd.read_sql(sql_location , con=conn) 
+        time = df_location.sort_values(by="tTime")["tTime"].to_list() 
+        if click_type == "wind":
+            values = [df_location.sort_values(by="tTime")['fFy'].to_list(),df_location.sort_values(by="tTime")['dFy'].to_list()]
+        else:
+            values = df_location.sort_values(by="tTime")[click_type].to_list()     
+        return time,values,click_type,station
+
 # ec数据的处理和对接
 class ec_data_point:
     def __init__(self,start_time,end_time):

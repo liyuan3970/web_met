@@ -579,10 +579,6 @@ def self_plot_download(request):
 
 
 # 自动站历史数据的查询交互
-# 设置自动站的全居变量
-zdz_worker = None
-
-
 def tool_zdz_date(request):
     start_time = request.POST.get('start_time', '')
     end_time = request.POST.get('end_time', '')
@@ -596,17 +592,69 @@ def tool_zdz_date(request):
     if click_type=='zdz_index':
         start = "2019" + start_time[4:]
         end = "2019" + end_time[4:]
-        global zdz_worker
         zdz_worker = data_class.zdz_data(start, end)
-        table_data,points,daily_btn_list = zdz_worker.index_data()
+        table_data,points,daily_btn_list = zdz_worker.sql_index()
         context = {
             'status': "ok",
             'table_data': json.dumps(table_data, cls=NpEncoder),
-            # 'table_data':table_data,
             'points': points,
             'daily_btn_list': daily_btn_list
         }
         return JsonResponse(context)
+    elif click_type=='mark_click':
+        station = request.POST.get('click_station', '')
+        click_type = request.POST.get('click_class', '')
+        start = "2019" + start_time[4:]
+        end = "2019" + end_time[4:]
+        zdz_worker = data_class.zdz_data(start, end)
+        plot_time,plot_list,plot_type,plot_name = zdz_worker.sql_click(start,end,station,click_type)
+        context = {
+            'status': "ok",
+            'plot_time': json.dumps(plot_time, cls=NpEncoder),
+            'plot_list': json.dumps(plot_list, cls=NpEncoder),
+            'plot_type': plot_type,
+            'plot_name': plot_name
+        }
+        return JsonResponse(context)
+    elif click_type=='btn_single':
+        click_type = request.POST.get('click_class', '')
+        start = "2019" + start_time[4:]
+        end = "2019" + end_time[4:]
+        zdz_worker = data_class.zdz_data(start, end)
+        if click_type == "view":
+            table_data,points = zdz_worker.sql_view(start,end)
+            context = {
+                'status': "ok",
+                'single_data': json.dumps(table_data, cls=NpEncoder),
+                'points': points
+            }
+            return JsonResponse(context)
+        if click_type == "wind":
+            table_data,points = zdz_worker.sql_wind(start,end)
+            context = {
+                'status': "ok",
+                'single_data': json.dumps(table_data, cls=NpEncoder),
+                'points': points
+            }
+            return JsonResponse(context)
+        if click_type == "rain":
+            table_data,points = zdz_worker.sql_rain(start,end)
+            context = {
+                'status': "ok",
+                'single_data': json.dumps(table_data, cls=NpEncoder),
+                'points': points
+            }
+            return JsonResponse(context)
+        if click_type == "temp":
+            table_data,points = zdz_worker.sql_temp(start,end)
+            context = {
+                'status': "ok",
+                'single_data': json.dumps(table_data, cls=NpEncoder),
+                'points': points
+            }
+            return JsonResponse(context)
+        
+
 
 
 # 自动站历史数据大风的查询
