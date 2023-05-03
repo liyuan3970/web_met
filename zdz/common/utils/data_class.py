@@ -378,9 +378,9 @@ class zdz_data:
         min(if(vis>0,vis,9999)) as view ,
         min(t_min) as t_min ,
         max(t_max) as t_max 
-        from (select station_no,max(if(w_max>0,w_max,null)) as wind from station_data where (datatime between '{self.start}' and '{self.end}') group by station_no) as wind
-        inner join station_data as sd on sd.station_no = wind.station_no where( sd.w_max = wind.wind and datatime between '{self.start}' and '{self.end}')
-        group by sd.datatime, sd.station_no, sd.w_max,lat,lon,station_name"""
+        from (select station_no,max(if(w_max>0,w_max,null)) as wind from station_data where (datetime between '{self.start}' and '{self.end}') group by station_no) as wind
+        inner join station_data as sd on sd.station_no = wind.station_no where( sd.w_max = wind.wind and datetime between '{self.start}' and '{self.end}')
+        group by sd.datetime, sd.station_no, sd.w_max,lat,lon,station_name"""
         df_location = pd.read_sql(sql_location , con=conn)  
         point = []  
         table_data = []
@@ -425,20 +425,20 @@ class zdz_data:
         select_lat = 'lat'
         select_lon = 'lon'
         db_table = 'station_data'
-        sql = f"""select datatime,station_no,
+        sql = f"""select datetime,station_no,
         {select_rain} ,{select_tmax},{select_tmin} ,{select_wind},{select_vis} 
         from {db_table}
-        where (datatime between "{start}" and "{end}")"""
+        where (datetime between "{start}" and "{end}")"""
         df_location = pd.read_sql(sql , con=conn)
-        df_location['day'] = df_location['datatime'].dt.day
-        df_location['year'] = df_location['datatime'].dt.year
-        df_location['month'] = df_location['datatime'].dt.month
+        df_location['day'] = df_location['datetime'].dt.day
+        df_location['year'] = df_location['datetime'].dt.year
+        df_location['month'] = df_location['datetime'].dt.month
         datagroup = df_location.groupby(['month','day','year'])
         dailylist = []
         for i in datagroup.size().index:
             df = datagroup.get_group(i)
             daily = {
-                "time":str(df['datatime'].dt.year.iloc[0]) +"年"+ str(df['datatime'].dt.month.iloc[0]) + "月" + str(df['datatime'].dt.day.iloc[0]) + "日",
+                "time":str(df['datetime'].dt.year.iloc[0]) +"年"+ str(df['datetime'].dt.month.iloc[0]) + "月" + str(df['datetime'].dt.day.iloc[0]) + "日",
                 "rain":False,
                 "wind":False,
                 "tmax":False,
@@ -460,9 +460,9 @@ class zdz_data:
     def sql_wind(self,start,end):
         conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="tzweb")
         sql_location = f"""select lat,lon,sd.station_name, sd.station_no as station_no, sd.w_max as wind, max(w_dir) as w_dir from
-        (select station_no,max(if(w_max>0,w_max,null)) as wind from station_data where (datatime between '{start}' and '{end}') group by station_no) as wind
-        inner join station_data as sd on sd.station_no = wind.station_no where( sd.w_max = wind.wind and datatime between '{start}' and '{end}')
-        group by sd.datatime, sd.station_no, sd.w_max,lat,lon,station_name"""
+        (select station_no,max(if(w_max>0,w_max,null)) as wind from station_data where (datetime between '{start}' and '{end}') group by station_no) as wind
+        inner join station_data as sd on sd.station_no = wind.station_no where( sd.w_max = wind.wind and datetime between '{start}' and '{end}')
+        group by sd.datetime, sd.station_no, sd.w_max,lat,lon,station_name"""
         df_location = pd.read_sql(sql_location , con=conn)
         point = []  
         table_data = []
@@ -497,7 +497,7 @@ class zdz_data:
         conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="tzweb")
         sql_location = f"""select lat,lon, station_name,station_no,
         sum(p_total>0) as rain
-        from station_data where( datatime between '{start}' and '{end}' ) 
+        from station_data where( datetime between '{start}' and '{end}' ) 
         group by lat,lon, station_name,station_no"""
         df_location = pd.read_sql(sql_location , con=conn)
         point = []  
@@ -537,7 +537,7 @@ class zdz_data:
         sql_location = f"""select lat,lon, station_name,station_no,
         min(t_min) as t_min ,
         max(t_max) as t_max 
-        from station_data where( datatime between '{start}' and '{end}' ) 
+        from station_data where( datetime between '{start}' and '{end}' ) 
         group by lat,lon, station_name,station_no"""
         df_location = pd.read_sql(sql_location , con=conn)
         point = []  
@@ -573,7 +573,7 @@ class zdz_data:
         conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="tzweb")
         sql_location = f"""select lat,lon, station_name,station_no,
         min(vis) as rain
-        from station_data where( datatime between '{start}' and '{end}' ) 
+        from station_data where( datetime between '{start}' and '{end}' ) 
         group by lat,lon, station_name,station_no"""
         df_location = pd.read_sql(sql_location , con=conn)
         point = []  
