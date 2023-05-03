@@ -377,10 +377,12 @@ class zdz_data:
         sum(p_total) as rain,
         min(if(vis>0,vis,9999)) as view ,
         min(t_min) as t_min ,
-        max(t_max) as t_max 
+        max(t_max) as t_max ,
+        sd.station_city as county,
+        sd.station_town as town
         from (select station_no,max(if(w_max>0,w_max,null)) as wind from station_data where (datetime between '{self.start}' and '{self.end}') group by station_no) as wind
         inner join station_data as sd on sd.station_no = wind.station_no where( sd.w_max = wind.wind and datetime between '{self.start}' and '{self.end}')
-        group by sd.datetime, sd.station_no, sd.w_max,lat,lon,station_name"""
+        group by sd.datetime, sd.station_no, sd.w_max,lat,lon,station_name,station_city,station_town"""
         df_location = pd.read_sql(sql_location , con=conn)  
         point = []  
         table_data = []
@@ -400,7 +402,8 @@ class zdz_data:
             # 数据表
             single = {
                 "IIiii":str(df_location.iloc[i,3]),
-                "county":"台州市",
+                "county":str(df_location.iloc[i,10]),
+                "town":str(df_location.iloc[i,11]),
                 "StationName":str(df_location.iloc[i,2]),
                 "fFy":str(df_location.iloc[i,4]),
                 "dFy":str(df_location.iloc[i,5]),
