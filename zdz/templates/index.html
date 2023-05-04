@@ -1878,8 +1878,10 @@
                                                     class="layui-btn layui-btn-xs wind">风</button>
                                                 <button type="button" value="rain_all"
                                                     class="layui-btn layui-btn-xs rain">雨</button>
-                                                <button type="button" value="temp_all"
-                                                    class="layui-btn layui-btn-xs temp">温</button>
+                                                <button type="button" value="temp_max"
+                                                    class="layui-btn layui-btn-xs temp">高</button>
+                                                <button type="button" value="temp_min"
+                                                    class="layui-btn layui-btn-xs temp">低</button>
                                                 <button type="button" value="view_all"
                                                     class="layui-btn layui-btn-xs view">雾</button>
                                             </div>
@@ -2130,7 +2132,8 @@
                                     { fill: "rgb(75,111,159)" },// 200
                                     { fill: "rgb(104,135,161)" },// 500
                                     { fill: "rgb(145,161,174)" },// 1000
-                                    { fill: "rgb(147,186,149)" }// 2000
+                                    { fill: "rgb(147,186,149)" },// 2000
+                                    { fill: "rgb(255,255,255)" }// 3000
                                 ]
                             };
                             
@@ -2214,7 +2217,8 @@
 
                                 }
                                 else{
-                                    var levelV=[-10,-8, -6, -4, -2, 0, 2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,35,37,40]
+                                    
+                                    var levelV=[-10.0,-8.0, -6.0, -4.0, -2.0, 0, 2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,35,37,40,42]
                                     var isobands_options=temp_options
                                 }
                                 return {
@@ -2230,7 +2234,7 @@
                             }
                             else if (plot_type=="view"){
                                 return {
-                                    levelV:[50, 200, 500, 1000, 2000],
+                                    levelV:[50, 200, 500, 1000, 2000,3000],
                                     isobands_options:view_options
                                 }
                             }
@@ -3966,23 +3970,6 @@
                                     }
                                     else if (type == "wind") {
                                         zdz_recdata_obj.flush_map()
-                                        zdz_recdata_obj.data_single.forEach(function (item) {
-                                            if (item.fFy>108) {
-                                                // 渲染颜色
-                                                // console.log(item.fFy,[parseFloat(item.lon), parseFloat(item.lat)])
-                                                var single_point = {
-                                                    type: "Feature",
-                                                    "properties": {
-                                                        "value": item.fFy
-                                                    },
-                                                    "geometry": {
-                                                        "type": "Point",
-                                                        "coordinates": [parseFloat(item.lon), parseFloat(item.lat)]
-                                                    }
-                                                }
-                                                points.push(single_point)
-                                            }
-                                        })
                                         var plot_type = "wind"
                                         var intersectionLay = map_toolbox_object.return_shp(zdz_recdata_obj.boundaries_taizhou, points, plot_type).intersectionLay
                                         intersectionLay.addTo(zdz_recdata_obj.zdz_map)
@@ -4048,7 +4035,7 @@
 
 
                                     }
-                                    else if (type == "temp") {
+                                    else if (type == "tmin") {
                                         zdz_recdata_obj.flush_map()
                                         zdz_recdata_obj.data_single.forEach(function (item) {
                                             if (item.t_min != -9999.0) {
@@ -4070,7 +4057,6 @@
                                         var intersectionLay = map_toolbox_object.return_shp(zdz_recdata_obj.boundaries_taizhou, points, plot_type).intersectionLay
                                         intersectionLay.addTo(zdz_recdata_obj.zdz_map)
                                         zdz_recdata_obj.current_layer = intersectionLay
-
                                         zdz_recdata_obj.data_single.forEach(function (item) {
                                             if (item.t_min != -9999.0 || item.t_max != -9999.0) {
                                                 var latlng = L.latLng(item.lat, item.lon);
@@ -4124,8 +4110,86 @@
 
                                             }
                                         })
+                                    }
+                                    else if (type == "tmax") {
+                                        zdz_recdata_obj.flush_map()
+                                        zdz_recdata_obj.data_single.forEach(function (item) {
+                                            if (item.t_max != -9999.0) {
+                                                // 渲染颜色
+                                                var single_point = {
+                                                    type: "Feature",
+                                                    "properties": {
+                                                        "value": item.t_max
+                                                    },
+                                                    "geometry": {
+                                                        "type": "Point",
+                                                        "coordinates": [parseFloat(item.lon), parseFloat(item.lat)]
+                                                    }
+                                                }
+                                                points.push(single_point)
+                                            }
+                                        })
+                                        var plot_type = "temp"
+                                        var intersectionLay = map_toolbox_object.return_shp(zdz_recdata_obj.boundaries_taizhou, points, plot_type).intersectionLay
+                                        intersectionLay.addTo(zdz_recdata_obj.zdz_map)
+                                        zdz_recdata_obj.current_layer = intersectionLay
+
+                                        zdz_recdata_obj.data_single.forEach(function (item) {
+                                            if (item.t_min != -9999.0 || item.t_max != -9999.0) {
+                                                var latlng = L.latLng(item.lat, item.lon);
+                                                var marker = L.circleMarker(latlng, {
+                                                    name: item.IIiii,
+                                                    station: item.StationName,
+                                                    start: item.start,
+                                                    end: item.end,
+                                                    tempmax: item.t_max,
+                                                    tempmin: item.t_min,
+                                                    weight: 0,
+                                                    radius: 5,
+                                                    opacity: 1,
+                                                    fill: false,
+                                                    labelStyle: {
+                                                        text: item.StationName + ':' + item.t_max.toString(),
+                                                        weight: 1,
+                                                        rotation: 0,
+                                                        color: "rgb(239, 243, 237)",
+                                                        zIndex: 800
+                                                    }
+                                                }).addTo(zdz_recdata_obj.zdz_map).on("click", function (e) {
+                                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                                    var plot_name = e.sourceTarget.options.name
+                                                    var plot_start = e.sourceTarget.options.start
+                                                    var plot_end = e.sourceTarget.options.end
+                                                    $.ajax({
+                                                        url: "tool_zdz_date",  // 请求的地址
+                                                        type: "post",  // 请求方式
+                                                        timeout: 25000, //设置延迟上限
+                                                        data: {
+                                                            'csrfmiddlewaretoken': csrf,
+                                                            'start_time': plot_start,
+                                                            'end_time': plot_end,
+                                                            'click_type': 'mark_click',
+                                                            'click_station': plot_name,
+                                                            'click_class': 'T'
+                                                        },
+                                                        dataType: "json",
+                                                        beforeSend: function (XMLHttpRequest) {
+                                                            load = showLoad();
+                                                        },
+                                                        success: function (data) {
+                                                            var plot_view = "temp"
+                                                            zdz_recdata_obj.rander_line(plot_view, JSON.parse(data.plot_time), JSON.parse(data.plot_list), data.plot_name)
+                                                            closeLoad(load)
+                                                        }
+                                                    })
+                                                })
+                                                zdz_recdata_obj.marker_list.push(marker)
+
+                                            }
+                                        })
 
                                     }
+                                    //关闭
                                     //关闭
                                     closeLoad(load)
                                 }})  
@@ -4213,7 +4277,7 @@
                             var points = []
                             if (click_type == "rain") {
                                 zdz_recdata_obj.data_all.forEach(function (item) {
-                                    if (item.RR != "-9999.0") {
+                                    if (item.RR >0) {
                                         // 渲染颜色
                                         var single_point = {
                                             type: "Feature",
@@ -4236,7 +4300,7 @@
                             else if (click_type == "wind"){
                                 // console.log("绘制封场")
                                 zdz_recdata_obj.data_all.forEach(function (item) {
-                                    if (item.fFy != "-9999.0") {
+                                    if (item.fFy != "9999.0") {
                                         // 渲染颜色
                                         // console.log(item.fFy,[parseFloat(item.lon), parseFloat(item.lat)])
                                         var single_point = {
@@ -4256,16 +4320,37 @@
                                 var intersectionLay = map_toolbox_object.return_shp(zdz_recdata_obj.boundaries_taizhou, points,plot_type).intersectionLay
                                 intersectionLay.addTo(zdz_recdata_obj.zdz_map)
                                 zdz_recdata_obj.current_layer = intersectionLay
-
                             }
-                            else if (click_type == "temp"){
+                            else if (click_type == "temp_max"){                   
                                 zdz_recdata_obj.data_all.forEach(function (item) {
-                                    if (item.Tn != "-9999.0") {
-                                        // 渲染颜色
+                                    if (item.Tn != "nan") {
+                                        // 渲染颜色                                    
                                         var single_point = {
                                             type: "Feature",
                                             "properties": {
-                                                "value": item.Tn
+                                                "value": (item.Tx/10).toString()
+                                            },
+                                            "geometry": {
+                                                "type": "Point",
+                                                "coordinates": [parseFloat(item.lon), parseFloat(item.lat)]
+                                            }
+                                        }
+                                        points.push(single_point)
+                                    }
+                                })
+                                var plot_type = "temp"
+                                var intersectionLay = map_toolbox_object.return_shp(zdz_recdata_obj.boundaries_taizhou, points,plot_type).intersectionLay
+                                intersectionLay.addTo(zdz_recdata_obj.zdz_map)
+                                zdz_recdata_obj.current_layer = intersectionLay
+                            }
+                            else if (click_type == "temp_min"){                   
+                                zdz_recdata_obj.data_all.forEach(function (item) {
+                                    if (item.Tn != "nan") {
+                                        // 渲染颜色                                     
+                                        var single_point = {
+                                            type: "Feature",
+                                            "properties": {
+                                                "value": (item.Tn/10).toString()
                                             },
                                             "geometry": {
                                                 "type": "Point",
@@ -4282,7 +4367,7 @@
                             }
                             else if (click_type == "view"){
                                 zdz_recdata_obj.data_all.forEach(function (item) {
-                                    if (item.VV != "-9999.0") {
+                                    if (item.VV != "9999.0") {
                                         // 渲染颜色
                                         var single_point = {
                                             type: "Feature",
@@ -4508,7 +4593,7 @@
                                 if (tmax) {
                                     var btn_tmax = document.createElement("button")
                                     btn_tmax.setAttribute("class", "layui-btn layui-btn-xs temp")
-                                    btn_tmax.innerText = "温"
+                                    btn_tmax.innerText = "高温"
                                     btn_tmax.value = title
                                     btn_tmax.addEventListener("click",function(e){
                                         var date = this.value
@@ -4520,7 +4605,7 @@
                                 if (tmin) {
                                     var btn_tmin = document.createElement("button")
                                     btn_tmin.setAttribute("class", "layui-btn layui-btn-xs temp")
-                                    btn_tmin.innerText = "温"
+                                    btn_tmin.innerText = "低温"
                                     btn_tmin.value = title
                                     btn_tmin.addEventListener("click",function(e){
                                         var date = this.value
@@ -4941,14 +5026,14 @@
                                     zdz_recdata_obj.plot(click_type)
                                     // 轮询   
                                     zdz_recdata_obj.data_all.forEach(function (item) {
-                                        if (item.fFy>108) {
+                                        if (item.fFy>10.8) {
                                             var latlng = L.latLng(item.lat, item.lon);
                                             var icon = L.WindBarb.icon({ 
                                                 deg: 360-item.dFy, 
                                                 pointRadius: 4, 
                                                 strokeLength: 5,
                                                 fillColor:"red",
-                                                speed: (item.fFy/10)*2.5 
+                                                speed: (item.fFy)*2.5 
                                             });
                                             var marker = L.marker([item.lat, item.lon], { 
                                                 icon: icon,
@@ -4986,7 +5071,7 @@
                                                         var fFy_list = JSON.parse(data.plot_list)[0]
                                                         var dFy_list = JSON.parse(data.plot_list)[1]
                                                         for (var i = 0; i < plot_time.length; i++) {
-                                                            var single_list = [fFy_list[i] / 10.0, dFy_list[i]]
+                                                            var single_list = [fFy_list[i]/10.0 , dFy_list[i]]
                                                             plot_list.push(single_list)
                                                         }
                                                         zdz_recdata_obj.rander_line(plot_wind, plot_time , plot_list, data.plot_name)
@@ -5016,12 +5101,12 @@
                                 }
 
                             }
-                            else if (click_type == "temp") {
-                                if (click_time == "all") {
+                            else if (click_type == "temp_max" || click_type == "temp_min") {
+                                if (click_time == "max") {          
                                     zdz_recdata_obj.plot(click_type)
                                     // 轮询   
                                     zdz_recdata_obj.data_all.forEach(function (item) {
-                                        if (item.tmax!="-9999.0" || item.tmin!="-9999.0") {
+                                        if (item.tmax!="nan" ) {
                                             var latlng = L.latLng(item.lat, item.lon);                       
                                             var marker = L.circleMarker(latlng, {
                                                 name: item.IIiii,
@@ -5059,7 +5144,8 @@
                                                         load = showLoad();
                                                     },
                                                     success: function (data) {
-                                                        var plot_temp = "temp"                                                    
+                                                        var plot_temp = "temp"   
+                                                                                                        
                                                         zdz_recdata_obj.rander_line(plot_temp, JSON.parse(data.plot_time) , JSON.parse(data.plot_list), data.plot_name)
                                                         closeLoad(load)
                                                     }
@@ -5079,6 +5165,64 @@
 
                                 }
                                 else {
+                                    zdz_recdata_obj.plot(click_type)
+                                    // 轮询   
+                                    zdz_recdata_obj.data_all.forEach(function (item) {
+                                        if ( item.tmin!="-9999.0") {
+                                            var latlng = L.latLng(item.lat, item.lon);                       
+                                            var marker = L.circleMarker(latlng, {
+                                                name: item.IIiii,
+                                                station: item.StationName,
+                                                tempmax:item.Tx/10,
+                                                tempmin:item.Tn/10,
+                                                weight: 0,
+                                                radius: 5,
+                                                opacity: 1,
+                                                fill: false,
+                                                labelStyle: {
+                                                    text: item.StationName+':'+(item.Tn/10).toString(),
+                                                    weight: 1,
+                                                    rotation: 0,
+                                                    color: "rgb(239, 243, 237)",
+                                                    zIndex: 800
+                                                }
+                                            }).addTo(zdz_recdata_obj.zdz_map).on("click",function (e) {
+                                                var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                                var plot_name = e.sourceTarget.options.name
+                                                $.ajax({
+                                                    url: "tool_zdz_date",  // 请求的地址
+                                                    type: "post",  // 请求方式
+                                                    timeout: 25000, //设置延迟上限
+                                                    data: {
+                                                        'csrfmiddlewaretoken': csrf,
+                                                        'start_time': zdz_recdata_obj.start_date,
+                                                        'end_time': zdz_recdata_obj.end_date,
+                                                        'click_type': 'mark_click',
+                                                        'click_station':plot_name,
+                                                        'click_class':'T'
+                                                    },
+                                                    dataType: "json",
+                                                    beforeSend: function (XMLHttpRequest) {
+                                                        load = showLoad();
+                                                    },
+                                                    success: function (data) {
+                                                        var plot_temp = "temp"   
+                                                                                                        
+                                                        zdz_recdata_obj.rander_line(plot_temp, JSON.parse(data.plot_time) , JSON.parse(data.plot_list), data.plot_name)
+                                                        closeLoad(load)
+                                                    }
+                                                })
+                                               
+                                                // var plot_type = "temp"
+                                                // var plot_time = e.sourceTarget.options.timelist
+                                                // var plot_list = e.sourceTarget.options.templist
+                                                // var plot_name = e.sourceTarget.options.station                        
+                                                // zdz_recdata_obj.rander_line(plot_type, plot_time, plot_list, plot_name)
+                                            })
+                                            zdz_recdata_obj.marker_list.push(marker)
+
+                                        }
+                                    })
 
                                 }
                                  
@@ -5089,7 +5233,7 @@
                                     zdz_recdata_obj.plot(click_type)
                                     // 轮询   
                                     zdz_recdata_obj.data_all.forEach(function (item) {
-                                        if (item.VV!="-9999.0") {
+                                        if (item.VV!="9999.0") {
                                             var latlng = L.latLng(item.lat, item.lon);                       
                                             var marker = L.circleMarker(latlng, {
                                                 name: item.IIiii,
@@ -5279,8 +5423,9 @@
                                 // var 
                                 zdz_recdata_obj.data_all.forEach(function (item){
                                     // console.log(item)
-                                    if ((item.RR != "-9999") && (item.county = "台州")) {
-                                        if (parseFloat(item.RR) != 0) {
+                                    if ((item.RR != "-9999") && (item.city == "台州")) {
+                                        
+                                        if (parseFloat(item.RR) > 0) {
                                             var single = {
                                                 "IIiii": item.IIiii,
                                                 "county": item.county,
@@ -5294,6 +5439,7 @@
                                         }
                                     }
                                 })
+                                
                                 // sort 会直接对原数据排序
                                 // wash_data.sort(down)
                                 // 求和
@@ -5321,7 +5467,7 @@
                                 var text_station = zdz_recdata_obj.randar_data_text(station,unity)
                                 var text_town = zdz_recdata_obj.randar_data_text(town_average,unity)
                                 rain_text = rain_text + (totle_sum/9).toFixed(2).toString() + "毫米。" + "各县面雨量：" + text_average + "单站前五分别是：" + text_station + "乡镇前五为：" + text_town 
-                                console.log("面雨量测试",rain_text)
+                                // console.log("面雨量测试",wash_data)
                                 return rain_text                               
                             }
                             else{    }
@@ -5355,7 +5501,7 @@
                                 // var 
                                 zdz_recdata_obj.data_all.forEach(function (item){
                                     // console.log(item)
-                                    if (item.fFy != "-9999") {
+                                    if ((item.fFy != "-9999")  && (item.city == "台州")) {
                                         if (parseFloat(item.fFy) != 0) {                                     
                                             if ((parseFloat(item.fFy) >17.1) && (parseFloat(item.fFy) <20.7)){
                                                 status.text = "全市出现8级大风。"
@@ -5443,7 +5589,7 @@
                                 }
                                 zdz_recdata_obj.data_all.forEach(function (item){
                                     // console.log(item)
-                                    if (item.VV != "-9999") {
+                                    if ((item.VV != "-9999") && (item.city == "台州")) {
                                         if (parseFloat(item.VV) != 0) {
                                             // 判断灾害等级
                                             if (parseFloat(item.VV)<500){
@@ -5510,7 +5656,7 @@
                                 }
                                 zdz_recdata_obj.data_all.forEach(function (item){
                                     // console.log(item)
-                                    if (item.Tn && item.Tx) {
+                                    if (item.Tn && item.Tx && (item.city == "台州")) {
                                         if (parseFloat(item.Tn) < 0) {
                                             status.temp0 = status.temp0 + 1
                                         }
@@ -5618,22 +5764,25 @@
                     })
                     // 温
                     $('.temp').click(function () {
-                        if (this.value == "temp_all") {
-                            console.log(this.value)
-                            var click_type = "temp"
-                            var click_time = "all"
+                        if (this.value == "temp_max") {
+                            var click_type = "temp_max"
+                            var click_time = "max"
                             //刷新
                             zdz_recdata_obj.flush_map()
                             zdz_recdata_obj.rander_marker(click_type, click_time)
                         }
                         else {
-                            console.log("single")
+                            var click_type = "temp_min"
+                            var click_time = "min"
+                            //刷新
+                            zdz_recdata_obj.flush_map()
+                            zdz_recdata_obj.rander_marker(click_type, click_time)
                         }
                     })
                     // 雾
                     $('.view').click(function () {
                         if (this.value == "view_all") {
-                            console.log(this.value)
+                            // console.log(this.value)
                             var click_type = "view"
                             var click_time = "all"
                             //刷新
@@ -5647,6 +5796,7 @@
               
                     // 自动站数据加载
                     $('#tool_zdz_button').click(function () {
+                        
                         $('.toolboxclick').attr('class','layui-btn layui-btn-radius toolboxclick')
                         this.setAttribute("class","layui-btn layui-btn-danger layui-btn-radius toolboxclick ")
                         var map_z = document.getElementById("zdz_webgis")

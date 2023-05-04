@@ -378,11 +378,12 @@ class zdz_data:
         min(if(vis>0,vis,9999)) as view ,
         min(t_min) as t_min ,
         max(t_max) as t_max ,
-        sd.station_city as county,
-        sd.station_town as town
+        sd.station_city as city,
+        sd.station_town as town,
+        sd.station_county as county
         from (select station_no,max(if(w_max>0,w_max,null)) as wind from station_data where (datetime between '{self.start}' and '{self.end}') group by station_no) as wind
         inner join station_data as sd on sd.station_no = wind.station_no where( sd.w_max = wind.wind and datetime between '{self.start}' and '{self.end}')
-        group by sd.datetime, sd.station_no, sd.w_max,lat,lon,station_name,station_city,station_town"""
+        group by sd.datetime, sd.station_no, sd.w_max,lat,lon,station_name,station_city,station_town,station_county"""
         df_location = pd.read_sql(sql_location , con=conn)  
         point = []  
         table_data = []
@@ -402,10 +403,11 @@ class zdz_data:
             # 数据表
             single = {
                 "IIiii":str(df_location.iloc[i,3]),
-                "county":str(df_location.iloc[i,10]),
+                "city":str(df_location.iloc[i,10]),
                 "town":str(df_location.iloc[i,11]),
+                "county":str(df_location.iloc[i,12]),
                 "StationName":str(df_location.iloc[i,2]),
-                "fFy":str(df_location.iloc[i,4]),
+                "fFy":str(df_location.iloc[i,4]/10.0),
                 "dFy":str(df_location.iloc[i,5]),
                 "RR":str(df_location.iloc[i,6]),
                 "Tx":str(df_location.iloc[i,9]),
@@ -474,7 +476,7 @@ class zdz_data:
             rain_data = {
                 "type": "Feature",
                 "properties": {
-                    "value": str(df_location.iloc[i,4])
+                    "value": str(df_location.iloc[i,4]/10)
                 },
                 "geometry": {
                     "type": "Point",
@@ -532,7 +534,7 @@ class zdz_data:
             table_data.append(single)       
         return table_data , point      
     def sql_temp(self,start,end,temp):
-        if temp =="max":
+        if temp =="tmax":
             tempind = 5
         else:
             tempind = 4
