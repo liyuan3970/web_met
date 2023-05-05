@@ -42,12 +42,19 @@ def kuaibao(request):
     # #print(this is a index)
     return render(request, 'kuaibao.html', locals())
 
-
+# 绘图的功能
 def canvas_plot(request):
     content = {
         'status': "ok"
     }
     return render(request, 'canvas_plot.html', locals())
+
+# 实况监测
+def station_zdz(request):
+    content = {
+        'status': "ok"
+    }
+    return render(request, 'station_zdz.html', locals())
 
 
 # 网站预览功能
@@ -75,7 +82,6 @@ def website(request):
                     }
                     single_list['img_list'].append(img_dir)
                 class_dir.append(single_list)
-
     view_list = class_dir[0]['img_list']
     # print("数据",class_dir,"shuju ",view_list)
     content = {
@@ -528,30 +534,17 @@ def leader_Data_post(request):
     return JsonResponse(context)
 
 
-# 设置全局变量用来存储EC数据的数据对象
-ec_worker = None
 
 
 def ec_single_data(request):
-    # 数据的接收 
+    # 十天预测的数据加载 
     ec_start_time = request.POST.get('ec_start_time', '')
     ec_end_time = request.POST.get('ec_end_time', '')
-    start_time, end_time = 1, 40
+    start_time, end_time = int(ec_start_time),int(ec_end_time)
     # 处理数据逻辑
-    global ec_worker
-    if ec_worker:
-        line_data = ec_worker.conuty_data()
-        plot_data = ec_worker.rander_leaflet(start_time, end_time)
-    else:
-        ec_worker = data_class.ec_data_point(start_time, end_time)
-        line_data = ec_worker.conuty_data()
-        plot_data = ec_worker.rander_leaflet(start_time, end_time)
-    # print("ec-->ok")
-    # 数据的返回
-    # context = {
-    #     'status': "ok",
-    #     'ec_data': data
-    # }
+    ec_worker = data_class.ec_data_point(start_time, end_time)
+    line_data = ec_worker.read_sql()
+    plot_data = ec_worker.rander_leaflet(start_time, end_time)
     context = {
         'status': "ok",
         'linedata':line_data,

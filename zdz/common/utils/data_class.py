@@ -725,9 +725,41 @@ class ec_data_point:
             lsp_line.append(totle_line[i] - cp_line[i])
         t2_line = self.t2.sel(lon=lon, lat=lat,method='nearest').to_pandas().tolist()
         return cp_line,lsp_line,t2_line
+    # 设置读取sql中的数据
+    def read_sql(self):
+        '''将数据传到sql中'''
+        time = '2022041700'
+        mydb =pymysql.connect(
+            host="127.0.0.1",
+            user="root",
+            password="051219",
+            database="tzweb"
+        )
+        sql="""select data from  ec_data order by create_time"""
+        data=pd.read_sql(sql,mydb)
+        # 数据转为python类型
+        data_org = data.iloc[0].data
+        data_python = json.loads(data_org)
+        return data_python
+    # 定时任务
     def conuty_data(self):
         '''将数据整理成json并存储到MySQL'''
         data_list = []
+        mysql_setting = {
+            'host': '127.0.0.1',
+            'port': 3306,
+            'user': 'root',
+            'passwd': '051219',
+            # 数据库名称
+            'db': 'tzweb',
+            'charset': 'utf8'
+        }
+        mydb =pymysql.connect(
+            host="127.0.0.1",
+            user="root",
+            password="051219",
+            database="tzweb"
+        )
         for i in range(len(self.lat_list)):
             lat = self.lat_list[i]
             lon = self.lon_list[i]
@@ -736,17 +768,30 @@ class ec_data_point:
             lsp = [0 if np.isnan(x) else x for x in lsp_line]
             t2 = [0 if np.isnan(x) else x for x in t2_line]
             data_single = {
-                "name":self.name_en[i],
-                "cp":cp,
-                "lsp":lsp,
-                "t2":t2
+                'name':self.name_en[i],
+                'cp':cp,
+                'lsp':lsp,
+                't2':t2
             }
             data_list.append(data_single)
+        # 数据库插入数据
+        create_time = dtt.date.today()
+        update_time = dtt.date.today()
+        time = self.date_time
+        model_type = "EC"
+        model_city ="台州市" #self.name_en[i]
+        data = json.dumps(data_list)
+        create_user=0
+        update_user=0
+        cursor = mydb.cursor()
+        sql = '''insert INTO ec_data(create_time,update_time,model_type,model_city,time,create_user,update_user,data) values ('{create_time}','{update_time}','{model_type}','{model_city}','{time}',0,0,'{data}') '''            
+        #sql = '''replace into ec_data(model_type,model_city,time,create_user,update_user,data) select '{model_type}','{model_city}','{time}',0,0,'{data}'  '''  
+        rsql = sql.format(create_time=create_time,update_time=update_time,model_type=model_type,model_city=model_city,time=time,create_user=create_user,update_user=update_user,data=escape_string(data)) 
+        cursor.execute(rsql)               
+        mydb.commit()
+        cursor.close()
+        mydb.close()
         return data_list
-    # 定时任务
-    def to_sql(self):
-        '''将数据传到sql中'''
-        pass
     # 截面数据的读取
     def rander_leaflet(self,start_time,end_time):
         '''返回数据'''

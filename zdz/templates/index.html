@@ -887,7 +887,8 @@
                                     })
                                     window.addEventListener("load", function (e) { 
                                             var logingherf = $("#href_panel4").text()                                     
-                                            var logingname = localStorage.getItem("name")                                         
+                                            var logingname = localStorage.getItem("name")  
+                                            console.log("登录的信息",logingname,logingherf)                                       
                                             if (logingname){
                                                 $("#document_li").attr("calss","active")  
                                                 $("#login_li").attr("calss"," ")  
@@ -1304,7 +1305,7 @@
                                         var d = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
                                         var h = today.getHours() < 10 ? "0" + today.getHours() + ":00:00" : today.getHours() + ":00:00";
                                         var today_str = y + "-" + m + "-" + d + " " + h;
-                                        var seven_day = getNextDate(today_str, day=-30) 
+                                        var seven_day = getNextDate(today_str, day=-15) 
                                         seven_day = seven_day + " " + h
                                         function date_to_str(date){
                                             var year = date.year 
@@ -1333,6 +1334,10 @@
                                         });
                                     })
                                     // 十天
+                                    const ec_data_obj = {
+                                        start: 1,
+                                        end:40
+                                    }
                                     layui.use('laydate', function () {
                                         var laydate = layui.laydate;
                                         //日期范围
@@ -1357,7 +1362,7 @@
                                         }
                                         function date_to_index(date) { 
                                             var hours_list = [
-                                                0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 63, 66, 69, 72,
+                                                0, 6, 12,  18,  24,  30,  36,  42,  48,  54,  60,  66,  72,
                                                 78, 84, 90, 96, 102, 108, 114, 120, 126, 132, 138, 144, 150, 156, 162, 168, 174, 180, 186, 192, 198, 204, 210, 216, 222, 228, 234, 240
                                             ]
                                             var date_str = date_to_str(date)
@@ -1389,6 +1394,8 @@
                                             ,done:function (value, startDate, endDate){  
                                                 var start_item = date_to_index(startDate)
                                                 var end_item = date_to_index(endDate)
+                                                ec_data_obj.start = start_item
+                                                ec_data_obj.end = end_item
                                                 // 传数据就好了
                                                 // console.log(seven_day)
                                             }
@@ -1948,9 +1955,7 @@
                                                             <!-- <div class="layui-card-header">实况统计:</div> -->
                                                             <div id="zdz_text_info" class="layui-card-body scrollbar_self"
                                                                 style="height:250px;overflow-x: hidden;overflow-y: scroll;">
-                                                                【风雨情通报】:2022-01-25 20:00到2022-02-10
-                                                                06:00各县市面雨量分别为:仙居县78.82毫米;天台县75.02毫米;三门县68.45毫米;临海市62.95毫米;黄岩区62.64毫米;温岭市47.34毫米;路桥区46.94毫米;椒江区40.8毫米;玉环市38.36毫米;玉环县23.84毫米;单站前五：K8914：127.4毫米,K8785：120.2毫米,K8709：115.0毫米,K8774：114.5毫米,K8924：110.0毫米.乡镇前五：浦坝港镇：814.1毫米,街头镇：808.2毫米,横溪镇：661.7毫米,健跳镇：631.2毫米,白水洋镇：619.9毫米.其中:大于250毫米有338站,大于100毫米有15站,大于50毫米有346站,大于25毫米有434站,大于10毫米有435站,大于5毫米有435站,大于1毫米有435站,沿海出现8~16级大风.风力较大的有：K8629：23.9米/秒,K8546：21.0米/秒,K8627：21.0米/秒,K8304：20.9米/秒,K8407：20.8米/秒.沿海出现小于200米的强浓雾。主城区最高温度：129度。主城区最低温度：28度。其中全市小于-3度的有18站。小于0度的有16站。小于3度的有146站。
-
+                                                                
                                                             </div>
                                                         </div>
                                                     </div>
@@ -3073,8 +3078,8 @@
                                 timeout: 25000, //设置延迟上限
                                 data: {
                                     'csrfmiddlewaretoken': csrf,
-                                    'ec_start_time': $('#ec_start_time').val(),
-                                    'ec_end_time': $('#ec_end_time').val()
+                                    'ec_start_time':ec_data_obj.start ,
+                                    'ec_end_time': ec_data_obj.end
                                 },
                                 dataType: "json",
                                 beforeSend: function (XMLHttpRequest) {
