@@ -35,6 +35,7 @@ from matplotlib.colors import ListedColormap,LinearSegmentedColormap
 from pylab import *
 from matplotlib.font_manager import FontProperties
 import pymysql
+from pymysql.converters import escape_string
 # 查询历史数据的calss
 
 # 自定义画图类
@@ -948,3 +949,133 @@ class sql_plot:
         else:
             canvas_data = self.return_ec_data()
         return canvas_data
+
+#上传EC的数据
+class ec_data_upload:
+    def __init__(self):
+        self.timelist = [0,2,4,6,8,10,12,14,16,18,20,22,24,25,
+                         26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,
+                        41,42,43,44,45,46,47,48,49,50,51,52]
+        self.date_time = self.time_file()
+        self.file_path = "/home/liyuan3970/Data/My_Git/" + self.date_time + "/" 
+        self.lat_list = [27.6, 28.1, 28.4, 29.1, 29.1, 29.8, 28.7, 28.5, 28.5, 28.6]
+        self.lon_list = [120.7, 121.1, 121.3, 121.2, 121.0, 120.7, 121.1, 121.4, 121.4, 121.2]
+        self.name = ["台州", "玉环", "温岭", "三门", "天台", "仙居", "临海", "路桥", "椒江", "黄岩"]
+        self.name_en = ['taizhou','yuhuan','wenling','sanmen','tiantai','xianju','linhai','luqiao','jiaojiang','huangyan']
+        self.cp,self.t2,self.lsp = self.read_data()
+    def regrid(self,data):
+        # 插值
+        ds_out = xr.Dataset(
+            {   
+                
+                "lat": (["lat"], np.arange(27.0, 31, 0.05)),
+                "lon": (["lon"], np.arange(120, 122.9, 0.05)),
+            }
+        )
+        regridder = xe.Regridder(data, ds_out, "bilinear")
+        dr_out = regridder(data)
+        return dr_out
+    def time_file(self):
+        today = dtt.date.today()
+        yesterday = today - dtt.timedelta(days = 1) 
+        year = yesterday.strftime('%Y-%m-%d_%H%M%S')[0:4]
+        month =  yesterday.strftime('%Y-%m-%d_%H%M%S')[5:7]
+        day = yesterday.strftime('%Y-%m-%d_%H%M%S')[8:10]
+        file_time = year + month + day + "00"
+        file_time = '2022041700'
+        return file_time      
+    def read_data(self):
+        '''读取数据'''
+        files = os.listdir(self.file_path)
+        lsp_list = [] 
+        cp_list = [] 
+        t2_list = [] 
+        for fileitem in self.timelist:
+            f=xr.open_dataset(self.file_path +files[fileitem],decode_times=False)
+            lsp = f.lsp.sel(lonS=slice(118,123),latS=slice(32,26))
+            cp = f.cp.sel(lonS=slice(118,123),latS=slice(32,26))
+            t2 = f.t2.sel(lonS=slice(118,123),latS=slice(32,26)) 
+            lsp_list.append(lsp)  
+            cp_list.append(cp)  
+            t2_list.append(t2)
+            del f,lsp,cp,t2  
+        cp_all = xr.concat(cp_list,dim="time")
+        cp_all = self.regrid(cp_all)
+        t2_all = xr.concat(t2_list,dim="time")
+        t2_all = self.regrid(t2_all)
+        lsp_all = xr.concat(lsp_list,dim="time")
+        lsp_all = self.regrid(lsp_all)
+        return cp_all,t2_all,lsp_all
+    def accum_data(self,list_data):
+        '''处理累计降水'''
+        out_list = []
+        for i in range(len(list_data)):
+            if i==0:
+                out_list.append(0)
+            elif i==1:
+                out_list.append(round(list_data[i],1))
+            else:
+                out_list.append(round(list_data[i]-list_data[i-1],1))
+        return out_list
+    def rain_data(self,lat,lon,data):
+        list_data= data.sel(lon=lon, lat=lat,method='nearest').to_pandas().tolist()
+        out_list = self.accum_data(list_data)
+        return out_list
+    def plot_line(self,lat,lon):
+        '''返回单点的降水气温曲线图'''
+        cp_line = self.rain_data(lat,lon,self.cp)
+        totle_line = self.rain_data(lat,lon,self.lsp)
+        lsp_line = []
+        for i in range(len(totle_line)):
+            lsp_line.append(totle_line[i] - cp_line[i])
+        t2_line = self.t2.sel(lon=lon, lat=lat,method='nearest').to_pandas().tolist()
+        return cp_line,lsp_line,t2_line
+    def conuty_data(self):
+        '''将数据整理成json并存储到MySQL'''
+        data_list = []
+        mysql_setting = {
+            'host': '127.0.0.1',
+            'port': 3306,
+            'user': 'root',
+            'passwd': '051219',
+            # 数据库名称
+            'db': 'tzweb',
+            'charset': 'utf8'
+        }
+        mydb =pymysql.connect(
+            host="127.0.0.1",
+            user="root",
+            password="051219",
+            database="tzweb"
+        )
+        for i in range(len(self.lat_list)):
+            lat = self.lat_list[i]
+            lon = self.lon_list[i]
+            cp_line,lsp_line,t2_line = self.plot_line(lat,lon)
+            cp = [0 if np.isnan(x) else x for x in cp_line]
+            lsp = [0 if np.isnan(x) else x for x in lsp_line]
+            t2 = [0 if np.isnan(x) else x for x in t2_line]
+            data_single = {
+                'name':self.name_en[i],
+                'cp':cp,
+                'lsp':lsp,
+                't2':t2
+            }
+            data_list.append(data_single)
+        # 数据库插入数据
+        create_time = dtt.date.today()
+        update_time = dtt.date.today()
+        time = self.date_time
+        model_type = "EC"
+        model_city ="台州市" #self.name_en[i]
+        data = json.dumps(data_list)
+        create_user=0
+        update_user=0
+        cursor = mydb.cursor()
+        sql = '''insert INTO ec_data(create_time,update_time,model_type,model_city,time,create_user,update_user,data) values ('{create_time}','{update_time}','{model_type}','{model_city}','{time}',0,0,'{data}') '''            
+        #sql = '''replace into ec_data(model_type,model_city,time,create_user,update_user,data) select '{model_type}','{model_city}','{time}',0,0,'{data}'  '''  
+        rsql = sql.format(create_time=create_time,update_time=update_time,model_type=model_type,model_city=model_city,time=time,create_user=create_user,update_user=update_user,data=escape_string(data)) 
+        cursor.execute(rsql)               
+        mydb.commit()
+        cursor.close()
+        mydb.close()

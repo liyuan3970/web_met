@@ -9,6 +9,7 @@ from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
 
 from zdz.schedulers.external_data_sync import sync_station_data
+from zdz.schedulers.external_ec_upload import ec_upload
 
 logger = logging.getLogger(__name__)
 
@@ -31,6 +32,16 @@ class Command(BaseCommand):
                 hour="*/1", minute="5"
             ),
             id="sync_station_data",  # The `id` assigned to each job MUST be unique
+            max_instances=1,
+            replace_existing=True,
+            misfire_grace_time=3600
+        )
+        scheduler.add_job(
+            ec_upload,
+            trigger=CronTrigger(
+                hour="*/1", minute="14"
+            ),
+            id="ec_upload",  # The `id` assigned to each job MUST be unique
             max_instances=1,
             replace_existing=True,
             misfire_grace_time=3600
