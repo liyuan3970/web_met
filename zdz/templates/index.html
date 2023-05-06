@@ -1379,6 +1379,9 @@
                                             }
                                             var min_hour = del_hours.reduce((a,b) => a>b?b:a) 
                                             var index_min = del_hours.findIndex(x => x === min_hour)
+                                            if (index_min==0){
+                                                index_min = index_min+ 1 
+                                            }
                                             return index_min
                                         }
                                         laydate.render({
@@ -1409,6 +1412,7 @@
                             $('#toolbox').click(function () {
                                 // $('#history_file').html(" ")
                                 // $("select_self_plot").html(" ")
+                                
                                 var select_plot = document.getElementById("select_self_plot")
                                 if (select_plot.children.length > 0) {
                                     for (var i = 0; i < select_plot.children.length; i++) {
@@ -1482,6 +1486,8 @@
                                                     $('#history_view').append(divcontenter)
                                                 }
                                                 $('.tool_history_button').click(function () {
+                                                    $('#product_view').attr("style", "background-color:rgb(239, 243, 237); width: 100%; height: 100%;")
+                                                    $('#product_zdz').attr("style", "display:none;background-color:rgb(34,47,62); width: 100%; height: 100%;padding:30px;")
                                                     $('.tool_history_button').attr('style', "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 10%;width:98%;text-align:center;;padding-top:5px;border-radius:5px;margin:5px;background-color:rgb(0,150,136);")
                                                     this.style = "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 10%;width:98%;text-align:center;;padding-top:5px;border-radius:5px;margin:5px;background-color:rgb(255,87,34);"
                                                     var info = this.id
@@ -1529,7 +1535,9 @@
                                             $('#history_button').append(button)
                                         }
                                         // 首页的加载数据
-                                        $('.tool_history_button').click(function () {                                     
+                                        $('.tool_history_button').click(function () { 
+                                            $('#product_view').attr("style", "background-color:rgb(239, 243, 237); width: 100%; height: 100%;")
+                                            $('#product_zdz').attr("style", "display:none;background-color:rgb(34,47,62); width: 100%; height: 100%;padding:30px;")                                    
                                             $('.tool_history_button').attr('style', "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 10%;width:98%;text-align:center;;padding-top:5px;border-radius:5px;margin:5px;background-color:rgb(0,150,136);")
                                             this.style = "display: inline-block;font-size: 20px;font-weight:900;font-family:'宋体';;height: 10%;width:98%;text-align:center;;padding-top:5px;border-radius:5px;margin:5px;background-color:rgb(255,87,34);"
                                             var info = this.id

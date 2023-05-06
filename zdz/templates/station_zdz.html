@@ -56,45 +56,64 @@
 
 <body>
     {% csrf_token %}
-    <div
-        style="display: flex;align-content:flex-start;position: absolute; justify-content: center; flex-wrap: wrap; width: 100%;height: 100%;background-color: rgb(246, 247, 250)">
+    <div 
+        style="display: flex;align-content:flex-start;position: absolute; justify-content: center; flex-wrap: wrap; width: 100%;height: 100%;background-color: rgb(246, 247, 250);overflow-y: hidden;">
         <!-- 导航栏目 -->
         <div style="width:100%;">
             <ul class="layui-nav">
-                <li class="layui-nav-item layui-this"><a href="">选中</a></li>
-                <li class="layui-nav-item">
-                    <a href="javascript:;">常规</a>
-                </li>
-                <li class="layui-nav-item">
-                    <a href="javascript:;">风</a>
-                </li>
-                <li class="layui-nav-item"><a href="">导航</a></li>
-                <li class="layui-nav-item">
-                    <a href="javascript:;">子级</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="">菜单1</a></dd>
-                        <dd><a href="">菜单2</a></dd>
-                        <dd><a href="">菜单3</a></dd>
-                    </dl>
-                </li>
-                <li class="layui-nav-item">
-                    <a href="javascript:;">选项</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="">选项1</a></dd>
-                        <dd class="layui-this"><a href="">选项2</a></dd>
-                        <dd><a href="">选项3</a></dd>
-                    </dl>
-                </li>
-                <li class="layui-nav-item"><a href="">演示</a></li>
+                <li  class="layui-nav-item" style="width: 14%;font-size: 25px;padding-left:25px">气象数据分析</li>
+                <li class="layui-nav-item layui-this"><a href="">实况</a></li>
+                <li class="layui-nav-item"><a href="">模式</a></li>
             </ul>
         </div>
         <!-- 内容 -->
         <div style="display: inline-flex;width:100%;height:95%">
-            <!-- 这里是内容显示区域 -->
-            <div style="width:15%;height: 100%;background-color: rgb(40,43,51);">
+            <!-- 这里是垂直导航栏目 -->
+            <!-- <div style="width:15%;height: 100%;background-color: rgb(40,43,51);"> -->
+                <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="demo" style="width:15%;height: 100%;background-color: rgb(40,43,51);">
+                    <li class="layui-nav-item layui-nav-itemed">
+                      <a href="javascript:;">风力</a>
+                      <dl class="layui-nav-child">
+                        <dd style="padding-left: 15px;"><button type="button" class="layui-btn">默认按钮</button><button type="button" class="layui-btn">默认按钮</button></dd>
+                      </dl>
+                    </li>
+                    <li class="layui-nav-item">
+                        <a href="javascript:;">降水</a>
+                        <dl class="layui-nav-child">
+                          <dd><a href="">移动模块</a></dd>
+                          <dd><a href="">后台模版</a></dd>
+                          <dd><a href="">电商平台</a></dd>
+                        </dl>
+                      </li>
+                      <li class="layui-nav-item">
+                        <a href="javascript:;">气温</a>
+                        <dl class="layui-nav-child">
+                          <dd><a href="">移动模块</a></dd>
+                          <dd><a href="">后台模版</a></dd>
+                          <dd><a href="">电商平台</a></dd>
+                        </dl>
+                      </li>
+                      <li class="layui-nav-item">
+                        <a href="javascript:;">能见度</a>
+                        <dl class="layui-nav-child">
+                          <dd><a href="">移动模块</a></dd>
+                          <dd><a href="">后台模版</a></dd>
+                          <dd><a href="">电商平台</a></dd>
+                        </dl>
+                      </li>
+                      <li class="layui-nav-item layui-nav-itemed">
+                        <a href="javascript:;">设置</a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="">设置内容</a></dd>
+                            <dd><a href="">设置内容</a></dd>
+                        </dl>
+                      </li>
+                   
+
+                </ul>
 
 
-            </div>
+            <!-- </div> -->
             <!-- 这里是地图 -->
             <div id="map" style="width:85%;height: 100%">
 
@@ -561,6 +580,10 @@
                     bounds: turf.bbox(boundaries),
                     layers: [lines]
                 });
+                // L.tileLayer('/static/maps/{z}/{x}/{y}.png', {
+                //         minZoom: 1,
+                //         maxZoom: 15,
+                //     }).addTo(map_zdz);
                 // zdz_recdata_obj.zdz_map = map_zdz
 
             </script>
