@@ -75,7 +75,7 @@
                       <a href="javascript:;">降水</a>
                       <dl class="layui-nav-child">
                         <dd style="padding-left: 15px;margin-bottom: 10px;margin-top: 10px;">
-                            <button type="button" class="layui-btn layui-btn-xs">R24</button>
+                            <button type="button" value=24 class="layui-btn layui-btn-xs rain">R24</button>
                             <button type="button" class="layui-btn layui-btn-xs">R12</button>
                             <button type="button" class="layui-btn layui-btn-xs">R06</button>
                             <button type="button" class="layui-btn layui-btn-xs">R03</button>
@@ -94,27 +94,64 @@
                     <li class="layui-nav-item">
                         <a href="javascript:;">风力</a>
                         <dl class="layui-nav-child">
-                          <dd><a href="">移动模块</a></dd>
-                          <dd><a href="">后台模版</a></dd>
-                          <dd><a href="">电商平台</a></dd>
+                            <dd style="padding-left: 15px;margin-bottom: 10px;margin-top: 10px;">
+                                <button type="button" class="layui-btn layui-btn-xs">F24</button>
+                                <button type="button" class="layui-btn layui-btn-xs">F12</button>
+                                <button type="button" class="layui-btn layui-btn-xs">F06</button>
+                                <button type="button" class="layui-btn layui-btn-xs">F03</button>
+                                <button type="button" class="layui-btn layui-btn-xs">F01</button>
+                        
+                            </dd>
+                            <dd style="padding-left: 15px;margin-bottom: 10px;">
+                                <button type="button" class="layui-btn layui-btn-xs">F45</button>
+                                <button type="button" class="layui-btn layui-btn-xs">F30</button>
+                                <button type="button" class="layui-btn layui-btn-xs">F15</button>
+                                <button type="button" class="layui-btn layui-btn-xs">F10</button>
+                                <button type="button" class="layui-btn layui-btn-xs">F05</button>
+                            </dd>
                         </dl>
                       </li>
                       <li class="layui-nav-item">
                         <a href="javascript:;">气温</a>
                         <dl class="layui-nav-child">
-                          <dd><a href="">移动模块</a></dd>
-                          <dd><a href="">后台模版</a></dd>
-                          <dd><a href="">电商平台</a></dd>
+                            <dd style="padding-left: 15px;margin-bottom: 10px;margin-top: 10px;">
+                                <button type="button" class="layui-btn layui-btn-xs">T24</button>
+                                <button type="button" class="layui-btn layui-btn-xs">T12</button>
+                                <button type="button" class="layui-btn layui-btn-xs">T06</button>
+                                <button type="button" class="layui-btn layui-btn-xs">T03</button>
+                                <button type="button" class="layui-btn layui-btn-xs">T01</button>
+                        
+                            </dd>
+                            <dd style="padding-left: 15px;margin-bottom: 10px;">
+                                <button type="button" class="layui-btn layui-btn-xs">T45</button>
+                                <button type="button" class="layui-btn layui-btn-xs">T30</button>
+                                <button type="button" class="layui-btn layui-btn-xs">T15</button>
+                                <button type="button" class="layui-btn layui-btn-xs">T10</button>
+                                <button type="button" class="layui-btn layui-btn-xs">T05</button>
+                            </dd>
                         </dl>
                       </li>
                       <li class="layui-nav-item">
                         <a href="javascript:;">能见度</a>
                         <dl class="layui-nav-child">
-                          <dd><a href="">移动模块</a></dd>
-                          <dd><a href="">后台模版</a></dd>
-                          <dd><a href="">电商平台</a></dd>
+                            <dd style="padding-left: 15px;margin-bottom: 10px;margin-top: 10px;">
+                                <button type="button" class="layui-btn layui-btn-xs">V24</button>
+                                <button type="button" class="layui-btn layui-btn-xs">V12</button>
+                                <button type="button" class="layui-btn layui-btn-xs">V06</button>
+                                <button type="button" class="layui-btn layui-btn-xs">V03</button>
+                                <button type="button" class="layui-btn layui-btn-xs">V01</button>
+                        
+                            </dd>
+                            <dd style="padding-left: 15px;margin-bottom: 10px;">
+                                <button type="button" class="layui-btn layui-btn-xs">V45</button>
+                                <button type="button" class="layui-btn layui-btn-xs">V30</button>
+                                <button type="button" class="layui-btn layui-btn-xs">V15</button>
+                                <button type="button" class="layui-btn layui-btn-xs">V10</button>
+                                <button type="button" class="layui-btn layui-btn-xs">V05</button>
+                            </dd>
                         </dl>
                       </li>
+                    <!-- 基础设置 -->
                       <li class="layui-nav-item layui-nav-itemed">
                         <a href="javascript:;">查询设置</a>
                         <dl class="layui-nav-child">
@@ -133,256 +170,15 @@
 
             </div>
             <script>
+                // 地图加载的核心
                 const map_toolbox_object = {
-                        color_numbers:undefined,
-                        temp_labellist:[-10,-8,-6,-4,-2,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,35,37,40,42],
-                        temp_labelstr:undefined,
-                        temp_indexfun:function(nums){
-                            var dellist = []
-                            for (var i = 0 ;i<map_toolbox_object.temp_labellist.length;i++){
-                                var delnum = Math.abs(nums-map_toolbox_object.temp_labellist[i])
-                                dellist.push(delnum)
-                            }
-                            var minindex = Math.min(...dellist)
-                            var index = dellist.indexOf(minindex)
-                            return index
-                        },
-                        label_map:function(isobands_options, map,plot_type){
-                            if (plot_type=="rain"){
-                                var colorinitlat = 28.4
-                                var colorinitlon = 120.5
-                                var labellist = ["0","0.1","10","25","50","100","250"]
-                                var coloritem = isobands_options.breaksProperties.length
-                                var colorwidth = 0.1
-                                var colorheight = 0.4 / coloritem                            
-                                for (var i = 0; i < isobands_options.breaksProperties.length; i++) {
-                                    var textIcon = L.divIcon({
-                                        html: labellist[i],
-                                        className: 'label_plot_rain'
-                                    });
-                                    var colorlat = colorinitlat - i * colorheight
-                                    var colorlon = colorinitlon
-                                    var latlngs = [[colorlat, colorlon], [colorlat, colorlon + colorwidth], [colorlat - colorheight, colorlon + colorwidth], [colorlat - colorheight, colorlon]]
-                                    var colorstr = isobands_options.breaksProperties[i].fill
-                                    var polygon = L.polygon(latlngs, {
-                                        color: "black",
-                                        fillColor: colorstr,
-                                        fillOpacity: 0.8,
-                                        weight: 1
-                                    }).addTo(map)
-                                    L.marker([colorlat - colorheight / 3, colorlon + colorwidth + 0.05], { icon: textIcon }).addTo(map);
-                                }
-
-                            }
-                            else if (plot_type=="temp"){
-                                if (map_toolbox_object.temp_labelstr){
-                                    var labellist = map_toolbox_object.temp_labelstr
-                                }
-                                else{
-                                    var labellist = ["-10","-8","-6","-4","-2","0","2","4","6","8","10"
-                                    ,"12","14","16","18","20","22","24","26","28","30","32","34","35","37","40","41"
-                                ]
-                                }
-                                
-                                var colorinitlat = 28.3
-                                var colorinitlon = 120.1
-                                var coloritem = isobands_options.breaksProperties.length
-                                var colorwidth = 0.1
-                                var colorheight = 0.8 / coloritem                            
-                                for (var i = 0; i < isobands_options.breaksProperties.length; i++) {
-                                    var textIcon = L.divIcon({
-                                        html: labellist[i],
-                                        className: 'label_plot_temp'
-                                    });
-                                    var colorlat = colorinitlat - i * colorheight
-                                    var colorlon = colorinitlon
-                                    var latlngs = [[colorlat, colorlon], [colorlat, colorlon + colorwidth], [colorlat - colorheight, colorlon + colorwidth], [colorlat - colorheight, colorlon]]
-                                    var colorstr = isobands_options.breaksProperties[i].fill
-                                    var polygon = L.polygon(latlngs, {
-                                        color: "black",
-                                        fillColor: colorstr,
-                                        fillOpacity: 0.8,
-                                        weight: 1
-                                    }).addTo(map)
-                                    L.marker([colorlat - colorheight / 3, colorlon + colorwidth + 0.05], { icon: textIcon }).addTo(map);
-                                }
-
-
-                            }
-
-                        },
-                        color_level:function (plot_type) {
-                            // 降水
-                            var rain_options = {
-                                zProperty: "value",
-                                commonProperties: {
-                                    "fill-opacity": 1
-                                },
-                                breaksProperties: [
-                                    { fill: "rgb(255,255,255)" },// 0 mm
-                                    { fill: "rgb(140,246,130)" },// 0.1
-                                    { fill: "rgb(0,191,27)" },// 10
-                                    { fill: "rgb(62,185,255)" },// 25
-                                    { fill: "rgb(25,0,235)" },// 50
-                                    { fill: "rgb(255,0,255)" },// 100
-                                    { fill: "rgb(140,0,65)" } //250
-                                ]
-                            };
-                            // 气温
-                            var temp_options = {
-                                zProperty: "value",
-                                commonProperties: {
-                                    "fill-opacity": 1
-                                },
-                                breaksProperties: [
-                                    { fill: "rgb(141,172,216)" },// -10
-                                    { fill: "rgb(147,178,205)" },// -8
-                                    { fill: "rgb(144,187,206)" },// -6
-                                    { fill: "rgb(147,194,199)" },// -4
-                                    { fill: "rgb(150,209,187)" },// -2
-                                    { fill: "rgb(199,199,141)" },// 0
-                                    { fill: "rgb(208,206,132)" }, // 2 
-                                    { fill: "rgb(207,207,132)" },// 4
-                                    { fill: "rgb(214,205,117)" },// 6
-                                    { fill: "rgb(215,195,108)" },// 8 
-                                    { fill: "rgb(210,177,80)" },// 10 
-                                    { fill: "rgb(203,155,58)" },// 12
-                                    { fill: "rgb(206,139,45)" },// 14
-                                    { fill: "rgb(206,139,45)" }, // 16
-                                    { fill: "rgb(211,116,59)" },//  18
-                                    { fill: "rgb(197,99,49)" },// 20
-                                    { fill: "rgb(205,89,61)" },// 22
-                                    { fill: "rgb(205,63,53)" },// 24
-                                    { fill: "rgb(190,70,50)" },// 26
-                                    { fill: "rgb(204,62,59)" },// 28
-                                    { fill: "rgb(170,54,54)" }, // 30
-                                    { fill: "rgb(165,41,51)" },// 32
-                                    { fill: "rgb(158,37,50)" },// 34
-                                    { fill: "rgb(153,35,54)" },// 35
-                                    { fill: "rgb(122,36,65)" },// 37
-                                    { fill: "rgb(93,38,67)" },// 40
-                                    { fill: "rgb(63,38,67)" }                           
-                                ]
-                            };
-                            // 能见度
-                            var view_options = {
-                                zProperty: "value",
-                                commonProperties: {
-                                    "fill-opacity": 0.9
-                                },
-                                breaksProperties: [
-                                    { fill: "rgb(58,88,148)" },// 50
-                                    { fill: "rgb(75,111,159)" },// 200
-                                    { fill: "rgb(104,135,161)" },// 500
-                                    { fill: "rgb(145,161,174)" },// 1000
-                                    { fill: "rgb(147,186,149)" },// 2000
-                                    { fill: "rgb(255,255,255)" }// 3000
-                                ]
-                            };
-                            
-                            // 风力
-                            var wind_options = {
-                                zProperty: "value",
-                                commonProperties: {
-                                    "fill-opacity": 0.9
-                                },
-                                breaksProperties: [
-                                    { fill: "rgb(219,212,204)" },// 0 
-                                    { fill: "rgb(193,192,198)" },// 0.3
-                                    { fill: "rgb(167,210,203)" },// 1.6
-                                    { fill: "rgb(219,220,162)" },// 3.4 
-                                    { fill: "rgb(223,193,155)" },// 5.5
-                                    { fill: "rgb(217,158,115)" },// 8 
-                                    { fill: "rgb(226,106,78)" },// 10.8
-                                    { fill: "rgb(217,64,64)" },// 13.9
-                                    { fill: "rgb(190,47,574)" }// 17.2
-                                ]
-                            };
-                            if(plot_type=="rain"){
-                                return {
-                                    levelV:[0, 0.1, 10, 25, 50, 100, 250],
-                                    isobands_options:rain_options
-                                }
-                            }
-                            else if (plot_type=="temp"){
-                                if(map_toolbox_object.color_numbers){
-                                    var tmax = map_toolbox_object.color_numbers[2]
-                                    var tmin = map_toolbox_object.color_numbers[0]
-                                    var tmid = map_toolbox_object.color_numbers[1]
-                                    if((tmax-tmin)>6){
-                                        var nums = parseInt((tmax - tmin)/2)+1
-                                        var index = map_toolbox_object.temp_indexfun(tmin)
-                                        var levelV = []
-                                        var levelVstr = []
-                                        for (var i = 0;i <nums;i++){
-                                            levelV.push(tmin-2+i*2)
-                                            
-                                        }
-                                        for (var i = 0;i <levelV.length;i++){
-                                            levelVstr.push(levelV[i].toString())
-                                        }
-
-                                        map_toolbox_object.temp_labelstr = levelVstr
-                                        var color_oplist=temp_options.breaksProperties.slice(index,index+nums)
-                                        var isobands_options = {
-                                            zProperty: "value",
-                                            commonProperties: {
-                                                "fill-opacity": 1
-                                            },
-                                            breaksProperties:color_oplist
-                                        }
-                                        
-                                        // console.log("索引",color_oplist,levelV,tmin,tmax)                                
-                                    }
-                                    else{
-                                        var nums = (tmax - tmin)+1
-                                        var index = map_toolbox_object.temp_indexfun(tmin)
-                                        var levelV = []
-                                        var levelVstr = []
-                                        for (var i = 0;i <nums;i++){
-                                            levelV.push(tmin-2+i*1)                                        
-                                        }
-                                        for (var i = 0;i <levelV.length;i++){
-                                            levelVstr.push(levelV[i].toString())
-                                        }
-                                        map_toolbox_object.temp_labelstr = levelVstr
-                                        var color_oplist=temp_options.breaksProperties.slice(index,index+nums)
-                                        var isobands_options = {
-                                            zProperty: "value",
-                                            commonProperties: {
-                                                "fill-opacity": 1
-                                            },
-                                            breaksProperties:color_oplist
-                                        }
-                                       // console.log("索引",nums,color_oplist,levelV)
-
-                                    }
-
-                                }
-                                else{
-                                    
-                                    var levelV=[-10.0,-8.0, -6.0, -4.0, -2.0, 0, 2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,35,37,40,42]
-                                    var isobands_options=temp_options
-                                }
-                                return {
-                                    levelV:levelV,
-                                    isobands_options:isobands_options
-                                }
-                            }
-                            else if (plot_type=="wind"){
-                                return {
-                                    levelV:[0, 0.3, 1.6, 3.4, 5.5, 8, 10.8,13.9,17.2],
-                                    isobands_options:wind_options
-                                }
-                            }
-                            else if (plot_type=="view"){
-                                return {
-                                    levelV:[50, 200, 500, 1000, 2000,3000],
-                                    isobands_options:view_options
-                                }
-                            }
-
-                        },
+                        start_date: undefined,// 起止时间
+                        end_date: undefined, // 终结时间
+                        recv_all_data:undefined, // 接收数据
+                        recv_single_data:undefined, // 接收单点数据
+                        current_map:undefined, // 当前地图层
+                        current_layer:undefined, // 当前绘图层
+                        current_marker_list:[], // 当前散点阵列
                         getMaxAttribute: function (inLevelV, inGrid, inBreaksProperties) {
                             //定义变量
                             let levelArray = [];
@@ -415,7 +211,7 @@
                             }
                             return [value, fill]
                         },
-                        return_shp: function (boundaries, data,plot_type) {
+                        return_shp: function (boundaries, data, plot_type) {
                             // data 为poin需要用turf的featureCollection(data)加载
                             var points = turf.featureCollection(data);
                             var interpolate_options = {
@@ -424,7 +220,7 @@
                                 units: "degrees",
                                 weight: 10
                             };
-                            var isobands_options = map_toolbox_object.color_level(plot_type).isobands_options 
+                            var isobands_options = map_toolbox_object.color_level(plot_type).isobands_options
                             var levelV = map_toolbox_object.color_level(plot_type).levelV;
                             var grid = turf.interpolate(points, 0.05, interpolate_options);
                             var isobands = turf.isobands(
@@ -535,71 +331,153 @@
                                 boundaries: bounddata
                             }
                         },
-                        return_colormap: function (isobands_options, map) {
-                            var coloritem = isobands_options.breaksProperties.length
-                            var colorinitlat = 28.4
-                            var colorinitlon = 120.5
-                            var colorwidth = 0.1
-                            var colorheight = 0.4 / coloritem
-                            var labellist = ['0~0.1', '0.1~1', '1~10', '10~25', '25~50', '50~100', '100']
-                            for (var i = 0; i < isobands_options.breaksProperties.length; i++) {
-                                var textIcon = L.divIcon({
-                                    html: labellist[i],
-                                    className: 'label_plot_rain'
+                        get_data: function(model,type,button_value){
+                            //向服务器要数据model,type,button 对应导航栏目、垂直导航类型、具体按钮
+                            var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                            $.ajax({
+                                url: "station_zdz_data",  // 请求的地址
+                                type: "post",  // 请求方式
+                                timeout: 25000, //设置延迟上限
+                                data: {
+                                    'csrfmiddlewaretoken': csrf,
+                                    'model': model,
+                                    'click_type': type,
+                                    'button_value': button_value
+                                },
+                                dataType: "json",
+                                success: function (recvdate) {
+                                    console.log("接受的数据",recvdate)
+                                }
+                            })
+
+                        },
+                        current_time: function(button_value){
+                            //返回时间
+                            function getNextDate(date, day) {
+                                var dd = new Date(date);
+                                dd.setDate(dd.getDate() + day);
+                                var y = dd.getFullYear();
+                                var m = dd.getMonth() + 1 < 10 ? "0" + (dd.getMonth() + 1) : dd.getMonth() + 1;
+                                var d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate();
+                                return y + "-" + m + "-" + d;
+                            }; 
+                            var today = new Date()
+                            var y = today.getFullYear();
+                            var m = today.getMonth() + 1 < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1;
+                            var d = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
+                            var h = today.getHours() < 10 ? "0" + today.getHours() +":" : today.getHours()+":";
+                            var minutes = today.getMinutes() < 10 ? "0" + today.getMinutes() + ":" : today.getMinutes() + ":";
+                            var sec = today.getSeconds() < 10 ? "0" + today.getSeconds() :today.getSeconds();
+                            var today_str = y + "-" + m + "-" + d + " " + h + minutes + sec;
+                            if (button_value==24){
+                                console.log(today_str)
+                                var old_day = getNextDate(today_str, day=-1)
+
+                            }
+
+
+                        },
+                        flush_map: function () {
+                            //刷新按钮
+                        },
+                        init: function () {
+                            //地图初始化
+                            if(map_toolbox_object.current_map){
+                                map_toolbox_object.current_map.eachLayer(function (layer) {
+                                    if (!layer._container || ('' + jQuery(layer._container).attr('class')).replace(/\s/g, '') != 'leaflet-layer') {
+                                        layer.remove();
+                                    }
                                 });
-                                var colorlat = colorinitlat - i * colorheight
-                                var colorlon = colorinitlon
-                                var latlngs = [[colorlat, colorlon], [colorlat, colorlon + colorwidth], [colorlat - colorheight, colorlon + colorwidth], [colorlat - colorheight, colorlon]]
-                                var colorstr = isobands_options.breaksProperties[i].fill
-                                var polygon = L.polygon(latlngs, {
-                                    color: "black",
-                                    fillColor: colorstr,
-                                    fillOpacity: 0.8,
-                                    weight: 1
-                                }).addTo(map)
-                                L.marker([colorlat - colorheight / 3, colorlon + colorwidth + 0.05], { icon: textIcon }).addTo(map);
+                                var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries
+                                var zhejiang = map_toolbox_object.return_boundaries(zhejianglist).boundaries
+                                var canvasLabel = new L.CanvasLabel({
+                                    defaultLabelStyle: {
+                                        collisionFlg: true,
+                                        scale: 1,
+                                        strokeStyle: "#000",
+                                        fillStyle: "#fff",
+                                        lineWidth: 3
+                                    }
+                                });
+                                var lines = L.geoJSON(zhejiang, {
+                                    style: function (feature) {
+                                        return { color: 'black', weight: 1, fillOpacity: 0.1 };
+                                    }
+                                })
+                                var map_zdz = new L.Map('map', {
+                                    center: new L.LatLng(28.6, 120.9),//110.763, 41.376   39.62353145, 121.9937485
+                                    renderer: canvasLabel,
+                                    zoom: 9, //4
+                                    zoomControl: false,
+                                    dragging: true,
+                                    scrollWheelZoom: true,
+                                    doubleClickZoom: false,
+                                    attributionControl: false, //是否去除右下角标志
+                                    bounds: turf.bbox(boundaries),
+
+                                    layers: [lines]
+                                });
+                                map_toolbox_object.current_map = map_zdz
+
                             }
-                            var data = ""
-                            return {
-                                data: data
+                            else{
+                                var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries
+                                var zhejiang = map_toolbox_object.return_boundaries(zhejianglist).boundaries
+                                var canvasLabel = new L.CanvasLabel({
+                                    defaultLabelStyle: {
+                                        collisionFlg: true,
+                                        scale: 1,
+                                        strokeStyle: "#000",
+                                        fillStyle: "#fff",
+                                        lineWidth: 3
+                                    }
+                                });
+                                var lines = L.geoJSON(zhejiang, {
+                                    style: function (feature) {
+                                        return { color: 'black', weight: 1, fillOpacity: 0.1 };
+                                    }
+                                })
+                                var corner1 = L.latLng(25, 115),
+                                    corner2 = L.latLng(35, 125),
+                                    bound = L.latLngBounds(corner1, corner2);
+                                var map_zdz = new L.Map('map', {
+                                    center: new L.LatLng(28.6, 120.9),//110.763, 41.376   39.62353145, 121.9937485
+                                    renderer: canvasLabel,
+                                    zoom: 9, //4
+                                    zoomControl: false,
+                                    dragging: true,
+                                    scrollWheelZoom: true,
+                                    doubleClickZoom: false,
+                                    attributionControl: false, //是否去除右下角标志
+                                    bounds: turf.bbox(boundaries),
+                                    maxBounds:bound,
+                                    layers: [lines]
+                                });
+                                map_toolbox_object.current_map = map_zdz
+
                             }
+                        },
+                        plot_layer: function () {
+                            //绘制图层
+                        },
+                        plot_mark: function () {
+                            //绘制站点                        
+                        },
+                        plot_line: function () {
+                            //绘制站点                        
                         }
                     }
-                var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries
-                var zhejiang = map_toolbox_object.return_boundaries(zhejianglist).boundaries
-                var canvasLabel = new L.CanvasLabel({
-                    defaultLabelStyle: {
-                        collisionFlg: true,
-                        scale: 1,
-                        strokeStyle: "#000",
-                        fillStyle: "#fff",
-                        lineWidth: 3
-                    }
-
-                });
-                var lines = L.geoJSON(zhejiang, {
-                    style: function (feature) {
-                        return { color: 'black', weight: 1, fillOpacity: 0.01 };
-                    }
+                // 首页加载地图
+                map_toolbox_object.init()
+                //按钮组的响应函数
+                $('.rain').click(function(){
+                    var model = "zdz"
+                    var type = "rain"
+                    var button_value = this.value 
+                    map_toolbox_object.current_time(button_value)
+                    map_toolbox_object.get_data(model,type,button_value)            
                 })
-                var map_zdz = new L.Map('map', {
-                    center: new L.LatLng(28.6, 120.9),//110.763, 41.376   39.62353145, 121.9937485
-                    renderer: canvasLabel,
-                    zoom: 9, //4
-                    zoomControl: false,
-                    dragging: true,
-                    scrollWheelZoom: true,
-                    doubleClickZoom: false,
-                    attributionControl: false, //是否去除右下角标志
-                    bounds: turf.bbox(boundaries),
-                    layers: [lines]
-                });
-                // 加载离线地图
-                // L.tileLayer('/static/maps/{z}/{x}/{y}.png', {
-                //         minZoom: 1,
-                //         maxZoom: 15,
-                //     }).addTo(map_zdz);
-                // zdz_recdata_obj.zdz_map = map_zdz
+
 
             </script>
         </div>

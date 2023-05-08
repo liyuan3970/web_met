@@ -71,6 +71,8 @@ urlpatterns = [
     path('ec_single_data', views.ec_single_data),
     # 自订正降水的查询
     path('select_self_plot', views.select_self_plot),
+    # 以下为station的链接
+    path('station_zdz_data', views.station_zdz_data),
 
 ]
 

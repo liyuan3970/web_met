@@ -820,3 +820,27 @@ def home(request):
     url = request.GET.get('url')
     return redirect(url)
 
+# 气象数据分析系统
+import pymysql
+def station_zdz_data(request):
+    model = request.POST.get('model', '')
+    click_type = request.POST.get('click_type', '')
+    button_value = request.POST.get('button_value', '')
+    # 编写数据查询的后端逻辑
+    conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="tzweb")
+    sql_location = """select lat ,lon ,p_total,station_no from station_data where datetime = '2019-05-01 00:00:00' """
+    df_location = pd.read_sql(sql_location , con=conn) 
+    datalist = []
+    for i in range(len(df_location)):
+        single = {
+            "RR":str(df_location.iloc[i,2]),
+            "lat":str(df_location.iloc[i,0]),
+            "lon":str(df_location.iloc[i,1])
+        }
+        datalist.append(single)
+    context = {
+        'status': "ok",
+        'data':datalist
+    }
+    return JsonResponse(context)
+
