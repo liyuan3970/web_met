@@ -352,15 +352,7 @@
 
                         },
                         current_time: function(button_value){
-                            //返回时间
-                            function getNextDate(date, day) {
-                                var dd = new Date(date);
-                                dd.setDate(dd.getDate() + day);
-                                var y = dd.getFullYear();
-                                var m = dd.getMonth() + 1 < 10 ? "0" + (dd.getMonth() + 1) : dd.getMonth() + 1;
-                                var d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate();
-                                return y + "-" + m + "-" + d;
-                            }; 
+                            //返回时间 
                             var today = new Date()
                             var y = today.getFullYear();
                             var m = today.getMonth() + 1 < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1;
@@ -370,8 +362,16 @@
                             var sec = today.getSeconds() < 10 ? "0" + today.getSeconds() :today.getSeconds();
                             var today_str = y + "-" + m + "-" + d + " " + h + minutes + sec;
                             if (button_value==24){
-                                console.log(today_str)
-                                var old_day = getNextDate(today_str, day=-1)
+                                
+                                var old_day = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+                                var yy = old_day.getFullYear();
+                                var mm = old_day.getMonth() + 1 < 10 ? "0" + (old_day.getMonth() + 1) : old_day.getMonth() + 1;
+                                var dd = old_day.getDate() < 10 ? "0" + old_day.getDate() : old_day.getDate();
+                                var hh = old_day.getHours() < 10 ? "0" + old_day.getHours() + ":" : old_day.getHours() + ":";
+                                var mms = old_day.getMinutes() < 10 ? "0" + old_day.getMinutes() + ":" : old_day.getMinutes() + ":";
+                                var ss = old_day.getSeconds() < 10 ? "0" + old_day.getSeconds() : old_day.getSeconds();
+                                var old_str = yy + "-" + mm + "-" + dd + " " + hh + mms + ss;
+                                console.log(today_str,old_str)
 
                             }
 
