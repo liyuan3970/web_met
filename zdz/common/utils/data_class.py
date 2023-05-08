@@ -736,7 +736,7 @@ class ec_data_point:
             password="051219",
             database="tzweb"
         )
-        sql="""select data from  ec_data order by create_time"""
+        sql="""select data from  ec_data order by -create_time"""
         data=pd.read_sql(sql,mydb)
         # 数据转为python类型
         data_org = data.iloc[0].data

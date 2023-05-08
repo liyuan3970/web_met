@@ -1305,7 +1305,7 @@
                                         var d = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
                                         var h = today.getHours() < 10 ? "0" + today.getHours() + ":00:00" : today.getHours() + ":00:00";
                                         var today_str = y + "-" + m + "-" + d + " " + h;
-                                        var seven_day = getNextDate(today_str, day=-15) 
+                                        var seven_day = getNextDate(today_str, day=-30) 
                                         seven_day = seven_day + " " + h
                                         function date_to_str(date){
                                             var year = date.year 
@@ -1340,8 +1340,7 @@
                                     }
                                     layui.use('laydate', function () {
                                         var laydate = layui.laydate;
-                                        //日期范围
-                                        
+                                        //日期范围                                    
                                         var today = new Date()
                                         var y = today.getFullYear();
                                         var m = today.getMonth() + 1 < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1;

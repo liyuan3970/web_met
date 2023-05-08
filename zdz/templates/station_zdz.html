@@ -61,9 +61,9 @@
         <!-- 导航栏目 -->
         <div style="width:100%;">
             <ul class="layui-nav">
-                <li  class="layui-nav-item" style="width: 14%;font-size: 25px;padding-left:25px">气象数据分析</li>
-                <li class="layui-nav-item layui-this"><a href="">实况</a></li>
-                <li class="layui-nav-item"><a href="">模式</a></li>
+                <li  class="layui-nav-item" style="width: 14%;font-size: 25px;padding-left:25px">气象数据分析系统</li>
+                <li class="layui-nav-item layui-this"><a href="">实况自动站</a></li>
+                <!-- <li class="layui-nav-item"><a href="">模式</a></li> -->
             </ul>
         </div>
         <!-- 内容 -->
@@ -72,13 +72,27 @@
             <!-- <div style="width:15%;height: 100%;background-color: rgb(40,43,51);"> -->
                 <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="demo" style="width:15%;height: 100%;background-color: rgb(40,43,51);">
                     <li class="layui-nav-item layui-nav-itemed">
-                      <a href="javascript:;">风力</a>
+                      <a href="javascript:;">降水</a>
                       <dl class="layui-nav-child">
-                        <dd style="padding-left: 15px;"><button type="button" class="layui-btn">默认按钮</button><button type="button" class="layui-btn">默认按钮</button></dd>
+                        <dd style="padding-left: 15px;margin-bottom: 10px;margin-top: 10px;">
+                            <button type="button" class="layui-btn layui-btn-xs">R24</button>
+                            <button type="button" class="layui-btn layui-btn-xs">R12</button>
+                            <button type="button" class="layui-btn layui-btn-xs">R06</button>
+                            <button type="button" class="layui-btn layui-btn-xs">R03</button>
+                            <button type="button" class="layui-btn layui-btn-xs">R01</button>
+
+                        </dd>
+                        <dd style="padding-left: 15px;margin-bottom: 10px;">
+                            <button type="button" class="layui-btn layui-btn-xs">R45</button>
+                            <button type="button" class="layui-btn layui-btn-xs">R30</button>        
+                            <button type="button" class="layui-btn layui-btn-xs">R15</button>
+                            <button type="button" class="layui-btn layui-btn-xs">R10</button>
+                            <button type="button" class="layui-btn layui-btn-xs">R05</button>
+                        </dd>
                       </dl>
                     </li>
                     <li class="layui-nav-item">
-                        <a href="javascript:;">降水</a>
+                        <a href="javascript:;">风力</a>
                         <dl class="layui-nav-child">
                           <dd><a href="">移动模块</a></dd>
                           <dd><a href="">后台模版</a></dd>
@@ -102,9 +116,9 @@
                         </dl>
                       </li>
                       <li class="layui-nav-item layui-nav-itemed">
-                        <a href="javascript:;">设置</a>
+                        <a href="javascript:;">查询设置</a>
                         <dl class="layui-nav-child">
-                            <dd><a href="">设置内容</a></dd>
+                            <dd style="height:400px"></dd>
                             <dd><a href="">设置内容</a></dd>
                         </dl>
                       </li>
@@ -580,6 +594,7 @@
                     bounds: turf.bbox(boundaries),
                     layers: [lines]
                 });
+                // 加载离线地图
                 // L.tileLayer('/static/maps/{z}/{x}/{y}.png', {
                 //         minZoom: 1,
                 //         maxZoom: 15,
