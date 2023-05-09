@@ -30,6 +30,8 @@
     <link href="static/layui/css/layui.css" rel="stylesheet">
     <!-- 引入 layui.js -->
     <script src="static/layui/layui.js"></script>
+    <!-- 弹窗 -->
+    <script src="static/layui/layer.js"></script>
     <!-- 数据 -->
     <script src='static/js/taizhou.js'></script>
     <script src='static/js/county.js'></script>
@@ -179,6 +181,179 @@
                         current_map:undefined, // 当前地图层
                         current_layer:undefined, // 当前绘图层
                         current_marker_list:[], // 当前散点阵列
+                        boundaries:undefined,
+                        color_level:function (plot_type) {
+                            // 降水
+                            var rain_options = {
+                                zProperty: "value",
+                                commonProperties: {
+                                    "fill-opacity": 1
+                                },
+                                breaksProperties: [
+                                    { fill: "rgb(255,255,255)" },// 0 mm
+                                    { fill: "rgb(140,246,130)" },// 0.1
+                                    { fill: "rgb(0,191,27)" },// 10
+                                    { fill: "rgb(62,185,255)" },// 25
+                                    { fill: "rgb(25,0,235)" },// 50
+                                    { fill: "rgb(255,0,255)" },// 100
+                                    { fill: "rgb(140,0,65)" } //250
+                                ]
+                            };
+                            // 气温
+                            var temp_options = {
+                                zProperty: "value",
+                                commonProperties: {
+                                    "fill-opacity": 1
+                                },
+                                breaksProperties: [
+                                    { fill: "rgb(141,172,216)" },// -10
+                                    { fill: "rgb(147,178,205)" },// -8
+                                    { fill: "rgb(144,187,206)" },// -6
+                                    { fill: "rgb(147,194,199)" },// -4
+                                    { fill: "rgb(150,209,187)" },// -2
+                                    { fill: "rgb(199,199,141)" },// 0
+                                    { fill: "rgb(208,206,132)" }, // 2 
+                                    { fill: "rgb(207,207,132)" },// 4
+                                    { fill: "rgb(214,205,117)" },// 6
+                                    { fill: "rgb(215,195,108)" },// 8 
+                                    { fill: "rgb(210,177,80)" },// 10 
+                                    { fill: "rgb(203,155,58)" },// 12
+                                    { fill: "rgb(206,139,45)" },// 14
+                                    { fill: "rgb(206,139,45)" }, // 16
+                                    { fill: "rgb(211,116,59)" },//  18
+                                    { fill: "rgb(197,99,49)" },// 20
+                                    { fill: "rgb(205,89,61)" },// 22
+                                    { fill: "rgb(205,63,53)" },// 24
+                                    { fill: "rgb(190,70,50)" },// 26
+                                    { fill: "rgb(204,62,59)" },// 28
+                                    { fill: "rgb(170,54,54)" }, // 30
+                                    { fill: "rgb(165,41,51)" },// 32
+                                    { fill: "rgb(158,37,50)" },// 34
+                                    { fill: "rgb(153,35,54)" },// 35
+                                    { fill: "rgb(122,36,65)" },// 37
+                                    { fill: "rgb(93,38,67)" },// 40
+                                    { fill: "rgb(63,38,67)" }                           
+                                ]
+                            };
+                            // 能见度
+                            var view_options = {
+                                zProperty: "value",
+                                commonProperties: {
+                                    "fill-opacity": 0.9
+                                },
+                                breaksProperties: [
+                                    { fill: "rgb(58,88,148)" },// 50
+                                    { fill: "rgb(75,111,159)" },// 200
+                                    { fill: "rgb(104,135,161)" },// 500
+                                    { fill: "rgb(145,161,174)" },// 1000
+                                    { fill: "rgb(147,186,149)" },// 2000
+                                    { fill: "rgb(255,255,255)" }// 3000
+                                ]
+                            };
+                            
+                            // 风力
+                            var wind_options = {
+                                zProperty: "value",
+                                commonProperties: {
+                                    "fill-opacity": 0.9
+                                },
+                                breaksProperties: [
+                                    { fill: "rgb(219,212,204)" },// 0 
+                                    { fill: "rgb(193,192,198)" },// 0.3
+                                    { fill: "rgb(167,210,203)" },// 1.6
+                                    { fill: "rgb(219,220,162)" },// 3.4 
+                                    { fill: "rgb(223,193,155)" },// 5.5
+                                    { fill: "rgb(217,158,115)" },// 8 
+                                    { fill: "rgb(226,106,78)" },// 10.8
+                                    { fill: "rgb(217,64,64)" },// 13.9
+                                    { fill: "rgb(190,47,574)" }// 17.2
+                                ]
+                            };
+                            if(plot_type=="rain"){
+                                return {
+                                    levelV:[0, 0.1, 10, 25, 50, 100, 250],
+                                    isobands_options:rain_options
+                                }
+                            }
+                            else if (plot_type=="temp"){
+                                if(map_toolbox_object.color_numbers){
+                                    var tmax = map_toolbox_object.color_numbers[2]
+                                    var tmin = map_toolbox_object.color_numbers[0]
+                                    var tmid = map_toolbox_object.color_numbers[1]
+                                    if((tmax-tmin)>6){
+                                        var nums = parseInt((tmax - tmin)/2)+1
+                                        var index = map_toolbox_object.temp_indexfun(tmin)
+                                        var levelV = []
+                                        var levelVstr = []
+                                        for (var i = 0;i <nums;i++){
+                                            levelV.push(tmin-2+i*2)
+                                            
+                                        }
+                                        for (var i = 0;i <levelV.length;i++){
+                                            levelVstr.push(levelV[i].toString())
+                                        }
+
+                                        map_toolbox_object.temp_labelstr = levelVstr
+                                        var color_oplist=temp_options.breaksProperties.slice(index,index+nums)
+                                        var isobands_options = {
+                                            zProperty: "value",
+                                            commonProperties: {
+                                                "fill-opacity": 1
+                                            },
+                                            breaksProperties:color_oplist
+                                        }
+                                        
+                                        // console.log("索引",color_oplist,levelV,tmin,tmax)                                
+                                    }
+                                    else{
+                                        var nums = (tmax - tmin)+1
+                                        var index = map_toolbox_object.temp_indexfun(tmin)
+                                        var levelV = []
+                                        var levelVstr = []
+                                        for (var i = 0;i <nums;i++){
+                                            levelV.push(tmin-2+i*1)                                        
+                                        }
+                                        for (var i = 0;i <levelV.length;i++){
+                                            levelVstr.push(levelV[i].toString())
+                                        }
+                                        map_toolbox_object.temp_labelstr = levelVstr
+                                        var color_oplist=temp_options.breaksProperties.slice(index,index+nums)
+                                        var isobands_options = {
+                                            zProperty: "value",
+                                            commonProperties: {
+                                                "fill-opacity": 1
+                                            },
+                                            breaksProperties:color_oplist
+                                        }
+                                       // console.log("索引",nums,color_oplist,levelV)
+
+                                    }
+
+                                }
+                                else{
+                                    
+                                    var levelV=[-10.0,-8.0, -6.0, -4.0, -2.0, 0, 2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,35,37,40,42]
+                                    var isobands_options=temp_options
+                                }
+                                return {
+                                    levelV:levelV,
+                                    isobands_options:isobands_options
+                                }
+                            }
+                            else if (plot_type=="wind"){
+                                return {
+                                    levelV:[0, 0.3, 1.6, 3.4, 5.5, 8, 10.8,13.9,17.2],
+                                    isobands_options:wind_options
+                                }
+                            }
+                            else if (plot_type=="view"){
+                                return {
+                                    levelV:[50, 200, 500, 1000, 2000,3000],
+                                    isobands_options:view_options
+                                }
+                            }
+
+                        },
                         getMaxAttribute: function (inLevelV, inGrid, inBreaksProperties) {
                             //定义变量
                             let levelArray = [];
@@ -346,7 +521,14 @@
                                 },
                                 dataType: "json",
                                 success: function (recvdate) {
-                                    console.log("接受的数据",recvdate)
+                                    console.log("接收的数据",recvdate)
+                                    var click_type = recvdate.click_type                                
+                                    map_toolbox_object.recv_all_data = recvdate.data
+                                    var pointdata = recvdate.data
+                                    // 绘制等值线
+                                    map_toolbox_object.plot_layer(pointdata,click_type)
+                                    // 绘制marker
+                                    map_toolbox_object.plot_mark()
                                 }
                             })
 
@@ -388,8 +570,9 @@
                                         layer.remove();
                                     }
                                 });
-                                var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries
-                                var zhejiang = map_toolbox_object.return_boundaries(zhejianglist).boundaries
+                                // var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries
+                                var boundaries = map_toolbox_object.return_boundaries(zhejianglist[0].features).boundaries
+                                map_toolbox_object.boundaries = boundaries
                                 var canvasLabel = new L.CanvasLabel({
                                     defaultLabelStyle: {
                                         collisionFlg: true,
@@ -399,7 +582,7 @@
                                         lineWidth: 3
                                     }
                                 });
-                                var lines = L.geoJSON(zhejiang, {
+                                var lines = L.geoJSON(boundaries, {
                                     style: function (feature) {
                                         return { color: 'black', weight: 1, fillOpacity: 0.1 };
                                     }
@@ -421,8 +604,9 @@
 
                             }
                             else{
-                                var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries
-                                var zhejiang = map_toolbox_object.return_boundaries(zhejianglist).boundaries
+                                // var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries                       
+                                var boundaries = map_toolbox_object.return_boundaries(zhejianglist[0].features).boundaries
+                                map_toolbox_object.boundaries = boundaries
                                 var canvasLabel = new L.CanvasLabel({
                                     defaultLabelStyle: {
                                         collisionFlg: true,
@@ -432,18 +616,20 @@
                                         lineWidth: 3
                                     }
                                 });
-                                var lines = L.geoJSON(zhejiang, {
+                                var lines = L.geoJSON(boundaries, {
                                     style: function (feature) {
                                         return { color: 'black', weight: 1, fillOpacity: 0.1 };
                                     }
                                 })
-                                var corner1 = L.latLng(25, 115),
-                                    corner2 = L.latLng(35, 125),
+                                var corner1 = L.latLng(25, 118),
+                                    corner2 = L.latLng(32, 123),
                                     bound = L.latLngBounds(corner1, corner2);
                                 var map_zdz = new L.Map('map', {
                                     center: new L.LatLng(28.6, 120.9),//110.763, 41.376   39.62353145, 121.9937485
                                     renderer: canvasLabel,
                                     zoom: 9, //4
+                                    maxZoom:10,
+                                    minZoom:8,
                                     zoomControl: false,
                                     dragging: true,
                                     scrollWheelZoom: true,
@@ -457,11 +643,60 @@
 
                             }
                         },
-                        plot_layer: function () {
+                        plot_layer: function (pointdata,click_type) {
                             //绘制图层
+                            var points = []
+                            map_toolbox_object.recv_all_data.forEach(function (item) {
+                                // 绘图
+                                var single_point = {
+                                    type: "Feature",
+                                    "properties": {
+                                        "value": item.value
+                                    },
+                                    "geometry": {
+                                        "type": "Point",
+                                        "coordinates": [parseFloat(item.lon), parseFloat(item.lat)]
+                                    }
+                                }
+                                points.push(single_point)
+                                // 添加散点------------
+                                if (click_type == "rain" && item.value > 0) {
+                                    var latlng = L.latLng(item.lat, item.lon);
+                                    var c = L.circleMarker(latlng, {
+                                        stationnum: item.IIiii,
+                                        weight: 0,
+                                        radius: 7,
+                                        opacity: 1,
+                                        fill: false,
+                                        labelStyle: {
+                                            text:item.name+"-"+item.value,
+                                            weight: 10,
+                                            rotation: 0,
+                                            color: "rgb(239, 243, 237)",
+                                            zIndex: 60
+                                        }
+                                    })
+                                    map_toolbox_object.current_marker_list.push(c)
+
+                                }
+                                
+                            })
+                            var intersectionLay = map_toolbox_object.return_shp(map_toolbox_object.boundaries, points,click_type).intersectionLay
+                            intersectionLay.addTo(map_toolbox_object.current_map)
                         },
-                        plot_mark: function () {
-                            //绘制站点                        
+                        plot_mark: function (click_type) {
+                            //添加绘图的相应函数
+                            map_toolbox_object.current_marker_list.forEach(function(item){
+                                item.addTo(map_toolbox_object.current_map).on("click", function (e) {
+                                    /// 叠加单机绘图
+                                    // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                    var plot_type = "rain"
+                                    var plot_name = e.sourceTarget.options.stationnum
+                                    $("#hidden_layer").attr('style',"padding: 30px;width: 900px ;height: 600px;position:absolute;top:20%;left:28%;z-index:1000;background-color: rgb(57,61,73);")
+                                    
+                                });
+
+                            })                       
                         },
                         plot_line: function () {
                             //绘制站点                        
@@ -480,6 +715,28 @@
 
 
             </script>
+            <!-- 隐藏栏目的设置 -->
+            <div id ="hidden_layer" class="layui-bg-gray" style="display:none;">
+                <div class="layui-row layui-col-space15">
+                    
+                    <div class="layui-col-md12">
+                        <div class="layui-panel">
+                            <div id ="station_line" style="height:520px;background-color: white;">
+
+                            </div>                
+                        </div>
+                    </div>
+                    <button id ="save" type="button" class="layui-btn layui-btn-sm" style="float: right;background-color: rgb(28,30,36);">暂存</button>
+                    &nbsp;&nbsp;&nbsp;
+                    <button id ="close" type="button" class="layui-btn layui-btn-sm" style="float: right;background-color: rgb(28,30,36);">关闭</button>
+                    <script>
+                        $("#close").click(function(){
+                            $("#hidden_layer").attr('style',"display:none;")
+                        })
+
+                    </script>
+                </div>
+            </div>
         </div>
 
 

@@ -828,19 +828,24 @@ def station_zdz_data(request):
     button_value = request.POST.get('button_value', '')
     # 编写数据查询的后端逻辑
     conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="tzweb")
-    sql_location = """select lat ,lon ,p_total,station_no from station_data where datetime = '2019-05-01 00:00:00' """
+    sql_location = """select lat ,lon ,p_total,station_no,station_name from station_data where datetime = '2019-05-01 00:00:00' """
     df_location = pd.read_sql(sql_location , con=conn) 
     datalist = []
     for i in range(len(df_location)):
         single = {
-            "RR":str(df_location.iloc[i,2]),
+            "name":str(df_location.iloc[i,4]),
+            "IIiii":str(df_location.iloc[i,3]),
+            "value":str(df_location.iloc[i,2]),
             "lat":str(df_location.iloc[i,0]),
             "lon":str(df_location.iloc[i,1])
         }
         datalist.append(single)
     context = {
         'status': "ok",
-        'data':datalist
+        'data':datalist,
+        'click_type':click_type
     }
     return JsonResponse(context)
+
+
 

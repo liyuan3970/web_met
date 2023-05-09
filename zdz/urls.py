@@ -14,7 +14,7 @@ urlpatterns = [
     path('station/<str:station_name>/', views.station_view),
     path('index', views.index_main),
     path('login', views.login_main),
-    path('home/', views.home),
+    path('home/', views.home), 
     path('quick_look', views.quick_look),
     # 可以直接预览媒体文件
     re_path('^media/(?P<path>.*?)$', serve, kwargs={'document_root': 'media/'}),
