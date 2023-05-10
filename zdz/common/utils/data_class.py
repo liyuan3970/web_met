@@ -375,14 +375,16 @@ class zdz_data:
         dailylist = self.day_button()
         conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="tzweb")
         sql_location = f"""select lat,lon,sd.station_name, sd.station_no as station_no, sd.w_max as wind, max(w_dir) as w_dir,
-        sum(p_total) as rain,
+        rr as rain,
         min(if(vis>0,vis,9999)) as view ,
-        min(t_min) as t_min ,
-        max(t_max) as t_max ,
+        tn as t_min ,
+        tx as t_max ,
         sd.station_city as city,
         sd.station_town as town,
         sd.station_county as county
-        from (select station_no,max(if(w_max>0,w_max,null)) as wind from station_data where (datetime between '{self.start}' and '{self.end}') group by station_no) as wind
+        from (select station_no,max(if(w_max>0,w_max,null)) as wind,sum(p_total) as rr,min(t_min) as tn,max(t_max) as tx
+        from station_data 
+        where (datetime between '{self.start}' and '{self.end}') group by station_no) as wind
         inner join station_data as sd on sd.station_no = wind.station_no where( sd.w_max = wind.wind and datetime between '{self.start}' and '{self.end}')
         group by sd.datetime, sd.station_no, sd.w_max,lat,lon,station_name,station_city,station_town,station_county"""
         df_location = pd.read_sql(sql_location , con=conn)  

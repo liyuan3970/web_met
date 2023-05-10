@@ -25,6 +25,12 @@
     <script type="text/javascript" src="static/js/dataTool.min.js"></script>
     <script type="text/javascript" src="static/js/china.js"></script>
     <script type="text/javascript" src="static/js/world.js"></script>
+    <!-- hightchart -->
+    <script src="static/js/highcharts.js"></script>
+    <script src="static/js/windbarb.js"></script>
+    <script src="static/js/exporting.js"></script>
+    <script src="static/js/export-data.js"></script>
+    <script src="static/js/accessibility.js"></script>
 
     <!-- 引入 layui.css -->
     <link href="static/layui/css/layui.css" rel="stylesheet">
@@ -58,12 +64,12 @@
 
 <body>
     {% csrf_token %}
-    <div 
+    <div
         style="display: flex;align-content:flex-start;position: absolute; justify-content: center; flex-wrap: wrap; width: 100%;height: 100%;background-color: rgb(246, 247, 250);overflow-y: hidden;">
         <!-- 导航栏目 -->
         <div style="width:100%;">
             <ul class="layui-nav">
-                <li  class="layui-nav-item" style="width: 14%;font-size: 25px;padding-left:25px">气象数据分析系统</li>
+                <li class="layui-nav-item" style="width: 14%;font-size: 25px;padding-left:25px">气象数据分析系统</li>
                 <li class="layui-nav-item layui-this"><a href="">实况自动站</a></li>
                 <!-- <li class="layui-nav-item"><a href="">模式</a></li> -->
             </ul>
@@ -72,10 +78,11 @@
         <div style="display: inline-flex;width:100%;height:95%">
             <!-- 这里是垂直导航栏目 -->
             <!-- <div style="width:15%;height: 100%;background-color: rgb(40,43,51);"> -->
-                <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="demo" style="width:15%;height: 100%;background-color: rgb(40,43,51);">
-                    <li class="layui-nav-item layui-nav-itemed">
-                      <a href="javascript:;">降水</a>
-                      <dl class="layui-nav-child">
+            <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="demo"
+                style="width:15%;height: 100%;background-color: rgb(40,43,51);">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">降水</a>
+                    <dl class="layui-nav-child">
                         <dd style="padding-left: 15px;margin-bottom: 10px;margin-top: 10px;">
                             <button type="button" value=24 class="layui-btn layui-btn-xs rain">R24</button>
                             <button type="button" class="layui-btn layui-btn-xs">R12</button>
@@ -86,84 +93,84 @@
                         </dd>
                         <dd style="padding-left: 15px;margin-bottom: 10px;">
                             <button type="button" class="layui-btn layui-btn-xs">R45</button>
-                            <button type="button" class="layui-btn layui-btn-xs">R30</button>        
+                            <button type="button" class="layui-btn layui-btn-xs">R30</button>
                             <button type="button" class="layui-btn layui-btn-xs">R15</button>
                             <button type="button" class="layui-btn layui-btn-xs">R10</button>
                             <button type="button" class="layui-btn layui-btn-xs">R05</button>
                         </dd>
-                      </dl>
-                    </li>
-                    <li class="layui-nav-item">
-                        <a href="javascript:;">风力</a>
-                        <dl class="layui-nav-child">
-                            <dd style="padding-left: 15px;margin-bottom: 10px;margin-top: 10px;">
-                                <button type="button" class="layui-btn layui-btn-xs">F24</button>
-                                <button type="button" class="layui-btn layui-btn-xs">F12</button>
-                                <button type="button" class="layui-btn layui-btn-xs">F06</button>
-                                <button type="button" class="layui-btn layui-btn-xs">F03</button>
-                                <button type="button" class="layui-btn layui-btn-xs">F01</button>
-                        
-                            </dd>
-                            <dd style="padding-left: 15px;margin-bottom: 10px;">
-                                <button type="button" class="layui-btn layui-btn-xs">F45</button>
-                                <button type="button" class="layui-btn layui-btn-xs">F30</button>
-                                <button type="button" class="layui-btn layui-btn-xs">F15</button>
-                                <button type="button" class="layui-btn layui-btn-xs">F10</button>
-                                <button type="button" class="layui-btn layui-btn-xs">F05</button>
-                            </dd>
-                        </dl>
-                      </li>
-                      <li class="layui-nav-item">
-                        <a href="javascript:;">气温</a>
-                        <dl class="layui-nav-child">
-                            <dd style="padding-left: 15px;margin-bottom: 10px;margin-top: 10px;">
-                                <button type="button" class="layui-btn layui-btn-xs">T24</button>
-                                <button type="button" class="layui-btn layui-btn-xs">T12</button>
-                                <button type="button" class="layui-btn layui-btn-xs">T06</button>
-                                <button type="button" class="layui-btn layui-btn-xs">T03</button>
-                                <button type="button" class="layui-btn layui-btn-xs">T01</button>
-                        
-                            </dd>
-                            <dd style="padding-left: 15px;margin-bottom: 10px;">
-                                <button type="button" class="layui-btn layui-btn-xs">T45</button>
-                                <button type="button" class="layui-btn layui-btn-xs">T30</button>
-                                <button type="button" class="layui-btn layui-btn-xs">T15</button>
-                                <button type="button" class="layui-btn layui-btn-xs">T10</button>
-                                <button type="button" class="layui-btn layui-btn-xs">T05</button>
-                            </dd>
-                        </dl>
-                      </li>
-                      <li class="layui-nav-item">
-                        <a href="javascript:;">能见度</a>
-                        <dl class="layui-nav-child">
-                            <dd style="padding-left: 15px;margin-bottom: 10px;margin-top: 10px;">
-                                <button type="button" class="layui-btn layui-btn-xs">V24</button>
-                                <button type="button" class="layui-btn layui-btn-xs">V12</button>
-                                <button type="button" class="layui-btn layui-btn-xs">V06</button>
-                                <button type="button" class="layui-btn layui-btn-xs">V03</button>
-                                <button type="button" class="layui-btn layui-btn-xs">V01</button>
-                        
-                            </dd>
-                            <dd style="padding-left: 15px;margin-bottom: 10px;">
-                                <button type="button" class="layui-btn layui-btn-xs">V45</button>
-                                <button type="button" class="layui-btn layui-btn-xs">V30</button>
-                                <button type="button" class="layui-btn layui-btn-xs">V15</button>
-                                <button type="button" class="layui-btn layui-btn-xs">V10</button>
-                                <button type="button" class="layui-btn layui-btn-xs">V05</button>
-                            </dd>
-                        </dl>
-                      </li>
-                    <!-- 基础设置 -->
-                      <li class="layui-nav-item layui-nav-itemed">
-                        <a href="javascript:;">查询设置</a>
-                        <dl class="layui-nav-child">
-                            <dd style="height:400px"></dd>
-                            <dd><a href="">设置内容</a></dd>
-                        </dl>
-                      </li>
-                   
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">风力</a>
+                    <dl class="layui-nav-child">
+                        <dd style="padding-left: 15px;margin-bottom: 10px;margin-top: 10px;">
+                            <button type="button" class="layui-btn layui-btn-xs">F24</button>
+                            <button type="button" class="layui-btn layui-btn-xs">F12</button>
+                            <button type="button" class="layui-btn layui-btn-xs">F06</button>
+                            <button type="button" class="layui-btn layui-btn-xs">F03</button>
+                            <button type="button" class="layui-btn layui-btn-xs">F01</button>
 
-                </ul>
+                        </dd>
+                        <dd style="padding-left: 15px;margin-bottom: 10px;">
+                            <button type="button" class="layui-btn layui-btn-xs">F45</button>
+                            <button type="button" class="layui-btn layui-btn-xs">F30</button>
+                            <button type="button" class="layui-btn layui-btn-xs">F15</button>
+                            <button type="button" class="layui-btn layui-btn-xs">F10</button>
+                            <button type="button" class="layui-btn layui-btn-xs">F05</button>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">气温</a>
+                    <dl class="layui-nav-child">
+                        <dd style="padding-left: 15px;margin-bottom: 10px;margin-top: 10px;">
+                            <button type="button" class="layui-btn layui-btn-xs">T24</button>
+                            <button type="button" class="layui-btn layui-btn-xs">T12</button>
+                            <button type="button" class="layui-btn layui-btn-xs">T06</button>
+                            <button type="button" class="layui-btn layui-btn-xs">T03</button>
+                            <button type="button" class="layui-btn layui-btn-xs">T01</button>
+
+                        </dd>
+                        <dd style="padding-left: 15px;margin-bottom: 10px;">
+                            <button type="button" class="layui-btn layui-btn-xs">T45</button>
+                            <button type="button" class="layui-btn layui-btn-xs">T30</button>
+                            <button type="button" class="layui-btn layui-btn-xs">T15</button>
+                            <button type="button" class="layui-btn layui-btn-xs">T10</button>
+                            <button type="button" class="layui-btn layui-btn-xs">T05</button>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">能见度</a>
+                    <dl class="layui-nav-child">
+                        <dd style="padding-left: 15px;margin-bottom: 10px;margin-top: 10px;">
+                            <button type="button" class="layui-btn layui-btn-xs">V24</button>
+                            <button type="button" class="layui-btn layui-btn-xs">V12</button>
+                            <button type="button" class="layui-btn layui-btn-xs">V06</button>
+                            <button type="button" class="layui-btn layui-btn-xs">V03</button>
+                            <button type="button" class="layui-btn layui-btn-xs">V01</button>
+
+                        </dd>
+                        <dd style="padding-left: 15px;margin-bottom: 10px;">
+                            <button type="button" class="layui-btn layui-btn-xs">V45</button>
+                            <button type="button" class="layui-btn layui-btn-xs">V30</button>
+                            <button type="button" class="layui-btn layui-btn-xs">V15</button>
+                            <button type="button" class="layui-btn layui-btn-xs">V10</button>
+                            <button type="button" class="layui-btn layui-btn-xs">V05</button>
+                        </dd>
+                    </dl>
+                </li>
+                <!-- 基础设置 -->
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">查询设置</a>
+                    <dl class="layui-nav-child">
+                        <dd style="height:400px"></dd>
+                        <dd><a href="">设置内容</a></dd>
+                    </dl>
+                </li>
+
+
+            </ul>
 
 
             <!-- </div> -->
@@ -174,564 +181,697 @@
             <script>
                 // 地图加载的核心
                 const map_toolbox_object = {
-                        start_date: undefined,// 起止时间
-                        end_date: undefined, // 终结时间
-                        recv_all_data:undefined, // 接收数据
-                        recv_single_data:undefined, // 接收单点数据
-                        current_map:undefined, // 当前地图层
-                        current_layer:undefined, // 当前绘图层
-                        current_marker_list:[], // 当前散点阵列
-                        boundaries:undefined,
-                        color_level:function (plot_type) {
-                            // 降水
-                            var rain_options = {
-                                zProperty: "value",
-                                commonProperties: {
-                                    "fill-opacity": 1
-                                },
-                                breaksProperties: [
-                                    { fill: "rgb(255,255,255)" },// 0 mm
-                                    { fill: "rgb(140,246,130)" },// 0.1
-                                    { fill: "rgb(0,191,27)" },// 10
-                                    { fill: "rgb(62,185,255)" },// 25
-                                    { fill: "rgb(25,0,235)" },// 50
-                                    { fill: "rgb(255,0,255)" },// 100
-                                    { fill: "rgb(140,0,65)" } //250
-                                ]
-                            };
-                            // 气温
-                            var temp_options = {
-                                zProperty: "value",
-                                commonProperties: {
-                                    "fill-opacity": 1
-                                },
-                                breaksProperties: [
-                                    { fill: "rgb(141,172,216)" },// -10
-                                    { fill: "rgb(147,178,205)" },// -8
-                                    { fill: "rgb(144,187,206)" },// -6
-                                    { fill: "rgb(147,194,199)" },// -4
-                                    { fill: "rgb(150,209,187)" },// -2
-                                    { fill: "rgb(199,199,141)" },// 0
-                                    { fill: "rgb(208,206,132)" }, // 2 
-                                    { fill: "rgb(207,207,132)" },// 4
-                                    { fill: "rgb(214,205,117)" },// 6
-                                    { fill: "rgb(215,195,108)" },// 8 
-                                    { fill: "rgb(210,177,80)" },// 10 
-                                    { fill: "rgb(203,155,58)" },// 12
-                                    { fill: "rgb(206,139,45)" },// 14
-                                    { fill: "rgb(206,139,45)" }, // 16
-                                    { fill: "rgb(211,116,59)" },//  18
-                                    { fill: "rgb(197,99,49)" },// 20
-                                    { fill: "rgb(205,89,61)" },// 22
-                                    { fill: "rgb(205,63,53)" },// 24
-                                    { fill: "rgb(190,70,50)" },// 26
-                                    { fill: "rgb(204,62,59)" },// 28
-                                    { fill: "rgb(170,54,54)" }, // 30
-                                    { fill: "rgb(165,41,51)" },// 32
-                                    { fill: "rgb(158,37,50)" },// 34
-                                    { fill: "rgb(153,35,54)" },// 35
-                                    { fill: "rgb(122,36,65)" },// 37
-                                    { fill: "rgb(93,38,67)" },// 40
-                                    { fill: "rgb(63,38,67)" }                           
-                                ]
-                            };
-                            // 能见度
-                            var view_options = {
-                                zProperty: "value",
-                                commonProperties: {
-                                    "fill-opacity": 0.9
-                                },
-                                breaksProperties: [
-                                    { fill: "rgb(58,88,148)" },// 50
-                                    { fill: "rgb(75,111,159)" },// 200
-                                    { fill: "rgb(104,135,161)" },// 500
-                                    { fill: "rgb(145,161,174)" },// 1000
-                                    { fill: "rgb(147,186,149)" },// 2000
-                                    { fill: "rgb(255,255,255)" }// 3000
-                                ]
-                            };
-                            
-                            // 风力
-                            var wind_options = {
-                                zProperty: "value",
-                                commonProperties: {
-                                    "fill-opacity": 0.9
-                                },
-                                breaksProperties: [
-                                    { fill: "rgb(219,212,204)" },// 0 
-                                    { fill: "rgb(193,192,198)" },// 0.3
-                                    { fill: "rgb(167,210,203)" },// 1.6
-                                    { fill: "rgb(219,220,162)" },// 3.4 
-                                    { fill: "rgb(223,193,155)" },// 5.5
-                                    { fill: "rgb(217,158,115)" },// 8 
-                                    { fill: "rgb(226,106,78)" },// 10.8
-                                    { fill: "rgb(217,64,64)" },// 13.9
-                                    { fill: "rgb(190,47,574)" }// 17.2
-                                ]
-                            };
-                            if(plot_type=="rain"){
-                                return {
-                                    levelV:[0, 0.1, 10, 25, 50, 100, 250],
-                                    isobands_options:rain_options
-                                }
-                            }
-                            else if (plot_type=="temp"){
-                                if(map_toolbox_object.color_numbers){
-                                    var tmax = map_toolbox_object.color_numbers[2]
-                                    var tmin = map_toolbox_object.color_numbers[0]
-                                    var tmid = map_toolbox_object.color_numbers[1]
-                                    if((tmax-tmin)>6){
-                                        var nums = parseInt((tmax - tmin)/2)+1
-                                        var index = map_toolbox_object.temp_indexfun(tmin)
-                                        var levelV = []
-                                        var levelVstr = []
-                                        for (var i = 0;i <nums;i++){
-                                            levelV.push(tmin-2+i*2)
-                                            
-                                        }
-                                        for (var i = 0;i <levelV.length;i++){
-                                            levelVstr.push(levelV[i].toString())
-                                        }
+                    start_date: undefined,// 起止时间
+                    end_date: undefined, // 终结时间
+                    recv_all_data: undefined, // 接收数据
+                    recv_single_data: undefined, // 接收单点数据
+                    current_map: undefined, // 当前地图层
+                    current_layer: undefined, // 当前绘图层
+                    current_marker_list: [], // 当前散点阵列
+                    boundaries: undefined,
+                    color_level: function (plot_type) {
+                        // 降水
+                        var rain_options = {
+                            zProperty: "value",
+                            commonProperties: {
+                                "fill-opacity": 1
+                            },
+                            breaksProperties: [
+                                { fill: "rgb(255,255,255)" },// 0 mm
+                                { fill: "rgb(140,246,130)" },// 0.1
+                                { fill: "rgb(0,191,27)" },// 10
+                                { fill: "rgb(62,185,255)" },// 25
+                                { fill: "rgb(25,0,235)" },// 50
+                                { fill: "rgb(255,0,255)" },// 100
+                                { fill: "rgb(140,0,65)" } //250
+                            ]
+                        };
+                        // 气温
+                        var temp_options = {
+                            zProperty: "value",
+                            commonProperties: {
+                                "fill-opacity": 1
+                            },
+                            breaksProperties: [
+                                { fill: "rgb(141,172,216)" },// -10
+                                { fill: "rgb(147,178,205)" },// -8
+                                { fill: "rgb(144,187,206)" },// -6
+                                { fill: "rgb(147,194,199)" },// -4
+                                { fill: "rgb(150,209,187)" },// -2
+                                { fill: "rgb(199,199,141)" },// 0
+                                { fill: "rgb(208,206,132)" }, // 2 
+                                { fill: "rgb(207,207,132)" },// 4
+                                { fill: "rgb(214,205,117)" },// 6
+                                { fill: "rgb(215,195,108)" },// 8 
+                                { fill: "rgb(210,177,80)" },// 10 
+                                { fill: "rgb(203,155,58)" },// 12
+                                { fill: "rgb(206,139,45)" },// 14
+                                { fill: "rgb(206,139,45)" }, // 16
+                                { fill: "rgb(211,116,59)" },//  18
+                                { fill: "rgb(197,99,49)" },// 20
+                                { fill: "rgb(205,89,61)" },// 22
+                                { fill: "rgb(205,63,53)" },// 24
+                                { fill: "rgb(190,70,50)" },// 26
+                                { fill: "rgb(204,62,59)" },// 28
+                                { fill: "rgb(170,54,54)" }, // 30
+                                { fill: "rgb(165,41,51)" },// 32
+                                { fill: "rgb(158,37,50)" },// 34
+                                { fill: "rgb(153,35,54)" },// 35
+                                { fill: "rgb(122,36,65)" },// 37
+                                { fill: "rgb(93,38,67)" },// 40
+                                { fill: "rgb(63,38,67)" }
+                            ]
+                        };
+                        // 能见度
+                        var view_options = {
+                            zProperty: "value",
+                            commonProperties: {
+                                "fill-opacity": 0.9
+                            },
+                            breaksProperties: [
+                                { fill: "rgb(58,88,148)" },// 50
+                                { fill: "rgb(75,111,159)" },// 200
+                                { fill: "rgb(104,135,161)" },// 500
+                                { fill: "rgb(145,161,174)" },// 1000
+                                { fill: "rgb(147,186,149)" },// 2000
+                                { fill: "rgb(255,255,255)" }// 3000
+                            ]
+                        };
 
-                                        map_toolbox_object.temp_labelstr = levelVstr
-                                        var color_oplist=temp_options.breaksProperties.slice(index,index+nums)
-                                        var isobands_options = {
-                                            zProperty: "value",
-                                            commonProperties: {
-                                                "fill-opacity": 1
-                                            },
-                                            breaksProperties:color_oplist
-                                        }
-                                        
-                                        // console.log("索引",color_oplist,levelV,tmin,tmax)                                
-                                    }
-                                    else{
-                                        var nums = (tmax - tmin)+1
-                                        var index = map_toolbox_object.temp_indexfun(tmin)
-                                        var levelV = []
-                                        var levelVstr = []
-                                        for (var i = 0;i <nums;i++){
-                                            levelV.push(tmin-2+i*1)                                        
-                                        }
-                                        for (var i = 0;i <levelV.length;i++){
-                                            levelVstr.push(levelV[i].toString())
-                                        }
-                                        map_toolbox_object.temp_labelstr = levelVstr
-                                        var color_oplist=temp_options.breaksProperties.slice(index,index+nums)
-                                        var isobands_options = {
-                                            zProperty: "value",
-                                            commonProperties: {
-                                                "fill-opacity": 1
-                                            },
-                                            breaksProperties:color_oplist
-                                        }
-                                       // console.log("索引",nums,color_oplist,levelV)
+                        // 风力
+                        var wind_options = {
+                            zProperty: "value",
+                            commonProperties: {
+                                "fill-opacity": 0.9
+                            },
+                            breaksProperties: [
+                                { fill: "rgb(219,212,204)" },// 0 
+                                { fill: "rgb(193,192,198)" },// 0.3
+                                { fill: "rgb(167,210,203)" },// 1.6
+                                { fill: "rgb(219,220,162)" },// 3.4 
+                                { fill: "rgb(223,193,155)" },// 5.5
+                                { fill: "rgb(217,158,115)" },// 8 
+                                { fill: "rgb(226,106,78)" },// 10.8
+                                { fill: "rgb(217,64,64)" },// 13.9
+                                { fill: "rgb(190,47,574)" }// 17.2
+                            ]
+                        };
+                        if (plot_type == "rain") {
+                            return {
+                                levelV: [0, 0.1, 10, 25, 50, 100, 250],
+                                isobands_options: rain_options
+                            }
+                        }
+                        else if (plot_type == "temp") {
+                            if (map_toolbox_object.color_numbers) {
+                                var tmax = map_toolbox_object.color_numbers[2]
+                                var tmin = map_toolbox_object.color_numbers[0]
+                                var tmid = map_toolbox_object.color_numbers[1]
+                                if ((tmax - tmin) > 6) {
+                                    var nums = parseInt((tmax - tmin) / 2) + 1
+                                    var index = map_toolbox_object.temp_indexfun(tmin)
+                                    var levelV = []
+                                    var levelVstr = []
+                                    for (var i = 0; i < nums; i++) {
+                                        levelV.push(tmin - 2 + i * 2)
 
                                     }
+                                    for (var i = 0; i < levelV.length; i++) {
+                                        levelVstr.push(levelV[i].toString())
+                                    }
+
+                                    map_toolbox_object.temp_labelstr = levelVstr
+                                    var color_oplist = temp_options.breaksProperties.slice(index, index + nums)
+                                    var isobands_options = {
+                                        zProperty: "value",
+                                        commonProperties: {
+                                            "fill-opacity": 1
+                                        },
+                                        breaksProperties: color_oplist
+                                    }
+
+                                    // console.log("索引",color_oplist,levelV,tmin,tmax)                                
+                                }
+                                else {
+                                    var nums = (tmax - tmin) + 1
+                                    var index = map_toolbox_object.temp_indexfun(tmin)
+                                    var levelV = []
+                                    var levelVstr = []
+                                    for (var i = 0; i < nums; i++) {
+                                        levelV.push(tmin - 2 + i * 1)
+                                    }
+                                    for (var i = 0; i < levelV.length; i++) {
+                                        levelVstr.push(levelV[i].toString())
+                                    }
+                                    map_toolbox_object.temp_labelstr = levelVstr
+                                    var color_oplist = temp_options.breaksProperties.slice(index, index + nums)
+                                    var isobands_options = {
+                                        zProperty: "value",
+                                        commonProperties: {
+                                            "fill-opacity": 1
+                                        },
+                                        breaksProperties: color_oplist
+                                    }
+                                    // console.log("索引",nums,color_oplist,levelV)
 
                                 }
-                                else{
-                                    
-                                    var levelV=[-10.0,-8.0, -6.0, -4.0, -2.0, 0, 2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,35,37,40,42]
-                                    var isobands_options=temp_options
-                                }
-                                return {
-                                    levelV:levelV,
-                                    isobands_options:isobands_options
-                                }
-                            }
-                            else if (plot_type=="wind"){
-                                return {
-                                    levelV:[0, 0.3, 1.6, 3.4, 5.5, 8, 10.8,13.9,17.2],
-                                    isobands_options:wind_options
-                                }
-                            }
-                            else if (plot_type=="view"){
-                                return {
-                                    levelV:[50, 200, 500, 1000, 2000,3000],
-                                    isobands_options:view_options
-                                }
-                            }
 
-                        },
-                        getMaxAttribute: function (inLevelV, inGrid, inBreaksProperties) {
-                            //定义变量
-                            let levelArray = [];
-                            let levelLength = inLevelV.length;
+                            }
+                            else {
+
+                                var levelV = [-10.0, -8.0, -6.0, -4.0, -2.0, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 35, 37, 40, 42]
+                                var isobands_options = temp_options
+                            }
+                            return {
+                                levelV: levelV,
+                                isobands_options: isobands_options
+                            }
+                        }
+                        else if (plot_type == "wind") {
+                            return {
+                                levelV: [0, 0.3, 1.6, 3.4, 5.5, 8, 10.8, 13.9, 17.2],
+                                isobands_options: wind_options
+                            }
+                        }
+                        else if (plot_type == "view") {
+                            return {
+                                levelV: [50, 200, 500, 1000, 2000, 3000],
+                                isobands_options: view_options
+                            }
+                        }
+
+                    },
+                    getMaxAttribute: function (inLevelV, inGrid, inBreaksProperties) {
+                        //定义变量
+                        let levelArray = [];
+                        let levelLength = inLevelV.length;
+                        inLevelV.forEach(function (item, index) {
+                            if (index < levelLength - 2) levelArray.push(0);
+                        });
+                        //统计每个等级中网格点数量
+                        inGrid.features.map((i) => {
                             inLevelV.forEach(function (item, index) {
-                                if (index < levelLength - 2) levelArray.push(0);
-                            });
-                            //统计每个等级中网格点数量
-                            inGrid.features.map((i) => {
-                                inLevelV.forEach(function (item, index) {
-                                    if (index < levelLength - 3) {
-                                        if (i.properties.value >= inLevelV[index] && i.properties.value < inLevelV[index + 1]) levelArray[index]++;
-                                    }
-                                    if (index == levelLength - 2) {
-                                        if (i.properties.value >= inLevelV[index]) levelArray[index]++;
-                                    }
-                                });
-                            });
-                            //取等级中网格点最多的值
-                            let maxIndex = -1;
-                            let maxV = 0;
-                            levelArray.forEach(function (item, index) {
-                                if (maxV < item) { maxV = item; maxIndex = index; }
-                            });
-                            let value = '';
-                            let fill = '';
-                            if (maxIndex != -1) {
-                                value = inLevelV[maxIndex] + '-' + inLevelV[maxIndex + 1];
-                                fill = inBreaksProperties[maxIndex].fill;
-                            }
-                            return [value, fill]
-                        },
-                        return_shp: function (boundaries, data, plot_type) {
-                            // data 为poin需要用turf的featureCollection(data)加载
-                            var points = turf.featureCollection(data);
-                            var interpolate_options = {
-                                gridType: "points",
-                                property: "value",
-                                units: "degrees",
-                                weight: 10
-                            };
-                            var isobands_options = map_toolbox_object.color_level(plot_type).isobands_options
-                            var levelV = map_toolbox_object.color_level(plot_type).levelV;
-                            var grid = turf.interpolate(points, 0.05, interpolate_options);
-                            var isobands = turf.isobands(
-                                grid,
-                                levelV,
-                                isobands_options
-                            );
-                            var isobandsLay = L.geoJSON(isobands, {
-                                style: function (feature) {
-                                    return {
-                                        color: '#4264fb',
-                                        fillColor: feature.properties.fill,
-                                        weight: 0.1,
-                                        fillOpacity: 0.8
-                                    };
+                                if (index < levelLength - 3) {
+                                    if (i.properties.value >= inLevelV[index] && i.properties.value < inLevelV[index + 1]) levelArray[index]++;
+                                }
+                                if (index == levelLength - 2) {
+                                    if (i.properties.value >= inLevelV[index]) levelArray[index]++;
                                 }
                             });
-                            var features = [];//裁剪后的结果集
-                            isobands.features.forEach(function (feature1) {
-                                boundaries.features.forEach(function (feature2) {
-                                    var intersection = null;
+                        });
+                        //取等级中网格点最多的值
+                        let maxIndex = -1;
+                        let maxV = 0;
+                        levelArray.forEach(function (item, index) {
+                            if (maxV < item) { maxV = item; maxIndex = index; }
+                        });
+                        let value = '';
+                        let fill = '';
+                        if (maxIndex != -1) {
+                            value = inLevelV[maxIndex] + '-' + inLevelV[maxIndex + 1];
+                            fill = inBreaksProperties[maxIndex].fill;
+                        }
+                        return [value, fill]
+                    },
+                    return_shp: function (boundaries, data, plot_type) {
+                        // data 为poin需要用turf的featureCollection(data)加载
+                        var points = turf.featureCollection(data);
+                        var interpolate_options = {
+                            gridType: "points",
+                            property: "value",
+                            units: "degrees",
+                            weight: 10
+                        };
+                        var isobands_options = map_toolbox_object.color_level(plot_type).isobands_options
+                        var levelV = map_toolbox_object.color_level(plot_type).levelV;
+                        var grid = turf.interpolate(points, 0.05, interpolate_options);
+                        var isobands = turf.isobands(
+                            grid,
+                            levelV,
+                            isobands_options
+                        );
+                        var isobandsLay = L.geoJSON(isobands, {
+                            style: function (feature) {
+                                return {
+                                    color: '#4264fb',
+                                    fillColor: feature.properties.fill,
+                                    weight: 0.1,
+                                    fillOpacity: 0.8
+                                };
+                            }
+                        });
+                        var features = [];//裁剪后的结果集
+                        isobands.features.forEach(function (feature1) {
+                            boundaries.features.forEach(function (feature2) {
+                                var intersection = null;
+                                try {
+                                    intersection = turf.intersect(feature1, feature2);
+                                } catch (e) {
                                     try {
+                                        //色斑图绘制之后，可能会生成一些非法 Polygon ，例如 在 hole 里存在一些形状（听不懂？去查一下 GeoJSON 的规范），
+                                        //我遇到的一个意外情况大概是这样，这种 Polygon 在做 intersect() 操作的时候会报错，所以在代码中做了个容错操作。
+                                        //解决的方法通常就是做一次 turf.buffer() 操作，这样可以把一些小的碎片 Polygon 清理掉。
+                                        feature1 = turf.buffer(feature1, 0);
                                         intersection = turf.intersect(feature1, feature2);
                                     } catch (e) {
-                                        try {
-                                            //色斑图绘制之后，可能会生成一些非法 Polygon ，例如 在 hole 里存在一些形状（听不懂？去查一下 GeoJSON 的规范），
-                                            //我遇到的一个意外情况大概是这样，这种 Polygon 在做 intersect() 操作的时候会报错，所以在代码中做了个容错操作。
-                                            //解决的方法通常就是做一次 turf.buffer() 操作，这样可以把一些小的碎片 Polygon 清理掉。
-                                            feature1 = turf.buffer(feature1, 0);
-                                            intersection = turf.intersect(feature1, feature2);
-                                        } catch (e) {
-                                            intersection = feature1;//实在裁剪不了就不裁剪了,根据业务需求自行决定
-                                        }
+                                        intersection = feature1;//实在裁剪不了就不裁剪了,根据业务需求自行决定
                                     }
-                                    if (intersection != null) {
-                                        intersection.properties = feature1.properties;
-                                        intersection.id = (Math.random() * 100000).toFixed(0);
-                                        features.push(intersection);
-                                    }
-                                });
+                                }
+                                if (intersection != null) {
+                                    intersection.properties = feature1.properties;
+                                    intersection.id = (Math.random() * 100000).toFixed(0);
+                                    features.push(intersection);
+                                }
                             });
-                            //turf.isobands有点不符合业务预期,只有一个等级时,结果集可能为空,无图形显示,写点程序(找出那一个等级，并添加进结果集)补救下
-                            if (features.length == 0) {
-                                var maxAttribute = map_toolbox_object.getMaxAttribute(levelV, grid, isobands_options.breaksProperties);
-                                var value = maxAttribute[0];
-                                var fill = maxAttribute[1];
-                                if (value != '' && fill != '') {
-                                    //获取网格点Box
-                                    var gridBox = turf.bbox(grid);
-                                    //生成网格点范围的面
-                                    var gridBoxPolygon = [[[gridBox[0], gridBox[1]], [gridBox[0], gridBox[3]], [gridBox[2], gridBox[3]], [gridBox[2], gridBox[1]], [gridBox[0], gridBox[1]]]];
-                                    //获取网格范围的面与行政边界的交集 Polygon
-                                    var intersectPolygon = null;
-                                    var gridoxFeature = {
-                                        "type": "Feature",
-                                        "properties": { "fill-opacity": 0.8 },
-                                        "geometry": { "type": "Polygon", "coordinates": gridBoxPolygon },
-                                        "id": 10
-                                    };
+                        });
+                        //turf.isobands有点不符合业务预期,只有一个等级时,结果集可能为空,无图形显示,写点程序(找出那一个等级，并添加进结果集)补救下
+                        if (features.length == 0) {
+                            var maxAttribute = map_toolbox_object.getMaxAttribute(levelV, grid, isobands_options.breaksProperties);
+                            var value = maxAttribute[0];
+                            var fill = maxAttribute[1];
+                            if (value != '' && fill != '') {
+                                //获取网格点Box
+                                var gridBox = turf.bbox(grid);
+                                //生成网格点范围的面
+                                var gridBoxPolygon = [[[gridBox[0], gridBox[1]], [gridBox[0], gridBox[3]], [gridBox[2], gridBox[3]], [gridBox[2], gridBox[1]], [gridBox[0], gridBox[1]]]];
+                                //获取网格范围的面与行政边界的交集 Polygon
+                                var intersectPolygon = null;
+                                var gridoxFeature = {
+                                    "type": "Feature",
+                                    "properties": { "fill-opacity": 0.8 },
+                                    "geometry": { "type": "Polygon", "coordinates": gridBoxPolygon },
+                                    "id": 10
+                                };
+                                try {
+                                    intersectPolygon = turf.intersect(gridoxFeature, boundaries.features[0]);
+                                } catch (e) {
                                     try {
+                                        //色斑图绘制之后，可能会生成一些非法 Polygon ，例如 在 hole 里存在一些形状（听不懂？去查一下 GeoJSON 的规范），
+                                        //我遇到的一个意外情况大概是这样，这种 Polygon 在做 intersect() 操作的时候会报错，所以在代码中做了个容错操作。
+                                        //解决的方法通常就是做一次 turf.buffer() 操作，这样可以把一些小的碎片 Polygon 清理掉。
+                                        gridoxFeature = turf.buffer(gridoxFeature, 0);
                                         intersectPolygon = turf.intersect(gridoxFeature, boundaries.features[0]);
                                     } catch (e) {
-                                        try {
-                                            //色斑图绘制之后，可能会生成一些非法 Polygon ，例如 在 hole 里存在一些形状（听不懂？去查一下 GeoJSON 的规范），
-                                            //我遇到的一个意外情况大概是这样，这种 Polygon 在做 intersect() 操作的时候会报错，所以在代码中做了个容错操作。
-                                            //解决的方法通常就是做一次 turf.buffer() 操作，这样可以把一些小的碎片 Polygon 清理掉。
-                                            gridoxFeature = turf.buffer(gridoxFeature, 0);
-                                            intersectPolygon = turf.intersect(gridoxFeature, boundaries.features[0]);
-                                        } catch (e) {
-                                            intersectPolygon = gridoxFeature;//实在裁剪不了就不裁剪了,根据业务需求自行决定
-                                        }
-                                    }
-                                    //结果添加到结果数组
-                                    if (intersectPolygon != null) {
-                                        features.push({
-                                            "type": "Feature",
-                                            "properties": { "fill-opacity": 0.8, "fill": fill, "value": value },
-                                            "geometry": intersectPolygon.geometry,
-                                            "id": 0
-                                        });
+                                        intersectPolygon = gridoxFeature;//实在裁剪不了就不裁剪了,根据业务需求自行决定
                                     }
                                 }
-                            }
-                            var intersection = turf.featureCollection(features);
-                            var intersectionLay = L.geoJSON(intersection, {
-                                style: function (feature) {
-                                    return {
-                                        color: 'black',
-                                        fillColor: feature.properties.fill,
-                                        weight: 0.1,
-                                        zIndex: 800,
-                                        fillOpacity: 0.7
-                                    };
+                                //结果添加到结果数组
+                                if (intersectPolygon != null) {
+                                    features.push({
+                                        "type": "Feature",
+                                        "properties": { "fill-opacity": 0.8, "fill": fill, "value": value },
+                                        "geometry": intersectPolygon.geometry,
+                                        "id": 0
+                                    });
                                 }
-                            })
-                            return {
-                                intersectionLay: intersectionLay
                             }
-                        },
-                        return_boundaries: function (shpdata) {
-                            var bounddata = {
-                                type: "FeatureCollection",
-                                name: "boundaries",
-                                crs: { type: "name", properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-                                features: shpdata
-                            }
-                            return {
-                                boundaries: bounddata
-                            }
-                        },
-                        get_data: function(model,type,button_value){
-                            //向服务器要数据model,type,button 对应导航栏目、垂直导航类型、具体按钮
-                            var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                            $.ajax({
-                                url: "station_zdz_data",  // 请求的地址
-                                type: "post",  // 请求方式
-                                timeout: 25000, //设置延迟上限
-                                data: {
-                                    'csrfmiddlewaretoken': csrf,
-                                    'model': model,
-                                    'click_type': type,
-                                    'button_value': button_value
-                                },
-                                dataType: "json",
-                                success: function (recvdate) {
-                                    console.log("接收的数据",recvdate)
-                                    var click_type = recvdate.click_type                                
-                                    map_toolbox_object.recv_all_data = recvdate.data
-                                    var pointdata = recvdate.data
-                                    // 绘制等值线
-                                    map_toolbox_object.plot_layer(pointdata,click_type)
-                                    // 绘制marker
-                                    map_toolbox_object.plot_mark()
-                                }
-                            })
-
-                        },
-                        current_time: function(button_value){
-                            //返回时间 
-                            var today = new Date()
-                            var y = today.getFullYear();
-                            var m = today.getMonth() + 1 < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1;
-                            var d = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
-                            var h = today.getHours() < 10 ? "0" + today.getHours() +":" : today.getHours()+":";
-                            var minutes = today.getMinutes() < 10 ? "0" + today.getMinutes() + ":" : today.getMinutes() + ":";
-                            var sec = today.getSeconds() < 10 ? "0" + today.getSeconds() :today.getSeconds();
-                            var today_str = y + "-" + m + "-" + d + " " + h + minutes + sec;
-                            if (button_value==24){
-                                
-                                var old_day = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
-                                var yy = old_day.getFullYear();
-                                var mm = old_day.getMonth() + 1 < 10 ? "0" + (old_day.getMonth() + 1) : old_day.getMonth() + 1;
-                                var dd = old_day.getDate() < 10 ? "0" + old_day.getDate() : old_day.getDate();
-                                var hh = old_day.getHours() < 10 ? "0" + old_day.getHours() + ":" : old_day.getHours() + ":";
-                                var mms = old_day.getMinutes() < 10 ? "0" + old_day.getMinutes() + ":" : old_day.getMinutes() + ":";
-                                var ss = old_day.getSeconds() < 10 ? "0" + old_day.getSeconds() : old_day.getSeconds();
-                                var old_str = yy + "-" + mm + "-" + dd + " " + hh + mms + ss;
-                                console.log(today_str,old_str)
-
-                            }
-
-
-                        },
-                        flush_map: function () {
-                            //刷新按钮
-                        },
-                        init: function () {
-                            //地图初始化
-                            if(map_toolbox_object.current_map){
-                                map_toolbox_object.current_map.eachLayer(function (layer) {
-                                    if (!layer._container || ('' + jQuery(layer._container).attr('class')).replace(/\s/g, '') != 'leaflet-layer') {
-                                        layer.remove();
-                                    }
-                                });
-                                // var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries
-                                var boundaries = map_toolbox_object.return_boundaries(zhejianglist[0].features).boundaries
-                                map_toolbox_object.boundaries = boundaries
-                                var canvasLabel = new L.CanvasLabel({
-                                    defaultLabelStyle: {
-                                        collisionFlg: true,
-                                        scale: 1,
-                                        strokeStyle: "#000",
-                                        fillStyle: "#fff",
-                                        lineWidth: 3
-                                    }
-                                });
-                                var lines = L.geoJSON(boundaries, {
-                                    style: function (feature) {
-                                        return { color: 'black', weight: 1, fillOpacity: 0.1 };
-                                    }
-                                })
-                                var map_zdz = new L.Map('map', {
-                                    center: new L.LatLng(28.6, 120.9),//110.763, 41.376   39.62353145, 121.9937485
-                                    renderer: canvasLabel,
-                                    zoom: 9, //4
-                                    zoomControl: false,
-                                    dragging: true,
-                                    scrollWheelZoom: true,
-                                    doubleClickZoom: false,
-                                    attributionControl: false, //是否去除右下角标志
-                                    bounds: turf.bbox(boundaries),
-
-                                    layers: [lines]
-                                });
-                                map_toolbox_object.current_map = map_zdz
-
-                            }
-                            else{
-                                // var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries                       
-                                var boundaries = map_toolbox_object.return_boundaries(zhejianglist[0].features).boundaries
-                                map_toolbox_object.boundaries = boundaries
-                                var canvasLabel = new L.CanvasLabel({
-                                    defaultLabelStyle: {
-                                        collisionFlg: true,
-                                        scale: 1,
-                                        strokeStyle: "#000",
-                                        fillStyle: "#fff",
-                                        lineWidth: 3
-                                    }
-                                });
-                                var lines = L.geoJSON(boundaries, {
-                                    style: function (feature) {
-                                        return { color: 'black', weight: 1, fillOpacity: 0.1 };
-                                    }
-                                })
-                                var corner1 = L.latLng(25, 118),
-                                    corner2 = L.latLng(32, 123),
-                                    bound = L.latLngBounds(corner1, corner2);
-                                var map_zdz = new L.Map('map', {
-                                    center: new L.LatLng(28.6, 120.9),//110.763, 41.376   39.62353145, 121.9937485
-                                    renderer: canvasLabel,
-                                    zoom: 9, //4
-                                    maxZoom:10,
-                                    minZoom:8,
-                                    zoomControl: false,
-                                    dragging: true,
-                                    scrollWheelZoom: true,
-                                    doubleClickZoom: false,
-                                    attributionControl: false, //是否去除右下角标志
-                                    bounds: turf.bbox(boundaries),
-                                    maxBounds:bound,
-                                    layers: [lines]
-                                });
-                                map_toolbox_object.current_map = map_zdz
-
-                            }
-                        },
-                        plot_layer: function (pointdata,click_type) {
-                            //绘制图层
-                            var points = []
-                            map_toolbox_object.recv_all_data.forEach(function (item) {
-                                // 绘图
-                                var single_point = {
-                                    type: "Feature",
-                                    "properties": {
-                                        "value": item.value
-                                    },
-                                    "geometry": {
-                                        "type": "Point",
-                                        "coordinates": [parseFloat(item.lon), parseFloat(item.lat)]
-                                    }
-                                }
-                                points.push(single_point)
-                                // 添加散点------------
-                                if (click_type == "rain" && item.value > 0) {
-                                    var latlng = L.latLng(item.lat, item.lon);
-                                    var c = L.circleMarker(latlng, {
-                                        stationnum: item.IIiii,
-                                        weight: 0,
-                                        radius: 7,
-                                        opacity: 1,
-                                        fill: false,
-                                        labelStyle: {
-                                            text:item.name+"-"+item.value,
-                                            weight: 10,
-                                            rotation: 0,
-                                            color: "rgb(239, 243, 237)",
-                                            zIndex: 60
-                                        }
-                                    })
-                                    map_toolbox_object.current_marker_list.push(c)
-
-                                }
-                                
-                            })
-                            var intersectionLay = map_toolbox_object.return_shp(map_toolbox_object.boundaries, points,click_type).intersectionLay
-                            intersectionLay.addTo(map_toolbox_object.current_map)
-                        },
-                        plot_mark: function (click_type) {
-                            //添加绘图的相应函数
-                            map_toolbox_object.current_marker_list.forEach(function(item){
-                                item.addTo(map_toolbox_object.current_map).on("click", function (e) {
-                                    /// 叠加单机绘图
-                                    // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                                    var plot_type = "rain"
-                                    var plot_name = e.sourceTarget.options.stationnum
-                                    $("#hidden_layer").attr('style',"padding: 30px;width: 900px ;height: 600px;position:absolute;top:20%;left:28%;z-index:1000;background-color: rgb(57,61,73);")
-                                    
-                                });
-
-                            })                       
-                        },
-                        plot_line: function () {
-                            //绘制站点                        
                         }
+                        var intersection = turf.featureCollection(features);
+                        var intersectionLay = L.geoJSON(intersection, {
+                            style: function (feature) {
+                                return {
+                                    color: 'black',
+                                    fillColor: feature.properties.fill,
+                                    weight: 0.1,
+                                    zIndex: 800,
+                                    fillOpacity: 0.7
+                                };
+                            }
+                        })
+                        return {
+                            intersectionLay: intersectionLay
+                        }
+                    },
+                    return_boundaries: function (shpdata) {
+                        var bounddata = {
+                            type: "FeatureCollection",
+                            name: "boundaries",
+                            crs: { type: "name", properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+                            features: shpdata
+                        }
+                        return {
+                            boundaries: bounddata
+                        }
+                    },
+                    get_data: function (model, type, button_value) {
+                        //向服务器要数据model,type,button 对应导航栏目、垂直导航类型、具体按钮
+                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                        $.ajax({
+                            url: "station_zdz_data",  // 请求的地址
+                            type: "post",  // 请求方式
+                            timeout: 25000, //设置延迟上限
+                            data: {
+                                'csrfmiddlewaretoken': csrf,
+                                'model': model,
+                                'click_type': type,
+                                'button_value': button_value
+                            },
+                            dataType: "json",
+                            success: function (recvdate) {
+                                console.log("接收的数据", recvdate)
+                                var click_type = recvdate.click_type
+                                map_toolbox_object.recv_all_data = recvdate.data
+                                var pointdata = recvdate.data
+                                // 绘制等值线
+                                map_toolbox_object.plot_layer(pointdata, click_type)
+                                // 绘制marker
+                                map_toolbox_object.plot_mark()
+                            }
+                        })
+
+                    },
+                    current_time: function (button_value) {
+                        //返回时间 
+                        var today = new Date()
+                        var y = today.getFullYear();
+                        var m = today.getMonth() + 1 < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1;
+                        var d = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
+                        var h = today.getHours() < 10 ? "0" + today.getHours() + ":" : today.getHours() + ":";
+                        var minutes = today.getMinutes() < 10 ? "0" + today.getMinutes() + ":" : today.getMinutes() + ":";
+                        var sec = today.getSeconds() < 10 ? "0" + today.getSeconds() : today.getSeconds();
+                        var today_str = y + "-" + m + "-" + d + " " + h + minutes + sec;
+                        if (button_value == 24) {
+
+                            var old_day = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+                            var yy = old_day.getFullYear();
+                            var mm = old_day.getMonth() + 1 < 10 ? "0" + (old_day.getMonth() + 1) : old_day.getMonth() + 1;
+                            var dd = old_day.getDate() < 10 ? "0" + old_day.getDate() : old_day.getDate();
+                            var hh = old_day.getHours() < 10 ? "0" + old_day.getHours() + ":" : old_day.getHours() + ":";
+                            var mms = old_day.getMinutes() < 10 ? "0" + old_day.getMinutes() + ":" : old_day.getMinutes() + ":";
+                            var ss = old_day.getSeconds() < 10 ? "0" + old_day.getSeconds() : old_day.getSeconds();
+                            var old_str = yy + "-" + mm + "-" + dd + " " + hh + mms + ss;
+                            console.log(today_str, old_str)
+
+                        }
+
+
+                    },
+                    flush_map: function () {
+                        //刷新按钮
+                    },
+                    init: function () {
+                        //地图初始化
+                        if (map_toolbox_object.current_map) {
+                            map_toolbox_object.current_map.eachLayer(function (layer) {
+                                if (!layer._container || ('' + jQuery(layer._container).attr('class')).replace(/\s/g, '') != 'leaflet-layer') {
+                                    layer.remove();
+                                }
+                            });
+                            // var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries
+                            var boundaries = map_toolbox_object.return_boundaries(zhejianglist[0].features).boundaries
+                            map_toolbox_object.boundaries = boundaries
+                            var canvasLabel = new L.CanvasLabel({
+                                defaultLabelStyle: {
+                                    collisionFlg: true,
+                                    scale: 1,
+                                    strokeStyle: "#000",
+                                    fillStyle: "#fff",
+                                    lineWidth: 3
+                                }
+                            });
+                            var lines = L.geoJSON(boundaries, {
+                                style: function (feature) {
+                                    return { color: 'black', weight: 1, fillOpacity: 0.1 };
+                                }
+                            })
+                            var map_zdz = new L.Map('map', {
+                                center: new L.LatLng(28.6, 120.9),//110.763, 41.376   39.62353145, 121.9937485
+                                renderer: canvasLabel,
+                                zoom: 9, //4
+                                zoomControl: false,
+                                dragging: true,
+                                scrollWheelZoom: true,
+                                doubleClickZoom: false,
+                                attributionControl: false, //是否去除右下角标志
+                                bounds: turf.bbox(boundaries),
+
+                                layers: [lines]
+                            });
+                            map_toolbox_object.current_map = map_zdz
+
+                        }
+                        else {
+                            // var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries                       
+                            var boundaries = map_toolbox_object.return_boundaries(zhejianglist[0].features).boundaries
+                            map_toolbox_object.boundaries = boundaries
+                            var canvasLabel = new L.CanvasLabel({
+                                defaultLabelStyle: {
+                                    collisionFlg: true,
+                                    scale: 1,
+                                    strokeStyle: "#000",
+                                    fillStyle: "#fff",
+                                    lineWidth: 3
+                                }
+                            });
+                            var lines = L.geoJSON(boundaries, {
+                                style: function (feature) {
+                                    return { color: 'black', weight: 1, fillOpacity: 0.1 };
+                                }
+                            })
+                            var corner1 = L.latLng(25, 118),
+                                corner2 = L.latLng(32, 123),
+                                bound = L.latLngBounds(corner1, corner2);
+                            var map_zdz = new L.Map('map', {
+                                center: new L.LatLng(28.6, 120.9),//110.763, 41.376   39.62353145, 121.9937485
+                                renderer: canvasLabel,
+                                zoom: 9, //4
+                                maxZoom: 10,
+                                minZoom: 8,
+                                zoomControl: false,
+                                dragging: true,
+                                scrollWheelZoom: true,
+                                doubleClickZoom: false,
+                                attributionControl: false, //是否去除右下角标志
+                                bounds: turf.bbox(boundaries),
+                                maxBounds: bound,
+                                layers: [lines]
+                            });
+                            map_toolbox_object.current_map = map_zdz
+
+                            // const Esri_WorldImagery = L.tileLayer(
+
+                            //     "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+
+                            // ).addTo(map_zdz)
+
+                            L.TileLayer.Custom = L.TileLayer.extend({
+                                getTileUrl: function (coords) {
+                                    url = 'static/maps/' + coords.z + '/' + coords.x + '/' + coords.y + '.jpg';
+                                    return url;
+                                }
+                            })
+                            L.tileLayer.Custom = function(){return new L.TileLayer.Custom();}
+                            L.tileLayer.Custom().addTo(map_zdz);
+
+
+                            // L.tileLayer(url, {
+                            //     zoom: 9,
+                            //     errorTileUrl:'static/maps/{z}/{x}/{y}.png'
+                            // }).addTo(map_zdz);
+
+
+                        }
+                    },
+                    plot_layer: function (pointdata, click_type) {
+                        //绘制图层
+                        var points = []
+                        map_toolbox_object.recv_all_data.forEach(function (item) {
+                            // 绘图
+                            var single_point = {
+                                type: "Feature",
+                                "properties": {
+                                    "value": item.value
+                                },
+                                "geometry": {
+                                    "type": "Point",
+                                    "coordinates": [parseFloat(item.lon), parseFloat(item.lat)]
+                                }
+                            }
+                            points.push(single_point)
+                            // 添加散点------------
+                            if (click_type == "rain" && item.value > 0) {
+                                var latlng = L.latLng(item.lat, item.lon);
+                                var c = L.circleMarker(latlng, {
+                                    stationnum: item.IIiii,
+                                    weight: 0,
+                                    radius: 7,
+                                    opacity: 1,
+                                    fill: false,
+                                    labelStyle: {
+                                        text: item.name + "-" + item.value,
+                                        weight: 10,
+                                        rotation: 0,
+                                        color: "rgb(239, 243, 237)",
+                                        zIndex: 60
+                                    }
+                                })
+                                map_toolbox_object.current_marker_list.push(c)
+
+                            }
+
+                        })
+                        var intersectionLay = map_toolbox_object.return_shp(map_toolbox_object.boundaries, points, click_type).intersectionLay
+                        intersectionLay.addTo(map_toolbox_object.current_map)
+                    },
+                    plot_mark: function (click_type) {
+                        //添加绘图的相应函数
+                        map_toolbox_object.current_marker_list.forEach(function (item) {
+                            item.addTo(map_toolbox_object.current_map).on("click", function (e) {
+                                /// 叠加单机绘图
+                                // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                var plot_type = "rain"
+                                var plot_name = e.sourceTarget.options.stationnum
+                                $("#hidden_layer").attr('style', "padding: 30px;width: 900px ;height: 600px;position:absolute;top:20%;left:28%;z-index:1000;background-color: rgb(57,61,73);")
+                                map_toolbox_object.plot_line(plot_type, plot_name)
+
+                            });
+
+                        })
+                    },
+                    plot_line: function (plot_type, plot_name) {
+                        //绘制站点  
+                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                        $.ajax({
+                            url: "station_zdz_data",  // 请求的地址
+                            type: "post",  // 请求方式
+                            timeout: 25000, //设置延迟上限
+                            data: {
+                                'csrfmiddlewaretoken': csrf,
+                                'model': 'single',
+                                'click_type': plot_type,
+                                'button_value': plot_name
+                            },
+                            dataType: "json",
+                            success: function (recvdate) {
+                                console.log("接收的数据", recvdate)
+                                var value = recvdate.value
+                                // 开始绘图
+                                if (plot_type == "rain") {
+                                    chart = Highcharts.chart('station_line', {
+                                        chart: {
+                                            type: 'column',
+                                            zoomType: 'x'
+                                        },
+                                        title: {
+                                            text: plot_name.toString()
+                                        },
+                                        credits: {
+                                            enabled: false//不显示LOGO
+                                        },
+                                        xAxis: {
+                                            type: 'datetime',
+                                            dateTimeLabelFormats: {
+                                                millisecond: '%H:%M:%S.%L',
+                                                second: '%H:%M:%S',
+                                                minute: '%H:%M',
+                                                hour: '%H:%M',
+                                                day: '%m-%d',
+                                                week: '%m-%d',
+                                                month: '%Y-%m',
+                                                year: '%Y'
+                                            }
+                                        },
+                                        // tooltip: {
+                                        //     dateTimeLabelFormats: {
+                                        //         millisecond: '%H:%M:%S.%L',
+                                        //         second: '%H:%M:%S',
+                                        //         minute: '%H:%M',
+                                        //         hour: '%H:%M',
+                                        //         day: '%Y-%m-%d',
+                                        //         week: '%m-%d',
+                                        //         month: '%Y-%m',
+                                        //         year: '%Y'
+                                        //     }
+                                        // },
+                                        yAxis: {
+                                            title: {
+                                                text: '降雨量'
+                                            }
+                                        },
+                                        legend: {
+                                            enabled: false
+                                        },
+                                        plotOptions: {
+                                            column: {
+                                                borderWidth: 0
+                                            },
+                                            series: {
+                                                // pointStart: Date.UTC(date_year, date_month, date_day, date_hour),
+                                                pointStart: Date.UTC(2019, 7, 7,0,0),
+                                                pointInterval: 3e5
+                                            },
+                                            area: {
+                                                fillColor: {
+                                                    linearGradient: {
+                                                        x1: 0,
+                                                        y1: 0,
+                                                        x2: 0,
+                                                        y2: 1
+                                                    },
+                                                    stops: [
+                                                        [0, new Highcharts.getOptions().colors[0]],
+                                                        [1, new Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                                                    ]
+                                                },
+                                                // marker: {
+                                                //     radius: 2
+                                                // },
+                                                // lineWidth: 1,
+                                                // states: {
+                                                //     hover: {
+                                                //         lineWidth: 1
+                                                //     }
+                                                // },
+                                                barWidth: 1,
+                                                threshold: null
+                                            }
+                                        },
+                                        series: [{
+                                            // type: 'area',
+                                            name: '降水过程',
+                                            data: value
+                                        }]
+                                    });
+
+                                }
+
+                            }
+                        })
+
                     }
+                }
                 // 首页加载地图
                 map_toolbox_object.init()
                 //按钮组的响应函数
-                $('.rain').click(function(){
+                $('.rain').click(function () {
                     var model = "zdz"
                     var type = "rain"
-                    var button_value = this.value 
+                    var button_value = this.value
                     map_toolbox_object.current_time(button_value)
-                    map_toolbox_object.get_data(model,type,button_value)            
+                    map_toolbox_object.get_data(model, type, button_value)
                 })
 
 
             </script>
             <!-- 隐藏栏目的设置 -->
-            <div id ="hidden_layer" class="layui-bg-gray" style="display:none;">
+            <div id="hidden_layer" class="layui-bg-gray" style="display:none;">
                 <div class="layui-row layui-col-space15">
-                    
+
                     <div class="layui-col-md12">
                         <div class="layui-panel">
-                            <div id ="station_line" style="height:520px;background-color: white;">
+                            <div id="station_line" style="height:520px;background-color: white;">
 
-                            </div>                
+                            </div>
                         </div>
                     </div>
-                    <button id ="save" type="button" class="layui-btn layui-btn-sm" style="float: right;background-color: rgb(28,30,36);">暂存</button>
+                    <button id="save" type="button" class="layui-btn layui-btn-sm"
+                        style="float: right;background-color: rgb(28,30,36);">暂存</button>
                     &nbsp;&nbsp;&nbsp;
-                    <button id ="close" type="button" class="layui-btn layui-btn-sm" style="float: right;background-color: rgb(28,30,36);">关闭</button>
+                    <button id="close" type="button" class="layui-btn layui-btn-sm"
+                        style="float: right;background-color: rgb(28,30,36);">关闭</button>
                     <script>
-                        $("#close").click(function(){
-                            $("#hidden_layer").attr('style',"display:none;")
+                        $("#close").click(function () {
+                            $("#hidden_layer").attr('style', "display:none;")
                         })
 
                     </script>
