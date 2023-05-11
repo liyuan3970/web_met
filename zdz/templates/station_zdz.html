@@ -528,7 +528,7 @@
                             },
                             dataType: "json",
                             success: function (recvdate) {
-                                console.log("接收的数据", recvdate)
+                                // console.log("接收的数据", recvdate)
                                 var click_type = recvdate.click_type
                                 map_toolbox_object.recv_all_data = recvdate.data
                                 var pointdata = recvdate.data
@@ -618,8 +618,8 @@
                                 defaultLabelStyle: {
                                     collisionFlg: true,
                                     scale: 1,
-                                    strokeStyle: "#000",
-                                    fillStyle: "#fff",
+                                    // strokeStyle: "#000",
+                                    fillStyle: "white",
                                     lineWidth: 3
                                 }
                             });
@@ -690,18 +690,42 @@
                             points.push(single_point)
                             // 添加散点------------
                             if (click_type == "rain" && item.value > 0) {
+                                if (item.value>0 && item.value<=1){
+                                    var colors = "black"
+                                }
+                                else if(item.value>1 && item.value<=10){
+                                    var colors = "rgb(140,246,130)"
+                                }
+                                else if(item.value>10 && item.value<=25){
+                                    var colors = "rgb(0,191,27)"
+                                }
+                                else if(item.value>25 && item.value<=50){
+                                    var colors = "rgb(62,185,255)"
+                                }
+                                else if(item.value>50 && item.value<=100){
+                                    var colors = "rgb(25,0,235)"
+                                }
+                                else if(item.value>100 && item.value<=250){
+                                    var colors = "rgb(255,0,255)"
+                                }
+                                else if(item.value>250){
+                                    var colors = "rgb(140,0,65)"
+                                }
                                 var latlng = L.latLng(item.lat, item.lon);
                                 var c = L.circleMarker(latlng, {
                                     stationnum: item.IIiii,
-                                    weight: 0,
-                                    radius: 7,
+                                    weight: 1,
+                                    radius: 4,
                                     opacity: 1,
-                                    fill: false,
+                                    fill: true,
+                                    color:colors,
+                                    fillColor:colors,
+                                    fillOpacity:1,
                                     labelStyle: {
-                                        text: item.name + "-" + item.value,
-                                        weight: 10,
+                                        text: item.name + ":" + item.value,
+                                        weight: 5,
                                         rotation: 0,
-                                        color: "rgb(239, 243, 237)",
+                                        color: "red",
                                         zIndex: 60
                                     }
                                 })
@@ -710,8 +734,9 @@
                             }
 
                         })
-                        var intersectionLay = map_toolbox_object.return_shp(map_toolbox_object.boundaries, points, click_type).intersectionLay
-                        intersectionLay.addTo(map_toolbox_object.current_map)
+                        // 绘制等值线
+                        // var intersectionLay = map_toolbox_object.return_shp(map_toolbox_object.boundaries, points, click_type).intersectionLay
+                        // intersectionLay.addTo(map_toolbox_object.current_map)
                     },
                     plot_mark: function (click_type) {
                         //添加绘图的相应函数
@@ -721,6 +746,8 @@
                                 // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                                 var plot_type = "rain"
                                 var plot_name = e.sourceTarget.options.stationnum
+                                // let data=e.target.options;
+                                // console.log("点的信息",data)
                                 $("#hidden_layer").attr('style', "padding: 30px;width: 900px ;height: 600px;position:absolute;top:20%;left:28%;z-index:1000;background-color: rgb(57,61,73);")
                                 map_toolbox_object.plot_line(plot_type, plot_name)
 
@@ -731,6 +758,41 @@
                     plot_line: function (plot_type, plot_name) {
                         //绘制站点  
                         var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                        var today = new Date()
+                        
+                        var y = today.getFullYear();
+                        var m = today.getMonth() + 1 < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1;
+                        var d = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
+                        var h = today.getHours() < 10 ? "0" + today.getHours() + ":" : today.getHours() + ":";
+                        var minutes = today.getMinutes() < 10 ? "0" + today.getMinutes() + ":" : today.getMinutes() + ":";
+                        var today_str = y + "-" + m + "-" + d + " " + h + minutes + "00";
+
+                        // 昨天的字符串
+                        today.setDate(today.getDate() -1)
+                        var ys = today.getFullYear();
+                        var ms = today.getMonth() + 1 < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1;
+                        var ds = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
+                        var hs = today.getHours() < 10 ? "0" + today.getHours() + ":" : today.getHours() + ":";
+                        var minutess = today.getMinutes() < 10 ? "0" + today.getMinutes() + ":" : today.getMinutes() + ":";
+                        var yestorday_str = ys + "-" + ms + "-" + ds + " " + hs + minutess + "00";
+
+                        var hours = today.getHours()
+                        if (hours>=20 && hours<24){
+                            // var start_d = 
+                            var start_str = y + "-" + m + "-" + d + " " + "20:00:00";
+                            var end_str = today_str;
+                            var begin_str = yestorday_str;
+                            var last_str = y + "-" + m + "-" + d + " " + "20:00:00";;
+                            console.log(start_str,end_str,begin_str,last_str)  
+                        }
+                        else{
+                            var start_str = ys + "-" + ms + "-" + ds + " " + "20:00:00";
+                            var end_str = today_str;
+                            var begin_str = yestorday_str;
+                            var last_str = ys + "-" + ms + "-" + ds + " " + "20:00:00";;
+                            console.log(start_str,end_str,begin_str,last_str) 
+                        }
+                        var date_list = [start_str,end_str,begin_str,last_str]
                         $.ajax({
                             url: "station_zdz_data",  // 请求的地址
                             type: "post",  // 请求方式
@@ -743,7 +805,7 @@
                             },
                             dataType: "json",
                             success: function (recvdate) {
-                                console.log("接收的数据", recvdate)
+                                // console.log("接收的数据", recvdate)
                                 var value = recvdate.value
                                 // 开始绘图
                                 if (plot_type == "rain") {
@@ -766,26 +828,27 @@
                                                 minute: '%H:%M',
                                                 hour: '%H:%M',
                                                 day: '%m-%d',
-                                                week: '%m-%d',
-                                                month: '%Y-%m',
-                                                year: '%Y'
+                                                week: '%m-%d'
+                                                // month: '%Y-%m'
+                                                // year: '%Y'
                                             }
                                         },
-                                        // tooltip: {
-                                        //     dateTimeLabelFormats: {
-                                        //         millisecond: '%H:%M:%S.%L',
-                                        //         second: '%H:%M:%S',
-                                        //         minute: '%H:%M',
-                                        //         hour: '%H:%M',
-                                        //         day: '%Y-%m-%d',
-                                        //         week: '%m-%d',
-                                        //         month: '%Y-%m',
-                                        //         year: '%Y'
-                                        //     }
-                                        // },
+                                        tooltip: {
+                                            dateTimeLabelFormats: {
+                                                millisecond: '%H:%M:%S.%L',
+                                                second: '%H:%M:%S',
+                                                minute: '%H:%M',
+                                                hour: '%H:%M'
+                                                // day: '%Y-%m-%d',
+                                                // week: '%m-%d',
+                                                // month: '%Y-%m',
+                                                // year: '%Y'
+                                            }
+                                        },
                                         yAxis: {
+                                            min: 0,
                                             title: {
-                                                text: '降雨量'
+                                                text: '雨强'
                                             }
                                         },
                                         legend: {
@@ -797,7 +860,7 @@
                                             },
                                             series: {
                                                 // pointStart: Date.UTC(date_year, date_month, date_day, date_hour),
-                                                pointStart: Date.UTC(2019, 7, 7,0,0),
+                                                pointStart: Date.UTC(2019, 7, 7,20,0),
                                                 pointInterval: 3e5
                                             },
                                             area: {
@@ -826,11 +889,13 @@
                                                 threshold: null
                                             }
                                         },
-                                        series: [{
-                                            // type: 'area',
-                                            name: '降水过程',
-                                            data: value
-                                        }]
+                                        series: [
+                                            {
+                                                // type: 'area',
+                                                name: '降水过程',
+                                                data: value
+                                            }
+                                        ]
                                     });
 
                                 }

@@ -2687,7 +2687,7 @@
                                 dataType: "json",
                                 success: function (data) {
                                     var datalist = []                                                                                                                                 
-                                    console.log(data.data_max,data.data_min)
+                                    // console.log(data.data_max,data.data_min)
                                     var select_type = data.plot_type
                                     if (select_type == "T" || select_type == "TMax24" || select_type == "TMin24"){
                                         data.back_data.forEach(function (item) {
@@ -2742,11 +2742,15 @@
                                         layers: []
                                     });
                                     map.bounds = turf.bbox(boundaries);
-                                    // L.geoJSON(boundaries, {
-                                    //     style: function (feature) {
-                                    //         return { color: 'black', weight: 1, fillOpacity: 0.1 };
+                                    // L.TileLayer.Custom = L.TileLayer.extend({
+                                    //     getTileUrl: function (coords) {
+                                    //         url = 'static/maps/' + coords.z + '/' + coords.x + '/' + coords.y + '.jpg';
+                                    //         return url;
                                     //     }
-                                    // }).addTo(map);
+                                    // })
+                                    // L.tileLayer.Custom = function () { return new L.TileLayer.Custom(); }
+                                    // L.tileLayer.Custom().addTo(map);
+
                                     isobandsLay = L.geoJSON(isobands, {
                                         style: function (feature) {
                                             return {
@@ -2757,6 +2761,7 @@
                                             };
                                         }
                                     });
+                                    
                                     //   裁剪数据
                                     let features = [];//裁剪后的结果集
                                     isobands.features.forEach(function (feature1) {
@@ -3015,9 +3020,16 @@
                                                             return { color: 'black', weight: 1, fillOpacity: 0.1 };
                                                         }
                                                     }).addTo(map);
+                                                    // L.TileLayer.Custom = L.TileLayer.extend({
+                                                    //     getTileUrl: function (coords) {
+                                                    //         url = 'static/maps/' + coords.z + '/' + coords.x + '/' + coords.y + '.jpg';
+                                                    //         return url;
+                                                    //     }
+                                                    // })
+                                                    // L.tileLayer.Custom = function () { return new L.TileLayer.Custom(); }
+                                                    // L.tileLayer.Custom().addTo(map);
                                                     
-
-
+                                                
                                                 }
                                             })
 
@@ -3119,7 +3131,7 @@
                                         var id = "ecbt_silder" + i.toString();
                                         
                                         singlebtn.setAttribute("class", "layui-btn layui-btn-sm ecbt_silder_calss")
-                                        singlebtn.style = "width:100%;height: 10%;margin-top:8px; border-radius:8px;margin-left:0px;"
+                                        singlebtn.style = "width:100%;height: 10%;margin-top:8px; border-radius:8px;margin-left:0px;z-index:9999"
                                         singlebtn.id = id
                                         singlebtn.innerText = labels_ecmapui[i]
                                         singlebtn.onclick = function (e) {
@@ -3279,6 +3291,15 @@
                                     var plot_type = "rain"
                                     var main_intersectionLay = map_toolbox_object.return_shp(boundaries, data.plotdata,plot_type).intersectionLay
                                     main_intersectionLay.addTo(map)
+                                    L.TileLayer.Custom = L.TileLayer.extend({
+                                        getTileUrl: function (coords) {
+                                            url = 'static/maps/' + coords.z + '/' + coords.x + '/' + coords.y + '.jpg';
+                                            return url;
+                                        }
+                                    })
+                                    L.tileLayer.Custom = function () { return new L.TileLayer.Custom(); }
+                                    L.tileLayer.Custom().addTo(map);
+
                                     // var chart = L.control({ position: 'bottomright' });
                                     // chart.onAdd = function (map) {
                                     //     var div = L.DomUtil.create('div', 'info chartecmap');
@@ -4274,6 +4295,15 @@
                                     layers: [lines]
                                 });
                                 zdz_recdata_obj.zdz_map = map_zdz
+                                // 叠加卫星
+                                L.TileLayer.Custom = L.TileLayer.extend({
+                                    getTileUrl: function (coords) {
+                                        url = 'static/maps/' + coords.z + '/' + coords.x + '/' + coords.y + '.jpg';
+                                        return url;
+                                    }
+                                })
+                                L.tileLayer.Custom = function () { return new L.TileLayer.Custom(); }
+                                L.tileLayer.Custom().addTo(map_zdz);
 
                             }
                             

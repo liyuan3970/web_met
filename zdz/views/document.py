@@ -849,8 +849,18 @@ def station_zdz_data(request):
         return JsonResponse(context)
     elif model =="single":
         conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="ZJSZDZDB")
-        sql_location = """select Ri,tTime from Tab_AM_M where tTime between '2019-08-08 00:00:00' and '2019-08-09 00:00:00' and IIiii='58653' order by tTime """
-        df_location = pd.read_sql(sql_location , con=conn)
+        start2 = '2019-08-07 21:11:00'
+        end2 = '2019-08-08 20:00:00'
+        start1 = '2019-08-08 20:00:00'
+        end1 = '2019-08-08 21:11:00'
+        sql1 = '''select tTime,Ri from Tab_AM_M where (tTime between '{start}' and '{end}' and IIiii = '58653') order by tTime'''            
+        rsql1 = sql1.format(start=start1,end=end1) 
+        rsql2 = sql1.format(start=start2,end=end2) 
+        df1 = pd.read_sql(rsql1 , con=conn)              
+        df2 = pd.read_sql(rsql2 , con=conn) 
+        df1 = df1[1:]
+        df2 = df2[:-1]
+        df_location = pd.concat([df1, df2])
         value = df_location['Ri'].to_list()
         context = {
             'status': "ok",
