@@ -647,7 +647,7 @@ class ec_data_point:
         self.exlon = [27.3,30.6]
         self.name = ["台州", "玉环", "温岭", "三门", "天台", "仙居", "临海", "路桥", "椒江", "黄岩"]
         self.name_en = ['taizhou','yuhuan','wenling','sanmen','tiantai','xianju','linhai','luqiao','jiaojiang','huangyan']
-        self.cp,self.t2,self.lsp = self.read_data()
+        self.cp,self.t2,self.tp = self.read_data()
     # 外部函数
     def transform_from_latlon(self,lat, lon):
         lat = np.asarray(lat)
@@ -655,7 +655,7 @@ class ec_data_point:
         trans = Affine.translation(lon[0], lat[0])
         scale = Affine.scale(lon[1] - lon[0], lat[1] - lat[0])
         return trans * scale    
-    def rasterize(self,shapes, coords, latitude='lat', longitude='lon',fill=np.nan, **kwargs):
+    def rasterize(self,shapes, coords, latitude='latS', longitude='lonS',fill=np.nan, **kwargs):
         transform = self.transform_from_latlon(coords[latitude], coords[longitude])
         out_shape = (len(coords[latitude]), len(coords[longitude]))
         raster = features.rasterize(shapes, out_shape=out_shape,
@@ -666,43 +666,28 @@ class ec_data_point:
     def add_shape_coord_from_data_array(self,xr_da, shp_path, coord_name):   
         shp_gpd = gpd.read_file(shp_path)
         shapes = [(shape, n) for n, shape in enumerate(shp_gpd.geometry)]
-        xr_da[coord_name] = self.rasterize(shapes, xr_da.coords, longitude='lon', latitude='lat')
+        xr_da[coord_name] = self.rasterize(shapes, xr_da.coords, longitude='lonS', latitude='latS')
         return xr_da
-    def regrid(self,data):
-        # 插值
-        ds_out = xr.Dataset(
-            {   
-                
-                "lat": (["lat"], np.arange(27.0, 31, 0.05)),
-                "lon": (["lon"], np.arange(120, 122.9, 0.05)),
-            }
-        )
-        regridder = xe.Regridder(data, ds_out, "bilinear")
-        dr_out = regridder(data)
-        return dr_out
     # 读取数据
     def read_data(self):
         '''读取数据'''
         files = os.listdir(self.file_path)
-        lsp_list = [] 
+        tp_list = [] 
         cp_list = [] 
         t2_list = [] 
         for fileitem in self.timelist:
             f=xr.open_dataset(self.file_path +files[fileitem],decode_times=False)
-            lsp = f.lsp.sel(lonS=slice(118,123),latS=slice(32,26))
+            tp = f.tp.sel(lonS=slice(118,123),latS=slice(32,26))
             cp = f.cp.sel(lonS=slice(118,123),latS=slice(32,26))
             t2 = f.t2.sel(lonS=slice(118,123),latS=slice(32,26)) 
-            lsp_list.append(lsp)  
+            tp_list.append(tp)  
             cp_list.append(cp)  
             t2_list.append(t2)
-            del f,lsp,cp,t2  
+            del f,tp,cp,t2  
         cp_all = xr.concat(cp_list,dim="time")
-        cp_all = self.regrid(cp_all)
         t2_all = xr.concat(t2_list,dim="time")
-        t2_all = self.regrid(t2_all)
-        lsp_all = xr.concat(lsp_list,dim="time")
-        lsp_all = self.regrid(lsp_all)
-        return cp_all,t2_all,lsp_all
+        tp_all = xr.concat(tp_list,dim="time")
+        return cp_all,t2_all,tp_all
     # 曲线的读取
     def accum_data(self,list_data):
         '''处理累计降水'''
@@ -716,18 +701,18 @@ class ec_data_point:
                 out_list.append(round(list_data[i]-list_data[i-1],1))
         return out_list
     def rain_data(self,lat,lon,data):
-        list_data= data.sel(lon=lon, lat=lat,method='nearest').to_pandas().tolist()
+        list_data= data.sel(lonS=lon, latS=lat,method='nearest').to_pandas().tolist()
         out_list = self.accum_data(list_data)
         return out_list
     def plot_line(self,lat,lon):
         '''返回单点的降水气温曲线图'''
         cp_line = self.rain_data(lat,lon,self.cp)
-        totle_line = self.rain_data(lat,lon,self.lsp)
-        lsp_line = []
+        totle_line = self.rain_data(lat,lon,self.tp)
+        tp_line = []
         for i in range(len(totle_line)):
-            lsp_line.append(totle_line[i] - cp_line[i])
-        t2_line = self.t2.sel(lon=lon, lat=lat,method='nearest').to_pandas().tolist()
-        return cp_line,lsp_line,t2_line
+            tp_line.append(totle_line[i] - cp_line[i])
+        t2_line = self.t2.sel(lonS=lon, latS=lat,method='nearest').to_pandas().tolist()
+        return cp_line,tp_line,t2_line
     # 设置读取sql中的数据
     def read_sql(self):
         '''将数据传到sql中'''
@@ -766,14 +751,14 @@ class ec_data_point:
         for i in range(len(self.lat_list)):
             lat = self.lat_list[i]
             lon = self.lon_list[i]
-            cp_line,lsp_line,t2_line = self.plot_line(lat,lon)
+            cp_line,tp_line,t2_line = self.plot_line(lat,lon)
             cp = [0 if np.isnan(x) else x for x in cp_line]
-            lsp = [0 if np.isnan(x) else x for x in lsp_line]
+            tp = [0 if np.isnan(x) else x for x in tp_line]
             t2 = [0 if np.isnan(x) else x for x in t2_line]
             data_single = {
                 'name':self.name_en[i],
                 'cp':cp,
-                'lsp':lsp,
+                'tp':tp,
                 't2':t2
             }
             data_list.append(data_single)
@@ -801,20 +786,20 @@ class ec_data_point:
         if start_time==0:
             rain = end_rain 
         else:
-            start_rain = self.lsp[start_time,:,:]
-            end_rain = self.lsp[end_time,:,:]
+            start_rain = self.tp[start_time,:,:]
+            end_rain = self.tp[end_time,:,:]
             rain = end_rain - start_rain 
         filepath = "static/data/shpfile/"
         shp_da = self.add_shape_coord_from_data_array(rain, filepath+"taizhou.shp", "remain") 
         taizhou = shp_da.where(shp_da.remain<7, other=99999)
-        len_lat = len(taizhou.lat.data)
-        len_lon = len(taizhou.lon.data)
+        len_lat = len(taizhou.latS.data)
+        len_lon = len(taizhou.lonS.data)
         data = []
         exdata = []
         for j in range(len(self.exlat)):
             exlat = self.exlat[j]
             exlon = self.exlon[j]
-            value = rain.sel(lon=exlon, lat=exlat,method='nearest').to_pandas().tolist()
+            value = rain.sel(lonS=exlon, latS=exlat,method='nearest').to_pandas().tolist()
             # value = np.around(value,decimals=2)
             if not value:
                 value = 0
@@ -832,8 +817,8 @@ class ec_data_point:
         #print("数据测试",data)
         for i in range(len_lon-1):
             for j in range(len_lat-1):
-                y0 = taizhou.lat.data[j]
-                x0 = taizhou.lon.data[i]
+                y0 = taizhou.latS.data[j]
+                x0 = taizhou.lonS.data[i]
                 if taizhou.data[j, i]!=99999:
                     single = {
                         "type": "Feature",
@@ -964,19 +949,7 @@ class ec_data_upload:
         self.lon_list = [120.7, 121.1, 121.3, 121.2, 121.0, 120.7, 121.1, 121.4, 121.4, 121.2]
         self.name = ["台州", "玉环", "温岭", "三门", "天台", "仙居", "临海", "路桥", "椒江", "黄岩"]
         self.name_en = ['taizhou','yuhuan','wenling','sanmen','tiantai','xianju','linhai','luqiao','jiaojiang','huangyan']
-        self.cp,self.t2,self.lsp = self.read_data()
-    def regrid(self,data):
-        # 插值
-        ds_out = xr.Dataset(
-            {   
-                
-                "lat": (["lat"], np.arange(27.0, 31, 0.05)),
-                "lon": (["lon"], np.arange(120, 122.9, 0.05)),
-            }
-        )
-        regridder = xe.Regridder(data, ds_out, "bilinear")
-        dr_out = regridder(data)
-        return dr_out
+        self.cp,self.t2,self.tp = self.read_data()
     def time_file(self):
         today = dtt.date.today()
         yesterday = today - dtt.timedelta(days = 1) 
@@ -989,25 +962,22 @@ class ec_data_upload:
     def read_data(self):
         '''读取数据'''
         files = os.listdir(self.file_path)
-        lsp_list = [] 
+        tp_list = [] 
         cp_list = [] 
         t2_list = [] 
         for fileitem in self.timelist:
             f=xr.open_dataset(self.file_path +files[fileitem],decode_times=False)
-            lsp = f.lsp.sel(lonS=slice(118,123),latS=slice(32,26))
+            tp = f.tp.sel(lonS=slice(118,123),latS=slice(32,26))
             cp = f.cp.sel(lonS=slice(118,123),latS=slice(32,26))
             t2 = f.t2.sel(lonS=slice(118,123),latS=slice(32,26)) 
-            lsp_list.append(lsp)  
+            tp_list.append(tp)  
             cp_list.append(cp)  
             t2_list.append(t2)
-            del f,lsp,cp,t2  
+            del f,tp,cp,t2  
         cp_all = xr.concat(cp_list,dim="time")
-        cp_all = self.regrid(cp_all)
         t2_all = xr.concat(t2_list,dim="time")
-        t2_all = self.regrid(t2_all)
-        lsp_all = xr.concat(lsp_list,dim="time")
-        lsp_all = self.regrid(lsp_all)
-        return cp_all,t2_all,lsp_all
+        tp_all = xr.concat(tp_list,dim="time")
+        return cp_all,t2_all,tp_all
     def accum_data(self,list_data):
         '''处理累计降水'''
         out_list = []
@@ -1020,18 +990,18 @@ class ec_data_upload:
                 out_list.append(round(list_data[i]-list_data[i-1],1))
         return out_list
     def rain_data(self,lat,lon,data):
-        list_data= data.sel(lon=lon, lat=lat,method='nearest').to_pandas().tolist()
+        list_data= data.sel(lonS=lon, latS=lat,method='nearest').to_pandas().tolist()
         out_list = self.accum_data(list_data)
         return out_list
     def plot_line(self,lat,lon):
         '''返回单点的降水气温曲线图'''
         cp_line = self.rain_data(lat,lon,self.cp)
-        totle_line = self.rain_data(lat,lon,self.lsp)
-        lsp_line = []
+        totle_line = self.rain_data(lat,lon,self.tp)
+        tp_line = []
         for i in range(len(totle_line)):
-            lsp_line.append(totle_line[i] - cp_line[i])
-        t2_line = self.t2.sel(lon=lon, lat=lat,method='nearest').to_pandas().tolist()
-        return cp_line,lsp_line,t2_line
+            tp_line.append(totle_line[i] - cp_line[i])
+        t2_line = self.t2.sel(lonS=lon, latS=lat,method='nearest').to_pandas().tolist()
+        return cp_line,tp_line,t2_line
     def conuty_data(self):
         '''将数据整理成json并存储到MySQL'''
         data_list = []
@@ -1053,14 +1023,14 @@ class ec_data_upload:
         for i in range(len(self.lat_list)):
             lat = self.lat_list[i]
             lon = self.lon_list[i]
-            cp_line,lsp_line,t2_line = self.plot_line(lat,lon)
+            cp_line,tp_line,t2_line = self.plot_line(lat,lon)
             cp = [0 if np.isnan(x) else x for x in cp_line]
-            lsp = [0 if np.isnan(x) else x for x in lsp_line]
+            tp = [0 if np.isnan(x) else x for x in tp_line]
             t2 = [0 if np.isnan(x) else x for x in t2_line]
             data_single = {
                 'name':self.name_en[i],
                 'cp':cp,
-                'lsp':lsp,
+                'tp':tp,
                 't2':t2
             }
             data_list.append(data_single)

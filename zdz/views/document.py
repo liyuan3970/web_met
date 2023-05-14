@@ -547,8 +547,8 @@ def ec_single_data(request):
     plot_data = ec_worker.rander_leaflet(start_time, end_time)
     context = {
         'status': "ok",
-        'linedata':line_data,
-        'plotdata':plot_data
+        'linedata':line_data,#json.dumps(table_data, cls=NpEncoder)
+        'plotdata':json.dumps(plot_data, cls=NpEncoder)#plot_data
     }
     return JsonResponse(context)
 

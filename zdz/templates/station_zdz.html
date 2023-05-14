@@ -625,7 +625,7 @@
                             });
                             var lines = L.geoJSON(boundaries, {
                                 style: function (feature) {
-                                    return { color: 'black', weight: 1, fillOpacity: 0.1 };
+                                    return { color: 'black', weight: 3, fillOpacity: 0.1 };
                                 }
                             })
                             var corner1 = L.latLng(25, 118),
@@ -635,7 +635,7 @@
                                 center: new L.LatLng(28.6, 120.9),//110.763, 41.376   39.62353145, 121.9937485
                                 renderer: canvasLabel,
                                 zoom: 9, //4
-                                maxZoom: 10,
+                                maxZoom: 12,
                                 minZoom: 8,
                                 zoomControl: false,
                                 dragging: true,
@@ -662,18 +662,65 @@
                             })
                             L.tileLayer.Custom = function(){return new L.TileLayer.Custom();}
                             L.tileLayer.Custom().addTo(map_zdz);
+                            L.Control.Logo = L.Control.extend({
+                                options: {
+                                    position: 'topright' //初始位置
+
+                                },
+
+                                initialize: function (options) {
+                                    L.Util.extend(this.options, options);
+
+                                },
+                                onAdd: function (map) {
+                                    //创建一个class为 leaflet-control-container的div
+                                    this._container = L.DomUtil.create('div', 'leaflet-control-container');
+                                    this._container.style = "width:150px;height:500px;border: 1px solid black"
+                                    //创建一个图片要素
+                                    var content = L.DomUtil.create('button', 'layui-btn');
+                                    content.setAttribute('type','button')
+                                    content.innerHTML = "666"              
+                                    // img.id = 'leaflet-control-clegend';
+                                    // img.type = 'img';
+                                    // // img.src = "./logo.jpg";
+                                    // this._legendimg = content;
+
+                                    //创建一个关闭控件的按钮
+                                    // var closeButton = L.DomUtil.create('a', 'leaflet-control-button');
+                                    // closeButton.text = 'X';
+                                    // closeButton.id = 'leaflet-control-geosearch-close';
+                                    // this._closebutton = closeButton;
 
 
-                            // L.tileLayer(url, {
-                            //     zoom: 9,
-                            //     errorTileUrl:'static/maps/{z}/{x}/{y}.png'
-                            // }).addTo(map_zdz);
+                                    this._container.appendChild(content);
+                                    // this._container.appendChild(this._closebutton);
 
+                                    //注册关闭事件
+                                    // L.DomEvent.addListener(this._closebutton, 'click', this._onCloseControl, this);
+
+                                    return this._container;
+                                },
+                                /**
+                                 *
+                                 * @private
+                                 */
+                                _onCloseControl: function () {
+                                    this._map.options.Legend = false;
+                                    this.remove(this._map);
+                                },
+                            });
+                        
+                            L.control.logo = function (options) {
+                                return new L.Control.Logo(options)
+                            };
+                            L.control.logo().addTo(map_toolbox_object.current_map);
 
                         }
                     },
                     plot_layer: function (pointdata, click_type) {
                         //绘制图层
+                        var mapdata = map_toolbox_object.current_map.getBounds()
+                        // console.log("当前经纬度",mapdata)
                         var points = []
                         map_toolbox_object.recv_all_data.forEach(function (item) {
                             // 绘图

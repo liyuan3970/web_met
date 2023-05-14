@@ -3289,7 +3289,8 @@
                                         }
                                     }).addTo(map);
                                     var plot_type = "rain"
-                                    var main_intersectionLay = map_toolbox_object.return_shp(boundaries, data.plotdata,plot_type).intersectionLay
+                                    
+                                    var main_intersectionLay = map_toolbox_object.return_shp(boundaries, JSON.parse(data.plotdata),plot_type).intersectionLay
                                     main_intersectionLay.addTo(map)
                                     L.TileLayer.Custom = L.TileLayer.extend({
                                         getTileUrl: function (coords) {
