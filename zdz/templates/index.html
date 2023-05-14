@@ -3101,7 +3101,7 @@
                                     load = showLoad();
                                 },
                                 success: function (data) {
-                                    // console.log("tool_ec", data)
+                                    console.log("tool_ec", data,data.plotdata)
                                     var labelthings = label_of_ectime(data.linedata[0])
                                     // var serverdata = JSON.parse(data)  
                                     var product_view = document.getElementById("product_view")
@@ -3126,150 +3126,6 @@
                                     var Lat = [28.5, 28.2, 28.4, 29.0, 29.11, 28.7, 28.8, 28.55, 28.65, 28.55]
                                     var Lon = [120.7, 121.2, 121.3, 121.4, 121.0, 120.70, 121.1, 121.4, 121.4, 121.0]
                                     var zoon = [8, 10, 10, 10, 10, 9, 9, 11, 10, 10, 10]
-                                    for (var i = 0; i < labels_ecmapui.length; i++) {
-                                        var singlebtn = document.createElement("button");
-                                        var id = "ecbt_silder" + i.toString();
-                                        
-                                        singlebtn.setAttribute("class", "layui-btn layui-btn-sm ecbt_silder_calss")
-                                        singlebtn.style = "width:100%;height: 10%;margin-top:8px; border-radius:8px;margin-left:0px;z-index:9999"
-                                        singlebtn.id = id
-                                        singlebtn.innerText = labels_ecmapui[i]
-                                        singlebtn.onclick = function (e) {
-                                            // console.log(this.innerText)
-                                            $('.ecbt_silder_calss').attr("layui-btn layui-btn-sm ecbt_silder_calss") 
-                                            $('.ecbt_silder_calss').attr("style","width:100%;height: 10%;margin-top:8px; border-radius:8px;margin-left:0px;") 
-                                            this.style = "width:100%;height: 10%;margin-top:8px; border-radius:8px;margin-left:0px;background-color:rgb(255,87,34);"
-
-                                            map.eachLayer(function (layer) {
-                                                if (!layer._container || ('' + jQuery(layer._container).attr('class')).replace(/\s/g, '') != 'leaflet-layer') {
-                                                    layer.remove();
-                                                }
-                                            });
-                                            //id
-                                            var item = this.id
-                                            var ites = item.substring(11, item.length)
-                                            var charttings = label_of_ectime(data.linedata[parseInt(ites)])
-                                            //截取数字
-                                            var boundaries_sigle = map_toolbox_object.return_boundaries(layerstr_ecmapui[parseInt(ites)]).boundaries
-                                            map.bounds = turf.bbox(boundaries_sigle);
-                                            map.setView([Lat[parseInt(ites)], Lon[parseInt(ites)]], zoon[parseInt(ites)])
-                                            var lines = L.geoJSON(boundaries_sigle, {
-                                                style: function (feature) {
-                                                    return { color: 'black', weight: 1, fillOpacity: 0.1 };
-                                                }
-                                            }).addTo(map)
-                                            //绘制数据
-                                            var plot_type = "rain"
-                                            var intersectionLay = map_toolbox_object.return_shp(boundaries_sigle, data.plotdata,plot_type).intersectionLay
-                                            intersectionLay.addTo(map)
-                                            // 加载echart数据
-
-                                            option = {
-                                                // tooltip: {
-                                                //     trigger: 'axis',
-                                                //     axisPointer: {
-                                                //         // Use axis to trigger tooltip
-                                                //         type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
-                                                //     }
-                                                // },
-                                                title: {
-                                                    text: labels_ecmapui[parseInt(ites)],
-                                                    textStyle: {
-                                                        align: 'center',
-                                                        color: 'black',
-                                                        fontSize: 25,
-                                                    },
-                                                    top: '5%',
-                                                    left: '8%',
-                                                },
-                                                grid: {
-                                                    top: '8%',
-                                                    right: '6%',
-                                                    left: '6%',
-                                                    bottom: '8%'
-                                                },
-                                                xAxis: [{
-                                                    type: 'category',
-                                                    axisTick: {
-                                                        alignWithLabel: true
-                                                    },
-                                                    axisLine: {
-                                                        show: true,
-                                                        lineStyle: {
-                                                            color: "black",
-                                                            width: 2
-                                                        }
-                                                    },
-                                                    data: charttings[0]
-                                                }],
-                                                yAxis: [{
-                                                    type: 'value',
-                                                    name: '',
-                                                    position: 'left',
-                                                    alignTicks: true,
-                                                    max: charttings[1],
-                                                    min: charttings[3],
-                                                    // interval: 50,
-                                                    splitLine: { show: false },
-                                                    axisLine: {
-                                                        show: true,
-                                                        lineStyle: {
-                                                            color: "black",
-                                                            width: 2
-                                                        }
-                                                    },
-                                                    axisLabel: {
-                                                        formatter: '{value} °C'
-                                                    }
-                                                }, {
-                                                    type: 'value',
-                                                    name: '',
-                                                    position: 'right',
-                                                    alignTicks: true,
-                                                    max:  charttings[2],
-                                                    min: 0,
-                                                    // interval: 10,
-                                                    axisLine: {
-                                                        show: true,
-                                                        lineStyle: {
-                                                            color: "black",
-                                                            width: 2
-                                                        },
-                                                        onZero:false
-                                                    },
-                                                    splitLine: { show: false },
-                                                    axisLabel: {
-                                                        formatter: '{value} mm'
-                                                    }
-                                                }],
-                                                series: [{
-                                                    name: '总降水',
-                                                    type: 'bar',
-                                                    color: "red",
-                                                    stack: 'Ad',
-                                                    yAxisIndex: 1,
-                                                    data: data.linedata[parseInt(ites)].lsp
-                                                }, {
-                                                    name: '对流降水',
-                                                    stack: 'Ad',
-                                                    type: 'bar',
-                                                    yAxisIndex: 1,
-                                                    color: "blue",
-                                                    data: data.linedata[parseInt(ites)].cp
-                                                }, {
-                                                    name: '温度',
-                                                    type: 'line',
-                                                    yAxisIndex: 0,
-                                                    data: data.linedata[parseInt(ites)].t2
-                                                }]
-                                            };
-                                            // 使用刚指定的配置项和数据显示图表。
-
-                                            myChart.setOption(option);
-
-                                        }
-                                        main_ecmapui.append(singlebtn)
-                                    }
                                     product_view.append(mapdiv, main_ecmapui,main_line)
                                     // 加载地图
                                     var map = new L.Map('ecmapview', {
@@ -3292,6 +3148,7 @@
                                     
                                     var main_intersectionLay = map_toolbox_object.return_shp(boundaries, JSON.parse(data.plotdata),plot_type).intersectionLay
                                     main_intersectionLay.addTo(map)
+                                    // 叠加底图
                                     L.TileLayer.Custom = L.TileLayer.extend({
                                         getTileUrl: function (coords) {
                                             url = 'static/maps/' + coords.z + '/' + coords.x + '/' + coords.y + '.jpg';
@@ -3300,14 +3157,196 @@
                                     })
                                     L.tileLayer.Custom = function () { return new L.TileLayer.Custom(); }
                                     L.tileLayer.Custom().addTo(map);
+                                    // 叠加按钮控件----------------------------------
+                                    L.Control.Logo = L.Control.extend({
+                                        options: {
+                                            position: 'topleft' //初始位置
 
-                                    // var chart = L.control({ position: 'bottomright' });
-                                    // chart.onAdd = function (map) {
-                                    //     var div = L.DomUtil.create('div', 'info chartecmap');
-                                    //     div.id = "chatrecmap";
-                                    //     return div;
-                                    // };
-                                    // chart.addTo(map);
+                                        },
+
+                                        initialize: function (options) {
+                                            L.Util.extend(this.options, options);
+
+                                        },
+                                        onAdd: function (map) {
+                                            //创建一个class为 leaflet-control-container的div
+                                            this._container = L.DomUtil.create('div', 'leaflet-control-container');
+                                            this._container.style = "width:80px;height:450px;"
+                                            //创建一个图片要素
+                                            // var content = L.DomUtil.create('button', 'layui-btn');
+                                            // content.setAttribute('type', 'button')
+                                            // content.innerHTML = "台州"
+                                            // for
+                                            for (var i = 0; i < labels_ecmapui.length; i++) {
+                                                var singlebtn = document.createElement("button");
+                                                var id = "ecbt_silder" + i.toString();
+
+                                                singlebtn.setAttribute("class", "layui-btn layui-btn-sm ecbt_silder_calss")
+                                                singlebtn.style = "width:100%;height: 5%;margin-top:8px; border-radius:8px;margin-left:0px;z-index:1000"
+                                                singlebtn.id = id
+                                                singlebtn.innerText = labels_ecmapui[i]
+                                                singlebtn.onclick = function (e) {
+                                                    // console.log(this.innerText)
+                                                    $('.ecbt_silder_calss').attr("layui-btn layui-btn-sm ecbt_silder_calss")
+                                                    $('.ecbt_silder_calss').attr("style", "width:100%;height: 5%;margin-top:8px; border-radius:8px;margin-left:0px;")
+                                                    this.style = "width:100%;height: 5%;margin-top:8px; border-radius:8px;margin-left:0px;background-color:rgb(255,87,34);"
+
+                                                    map.eachLayer(function (layer) {
+                                                        if (!layer._container || ('' + jQuery(layer._container).attr('class')).replace(/\s/g, '') != 'leaflet-layer') {
+                                                            layer.remove();
+                                                        }
+                                                    });
+                                                    //id
+                                                    var item = this.id
+                                                    var ites = item.substring(11, item.length)
+                                                    var charttings = label_of_ectime(data.linedata[parseInt(ites)])
+                                                    //截取数字
+                                                    var boundaries_sigle = map_toolbox_object.return_boundaries(layerstr_ecmapui[parseInt(ites)]).boundaries
+                                                    map.bounds = turf.bbox(boundaries_sigle);
+                                                    map.setView([Lat[parseInt(ites)], Lon[parseInt(ites)]], zoon[parseInt(ites)])
+                                                    var lines = L.geoJSON(boundaries_sigle, {
+                                                        style: function (feature) {
+                                                            return { color: 'black', weight: 1, fillOpacity: 0.1 };
+                                                        }
+                                                    }).addTo(map)
+                                                    //绘制数据
+                                                    var plot_type = "rain"
+                                                    var intersectionLay = map_toolbox_object.return_shp(boundaries_sigle, JSON.parse(data.plotdata), plot_type).intersectionLay
+                                                    intersectionLay.addTo(map)
+                                                    // 加载echart数据
+
+                                                    option = {
+                                                        // tooltip: {
+                                                        //     trigger: 'axis',
+                                                        //     axisPointer: {
+                                                        //         // Use axis to trigger tooltip
+                                                        //         type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
+                                                        //     }
+                                                        // },
+                                                        title: {
+                                                            text: labels_ecmapui[parseInt(ites)],
+                                                            textStyle: {
+                                                                align: 'center',
+                                                                color: 'black',
+                                                                fontSize: 25,
+                                                            },
+                                                            top: '5%',
+                                                            left: '8%',
+                                                        },
+                                                        grid: {
+                                                            top: '8%',
+                                                            right: '6%',
+                                                            left: '6%',
+                                                            bottom: '8%'
+                                                        },
+                                                        xAxis: [{
+                                                            type: 'category',
+                                                            axisTick: {
+                                                                alignWithLabel: true
+                                                            },
+                                                            axisLine: {
+                                                                show: true,
+                                                                lineStyle: {
+                                                                    color: "black",
+                                                                    width: 2
+                                                                }
+                                                            },
+                                                            data: charttings[0]
+                                                        }],
+                                                        yAxis: [{
+                                                            type: 'value',
+                                                            name: '',
+                                                            position: 'left',
+                                                            alignTicks: true,
+                                                            max: charttings[1],
+                                                            min: charttings[3],
+                                                            // interval: 50,
+                                                            splitLine: { show: false },
+                                                            axisLine: {
+                                                                show: true,
+                                                                lineStyle: {
+                                                                    color: "black",
+                                                                    width: 2
+                                                                }
+                                                            },
+                                                            axisLabel: {
+                                                                formatter: '{value} °C'
+                                                            }
+                                                        }, {
+                                                            type: 'value',
+                                                            name: '',
+                                                            position: 'right',
+                                                            alignTicks: true,
+                                                            max: charttings[2],
+                                                            min: 0,
+                                                            // interval: 10,
+                                                            axisLine: {
+                                                                show: true,
+                                                                lineStyle: {
+                                                                    color: "black",
+                                                                    width: 2
+                                                                },
+                                                                onZero: false
+                                                            },
+                                                            splitLine: { show: false },
+                                                            axisLabel: {
+                                                                formatter: '{value} mm'
+                                                            }
+                                                        }],
+                                                        series: [{
+                                                            name: '总降水',
+                                                            type: 'bar',
+                                                            color: "red",
+                                                            stack: 'Ad',
+                                                            yAxisIndex: 1,
+                                                            data: data.linedata[parseInt(ites)].lsp
+                                                        }, {
+                                                            name: '对流降水',
+                                                            stack: 'Ad',
+                                                            type: 'bar',
+                                                            yAxisIndex: 1,
+                                                            color: "blue",
+                                                            data: data.linedata[parseInt(ites)].cp
+                                                        }, {
+                                                            name: '温度',
+                                                            type: 'line',
+                                                            yAxisIndex: 0,
+                                                            data: data.linedata[parseInt(ites)].t2
+                                                        }]
+                                                    };
+                                                    // 使用刚指定的配置项和数据显示图表。
+
+                                                    myChart.setOption(option);
+
+                                                }
+                                                this._container.appendChild(singlebtn)
+                                            }
+
+                                            
+
+                                            // this._container.appendChild(content);
+                                            // this._container.appendChild(this._closebutton);
+
+                                            //注册关闭事件
+                                            // L.DomEvent.addListener(this._closebutton, 'click', this._onCloseControl, this);
+
+                                            return this._container;
+                                        },
+                                        /**
+                                         *
+                                         * @private
+                                         */
+                                        _onCloseControl: function () {
+                                            this._map.options.Legend = false;
+                                            this.remove(this._map);
+                                        },
+                                    });
+
+                                    L.control.logo = function (options) {
+                                        return new L.Control.Logo(options)
+                                    };
+                                    L.control.logo().addTo(map);
+                                    
                                     // 基于准备好的dom，初始化echarts实例
                                     var myChart = echarts.init(document.getElementById('chatrecmap'));
                                     // 洪家的情况

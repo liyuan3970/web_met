@@ -69,8 +69,8 @@
         <!-- 导航栏目 -->
         <div style="width:100%;">
             <ul class="layui-nav">
-                <li class="layui-nav-item" style="width: 14%;font-size: 25px;padding-left:25px">气象数据分析系统</li>
-                <li class="layui-nav-item layui-this"><a href="">实况自动站</a></li>
+                <li class="layui-nav-item" style="width: 15%;font-size: 25px;padding-left:25px">气象数据分析系统</li>
+                <li class="layui-nav-item "><a href="">实况自动站</a></li>
                 <!-- <li class="layui-nav-item"><a href="">模式</a></li> -->
             </ul>
         </div>
@@ -662,58 +662,59 @@
                             })
                             L.tileLayer.Custom = function(){return new L.TileLayer.Custom();}
                             L.tileLayer.Custom().addTo(map_zdz);
-                            L.Control.Logo = L.Control.extend({
-                                options: {
-                                    position: 'topright' //初始位置
+                            // 添加地图上的按钮
+                            // L.Control.Logo = L.Control.extend({
+                            //     options: {
+                            //         position: 'topright' //初始位置
 
-                                },
+                            //     },
 
-                                initialize: function (options) {
-                                    L.Util.extend(this.options, options);
+                            //     initialize: function (options) {
+                            //         L.Util.extend(this.options, options);
 
-                                },
-                                onAdd: function (map) {
-                                    //创建一个class为 leaflet-control-container的div
-                                    this._container = L.DomUtil.create('div', 'leaflet-control-container');
-                                    this._container.style = "width:150px;height:500px;border: 1px solid black"
-                                    //创建一个图片要素
-                                    var content = L.DomUtil.create('button', 'layui-btn');
-                                    content.setAttribute('type','button')
-                                    content.innerHTML = "666"              
-                                    // img.id = 'leaflet-control-clegend';
-                                    // img.type = 'img';
-                                    // // img.src = "./logo.jpg";
-                                    // this._legendimg = content;
+                            //     },
+                            //     onAdd: function (map) {
+                            //         //创建一个class为 leaflet-control-container的div
+                            //         this._container = L.DomUtil.create('div', 'leaflet-control-container');
+                            //         this._container.style = "width:150px;height:500px;border: 1px solid black"
+                            //         //创建一个图片要素
+                            //         var content = L.DomUtil.create('button', 'layui-btn');
+                            //         content.setAttribute('type','button')
+                            //         content.innerHTML = "666"              
+                            //         // img.id = 'leaflet-control-clegend';
+                            //         // img.type = 'img';
+                            //         // // img.src = "./logo.jpg";
+                            //         // this._legendimg = content;
 
-                                    //创建一个关闭控件的按钮
-                                    // var closeButton = L.DomUtil.create('a', 'leaflet-control-button');
-                                    // closeButton.text = 'X';
-                                    // closeButton.id = 'leaflet-control-geosearch-close';
-                                    // this._closebutton = closeButton;
+                            //         //创建一个关闭控件的按钮
+                            //         // var closeButton = L.DomUtil.create('a', 'leaflet-control-button');
+                            //         // closeButton.text = 'X';
+                            //         // closeButton.id = 'leaflet-control-geosearch-close';
+                            //         // this._closebutton = closeButton;
 
 
-                                    this._container.appendChild(content);
-                                    // this._container.appendChild(this._closebutton);
+                            //         this._container.appendChild(content);
+                            //         // this._container.appendChild(this._closebutton);
 
-                                    //注册关闭事件
-                                    // L.DomEvent.addListener(this._closebutton, 'click', this._onCloseControl, this);
+                            //         //注册关闭事件
+                            //         // L.DomEvent.addListener(this._closebutton, 'click', this._onCloseControl, this);
 
-                                    return this._container;
-                                },
-                                /**
-                                 *
-                                 * @private
-                                 */
-                                _onCloseControl: function () {
-                                    this._map.options.Legend = false;
-                                    this.remove(this._map);
-                                },
-                            });
+                            //         return this._container;
+                            //     },
+                            //     /**
+                            //      *
+                            //      * @private
+                            //      */
+                            //     _onCloseControl: function () {
+                            //         this._map.options.Legend = false;
+                            //         this.remove(this._map);
+                            //     },
+                            // });
                         
-                            L.control.logo = function (options) {
-                                return new L.Control.Logo(options)
-                            };
-                            L.control.logo().addTo(map_toolbox_object.current_map);
+                            // L.control.logo = function (options) {
+                            //     return new L.Control.Logo(options)
+                            // };
+                            // L.control.logo().addTo(map_toolbox_object.current_map);
 
                         }
                     },
