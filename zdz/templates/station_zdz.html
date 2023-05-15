@@ -69,8 +69,8 @@
         <!-- 导航栏目 -->
         <div style="width:100%;">
             <ul class="layui-nav">
-                <li class="layui-nav-item" style="width: 15%;font-size: 25px;padding-left:25px">气象数据分析系统</li>
-                <li class="layui-nav-item "><a href="">实况自动站</a></li>
+                <li class="layui-nav-item" style="width: 15%;font-size: 25px;padding-left:25px;padding-top:1px;">气象数据分析系统</li>
+                <li class="layui-nav-item "><a href="" style=";padding-top:1px;">实况自动站</a></li>
                 <!-- <li class="layui-nav-item"><a href="">模式</a></li> -->
             </ul>
         </div>
@@ -78,8 +78,8 @@
         <div style="display: inline-flex;width:100%;height:95%">
             <!-- 这里是垂直导航栏目 -->
             <!-- <div style="width:15%;height: 100%;background-color: rgb(40,43,51);"> -->
-            <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="demo"
-                style="width:15%;height: 100%;background-color: rgb(40,43,51);">
+            <ul class="layui-nav layui-nav-tree layui-inline scrollbar" lay-filter="demo"
+                style="width:15%;height: 100%;background-color: rgb(40,43,51);overflow-y: scroll;overflow-x: hidden;">
                 <li class="layui-nav-item layui-nav-itemed">
                     <a href="javascript:;">降水</a>
                     <dl class="layui-nav-child">
@@ -160,12 +160,95 @@
                         </dd>
                     </dl>
                 </li>
+                
+                <!-- 时间短的数据查询 -->
+                <li class="layui-nav-item ">
+                    <a href="javascript:;">历史查询</a>
+                    <dl class="layui-nav-child">
+                        <dd style="height:200px">
+                            <div style="height:100%;width:100%;" class="layui-form">
+                                <div class="layui-form-item" >
+                                    <div class="layui-input-block" style="background-color:rgb(28,30,36);width:145px;">
+                                        <select   >
+                                            <option value=""></option>
+                                            <option value="0"  >国家站</option>
+                                            <option value="1">区域站</option>
+                                            <option value="2" selected="">降水</option>
+                                            <option value="3">指标站</option>
+                                            <option value="4">其他</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-form">
+                                    <div class="layui-form-item">
+                                        <div class="layui-inline">
+                                            <div class="layui-inline" id="test6">
+                                                <div class="layui-input-inline" style="width:42%;">
+                                                    <input type="text" autocomplete="off" id="test-startDate-1" class="layui-input" placeholder="开始日期">
+                                                </div>
+                                                <div class="layui-form-mid">-</div>
+                                                <div class="layui-input-inline" style="width:42%;">
+                                                    <input type="text" autocomplete="off" id="test-endDate-1" class="layui-input" placeholder="结束日期">
+                                                </div>
+                                            </div>
+                                            <script>
+                                                layui.use('laydate', function () {
+                                                        var laydate = layui.laydate;
+                                                        laydate.render({
+                                                            elem: '#test6'
+                                                            //设置开始日期、日期日期的 input 选择器
+                                                            //数组格式为 2.6.6 开始新增，之前版本直接配置 true 或任意分割字符即可
+                                                            , range: ['#test-startDate-1', '#test-endDate-1']
+                                                        });
+                                                    })
+
+                                            </script>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            
+                        </dd>
+                    </dl>
+                </li>
+
+
                 <!-- 基础设置 -->
                 <li class="layui-nav-item layui-nav-itemed">
-                    <a href="javascript:;">查询设置</a>
+                    <a href="javascript:;">搜索设置</a>
                     <dl class="layui-nav-child">
-                        <dd style="height:400px"></dd>
-                        <dd><a href="">设置内容</a></dd>
+                        <dd style="height:180px">
+                            <div style="height:100%;width:100%;" class="layui-form">                            
+                                <div class="layui-form-item" style="margin-top:15px;">
+                                    <label class="layui-form-label">数据选项</label>
+                                    <div class="layui-input-block" style="padding-left:5%;">
+                                        <input type="radio" name="aera" value="市县" title="当前" checked="">
+                                        <input type="radio" name="aera" value="乡镇" title="全省"> 
+                                          
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" >
+                                    <label class="layui-form-label">数据类型</label>
+                                    <div class="layui-input-block" style="background-color:rgb(28,30,36);width:145px;">
+                                        <select   >
+                                            <option value=""></option> 
+                                            <option value="nation">国家站</option>                               
+                                            <option value="regin">区域站</option>
+                                            <option value="all">所有站</option>
+                                            <option value="main" selected="">骨干站</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">地图界线</label>
+                                    <div class="layui-input-block">
+                                        <input type="radio" name="sex" value="市县" title="市县" checked="">
+                                        <input type="radio" name="sex" value="乡镇" title="乡镇">                       
+                                    </div>
+                                </div>                                                                            
+                            </div>
+                        </dd>
                     </dl>
                 </li>
 

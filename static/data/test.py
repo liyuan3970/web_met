@@ -1,190 +1,255 @@
-import xarray as xr
+import pymysql
+import pymssql 
 import numpy as np
-import matplotlib.pyplot as plt
-from scipy.interpolate import griddata
-from scipy.interpolate import interp1d
-import xesmf as xe
-import redis
 import pandas as pd
-import datetime
-from matplotlib.colors import ListedColormap,LinearSegmentedColormap
-import os
-import random
-from io import BytesIO
-import base64
-
-
-
-class ec_data_point:
-    def __init__(self,select_time,select_type,select_county):
-        self.timelist = [0,2,4,6,8,10,12,14,16,18,20,22,24,25,
-                         26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,
-                        41,42,43,44,45,46,47,48,49,50,51,52]
-        self.county = select_county
-        self.file_path = "/workspace/liyuan3970/Data/My_Git/" + select_time + "/" 
-        self.data  = self.read_data()
-        self.rain = None
-    def county_location(self,select_county):
-        '''用于返回乡镇对应的经纬度'''
-        county = {
-            '仙居':[28.6,121.4]
-        }
-        return county[select_county]
-    def read_data(self):
-        '''读取基础数据'''
-        #file_path = "/home/liyuan3970/Data/My_Git/2022041700/*.nc" 
-        #file_path = ["/home/liyuan3970/Data/My_Git/2022041700/ecfine.I2022041700.024.F2022041800.nc" ,"/home/liyuan3970/Data/My_Git/2022041700/ecfine.I2022041700.069.F2022041921.nc" ]
-        files = os.listdir(self.file_path)
-        file_path = []
-        for i in self.timelist:
-            file_path.append(self.file_path + files[i])    
-        f = xr.open_mfdataset(file_path, parallel=False)
-        # 读取降水和气温的基本数据
-        lsp = f.tp.sel(lev=1000,lonS=slice(118,123),latS=slice(32,26))
-        tmax2 = f.tmax2.sel(lev=1000,lonS=slice(118,123),latS=slice(32,26))
-        tmin2 = f.tmin2.sel(lev=1000,lonS=slice(118,123),latS=slice(32,26))
-        cp = f.cp.sel(lev=1000,lonS=slice(118,123),latS=slice(32,26))
-        # 读取单点的分析图
-        u = f.u.sel(lonP=slice(118,123),latP=slice(32,26))
-        v = f.v.sel(lonP=slice(118,123),latP=slice(32,26))
-        r = f.r.sel(lonP=slice(118,123),latP=slice(32,26))
-        data = {
-            'lsp':lsp,
-            'tmax':tmax2,
-            'tmin':tmin2,
-            'cp':cp,
-            'u':u,
-            'v':v,
-            'r':r
-        }
-        print(data['lsp'])
+import pickle
+import redis
+import datetime as dtt
+from datetime import timezone
+class station_zdz:
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+        self.rs = redis.Redis(host='127.0.0.1', port=6379)
+        self.conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="ZJSZDZDB")
+    def time_today(self):
+        SHA_TZ = timezone(
+            dtt.timedelta(hours=8),
+            name='Asia/Shanghai',
+        )
+        utc_now = dtt.datetime.utcnow().replace(tzinfo=dtt.timezone.utc)
+        today = utc_now.astimezone(SHA_TZ)
+        return today
+    def get_redis(self,date_type):
+        '''根据date_type向redis中获取数据'''
+        value = self.rs.get(date_type)
+        if value:
+            data = pickle.loads(value)
+        else:
+            data = None       
+        #data = pickle.loads(self.rs.get(date_type))
+        # 解析数据
         return data
-    def accum_data(self,list_data):
-        '''处理累计降水'''
-        out_list = []
-        for i in range(len(list_data)):
-            if i==0:
-                out_list.append(0)
-            else:
-                out_list.append(list_data[i]-list_data[i-1])
-        return out_list  
-    def decode_data(self,select_county,select_type):
-        '''解析所需数据的列表'''
-        lat = self.county_location(select_county)[0]
-        lon = self.county_location(select_county)[1]
-        if select_type=='rain':
-            cp  = self.data['cp'].sel(lonS=lon, latS=lat,method='nearest').to_pandas().tolist()
-            lsp  = self.data['lsp'].sel(lonS=lon, latS=lat,method='nearest').to_pandas().tolist()
-            tmax_data  = self.data['tmax'].sel(lonS=lon, latS=lat,method='nearest').to_pandas().tolist()
-            tmin_data  = self.data['tmin'].sel(lonS=lon, latS=lat,method='nearest').to_pandas().tolist()
-            cp_data = self.accum_data(cp)
-            pre_data = self.accum_data(lsp)
-            return tmax_data,tmin_data,cp_data,pre_data
+    def single_station(self,station):
+        '''获取单站数据并解析'''
+        # 获取当前时间
+        SHA_TZ = timezone(
+            dtt.timedelta(hours=8),
+            name='Asia/Shanghai',
+        )
+        utc_now = dtt.datetime.utcnow().replace(tzinfo=dtt.timezone.utc)
+        today = utc_now.astimezone(SHA_TZ)
+        end = today.strftime('%Y-%m-%d %H:%M:%S')
+        offset = dtt.timedelta(days=-1)
+        start = (today + offset).strftime('%Y-%m-%d %H:%M:%S')
+        # 造假数据
+        start = '2019-08-07 20:53:00'
+        end = '2019-08-08 20:53:00' 
+        yesday = start[0:10] + " 20:00:00"
+        today = end[0:10] + " 20:00:00"
+        hours = dtt.datetime.strptime(end,'%Y-%m-%d %H:%M:%S').hour
+        # 数据库中读取单站数据并解析
+        sql = """select tTime,ta.IIiii,station.StationName,station.Province,station.City,station.County,station.Town,station.lat,station.lon,Ri,T,V,fFy,dFy 
+        from Tab_AM_M as ta inner join TAB_StationInfo as station on ta.IIiii=station.IIiii and station.Province ='浙江' 
+        where (ta.IIiii='{station}' and tTime between '{start_time}' and '{end_time}')  order by tTime  """
+        rsql = sql.format(start_time=start,end_time=end,station=station)
+        data = pd.read_sql(rsql , con=self.conn)
+        if hours>=20:
+            # 实时数据
+            now_data = data[data['tTime']>=today]
+            now_data = now_data[now_data['tTime']<=end]
+            # 历史数据
+            his_data = data[data['tTime']>start]
+            his_data = his_data[his_data['tTime']<=today]   
         else:
-            u  = self.data['u'].sel(lonP=lon, latP=lat,method='nearest').transpose('lev', 'time').to_pandas().values
-            v  = self.data['v'].sel(lonP=lon, latP=lat,method='nearest').transpose('lev', 'time').to_pandas().values
-            r  = self.data['r'].sel(lonP=lon, latP=lat,method='nearest').transpose('lev', 'time').to_pandas().values
-            print(self.data['r'].sel(lonP=lon, latP=lat,method='nearest').transpose('lev', 'time'))
-            return u,v,r
-    def decode_time(self,select_time):
-        #2022101612
-        year = int(select_time[0:4])
-        month = int(select_time[4:6])
-        day = int(select_time[6:8])
-        hour = select_time[8:]
-        start = datetime.date(year, month, day)
-        end = (start + datetime.timedelta(days = 10)).strftime("%Y-%m-%d")
-        if hour=='12':
-            start_day = start.strftime("%Y-%m-%d") +" " + "20:00"
-            end_day = end +" " + "20:00"
+            # 实时数据
+            now_data = data[data['tTime']>=yesday]
+            now_data = now_data[now_data['tTime']<=end]
+            # 历史数据
+            his_data = data[data['tTime']>start]
+            his_data = his_data[his_data['tTime']<=yesday]
+        # 开始筛选数据种类
+        nul_now = [0 for i in range(len(now_data['T'].to_list()))]    
+        nul_his =  [0 for i in range(len(his_data['T'].to_list()))]
+        value_now =  now_data['T'].to_list()  + nul_his
+        value_his = nul_now + his_data['T'].to_list() 
+        # 解析数据成两个序列
+        return data
+    def upload2_redis_Minutes(self):
+        '''根据date_type向redis中传输数据'''
+        table = 'Tab_AM_M'
+        SHA_TZ = timezone(
+            dtt.timedelta(hours=8),
+            name='Asia/Shanghai',
+        )
+        utc_now = dtt.datetime.utcnow().replace(tzinfo=dtt.timezone.utc)
+        today = utc_now.astimezone(SHA_TZ)
+        sql = """select tTime,ta.IIiii,station.StationName,station.Province,station.City,station.County,station.Town,station.ZoomLevel,station.Type,station.lat,station.lon,Ri,T,V,fFy,dFy 
+        from {table} as ta inner join TAB_StationInfo as station on ta.IIiii=station.IIiii and station.Province ='浙江' 
+        where (tTime > '{time}') order by tTime """
+        # 数据加载
+        data_class = "table_minutes"
+        redis_data = self.get_redis(data_class)
+        if not redis_data:
+            # 当redis无数据时
+            #time = today.strftime('%Y-%m-%d %H:%M:%S')
+            offset = dtt.timedelta(seconds=-120)
+            time = (today + offset).strftime('%Y-%m-%d %H:%M:%S')
+            # 测试
+            time = '2019-08-09 19:30:00' 
+            # 测试
+            rsql = sql.format(time=time,table=table)
+            station_all = pd.read_sql(rsql , con=self.conn)
+            data = {
+                'time':time,
+                "data_class":"table_minutes",
+                "data":station_all
+            }
         else:
-            start_day = start.strftime("%Y-%m-%d") +" " + "08:00"
-            end_day = end +" " + "08:00"
-        time_data = pd.date_range(start=start_day,end=end_day,freq='24H')
-        ticks = [0,4,8,12,16,20,24,28,32,36,40]
-        label = []
-        for i in time_data:
-            label.append(i.strftime("%Y-%m-%d")[8:10] + "$^{20}$")
-        return ticks,label
-    def plot_rain(self,select_county):
-        '''用于绘制指定经纬度的降水、高温、低温数据'''
-        # 模拟的数据
-        fig1, ax1 = plt.subplots(figsize=[16,10]) 
-        tmax_data,tmin_data,cp_data,pre_data  = self.decode_data(select_county,select_type)
-        tmean = (np.nanmean(tmax_data) // 2 ) * 2
-        pmax = (np.nanmax(pre_data) // 2 ) * 2
-        print(tmean,pmax)
-        time_line =  [f"{i}" for i in range(0, 41)]  
-        # 画图，plt.bar()可以画柱状图    
-        ax2 = ax1.twinx() 
-        print(len(pre_data),len(time_line))
-        # 画图，plt.bar()可以画柱状图    
-        ax2.bar(time_line, pre_data,color = "blue")
-        ax2.bar(time_line, cp_data,color = "red")
-        ax1.plot(time_line, tmax_data,color = "red")
-        ax1.plot(time_line, tmin_data,color = "blue")
-        # 设置图片名称
-        plt.title("rain")
-        # 设置x轴标签名
-        ax1.set_ylim(tmean-20,tmean+10)
-        #ax2.set_ylim(0,pmax*2.3)
-        ax2.set_ylim(0,50)
-        ticks,label = self.decode_time(select_time)
-        plt.xticks(ticks,label)
-        ax1.set_xlabel('time')    #设置x轴标题
-        ax1.set_ylabel('temperature',color = 'g')   #设置Y1轴标题
-        ax2.set_ylabel('mm',color = 'b')   #设置Y2轴标题
-        #plt.show()
-        imd = self.decode_base64(plt)
-        return imd
-    def plot_wind(self,select_county):
-        '''用于绘制指定经纬度的风场、相对湿度、等高线数据'''
-        lat = self.county_location(select_county)[0]
-        lon = self.county_location(select_county)[1]
-        u,v,r  = self.decode_data(select_county,select_type)
-        # 模拟的数据     
-        x = np.linspace(0,41 , 41) 
-        y = np.linspace(0,15, 15)#[1000,925,850,700,500,200,100]#np.linspace(0,15, 7) 
-        X, Y = np.meshgrid(x, y) 
-        U, V = u,v
-        Z2 = r
-        fig1, axs1 = plt.subplots(figsize=[16,10]) 
-        #axs1.invert_yaxis() 
-        #axs1.contour(X,Y,Z,8,alpha=0.75,cmap='hot')
-        colorslist = ['#FFFFFF','#B4F0FA','#96D2FA','#50A5F5','#1E78DC']# 相对湿度
-        cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=5)
-        levels = [0,80,85,90,95,100]
-        axs1.contourf(X,Y,Z2,cmap=cmaps,add_labels=True)
-        axs1.barbs(X, Y, U, V) 
-        ticks,label = self.decode_time(select_time)
-        plt.xticks(ticks,label)
-        #plt.show()
-        imd = self.decode_base64(plt)
-        return imd
-    def decode_base64(self,plt):
-        '''解析base64类型的数据'''
-        buffer = BytesIO()
-        plt.savefig(buffer,bbox_inches='tight')  
-        plot_img = buffer.getvalue()
-        imb = base64.b64encode(plot_img) 
-        ims = imb.decode()
-        imd = "data:image/png;base64,"+ims
-        return imd
-        
+            # 当redis有数据时,存储数据并保留最近24小时的
+            redis_df = redis_data['data']
+            time = redis_df['tTime'].iloc[-1].strftime('%Y-%m-%d %H:%M:%S')
+            daydelay = dtt.timedelta(days=-1)
+            daystar = (today + daydelay).strftime('%Y-%m-%d %H:%M:%S')
+            redis_df['tTime'] = pd.to_datetime(redis_df['tTime'])
+            # 测试
+            time = '2019-08-09 19:30:00'
+            daystar = '2019-08-08 19:30:00'
+            # 测试
+            remain_df = redis_df[redis_df['tTime']>=daystar]
+            rsql = sql.format(time=time,table=table)
+            station_all = pd.read_sql(rsql , con=self.conn)
+            output = pd.concat([remain_df,station_all])
+            output['tTime'] = pd.to_datetime(output['tTime'])
+            output.drop_duplicates(keep='first',inplace=True)
+            data = {
+                'time':time,
+                "data_class":"table_minutes",
+                "data":output
+            }
+        # 将保留的数据重新存储到redis中
+        self.rs.set("table_minutes", pickle.dumps(data))  
+    def sql_now(self,decode_type,area):
+        '''根据date_type向redis中获取数据'''
+        return data
+    def decode_time(self,data,times,area,boundary):
+        date_type = "table_minutes"
+        times = 60*3
+        SHA_TZ = timezone(
+            dtt.timedelta(hours=8),
+            name='Asia/Shanghai',
+        )
+        utc_now = dtt.datetime.utcnow().replace(tzinfo=dtt.timezone.utc)
+        today = utc_now.astimezone(SHA_TZ)
+        offset = dtt.timedelta(minutes=-times)
+        timeindex = (today + offset).strftime('%Y-%m-%d %H:%M:%S')
+        timeindex = '2019-08-09 19:00:00'
+        data = pickle.loads(self.rs.get(date_type))
+        if boundary!="all":
+            lat0 =  boundary[0]
+            lat1 =  boundary[1]
+            lon0 =  boundary[2]
+            lon1 =  boundary[3]
+        else:
+            lat0 = 25
+            lat1 = 35
+            lon0 = 110
+            lon1 = 125
+        if area=="nation":
+            remain = data[(data['lat']>lat0) & (data['lat']<lat1)  &  (data['lon']<lon1) & (data['lon']>lon0) & (pd.isnull(data['Type']))&(data['ZoomLevel']<6)&(data['tTime']>timeindex)]
+        if area=="regin":
+            remain = data[(data['lat']>lat0) & (data['lat']<lat1)  &  (data['lon']<lon1) & (data['lon']>lon0) & (data['Type']=="区域站")&(data['tTime']>timeindex)]
+        elif area=="all":
+            remain = data[(data['lat']>lat0) & (data['lat']<lat1)  &  (data['lon']<lon1) & (data['lon']>lon0)&(data['tTime']>timeindex)]
+        elif area=="main":
+            remain = data[(data['lat']>lat0) & (data['lat']<lat1)  &  (data['lon']<lon1) & (data['lon']>lon0) & (data['ZoomLevel']<6)&(data['tTime']>timeindex)]
+        return remain
+    def decode_rain(self,data):
+        data = data[data['Ri']>0]
+        rain=data.groupby(by=['IIiii','StationName','Province','City','County','Town','Type','lat','lon'])['Ri'].sum().reset_index()
+        table_list = rain.to_json(orient='records',force_ascii=False)
+        return table_list
+    def decode_tmin(self,data):
+        data = data[data['T']!=-9999]
+        tmin=data.groupby(by=['IIiii','StationName','Province','City','County','Town','Type','lat','lon'])['T'].min().reset_index()
+        table_list = tmin.to_json(orient='records',force_ascii=False)
+        return table_list
+    def decode_tmax(self,data):
+        data = data[data['T']!=-9999]
+        tmax = data.groupby(by=['IIiii','StationName','Province','City','County','Town','Type','lat','lon'])['T'].max().reset_index()
+        table_list = tmax.to_json(orient='records',force_ascii=False)
+        return table_list
+    def decode_view(self,data):
+        data = data[data['V']>=0]
+        view = data.groupby(by=['IIiii','StationName','Province','City','County','Town','Type','lat','lon'])['V'].min().reset_index()
+        table_list = view.to_json(orient='records',force_ascii=False)
+        return table_list
+    def decode_wind(self,data):
+        data = data[data['fFy']!=-9999]
+        grouped_IIiii = remain.groupby('IIiii')
+        table_list = []
+        for i in grouped_IIiii.size().index:
+            single = grouped_IIiii.get_group(i)
+            wind = single_data['fFy'].max()
+            index =  single_data[single_data['fFy'] == single_data['fFy'].max()].index.tolist()[0]
+            deg = single_data['dFy'][index]
+            single_dir = {
+                "IIiii":str(single_data['IIiii'].iloc[0]),
+                "StationName":str(single_data['StationName'].iloc[0]),
+                "Province":str(single_data['Province'].iloc[0]),
+                "City":str(single_data['City'].iloc[0]),
+                "County":str(single_data['County'].iloc[0]),
+                "Town":str(single_data['Town'].iloc[0]),
+                "lat":str(single_data['lat'].iloc[0]),
+                "lon":str(single_data['lon'].iloc[0]),
+                "fFy":str(wind),
+                "dFy":str(deg)          
+            }
+            table_list.append(single_dir)
+        return table_list
+    def decode_data(self,decode_type,times,area,boundary,data_type):
+        '''根据前段参数处理数据
+        返回列表数据
+        decode_type--类型
+        data_type--请求的数据类型'''
+        date_type = "table_minutes"  
+        data = pickle.loads(self.rs.get(date_type))['data']
+        if decode_type=='now':
+            print("解析当前时刻的降水数据")
+            data = self.sql_now()
+        elif decode_type=='station':
+            print("解析单站的降水数据")
+        elif decode_type=='aera':
+            print("解析面上的降水数据")
+            timedata = self.decode_time(data,times,area,boundary)
+            if data_type == "rain":
+                output = self.decode_rain(timedata)
+            elif data_type == "wind":
+                output = self.decode_wind(timedata)
+            elif data_type == "tmax":
+                output = self.decode_tmax(timedata)
+            elif data_type == "tmin":
+                output = self.decode_tmin(timedata)
+            elif data_type == "view":
+                output = self.decode_view(timedata)
+        return output
 
-        
-        
-        
 
+start = '2019-08-08 06:00:00'
+end = '2019-08-08 18:00:00'  
+date_type = 'table_minutes'
+station = '58653'
+worker = station_zdz(start,end)
+dataframe = None
+decode_type = "aera"
+times = 60*3
+area="nation"
+boundary = "all"
+data_type = "rain"
+# worker.decode_dataframe(dataframe,decode_type)
+#data = worker.single_station(station)
+#worker.upload2_redis_Minutes()
+# data = worker.get_redis(date_type)
+# data['data']
 
-
-
-#select_time,select_type,select_county = '2022041700','rain','仙居'
-select_time,select_type,select_county = '2022041700','wind','仙居'
-#select_time,select_type,select_county = '2022101612','rain','仙居'
-ec_worker = ec_data_point(select_time,select_type,select_county) 
-ec_worker.plot_wind(select_county)
-#ec_worker.plot_rain(select_county)
-#ec_worker.decode_data(select_county)
-
-# ec_worker.decode_time(select_time)
+worker.decode_data(decode_type,times,area,boundary,data_type)
