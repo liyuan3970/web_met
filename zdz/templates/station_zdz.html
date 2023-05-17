@@ -936,8 +936,21 @@
                             },
                             dataType: "json",
                             success: function (recvdate) {
-                                // console.log("接收的数据", recvdate)
-                                var value = recvdate.value
+                                
+                                var value = JSON.parse(recvdate.value)
+                                console.log("接收的数据", value) 
+                                var ri = []
+                                var t = []
+                                var wind = []
+                                var view = []
+
+                                value.forEach(function(item,index){
+                                    ri.push(item[2])
+                                    t.push(item[3])
+                                    view.push(item[4])
+                                    wind.push([item[5],item[6]])                                
+                                })
+                                
                                 // 开始绘图
                                 if (plot_type == "rain") {
                                     chart = Highcharts.chart('station_line', {
@@ -953,6 +966,28 @@
                                         },
                                         xAxis: {
                                             type: 'datetime',
+                                            plotBands: [{
+                                                from: Date.UTC(2019, 7, 7,22,0),               // 标示带开始值
+                                                to: Date.UTC(2019, 7, 8,20,10),                 // 标示带结束值
+                                                label: {              // 标示带文字标签配置，详见API
+                                                },
+                                                color: 'red',            // 标示带背景颜色
+                                                borderWidth:2,        // 标示带边框宽度
+                                                borderColor: "red",        // 标示带边框颜色
+                                                // id: ,                 // 标示带 id，用于删除等操作
+                                                // zIndex:,              // 标示带层叠，用于调整显示层次
+                                                events: {             // 事件，支持 click、mouseover、mouseout、mousemove等事件
+                                                    click: function (e) {
+                                                    },
+                                                    mouseover: function (e) {
+                                                    },
+                                                    mouseout: function (e) {
+                                                    },
+                                                    mousemove: function (e) {
+                                                    }
+                                                }
+
+                                            }],
                                             dateTimeLabelFormats: {
                                                 millisecond: '%H:%M:%S.%L',
                                                 second: '%H:%M:%S',
@@ -1024,7 +1059,7 @@
                                             {
                                                 // type: 'area',
                                                 name: '降水过程',
-                                                data: value
+                                                data: ri
                                             }
                                         ]
                                     });
