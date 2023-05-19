@@ -31,6 +31,7 @@
     <script src="static/js/exporting.js"></script>
     <script src="static/js/export-data.js"></script>
     <script src="static/js/accessibility.js"></script>
+    <!-- <script src="https://code.hcharts.cn/highcharts/themes/dark-unica.js"></script> -->
 
     <!-- 引入 layui.css -->
     <link href="static/layui/css/layui.css" rel="stylesheet">
@@ -886,44 +887,372 @@
 
                         })
                     },
+                    decode_line:function(plot_type,his,now){
+                        // recv_single_data  解析
+                        var data_time = []
+                        var data_his = [] // 历史数据
+                        var data_now = [] // 当前数据
+                        now.forEach(function (item, index) {
+                            if (plot_type == "rain") {
+                                data_time.push(item[0])
+                                data_now.push(item[2])
+                                data_his.push(null)
+                            }
+                            else if (plot_type == "wind"){
+                                values = [item[5],item[6]]
+                                data_time.push(item[0])
+                                data_now.push(values)
+                                data_his.push([null,null])
+                            }
+                            else if (plot_type == "temp"){
+                                data_time.push(item[0])
+                                data_now.push(item[3])
+                                data_his.push(null)
+                            }
+                            else if (plot_type == "view"){
+                                data_time.push(item[0])
+                                data_now.push(item[4])
+                                data_his.push(null)
+                            }
+                        })
+                        // 历史数据
+                        his.forEach(function (item, index) {
+                            if (plot_type == "rain") {
+                                data_time.push(item[0])
+                                data_now.push(null)
+                                data_his.push(item[2])
+                            }
+                            else if (plot_type == "wind"){
+                                values = [item[5],item[6]]
+                                data_time.push(item[0])
+                                data_now.push([null,null])
+                                data_his.push(values)
+                            }
+                            else if (plot_type == "temp"){
+                                data_time.push(item[0])
+                                data_now.push(null)
+                                data_his.push(item[3])
+                            }
+                            else if (plot_type == "view"){
+                                data_time.push(item[0])
+                                data_now.push(null)
+                                data_his.push(item[4])
+                            }
+                        })
+                        return [data_time,data_now,data_his]
+
+
+                    },
+                    plot_line_opt:function(plot_type,plot_data){
+                        var timeindex = plot_data[0]
+                        var now = plot_data[1]
+                        var his = plot_data[2]
+                        var opt = undefined
+                        if (plot_type=="rain"){
+                            opt = {
+                                chart: {
+                                    type: 'column'
+                                },
+                                title: {
+                                    text: '降水'
+                                },
+                                // subtitle: {
+                                //     text: '数据来源: WorldClimate.com'
+                                // },
+                                // plotOptions: {
+                                //     series: {
+                                //         pointStart: Date.UTC(2013,11,14,0,0,0,0),
+                                //         pointInterval: 6e5    
+                                //     }
+                                // },
+                                xAxis: {
+                                    categories: timeindex,
+                                    labels: {
+                                        step: 48,
+
+                                    },
+                                    lineColor: "black",
+                                    lineWidth: 2,
+                                    // crosshair: true,
+                                    // gridLineWidth: 1,
+                                    // gridLineColor: 'black',
+                                    // gridLineDashStyle: 'Dash',
+                                    // tickColor:"black"
+                                    // tickWidth:5,
+                                    // gridLineWidth:0.1,
+                                },
+                                yAxis: {
+                                    min: 0,
+                                    title: {
+                                        text: '降雨量 (mm)'
+                                    },
+                                    lineColor: "black",
+                                    lineWidth: 2,
+                                    gridLineColor: 'black',
+                                    gridLineDashStyle: 'Dash'
+                                    // gridLineWidth:1
+                                    // gridLineDashStyle:'Dash'
+                                },
+                                tooltip: {
+                                    useHTML: true,
+                                    headerFormat: '<small>{point.key}</small><table>',
+                                    pointFormat: '<tr><td style="color: {series.color}">{series.name}: </td>' +
+                                        '<td style="text-align: right"><b>{point.y} </b></td></tr>',
+                                    footerFormat: '</table>',
+                                    valueDecimals: 2
+
+                                },
+                                series: [{
+                                    name: '昨天',
+                                    data: his
+                                }, {
+                                    name: '今天',
+                                    data: now
+                                }]
+                            }
+                        }
+                        else if (plot_type=="wind"){
+                            opt = {
+                                title: {
+                                    text: '风场'
+                                },
+                                xAxis: {
+                                    categories: timeindex,
+                                    labels: {
+                                        step: 12,
+
+                                    },
+                                    lineColor: "blue",
+                                    lineWidth: 2,
+                                },
+                                // plotOptions: {
+                                //     series: {
+                                //         pointStart: Date.UTC(2017, 0, 29),
+                                //         pointInterval: 36e5
+                                //     }
+                                // },
+                                series: [{
+                                    type: 'windbarb',
+                                    data: now,
+                                    // name: 'Wind',
+                                    color: Highcharts.getOptions().colors[1],
+                                    showInLegend: false,
+                                    tooltip: {
+                                        valueSuffix: ' m/s'
+                                    }
+                                }, {
+                                    type: 'area',
+                                    keys: ['y', 'rotation'], // rotation is not used here
+                                    data: now,
+                                    color: Highcharts.getOptions().colors[0],
+                                    fillColor: {
+                                        linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+                                        stops: [
+                                            [0, Highcharts.getOptions().colors[0]],
+                                            [
+                                                1,
+                                                Highcharts.color(Highcharts.getOptions().colors[0])
+                                                    .setOpacity(0.25).get()
+                                            ]
+                                        ]
+                                    },
+                                    name: 'Wind speed',
+                                    tooltip: {
+                                        valueSuffix: ' m/s'
+                                    }
+                                },
+                                // 气温
+                                {
+                                    type: 'windbarb',
+                                    data: his,
+                                    // name: 'Wind',
+                                    color: "red",
+                                    showInLegend: false,
+                                    tooltip: {
+                                        valueSuffix: ' m/s'
+                                    }
+                                },
+                                {
+                                    type: 'area',
+                                    keys: ['y', 'rotation'], // rotation is not used here
+                                    data: his,
+                                    color: "red",
+                                    fillColor: {
+                                        linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+                                        stops: [
+                                            [0, Highcharts.getOptions().colors[0]],
+                                            [
+                                                1,
+                                                Highcharts.color("red")
+                                                    .setOpacity(0.25).get()
+                                            ]
+                                        ]
+                                    },
+                                    name: 'Wind speed',
+                                    tooltip: {
+                                        valueSuffix: ' m/s'
+                                    }
+                                },
+                                ]
+                            }
+
+                        }
+                        else if (plot_type=="temp"){
+                            opt = {
+                                chart: {
+                                    type: 'spline'
+                                },
+                                title: {
+                                    text: '气温'
+                                },
+                                // subtitle: {
+                                //     text: '数据来源: WorldClimate.com'
+                                // },
+                                // plotOptions: {
+                                //     series: {
+                                //         pointStart: Date.UTC(2013, 11, 14, 0, 0, 0, 0),
+                                //         pointInterval: 6e5
+                                //     }
+                                // },
+                                xAxis: {
+                                    categories: timeindex,
+                                    labels: {
+                                        step: 12,
+
+                                    },
+                                    lineColor: "blue",
+                                    lineWidth: 2
+                                },
+                                yAxis: {
+                                    min: 0,
+                                    title: {
+                                        text: '气温 (mm)'
+                                    },
+                                    gridLineColor: 'black',
+                                    gridLineDashStyle: 'Dash'
+                                    // gridLineWidth:1
+                                    // gridLineDashStyle:'Dash'
+                                },
+                                tooltip: {
+                                    backgroundColor: '#FCFFC5',   // 背景颜色
+                                    borderColor: 'black',         // 边框颜色
+                                    borderRadius: 10,             // 边框圆角
+                                    borderWidth: 3,               // 边框宽度
+                                    shadow: true,                 // 是否显示阴影
+                                    animation: true,              // 是否启用动画效果
+                                    style: {                      // 文字内容相关样式
+                                        color: "#ff0000",
+                                        fontSize: "12px",
+                                        fontWeight: "blod",
+                                        fontFamily: "Courir new"
+                                    },
+                                    pointFormatter: function () {
+
+                                        return '<span style="color: ' + this.series.color + '">\u25CF</span> ' +
+                                            this.series.name + ': <b>' + this.y + '</b><br/>.'
+                                    },
+                                    dateTimeLabelFormats: {
+                                        millisecond: "%A, %b %e, %H:%M:%S.%L",
+                                        second: "%A, %b %e, %H:%M:%S",
+                                        minute: "%A, %b %e, %H:%M",
+                                        hour: "%A, %b %e, %H:%M",
+                                        // day: "%A, %b %e, %Y",
+                                        // week: "Week from %A, %b %e, %Y",
+                                        // month: "%B %Y",
+                                        // year: "%Y"
+                                    }
+                                },
+                                series: [{
+                                    name: '昨天',
+                                    data: his
+                                }, {
+                                    name: '今天',
+                                    data: now
+                                }]
+                            }
+
+                        }
+                        else if (plot_type=="view"){
+                            opt = {
+                                chart: {
+                                    type: 'spline'
+                                },
+                                title: {
+                                    text: '气温'
+                                },
+                                // subtitle: {
+                                //     text: '数据来源: WorldClimate.com'
+                                // },
+                                // plotOptions: {
+                                //     series: {
+                                //         pointStart: Date.UTC(2013, 11, 14, 0, 0, 0, 0),
+                                //         pointInterval: 6e5
+                                //     }
+                                // },
+                                xAxis: {
+                                    categories: timeindex,
+                                    labels: {
+                                        step: 12,
+
+                                    },
+                                    lineColor: "blue",
+                                    lineWidth: 2
+                                },
+                                yAxis: {
+                                    min: 0,
+                                    title: {
+                                        text: '气温 (mm)'
+                                    },
+                                    gridLineColor: 'black',
+                                    gridLineDashStyle: 'Dash'
+                                    // gridLineWidth:1
+                                    // gridLineDashStyle:'Dash'
+                                },
+                                tooltip: {
+                                    backgroundColor: '#FCFFC5',   // 背景颜色
+                                    borderColor: 'black',         // 边框颜色
+                                    borderRadius: 10,             // 边框圆角
+                                    borderWidth: 3,               // 边框宽度
+                                    shadow: true,                 // 是否显示阴影
+                                    animation: true,              // 是否启用动画效果
+                                    style: {                      // 文字内容相关样式
+                                        color: "#ff0000",
+                                        fontSize: "12px",
+                                        fontWeight: "blod",
+                                        fontFamily: "Courir new"
+                                    },
+                                    pointFormatter: function () {
+
+                                        return '<span style="color: ' + this.series.color + '">\u25CF</span> ' +
+                                            this.series.name + ': <b>' + this.y + '</b><br/>.'
+                                    },
+                                    dateTimeLabelFormats: {
+                                        millisecond: "%A, %b %e, %H:%M:%S.%L",
+                                        second: "%A, %b %e, %H:%M:%S",
+                                        minute: "%A, %b %e, %H:%M",
+                                        hour: "%A, %b %e, %H:%M",
+                                        // day: "%A, %b %e, %Y",
+                                        // week: "Week from %A, %b %e, %Y",
+                                        // month: "%B %Y",
+                                        // year: "%Y"
+                                    }
+                                },
+                                series: [{
+                                    name: '昨天',
+                                    data: his
+                                }, {
+                                    name: '今天',
+                                    data: now
+                                }]
+                            }
+
+
+                        }
+                        return opt
+                    },
                     plot_line: function (plot_type, plot_name) {
                         //绘制站点  
                         var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                        var today = new Date()
-                        
-                        var y = today.getFullYear();
-                        var m = today.getMonth() + 1 < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1;
-                        var d = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
-                        var h = today.getHours() < 10 ? "0" + today.getHours() + ":" : today.getHours() + ":";
-                        var minutes = today.getMinutes() < 10 ? "0" + today.getMinutes() + ":" : today.getMinutes() + ":";
-                        var today_str = y + "-" + m + "-" + d + " " + h + minutes + "00";
-
-                        // 昨天的字符串
-                        today.setDate(today.getDate() -1)
-                        var ys = today.getFullYear();
-                        var ms = today.getMonth() + 1 < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1;
-                        var ds = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
-                        var hs = today.getHours() < 10 ? "0" + today.getHours() + ":" : today.getHours() + ":";
-                        var minutess = today.getMinutes() < 10 ? "0" + today.getMinutes() + ":" : today.getMinutes() + ":";
-                        var yestorday_str = ys + "-" + ms + "-" + ds + " " + hs + minutess + "00";
-
-                        var hours = today.getHours()
-                        if (hours>=20 && hours<24){
-                            // var start_d = 
-                            var start_str = y + "-" + m + "-" + d + " " + "20:00:00";
-                            var end_str = today_str;
-                            var begin_str = yestorday_str;
-                            var last_str = y + "-" + m + "-" + d + " " + "20:00:00";;
-                            console.log(start_str,end_str,begin_str,last_str)  
-                        }
-                        else{
-                            var start_str = ys + "-" + ms + "-" + ds + " " + "20:00:00";
-                            var end_str = today_str;
-                            var begin_str = yestorday_str;
-                            var last_str = ys + "-" + ms + "-" + ds + " " + "20:00:00";;
-                            console.log(start_str,end_str,begin_str,last_str) 
-                        }
-                        var date_list = [start_str,end_str,begin_str,last_str]
                         $.ajax({
                             url: "station_zdz_data",  // 请求的地址
                             type: "post",  // 请求方式
@@ -935,136 +1264,150 @@
                                 'button_value': plot_name
                             },
                             dataType: "json",
-                            success: function (recvdate) {
-                                
-                                var value = JSON.parse(recvdate.value)
-                                console.log("接收的数据", value) 
-                                var ri = []
-                                var t = []
-                                var wind = []
-                                var view = []
+                            success: function (recvdate) {                        
+                                var his = JSON.parse(recvdate.value.his)
+                                var now = JSON.parse(recvdate.value.now)                         
+                                var plot_data = map_toolbox_object.decode_line(plot_type,his,now)
+                                console.log("接收的数据", plot_data) 
+                                var option = map_toolbox_object.plot_line_opt(plot_type,plot_data)
+                                chart = Highcharts.chart('station_line',option)
 
-                                value.forEach(function(item,index){
-                                    ri.push(item[2])
-                                    t.push(item[3])
-                                    view.push(item[4])
-                                    wind.push([item[5],item[6]])                                
-                                })
+                                // Highcharts.theme = {
+                                //     colors: ['red', '#95C471', '#35729E', '#251735', "green"],
+                                //     colorAxis: {
+                                //         maxColor: '#05426E',
+                                //         minColor: '#F3E796'
+                                //     },
+                                //     plotOptions: {
+                                //         map: {
+                                //             nullColor: '#FCFEFE'
+                                //         }
+                                //     },
+                                //     navigator: {
+                                //         maskFill: 'rgba(170, 205, 170, 0.5)',
+                                //         series: {
+                                //             color: '#95C471',
+                                //             lineColor: '#35729E'
+                                //         }
+                                //     }
+                                // };
+                                // // Apply the theme
+                                // Highcharts.setOptions(Highcharts.theme);
                                 
                                 // 开始绘图
-                                if (plot_type == "rain") {
-                                    chart = Highcharts.chart('station_line', {
-                                        chart: {
-                                            type: 'column',
-                                            zoomType: 'x'
-                                        },
-                                        title: {
-                                            text: plot_name.toString()
-                                        },
-                                        credits: {
-                                            enabled: false//不显示LOGO
-                                        },
-                                        xAxis: {
-                                            type: 'datetime',
-                                            plotBands: [{
-                                                from: Date.UTC(2019, 7, 7,22,0),               // 标示带开始值
-                                                to: Date.UTC(2019, 7, 8,20,10),                 // 标示带结束值
-                                                label: {              // 标示带文字标签配置，详见API
-                                                },
-                                                color: 'red',            // 标示带背景颜色
-                                                borderWidth:2,        // 标示带边框宽度
-                                                borderColor: "red",        // 标示带边框颜色
-                                                // id: ,                 // 标示带 id，用于删除等操作
-                                                // zIndex:,              // 标示带层叠，用于调整显示层次
-                                                events: {             // 事件，支持 click、mouseover、mouseout、mousemove等事件
-                                                    click: function (e) {
-                                                    },
-                                                    mouseover: function (e) {
-                                                    },
-                                                    mouseout: function (e) {
-                                                    },
-                                                    mousemove: function (e) {
-                                                    }
-                                                }
+                                // if (plot_type == "rain") {
+                                //     chart = Highcharts.chart('station_line', {
+                                //         chart: {
+                                //             type: 'column',
+                                //             zoomType: 'x'
+                                //         },
+                                //         title: {
+                                //             text: plot_name.toString()
+                                //         },
+                                //         credits: {
+                                //             enabled: false//不显示LOGO
+                                //         },
+                                //         xAxis: {
+                                //             type: 'datetime',
+                                //             plotBands: [{
+                                //                 from: Date.UTC(2019, 7, 7,22,0),               // 标示带开始值
+                                //                 to: Date.UTC(2019, 7, 8,20,10),                 // 标示带结束值
+                                //                 label: {              // 标示带文字标签配置，详见API
+                                //                 },
+                                //                 color: 'red',            // 标示带背景颜色
+                                //                 borderWidth:2,        // 标示带边框宽度
+                                //                 borderColor: "red",        // 标示带边框颜色
+                                //                 // id: ,                 // 标示带 id，用于删除等操作
+                                //                 // zIndex:,              // 标示带层叠，用于调整显示层次
+                                //                 events: {             // 事件，支持 click、mouseover、mouseout、mousemove等事件
+                                //                     click: function (e) {
+                                //                     },
+                                //                     mouseover: function (e) {
+                                //                     },
+                                //                     mouseout: function (e) {
+                                //                     },
+                                //                     mousemove: function (e) {
+                                //                     }
+                                //                 }
 
-                                            }],
-                                            dateTimeLabelFormats: {
-                                                millisecond: '%H:%M:%S.%L',
-                                                second: '%H:%M:%S',
-                                                minute: '%H:%M',
-                                                hour: '%H:%M',
-                                                day: '%m-%d',
-                                                week: '%m-%d'
-                                                // month: '%Y-%m'
-                                                // year: '%Y'
-                                            }
-                                        },
-                                        tooltip: {
-                                            dateTimeLabelFormats: {
-                                                millisecond: '%H:%M:%S.%L',
-                                                second: '%H:%M:%S',
-                                                minute: '%H:%M',
-                                                hour: '%H:%M'
-                                                // day: '%Y-%m-%d',
-                                                // week: '%m-%d',
-                                                // month: '%Y-%m',
-                                                // year: '%Y'
-                                            }
-                                        },
-                                        yAxis: {
-                                            min: 0,
-                                            title: {
-                                                text: '雨强'
-                                            }
-                                        },
-                                        legend: {
-                                            enabled: false
-                                        },
-                                        plotOptions: {
-                                            column: {
-                                                borderWidth: 0
-                                            },
-                                            series: {
-                                                // pointStart: Date.UTC(date_year, date_month, date_day, date_hour),
-                                                pointStart: Date.UTC(2019, 7, 7,20,0),
-                                                pointInterval: 3e5
-                                            },
-                                            area: {
-                                                fillColor: {
-                                                    linearGradient: {
-                                                        x1: 0,
-                                                        y1: 0,
-                                                        x2: 0,
-                                                        y2: 1
-                                                    },
-                                                    stops: [
-                                                        [0, new Highcharts.getOptions().colors[0]],
-                                                        [1, new Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                                                    ]
-                                                },
-                                                // marker: {
-                                                //     radius: 2
-                                                // },
-                                                // lineWidth: 1,
-                                                // states: {
-                                                //     hover: {
-                                                //         lineWidth: 1
-                                                //     }
-                                                // },
-                                                barWidth: 1,
-                                                threshold: null
-                                            }
-                                        },
-                                        series: [
-                                            {
-                                                // type: 'area',
-                                                name: '降水过程',
-                                                data: ri
-                                            }
-                                        ]
-                                    });
+                                //             }],
+                                //             dateTimeLabelFormats: {
+                                //                 millisecond: '%H:%M:%S.%L',
+                                //                 second: '%H:%M:%S',
+                                //                 minute: '%H:%M',
+                                //                 hour: '%H:%M',
+                                //                 day: '%m-%d',
+                                //                 week: '%m-%d'
+                                //                 // month: '%Y-%m'
+                                //                 // year: '%Y'
+                                //             }
+                                //         },
+                                //         tooltip: {
+                                //             dateTimeLabelFormats: {
+                                //                 millisecond: '%H:%M:%S.%L',
+                                //                 second: '%H:%M:%S',
+                                //                 minute: '%H:%M',
+                                //                 hour: '%H:%M'
+                                //                 // day: '%Y-%m-%d',
+                                //                 // week: '%m-%d',
+                                //                 // month: '%Y-%m',
+                                //                 // year: '%Y'
+                                //             }
+                                //         },
+                                //         yAxis: {
+                                //             min: 0,
+                                //             title: {
+                                //                 text: '雨强'
+                                //             }
+                                //         },
+                                //         legend: {
+                                //             enabled: false
+                                //         },
+                                //         plotOptions: {
+                                //             column: {
+                                //                 borderWidth: 0
+                                //             },
+                                //             series: {
+                                //                 // pointStart: Date.UTC(date_year, date_month, date_day, date_hour),
+                                //                 pointStart: Date.UTC(2019, 7, 7,20,0),
+                                //                 pointInterval: 3e5
+                                //             },
+                                //             area: {
+                                //                 fillColor: {
+                                //                     linearGradient: {
+                                //                         x1: 0,
+                                //                         y1: 0,
+                                //                         x2: 0,
+                                //                         y2: 1
+                                //                     },
+                                //                     stops: [
+                                //                         [0, new Highcharts.getOptions().colors[0]],
+                                //                         [1, new Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                                //                     ]
+                                //                 },
+                                //                 // marker: {
+                                //                 //     radius: 2
+                                //                 // },
+                                //                 // lineWidth: 1,
+                                //                 // states: {
+                                //                 //     hover: {
+                                //                 //         lineWidth: 1
+                                //                 //     }
+                                //                 // },
+                                //                 barWidth: 1,
+                                //                 threshold: null
+                                //             }
+                                //         },
+                                //         series: [
+                                //             {
+                                //                 // type: 'area',
+                                //                 name: '降水过程',
+                                //                 data: ri
+                                //             }
+                                //         ]
+                                //     });
 
-                                }
+                                // }
 
                             }
                         })
@@ -1086,15 +1429,25 @@
             </script>
             <!-- 隐藏栏目的设置 -->
             <div id="hidden_layer" class="layui-bg-gray" style="display:none;">
-                <div class="layui-row layui-col-space15">
+            <!-- <div id="hidden_layer" class="layui-bg-gray" style="padding: 10px;width: 900px ;height: 572px;position:absolute;top:20%;left:28%;z-index:1000;background-color: rgb(57,61,73);" > -->
+                <div class="layui-row layui-col-space15" style="background-color: rgb(57,61,73);">
 
                     <div class="layui-col-md12">
                         <div class="layui-panel">
-                            <div id="station_line" style="height:520px;background-color: white;">
+                            <div id="station_line" style="height:520px;">
 
                             </div>
                         </div>
                     </div>
+                    <button id="rain_line" type="button" class="layui-btn layui-btn-sm"
+                        style="float: left;">降水</button>
+                    <button id="wind_line" type="button" class="layui-btn layui-btn-sm"
+                        style="float: left;">阵风</button>
+                    <button id="temp_line" type="button" class="layui-btn layui-btn-sm"
+                        style="float: left;">温度</button>
+                    <button id="view_line" type="button" class="layui-btn layui-btn-sm"
+                        style="float: left;">能见度</button>
+                    <!-- 选项 -->
                     <button id="save" type="button" class="layui-btn layui-btn-sm"
                         style="float: right;background-color: rgb(28,30,36);">暂存</button>
                     &nbsp;&nbsp;&nbsp;

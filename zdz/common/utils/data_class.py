@@ -1120,8 +1120,14 @@ class station_zdz:
 #         value_now =  now_data['T'].to_list()  + nul_his
 #         value_his = nul_now + his_data['T'].to_list() 
         output = pd.concat([now_data,his_data])  
+        history = his_data.to_json(orient='values',force_ascii=False)
+        nowdata = now_data.to_json(orient='values',force_ascii=False)
+        output = {
+            "now":nowdata,
+            "his":history
+        }
         # 解析数据成两个序列
-        return output.to_json(orient='values',force_ascii=False)
+        return output
     def upload2_redis_Minutes(self):
         '''根据date_type向redis中传输数据'''
         table = 'Tab_AM_M'
