@@ -822,46 +822,46 @@ def home(request):
 
 # 气象数据分析系统
 import pymysql
+import ast
 def station_zdz_data(request):
     model = request.POST.get('model', '')
     click_type = request.POST.get('click_type', '')
     button_value = request.POST.get('button_value', '')
     # 编写数据查询的后端逻辑
     if model =="zdz":
-        conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="tzweb")
-        sql_location = """select lat ,lon ,p_total,station_no,station_name from station_data where datetime = '2019-05-01 00:00:00' """
-        df_location = pd.read_sql(sql_location , con=conn) 
-        datalist = []
-        for i in range(len(df_location)):
-            single = {
-                "name":str(df_location.iloc[i,4]),
-                "IIiii":str(df_location.iloc[i,3]),
-                "value":str(df_location.iloc[i,2]),
-                "lat":str(df_location.iloc[i,0]),
-                "lon":str(df_location.iloc[i,1])
-            }
-            datalist.append(single)
+        # conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="tzweb")
+        # sql_location = """select lat ,lon ,p_total,station_no,station_name from station_data where datetime = '2019-05-01 00:00:00' """
+        # df_location = pd.read_sql(sql_location , con=conn) 
+        # datalist = []
+        # for i in range(len(df_location)):
+        #     single = {
+        #         "name":str(df_location.iloc[i,4]),
+        #         "IIiii":str(df_location.iloc[i,3]),
+        #         "value":str(df_location.iloc[i,2]),
+        #         "lat":str(df_location.iloc[i,0]),
+        #         "lon":str(df_location.iloc[i,1])
+        #     }
+        #     datalist.append(single)
+        # context = {
+        #     'status': "ok",
+        #     'data':datalist,
+        #     'click_type':click_type
+        # }
+        table_type = request.POST.get('table_type', '')
+        value_index = int(request.POST.get('table_index', ''))
+        boundary = json.loads(request.POST.get('boundary', ''))
+        worker = data_class.station_zdz()
+        tables_name = button_value
+        data = worker.get_regin(boundary,table_type,tables_name,value_index)
         context = {
             'status': "ok",
-            'data':datalist,
-            'click_type':click_type
+            'click_type':click_type,
+            'data':data 
+
+
         }
         return JsonResponse(context)
     elif model =="single":
-        # conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="ZJSZDZDB")
-        # start2 = '2019-08-07 21:11:00'
-        # end2 = '2019-08-08 20:00:00'
-        # start1 = '2019-08-08 20:00:00'
-        # end1 = '2019-08-08 21:11:00'
-        # sql1 = '''select tTime,Ri from Tab_AM_M where (tTime between '{start}' and '{end}' and IIiii = '58653') order by tTime'''            
-        # rsql1 = sql1.format(start=start1,end=end1) 
-        # rsql2 = sql1.format(start=start2,end=end2) 
-        # df1 = pd.read_sql(rsql1 , con=conn)              
-        # df2 = pd.read_sql(rsql2 , con=conn) 
-        # df1 = df1[1:]
-        # df2 = df2[:-1]
-        # df_location = pd.concat([df1, df2])
-        # value = df_location['Ri'].to_list()
         station = '58653'
         worker = data_class.station_zdz()
         value = worker.single_station(station)

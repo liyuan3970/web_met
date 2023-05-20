@@ -37,6 +37,7 @@ from pylab import *
 from matplotlib.font_manager import FontProperties
 import pymysql
 from pymysql.converters import escape_string
+import pickle
 # 查询历史数据的calss
 
 # 自定义画图类
@@ -1090,8 +1091,8 @@ class station_zdz:
         offset = dtt.timedelta(days=-1)
         start = (today + offset).strftime('%Y-%m-%d %H:%M:%S')
         # 造假数据
-        start = '2019-08-07 20:53:00'
-        end = '2019-08-08 20:53:00' 
+        start = '2019-08-08 16:53:00'
+        end = '2019-08-09 16:53:00' 
         yesday = start[0:10] + " 20:00:00"
         today = end[0:10] + " 20:00:00"
         hours = dtt.datetime.strptime(end,'%Y-%m-%d %H:%M:%S').hour
@@ -1221,14 +1222,15 @@ class station_zdz:
         lon1 = boundary[3]
         boundary_data =  data[(data['lat']>lat0) & (data['lat']<lat1)  &  (data['lon']<lon1) & (data['lon']>lon0)]
         if table_type=="nation":
-            remain = data[(pd.isnull(data['Type']))&(data['ZoomLevel']<6)]
+            remain = boundary_data[(pd.isnull(boundary_data['Type']))&(boundary_data['ZoomLevel']<6)]
         if table_type=="regin":
-            remain = data[(data['Type']=="区域站")]
+            remain = boundary_data[(boundary_data['Type']=="区域站")]
         elif table_type=="all":
-            remain = data
+            remain = boundary_data
         elif table_type=="main":
-            remain = data[(data['ZoomLevel']<6)]
-        return remain
+            remain = boundary_data[(boundary_data['ZoomLevel']<6)]
+        output = remain.to_json(orient='records',force_ascii=False)
+        return output
     def return_data(self,remain,value):
         '''返回数据的类型
         boundary 边界
@@ -1251,21 +1253,17 @@ class station_zdz:
                 value = single[ single['fFy']== single['fFy'].max()].head(1)
                 all_list.append(value)
             df = pd.concat(all_list) 
-            df['value'] = df['fFy']
-            output = df.to_json(orient='records',force_ascii=False)         
+            df['value'] = df['fFy']          
         elif value=="Tx":
             re = remain[remain['T']!=-9999]
             df = re.groupby(['IIiii','StationName','Province','City','County','Town','Type','lat','lon','ZoomLevel'])['T'].max().reset_index() 
             df['value'] = df['T']
-            output = df.to_json(orient='records',force_ascii=False)
         elif value=="Tn":
             re = remain[remain['T']!=-9999]
             df = re.groupby(['IIiii','StationName','Province','City','County','Town','Type','lat','lon','ZoomLevel'])['T'].min().reset_index()
             df['value'] = df['T']
-            output = df.to_json(orient='records',force_ascii=False)
         elif value=="V":
             re = remain[remain['V']!=-9999]
             df = re.groupby(['IIiii','StationName','Province','City','County','Town','Type','lat','lon','ZoomLevel'])['V'].min().reset_index() 
-            df['value'] = df['V']
-            output = df.to_json(orient='records',force_ascii=False)
+            df['value'] = df['V']         
         return df

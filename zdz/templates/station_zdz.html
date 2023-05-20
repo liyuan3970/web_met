@@ -16,6 +16,9 @@
     <script src="static/js/leaflet.js"></script>
     <script type="text/javascript" src="static/js/leaflet-windbarb.js"></script>
     <script src="static/js/leaflet.canvaslabel.js"></script>
+    <!-- 散点 -->
+    <link rel="stylesheet" href="static/css/leaflet-beautify-marker-icon.css">
+    <script src="static/js/leaflet-beautify-marker-icon.js"></script>
     <!-- 使用turf -->
     <script src="static/js/turf.min.js"></script>
     <!-- echart -->
@@ -32,6 +35,9 @@
     <script src="static/js/export-data.js"></script>
     <script src="static/js/accessibility.js"></script>
     <!-- <script src="https://code.hcharts.cn/highcharts/themes/dark-unica.js"></script> -->
+    <!-- 弹窗 -->
+    <link rel="stylesheet" type="text/css" href="static/css/translucent.css">
+    <script src="static/js/jquery-translucent.js"></script>
 
     <!-- 引入 layui.css -->
     <link href="static/layui/css/layui.css" rel="stylesheet">
@@ -85,7 +91,7 @@
                     <a href="javascript:;">降水</a>
                     <dl class="layui-nav-child">
                         <dd style="padding-left: 15px;margin-bottom: 10px;margin-top: 10px;">
-                            <button type="button" value=24 class="layui-btn layui-btn-xs rain">R24</button>
+                            <button type="button" value="24hours" class="layui-btn layui-btn-xs rain">R24</button>
                             <button type="button" class="layui-btn layui-btn-xs">R12</button>
                             <button type="button" class="layui-btn layui-btn-xs">R06</button>
                             <button type="button" class="layui-btn layui-btn-xs">R03</button>
@@ -105,7 +111,7 @@
                     <a href="javascript:;">风力</a>
                     <dl class="layui-nav-child">
                         <dd style="padding-left: 15px;margin-bottom: 10px;margin-top: 10px;">
-                            <button type="button" class="layui-btn layui-btn-xs">F24</button>
+                            <button type="button" value="24hours" class="layui-btn layui-btn-xs wind">F24</button>
                             <button type="button" class="layui-btn layui-btn-xs">F12</button>
                             <button type="button" class="layui-btn layui-btn-xs">F06</button>
                             <button type="button" class="layui-btn layui-btn-xs">F03</button>
@@ -224,15 +230,15 @@
                                 <div class="layui-form-item" style="margin-top:15px;">
                                     <label class="layui-form-label">数据选项</label>
                                     <div class="layui-input-block" style="padding-left:5%;">
-                                        <input type="radio" name="aera" value="市县" title="当前" checked="">
-                                        <input type="radio" name="aera" value="乡镇" title="全省"> 
-                                          
+                                        <input type="radio" name="boundary_type" value="current" title="当前" checked="">
+                                        <input type="radio" name="boundary_type" value="all" title="全省"> 
+                             
                                     </div>
                                 </div>
                                 <div class="layui-form-item" >
                                     <label class="layui-form-label">数据类型</label>
                                     <div class="layui-input-block" style="background-color:rgb(28,30,36);width:145px;">
-                                        <select   >
+                                        <select  id="table_type" >
                                             <option value=""></option> 
                                             <option value="nation">国家站</option>                               
                                             <option value="regin">区域站</option>
@@ -597,33 +603,6 @@
                             boundaries: bounddata
                         }
                     },
-                    get_data: function (model, type, button_value) {
-                        //向服务器要数据model,type,button 对应导航栏目、垂直导航类型、具体按钮
-                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                        $.ajax({
-                            url: "station_zdz_data",  // 请求的地址
-                            type: "post",  // 请求方式
-                            timeout: 25000, //设置延迟上限
-                            data: {
-                                'csrfmiddlewaretoken': csrf,
-                                'model': model,
-                                'click_type': type,
-                                'button_value': button_value
-                            },
-                            dataType: "json",
-                            success: function (recvdate) {
-                                // console.log("接收的数据", recvdate)
-                                var click_type = recvdate.click_type
-                                map_toolbox_object.recv_all_data = recvdate.data
-                                var pointdata = recvdate.data
-                                // 绘制等值线
-                                map_toolbox_object.plot_layer(pointdata, click_type)
-                                // 绘制marker
-                                map_toolbox_object.plot_mark()
-                            }
-                        })
-
-                    },
                     current_time: function (button_value) {
                         //返回时间 
                         var today = new Date()
@@ -821,7 +800,7 @@
                             }
                             points.push(single_point)
                             // 添加散点------------
-                            if (click_type == "rain" && item.value > 0) {
+                            if (click_type == "rain" && item.value/10.0 > 0) {
                                 if (item.value>0 && item.value<=1){
                                     var colors = "black"
                                 }
@@ -844,6 +823,7 @@
                                     var colors = "rgb(140,0,65)"
                                 }
                                 var latlng = L.latLng(item.lat, item.lon);
+                                // 添加散点插件
                                 var c = L.circleMarker(latlng, {
                                     stationnum: item.IIiii,
                                     weight: 1,
@@ -854,14 +834,44 @@
                                     fillColor:colors,
                                     fillOpacity:1,
                                     labelStyle: {
-                                        text: item.name + ":" + item.value,
+                                        text: item.StationName + ":" + item.value/10.0,
                                         weight: 5,
                                         rotation: 0,
                                         color: "red",
                                         zIndex: 60
                                     }
                                 })
+                                // map_toolbox_object.current_marker_list.push(marker)
                                 map_toolbox_object.current_marker_list.push(c)
+
+                            }
+                            else if (click_type == "wind" && item.value!=-9999 ){
+                                var latlng = L.latLng(item.lat, item.lon);
+                                if (item.value>106){
+                                    var colors = "red"
+                                }
+                                else{
+                                    var colors = "black" 
+                                }
+                                var latlng = L.latLng(item.lat, item.lon);
+                                var icon = L.WindBarb.icon({
+                                    color:"red",
+                                    deg: 360 - item.dFy,
+                                    pointRadius: 6,
+                                    strokeLength: 3,
+                                    // barbSpaceing:4,
+                                    // barbHeight:20,
+                                    fillColor:colors,
+                                    speed: (item.fFy/10) 
+                                });
+                                var marker = L.marker([item.lat, item.lon], {
+                                    icon: icon,
+                                    name: item.IIiii,
+                                    deg: item.dFy,
+                                    sped: item.fFy,
+                                    station: item.StationName                            
+                                })
+                                map_toolbox_object.current_marker_list.push(marker)
 
                             }
 
@@ -878,9 +888,8 @@
                                 // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                                 var plot_type = "rain"
                                 var plot_name = e.sourceTarget.options.stationnum
-                                // let data=e.target.options;
-                                // console.log("点的信息",data)
-                                $("#hidden_layer").attr('style', "padding: 30px;width: 900px ;height: 600px;position:absolute;top:20%;left:28%;z-index:1000;background-color: rgb(57,61,73);")
+                                
+                                // $("#hidden_layer").attr('style', "width: 900px ;height: 572px;position:absolute;top:20%;left:28%;z-index:1000;background-color: rgb(57,61,73);")
                                 map_toolbox_object.plot_line(plot_type, plot_name)
 
                             });
@@ -1268,173 +1277,131 @@
                                 var his = JSON.parse(recvdate.value.his)
                                 var now = JSON.parse(recvdate.value.now)                         
                                 var plot_data = map_toolbox_object.decode_line(plot_type,his,now)
-                                console.log("接收的数据", plot_data) 
+                                // console.log("接收的数据", plot_data) 
                                 var option = map_toolbox_object.plot_line_opt(plot_type,plot_data)
-                                chart = Highcharts.chart('station_line',option)
-
-                                // Highcharts.theme = {
-                                //     colors: ['red', '#95C471', '#35729E', '#251735', "green"],
-                                //     colorAxis: {
-                                //         maxColor: '#05426E',
-                                //         minColor: '#F3E796'
-                                //     },
-                                //     plotOptions: {
-                                //         map: {
-                                //             nullColor: '#FCFEFE'
-                                //         }
-                                //     },
-                                //     navigator: {
-                                //         maskFill: 'rgba(170, 205, 170, 0.5)',
-                                //         series: {
-                                //             color: '#95C471',
-                                //             lineColor: '#35729E'
-                                //         }
-                                //     }
-                                // };
-                                // // Apply the theme
-                                // Highcharts.setOptions(Highcharts.theme);
-                                
-                                // 开始绘图
-                                // if (plot_type == "rain") {
-                                //     chart = Highcharts.chart('station_line', {
-                                //         chart: {
-                                //             type: 'column',
-                                //             zoomType: 'x'
-                                //         },
-                                //         title: {
-                                //             text: plot_name.toString()
-                                //         },
-                                //         credits: {
-                                //             enabled: false//不显示LOGO
-                                //         },
-                                //         xAxis: {
-                                //             type: 'datetime',
-                                //             plotBands: [{
-                                //                 from: Date.UTC(2019, 7, 7,22,0),               // 标示带开始值
-                                //                 to: Date.UTC(2019, 7, 8,20,10),                 // 标示带结束值
-                                //                 label: {              // 标示带文字标签配置，详见API
-                                //                 },
-                                //                 color: 'red',            // 标示带背景颜色
-                                //                 borderWidth:2,        // 标示带边框宽度
-                                //                 borderColor: "red",        // 标示带边框颜色
-                                //                 // id: ,                 // 标示带 id，用于删除等操作
-                                //                 // zIndex:,              // 标示带层叠，用于调整显示层次
-                                //                 events: {             // 事件，支持 click、mouseover、mouseout、mousemove等事件
-                                //                     click: function (e) {
-                                //                     },
-                                //                     mouseover: function (e) {
-                                //                     },
-                                //                     mouseout: function (e) {
-                                //                     },
-                                //                     mousemove: function (e) {
-                                //                     }
-                                //                 }
-
-                                //             }],
-                                //             dateTimeLabelFormats: {
-                                //                 millisecond: '%H:%M:%S.%L',
-                                //                 second: '%H:%M:%S',
-                                //                 minute: '%H:%M',
-                                //                 hour: '%H:%M',
-                                //                 day: '%m-%d',
-                                //                 week: '%m-%d'
-                                //                 // month: '%Y-%m'
-                                //                 // year: '%Y'
-                                //             }
-                                //         },
-                                //         tooltip: {
-                                //             dateTimeLabelFormats: {
-                                //                 millisecond: '%H:%M:%S.%L',
-                                //                 second: '%H:%M:%S',
-                                //                 minute: '%H:%M',
-                                //                 hour: '%H:%M'
-                                //                 // day: '%Y-%m-%d',
-                                //                 // week: '%m-%d',
-                                //                 // month: '%Y-%m',
-                                //                 // year: '%Y'
-                                //             }
-                                //         },
-                                //         yAxis: {
-                                //             min: 0,
-                                //             title: {
-                                //                 text: '雨强'
-                                //             }
-                                //         },
-                                //         legend: {
-                                //             enabled: false
-                                //         },
-                                //         plotOptions: {
-                                //             column: {
-                                //                 borderWidth: 0
-                                //             },
-                                //             series: {
-                                //                 // pointStart: Date.UTC(date_year, date_month, date_day, date_hour),
-                                //                 pointStart: Date.UTC(2019, 7, 7,20,0),
-                                //                 pointInterval: 3e5
-                                //             },
-                                //             area: {
-                                //                 fillColor: {
-                                //                     linearGradient: {
-                                //                         x1: 0,
-                                //                         y1: 0,
-                                //                         x2: 0,
-                                //                         y2: 1
-                                //                     },
-                                //                     stops: [
-                                //                         [0, new Highcharts.getOptions().colors[0]],
-                                //                         [1, new Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                                //                     ]
-                                //                 },
-                                //                 // marker: {
-                                //                 //     radius: 2
-                                //                 // },
-                                //                 // lineWidth: 1,
-                                //                 // states: {
-                                //                 //     hover: {
-                                //                 //         lineWidth: 1
-                                //                 //     }
-                                //                 // },
-                                //                 barWidth: 1,
-                                //                 threshold: null
-                                //             }
-                                //         },
-                                //         series: [
-                                //             {
-                                //                 // type: 'area',
-                                //                 name: '降水过程',
-                                //                 data: ri
-                                //             }
-                                //         ]
-                                //     });
-
-                                // }
+                                Highcharts.theme = {
+                                    colors: ['red', '#95C471', '#35729E', '#251735', "green"],
+                                    colorAxis: {
+                                        maxColor: '#05426E',
+                                        minColor: '#F3E796'
+                                    },
+                                    plotOptions: {
+                                        map: {
+                                            nullColor: '#FCFEFE'
+                                        }
+                                    },
+                                    navigator: {
+                                        maskFill: 'rgba(170, 205, 170, 0.5)',
+                                        series: {
+                                            color: '#95C471',
+                                            lineColor: '#35729E'
+                                        }
+                                    }
+                                };
+                                // Apply the theme
+                                Highcharts.setOptions(Highcharts.theme);
+                                // chart = Highcharts.chart('station_line',option)
+                                $("body").translucent({
+                                    titleGroundColor: "#282B33",
+                                    backgroundColor: "#282B33",
+                                    titleFontColor: "#ffffff",
+                                    titleText:plot_name,
+                                    titleFontSize: 14,
+                                    opacity: 1,
+                                    zIndex: 9999,
+                                    textHtml: '<div id="container_line" style="width: 100%;height:100%"></div>',
+                                    close: function ($dom) {
+                                        // alert("确定要关闭吗？")
+                                    }
+                                });
+                                chart = Highcharts.chart('container_line',option)
 
                             }
                         })
+
+                    },
+                    get_data: function (model, value_index, tables_name,tables_index) {
+                        var decode_select = map_toolbox_object.decode_selection()
+                        //向服务器要数据model,type,button 对应导航栏目、垂直导航类型、具体按钮
+                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                        $.ajax({
+                            url: "station_zdz_data",  // 请求的地址
+                            type: "post",  // 请求方式
+                            timeout: 25000, //设置延迟上限
+                            data: {
+                                'csrfmiddlewaretoken': csrf,
+                                'model': model,
+                                'table_type':decode_select[1],
+                                'table_index':tables_index,
+                                'boundary':JSON.stringify(decode_select[0]),
+                                'click_type': value_index,
+                                'button_value': tables_name
+                            },
+                            dataType: "json",
+                            success: function (recvdate) {
+                                // 获取数据
+                                var click_type = recvdate.click_type
+                                map_toolbox_object.recv_all_data = JSON.parse(recvdate.data) 
+                                var pointdata = JSON.parse(recvdate.data)
+                                // 绘制等值线
+                                map_toolbox_object.plot_layer(pointdata, click_type)
+                                // 绘制marker
+                                map_toolbox_object.plot_mark()
+                                // console.log(typeof(recvdate.data),map_toolbox_object.recv_all_data )
+                            }
+                        })
+                    },
+                    decode_selection:function(){
+                        // 收集基础数据
+                        var mapdata = map_toolbox_object.current_map.getBounds() 
+                        var boundary_type = $('input[name="boundary_type"]:checked').val()
+                        
+                        if (boundary_type=="all"){
+                            var boundary = [25,35,115,125]
+                        }
+                        else{
+                            var boundary = [mapdata['_southWest'].lat,mapdata['_northEast'].lat,mapdata['_southWest'].lng,mapdata['_northEast'].lng]
+                        }
+                        var table_type = $("#table_type").val()                
+                        // console.log("接收的数据",boundary,boundary_type,table_type)
+                        console.log(boundary_type,boundary,table_type)
+                        return [boundary,table_type]
 
                     }
                 }
                 // 首页加载地图
                 map_toolbox_object.init()
                 //按钮组的响应函数
-                $('.rain').click(function () {
+                $('.rain').click(function () {                
+                    // console.log(decode_select)
                     var model = "zdz"
-                    var type = "rain"
-                    var button_value = this.value
-                    map_toolbox_object.current_time(button_value)
-                    map_toolbox_object.get_data(model, type, button_value)
+                    var value_index = "rain"
+                    var tables_name = this.value
+                    var tables_index = 0  // 降水在列表中的索引
+
+                    map_toolbox_object.get_data(model, value_index, tables_name,tables_index)
+                })
+
+                $('.wind').click(function () {                
+                    // console.log(decode_select)
+                    var model = "zdz"
+                    var value_index = "wind"
+                    var tables_name = this.value
+                    var tables_index = 3  // 降水在列表中的索引
+
+                    map_toolbox_object.get_data(model, value_index, tables_name,tables_index)
                 })
 
 
             </script>
             <!-- 隐藏栏目的设置 -->
             <div id="hidden_layer" class="layui-bg-gray" style="display:none;">
-            <!-- <div id="hidden_layer" class="layui-bg-gray" style="padding: 10px;width: 900px ;height: 572px;position:absolute;top:20%;left:28%;z-index:1000;background-color: rgb(57,61,73);" > -->
+            <!-- <div id="hidden_layer" class="layui-bg-gray" style="width: 900px ;height: 572px;position:absolute;top:20%;left:28%;z-index:1000;background-color: rgb(57,61,73);" > -->
                 <div class="layui-row layui-col-space15" style="background-color: rgb(57,61,73);">
 
-                    <div class="layui-col-md12">
-                        <div class="layui-panel">
-                            <div id="station_line" style="height:520px;">
+                    <div class="layui-col-md12" style="background-color: rgb(57,61,73);">
+                        <div class="layui-panel" style="background-color: rgb(57,61,73);">
+                            <div id="station_line" style="height:540px;">
 
                             </div>
                         </div>
