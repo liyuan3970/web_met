@@ -1222,7 +1222,7 @@ class station_zdz:
         lon1 = boundary[3]
         boundary_data =  data[(data['lat']>lat0) & (data['lat']<lat1)  &  (data['lon']<lon1) & (data['lon']>lon0)]
         if table_type=="nation":
-            remain = boundary_data[(pd.isnull(boundary_data['Type']))&(boundary_data['ZoomLevel']<6)]
+            remain = boundary_data[boundary_data['Type']=='基本站'] #boundary_data[(boundary_data[boundary_data['Type']=='基本站'])&(boundary_data['ZoomLevel']<6)]
         if table_type=="regin":
             remain = boundary_data[(boundary_data['Type']=="区域站")]
         elif table_type=="all":

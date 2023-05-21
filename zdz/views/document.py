@@ -862,9 +862,10 @@ def station_zdz_data(request):
         }
         return JsonResponse(context)
     elif model =="single":
-        station = '58653'
+        station = button_value
         worker = data_class.station_zdz()
         value = worker.single_station(station)
+        #print("测试单站数据",value,"---",station)
         context = {
             'status': "ok",
             'value':value
