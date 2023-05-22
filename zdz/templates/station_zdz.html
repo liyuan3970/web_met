@@ -701,8 +701,8 @@
                                     return { color: 'black', weight: 3, fillOpacity: 0.1 };
                                 }
                             })
-                            var corner1 = L.latLng(27, 118.5),
-                                corner2 = L.latLng(33, 123),
+                            var corner1 = L.latLng(26, 115),
+                                corner2 = L.latLng(34, 125),
                                 bound = L.latLngBounds(corner1, corner2);
                             var map_zdz = new L.Map('map', {
                                 center: new L.LatLng(28.6, 120.9),//110.763, 41.376   39.62353145, 121.9937485
@@ -717,6 +717,7 @@
                                 attributionControl: false, //是否去除右下角标志
                                 bounds: turf.bbox(boundaries),
                                 maxBounds: bound,
+                                maxBoundsViscosity: 1.0,
                                 layers: [lines]
                             });
                             map_toolbox_object.current_map = map_zdz
