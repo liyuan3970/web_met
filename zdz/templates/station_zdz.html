@@ -1630,9 +1630,14 @@
                     layer.open({
                         type: 1,
                         title:labels,
+                        maxmin:true,
+                        moveOut:true,
+                        // resize:true,
                         skin: 'layui-layer-lan', //样式类名
                         closeBtn: 1, //不显示关闭按钮
                         area: ['1200px', '600px'],
+                        maxHeight:600,
+                        maxWidth:1200,
                         anim: 0,
                         shade:0,
                         zIndex :9999,
