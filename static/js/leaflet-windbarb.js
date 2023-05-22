@@ -23,6 +23,7 @@
             strokeLength: 15,
             barbSpaceing: 5,
             barbHeight: 15,
+            strokeColor:"#010101",
             forceDir: false
         },
 
@@ -39,15 +40,16 @@
         },
 
         _createPoint: function() {
-            var svg, w,h, sw, r, fc;
+            var svg, w,h, sw, r, fc,sc;
             sw = this.options.strokeWidth, r = this.options.pointRadius, fc = this.options.fillColor;
+            sc =  this.options.strokeColor
             w = h = 2*sw+2*r;
             var xmlns = "http://www.w3.org/2000/svg";
             svg = document.createElementNS (xmlns, 'svg');
                 svg.setAttributeNS (null, 'width', w);
                 svg.setAttributeNS (null, 'height', h);
             var c = document.createElementNS (xmlns, 'circle');
-                c.setAttributeNS (null, 'stroke', '#010101');
+                c.setAttributeNS (null, 'stroke', sc);
                 c.setAttributeNS (null, 'stroke-width', sw);
                 c.setAttributeNS (null, 'fill', fc);                
                 c.setAttributeNS (null, 'cx', w/2);
@@ -135,7 +137,7 @@
             
                 // draw first line
                 var path = document.createElementNS (xmlns, "path");
-                    path.setAttributeNS (null, 'stroke', "#000000");
+                    path.setAttributeNS (null, 'stroke', this.options.strokeColor);
                     path.setAttributeNS (null, 'stroke-width', sw);
                     path.setAttributeNS (null, 'stroke-linecap', "butt");
                     path.setAttributeNS (null, 'd', 'M '+M+' H '+H);
@@ -160,7 +162,7 @@
                 
                     // draw first line
                     var path = document.createElementNS (xmlns, "path");
-                        path.setAttributeNS (null, 'stroke', "#000000");
+                        path.setAttributeNS (null, 'stroke', this.options.strokeColor);
                         path.setAttributeNS (null, 'stroke-width', sw);
                         path.setAttributeNS (null, 'stroke-linecap', "butt");
                         path.setAttributeNS (null, 'd', 'M '+M+' H '+H);
@@ -184,7 +186,7 @@
                     L = ((px)-(bl5*Math.cos(ang10)))+','+(cy-bh*0.5);   
                     
                     var path = document.createElementNS (xmlns, "path");
-                        path.setAttributeNS (null, 'stroke', "#000000");
+                        path.setAttributeNS (null, 'stroke', this.options.strokeColor);
                         path.setAttributeNS (null, 'stroke-width', sw);
                         path.setAttributeNS (null, 'stroke-linecap', "butt");
                         path.setAttributeNS (null, 'd', 'M '+M+' L '+L);
@@ -195,7 +197,7 @@
                         px -= (bs);
                         H = px;
                         var path = document.createElementNS (xmlns, "path");
-                            path.setAttributeNS (null, 'stroke', "#000000");
+                            path.setAttributeNS (null, 'stroke', this.options.strokeColor);
                             path.setAttributeNS (null, 'stroke-width', sw);
                             path.setAttributeNS (null, 'stroke-linecap', "butt");
                             path.setAttributeNS (null, 'd', 'M '+M+' H '+H);
@@ -208,7 +210,7 @@
                     px -= bs,
                     H = px;
                     var path = document.createElementNS (xmlns, "path");
-                        path.setAttributeNS (null, 'stroke', "#000000");
+                        path.setAttributeNS (null, 'stroke', this.options.strokeColor);
                         path.setAttributeNS (null, 'stroke-width', sw);
                         path.setAttributeNS (null, 'stroke-linecap', "butt");
                         path.setAttributeNS (null, 'd', 'M '+M+' H '+H);
@@ -217,7 +219,7 @@
                     pt -= bs,
                     L = pt+','+(cy-bh);
                     var path = document.createElementNS (xmlns, "path");
-                        path.setAttributeNS (null, 'stroke', "#000000");
+                        path.setAttributeNS (null, 'stroke', this.options.strokeColor);
                         path.setAttributeNS (null, 'stroke-width', sw);
                         path.setAttributeNS (null, 'stroke-linecap', "butt");
                         path.setAttributeNS (null, 'd', 'M '+M+' L '+L);
@@ -229,7 +231,7 @@
                     px -= bs,
                     H = px;
                     var path = document.createElementNS (xmlns, "path");
-                        path.setAttributeNS (null, 'stroke', "#000000");
+                        path.setAttributeNS (null, 'stroke', this.options.strokeColor);
                         path.setAttributeNS (null, 'stroke-width', sw);
                         path.setAttributeNS (null, 'stroke-linecap', "butt");
                         path.setAttributeNS (null, 'd', 'M '+M+' H '+H);
@@ -242,9 +244,9 @@
                         p2 = pt+','+(cy-bh),  
                         p3 = pt+','+cy;
                         var path = document.createElementNS (xmlns, "polygon");
-                            path.setAttributeNS (null, 'stroke', "#000000");
+                            path.setAttributeNS (null, 'stroke', this.options.strokeColor);
                             path.setAttributeNS (null, 'stroke-width', sw);
-                            path.setAttributeNS (null, 'fill', "#000000");                                
+                            path.setAttributeNS (null, 'fill', this.options.strokeColor);                                
                             path.setAttributeNS (null, 'points', p1+' '+p2+' '+p3);
                         g.appendChild (path);
                         px -= 2*bs,

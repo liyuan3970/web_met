@@ -16,6 +16,9 @@
     <script src="static/js/leaflet.js"></script>
     <script type="text/javascript" src="static/js/leaflet-windbarb.js"></script>
     <script src="static/js/leaflet.canvaslabel.js"></script>
+    <script src="static/js/Leaflet.canvasmarker.js"></script>
+    <!-- <script src="https://unpkg.com/leaflet-canvas-marker@0.2.0"></script> -->
+
     <!-- 散点 -->
     <link rel="stylesheet" href="static/css/leaflet-beautify-marker-icon.css">
     <script src="static/js/leaflet-beautify-marker-icon.js"></script>
@@ -66,6 +69,10 @@
         .scrollbar::-webkit-scrollbar {
             display: none;
         }
+        .layui-layer-lan .layui-layer-title{background:#393D49; color:#fff;font-size: 20px; border: none;}
+        /* .layui-layer-lan .layui-layer-btn{border-top:1px solid #E9E7E7} */
+        /* .demo-class .layui-layer-btn a{background:#333;} */
+        /* .demo-class .layui-layer-btn .layui-layer-btn1{background:#999;} */
     </style>
 </head>
 
@@ -161,7 +168,7 @@
                         <dd>
                             <div class="layui-input-block" style="width: 55%;margin-top: 15px;margin-bottom: 15px;">
                                 <button id="real_plot" type="button" class="layui-btn layui-btn-primary" style="float: right;">查询</button> 
-                                <button type="button" class="layui-btn layui-btn-primary" style="float: right;">刷新</button> 
+                                <button id="real_flash" type="button" class="layui-btn layui-btn-primary" style="float: right;">刷新</button> 
                             </div>
 
                         </dd>
@@ -604,9 +611,37 @@
 
 
                     },
-                    flush_map: function () {
-                        //刷新按钮
-                        map_toolbox_object.init()
+                    flash_map: function () {
+                        if (map_toolbox_object.current_map) {
+                            map_toolbox_object.current_map.eachLayer(function (layer) {
+                                if (!layer._container || ('' + jQuery(layer._container).attr('class')).replace(/\s/g, '') != 'leaflet-layer') {
+                                    layer.remove();
+                                }
+                            });}
+                            var boundaries = map_toolbox_object.return_boundaries(zhejianglist[0].features).boundaries
+                            map_toolbox_object.boundaries = boundaries
+                            var canvasLabel = new L.CanvasLabel({
+                                defaultLabelStyle: {
+                                    collisionFlg: true,
+                                    scale: 1,
+                                    strokeStyle: "#000",
+                                    fillStyle: "#fff",
+                                    lineWidth: 3
+                                }
+                            });
+                            var lines = L.geoJSON(boundaries, {
+                                style: function (feature) {
+                                    return { color: 'black', weight: 3, fillOpacity: 0.1 };
+                                }
+                            }).addTo(map_toolbox_object.current_map)
+
+                           
+                            
+                        //清空数据
+
+                        map_toolbox_object.recv_all_data=undefined
+                        map_toolbox_object.current_marker_list=[]
+
                     },
                     init: function () {
                         //地图初始化
@@ -630,7 +665,7 @@
                             });
                             var lines = L.geoJSON(boundaries, {
                                 style: function (feature) {
-                                    return { color: 'black', weight: 1, fillOpacity: 0.1 };
+                                    return { color: 'black', weight: 3, fillOpacity: 0.1 };
                                 }
                             })
                             var map_zdz = new L.Map('map', {
@@ -643,7 +678,6 @@
                                 doubleClickZoom: false,
                                 attributionControl: false, //是否去除右下角标志
                                 bounds: turf.bbox(boundaries),
-
                                 layers: [lines]
                             });
                             map_toolbox_object.current_map = map_zdz
@@ -667,8 +701,8 @@
                                     return { color: 'black', weight: 3, fillOpacity: 0.1 };
                                 }
                             })
-                            var corner1 = L.latLng(25, 118),
-                                corner2 = L.latLng(32, 123),
+                            var corner1 = L.latLng(27, 118.5),
+                                corner2 = L.latLng(33, 123),
                                 bound = L.latLngBounds(corner1, corner2);
                             var map_zdz = new L.Map('map', {
                                 center: new L.LatLng(28.6, 120.9),//110.763, 41.376   39.62353145, 121.9937485
@@ -758,9 +792,12 @@
                         }
                     },
                     plot_layer: function (pointdata, click_type) {
+                        // 刷新地图
+                        map_toolbox_object.flash_map()
                         //绘制图层
                         var mapdata = map_toolbox_object.current_map.getBounds()
                         // console.log("当前经纬度",mapdata)
+                        map_toolbox_object.recv_all_data = pointdata
                         var points = []
                         map_toolbox_object.recv_all_data.forEach(function (item) {
                             // 绘图
@@ -825,8 +862,11 @@
                             }
                             else if (click_type == "wind" && item.value != -9999) {
                                 var latlng = L.latLng(item.lat, item.lon);
-                                if (item.value > 106) {
-                                    var colors = "red"
+                                if ((item.value/10 <= 20.6 )&& (item.value/10 > 106)) {
+                                    var colors = "#E71FED" // 粉色
+                                }
+                                else if (item.value/10 > 20.6){
+                                    var colors = "red" // 粉色
                                 }
                                 else {
                                     var colors = "black"
@@ -835,8 +875,8 @@
                                 var icon = L.WindBarb.icon({
                                     color: "red",
                                     deg: 360 - item.dFy,
-                                    pointRadius: 6,
-                                    strokeLength: 3,
+                                    pointRadius: 5,
+                                    strokeColor:colors,
                                     // barbSpaceing:4,
                                     // barbHeight:20,
                                     fillColor: colors,
@@ -855,6 +895,15 @@
                             else if (click_type == "tmax" || click_type == "tmin") {
                                 if (item.value!=-9999){
                                     if (item.value!=-9999){
+                                        if (item.value/10 > 35){
+                                            var colors = "red"
+                                        }
+                                        else if (item.value/10 < 3){
+                                            var colors = "blue"
+                                        }
+                                        else {
+                                            var colors = "white"
+                                        }
                                         var latlng = L.latLng(item.lat, item.lon);
                                         var c = L.circleMarker(latlng, {
                                             stationnum: item.IIiii,
@@ -865,6 +914,7 @@
                                             fillOpacity: 1,
                                             labelStyle: {
                                                 text: item.StationName + ":" + item.value / 10.0,
+                                                fillStyle:colors,
                                                 scale:1.5,
                                                 weight: 5,
                                                 rotation: 0,
@@ -877,6 +927,21 @@
                                 }
                             }
                             else if (click_type == "view" && item.value != -9999) {
+                                if ((item.value>500)&&(item.value<=1000)){
+                                    var colors = "blue"
+                                }
+                                else if((item.value>200)&&(item.value<=500)){
+                                    var colors = "#F8E811"
+                                }
+                                else if((item.value>50)&&(item.value<=200)){
+                                    var colors = "#F88109"
+                                }
+                                else if (item.value<=50) {
+                                    var colors = "red"
+                                }
+                                else{
+                                    var colors = "white"
+                                }
                                 var latlng = L.latLng(item.lat, item.lon);
                                 var c = L.circleMarker(latlng, {
                                     stationnum: item.IIiii,
@@ -887,8 +952,8 @@
                                     fillOpacity: 1,
                                     labelStyle: {
                                         text: item.StationName + ":" + item.value,
-                                        scale:1.5,
-                                        fillStyle:"red",  // 颜色
+                                        scale:1.5, // 字体大小
+                                        fillStyle:colors,  // 颜色
                                         weight: 2000,
                                         rotation: 0,
                                         zIndex: 200
@@ -908,15 +973,20 @@
                         map_toolbox_object.current_marker_list.forEach(function (item) {
                             item.addTo(map_toolbox_object.current_map).on("click", function (e) {
                                 /// 叠加单机绘图
-                                console.log("散点图的点击",click_type, e.sourceTarget.options.stationnum)
+                                // console.log("散点图的点击",click_type, e.sourceTarget.options.stationnum)
                                 // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                                 var plot_type = click_type
                                 var plot_name = e.sourceTarget.options.stationnum
                                 map_toolbox_object.plot_line(plot_type, plot_name)
-
                             });
-
                         })
+                        // canvas 的加载方法
+                        // var ciLayer = L.canvasMarkerLayer({
+                        //     collisionFlg: true
+                        // }).addTo(map_toolbox_object.current_map);
+                        // ciLayer.addLayers(map_toolbox_object.current_marker_list);
+
+
                     },
                     decode_line: function (plot_type, his, now) {
                         // recv_single_data  解析
@@ -1391,9 +1461,9 @@
                             },
                             success: function (recvdate) {
                                 // 获取数据
-                                console.log("国家站",recvdate.data)
+                                // console.log("国家站",recvdate.data)
                                 var click_type = recvdate.click_type
-                                map_toolbox_object.recv_all_data = JSON.parse(recvdate.data)
+                                // map_toolbox_object.recv_all_data = JSON.parse(recvdate.data)
                                 var pointdata = JSON.parse(recvdate.data)
                                 // 绘制等值线
                                 map_toolbox_object.plot_layer(pointdata, click_type)
@@ -1449,28 +1519,171 @@
                     map_toolbox_object.get_data(model, value_index, tables_name, tables_index)
                 })
                 
-                // 
+                // 单站数据的查询 
                 $("#single_plot").click(function(){
                     var button_value = $("#single_station").val()
                     var times = $("#single_zdz_time").val()
-                    var click_type = $("#single_class").val()
-                    
+                    var click_type = $("#single_class").val()           
                     map_toolbox_object.plot_line(click_type, button_value)
-
-
                 })
+                // 地图的刷新按钮
+                $("#real_flash").click(function (){
+                    map_toolbox_object.flash_map()
+                    // 测试
+                    var labels = "K8515--坎门站"
+                    Highcharts.chart('hidden_plot', {
+                        title: {
+                            text: 'Highcharts Wind Barbs'
+                        },
+                        xAxis: {
+                            type: 'datetime',
+                            offset: 40
+                        },
+                        plotOptions: {
+                            series: {
+                                pointStart: Date.UTC(2017, 0, 29),
+                                pointInterval: 36e5
+                            }
+                        },
+                        series: [{
+                            type: 'windbarb',
+                            data: [
+                                [9.8, 177.9],
+                                [10.1, 177.2],
+                                [11.3, 179.7],
+                                [10.9, 175.5],
+                                [9.3, 159.9],
+                                [8.8, 159.6],
+                                [7.8, 162.6],
+                                [5.6, 186.2],
+                                [6.8, 146.0],
+                                [6.4, 139.9],
+                                [3.1, 180.2],
+                                [4.3, 177.6],
+                                [5.3, 191.8],
+                                [6.3, 173.1],
+                                [7.7, 140.2],
+                                [8.5, 136.1],
+                                [9.4, 142.9],
+                                [10.0, 140.4],
+                                [5.3, 142.1],
+                                [3.8, 141.0],
+                                [3.3, 116.5],
+                                [1.5, 327.5],
+                                [0.1, 1.1],
+                                [1.2, 11.1]
+                            ],
+                            name: 'Wind',
+                            color: Highcharts.getOptions().colors[1],
+                            showInLegend: false,
+                            tooltip: {
+                                valueSuffix: ' m/s'
+                            }
+                        }, {
+                            type: 'area',
+                            keys: ['y', 'rotation'], // rotation is not used here
+                            data: [
+                                [9.8, 177.9],
+                                [10.1, 177.2],
+                                [11.3, 179.7],
+                                [10.9, 175.5],
+                                [9.3, 159.9],
+                                [8.8, 159.6],
+                                [7.8, 162.6],
+                                [5.6, 186.2],
+                                [6.8, 146.0],
+                                [6.4, 139.9],
+                                [3.1, 180.2],
+                                [4.3, 177.6],
+                                [5.3, 191.8],
+                                [6.3, 173.1],
+                                [7.7, 140.2],
+                                [8.5, 136.1],
+                                [9.4, 142.9],
+                                [10.0, 140.4],
+                                [5.3, 142.1],
+                                [3.8, 141.0],
+                                [3.3, 116.5],
+                                [1.5, 327.5],
+                                [0.1, 1.1],
+                                [1.2, 11.1]
+                            ],
+                            color: Highcharts.getOptions().colors[0],
+                            fillColor: {
+                                linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+                                stops: [
+                                    [0, Highcharts.getOptions().colors[0]],
+                                    [
+                                        1,
+                                        Highcharts.color(Highcharts.getOptions().colors[0])
+                                            .setOpacity(0.25).get()
+                                    ]
+                                ]
+                            },
+                            name: 'Wind speed',
+                            tooltip: {
+                                valueSuffix: ' m/s'
+                            }
+                        }]
+                    });
+
+                    layer.open({
+                        type: 1,
+                        title:labels,
+                        skin: 'layui-layer-lan', //样式类名
+                        closeBtn: 1, //不显示关闭按钮
+                        area: ['1200px', '600px'],
+                        anim: 0,
+                        shade:0,
+                        zIndex :9999,
+                        shadeClose: false, //开启遮罩关闭
+                        content:$("#hidden_station")
+                        , btn: ['按钮一', '按钮二', '按钮三']
+                        , yes: function (index, layero) {
+                            //按钮【按钮一】的回调
+                        }
+                        , btn2: function (index, layero) {
+                            //按钮【按钮二】的回调
+
+                            //return false 开启该代码可禁止点击该按钮关闭
+                        }
+                        , btn3: function (index, layero) {
+                            //按钮【按钮三】的回调
+
+                            //return false 开启该代码可禁止点击该按钮关闭
+                        }
+                        , cancel: function () {
+                            //右上角关闭回调
+
+                            //return false 开启该代码可禁止点击该按钮关闭
+                        }
+                        ,  success: function (layero, index) {
+                            console.log(layero, index);
+                            
+                        }
+                    });
+                    
+                })
+
             </script>
             <!-- 隐藏栏目的设置 -->
            
+        </div>
+        <!-- 弹出栏的设置 -->
+        <div id="hidden_station" style="width:100%;height:100%;">
+            <div id = "hidden_plot" style="width:1200px;height: 500px;"></div>
+            
         </div>
 
 
 
 
     </div>
+    
 
 
     {% csrf_token %}
 </body>
+
 
 </html>

@@ -822,7 +822,8 @@ def home(request):
 
 # 气象数据分析系统
 import pymysql
-import ast
+from django.conf import settings
+
 def station_zdz_data(request):
     model = request.POST.get('model', '')
     click_type = request.POST.get('click_type', '')
@@ -862,6 +863,7 @@ def station_zdz_data(request):
         }
         return JsonResponse(context)
     elif model =="single":
+        # print("环境测试",settings.ENV)
         station = button_value
         worker = data_class.station_zdz()
         value = worker.single_station(station)
