@@ -1100,7 +1100,7 @@ class station_zdz:
         sql = """select tTime,IIiii,Ri,T,V,fFy,dFy 
         from Tab_AM_M where ( tTime between '{start_time}' and '{end_time}' and IIiii='{station}')  order by tTime  """
         rsql = sql.format(start_time=start,end_time=end,station=station)
-        data = pd.read_sql(rsql , con=self.conn)
+        data = pd.read_sql(rsql , con=self.conn)   
         if hours>=20:
             # 实时数据
             now_data = data[data['tTime']>=today]

@@ -316,7 +316,7 @@
                         };
                         if (plot_type == "rain") {
                             return {
-                                levelV: [0,0.1, 10, 25, 50, 100, 250,350],
+                                levelV: [-999,0.1, 10, 25, 50, 100, 250,9990],
                                 isobands_options: rain_options
                             }
                         }
@@ -387,13 +387,13 @@
                         }
                         else if (plot_type == "wind") {
                             return {
-                                levelV: [0, 0.3, 1.6, 3.4, 5.5, 8, 10.8, 13.9, 17.2],
+                                levelV: [0, 3.4, 5.5, 8, 10.8, 13.9, 17.2, 21.0, 40.2],
                                 isobands_options: wind_options
                             }
                         }
                         else if (plot_type == "view") {
                             return {
-                                levelV: [50, 200, 500, 1000, 2000, 3000],
+                                levelV: [0,50, 200, 500, 1000, 300000],
                                 isobands_options: view_options
                             }
                         }
@@ -1161,9 +1161,9 @@
                                         text: '风力 (m/s)'
                                     },
                                     lineColor: "black",
-                                    lineWidth: 2,
-                                    gridLineColor: 'black',
-                                    gridLineDashStyle: 'Dash'
+                                    lineWidth: 2
+                                    // gridLineColor: 'black',
+                                    // gridLineDashStyle: 'Dash'
                                     // gridLineWidth:1
                                     // gridLineDashStyle:'Dash'
                                 },
@@ -1187,7 +1187,7 @@
                                     type: 'windbarb',
                                     data: now,
                                     // name: 'Wind',
-                                    color: Highcharts.getOptions().colors[1],
+                                    color: "blue",
                                     showInLegend: false,
                                     tooltip: {
                                         valueSuffix: ' m/s'
@@ -1196,15 +1196,14 @@
                                     type: 'area',
                                     keys: ['y', 'rotation'], // rotation is not used here
                                     data: now,
-                                    color: Highcharts.getOptions().colors[0],
+                                    color: "blue",
                                     fillColor: {
                                         linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
                                         stops: [
-                                            [0, Highcharts.getOptions().colors[0]],
+                                            [0, "blue"],
                                             [
                                                 1,
-                                                Highcharts.color(Highcharts.getOptions().colors[0])
-                                                    .setOpacity(0.25).get()
+                                                "white"
                                             ]
                                         ]
                                     },
@@ -1232,11 +1231,10 @@
                                     fillColor: {
                                         linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
                                         stops: [
-                                            [0, "#F3B130"],
+                                            [0, "red"],
                                             [
                                                 1,
-                                                Highcharts.color("red")
-                                                    .setOpacity(0.02).get()
+                                                "white"
                                             ]
                                         ]
                                     },
@@ -1654,16 +1652,23 @@
                 $("#real_contour").click(function(){
                    var plot_opt =  $('input[name="plot_opt"]:checked').val();
                    var points = map_toolbox_object.current_points 
-                   var click_type = $("#single_class").val()
+                   var click_type = $("#real_class").val()
+                //    console.log("绘图代码",click_type)
+                   if (click_type=="tmax"||(click_type=="tmin")){
+                    click_type = "temp"
+                   }
+                   if (extra_map_obj.current_layer){
+                        extra_map_obj.current_layer.remove()
+                   }
                 
                    
 
                    if (plot_opt == "extra") {
-                        map_extra.eachLayer(function (layer) {
-                            if (!layer._container || ('' + jQuery(layer._container).attr('class')).replace(/\s/g, '') != 'leaflet-layer') {
-                                layer.remove();
-                            }
-                        });
+                        // map_extra.eachLayer(function (layer) {
+                        //     if (!layer._container || ('' + jQuery(layer._container).attr('class')).replace(/\s/g, '') != 'leaflet-layer') {
+                        //         layer.remove();
+                        //     }
+                        // });
 
                         layer.open({
                             type: 1,
@@ -1682,15 +1687,20 @@
                             shadeClose: false, //开启遮罩关闭
                             content: $("#extra_plot")
                         });
-                        var intersectionLay = map_toolbox_object.return_shp(boundaries_exra, points, click_type).intersectionLay
-                        intersectionLay.addTo(map_extra)
+                        if (points) {
+                           var intersectionLay = map_toolbox_object.return_shp(boundaries_exra, points, click_type).intersectionLay
+                           intersectionLay.addTo(map_extra)
+                           extra_map_obj.current_layer = intersectionLay
+
+                       }
+                        
                     } else {
                         // 在地图上绘制
                         if (points) {
+                           map_toolbox_object.flash_map()
                            var intersectionLay = map_toolbox_object.return_shp(map_toolbox_object.boundaries, points, click_type).intersectionLay
-                           intersectionLay.setZIndex(1)
                            intersectionLay.addTo(map_toolbox_object.current_map)
-                       }
+                        }
                         
                     }
                    
@@ -1790,6 +1800,9 @@
 
             <div id="extra_map" style="width:800px;height: 700px;background-color: white;"></div>
             <script>
+                const extra_map_obj = {
+                    current_layer:undefined
+                }
                 
                 let boundaries_exra = {
                         type: "FeatureCollection",
@@ -1799,7 +1812,13 @@
                     };
                     var lines_exra = L.geoJSON(boundaries_exra, {
                         style: function (feature) {
-                            return { color: 'black', weight: 1, fillOpacity: 0.01 };
+                            return { 
+                                color: 'black', 
+                                weight: 1.5, 
+                                opacity:1,
+                                fill:true,
+                                fillColor:"white",
+                                fillOpacity: 1 };
                         }
                     })
                     let map_extra = new L.Map('extra_map', {
