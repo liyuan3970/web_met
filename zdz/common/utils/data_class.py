@@ -1078,6 +1078,23 @@ class station_zdz:
         #data = pickle.loads(self.rs.get(date_type))
         # 解析数据
         return data
+    def hours_wind(self,data):
+        data['tTime'] = pd.to_datetime(data['tTime'])
+        data['Year'] = data['tTime'].dt.year
+        data['Month'] = data['tTime'].dt.month
+        data['Day'] = data['tTime'].dt.day
+        data['Hour'] = data['tTime'].dt.hour
+        grouped_IIiii = data.groupby(['Day','Hour'])
+        time_list = []
+        dir_list = []
+        speed_list = []
+        for i in grouped_IIiii.size().index:
+            single = grouped_IIiii.get_group(i)
+            value = single[ single['fFy']== single['fFy'].max()].head(1)
+            time_list.append(value['tTime'].dt.strftime('%Y-%m-%d %H:%M:%S').values[0])
+            speed_list.append(value['fFy'].values[0])
+            dir_list.append(value['dFy'].values[0])
+        return time_list,speed_list,dir_list
     def single_station(self,station):
         '''获取单站数据并解析'''
         # 获取当前时间
@@ -1100,35 +1117,46 @@ class station_zdz:
         sql = """select tTime,IIiii,Ri,T,V,fFy,dFy 
         from Tab_AM_M where ( tTime between '{start_time}' and '{end_time}' and IIiii='{station}')  order by tTime  """
         rsql = sql.format(start_time=start,end_time=end,station=station)
-        data = pd.read_sql(rsql , con=self.conn)   
+        data = pd.read_sql(rsql , con=self.conn) 
+        wind_time,wind_speed,wind_dir =  self.hours_wind(data)
+        wind_data = pd.DataFrame(data={'tTime':wind_time,'dFy':wind_dir,'fFy':wind_speed})   
+        data['tTime'] = data['tTime'].dt.strftime('%Y-%m-%d %H:%M:%S')
         if hours>=20:
             # 实时数据
             now_data = data[data['tTime']>=today]
             now_data = now_data[now_data['tTime']<=end]
+            now_wind = wind_data[wind_data['tTime']>=today]
+            now_wind = now_wind[now_wind['tTime']<=end]
             # 历史数据
             his_data = data[data['tTime']>start]
-            his_data = his_data[his_data['tTime']<=today]   
+            his_data = his_data[his_data['tTime']<=today]
+            his_wind = wind_data[wind_data['tTime']>start]
+            his_wind = his_wind[his_wind['tTime']<=today]
         else:
             # 实时数据
             now_data = data[data['tTime']>=yesday]
             now_data = now_data[now_data['tTime']<=end]
+            now_wind = wind_data[wind_data['tTime']>=yesday]
+            now_wind = now_wind[now_wind['tTime']<=end]
             # 历史数据
             his_data = data[data['tTime']>start]
             his_data = his_data[his_data['tTime']<=yesday]
-        # 开始筛选数据种类
-#         nul_now = [0 for i in range(len(now_data['T'].to_list()))]    
-#         nul_his =  [0 for i in range(len(his_data['T'].to_list()))]
-#         value_now =  now_data['T'].to_list()  + nul_his
-#         value_his = nul_now + his_data['T'].to_list() 
+            his_wind = wind_data[wind_data['tTime']>start]
+            his_wind = his_wind[his_wind['tTime']<=yesday]
         output = pd.concat([now_data,his_data])  
         history = his_data.to_json(orient='values',force_ascii=False)
         nowdata = now_data.to_json(orient='values',force_ascii=False)
+        windhis = his_wind.to_json(orient='values',force_ascii=False)
+        windnow = now_wind.to_json(orient='values',force_ascii=False)
         output = {
             "now":nowdata,
-            "his":history
+            "his":history,
+            "wind_time":wind_time,
+            "wind_speed":wind_speed,
+            "wind_dir":wind_dir
         }
         # 解析数据成两个序列
-        return output
+        return nowdata,history,windhis,windnow
     def upload2_redis_Minutes(self):
         '''根据date_type向redis中传输数据'''
         table = 'Tab_AM_M'

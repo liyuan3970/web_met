@@ -866,11 +866,15 @@ def station_zdz_data(request):
         # print("环境测试",settings.ENV)
         station = button_value
         worker = data_class.station_zdz()
-        value = worker.single_station(station)
+        nowdata,history,windhis,windnow = worker.single_station(station)
         #print("测试单站数据",value,"---",station)
         context = {
             'status': "ok",
-            'value':value
+            'now':nowdata,
+            'his':history,
+            'windhis':windhis,
+            'windnow':windnow
+
         }
         return JsonResponse(context)
         #return JsonResponse(value,safe=False)

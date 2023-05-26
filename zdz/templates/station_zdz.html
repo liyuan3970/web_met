@@ -126,10 +126,11 @@
                                         <option value="6hours">6h</option>
                                         <option value="3hours">3h</option>
                                         <option value="2hours">2h</option>
-                                        <option value="60minutes">60M</option>
-                                        <option value="45minutes">45M</option>
-                                        <option value="30minutes">30M</option>
-                                        <option value="15minutes">15M</option>
+                                        <option value="60mins">60M</option>
+                                        <option value="45mins">45M</option>
+                                        <option value="30mins">30M</option>
+                                        <option value="15mins">15M</option>
+                                        <option value="5mins">5M</option>
                                     </select>
                                 </div>
 
@@ -1008,7 +1009,7 @@
 
 
                     },
-                    decode_line: function (plot_type, his, now) {
+                    decode_line: function (plot_type, his, now,windhis,windnow) {
                         // recv_single_data  解析
                         var data_time = []
                         var data_his = [] // 历史数据
@@ -1016,17 +1017,26 @@
                         now.forEach(function (item, index) {
                             if (plot_type == "rain") {
                                 // console.log(item[0].substring(14, 16))
-                                // if (item[0].substring(14, 16)=="00" || (item[0].substring(14, 16)=="30")){
+                                // console.log(item[0].substring(14, 16))
+                                // if ((item[0].substring(14, 16)=="00") || (item[0].substring(14, 16)=="30")){
                                 //     data_time.push(item[0].substring(11, 16))
                                 // }
                                 // else{
-                                //     data_time.push("")
+                                //     var timestr = " "
+                                //     data_time.push(timestr)
                                 // }
                                 data_time.push(item[0].substring(11, 16))
                                 data_now.push(item[2])
                                 data_his.push(null)
                             }
                             else if (plot_type == "wind") {
+                                // if ((item[0].substring(14, 16)=="00")){
+                                //     data_time.push(item[0].substring(11, 16))
+                                // }
+                                // else{
+                                //     var timestr = " "
+                                //     data_time.push(timestr)
+                                // }
                                 values = [item[5] / 10, item[6]]
                                 data_time.push(item[0].substring(11, 16))
                                 data_now.push(values)
@@ -1046,11 +1056,26 @@
                         // 历史数据
                         his.forEach(function (item, index) {
                             if (plot_type == "rain") {
+                                // if ((item[0].substring(14, 16)=="00") || (item[0].substring(14, 16)=="30")){
+                                //     data_time.push(item[0].substring(11, 16))
+                                // }
+                                // else{
+                                //     var timestr = " "
+                                //     data_time.push(timestr)
+                                // }
                                 data_time.push(item[0].substring(11, 16))
                                 data_now.push(null)
                                 data_his.push(item[2])
                             }
                             else if (plot_type == "wind") {
+                                // if ((item[0].substring(14, 16)=="00")){
+                                //     data_time.push(item[0].substring(11, 16))
+                                //     console.log(item[0].substring(11, 16))
+                                // }
+                                // else{
+                                //     var timestr = " "
+                                //     data_time.push(timestr)
+                                // }
                                 values = [item[5] / 10, item[6]]
                                 data_time.push(item[0].substring(11, 16))
                                 data_now.push([null, null])
@@ -1067,7 +1092,29 @@
                                 data_his.push(item[4])
                             }
                         })
-                        return [data_time, data_now, data_his]
+                        if (plot_type == "wind"){
+                            var wind_time = []
+                            var wind_his = []
+                            var wind_now = []
+                            // console.log(windnow)
+                            windnow.forEach(function(item,index){
+                                // console.log(item)
+                                wind_time.push(item[0].substring(11, 16))
+                                wind_his.push([null,null])
+                                wind_now.push([item[2]/10,item[1]])
+                            })
+                            windhis.forEach(function(item,index){
+                                wind_time.push(item[0].substring(11, 16))
+                                wind_his.push([item[2]/10,item[1]])
+                                wind_now.push([null,null])
+                            })
+                        }
+                        else{
+                            var wind_time = undefined
+                            var wind_his = undefined
+                            var wind_now = undefined
+                        }
+                        return [data_time, data_now, data_his,wind_time,wind_now,wind_his]
 
 
                     },
@@ -1099,9 +1146,9 @@
                                 // },
                                 xAxis: {
                                     categories: timeindex,
-                                    labels: {
-                                        step: 12,
-                                    },
+                                    // labels: {
+                                    //     step: 12,
+                                    // },
                                     lineColor: "black",
                                     lineWidth: 2,
                                     // crosshair: true,
@@ -1145,6 +1192,7 @@
                             }
                         }
                         else if (plot_type == "wind") {
+                            
                             opt = {
                                 title: {
                                     text: '风场'
@@ -1167,16 +1215,22 @@
                                     // gridLineWidth:1
                                     // gridLineDashStyle:'Dash'
                                 },
-                                xAxis: {
-                                    categories: timeindex,
-                                    labels: {
-                                        step: 12,
-
-                                    },
-                                    lineColor: "black",
-                                    lineWidth: 2,
+                                xAxis: [{
+                                    categories: plot_data[3],
+                                    lineColor: "white",
+                                    lineWidth: 0,
                                     offset: 40
-                                },
+                                }, {
+                                    categories: timeindex,
+                                    lineColor: "black",
+                                    angle:0,
+                                    lineWidth: 2,
+                                    // labels:{
+                                    //     rotation:0 
+                                    // },
+                                    offset: 80
+                                }
+                                ],
                                 // plotOptions: {
                                 //     series: {
                                 //         pointStart: Date.UTC(2017, 0, 29),
@@ -1185,59 +1239,63 @@
                                 // },
                                 series: [{
                                     type: 'windbarb',
-                                    data: now,
+                                    data: plot_data[4],
                                     // name: 'Wind',
                                     color: "blue",
+                                    xAxis:0,
                                     showInLegend: false,
                                     tooltip: {
                                         valueSuffix: ' m/s'
                                     }
-                                }, {
-                                    type: 'area',
+                                },
+                                {
+                                    type: 'windbarb',
+                                    data: plot_data[5],
+                                    // name: 'Wind',
+                                    color: "red",
+                                    xAxis:0,
+                                    showInLegend: false,
+                                    tooltip: {
+                                        valueSuffix: ' m/s'
+                                    }
+                                },
+                                 {
+                                    type: 'column',
                                     keys: ['y', 'rotation'], // rotation is not used here
                                     data: now,
+                                    xAxis:1,
                                     color: "blue",
-                                    fillColor: {
-                                        linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
-                                        stops: [
-                                            [0, "blue"],
-                                            [
-                                                1,
-                                                "white"
-                                            ]
-                                        ]
-                                    },
+                                    // fillColor: {
+                                    //     linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+                                    //     stops: [
+                                    //         [0, "blue"],
+                                    //         [
+                                    //             1,
+                                    //             "white"
+                                    //         ]
+                                    //     ]
+                                    // },
                                     name: '今天',
                                     tooltip: {
                                         valueSuffix: ' m/s'
                                     }
-                                },
-                                // 气温
+                                },                   
                                 {
-                                    type: 'windbarb',
-                                    data: his,
-                                    // name: 'Wind',
-                                    color: "red",
-                                    showInLegend: false,
-                                    tooltip: {
-                                        valueSuffix: ' m/s'
-                                    }
-                                },
-                                {
-                                    type: 'area',
+                                    type: 'column',
                                     keys: ['y', 'rotation'], // rotation is not used here
                                     data: his,
+                                    xAxis:1,
                                     color: "red",
-                                    fillColor: {
-                                        linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
-                                        stops: [
-                                            [0, "red"],
-                                            [
-                                                1,
-                                                "white"
-                                            ]
-                                        ]
-                                    },
+                                    // fillColor: {
+                                    //     linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+                                    //     stops: [
+                                    //         [0, "red"],
+                                    //         [
+                                    //             1,
+                                    //             "white"
+                                    //         ]
+                                    //     ]
+                                    // },
                                     name: '昨天',
                                     tooltip: {
                                         valueSuffix: ' m/s'
@@ -1270,9 +1328,9 @@
                                 // },
                                 xAxis: {
                                     categories: timeindex,
-                                    labels: {
-                                        step: 12,
-                                    },
+                                    // labels: {
+                                    //     step: 12,
+                                    // },
                                     lineColor: "black",
                                     lineWidth: 3,
                                     gridLineWidth:0.2,
@@ -1334,10 +1392,10 @@
                                 // },
                                 xAxis: {
                                     categories: timeindex,
-                                    labels: {
-                                        step: 12,
+                                    // labels: {
+                                    //     step: 12,
 
-                                    },
+                                    // },
                                     gridLineWidth:0.2,
                                     gridLineColor: 'black',
                                     gridLineDashStyle: 'Dash',
@@ -1418,46 +1476,13 @@
                                 load = showLoad();
                             },
                             success: function (recvdate) {
-                                var his = JSON.parse(recvdate.value.his)
-                                var now = JSON.parse(recvdate.value.now)
-                                var plot_data = map_toolbox_object.decode_line(plot_type, his, now)
-                                // console.log("解析接收的数据", recvdate.value) 
+                                // var all_data = JSON.parse(recvdate.value)                       
+                                var his = JSON.parse(recvdate.his)
+                                var now = JSON.parse(recvdate.now)
+                                var windhis = JSON.parse(recvdate.windhis)
+                                var windnow = JSON.parse(recvdate.windnow)
+                                var plot_data = map_toolbox_object.decode_line(plot_type, his, now,windhis,windnow)                           
                                 var option = map_toolbox_object.plot_line_opt(plot_type, plot_data)
-                                // Highcharts.theme = {
-                                //     colors: ['#7CB5EC', '#95C471', '#35729E', '#251735', "green"],
-                                //     colorAxis: {
-                                //         maxColor: '#05426E',
-                                //         minColor: '#F3E796'
-                                //     },
-                                //     plotOptions: {
-                                //         map: {
-                                //             nullColor: '#FCFEFE'
-                                //         }
-                                //     },
-                                //     navigator: {
-                                //         maskFill: 'rgba(170, 205, 170, 0.5)',
-                                //         series: {
-                                //             color: '#95C471',
-                                //             lineColor: '#35729E'
-                                //         }
-                                //     }
-                                // };
-                                // Apply the theme
-                                // Highcharts.setOptions(Highcharts.theme);
-                                // chart = Highcharts.chart('station_line',option)
-                                // $("body").translucent({
-                                //     titleGroundColor: "#282B33",
-                                //     backgroundColor: "#282B33",
-                                //     titleFontColor: "#ffffff",
-                                //     titleText: plot_name,
-                                //     titleFontSize: 14,
-                                //     opacity: 1,
-                                //     zIndex: 9999,
-                                //     textHtml: '<div id="container_line" style="width: 100%;height:100%"></div>',
-                                //     close: function ($dom) {
-                                //         // alert("确定要关闭吗？")
-                                //     }
-                                // });
                                 chart = Highcharts.chart('hidden_plot', option)
                                 closeLoad(load)
 
@@ -1551,7 +1576,7 @@
                     var button_value = $("#single_station").val()
                     var times = $("#single_zdz_time").val()
                     var click_type = $("#single_class").val()
-                    console.log(button_value, times, click_type)
+                    // console.log(button_value, times, click_type)
                     var labels = "单站"
                     // map_toolbox_object.plot_line(plot_type,plot_num)  
                     if (button_value) {
