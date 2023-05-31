@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -18,7 +17,6 @@
     <script src="static/js/leaflet.canvaslabel.js"></script>
     <script src="static/js/Leaflet.canvasmarker.js"></script>
     <!-- <script src="https://unpkg.com/leaflet-canvas-marker@0.2.0"></script> -->
-
     <!-- 散点 -->
     <link rel="stylesheet" href="static/css/leaflet-beautify-marker-icon.css">
     <script src="static/js/leaflet-beautify-marker-icon.js"></script>
@@ -65,6 +63,8 @@
     <script src="static/js/html2canvas.js"></script>
     <script src='static/js/zhejianglist.js'></script>
     <script src='static/js/zjonly.js'></script>
+    <script src='static/js/taizhou_county.js'></script>
+    <script src='static/js/taizhouxiangzhen.js'></script>
     <title>实况监测</title>
     <style type="text/css">
         .scrollbar::-webkit-scrollbar {
@@ -82,7 +82,6 @@
         /* .demo-class .layui-layer-btn .layui-layer-btn1{background:#999;} */
     </style>
 </head>
-
 <body>
     {% csrf_token %}
     <div
@@ -112,6 +111,7 @@
                                     <select id="real_class">
                                         <option value=""></option>
                                         <option value="rain" selected="">降水</option>
+                                        <option value="sped">风级</option>
                                         <option value="wind">风力</option>
                                         <option value="tmax">高温</option>
                                         <option value="tmin">低温</option>
@@ -132,23 +132,17 @@
                                         <option value="15mins">15分钟</option>                                    
                                     </select>
                                 </div>
-
-
                             </div>
-
-
                         </dd>
-                        <dd style="height:280px">
+                        <dd style="height:230px">
                             <div style="height:100%;width:100%;" class="layui-form">
                                 <div class="layui-form-item" style="margin-top:15px;">
                                     <label class="layui-form-label">显示选项</label>
                                     <div class="layui-input-block" style="padding-left:5%;">
                                         <input type="radio" name="boundary_type" value="current" title="当前" checked="">
                                         <input type="radio" name="boundary_type" value="all" title="全省">
-
                                     </div>
                                 </div>
-
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">数据级别</label>
                                     <div class="layui-input-block" style="background-color:rgb(28,30,36);width:50%;">
@@ -157,16 +151,27 @@
                                             <option value="nation">国家站</option>
                                             <option value="regin">区域站</option>
                                             <option value="all">所有站</option>
-                                            <option value="main" selected="">骨干站</option>
+                                            <option value="main" >骨干站</option>
+                                            <option value="auto" selected="">全自动</option>
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">地图界线</label>
-                                    <div class="layui-input-block">
-                                        <input type="radio" name="sex" value="市县" title="市县" checked="">
-                                        <input type="radio" name="sex" value="乡镇" title="乡镇">
+                                    <div class="layui-input-block" style="background-color:rgb(28,30,36);width:50%;">
+                                        <select id="village_line">
+                                            <option value=""></option>
+                                            <option value="taizhou" selected="">台州</option>
+                                            <option value="yuhuan" >玉环</option>
+                                            <option value="wenling">温岭</option>
+                                            <option value="huangyan">黄岩</option>
+                                            <option value="luqiao">路桥</option>
+                                            <option value="jiaojiang">椒江</option>
+                                            <option value="xianju">仙居</option>
+                                            <option value="linhai">临海</option>
+                                            <option value="tiantai">天台</option>
+                                            <option value="sanmen">三门</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
@@ -177,38 +182,29 @@
                                     </div>
                                 </div>
                             </div>
-
-
                         </dd>
                         <dd style="margin-left:0;padding-left: 0;">
                             <div class="layui-input-inline" style="width: 90%;margin-top: 15px;margin-bottom: 10px;">
-                                <button id="real_plot" type="button" class="layui-btn layui-btn-xs"
+                                <button id="real_plot" type="button" class="layui-btn layui-btn-sm"
                                     style="float: right;margin-left: 10px;">查询</button>
-                                <button id="real_single" type="button" class="layui-btn layui-btn-xs"
+                                <button id="real_single" type="button" class="layui-btn layui-btn-sm"
                                     style="float: right;">单站</button>
-                                <button id="real_contour" type="button" class="layui-btn layui-btn-xs"
+                                <button id="real_contour" type="button" class="layui-btn layui-btn-sm"
                                     style="float: right;">绘图</button>
-                                <button type="button" class="layui-btn layui-btn-xs"
-                                    style="float: right;">通报</button>
-                                <button id="real_flash" type="button" class="layui-btn layui-btn-xs"
+                                <!-- <button type="button" class="layui-btn layui-btn-sm"
+                                    style="float: right;">通报</button> -->
+                                <button id="real_flash" type="button" class="layui-btn layui-btn-sm"
                                     style="float: right;">刷新</button>
                             </div>
                         </dd>
                     </dl>
-
-
                 </li>
-
             </ul>
-
-
             <!-- </div> -->
             <!-- 这里是地图 -->
             <div id="map" style="width:85%;height: 100%">
-
             </div>
-            <script>
-               
+            <script>          
                 // 等待加载时间
                 function showLoad() {
                     return layer.msg('程序加载....', { icon: 16, shade: [0.5, '#f5f5f5'], scrollbar: false, offset: 'auto', time: 100000 });
@@ -567,6 +563,85 @@
                                 return { color: 'black', weight: 3, fillOpacity: 0.1 };
                             }
                         }).addTo(map_toolbox_object.current_map)
+                        if($("#village_line").val()=="wenling"){
+                            var boundaries_village = map_toolbox_object.return_boundaries(wl_json.features).boundaries
+                            var lines_village = L.geoJSON(boundaries_village, {
+                                style: function (feature) {
+                                    return { color: 'red', weight: 3, fillOpacity: 0.01 };
+                                }
+                            }).addTo(map_toolbox_object.current_map)
+                        }
+                        else if($("#village_line").val()=="yuhuan"){
+                            var boundaries_village = {
+                                type: "FeatureCollection",
+                                name: "boundaries",
+                                crs: { type: "name", properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+                                features:yuhuan_map
+                            };
+                            var lines_village = L.geoJSON(boundaries_village, {
+                                style: function (feature) {
+                                    return { color: 'red', weight: 3, fillOpacity: 0.01 };
+                                }
+                            }).addTo(map_toolbox_object.current_map)
+                        }
+                        //
+                        else if($("#village_line").val()=="huangyan"){
+                            var boundaries_village = map_toolbox_object.return_boundaries(hy_json.features).boundaries
+                            var lines_village = L.geoJSON(boundaries_village, {
+                                style: function (feature) {
+                                    return { color: 'red', weight: 3, fillOpacity: 0.01 };
+                                }
+                            }).addTo(map_toolbox_object.current_map)
+                        }
+                        else if($("#village_line").val()=="luqiao"){
+                            var boundaries_village = map_toolbox_object.return_boundaries(lq_json.features).boundaries
+                            var lines_village = L.geoJSON(boundaries_village, {
+                                style: function (feature) {
+                                    return { color: 'red', weight: 3, fillOpacity: 0.01 };
+                                }
+                            }).addTo(map_toolbox_object.current_map)
+                        }
+                        else if($("#village_line").val()=="jiaojiang"){
+                            var boundaries_village = map_toolbox_object.return_boundaries(jj_json.features).boundaries
+                            var lines_village = L.geoJSON(boundaries_village, {
+                                style: function (feature) {
+                                    return { color: 'red', weight: 3, fillOpacity: 0.01 };
+                                }
+                            }).addTo(map_toolbox_object.current_map)
+                        }
+                        else if($("#village_line").val()=="xianju"){
+                            var boundaries_village = map_toolbox_object.return_boundaries(xj_json.features).boundaries
+                            var lines_village = L.geoJSON(boundaries_village, {
+                                style: function (feature) {
+                                    return { color: 'red', weight: 3, fillOpacity: 0.01 };
+                                }
+                            }).addTo(map_toolbox_object.current_map)
+                        }
+                        else if($("#village_line").val()=="linhai"){
+                            var boundaries_village = map_toolbox_object.return_boundaries(lh_json.features).boundaries
+                            var lines_village = L.geoJSON(boundaries_village, {
+                                style: function (feature) {
+                                    return { color: 'red', weight: 3, fillOpacity: 0.01 };
+                                }
+                            }).addTo(map_toolbox_object.current_map)
+                        }
+                        else if($("#village_line").val()=="tiantai"){
+                            var boundaries_village = map_toolbox_object.return_boundaries(tt_json.features).boundaries
+                            var lines_village = L.geoJSON(boundaries_village, {
+                                style: function (feature) {
+                                    return { color: 'red', weight: 3, fillOpacity: 0.01 };
+                                }
+                            }).addTo(map_toolbox_object.current_map)
+                        }
+                        else if($("#village_line").val()=="sanmen"){
+                            var boundaries_village = map_toolbox_object.return_boundaries(sm_json.features).boundaries
+                            var lines_village = L.geoJSON(boundaries_village, {
+                                style: function (feature) {
+                                    return { color: 'red', weight: 3, fillOpacity: 0.01 };
+                                }
+                            }).addTo(map_toolbox_object.current_map)
+                        }
+
 
 
 
@@ -601,18 +676,25 @@
                                     return { color: 'black', weight: 3, fillOpacity: 0.1 };
                                 }
                             })
+                            
                             var map_zdz = new L.Map('map', {
                                 center: new L.LatLng(28.6, 120.9),//110.763, 41.376   39.62353145, 121.9937485
                                 renderer: canvasLabel,
                                 zoom: 9, //4
+                                maxZoom: 12,
+                                minZoom: 8,
                                 zoomControl: false,
                                 dragging: true,
                                 scrollWheelZoom: true,
                                 doubleClickZoom: false,
                                 attributionControl: false, //是否去除右下角标志
                                 bounds: turf.bbox(boundaries),
+                                maxBounds: bound,
+                                maxBoundsViscosity: 1.0,
                                 layers: [lines]
                             });
+
+
                             map_toolbox_object.current_map = map_zdz
 
                         }
@@ -637,6 +719,8 @@
                             var corner1 = L.latLng(26, 115),
                                 corner2 = L.latLng(34, 125),
                                 bound = L.latLngBounds(corner1, corner2);
+                            
+
                             var map_zdz = new L.Map('map', {
                                 center: new L.LatLng(28.6, 120.9),//110.763, 41.376   39.62353145, 121.9937485
                                 renderer: canvasLabel,
@@ -652,15 +736,8 @@
                                 maxBounds: bound,
                                 maxBoundsViscosity: 1.0,
                                 layers: [lines]
-                            });
+                            });                                                                                 
                             map_toolbox_object.current_map = map_zdz
-
-                            // const Esri_WorldImagery = L.tileLayer(
-
-                            //     "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-
-                            // ).addTo(map_zdz)
-
                             L.TileLayer.Custom = L.TileLayer.extend({
                                 getTileUrl: function (coords) {
                                     url = 'static/maps/' + coords.z + '/' + coords.x + '/' + coords.y + '.jpg';
@@ -746,6 +823,13 @@
                                 }
                             }
                             points.push(single_point)
+                            if((item.ZoomLevel<=6)&&(item.City=="台州")){
+                                var iflabel = false
+                            }
+                            else{
+                                var iflabel = true
+                            }
+
                             // 添加散点------------
                             if (click_type == "rain" && item.value / 10.0 > 0) {
                                 if ($("#real_times").val() == "24hours") {
@@ -880,6 +964,7 @@
                                     fillOpacity: 1,
                                     labelStyle: {
                                         text: item.StationName + ":" + item.value / 10.0,
+                                        collisionFlg: iflabel,
                                         offsetY: -25,
                                         scale: 1.5,
                                         weight: 3,
@@ -927,6 +1012,73 @@
 
 
                             }
+                            else if (click_type == "sped" && item.value != -9999) {
+                                if ((item.value>0)&&(item.value<=54)){
+                                    var texts = "3级"
+                                    var colors = "white"
+                                    
+                                }
+                                else if((item.value>54)&&(item.value<=79)){
+                                    var texts = "4级"
+                                    var colors = "white"
+                                }
+                                else if((item.value>79)&&(item.value<=107)){
+                                    var texts = "5级"
+                                    var colors = "white"
+                                }
+                                else if((item.value>107)&&(item.value<=138)){
+                                    var texts = "6级"
+                                    var colors = "#F3EBAB"
+                                }
+                                else if((item.value>138)&&(item.value<=171)){
+                                    var texts = "7级"
+                                    var colors = "#ABC1F3"
+                                }
+                                else if((item.value>171)&&(item.value<=207)){
+                                    var texts = "8级"
+                                    var colors = "#F3ABF1"
+                                }
+                                else if((item.value>207)&&(item.value<=244)){
+                                    var texts = "9级"
+                                    var colors = "red"
+                                }
+                                else if((item.value>244)&&(item.value<=284)){
+                                    var texts = "10级"
+                                    var colors = "red"
+                                }
+                                else if((item.value>284)){
+                                    var texts = "11级"
+                                    var colors = "red"
+                                }
+
+                                var latlng = L.latLng(item.lat, item.lon);
+                                // 添加散点插件
+                                var c = L.circleMarker(latlng, {
+                                    stationname: item.StationName,
+                                    stationnum: item.IIiii,
+                                    weight: 0,
+                                    radius: 7,
+                                    opacity: 1,
+                                    fill: false,
+                                    color: colors,
+                                    fillColor: colors,
+                                    fillOpacity: 1,
+                                    labelStyle: {
+                                        text: item.StationName + ":" + texts,
+                                        collisionFlg: iflabel,
+                                        fillStyle: colors,
+                                        // offsetY: -25,
+                                        scale: 1.5,
+                                        weight: 3,
+                                        rotation: 0,
+                                        color: "red",
+                                        zIndex: 60
+                                    }
+                                })
+                                // map_toolbox_object.current_marker_list.push(marker)
+                                map_toolbox_object.current_marker_list.push(c)
+
+                            }
                             else if (click_type == "tmax" || click_type == "tmin") {
                                 if (item.value != -9999) {
                                     if (item.value != -9999) {
@@ -950,6 +1102,7 @@
                                             fillOpacity: 1,
                                             labelStyle: {
                                                 text: item.StationName + ":" + item.value / 10.0,
+                                                collisionFlg: iflabel,
                                                 fillStyle: colors,
                                                 scale: 1.5,
                                                 weight: 5,
@@ -990,6 +1143,7 @@
                                     fillOpacity: 1,
                                     labelStyle: {
                                         text: item.StationName + ":" + item.value,
+                                        collisionFlg: iflabel,
                                         scale: 1.5, // 字体大小
                                         fillStyle: colors,  // 颜色
                                         weight: 2000,
@@ -1090,7 +1244,7 @@
                                 data_now.push(item[2])
                                 data_his.push(null)
                             }
-                            else if (plot_type == "wind") {
+                            else if ((plot_type == "wind") || (plot_type == "sped")) {
                                 // if ((item[0].substring(14, 16)=="00")){
                                 //     data_time.push(item[0].substring(11, 16))
                                 // }
@@ -1128,7 +1282,7 @@
                                 data_now.push(null)
                                 data_his.push(item[2])
                             }
-                            else if (plot_type == "wind") {
+                            else if ((plot_type == "wind") || (plot_type == "sped")) {
                                 // if ((item[0].substring(14, 16)=="00")){
                                 //     data_time.push(item[0].substring(11, 16))
                                 //     console.log(item[0].substring(11, 16))
@@ -1153,7 +1307,7 @@
                                 data_his.push(item[4])
                             }
                         })
-                        if (plot_type == "wind"){
+                        if ((plot_type == "wind") || (plot_type == "sped")){
                             var wind_time = []
                             var wind_his = []
                             var wind_now = []
@@ -1261,7 +1415,7 @@
                                 }]
                             }
                         }
-                        else if (plot_type == "wind") {
+                        else if ((plot_type == "wind") || (plot_type == "sped")) {
                             
                             opt = {
                                 title: {
@@ -1615,6 +1769,8 @@
                     },
                     get_data: function (model, value_index, tables_name, tables_index) {
                         var decode_select = map_toolbox_object.decode_selection()
+                        var current_zoom = map_toolbox_object.current_map.getZoom()
+                        // 8 为全省  9 为 骨干站  10 为所有站
                         //向服务器要数据model,type,button 对应导航栏目、垂直导航类型、具体按钮
                         var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                         $.ajax({
@@ -1628,6 +1784,7 @@
                                 'table_index': tables_index,
                                 'boundary': JSON.stringify(decode_select[0]),
                                 'click_type': value_index,
+                                'zoom':current_zoom,
                                 'button_value': tables_name
                             },
                             dataType: "json",
@@ -1669,23 +1826,25 @@
                 }
                 // 首页加载地图
                 map_toolbox_object.init()
-
                 //按钮组的响应函数
+                
+
                 $('#real_plot').click(function () {
-                    // console.log(decode_select)
+                    
+                    
                     var model = "zdz"
                     var value_index = $("#real_class").val()  // "rain"
                     var tables_name = $("#real_times").val()  // this.value
                     if (value_index == "rain") {
                         var tables_index = 0
                     }
-                    else if (value_index == "tmax") {
+                    else if (value_index == "tmax" ) {
                         var tables_index = 1
                     }
                     else if (value_index == "tmin") {
                         var tables_index = 2
                     }
-                    else if (value_index == "wind") {
+                    else if (value_index == "wind" || value_index == "sped") {
                         var tables_index = 3
                     }
                     else if (value_index == "view") {
@@ -1693,7 +1852,6 @@
                     }
                     map_toolbox_object.get_data(model, value_index, tables_name, tables_index)
                 })
-
                 // 单站数据的查询 
                 $("#real_single").click(function () {
                     var button_value = $("#single_station").val()
@@ -1821,27 +1979,24 @@
                             zIndex: 9999,
                             shadeClose: false, //开启遮罩关闭
                             content: $("#extra_plot")
-                        });
-                        
+                        });                   
                     }
                     else {
                         // 在地图上绘制
                         if (points) {
                            map_toolbox_object.flash_map() 
-                           var boundaries_zj = map_toolbox_object.return_boundaries(zjonly[0].features).boundaries                      
+                           
+                           var boundaries_zj = map_toolbox_object.return_boundaries(tz_json_county.features).boundaries
+                        //    var boundaries_zj = map_toolbox_object.return_boundaries(zjonly[0].features).boundaries                      
                            var intersectionLay = map_toolbox_object.return_shp(boundaries_zj, points, click_type).intersectionLay
                            intersectionLay.addTo(map_toolbox_object.current_map)
-                        }
-                        
-                    }
-                   
-
+                        }                    
+                    }            
                 })
-
+                
 
             </script>
             <!-- 隐藏栏目的设置 -->
-
         </div>
         <!-- 弹出栏的设置 -->
         <div id="hidden_station" style="width:100%;height:100%;">
@@ -1852,7 +2007,6 @@
                         <div class="layui-input-inline">
                             <input type="text" class="layui-input" id="single_zdz_time" placeholder="yyyy-MM-dd">
                         </div>
-
                         <div class="layui-input-inline">
                             <input id="single_station" type="text" class="layui-input" placeholder="请选择站号">
                         </div>
@@ -1879,13 +2033,8 @@
                         })
                     </script>
                 </div>
-
-
-
             </div>
-
             <div id="hidden_plot" style="width:1150px;height: 500px;"></div>
-
         </div>
         <script>
             $("#single_search").click(function() {
@@ -1980,15 +2129,10 @@
                                 //数组格式为 2.6.6 开始新增，之前版本直接配置 true 或任意分割字符即可
                                 , range: ['#plot_img-startDate-1', '#plot_img-endDate-1']
                             });
-                        })
-                        
+                        })                      
                     </script>
                 </div>
-
-
-
             </div>
-
             <div id="extra_map" style="width:800px;height: 700px;background-color: white;"></div>
             <script>
                 $("#plot_image").click(function () {
@@ -2010,7 +2154,7 @@
                                 load = showLoad();
                             },
                             success: function (recvdate) {
-                                console.log(recvdate)
+                                // console.log(recvdate)
                                 var imgsrc = recvdate.imgs
                                 var image = document.createElement("img")
                                 image.src = imgsrc
@@ -2020,23 +2164,10 @@
                                 closeLoad(load)
                             }
                         })
-
-                    })
-                
+                    })               
             </script>
-
         </div>
-
-
-
-
-
     </div>
-
-
-
     {% csrf_token %}
 </body>
-
-
 </html>

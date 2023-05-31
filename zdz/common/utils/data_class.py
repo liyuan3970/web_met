@@ -1243,7 +1243,7 @@ class station_zdz:
             }
             # 将保留的数据重新存储到redis中
             self.rs.set(tables[i], pickle.dumps(data_redis))  
-    def get_regin(self,boundary,table_type,tables_name,value_index):
+    def get_regin(self,boundary,table_type,tables_name,value_index,zoom):
         '''解码单站数据'''
         data = self.get_redis(tables_name)['table_data_list'][value_index]
         lat0 = boundary[0]
@@ -1259,6 +1259,11 @@ class station_zdz:
             remain = boundary_data
         elif table_type=="main":
             remain = boundary_data[(boundary_data['ZoomLevel']<6)]
+        elif table_type=="auto":
+            if zoom<=9:
+                remain = boundary_data[(boundary_data['ZoomLevel']<10)]
+            else:
+                remain = boundary_data
         output = remain.to_json(orient='records',force_ascii=False)
         return output
     def return_data(self,remain,value):

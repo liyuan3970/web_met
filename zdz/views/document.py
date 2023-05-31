@@ -833,9 +833,10 @@ def station_zdz_data(request):
         table_type = request.POST.get('table_type', '')
         value_index = int(request.POST.get('table_index', ''))
         boundary = json.loads(request.POST.get('boundary', ''))
+        zoom = int(request.POST.get('zoom', ''))
         worker = data_class.station_zdz()
         tables_name = button_value
-        data = worker.get_regin(boundary,table_type,tables_name,value_index)
+        data = worker.get_regin(boundary,table_type,tables_name,value_index,zoom)
         context = {
             'status': "ok",
             'click_type':click_type,
