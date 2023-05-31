@@ -830,24 +830,6 @@ def station_zdz_data(request):
     button_value = request.POST.get('button_value', '')
     # 编写数据查询的后端逻辑
     if model =="zdz":
-        # conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="tzweb")
-        # sql_location = """select lat ,lon ,p_total,station_no,station_name from station_data where datetime = '2019-05-01 00:00:00' """
-        # df_location = pd.read_sql(sql_location , con=conn) 
-        # datalist = []
-        # for i in range(len(df_location)):
-        #     single = {
-        #         "name":str(df_location.iloc[i,4]),
-        #         "IIiii":str(df_location.iloc[i,3]),
-        #         "value":str(df_location.iloc[i,2]),
-        #         "lat":str(df_location.iloc[i,0]),
-        #         "lon":str(df_location.iloc[i,1])
-        #     }
-        #     datalist.append(single)
-        # context = {
-        #     'status': "ok",
-        #     'data':datalist,
-        #     'click_type':click_type
-        # }
         table_type = request.POST.get('table_type', '')
         value_index = int(request.POST.get('table_index', ''))
         boundary = json.loads(request.POST.get('boundary', ''))
@@ -858,8 +840,6 @@ def station_zdz_data(request):
             'status': "ok",
             'click_type':click_type,
             'data':data 
-
-
         }
         return JsonResponse(context)
     elif model =="single":
@@ -874,10 +854,24 @@ def station_zdz_data(request):
             'his':history,
             'windhis':windhis,
             'windnow':windnow
-
         }
         return JsonResponse(context)
-        #return JsonResponse(value,safe=False)
+    elif model =="plot_image":
+        start = request.POST.get('start', '')
+        end = request.POST.get('end', '')
+        # 测试
+        start = '2019-08-08 08:00:00'  
+        end = '2019-08-08 09:00:00'
+        # 以上为测试
+        worker = data_class.station_plot(start,end,click_type[0:4],click_type,button_value)
+        img = worker.plot_img()
+        context = {
+            'status': "ok",
+            'imgs':img
+        }
+        return JsonResponse(context)
+
+
 
 
 

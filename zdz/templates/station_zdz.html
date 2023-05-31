@@ -64,6 +64,7 @@
     <script src='static/js/taizhoulist.js'></script>
     <script src="static/js/html2canvas.js"></script>
     <script src='static/js/zhejianglist.js'></script>
+    <script src='static/js/zjonly.js'></script>
     <title>实况监测</title>
     <style type="text/css">
         .scrollbar::-webkit-scrollbar {
@@ -181,13 +182,15 @@
                         </dd>
                         <dd style="margin-left:0;padding-left: 0;">
                             <div class="layui-input-inline" style="width: 90%;margin-top: 15px;margin-bottom: 10px;">
-                                <button id="real_plot" type="button" class="layui-btn layui-btn-sm"
+                                <button id="real_plot" type="button" class="layui-btn layui-btn-xs"
                                     style="float: right;margin-left: 10px;">查询</button>
-                                <button id="real_single" type="button" class="layui-btn layui-btn-sm"
+                                <button id="real_single" type="button" class="layui-btn layui-btn-xs"
                                     style="float: right;">单站</button>
-                                <button id="real_contour" type="button" class="layui-btn layui-btn-sm"
+                                <button id="real_contour" type="button" class="layui-btn layui-btn-xs"
                                     style="float: right;">绘图</button>
-                                <button id="real_flash" type="button" class="layui-btn layui-btn-sm"
+                                <button type="button" class="layui-btn layui-btn-xs"
+                                    style="float: right;">通报</button>
+                                <button id="real_flash" type="button" class="layui-btn layui-btn-xs"
                                     style="float: right;">刷新</button>
                             </div>
                         </dd>
@@ -205,6 +208,7 @@
 
             </div>
             <script>
+               
                 // 等待加载时间
                 function showLoad() {
                     return layer.msg('程序加载....', { icon: 16, shade: [0.5, '#f5f5f5'], scrollbar: false, offset: 'auto', time: 100000 });
@@ -226,7 +230,7 @@
                     current_points :undefined,// 当前绘图数据
                     // current_points :undefined,
                     boundaries: undefined,
-                    color_level: function (plot_type) {
+                    color_level: function (plot_type) {                
                         // 降水
                         var rain_options = {
                             zProperty: "value",
@@ -250,33 +254,20 @@
                                 "fill-opacity": 1
                             },
                             breaksProperties: [
-                                { fill: "rgb(141,172,216)" },// -10
-                                { fill: "rgb(147,178,205)" },// -8
-                                { fill: "rgb(144,187,206)" },// -6
-                                { fill: "rgb(147,194,199)" },// -4
-                                { fill: "rgb(150,209,187)" },// -2
-                                { fill: "rgb(199,199,141)" },// 0
-                                { fill: "rgb(208,206,132)" }, // 2 
-                                { fill: "rgb(207,207,132)" },// 4
-                                { fill: "rgb(214,205,117)" },// 6
-                                { fill: "rgb(215,195,108)" },// 8 
-                                { fill: "rgb(210,177,80)" },// 10 
-                                { fill: "rgb(203,155,58)" },// 12
-                                { fill: "rgb(206,139,45)" },// 14
-                                { fill: "rgb(206,139,45)" }, // 16
-                                { fill: "rgb(211,116,59)" },//  18
-                                { fill: "rgb(197,99,49)" },// 20
-                                { fill: "rgb(205,89,61)" },// 22
-                                { fill: "rgb(205,63,53)" },// 24
-                                { fill: "rgb(190,70,50)" },// 26
-                                { fill: "rgb(204,62,59)" },// 28
-                                { fill: "rgb(170,54,54)" }, // 30
-                                { fill: "rgb(165,41,51)" },// 32
-                                { fill: "rgb(158,37,50)" },// 34
-                                { fill: "rgb(153,35,54)" },// 35
-                                { fill: "rgb(122,36,65)" },// 37
-                                { fill: "rgb(93,38,67)" },// 40
-                                { fill: "rgb(63,38,67)" }
+                                { fill: "rgb(31,31,255)" },//7 
+                                { fill: "rgb(59,59,255)" },//6
+                                { fill: "rgb(87,87,255)" },// 5
+                                { fill: "rgb(114,114,255)" },// 4
+                                { fill: "rgb(143,143,255)" },// 3
+                                { fill: "rgb(171,171,255)" },// 2
+                                { fill: "rgb(199,199,255)" }, // 1
+                                { fill: "rgb(248,224,139)" },// 1
+                                { fill: "rgb(243,195,111)" },// 2
+                                { fill: "rgb(239,167,110)" },// 3
+                                { fill: "rgb(236,138,81)" },//  4
+                                { fill: "rgb(234,110,81)" },// 5
+                                { fill: "rgb(232,81,51)" },// 6
+                                { fill: "rgb(230,51,51)" } // 7                         
                             ]
                         };
                         // 能见度
@@ -286,15 +277,15 @@
                                 "fill-opacity": 0.9
                             },
                             breaksProperties: [
-                                { fill: "rgb(58,88,148)" },// 50
-                                { fill: "rgb(75,111,159)" },// 200
-                                { fill: "rgb(104,135,161)" },// 500
-                                { fill: "rgb(145,161,174)" },// 1000
-                                { fill: "rgb(147,186,149)" },// 2000
-                                { fill: "rgb(255,255,255)" }// 3000
+                                { fill: "rgb(169,52,52)" },// 0-50
+                                { fill: "rgb(255,150,0)" },// 50-200
+                                { fill: "rgb(255,253,55)" },// 200-500
+                                { fill: "rgb(55,216,253)" },// 500-1000
+                                { fill: "rgb(168,242,243)" },// 1000-2000
+                                { fill: "rgb(220,246,247)" },// 2000-5000
+                                { fill: "rgb(247,252,252)" },// 5000
                             ]
                         };
-
                         // 风力
                         var wind_options = {
                             zProperty: "value",
@@ -314,71 +305,43 @@
                             ]
                         };
                         if (plot_type == "rain") {
+                            if($("#real_times").val()=="24hours"){
+                                var levelV = [-999,1, 10, 25, 50, 100, 250,9990]
+                            }
+                            else if ($("#real_times").val()=="12hours"){
+                                var levelV = [-999,1, 5, 15, 30, 70, 140,9990]
+                            }
+                            else if ($("#real_times").val()=="6hours"){
+                                var levelV = [-999,1, 4, 13, 25, 60, 120,9990]
+                            }
+                            else if ($("#real_times").val()=="3hours"){
+                                var levelV = [-999,1, 3, 10, 20, 50, 70,9990]
+                            }
+                            else{
+                                var levelV = [-999,1, 1.5, 7, 15, 40, 50,9990]
+                            }
                             return {
-                                levelV: [-999,0.1, 10, 25, 50, 100, 250,9990],
+                                levelV: levelV,
                                 isobands_options: rain_options
                             }
                         }
                         else if (plot_type == "temp") {
-                            if (map_toolbox_object.color_numbers) {
-                                var tmax = map_toolbox_object.color_numbers[2]
-                                var tmin = map_toolbox_object.color_numbers[0]
-                                var tmid = map_toolbox_object.color_numbers[1]
-                                if ((tmax - tmin) > 6) {
-                                    var nums = parseInt((tmax - tmin) / 2) + 1
-                                    var index = map_toolbox_object.temp_indexfun(tmin)
-                                    var levelV = []
-                                    var levelVstr = []
-                                    for (var i = 0; i < nums; i++) {
-                                        levelV.push(tmin - 2 + i * 2)
-
-                                    }
-                                    for (var i = 0; i < levelV.length; i++) {
-                                        levelVstr.push(levelV[i].toString())
-                                    }
-
-                                    map_toolbox_object.temp_labelstr = levelVstr
-                                    var color_oplist = temp_options.breaksProperties.slice(index, index + nums)
-                                    var isobands_options = {
-                                        zProperty: "value",
-                                        commonProperties: {
-                                            "fill-opacity": 1
-                                        },
-                                        breaksProperties: color_oplist
-                                    }
-
-                                    // console.log("索引",color_oplist,levelV,tmin,tmax)                                
-                                }
-                                else {
-                                    var nums = (tmax - tmin) + 1
-                                    var index = map_toolbox_object.temp_indexfun(tmin)
-                                    var levelV = []
-                                    var levelVstr = []
-                                    for (var i = 0; i < nums; i++) {
-                                        levelV.push(tmin - 2 + i * 1)
-                                    }
-                                    for (var i = 0; i < levelV.length; i++) {
-                                        levelVstr.push(levelV[i].toString())
-                                    }
-                                    map_toolbox_object.temp_labelstr = levelVstr
-                                    var color_oplist = temp_options.breaksProperties.slice(index, index + nums)
-                                    var isobands_options = {
-                                        zProperty: "value",
-                                        commonProperties: {
-                                            "fill-opacity": 1
-                                        },
-                                        breaksProperties: color_oplist
-                                    }
-                                    // console.log("索引",nums,color_oplist,levelV)
-
-                                }
-
-                            }
-                            else {
-
-                                var levelV = [-10.0, -8.0, -6.0, -4.0, -2.0, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 35, 37, 40, 42]
-                                var isobands_options = temp_options
-                            }
+                            // console.log(map_toolbox_object.current_points)
+                            var arrdata = []
+                            map_toolbox_object.current_points.forEach(function(item){
+                                arrdata.push(item.properties.value)
+                            })
+                            var max = Math.max.apply(null, arrdata)+1
+                            var min = Math.min.apply(null, arrdata)-1
+                            var steps = (max -min)/14
+                            console.log(steps,max,min)
+                            var levelV = []
+                            // generaterArray(min, max, steps)
+                            for (var i=0; i<14; i++){
+                                var item = min + steps*i
+                                levelV.push(item)
+                            }                    
+                            var isobands_options = temp_options
                             return {
                                 levelV: levelV,
                                 isobands_options: isobands_options
@@ -392,7 +355,7 @@
                         }
                         else if (plot_type == "view") {
                             return {
-                                levelV: [0,50, 200, 500, 1000, 300000],
+                                levelV: [-999,5, 20, 50, 100,200,500, 300000],
                                 isobands_options: view_options
                             }
                         }
@@ -457,10 +420,10 @@
                                 };
                             }
                         });
-                        var lines = turf.isolines(grid,
-                            levelV,
-                            isobands_options)
-                        console.log("测试绘图平滑",lines)
+                        // var lines = turf.isolines(grid,
+                        //     levelV,
+                        //     isobands_options)
+                        // console.log("测试绘图平滑",lines)
                         var features = [];//裁剪后的结果集
                         isobands.features.forEach(function (feature1) {
                             boundaries.features.forEach(function (feature2) {
@@ -785,26 +748,123 @@
                             points.push(single_point)
                             // 添加散点------------
                             if (click_type == "rain" && item.value / 10.0 > 0) {
-                                if (item.value/10 > 0 && item.value/10 <= 1) {
-                                    var colors = "black"
+                                if ($("#real_times").val() == "24hours") {
+                                    if (item.value / 10 > 0 && item.value / 10 <= 1) {
+                                       var colors = "black"
+                                    }
+                                    else if (item.value / 10 > 1 && item.value / 10 <= 10) {
+                                       var colors = "rgb(140,246,130)"
+                                    }
+                                    else if (item.value / 10 > 10 && item.value / 10 <= 25) {
+                                       var colors = "rgb(0,191,27)"
+                                    }
+                                    else if (item.value / 10 > 25 && item.value / 10 <= 50) {
+                                       var colors = "rgb(62,185,255)"
+                                    }
+                                    else if (item.value / 10 > 50 && item.value / 10 <= 100) {
+                                       var colors = "rgb(25,0,235)"
+                                    }
+                                    else if (item.value / 10 > 100 && item.value / 10 <= 250) {
+                                       var colors = "rgb(255,0,255)"
+                                    }
+                                    else if (item.value / 10 > 250) {
+                                       var colors = "rgb(140,0,65)"
+                                    }
+
                                 }
-                                else if (item.value/10 > 1 && item.value/10 <= 10) {
-                                    var colors = "rgb(140,246,130)"
+                                else if($("#real_times").val() == "12hours"){
+                                    if (item.value / 10 > 0 && item.value / 10 <= 1) {
+                                        var colors = "black"
+                                    }
+                                    else if (item.value / 10 > 1 && item.value / 10 <= 5) {
+                                        var colors = "rgb(140,246,130)"
+                                    }
+                                    else if (item.value / 10 > 5 && item.value / 10 <= 15) {
+                                        var colors = "rgb(0,191,27)"
+                                    }
+                                    else if (item.value / 10 > 15 && item.value / 10 <= 30) {
+                                        var colors = "rgb(62,185,255)"
+                                    }
+                                    else if (item.value / 10 > 30 && item.value / 10 <= 70) {
+                                        var colors = "rgb(25,0,235)"
+                                    }
+                                    else if (item.value / 10 > 70 && item.value / 10 <= 140) {
+                                        var colors = "rgb(255,0,255)"
+                                    }
+                                    else if (item.value / 10 > 140) {
+                                        var colors = "rgb(140,0,65)"
+                                    }
                                 }
-                                else if (item.value/10 > 10 && item.value/10 <= 25) {
-                                    var colors = "rgb(0,191,27)"
+                                else if($("#real_times").val() == "6hours"){
+                                    if (item.value / 10 > 0 && item.value / 10 <= 1) {
+                                        var colors = "black"
+                                    }
+                                    else if (item.value / 10 > 1 && item.value / 10 <= 4) {
+                                        var colors = "rgb(140,246,130)"
+                                    }
+                                    else if (item.value / 10 > 4 && item.value / 10 <= 13) {
+                                        var colors = "rgb(0,191,27)"
+                                    }
+                                    else if (item.value / 10 > 13 && item.value / 10 <= 25) {
+                                        var colors = "rgb(62,185,255)"
+                                    }
+                                    else if (item.value / 10 > 25 && item.value / 10 <= 60) {
+                                        var colors = "rgb(25,0,235)"
+                                    }
+                                    else if (item.value / 10 > 60 && item.value / 10 <= 120) {
+                                        var colors = "rgb(255,0,255)"
+                                    }
+                                    else if (item.value / 10 > 120) {
+                                        var colors = "rgb(140,0,65)"
+                                    }
+
                                 }
-                                else if (item.value/10 > 25 && item.value/10 <= 50) {
-                                    var colors = "rgb(62,185,255)"
+                                else if($("#real_times").val() == "3hours"){
+                                    if (item.value / 10 > 0 && item.value / 10 <= 1) {
+                                        var colors = "black"
+                                    }
+                                    else if (item.value / 10 > 1 && item.value / 10 <= 3) {
+                                        var colors = "rgb(140,246,130)"
+                                    }
+                                    else if (item.value / 10 > 3 && item.value / 10 <= 10) {
+                                        var colors = "rgb(0,191,27)"
+                                    }
+                                    else if (item.value / 10 > 10 && item.value / 10 <= 20) {
+                                        var colors = "rgb(62,185,255)"
+                                    }
+                                    else if (item.value / 10 > 20 && item.value / 10 <= 50) {
+                                        var colors = "rgb(25,0,235)"
+                                    }
+                                    else if (item.value / 10 > 50 && item.value / 10 <= 70) {
+                                        var colors = "rgb(255,0,255)"
+                                    }
+                                    else if (item.value / 10 > 70) {
+                                        var colors = "rgb(140,0,65)"
+                                    }
                                 }
-                                else if (item.value/10 > 50 && item.value/10 <= 100) {
-                                    var colors = "rgb(25,0,235)"
-                                }
-                                else if (item.value/10 > 100 && item.value/10 <= 250) {
-                                    var colors = "rgb(255,0,255)"
-                                }
-                                else if (item.value/10 > 250) {
-                                    var colors = "rgb(140,0,65)"
+                                else{
+                                    if (item.value / 10 > 0 && item.value / 10 <= 1) {
+                                        var colors = "black"
+                                    }
+                                    else if (item.value / 10 > 1 && item.value / 10 <= 1.5) {
+                                        var colors = "rgb(140,246,130)"
+                                    }
+                                    else if (item.value / 10 > 1.5 && item.value / 10 <= 7) {
+                                        var colors = "rgb(0,191,27)"
+                                    }
+                                    else if (item.value / 10 > 7 && item.value / 10 <= 15) {
+                                        var colors = "rgb(62,185,255)"
+                                    }
+                                    else if (item.value / 10 > 15 && item.value / 10 <= 40) {
+                                        var colors = "rgb(25,0,235)"
+                                    }
+                                    else if (item.value / 10 > 40 && item.value / 10 <= 50) {
+                                        var colors = "rgb(255,0,255)"
+                                    }
+                                    else if (item.value / 10 > 50) {
+                                        var colors = "rgb(140,0,65)"
+                                    }
+
                                 }
                                 var latlng = L.latLng(item.lat, item.lon);
                                 // 添加散点插件
@@ -1142,10 +1202,11 @@
                                 xAxis: [{
                                     categories: timeindex,
                                     // type:"linear",
+                                    tickInterval:60,
                                     lineColor: "white",
                                     lineWidth: 1,
                                     labels:{
-                                        step:12,
+                                        // step:12,
                                         rotation: 0,
                                         formatter: function () { 
                                             // var index = parseInt(this.value)                                          
@@ -1232,11 +1293,26 @@
                                 }, {
                                     categories: timeindex,
                                     lineColor: "black",
-                                    angle:0,
+                                    tickInterval:60,
                                     lineWidth: 2,
-                                    // labels:{
-                                    //     rotation:0 
-                                    // },
+                                    labels:{
+                                        // step:12,
+                                        rotation: 0,
+                                        formatter: function () { 
+                                            // var index = parseInt(this.value)                                          
+                                            var labe = this.value                                        
+                                            if (this.value.substring(2,5)==":00"){
+                                                var labe = this.value.substring(0,2) + "时"
+                                                // console.log("---",this.value,labe) 
+                                            }   
+                                            else {
+                                                var labe = this.value.substring(0,2) + "时"
+                                                // console.log("---",this.value,labe,this.value.substring(2,4)) 
+                                            }                               
+                                            return labe
+                                        },
+                                        // useHTML: true
+                                    },
                                     offset: 80
                                 }
                                 ],
@@ -1342,6 +1418,25 @@
                                     // },
                                     lineColor: "black",
                                     lineWidth: 3,
+                                    tickInterval:60,
+                                    labels:{
+                                        // step:12,
+                                        rotation: 0,
+                                        formatter: function () { 
+                                            // var index = parseInt(this.value)                                          
+                                            var labe = this.value                                        
+                                            if (this.value.substring(2,5)==":00"){
+                                                var labe = this.value.substring(0,2) + "时"
+                                                // console.log("---",this.value,labe) 
+                                            }   
+                                            else {
+                                                var labe = this.value.substring(0,2) + "时"
+                                                // console.log("---",this.value,labe,this.value.substring(2,4)) 
+                                            }                               
+                                            return labe
+                                        },
+                                        // useHTML: true
+                                    },
                                     gridLineWidth:0.2,
                                     gridLineColor: 'black',
                                     gridLineDashStyle: 'Dash'
@@ -1409,7 +1504,26 @@
                                     gridLineColor: 'black',
                                     gridLineDashStyle: 'Dash',
                                     lineColor: "blue",
-                                    lineWidth: 2
+                                    lineWidth: 2,
+                                    tickInterval:20,
+                                    labels:{
+                                        // step:12,
+                                        rotation: 0,
+                                        formatter: function () { 
+                                            // var index = parseInt(this.value)                                          
+                                            var labe = this.value                                        
+                                            if (this.value.substring(2,5)==":00"){
+                                                var labe = this.value.substring(0,2) + "时"
+                                                // console.log("---",this.value,labe) 
+                                            }   
+                                            else {
+                                                var labe = this.value.substring(0,2) + "时"
+                                                // console.log("---",this.value,labe,this.value.substring(2,4)) 
+                                            }                               
+                                            return labe
+                                        },
+                                        // useHTML: true
+                                    }
                                 },
                                 yAxis: {
                                     min: 0,
@@ -1688,11 +1802,9 @@
                    var points = map_toolbox_object.current_points 
                    var click_type = $("#real_class").val()
                    if (click_type=="tmax"||(click_type=="tmin")){
-                    click_type = "temp"
+                        click_type = "temp"
                    }                      
                    if (plot_opt == "extra") {
-
-
                         layer.open({
                             type: 1,
                             title: "绘图",
@@ -1701,7 +1813,7 @@
                             // resize:true,
                             skin: 'layui-layer-lan', //样式类名
                             closeBtn: 1, //不显示关闭按钮
-                            area: ['800px', '800px'],
+                            area: ['850px', '900px'],
                             maxHeight: 600,
                             maxWidth: 1200,
                             anim: 0,
@@ -1711,11 +1823,13 @@
                             content: $("#extra_plot")
                         });
                         
-                    } else {
+                    }
+                    else {
                         // 在地图上绘制
                         if (points) {
-                           map_toolbox_object.flash_map()
-                           var intersectionLay = map_toolbox_object.return_shp(map_toolbox_object.boundaries, points, click_type).intersectionLay
+                           map_toolbox_object.flash_map() 
+                           var boundaries_zj = map_toolbox_object.return_boundaries(zjonly[0].features).boundaries                      
+                           var intersectionLay = map_toolbox_object.return_shp(boundaries_zj, points, click_type).intersectionLay
                            intersectionLay.addTo(map_toolbox_object.current_map)
                         }
                         
@@ -1794,41 +1908,79 @@
                             <div class="layui-form-mid">-</div>
                             <div class="layui-input-inline">
                                 <input type="text" autocomplete="off" id="plot_img-endDate-1" class="layui-input" placeholder="结束日期">
-                            </div>
-                            
+                            </div>                          
                         </div>
-
-                        <!-- <div class="layui-input" style="width:200px">
-                            <input type="text" class="layui-input"  placeholder="站号" style="width:40%">
-                        </div> -->
-                        <div class="layui-input-inline" style="width:20%">
-                            <select id="single_class" style="width:40%">
+                        <div class="layui-input-inline" style="width:15%">
+                            <select id="color_label" style="width:40%">
                                 <option value=""></option>
-                                <option value="rain" selected="">降水-1小时</option>
-                                <option value="rain" selected="">降水-3小时</option>
-                                <option value="rain" selected="">降水-6小时</option>
-                                <option value="rain" selected="">降水-12小时</option>
-                                <option value="wind">风力</option>
-                                <option value="tmax">高温</option>
-                                <option value="tmin">低温</option>
-                                <option value="tmax">热浪</option>
-                                <option value="tmin">寒潮</option>
-                                <option value="view">能见度</option>
+                                <option value="rain_01hours" selected="">降水-1小时</option>
+                                <option value="rain_03hours" >降水-3小时</option>
+                                <option value="rain_06hours" >降水-6小时</option>
+                                <option value="rain_12hours" >降水-12小时</option>
+                                <option value="rain_24hours" >降水-24小时</option>
+                                <option value="wind_normal">风力</option>
+                                <option value="tmax_normal">高温</option>
+                                <option value="tmin_normal">低温</option>
+                                <option value="tmax_high">热浪</option>
+                                <option value="tmin_low">寒潮</option>
+                                <option value="view_normal">能见度</option>
                             </select>
                         </div>
-                        <button id="plot_image" type="button" class="layui-btn layui-btn-normal"
-                            style="float: right;">查询</button>
+                        <div class="layui-input-inline" style="width:10%">
+                            <select id="city" style="width:40%">
+                                <option value=""></option>
+                                <option value="taizhou" selected="">台州</option>
+                                <option value="sanmen" >三门</option>
+                                <option value="linhai" >临海</option>
+                                <option value="luqiao" >路桥</option>
+                                <option value="wenling">温岭</option>
+                                <option value="jiaojiang">椒江</option>
+                                <option value="huangyan">黄岩</option>
+                                <option value="xianju">仙居</option>
+                                <option value="tiantai">天台</option>
+                                <option value="yuhuan">玉环</option>
+                            </select>
+                        </div>
+                        <button id="plot_image" type="button" class="layui-btn layui-btn-normal">查询</button>
                     </div>
                     <script>
+                        function getNextDate(date, day) {
+                                var dd = new Date(date);
+                                dd.setDate(dd.getDate() + day);
+                                var y = dd.getFullYear();
+                                var m = dd.getMonth() + 1 < 10 ? "0" + (dd.getMonth() + 1) : dd.getMonth() + 1;
+                                var d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate();
+                                return y + "-" + m + "-" + d 
+                            };                    
                         layui.use('laydate', function () {
-                                var laydate = layui.laydate;
-                                laydate.render({
-                                    elem: '#plot_img'
-                                    //设置开始日期、日期日期的 input 选择器
-                                    //数组格式为 2.6.6 开始新增，之前版本直接配置 true 或任意分割字符即可
-                                    , range: ['#plot_img-startDate-1', '#plot_img-endDate-1']
-                                });
-                            })
+                            var laydate = layui.laydate;
+                            var today = new Date()
+                            var y = today.getFullYear();
+                            var m = today.getMonth() + 1 < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1;
+                            var d = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
+                            var h = today.getHours() < 10 ? "0" + today.getHours() + ":00:00" : today.getHours() + ":00:00";
+                            var today_str = y + "-" + m + "-" + d + " " + h;
+                            var yestorday = getNextDate(today_str, day = -1)
+                            var yes_str = yestorday + " " + h;
+                            function date_to_str(date) {
+                                var year = date.year
+                                var month = date.month < 10 ? "0" + date.month.toString() : date.month.toString()
+                                var day = date.date < 10 ? "0" + date.date.toString() : date.date.toString()
+                                var hour = date.hours < 10 ? "0" + date.hours.toString() : date.hours.toString()
+                                var mins = date.minutes < 10 ? "0" + date.minutes.toString() + ":00" : date.minutes.toString() + ":00"
+                                date_str = year + "-" + month + "-" + day + " " + hour + ":" + mins;
+                                return date_str
+                            }
+                            laydate.render({
+                                elem: '#plot_img'
+                                , type: 'datetime'
+                                , theme: 'molv'
+                                ,value: [yes_str,today_str]                            
+                                //设置开始日期、日期日期的 input 选择器
+                                //数组格式为 2.6.6 开始新增，之前版本直接配置 true 或任意分割字符即可
+                                , range: ['#plot_img-startDate-1', '#plot_img-endDate-1']
+                            });
+                        })
                         
                     </script>
                 </div>
@@ -1839,6 +1991,37 @@
 
             <div id="extra_map" style="width:800px;height: 700px;background-color: white;"></div>
             <script>
+                $("#plot_image").click(function () {
+                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                        $.ajax({
+                            url: "station_zdz_data",  // 请求的地址
+                            type: "post",  // 请求方式
+                            timeout: 25000, //设置延迟上限
+                            data: {
+                                'csrfmiddlewaretoken': csrf,
+                                'model': 'plot_image',
+                                'click_type': $("#color_label").val(),
+                                'button_value': $("#city").val(),
+                                'start': $("#plot_img-startDate-1").val(),
+                                'end': $("#plot_img-endDate-1").val()
+                            },
+                            dataType: "json",
+                            beforeSend: function (XMLHttpRequest) {
+                                load = showLoad();
+                            },
+                            success: function (recvdate) {
+                                console.log(recvdate)
+                                var imgsrc = recvdate.imgs
+                                var image = document.createElement("img")
+                                image.src = imgsrc
+                                // image.style = "width:100%;height:100%"
+                                var mapdiv = document.getElementById("extra_map") 
+                                mapdiv.append(image)
+                                closeLoad(load)
+                            }
+                        })
+
+                    })
                 
             </script>
 
