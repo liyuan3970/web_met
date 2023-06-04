@@ -1517,3 +1517,135 @@ class station_plot:
         ims = imb.decode()
         imd = "data:image/png;base64,"+ims
         return imd
+
+
+
+class station_sql_data:
+    def __init__(self):
+        self.rs = redis.Redis(host='127.0.0.1', port=6379)
+        self.conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="ZJSZDZDB")
+        self.redis_name = {
+            "24hours":"table_24hours",
+            "12hours":"table_12hours",
+            "6hours":"table_6hours",
+            "3hours":"table_3hours",
+            "2hours":"table_2hours",
+            "1hours":"table_1hours",
+            "45mins":"table_45mins",
+            "30mins":"table_30mins",
+            "15mins":"table_15mins"         
+        }
+    def rain_sql(self,tables_name,timesdelay):
+        SHA_TZ = timezone(
+            dtt.timedelta(hours=8),
+            name='Asia/Shanghai',
+        )
+        utc_now = dtt.datetime.utcnow().replace(tzinfo=dtt.timezone.utc)
+        today = utc_now.astimezone(SHA_TZ)
+        offset = dtt.timedelta(minutes=-timesdelay)
+        start_time = (today + offset).strftime('%Y-%m-%d %H:%M:%S')
+        sql = """select ta.IIIII,station.StationName,station.Province,station.City,station.County,station.Town,station.ZoomLevel,station.Type,station.lat,station.lon,sum(Ri) as value
+        from Tab_AM_M as ta inner join TAB_StationInfo as station on ta.IIIII=station.IIiii and station.Province ='浙江' 
+        where (TTime >'{time}' and  ta.Ri!=-9999) 
+        group by  ta.IIIII,station.StationName,station.Province,station.City,station.County,station.Town,station.ZoomLevel,station.Type,station.lat,station.lon"""
+        rsql = sql.format(time=start_time)
+        station_all = pd.read_sql(rsql, con=self.conn)
+        # 设置redis的键值对儿
+        data = {
+            "time":start_time,
+            "data":station_all
+        }
+        redis_name_str = self.redis_name[tables_name] + "_rain"
+        self.rs.set(redis_name_str, pickle.dumps(data))
+        
+    def wind_sql(self,tables_name,timesdelay):
+        SHA_TZ = timezone(
+            dtt.timedelta(hours=8),
+            name='Asia/Shanghai',
+        )
+        utc_now = dtt.datetime.utcnow().replace(tzinfo=dtt.timezone.utc)
+        today = utc_now.astimezone(SHA_TZ)
+        offset = dtt.timedelta(minutes=-timesdelay)
+        start_time = (today + offset).strftime('%Y-%m-%d %H:%M:%S')
+        sql = """select wind1.IIiii as IIiii,wind1.StationName,wind1.Province,wind1.City,wind1.County,wind1.Town,wind1.ZoomLevel,wind1.Type, max(wind1.lon) as lon, max(wind1.lat) as lat, wind1.fFy as value, max(wind2.dFy) as dFy  from 
+        (SELECT  st.IIiii AS  IIiii,StationName,Province,City,County,Town,ZoomLevel,Type, max(st.lon) AS  lon, max(st.lat) AS  lat, max(sd.fFy) AS  fFy  FROM  TAB_StationInfo  AS  st
+        LEFT JOIN Tab_AM_M  AS  sd ON  sd.IIIII = st.IIiii WHERE  (st.Province='浙江' AND  (sd.TTime >'{time}') and sd.fFy!=-9999 and sd.dFy!=-9999 ) 
+        GROUP BY  st.IIiii,st.StationName,st.Province,st.City,st.County,st.Town,st.ZoomLevel,st.Type) as wind1
+        inner join Tab_AM_M as wind2 on wind2.IIIII = wind1.IIiii and wind2.fFy = wind1.fFy and wind2.TTime >'{time}'
+        group by wind1.IIiii, wind1.fFy,StationName,Province,City,County,Town,ZoomLevel,Type"""
+        rsql = sql.format(time=start_time)
+        station_all = pd.read_sql(rsql, con=self.conn)
+        # 设置redis的键值对儿
+        data = {
+            "time":start_time,
+            "data":station_all
+        }
+        redis_name_str = self.redis_name[tables_name] + "_wind"
+        self.rs.set(redis_name_str, pickle.dumps(data))
+    def tmax_sql(self,tables_name,timesdelay):
+        SHA_TZ = timezone(
+            dtt.timedelta(hours=8),
+            name='Asia/Shanghai',
+        )
+        utc_now = dtt.datetime.utcnow().replace(tzinfo=dtt.timezone.utc)
+        today = utc_now.astimezone(SHA_TZ)
+        offset = dtt.timedelta(minutes=-timesdelay)
+        start_time = (today + offset).strftime('%Y-%m-%d %H:%M:%S')
+        sql = """select ta.IIIII,station.StationName,station.Province,station.City,station.County,station.Town,station.ZoomLevel,station.Type,station.lat,station.lon,max(T) as value
+        from Tab_AM_M as ta inner join TAB_StationInfo as station on ta.IIIII=station.IIiii and station.Province ='浙江' 
+        where (TTime >'{time}' and  ta.T!=-9999) 
+        group by  ta.IIIII,station.StationName,station.Province,station.City,station.County,station.Town,station.ZoomLevel,station.Type,station.lat,station.lon"""
+        rsql = sql.format(time=start_time)
+        station_all = pd.read_sql(rsql, con=self.conn)
+        # 设置redis的键值对儿
+        data = {
+            "time":start_time,
+            "data":station_all
+        }
+        redis_name_str = self.redis_name[tables_name] + "_tmax"
+        self.rs.set(redis_name_str, pickle.dumps(data))
+    def tmin_sql(self,tables_name,timesdelay):
+        SHA_TZ = timezone(
+            dtt.timedelta(hours=8),
+            name='Asia/Shanghai',
+        )
+        utc_now = dtt.datetime.utcnow().replace(tzinfo=dtt.timezone.utc)
+        today = utc_now.astimezone(SHA_TZ)
+        offset = dtt.timedelta(minutes=-timesdelay)
+        start_time = (today + offset).strftime('%Y-%m-%d %H:%M:%S')
+        sql ="""select ta.IIIII,station.StationName,station.Province,station.City,station.County,station.Town,station.ZoomLevel,station.Type,station.lat,station.lon,min(T) as value
+        from Tab_AM_M as ta inner join TAB_StationInfo as station on ta.IIIII=station.IIiii and station.Province ='浙江' 
+        where (TTime >'{time}' and  ta.T!=-9999) 
+        group by  ta.IIIII,station.StationName,station.Province,station.City,station.County,station.Town,station.ZoomLevel,station.Type,station.lat,station.lon"""
+        rsql = sql.format(time=start_time)
+        station_all = pd.read_sql(rsql, con=self.conn)
+        # 设置redis的键值对儿
+        data = {
+            "time":start_time,
+            "data":station_all
+        }
+        redis_name_str = self.redis_name[tables_name] + "_tmin"
+        self.rs.set(redis_name_str, pickle.dumps(data))
+    def view_sql(self,tables_name,timesdelay):
+        SHA_TZ = timezone(
+            dtt.timedelta(hours=8),
+            name='Asia/Shanghai',
+        )
+        utc_now = dtt.datetime.utcnow().replace(tzinfo=dtt.timezone.utc)
+        today = utc_now.astimezone(SHA_TZ)
+        offset = dtt.timedelta(minutes=-timesdelay)
+        start_time = (today + offset).strftime('%Y-%m-%d %H:%M:%S')
+        sql = """select ta.IIIII,station.StationName,station.Province,station.City,station.County,station.Town,station.ZoomLevel,station.Type,station.lat,station.lon,min(V) as value
+        from Tab_AM_M as ta inner join TAB_StationInfo as station on ta.IIIII=station.IIiii and station.Province ='浙江' 
+        where (TTime >'{time}' and ta.V!=-9999 ) 
+        group by  ta.IIIII,station.StationName,station.Province,station.City,station.County,station.Town,station.ZoomLevel,station.Type,station.lat,station.lon"""
+        rsql = sql.format(time=start_time)
+        station_all = pd.read_sql(rsql, con=self.conn)
+        # 设置redis的键值对儿
+        data = {
+            "time":start_time,
+            "data":station_all
+        }
+        redis_name_str = self.redis_name[tables_name] + "_view"
+        self.rs.set(redis_name_str, pickle.dumps(data))
+
