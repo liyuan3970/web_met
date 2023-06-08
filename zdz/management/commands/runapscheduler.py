@@ -58,6 +58,7 @@ class Command(BaseCommand):
             seconds=60*2, # 2分钟运行一次
             id="rain_data_24",  # The `id` assigned to each job MUST be unique
             coalesce=True, #如果为 True，则在执行任务时忽略其之前的所有未执行任务
+            max_instances=3,
             replace_existing=True,
             misfire_grace_time=3600,
             kwargs= {

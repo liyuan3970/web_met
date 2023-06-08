@@ -41,8 +41,8 @@
 
         _createPoint: function() {
             var svg, w,h, sw, r, fc,sc;
-            sw = this.options.strokeWidth, r = this.options.pointRadius, fc = this.options.fillColor;
-            sc =  this.options.strokeColor
+            sw = this.options.strokeWidth, r = this.options.pointRadius, fc = 'rgba(255,255,255,0)' //this.options.fillColor;
+            sc =  'rgba(255,255,255,0)' // this.options.strokeColor
             w = h = 2*sw+2*r;
             var xmlns = "http://www.w3.org/2000/svg";
             svg = document.createElementNS (xmlns, 'svg');

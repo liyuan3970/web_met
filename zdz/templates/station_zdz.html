@@ -834,7 +834,7 @@
                             if (click_type == "rain" && item.value / 10.0 > 0) {
                                 if ($("#real_times").val() == "24hours") {
                                     if (item.value / 10 > 0 && item.value / 10 <= 1) {
-                                       var colors = "black"
+                                       var colors = "white"
                                     }
                                     else if (item.value / 10 > 1 && item.value / 10 <= 10) {
                                        var colors = "rgb(140,246,130)"
@@ -858,7 +858,7 @@
                                 }
                                 else if($("#real_times").val() == "12hours"){
                                     if (item.value / 10 > 0 && item.value / 10 <= 1) {
-                                        var colors = "black"
+                                        var colors = "white"
                                     }
                                     else if (item.value / 10 > 1 && item.value / 10 <= 5) {
                                         var colors = "rgb(140,246,130)"
@@ -881,7 +881,7 @@
                                 }
                                 else if($("#real_times").val() == "6hours"){
                                     if (item.value / 10 > 0 && item.value / 10 <= 1) {
-                                        var colors = "black"
+                                        var colors = "white"
                                     }
                                     else if (item.value / 10 > 1 && item.value / 10 <= 4) {
                                         var colors = "rgb(140,246,130)"
@@ -905,7 +905,7 @@
                                 }
                                 else if($("#real_times").val() == "3hours"){
                                     if (item.value / 10 > 0 && item.value / 10 <= 1) {
-                                        var colors = "black"
+                                        var colors = "white"
                                     }
                                     else if (item.value / 10 > 1 && item.value / 10 <= 3) {
                                         var colors = "rgb(140,246,130)"
@@ -928,7 +928,7 @@
                                 }
                                 else{
                                     if (item.value / 10 > 0 && item.value / 10 <= 1) {
-                                        var colors = "black"
+                                        var colors = "white"
                                     }
                                     else if (item.value / 10 > 1 && item.value / 10 <= 1.5) {
                                         var colors = "rgb(140,246,130)"
@@ -955,24 +955,27 @@
                                 var c = L.circleMarker(latlng, {
                                     stationname: item.StationName,
                                     stationnum: item.IIiii,
-                                    weight: 1,
+                                    weight: 0,
                                     radius: 8,
-                                    opacity: 1,
-                                    fill: true,
+                                    opacity: 0,
+                                    fill: false,
                                     color: colors,
                                     fillColor: colors,
                                     fillOpacity: 1,
                                     labelStyle: {
-                                        text: item.StationName + ":" + item.value / 10.0,
+                                        text: item.value / 10.0,
                                         collisionFlg: iflabel,
-                                        offsetY: -25,
+                                        // offsetY: -25,
                                         scale: 1.5,
                                         weight: 3,
                                         rotation: 0,
-                                        color: "red",
+                                        fillStyle: colors,
                                         zIndex: 60
                                     }
-                                })
+                                }).bindTooltip(item.StationName + "站"+  item.IIiii ,{
+                                    direction:"top",
+                                    offset:L.point(0, -10)
+                                }).openTooltip();
                                 // map_toolbox_object.current_marker_list.push(marker)
                                 map_toolbox_object.current_marker_list.push(c)
 
@@ -992,7 +995,7 @@
                                 var icon = L.WindBarb.icon({
                                     color: "red",
                                     deg: 360 - item.dFy,
-                                    pointRadius: 5,
+                                    pointRadius: 8,
                                     strokeColor: colors,
                                     // barbSpaceing:4,
                                     // barbHeight:20,
@@ -1007,47 +1010,50 @@
                                     deg: item.dFy,
                                     sped: item.fFy,
                                     station: item.StationName
-                                })
+                                }).bindTooltip(item.StationName + "站"+  item.IIiii ,{
+                                    direction:"top",
+                                    offset:L.point(0, -10)
+                                }).openTooltip();
                                 map_toolbox_object.current_marker_list.push(marker)
 
 
                             }
                             else if (click_type == "sped" && item.value != -9999) {
                                 if ((item.value>0)&&(item.value<=54)){
-                                    var texts = "3级"
+                                    var texts = "3"
                                     var colors = "white"
                                     
                                 }
                                 else if((item.value>54)&&(item.value<=79)){
-                                    var texts = "4级"
+                                    var texts = "4"
                                     var colors = "white"
                                 }
                                 else if((item.value>79)&&(item.value<=107)){
-                                    var texts = "5级"
+                                    var texts = "5"
                                     var colors = "white"
                                 }
                                 else if((item.value>107)&&(item.value<=138)){
-                                    var texts = "6级"
+                                    var texts = "6"
                                     var colors = "#F3EBAB"
                                 }
                                 else if((item.value>138)&&(item.value<=171)){
-                                    var texts = "7级"
+                                    var texts = "7"
                                     var colors = "#ABC1F3"
                                 }
                                 else if((item.value>171)&&(item.value<=207)){
-                                    var texts = "8级"
+                                    var texts = "8"
                                     var colors = "#F3ABF1"
                                 }
                                 else if((item.value>207)&&(item.value<=244)){
-                                    var texts = "9级"
+                                    var texts = "9"
                                     var colors = "red"
                                 }
                                 else if((item.value>244)&&(item.value<=284)){
-                                    var texts = "10级"
+                                    var texts = "10"
                                     var colors = "red"
                                 }
                                 else if((item.value>284)){
-                                    var texts = "11级"
+                                    var texts = "11"
                                     var colors = "red"
                                 }
 
@@ -1064,7 +1070,7 @@
                                     fillColor: colors,
                                     fillOpacity: 1,
                                     labelStyle: {
-                                        text: item.StationName + ":" + texts,
+                                        text: texts,
                                         collisionFlg: iflabel,
                                         fillStyle: colors,
                                         // offsetY: -25,
@@ -1074,7 +1080,10 @@
                                         color: "red",
                                         zIndex: 60
                                     }
-                                })
+                                }).bindTooltip(item.StationName + "站"+  item.IIiii ,{
+                                    direction:"top",
+                                    offset:L.point(0, -10)
+                                }).openTooltip();
                                 // map_toolbox_object.current_marker_list.push(marker)
                                 map_toolbox_object.current_marker_list.push(c)
 
@@ -1101,7 +1110,7 @@
                                             fill: false,
                                             fillOpacity: 1,
                                             labelStyle: {
-                                                text: item.StationName + ":" + item.value / 10.0,
+                                                text: item.value / 10.0,
                                                 collisionFlg: iflabel,
                                                 fillStyle: colors,
                                                 scale: 1.5,
@@ -1109,7 +1118,10 @@
                                                 rotation: 0,
                                                 zIndex: 60
                                             }
-                                        })
+                                        }).bindTooltip(item.StationName + "站" + item.IIiii, {
+                                            direction: "top",
+                                            offset: L.point(0, -10)
+                                        }).openTooltip();
                                         // map_toolbox_object.current_marker_list.push(marker)
                                         map_toolbox_object.current_marker_list.push(c)
                                     }
@@ -1142,7 +1154,7 @@
                                     zIndex: 500,
                                     fillOpacity: 1,
                                     labelStyle: {
-                                        text: item.StationName + ":" + item.value,
+                                        text: item.value,
                                         collisionFlg: iflabel,
                                         scale: 1.5, // 字体大小
                                         fillStyle: colors,  // 颜色
@@ -1150,7 +1162,10 @@
                                         rotation: 0,
                                         zIndex: 200
                                     }
-                                })
+                                }).bindTooltip(item.StationName + "站"+  item.IIiii ,{
+                                    direction:"top",
+                                    offset:L.point(0, -10)
+                                }).openTooltip();
                                 // map_toolbox_object.current_marker_list.push(marker)
                                 map_toolbox_object.current_marker_list.push(c)
 
