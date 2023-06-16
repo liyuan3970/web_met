@@ -22,6 +22,8 @@
     <script src="static/js/leaflet-beautify-marker-icon.js"></script>
     <!-- 使用turf -->
     <script src="static/js/turf.min.js"></script>
+    <!-- 使用插值算法 -->
+    <script src="static/js/kriging.js"></script>
     <!-- echart -->
     <script type="text/javascript" src="static/js/echarts.min.js"></script>
     <script type="text/javascript" src="static/js/echarts-gl.min.js"></script>
@@ -65,6 +67,7 @@
     <script src='static/js/zjonly.js'></script>
     <script src='static/js/taizhou_county.js'></script>
     <script src='static/js/taizhouxiangzhen.js'></script>
+    <script src='static/js/tzonly.js'></script>
     <title>实况监测</title>
     <style type="text/css">
         .scrollbar::-webkit-scrollbar {
@@ -224,7 +227,7 @@
                     current_layer: undefined, // 当前绘图层
                     current_marker_list: [], // 当前散点阵列
                     current_points :undefined,// 当前绘图数据
-                    // current_points :undefined,
+                    // current_points :undefined,// 当前绘制曲线的option
                     boundaries: undefined,
                     color_level: function (plot_type) {                
                         // 降水
@@ -513,32 +516,6 @@
                             boundaries: bounddata
                         }
                     },
-                    current_time: function (button_value) {
-                        //返回时间 
-                        var today = new Date()
-                        var y = today.getFullYear();
-                        var m = today.getMonth() + 1 < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1;
-                        var d = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
-                        var h = today.getHours() < 10 ? "0" + today.getHours() + ":" : today.getHours() + ":";
-                        var minutes = today.getMinutes() < 10 ? "0" + today.getMinutes() + ":" : today.getMinutes() + ":";
-                        var sec = today.getSeconds() < 10 ? "0" + today.getSeconds() : today.getSeconds();
-                        var today_str = y + "-" + m + "-" + d + " " + h + minutes + sec;
-                        if (button_value == 24) {
-
-                            var old_day = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
-                            var yy = old_day.getFullYear();
-                            var mm = old_day.getMonth() + 1 < 10 ? "0" + (old_day.getMonth() + 1) : old_day.getMonth() + 1;
-                            var dd = old_day.getDate() < 10 ? "0" + old_day.getDate() : old_day.getDate();
-                            var hh = old_day.getHours() < 10 ? "0" + old_day.getHours() + ":" : old_day.getHours() + ":";
-                            var mms = old_day.getMinutes() < 10 ? "0" + old_day.getMinutes() + ":" : old_day.getMinutes() + ":";
-                            var ss = old_day.getSeconds() < 10 ? "0" + old_day.getSeconds() : old_day.getSeconds();
-                            var old_str = yy + "-" + mm + "-" + dd + " " + hh + mms + ss;
-                            // console.log(today_str, old_str)
-
-                        }
-
-
-                    },
                     flash_map: function () {
                         if (map_toolbox_object.current_map) {
                             map_toolbox_object.current_map.eachLayer(function (layer) {
@@ -644,8 +621,9 @@
 
 
 
-
+                        // map_toolbox_object.randar_tables()
                         //清空数据
+                        
 
                         map_toolbox_object.recv_all_data = undefined
                         map_toolbox_object.current_marker_list = []
@@ -823,15 +801,16 @@
                                 }
                             }
                             points.push(single_point)
-                            if((item.ZoomLevel<=6)&&(item.City=="台州")){
+                            if((item.ZoomLevel<=6)){
                                 var iflabel = false
                             }
                             else{
                                 var iflabel = true
                             }
-
+                            var tooltips = item.StationName + "-" + item.IIiii + "<br>"+"    纬度:" + item.lat.toFixed(2).toString() + "  "+ "经度:" + item.lon.toFixed(2).toString()+"<br>"+"    " +item.City + "-" + item.County + "-" + item.Town 
                             // 添加散点------------
                             if (click_type == "rain" && item.value / 10.0 > 0) {
+
                                 if ($("#real_times").val() == "24hours") {
                                     if (item.value / 10 > 0 && item.value / 10 <= 1) {
                                        var colors = "white"
@@ -841,18 +820,23 @@
                                     }
                                     else if (item.value / 10 > 10 && item.value / 10 <= 25) {
                                        var colors = "rgb(0,191,27)"
+                                       var iflabel = false
                                     }
                                     else if (item.value / 10 > 25 && item.value / 10 <= 50) {
                                        var colors = "rgb(62,185,255)"
+                                       var iflabel = false
                                     }
                                     else if (item.value / 10 > 50 && item.value / 10 <= 100) {
                                        var colors = "rgb(25,0,235)"
+                                       var iflabel = false
                                     }
                                     else if (item.value / 10 > 100 && item.value / 10 <= 250) {
                                        var colors = "rgb(255,0,255)"
+                                       var iflabel = false
                                     }
                                     else if (item.value / 10 > 250) {
                                        var colors = "rgb(140,0,65)"
+                                       var iflabel = false
                                     }
 
                                 }
@@ -868,15 +852,19 @@
                                     }
                                     else if (item.value / 10 > 15 && item.value / 10 <= 30) {
                                         var colors = "rgb(62,185,255)"
+                                        var iflabel = false
                                     }
                                     else if (item.value / 10 > 30 && item.value / 10 <= 70) {
                                         var colors = "rgb(25,0,235)"
+                                        var iflabel = false
                                     }
                                     else if (item.value / 10 > 70 && item.value / 10 <= 140) {
                                         var colors = "rgb(255,0,255)"
+                                        var iflabel = false
                                     }
                                     else if (item.value / 10 > 140) {
                                         var colors = "rgb(140,0,65)"
+                                        var iflabel = false
                                     }
                                 }
                                 else if($("#real_times").val() == "6hours"){
@@ -891,15 +879,19 @@
                                     }
                                     else if (item.value / 10 > 13 && item.value / 10 <= 25) {
                                         var colors = "rgb(62,185,255)"
+                                        var iflabel = false
                                     }
                                     else if (item.value / 10 > 25 && item.value / 10 <= 60) {
                                         var colors = "rgb(25,0,235)"
+                                        var iflabel = false
                                     }
                                     else if (item.value / 10 > 60 && item.value / 10 <= 120) {
                                         var colors = "rgb(255,0,255)"
+                                        var iflabel = false
                                     }
                                     else if (item.value / 10 > 120) {
                                         var colors = "rgb(140,0,65)"
+                                        var iflabel = false
                                     }
 
                                 }
@@ -912,18 +904,23 @@
                                     }
                                     else if (item.value / 10 > 3 && item.value / 10 <= 10) {
                                         var colors = "rgb(0,191,27)"
+                                        var iflabel = false
                                     }
                                     else if (item.value / 10 > 10 && item.value / 10 <= 20) {
                                         var colors = "rgb(62,185,255)"
+                                        var iflabel = false
                                     }
                                     else if (item.value / 10 > 20 && item.value / 10 <= 50) {
                                         var colors = "rgb(25,0,235)"
+                                        var iflabel = false
                                     }
                                     else if (item.value / 10 > 50 && item.value / 10 <= 70) {
                                         var colors = "rgb(255,0,255)"
+                                        var iflabel = false
                                     }
                                     else if (item.value / 10 > 70) {
                                         var colors = "rgb(140,0,65)"
+                                        var iflabel = false
                                     }
                                 }
                                 else{
@@ -972,7 +969,7 @@
                                         fillStyle: colors,
                                         zIndex: 60
                                     }
-                                }).bindTooltip(item.StationName + "站"+  item.IIiii ,{
+                                }).bindTooltip(tooltips,{
                                     direction:"top",
                                     offset:L.point(0, -10)
                                 }).openTooltip();
@@ -980,13 +977,15 @@
                                 map_toolbox_object.current_marker_list.push(c)
 
                             }
-                            else if (click_type == "wind" && item.value != -9999) {
+                            else if (click_type == "wind" && item.value >54) {
                                 var latlng = L.latLng(item.lat, item.lon);
-                                if ((item.value / 10 <= 20.6) && (item.value / 10 > 106)) {
+                                if ((item.value / 10 <= 20.6) && (item.value / 10 > 170)) {
                                     var colors = "#E71FED" // 粉色
+                                    
                                 }
                                 else if (item.value / 10 > 20.6) {
                                     var colors = "red" // 粉色
+                                    
                                 }
                                 else {
                                     var colors = "white"
@@ -1010,7 +1009,7 @@
                                     deg: item.dFy,
                                     sped: item.fFy,
                                     station: item.StationName
-                                }).bindTooltip(item.StationName + "站"+  item.IIiii ,{
+                                }).bindTooltip(tooltips ,{
                                     direction:"top",
                                     offset:L.point(0, -10)
                                 }).openTooltip();
@@ -1019,10 +1018,9 @@
 
                             }
                             else if (click_type == "sped" && item.value != -9999) {
-                                if ((item.value>0)&&(item.value<=54)){
+                                if ((item.value>=0)&&(item.value<=54)){
                                     var texts = "3"
-                                    var colors = "white"
-                                    
+                                    var colors = "white"                                
                                 }
                                 else if((item.value>54)&&(item.value<=79)){
                                     var texts = "4"
@@ -1039,22 +1037,28 @@
                                 else if((item.value>138)&&(item.value<=171)){
                                     var texts = "7"
                                     var colors = "#ABC1F3"
+                                    var iflabel = false
+                                    
                                 }
                                 else if((item.value>171)&&(item.value<=207)){
                                     var texts = "8"
                                     var colors = "#F3ABF1"
+                                    var iflabel = false
                                 }
                                 else if((item.value>207)&&(item.value<=244)){
                                     var texts = "9"
                                     var colors = "red"
+                                    var iflabel = false
                                 }
                                 else if((item.value>244)&&(item.value<=284)){
                                     var texts = "10"
                                     var colors = "red"
+                                    var iflabel = false
                                 }
                                 else if((item.value>284)){
                                     var texts = "11"
                                     var colors = "red"
+                                    var iflabel = false
                                 }
 
                                 var latlng = L.latLng(item.lat, item.lon);
@@ -1080,7 +1084,7 @@
                                         color: "red",
                                         zIndex: 60
                                     }
-                                }).bindTooltip(item.StationName + "站"+  item.IIiii ,{
+                                }).bindTooltip(tooltips ,{
                                     direction:"top",
                                     offset:L.point(0, -10)
                                 }).openTooltip();
@@ -1093,9 +1097,11 @@
                                     if (item.value != -9999) {
                                         if (item.value / 10 > 35) {
                                             var colors = "red"
+                                            var iflabel = false
                                         }
                                         else if (item.value / 10 < 3) {
                                             var colors = "blue"
+                                            var iflabel = false
                                         }
                                         else {
                                             var colors = "white"
@@ -1118,7 +1124,7 @@
                                                 rotation: 0,
                                                 zIndex: 60
                                             }
-                                        }).bindTooltip(item.StationName + "站" + item.IIiii, {
+                                        }).bindTooltip(tooltips, {
                                             direction: "top",
                                             offset: L.point(0, -10)
                                         }).openTooltip();
@@ -1133,12 +1139,15 @@
                                 }
                                 else if ((item.value > 200) && (item.value <= 500)) {
                                     var colors = "#F8E811"
+                                    var iflabel = false
                                 }
                                 else if ((item.value > 50) && (item.value <= 200)) {
                                     var colors = "#F88109"
+                                    var iflabel = false
                                 }
                                 else if (item.value <= 50) {
                                     var colors = "red"
+                                    var iflabel = false
                                 }
                                 else {
                                     var colors = "white"
@@ -1162,7 +1171,7 @@
                                         rotation: 0,
                                         zIndex: 200
                                     }
-                                }).bindTooltip(item.StationName + "站"+  item.IIiii ,{
+                                }).bindTooltip(tooltips ,{
                                     direction:"top",
                                     offset:L.point(0, -10)
                                 }).openTooltip();
@@ -1356,7 +1365,6 @@
                         var opt = undefined
                         var hoursindex= ['20:00','21:00','22:00','23:00','24:00','01:00','02:00','03:00','04:00','05:00','06:00','07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00']
                         if (plot_type == "rain") {
-                            var indexline = timeindex
                             opt = {
                                 chart: {
                                     type: 'column',
@@ -1372,7 +1380,7 @@
                                     categories: timeindex,
                                     // type:"linear",
                                     tickInterval:60,
-                                    lineColor: "white",
+                                    lineColor: "black",
                                     lineWidth: 1,
                                     labels:{
                                         // step:12,
@@ -1430,8 +1438,7 @@
                                 }]
                             }
                         }
-                        else if ((plot_type == "wind") || (plot_type == "sped")) {
-                            
+                        else if ((plot_type == "wind") || (plot_type == "sped")) {                            
                             opt = {
                                 title: {
                                     text: '风场'
@@ -1672,7 +1679,7 @@
                                     gridLineWidth:0.2,
                                     gridLineColor: 'black',
                                     gridLineDashStyle: 'Dash',
-                                    lineColor: "blue",
+                                    lineColor: "black",
                                     lineWidth: 2,
                                     tickInterval:20,
                                     labels:{
@@ -1917,7 +1924,6 @@
 
                             // }
                         });
-
                     }
                     else {
                         layer.open({
@@ -1970,6 +1976,7 @@
                 $("#real_flash").click(function () {
                     map_toolbox_object.flash_map()        
                 })
+                // 地图绘制的按钮
                 $("#real_contour").click(function(){
                    var plot_opt =  $('input[name="plot_opt"]:checked').val();
                    var points = map_toolbox_object.current_points 
@@ -2000,9 +2007,10 @@
                         // 在地图上绘制
                         if (points) {
                            map_toolbox_object.flash_map() 
-                           
+                        //    console.log("地图上绘制的简单代码",taizhouonly)
                            var boundaries_zj = map_toolbox_object.return_boundaries(tz_json_county.features).boundaries
-                        //    var boundaries_zj = map_toolbox_object.return_boundaries(zjonly[0].features).boundaries                      
+                           
+                                            
                            var intersectionLay = map_toolbox_object.return_shp(boundaries_zj, points, click_type).intersectionLay
                            intersectionLay.addTo(map_toolbox_object.current_map)
                         }                    
@@ -2034,8 +2042,10 @@
                                 <option value="view">能见度</option>
                             </select>
                         </div>
+                        <button id="single_compare" type="button" class="layui-btn layui-btn-normal"
+                         style="margin-left:320px;"    >对比线</button>
                         <button id="single_search" type="button" class="layui-btn layui-btn-normal"
-                            style="float: right;margin-left:420px;">查询</button>
+                            style="margin-left:10px;">查询</button>
                     </div>
                     <script>
                         layui.use('laydate', function () {
@@ -2148,6 +2158,7 @@
                     </script>
                 </div>
             </div>
+            <canvas id="canvasMap" style="display:none;"></canvas>
             <div id="extra_map" style="width:800px;height: 700px;background-color: white;"></div>
             <script>
                 $("#plot_image").click(function () {
