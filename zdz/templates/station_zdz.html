@@ -23,7 +23,7 @@
     <!-- 使用turf -->
     <script src="static/js/turf.min.js"></script>
     <!-- 使用插值算法 -->
-    <script src="static/js/kriging.js"></script>
+    <!-- <script src="static/js/kriging.js"></script> -->
     <!-- echart -->
     <script type="text/javascript" src="static/js/echarts.min.js"></script>
     <script type="text/javascript" src="static/js/echarts-gl.min.js"></script>
@@ -67,7 +67,7 @@
     <script src='static/js/zjonly.js'></script>
     <script src='static/js/taizhou_county.js'></script>
     <script src='static/js/taizhouxiangzhen.js'></script>
-    <script src='static/js/tzonly.js'></script>
+    <!-- <script src='static/js/tzonly.js'></script> -->
     <title>实况监测</title>
     <style type="text/css">
         .scrollbar::-webkit-scrollbar {
@@ -137,7 +137,7 @@
                                 </div>
                             </div>
                         </dd>
-                        <dd style="height:230px">
+                        <dd style="height:280px">
                             <div style="height:100%;width:100%;" class="layui-form">
                                 <div class="layui-form-item" style="margin-top:15px;">
                                     <label class="layui-form-label">显示选项</label>
@@ -178,6 +178,13 @@
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
+                                    <label class="layui-form-label">短临报警</label>
+                                    <div class="layui-input-block">
+                                        <input type="radio" name="warring_opt" value="local" title="警报" >
+                                        <input type="radio" name="warring_opt" value="extra" checked="" title="静音">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
                                     <label class="layui-form-label">绘图选项</label>
                                     <div class="layui-input-block">
                                         <input type="radio" name="plot_opt" value="local" title="地图" >
@@ -189,11 +196,11 @@
                         <dd style="margin-left:0;padding-left: 0;">
                             <div class="layui-input-inline" style="width: 90%;margin-top: 15px;margin-bottom: 10px;">
                                 <button id="real_plot" type="button" class="layui-btn layui-btn-sm"
-                                    style="float: right;margin-left: 10px;">查询</button>
+                                    style="float: right;margin-left: 10px;">加载</button>
                                 <button id="real_single" type="button" class="layui-btn layui-btn-sm"
                                     style="float: right;">单站</button>
                                 <button id="real_contour" type="button" class="layui-btn layui-btn-sm"
-                                    style="float: right;">绘图</button>
+                                    style="float: right;">快报</button>
                                 <!-- <button type="button" class="layui-btn layui-btn-sm"
                                     style="float: right;">通报</button> -->
                                 <button id="real_flash" type="button" class="layui-btn layui-btn-sm"
@@ -993,7 +1000,7 @@
                                 var latlng = L.latLng(item.lat, item.lon);
                                 var icon = L.WindBarb.icon({
                                     color: "red",
-                                    deg: 360 - item.dFy,
+                                    deg: item.dFy,
                                     pointRadius: 8,
                                     strokeColor: colors,
                                     // barbSpaceing:4,
@@ -1985,17 +1992,18 @@
                         click_type = "temp"
                    }                      
                    if (plot_opt == "extra") {
+                        // 绘图
                         layer.open({
                             type: 1,
-                            title: "绘图",
+                            title: "快报统计",
                             maxmin: true,
                             moveOut: true,
                             // resize:true,
                             skin: 'layui-layer-lan', //样式类名
                             closeBtn: 1, //不显示关闭按钮
-                            area: ['850px', '900px'],
-                            maxHeight: 600,
-                            maxWidth: 1200,
+                            area: ['1200px', '800px'],
+                            // maxHeight: 600,
+                            // maxWidth: 1400,
                             anim: 0,
                             shade: 0,
                             zIndex: 9999,
@@ -2071,9 +2079,10 @@
         </script>
         <!-- 画图的设置 -->
         <div id="extra_plot" style="width:100%;height:100%;">
-            <div style="width:100%;height:50px;">
+            <div style="width:100%;height:50px;;">
                 <div class="layui-form" style="padding-top:10px;">
                     <div class="layui-inline">
+                        
                         <label class="layui-form-label">范围</label>
                         <div class="layui-inline" id="plot_img">
                             <div class="layui-input-inline">
@@ -2084,28 +2093,28 @@
                                 <input type="text" autocomplete="off" id="plot_img-endDate-1" class="layui-input" placeholder="结束日期">
                             </div>                          
                         </div>
-                        <div class="layui-input-inline" style="width:15%">
-                            <select id="color_label" style="width:40%">
-                                <option value=""></option>
-                                <option value="rain_01hours" selected="">降水-1小时</option>
-                                <option value="rain_03hours" >降水-3小时</option>
-                                <option value="rain_06hours" >降水-6小时</option>
-                                <option value="rain_12hours" >降水-12小时</option>
-                                <option value="rain_24hours" >降水-24小时</option>
-                                <option value="wind_normal">风力</option>
-                                <option value="tmax_normal">高温</option>
-                                <option value="tmin_normal">低温</option>
-                                <option value="tmax_high">热浪</option>
-                                <option value="tmin_low">寒潮</option>
-                                <option value="view_normal">能见度</option>
-                            </select>
-                        </div>
+                        
                         <div class="layui-input-inline" style="width:10%">
                             <select id="city" style="width:40%">
                                 <option value=""></option>
                                 <option value="taizhou" selected="">台州</option>
+                                <option value="sanmen" >杭州</option>
+                                <option value="linhai" >湖州</option>
+                                <option value="luqiao" >嘉兴</option>
+                                <option value="wenling">绍兴</option>
+                                <option value="jiaojiang">舟山</option>
+                                <option value="huangyan">金华</option>
+                                <option value="xianju">丽水</option>
+                                <option value="tiantai">衢州</option>
+                                <option value="yuhuan">宁波</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline" style="width:10%">
+                            <select id="country" style="width:40%">
+                                <option value=""></option>
+                                
                                 <option value="sanmen" >三门</option>
-                                <option value="linhai" >临海</option>
+                                <option value="linhai" selected="">临海</option>
                                 <option value="luqiao" >路桥</option>
                                 <option value="wenling">温岭</option>
                                 <option value="jiaojiang">椒江</option>
@@ -2115,7 +2124,14 @@
                                 <option value="yuhuan">玉环</option>
                             </select>
                         </div>
-                        <button id="plot_image" type="button" class="layui-btn layui-btn-normal">查询</button>
+                        
+                            <div class="layui-inline">
+                              <input class="layui-input" name="id" id="SearchReload" autocomplete="off">
+                            </div>
+                            <button id="TableSearch" class="layui-btn" data-type="reload">搜索</button>
+                            <button id="TableReload" class="layui-btn" data-type="reload">重置</button>
+                         
+                        <button id="plot_image" type="button" class="layui-btn layui-btn-normal" style="margin-left: 30px;">下载</button>
                     </div>
                     <script>
                         function getNextDate(date, day) {
@@ -2158,40 +2174,437 @@
                     </script>
                 </div>
             </div>
-            <canvas id="canvasMap" style="display:none;"></canvas>
-            <div id="extra_map" style="width:800px;height: 700px;background-color: white;"></div>
+            <!-- 表格 -->
+            <div style="width:100%;height: 50%;">
+                <table class="layui-hide" id="extra_table" style="width: 1200px;"></table>
+            </div>
+
             <script>
-                $("#plot_image").click(function () {
-                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                        $.ajax({
-                            url: "station_zdz_data",  // 请求的地址
-                            type: "post",  // 请求方式
-                            timeout: 25000, //设置延迟上限
-                            data: {
-                                'csrfmiddlewaretoken': csrf,
-                                'model': 'plot_image',
-                                'click_type': $("#color_label").val(),
-                                'button_value': $("#city").val(),
-                                'start': $("#plot_img-startDate-1").val(),
-                                'end': $("#plot_img-endDate-1").val()
-                            },
-                            dataType: "json",
-                            beforeSend: function (XMLHttpRequest) {
-                                load = showLoad();
-                            },
-                            success: function (recvdate) {
-                                // console.log(recvdate)
-                                var imgsrc = recvdate.imgs
-                                var image = document.createElement("img")
-                                image.src = imgsrc
-                                // image.style = "width:100%;height:100%"
-                                var mapdiv = document.getElementById("extra_map") 
-                                mapdiv.append(image)
-                                closeLoad(load)
+                layui.use('table', function () {
+                    var table = layui.table;
+                    //展示已知数据
+                    table.render({
+                        elem: '#extra_table'
+                        ,width: 1200
+                        ,height: 360
+                        ,cellMinWidth: 80
+                        , cols: [[ //标题栏
+                            { field: 'id', title: 'ID', width:200, sort: true }
+                            , { field: 'username', title: '用户名', width:200 }
+                            , { field: 'email', title: '邮箱', width:200 }
+                            , { field: 'sign', title: '签名', width:200 }
+                            , { field: 'sex', title: '性别', width:150 }
+                            , { field: 'city', title: '城市', width:50 }
+                            , { field: 'experience', title: '积分', sort: true, width:50 }
+                            , {
+                                field: 'lock', title: '可疑', width: 110, templet:  function(d) {
+                                    console.log(d); // 得到当前行数据
+                                    if (d.lock){
+                                        var checkboxhtml = '<input type="checkbox" name="lock" checked = "checked">'
+                                        return '<input type="checkbox" name="lock" checked = "checked">'
+                                    }
+                                    else{
+                                        var checkboxhtml = '<input type="checkbox" name="lock" >'
+                                        return '<input type="checkbox" name="lock" >'
+
+                                    }
+                                }
                             }
-                        })
-                    })               
+                        ]]
+                        , data: [{
+                            "id": "10001"
+                            , "username": "杜甫"
+                            , "email": "test@email.com"
+                            , "sex": "男"
+                            , "city": "浙江杭州"
+                            , "sign": "人生恰似一场修行"
+                            , "experience": "116"
+                            , "ip": "192.168.0.8"
+                            , "logins": "108"
+                            , "joinTime": "2016-10-14"
+                            , "lock": false
+                        }, {
+                            "id": "10002"
+                            , "username": "李白"
+                            , "email": "test@email.com"
+                            , "sex": "男"
+                            , "city": "浙江杭州"
+                            , "sign": "人生恰似一场修行"
+                            , "experience": "12"
+                            , "ip": "192.168.0.8"
+                            , "logins": "106"
+                            , "joinTime": "2016-10-14"
+                            , "LAY_CHECKED": true
+                            , "lock": true
+                        }, {
+                            "id": "10003"
+                            , "username": "王勃"
+                            , "email": "test@email.com"
+                            , "sex": "男"
+                            , "city": "浙江杭州"
+                            , "sign": "人生恰似一场修行"
+                            , "experience": "65"
+                            , "ip": "192.168.0.8"
+                            , "logins": "106"
+                            , "joinTime": "2016-10-14"
+                            , "lock": true
+                        }, {
+                            "id": "10004"
+                            , "username": "贤心"
+                            , "email": "test@email.com"
+                            , "sex": "男"
+                            , "city": "浙江杭州"
+                            , "sign": "人生恰似一场修行"
+                            , "experience": "666"
+                            , "ip": "192.168.0.8"
+                            , "logins": "106"
+                            , "joinTime": "2016-10-14"
+                            , "lock": true
+                        }, {
+                            "id": "10005"
+                            , "username": "贤心"
+                            , "email": "test@email.com"
+                            , "sex": "男"
+                            , "city": "浙江杭州"
+                            , "sign": "人生恰似一场修行"
+                            , "experience": "86"
+                            , "ip": "192.168.0.8"
+                            , "logins": "106"
+                            , "joinTime": "2016-10-14"
+                            , "lock": true
+                        }, {
+                            "id": "10006"
+                            , "username": "贤心"
+                            , "email": "test@email.com"
+                            , "sex": "男"
+                            , "city": "浙江杭州"
+                            , "sign": "人生恰似一场修行"
+                            , "experience": "12"
+                            , "ip": "192.168.0.8"
+                            , "logins": "106"
+                            , "joinTime": "2016-10-14"
+                            , "lock": true
+                        }, {
+                            "id": "10007"
+                            , "username": "贤心"
+                            , "email": "test@email.com"
+                            , "sex": "男"
+                            , "city": "浙江杭州"
+                            , "sign": "人生恰似一场修行"
+                            , "experience": "16"
+                            , "ip": "192.168.0.8"
+                            , "logins": "106"
+                            , "joinTime": "2016-10-14"
+                            , "lock": true
+                        }, {
+                            "id": "10008"
+                            , "username": "贤心"
+                            , "email": "test@email.com"
+                            , "sex": "男"
+                            , "city": "浙江杭州"
+                            , "sign": "人生恰似一场修行"
+                            , "experience": "106"
+                            , "ip": "192.168.0.8"
+                            , "logins": "106"
+                            , "joinTime": "2016-10-14"
+                            , "lock": true
+                        }, {
+                            "id": "10009"
+                            , "username": "贤心"
+                            , "email": "test@email.com"
+                            , "sex": "男"
+                            , "city": "浙江杭州"
+                            , "sign": "人生恰似一场修行"
+                            , "experience": "106"
+                            , "ip": "192.168.0.8"
+                            , "logins": "106"
+                            , "joinTime": "2016-10-14"
+                            , "lock": true
+                        }]
+                        ,skin: 'line' //表格风格
+                        , even: true
+                        ,id: 'tabledata'
+                        //,page: true //是否显示分页
+                        //,limits: [5, 7, 10]
+                        //,limit: 5 //每页默认显示的数量
+                    });
+                    var $ = layui.$, active = {
+                        reload: function () {
+                            var SearchReload = $('#SearchReload');
+                            console.log("测试",SearchReload.val())
+                            var returndata = [{
+                                    "id": "10006"
+                                    , "username": "贤心"
+                                    , "email": "test@email.com"
+                                    , "sex": "男"
+                                    , "city": "浙江杭州"
+                                    , "sign": "人生恰似一场修行"
+                                    , "experience": "12"
+                                    , "ip": "192.168.0.8"
+                                    , "logins": "106"
+                                    , "joinTime": "2016-10-14"
+                                    , "lock": true
+                                }, {
+                                    "id": "10007"
+                                    , "username": "贤心"
+                                    , "email": "test@email.com"
+                                    , "sex": "男"
+                                    , "city": "浙江杭州"
+                                    , "sign": "人生恰似一场修行"
+                                    , "experience": "16"
+                                    , "ip": "192.168.0.8"
+                                    , "logins": "106"
+                                    , "joinTime": "2016-10-14"
+                                    , "lock": true
+                                }, {
+                                    "id": "10008"
+                                    , "username": "贤心"
+                                    , "email": "test@email.com"
+                                    , "sex": "男"
+                                    , "city": "浙江杭州"
+                                    , "sign": "人生恰似一场修行"
+                                    , "experience": "106"
+                                    , "ip": "192.168.0.8"
+                                    , "logins": "106"
+                                    , "joinTime": "2016-10-14"
+                                    , "lock": true
+                                }, {
+                                    "id": "10009"
+                                    , "username": "贤心"
+                                    , "email": "test@email.com"
+                                    , "sex": "男"
+                                    , "city": "浙江杭州"
+                                    , "sign": "人生恰似一场修行"
+                                    , "experience": "106"
+                                    , "ip": "192.168.0.8"
+                                    , "logins": "106"
+                                    , "joinTime": "2016-10-14"
+                                    , "lock": true
+                                }]
+                            //执行重载
+                            table.reload('tabledata', {
+                                // page: {
+                                //     curr: 1 //重新从第 1 页开始
+                                // },
+                                // where: {
+                                //     // id : demoReload.val(),
+                                //     key: {
+                                //         id: demoReload.val()
+                                //     }
+                                // },
+                                cols: [[ //标题栏
+                                    { field: 'id', title: 'ID', width: 200, sort: true }
+                                    , { field: 'username', title: '用户名', width: 200 }
+                                    , { field: 'email', title: '邮箱', width: 200 }
+                                    , { field: 'sign', title: '签名', width: 200 }
+                                    , { field: 'sex', title: '性别', width: 150 }
+                                    , { field: 'city', title: '城市', width: 50 }
+                                    , { field: 'experience', title: '积分', sort: true, width: 50 }
+                                    , {
+                                        field: 'lock', title: '可疑', width: 110, templet: function (d) {
+                                            console.log(d); // 得到当前行数据
+                                            if (d.lock) {
+                                                var checkboxhtml = '<input type="checkbox" name="lock" checked = "checked">'
+                                                return '<input type="checkbox" name="lock" checked = "checked">'
+                                            }
+                                            else {
+                                                var checkboxhtml = '<input type="checkbox" name="lock" >'
+                                                return '<input type="checkbox" name="lock" >'
+
+                                            }
+                                        }
+                                    }
+                                ]]
+                                , data: returndata
+                                , skin: 'line'
+                            });
+                        }
+                    };
+
+                    $('#TableSearch').on('click', function () {
+                        var type = $(this).data('type');
+                        active[type] ? active[type].call(this) : '';
+                    });
+                    $('#TableReload').on('click', function () {
+                        table.reload('tabledata', {
+                                // page: {
+                                //     curr: 1 //重新从第 1 页开始
+                                // },
+                                // where: {
+                                //     // id : demoReload.val(),
+                                //     key: {
+                                //         id: demoReload.val()
+                                //     }
+                                // },
+                                cols: [[ //标题栏
+                                    { field: 'id', title: 'ID', width: 200, sort: true }
+                                    , { field: 'username', title: '用户名', width: 200 }
+                                    , { field: 'email', title: '邮箱', width: 200 }
+                                    , { field: 'sign', title: '签名', width: 200 }
+                                    , { field: 'sex', title: '性别', width: 150 }
+                                    , { field: 'city', title: '城市', width: 50 }
+                                    , { field: 'experience', title: '积分', sort: true, width: 50 }
+                                    , {
+                                        field: 'lock', title: '可疑', width: 110, templet: function (d) {
+                                            console.log(d); // 得到当前行数据
+                                            if (d.lock) {
+                                                var checkboxhtml = '<input type="checkbox" name="lock" checked = "checked">'
+                                                return '<input type="checkbox" name="lock" checked = "checked">'
+                                            }
+                                            else {
+                                                var checkboxhtml = '<input type="checkbox" name="lock" >'
+                                                return '<input type="checkbox" name="lock" >'
+
+                                            }
+                                        }
+                                    }
+                                ]]
+                                , data:[{
+                                    "id": "10006"
+                                    , "username": "贤心"
+                                    , "email": "test@email.com"
+                                    , "sex": "男"
+                                    , "city": "浙江杭州"
+                                    , "sign": "人生恰似一场修行"
+                                    , "experience": "12"
+                                    , "ip": "192.168.0.8"
+                                    , "logins": "106"
+                                    , "joinTime": "2016-10-14"
+                                    , "lock": true
+                                }]
+                                , skin: 'line'
+                            });
+                    });
+                });
             </script>
+            <!-- 按钮组 -->
+            <div style="width:100%;height:50px;">
+                <div class="layui-form" style="padding-top:10px;">
+                    <div class="layui-input-inline" style="width:15%;margin-left: 800px;">
+                        <select id="color_label" style="width:40%">
+                            <option value=""></option>
+                            <option value="rain_01hours" selected="">降水-1小时</option>
+                            <option value="rain_03hours" >降水-3小时</option>
+                            <option value="rain_06hours" >降水-6小时</option>
+                            <option value="rain_12hours" >降水-12小时</option>
+                            <option value="rain_24hours" >降水-24小时</option>
+                            <option value="wind_normal">风力</option>
+                            <option value="tmax_high">热浪</option>
+                            <option value="tmin_low">寒潮</option>
+                            
+                        </select>
+                    </div>
+                    <button type="button" class="layui-btn layui-btn-normal" style="">再统计</button>
+                    <button type="button" class="layui-btn layui-btn-normal" style="">绘图</button>
+                    
+                </div>
+            </div>
+            <!-- 文字统计 -->
+            <div style="display: inline-flex;width:100%;height:35%;">
+                <!-- 面雨量 -->
+                <div style="display:inline-flex;width:50%;height:100%;">
+                    <table class="layui-hide" id="extra_average" style="width: 1200px;"></table>
+                </div>
+                <script>
+                    layui.use('table', function () {
+                        var table = layui.table;
+                        //展示已知数据
+                        table.render({
+                            elem: '#extra_average'
+                            ,width: 600
+                            ,height: 260
+                            ,cellMinWidth: 80
+                            , cols: [[ //标题栏
+                                { field: 'id', title: 'ID', width:100, sort: true }
+                                , { field: 'username', title: '用户名', width:100 }
+                                , { field: 'email', title: '邮箱', width:100 }
+                                , { field: 'sign', title: '签名', width:100 }
+                                , { field: 'sex', title: '性别', width:150 }
+                                , { field: 'city', title: '城市', width:50 }
+                                , { field: 'experience', title: '积分', sort: true, width:50 }
+                                , {
+                                    field: 'lock', title: '可疑', width: 110, templet:  function(d) {
+                                        console.log(d); // 得到当前行数据
+                                        if (d.lock){
+                                            var checkboxhtml = '<input type="checkbox" name="lock" checked = "checked">'
+                                            return '<input type="checkbox" name="lock" checked = "checked">'
+                                        }
+                                        else{
+                                            var checkboxhtml = '<input type="checkbox" name="lock" >'
+                                            return '<input type="checkbox" name="lock" >'
+    
+                                        }
+                                    }
+                                }
+                            ]]
+                            , data: [{
+                                "id": "10001"
+                                , "username": "杜甫"
+                                , "email": "test@email.com"
+                                , "sex": "男"
+                                , "city": "浙江杭州"
+                                , "sign": "人生恰似一场修行"
+                                , "experience": "116"
+                                , "ip": "192.168.0.8"
+                                , "logins": "108"
+                                , "joinTime": "2016-10-14"
+                                , "lock": false
+                            }, {
+                                "id": "10002"
+                                , "username": "李白"
+                                , "email": "test@email.com"
+                                , "sex": "男"
+                                , "city": "浙江杭州"
+                                , "sign": "人生恰似一场修行"
+                                , "experience": "12"
+                                , "ip": "192.168.0.8"
+                                , "logins": "106"
+                                , "joinTime": "2016-10-14"
+                                , "LAY_CHECKED": true
+                                , "lock": true
+                            }, {
+                                "id": "10003"
+                                , "username": "王勃"
+                                , "email": "test@email.com"
+                                , "sex": "男"
+                                , "city": "浙江杭州"
+                                , "sign": "人生恰似一场修行"
+                                , "experience": "65"
+                                , "ip": "192.168.0.8"
+                                , "logins": "106"
+                                , "joinTime": "2016-10-14"
+                                , "lock": true
+                            }, {
+                                "id": "10004"
+                                , "username": "贤心"
+                                , "email": "test@email.com"
+                                , "sex": "男"
+                                , "city": "浙江杭州"
+                                , "sign": "人生恰似一场修行"
+                                , "experience": "666"
+                                , "ip": "192.168.0.8"
+                                , "logins": "106"
+                                , "joinTime": "2016-10-14"
+                                , "lock": true
+                            }]
+                            ,skin: 'line' //表格风格
+                            , even: true
+                            //,page: true //是否显示分页
+                            //,limits: [5, 7, 10]
+                            //,limit: 5 //每页默认显示的数量
+                        });
+                    });
+                </script>
+                <!-- 风雨情统计 -->
+                <div style="display:inline-flex;width:50%;height:100%;">
+                    <pre class="layui-code" style="width:100%">
+
+                    </pre>
+
+                </div>
+            </div>
+            <!-- <div id="extra_map" style="width:800px;height: 700px;background-color: white;"></div> -->
+            
         </div>
     </div>
     {% csrf_token %}

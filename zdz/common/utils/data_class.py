@@ -1511,7 +1511,7 @@ class station_plot:
         m.colorbar(cs, location='right', size='30%', pad="-100%",ax = ax2)
         self.basemask(cs, ax, m, self.shp_path+'taizhou') 
         buffer = BytesIO()
-        plt.savefig(buffer,bbox_inches='tight')  
+        plt.savefig(buffer,bbox_inches='tight', transparent=True)  
         plot_img = buffer.getvalue()
         imb = base64.b64encode(plot_img) 
         ims = imb.decode()
