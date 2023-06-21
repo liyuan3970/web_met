@@ -177,13 +177,52 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="layui-form-item">
+                                <div id="warring_div" class="layui-form-item">
                                     <label class="layui-form-label">短临报警</label>
                                     <div class="layui-input-block">
-                                        <input type="radio" name="warring_opt" value="local" title="警报" >
-                                        <input type="radio" name="warring_opt" value="extra" checked="" title="静音">
+                                        <input type="radio" name="warring_opt" value="warring" title="警报" >
+                                        <input type="radio" name="warring_opt" value="silence" checked="" title="静音">
                                     </div>
+                                   
                                 </div>
+                                <!-- 警报的相关 -->
+                                <script>
+                                    const warring_obj = {};
+                                    //报警设置
+                                    $("#warring_div").click(function(){
+                                        var warring_opt =  $('input[name="warring_opt"]:checked').val();
+                                        if (warring_opt == "warring") {
+                                            layer.open({
+                                                type: 1,
+                                                title: "报警设置",
+                                                maxmin: false,
+                                                scrollbar: false,
+                                                fixed: false,
+                                                // offset: 'rt',
+                                                moveOut: false,
+                                                resize: false,
+                                                skin: 'layui-layer-lan', //样式类名
+                                                closeBtn: 1, //不显示关闭按钮
+                                                area: ['900px', '650px'],
+                                                // maxHeight: 600,
+                                                // maxWidth: 1400,
+                                                anim: 0,
+                                                shade: 0,
+                                                zIndex: 9999,
+                                                shadeClose: false, //开启遮罩关闭
+                                                content: $("#warring_ui")
+                                            });
+
+
+                                        }
+                                    })
+                                
+                                    // 报警请求数据
+                                    var Date2 = window.setInterval(function () {
+                                            console.log(new Date(),"打印警报")
+                                        }, 1000*60) // 间隔1秒就打印
+                                </script>
+                                
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">绘图选项</label>
                                     <div class="layui-input-block">
@@ -1003,6 +1042,8 @@
                                     deg: item.dFy,
                                     pointRadius: 8,
                                     strokeColor: colors,
+                                    strokeLength:25,
+                                    forceDir:true,
                                     // barbSpaceing:4,
                                     // barbHeight:20,
                                     fillColor: colors,
@@ -1796,6 +1837,70 @@
                         })
 
                     },
+                    get_table: function (tabledata,click_type) {
+                        if(click_type=="rain"){var fields = "降水"}
+                        else if (click_type=="wind" ||click_type=="sped" ){var fields = "风力"}
+                        else if (click_type=="tmax" ||click_type=="sped" ){var fields = "气温"}
+                        else if (click_type=="view"){var fields = "能见度"}
+                        layui.use('table', function () {
+                            var table = layui.table;
+                            //展示已知数据
+                            table.render({
+                                elem: '#get_data_table_content'
+                                , width: 500
+                                , height: 360
+                                , cellMinWidth: 80
+                                , cols: [[ //标题栏
+                                    { field: 'IIiii', title: 'ID', width: 60 }
+                                    , { field: 'City', title: '地市',  width: 60 }
+                                    , { field: 'County', title: '县(市)', width: 80 }
+                                    , { field: 'Town', title: '乡镇', width: 100 }
+                                    , { field: 'value', title: fields, sort: true, width: 80 }
+                                    , { field: 'Type', title: '质控码', width: 50 }
+                                    // , {
+                                    //     field: 'lock', title: '可疑', width: 110, templet: function (d) {
+                                    //         console.log(d); // 得到当前行数据
+                                    //         if (d.lock) {
+                                    //             var checkboxhtml = '<input type="checkbox" name="lock" checked = "checked">'
+                                    //             return '<input type="checkbox" name="lock" checked = "checked">'
+                                    //         }
+                                    //         else {
+                                    //             var checkboxhtml = '<input type="checkbox" name="lock" >'
+                                    //             return '<input type="checkbox" name="lock" >'
+
+                                    //         }
+                                        // }
+                                    // }
+                                ]]
+                                , data: tabledata
+                                , skin: 'line' //表格风格
+                                , even: true
+                                //,page: true //是否显示分页
+                                //,limits: [5, 7, 10]
+                                ,limit: 300 //每页默认显示的数量
+                            });
+                        });
+                        layer.open({
+                            type: 1,
+                            title: "站点数据",
+                            maxmin: false,
+                            scrollbar: false,
+                            fixed: false,
+                            offset: 'rt',
+                            moveOut: false,
+                            resize:false,
+                            skin: 'layui-layer-lan', //样式类名
+                            closeBtn: 1, //不显示关闭按钮
+                            area: ['505px', '300px'],
+                            // maxHeight: 600,
+                            // maxWidth: 1400,
+                            anim: 0,
+                            shade: 0,
+                            zIndex: 9999,
+                            shadeClose: false, //开启遮罩关闭
+                            content: $("#get_data_table")
+                        });
+                    },
                     get_data: function (model, value_index, tables_name, tables_index) {
                         var decode_select = map_toolbox_object.decode_selection()
                         var current_zoom = map_toolbox_object.current_map.getZoom()
@@ -1831,6 +1936,8 @@
                                 // 绘制marker
                                 map_toolbox_object.plot_mark(click_type)
                                 // console.log(typeof(recvdate.data),map_toolbox_object.recv_all_data )
+                                // 图层显示
+                                map_toolbox_object.get_table(pointdata,click_type)
                                 closeLoad(load)
                             }
                         })
@@ -2606,7 +2713,20 @@
             <!-- <div id="extra_map" style="width:800px;height: 700px;background-color: white;"></div> -->
             
         </div>
+        <!-- 请求数据的表格 -->
+        <div id = "get_data_table" style="width:100%;height:100%;overflow: hidden;">
+            <table class="layui-hide" id="get_data_table_content" style="width: 500px;"></table>
+
+        </div>
+        <!-- 报警参数设置 -->
+        <!-- 开始报警相关的设置 -->
+        <div id = "warring_ui" style="width:100%;height:100%;overflow: hidden;">
+            
+
+        </div>
+
     </div>
     {% csrf_token %}
 </body>
+
 </html>
