@@ -1116,7 +1116,7 @@ class station_zdz:
         today = end[0:10] + " 20:00:00"
         hours = dtt.datetime.strptime(end,'%Y-%m-%d %H:%M:%S').hour
         # 数据库中读取单站数据并解析
-        sql = """select TTime,IIIII,Ri,T,V,fFy,dFy 
+        sql = """select TTime,IIIII,Ri,T,V,FF as fFy,DF as dFy 
         from Tab_AM_M where ( TTime between '{start_time}' and '{end_time}' and IIIII='{station}')  order by TTime  """
         rsql = sql.format(start_time=start,end_time=end,station=station)
         data = pd.read_sql(rsql , con=self.conn) 

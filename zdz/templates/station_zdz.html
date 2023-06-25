@@ -2466,7 +2466,15 @@
             <!-- 按钮组 -->
             <div style="width:100%;height:50px;">
                 <div class="layui-form" style="padding-top:10px;">
-                    <div class="layui-input-inline" style="width:15%;margin-left: 800px;">
+                    <div class="layui-input-inline" style="width:15%;margin-left: 600px;">
+                        <select id="plot_value" style="width:40%">
+                            <option value=""></option>
+                            <option value="rain" selected="">降水</option>
+                            <option value="temp" >温度</option>
+                            <option value="wind" >风力</option>                     
+                        </select>
+                    </div>
+                    <div class="layui-input-inline" style="width:15%;">
                         <select id="color_label" style="width:40%">
                             <option value=""></option>
                             <option value="rain_01hours" selected="">降水-1小时</option>
@@ -2487,13 +2495,13 @@
                             var table = layui.table;
                             var opt =  $('input[name="lock"]');
                             // console.log(table.getData("tabledata")) 
-                            console.log(opt)
+                            // console.log(opt)
 
                             
                         })
                         // 绘图的核心代码
                         $("#image_layer").click(function () {
-                            
+                            var table = layui.table;
                             var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                             $.ajax({
                                 url: "station_zdz_data",  // 请求的地址
@@ -2504,6 +2512,9 @@
                                     'model': "image_plot",
                                     'start': $("#extra_download-startDate-1").val(),
                                     'end': $("#extra_download-endDate-1").val(),
+                                    'plot_data':JSON.stringify(table.getData("tabledata")),
+                                    'plot_value':$("#plot_value").val(),
+                                    'color_label':$("#color_label").val(),
                                     'click_type': $("#city").val(), // 城市
                                     'button_value': $("#country").val() // 乡镇
                                 },
@@ -2552,6 +2563,7 @@
                                     // var imageUrl = 'url';//图片的地址
                                     var imageLayer = L.imageOverlay(imgs, imageBounds, { opacity: 0.8 });//opacity是透明度
                                     map_image.addLayer(imageLayer);
+                                    console.log(recvdate)
 
                                     // 弹出界面
                                     layer.open({

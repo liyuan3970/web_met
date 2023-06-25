@@ -877,25 +877,16 @@ def station_zdz_data(request):
     elif model =="image_plot":
         start = request.POST.get('start', '')
         end = request.POST.get('end', '')
+        plot_value = request.POST.get('plot_value', '')
+        plot_data = json.loads(request.POST.get('plot_data', ''))
         city = click_type
         country = button_value
-        # 测试
-        # print("测试",city,country)
-        start = '2019-08-08 08:00:00'  
-        end = '2019-08-08 09:00:00'
         worker = data_class.station_plot()
-        data = worker.extra_download(start,end,city,country)
-        plot_data = [{"lat":28.6,"lon":121.5,"rain":-9999},{"lat":28.6,"lon":121.3,"rain":2000}]
-        city = "台州"
-        country = "all"
-        color_label = "rain_24hours"
-        # data = worker.extra_download(start,end,city,country)
-        plot_value = "rain"
-        data = worker.plot(start,end,city,country,plot_data,plot_value,color_label)
-        # 以上为测试      
+        color_label = request.POST.get('color_label', '')
+        imgs = worker.plot(start,end,city,country,plot_data,plot_value,color_label)      
         context = {
             'status': "ok",
-            'image_data':data
+            'image_data':imgs
         }
         return JsonResponse(context)
 
