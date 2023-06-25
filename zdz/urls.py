@@ -73,6 +73,8 @@ urlpatterns = [
     path('select_self_plot', views.select_self_plot),
     # 以下为station的链接
     path('station_zdz_data', views.station_zdz_data),
+    # 以下为警报的链接
+    path('station_zdz_warring', views.station_zdz_warring),
 
 ]
 

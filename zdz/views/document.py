@@ -857,20 +857,54 @@ def station_zdz_data(request):
             'windnow':windnow
         }
         return JsonResponse(context)
-    elif model =="plot_image":
+    elif model =="extra_download":
         start = request.POST.get('start', '')
         end = request.POST.get('end', '')
+        city = click_type
+        country = button_value
         # 测试
+        # print("测试",city,country)
         start = '2019-08-08 08:00:00'  
         end = '2019-08-08 09:00:00'
-        # 以上为测试
-        worker = data_class.station_plot(start,end,click_type[0:4],click_type,button_value)
-        img = worker.plot_img()
+        worker = data_class.station_plot()
+        data = worker.extra_download(start,end,city,country)
+        # 以上为测试      
         context = {
             'status': "ok",
-            'imgs':img
+            'extra_data':data
         }
         return JsonResponse(context)
+    elif model =="image_plot":
+        start = request.POST.get('start', '')
+        end = request.POST.get('end', '')
+        city = click_type
+        country = button_value
+        # 测试
+        # print("测试",city,country)
+        start = '2019-08-08 08:00:00'  
+        end = '2019-08-08 09:00:00'
+        worker = data_class.station_plot()
+        data = worker.extra_download(start,end,city,country)
+        plot_data = [{"lat":28.6,"lon":121.5,"rain":-9999},{"lat":28.6,"lon":121.3,"rain":2000}]
+        city = "台州"
+        country = "all"
+        color_label = "rain_24hours"
+        # data = worker.extra_download(start,end,city,country)
+        plot_value = "rain"
+        data = worker.plot(start,end,city,country,plot_data,plot_value,color_label)
+        # 以上为测试      
+        context = {
+            'status': "ok",
+            'image_data':data
+        }
+        return JsonResponse(context)
+
+def station_zdz_warring(request):
+    context = {
+            'warring': "warring"
+        }
+    return JsonResponse(context)
+
 
 
 

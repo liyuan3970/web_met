@@ -1306,19 +1306,84 @@ class station_zdz:
             df['value'] = df['V']         
         return df
 
-
+# 气象服务快报的相关
 class station_plot:
-    def __init__(self, plot_start_time,plot_end_time,plot_type,color_label,city):
-        self.start = plot_start_time
-        self.end = plot_end_time
-        self.plot_type = plot_type
-        self.color_label = color_label
+    def __init__(self):
         self.conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="ZJSZDZDB")
-        self.max = None
-        self.min = None 
-        self.city = city
-        self.shp_path = "static/data/shpfile/"
+        self.shp_path = "static/data/shpfile/country/"
     # 外部函数
+    def colormap(self,plot_value,color_label):
+        '''色标的自定义'''
+        plt.rcParams['axes.facecolor']='snow'
+        # 降水
+        if plot_value=="rain":
+            if color_label =="rain_24hours":
+                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 24降水
+                levels = [0,1,10,25,50,100,250,1000]
+                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+                cmap_nonlin = nlcmap(cmaps, levels)
+            elif color_label =="rain_12hours":
+                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 12降水
+                levels = [0,1,5,15,30,70,140,250]
+                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+                cmap_nonlin = nlcmap(cmaps, levels)
+            elif color_label =="rain_06hours":
+                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 06降水
+                levels = [0,1,4,13,25,60,120,250]
+                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+                cmap_nonlin = nlcmap(cmaps, levels)
+            elif color_label =="rain_03hours":
+                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 03降水
+                levels = [0,1,3,10,20,50,70,150]
+                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+                cmap_nonlin = nlcmap(cmaps, levels)
+            elif color_label =="rain_01hours":
+                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 01降水
+                levels = [0,1,2,7,15,40,50,100]
+                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+                cmap_nonlin = nlcmap(cmaps, levels)
+        elif plot_value=="tmax" or plot_value=="tmin":
+            if color_label =="temp_normal":
+                #colorslist = ['#1F1FFF',"#3B3BFF","#5757FF","#7272FF","#8F8FFF","#ABABFF","#C7C7FF","#E3E3FF","#FDFC8B","#F8E08B","#F3C36F","#EFA76E","#EC8A51","#F31717"]# 气温
+                #colornum = len(colorslist)
+                level = list(np.linspace(self.min-1, self.max+1, num=14, endpoint=True, retstep=False, dtype=None))
+                levels = [round(i,1) for i in level]
+                cmap_nonlin = 'seismic'#'coolwarm'#
+            elif color_label =="temp_high":
+                level = list(np.linspace(self.min-1, self.max+1, num=14, endpoint=True, retstep=False, dtype=None))
+                levels = [round(i,1) for i in level]
+                cmap_nonlin = 'Reds'
+            elif color_label =="temp_low":
+                level = list(np.linspace(self.min-1, self.max+1, num=14, endpoint=True, retstep=False, dtype=None))
+                levels = [round(i,1) for i in level]
+                cmap_nonlin = 'Blues_r'
+        elif plot_value=="wind":
+            if color_label =="wind_normal":
+                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 风力
+                levels = [0,1,10,15,25,50,100,250]
+                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+                cmap_nonlin = nlcmap(cmaps, levels) 
+            elif color_label =="wind_other":
+                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 风力其他
+                levels = [0,1,10,15,25,50,100,250]
+                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+                cmap_nonlin = nlcmap(cmaps, levels)
+        elif plot_value=="view":
+            if color_label =="view_normal":
+                colorslist = ['#A93434','#FF9600','#FFFD37',"#55FF37","#ABF3D3","#5EC6EB","#B1F1EF"]# 能见度
+                levels = [0,50,200,500,1000,1500,3000,20000]
+                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+                cmap_nonlin = nlcmap(cmaps, levels) 
+            elif color_label =="view_other":
+                colorslist = ['#FFFFFF','#FF9600','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 能见度
+                levels = [0,1,10,15,25,50,100,250]
+                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+                cmap_nonlin = nlcmap(cmaps, levels)             
+        return cmap_nonlin ,levels
+    def city_shp(self,data_xr):
+        shp_da = self.add_shape_coord_from_data_array(data_xr,self.shp_path+"taizhou.shp", "country")
+        awash_da = shp_da.where(shp_da.country<7, other=np.nan)
+        return awash_da
     def transform_from_latlon(self,lat, lon):
         lat = np.asarray(lat)
         lon = np.asarray(lon)
@@ -1343,7 +1408,7 @@ class station_plot:
         vertices = []
         codes = []
         for shape_rec in sf.shapeRecords():
-            if shape_rec.record[0] >= 0:  
+            if shape_rec.record[0]:  
                 pts = shape_rec.shape.points
                 prt = list(shape_rec.shape.parts) + [len(pts)]
                 for i in range(len(prt) - 1):
@@ -1357,126 +1422,68 @@ class station_plot:
         for contour in cs.collections:
             contour.set_clip_path(clip)    
     # 内部函数
-    def get_sql_data(self):      
+    def get_sql_data(self,start,end):      
         '''sql 获取数据'''
-        table = 'Tab_AM_M'
-        sqlview = """"""
-        sqlrain = """"""
-        sqlwind = """"""
-        sqltmax = """"""
-        sqltmin = """select ta.IIIII,station.lat,station.lon,min(T)/10 as value
+        tables = ['TAB_Aws2019','TAB_Mws2019']
+        data_list = []
+        sqltall = """select ta.IIiii,max(station.lat) as lat,max(station.lon) as lon,max(station.StationName) as StationName,
+        max(station.City) as City,max(station.County) as County,max(station.Town) as Town,max(station.Village) as Village,max(station.Country) as Country, 
+        max(fFy*1000+dFy) as fff ,min(VV) as view,max(T) as tmax,min(T) as tmin ,sum(RR) as rain,max(fFy) as wind
         from {table} as ta inner join TAB_StationInfo as station on ta.IIIII=station.IIiii  
-        where (tTime between '{start}' and '{end}' and station.lon>119 and station.lon<122 and station.lat>27.5 and station.lat<29.5 ) group by station.IIiii,station.lat,station.lon """
-        rsql = sqltmin.format(start=self.start,end=self.end,table=table)
-        data = pd.read_sql(rsql , con=self.conn)
-        drop = data[data['value']!=-999.9]
-        lat = np.array(drop['lat'].to_list())
-        lon = np.array(drop['lon'].to_list())
-        Zi = np.array(drop['value'].to_list())
+        where (tTime between '{start}' and '{end}' and station.lon>119 and station.lon<122 and station.lat>27.5 and station.lat<29.5 ) 
+        group by ta.IIiii"""
+        for table in tables: 
+            rsql = sqltall.format(start=start,end=end,table=table)
+            data = pd.read_sql(rsql , con=self.conn)
+            data_list.append(data)
+        station_all = pd.concat(data_list)
+        station_all['fff'] = station_all['fff'].values.astype(str)
+        station_all['dFy'] = station_all['fff'].str.slice(-3)
+        station_all["dFy"] = pd.to_numeric(station_all["dFy"])
+        return station_all
+    def extra_download(self,start,end,city,country):
+        station_all = self.get_sql_data(start,end)
+        station_all['lock'] = "true"
+        if country=="all":
+            country = city
+            data = station_all[station_all['City']==city]
+        else:
+            country = country
+            data = station_all[station_all['County']==country]
+        output = data.to_json(orient='records',force_ascii=False)
+        return output
+    def get_plot_data(self,city,country,plot_data,plot_value):
+        '''解析前段获取的数据'''
+        x = []
+        y = []
+        z = []
+        for i in range(len(plot_data)):
+            if plot_data[i][plot_value]!=-9999.0:
+                x.append(plot_data[i]['lon'])
+                y.append(plot_data[i]['lat'])
+                z.append(plot_data[i][plot_value]/10)
+        lat = np.array(y)
+        lon = np.array(x)
+        Zi = np.array(z)
         data_max = max(Zi)
         data_min = min(Zi)
-        self.max = data_max
-        self.min = data_min
         np.set_printoptions(precision = 2)
-        x = np.arange(120.0,122.0,0.025)
-        y = np.arange(27.8,29.5,0.025)
+        x = np.arange(120.0,122.0,0.05)
+        y = np.arange(27.8,29.5,0.05)
         nx0 =len(x)
         ny0 =len(y)
         X, Y = np.meshgrid(x, y)#100*100
         P = np.array([X.flatten(), Y.flatten() ]).transpose()    
         Pi =  np.array([lon, lat ]).transpose()
         Z_linear = griddata(Pi, Zi, P, method = "nearest").reshape([ny0,nx0])
-        gauss_kernel = Gaussian2DKernel(0.3)
-        smoothed_data_gauss = convolve(Z_linear, gauss_kernel)
-        data_xr = xr.DataArray(smoothed_data_gauss, coords=[ y,x], dims=["lat", "lon"])
-        #data_xr = xr.DataArray(Z_linear, coords=[ y,x], dims=["lat", "lon"])
+        data_xr = xr.DataArray(Z_linear, coords=[ y,x], dims=["lat", "lon"])
         return data_xr
-    def city_shp(self,data_xr):
-        if self.city =="taizhou":
-            shp_da = self.add_shape_coord_from_data_array(data_xr,self.shp_path+"taizhou.shp", "country")
-            awash_da = shp_da.where(shp_da.country<7, other=np.nan)
-        elif self.city =="jiaojiang":
-            shp_da = self.add_shape_coord_from_data_array(data_xr, self.shp_path+"taizhou.shp", "country")
-            awash_da = shp_da.where(shp_da.country<7, other=np.nan)
-        return awash_da
-    def colormap(self):
-        '''色标的自定义'''
-        plt.rcParams['axes.facecolor']='snow'
-        # 降水
-        if self.plot_type=="rain":
-            if self.color_label =="rain_24hours":
-                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 24降水
-                levels = [0,1,10,25,50,100,250,1000]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-                cmap_nonlin = nlcmap(cmaps, levels)
-            elif self.color_label =="rain_12hours":
-                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 12降水
-                levels = [0,1,5,15,30,70,140,250]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-                cmap_nonlin = nlcmap(cmaps, levels)
-            elif self.color_label =="rain_06hours":
-                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 06降水
-                levels = [0,1,4,13,25,60,120,250]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-                cmap_nonlin = nlcmap(cmaps, levels)
-            elif self.color_label =="rain_03hours":
-                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 03降水
-                levels = [0,1,3,10,20,50,70,150]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-                cmap_nonlin = nlcmap(cmaps, levels)
-            elif self.color_label =="rain_01hours":
-                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 01降水
-                levels = [0,1,2,7,15,40,50,100]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-                cmap_nonlin = nlcmap(cmaps, levels)
-        elif self.plot_type=="tmax" or self.plot_type=="tmin":
-            if self.color_label =="tmax_normal" or self.color_label =="tmin_normal":
-                #colorslist = ['#1F1FFF',"#3B3BFF","#5757FF","#7272FF","#8F8FFF","#ABABFF","#C7C7FF","#E3E3FF","#FDFC8B","#F8E08B","#F3C36F","#EFA76E","#EC8A51","#F31717"]# 气温
-                #colornum = len(colorslist)
-                level = list(np.linspace(self.min-1, self.max+1, num=14, endpoint=True, retstep=False, dtype=None))
-                levels = [round(i,1) for i in level]
-                cmap_nonlin = 'seismic'#'coolwarm'#
-            elif self.color_label =="tmax_high":
-                level = list(np.linspace(self.min-1, self.max+1, num=14, endpoint=True, retstep=False, dtype=None))
-                levels = [round(i,1) for i in level]
-                cmap_nonlin = 'Reds'
-            elif self.color_label =="tmin_low":
-                level = list(np.linspace(self.min-1, self.max+1, num=14, endpoint=True, retstep=False, dtype=None))
-                levels = [round(i,1) for i in level]
-                cmap_nonlin = 'Blues_r'
-        elif self.plot_type=="wind":
-            if self.color_label =="wind_normal":
-                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 风力
-                levels = [0,1,10,15,25,50,100,250]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-                cmap_nonlin = nlcmap(cmaps, levels) 
-            elif self.color_label =="wind_other":
-                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 风力其他
-                levels = [0,1,10,15,25,50,100,250]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-                cmap_nonlin = nlcmap(cmaps, levels)
-        elif self.plot_type=="view":
-            if self.color_label =="view_normal":
-                colorslist = ['#A93434','#FF9600','#FFFD37',"#55FF37","#ABF3D3","#5EC6EB","#B1F1EF"]# 能见度
-                levels = [0,50,200,500,1000,1500,3000,20000]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-                cmap_nonlin = nlcmap(cmaps, levels) 
-            elif self.color_label =="view_other":
-                colorslist = ['#FFFFFF','#FF9600','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 能见度
-                levels = [0,1,10,15,25,50,100,250]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-                cmap_nonlin = nlcmap(cmaps, levels)             
-        return cmap_nonlin ,levels
-    def plot_mark(self):
-        pass
-    def plot_label(self):
-        pass
-    def plot_img(self):
-        data_xr = self.get_sql_data()
+    def plot(self,start,end,city,country,plot_data,plot_value,color_label):
+        data_xr = self.get_plot_data(city,country,plot_data,plot_value)
         # 平滑
         #data_xr = scipy.ndimage.zoom(data_xr, 3)
         # ##########色标和大小#############################
-        cmaps ,levels = self.colormap()
+        cmaps ,levels = self.colormap(plot_value,color_label)
         fig = plt.figure(figsize=[10,10]) 
         ax = fig.add_subplot(111)
         awash_da = self.city_shp(data_xr)
@@ -1491,11 +1498,9 @@ class station_plot:
         lons, lats = np.meshgrid(lon, lat)
         cs =m.contourf(lons,lats,data_xr,ax=ax, cmap=cmaps,levels =levels,add_labels=True)
         ##########标题#############################
-        # font = FontProperties(fname="simkai.ttf", size=14)
-        # 为matplotlib中文无法显示设置字体
-        #plt.rcParams['font.sans-serif'] = 'SimHei' # 黑体
-        # label  = "测试绘图"
-        # plt.text(120.2,29.4, label,fontsize=15, fontproperties=font)
+        font = FontProperties(fname="static/data/simkai.ttf", size=14)
+        label  = start + " 至 " + end + "   "  + "累积雨量"
+        plt.text(120.2,29.4, label,fontsize=15, fontproperties=font)
         ##########标题#############################
         m.readshapefile(self.shp_path + 'taizhou','taizhou',color='k',linewidth=1.2)
         plt.axis('off')
@@ -1511,14 +1516,12 @@ class station_plot:
         m.colorbar(cs, location='right', size='30%', pad="-100%",ax = ax2)
         self.basemask(cs, ax, m, self.shp_path+'taizhou') 
         buffer = BytesIO()
-        plt.savefig(buffer,bbox_inches='tight', transparent=True)  
+        plt.savefig(buffer,bbox_inches='tight',transparent=True)  
         plot_img = buffer.getvalue()
         imb = base64.b64encode(plot_img) 
         ims = imb.decode()
         imd = "data:image/png;base64,"+ims
-        return imd
-
-
+        return imd   
 
 class station_sql_data:
     def __init__(self):
