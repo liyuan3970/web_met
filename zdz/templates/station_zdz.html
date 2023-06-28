@@ -16,6 +16,9 @@
     <script type="text/javascript" src="static/js/leaflet-windbarb.js"></script>
     <script src="static/js/leaflet.canvaslabel.js"></script>
     <script src="static/js/Leaflet.canvasmarker.js"></script>
+    <script type="text/javascript" src="static/js/iconLayers.js"></script>
+    <link rel="stylesheet" href="static/css/iconLayers.css">
+
     <!-- <script src="https://unpkg.com/leaflet-canvas-marker@0.2.0"></script> -->
     <!-- 散点 -->
     <link rel="stylesheet" href="static/css/leaflet-beautify-marker-icon.css">
@@ -710,7 +713,7 @@
                         });
                         var lines = L.geoJSON(boundaries, {
                             style: function (feature) {
-                                return { color: 'black', weight: 3, fillOpacity: 0.1 };
+                                return { color: 'black', fill:false,weight: 3, fillOpacity: 0.1 };
                             }
                         }).addTo(map_toolbox_object.current_map)
                         if($("#village_line").val()=="wenling"){
@@ -864,7 +867,7 @@
                             });
                             var lines = L.geoJSON(boundaries, {
                                 style: function (feature) {
-                                    return { color: 'black', weight: 3, fillOpacity: 0.1 };
+                                    return { color: 'black', fill:false,weight: 3, fillOpacity: 0.1 };
                                 }
                             })
                             var corner1 = L.latLng(26, 115),
@@ -889,12 +892,8 @@
                                 layers: [lines]
                             });                                                                                 
                             map_toolbox_object.current_map = map_zdz
-                            // L.TileLayer.Custom = L.TileLayer.extend({
-                            //     getTileUrl: function (coords) {
-                            //         url = 'static/map_street/' + coords.z + '/' + coords.x + '/' + coords.y + '.png';
-                            //         return url;
-                            //     }
-                            // })
+                            
+
                             L.TileLayer.Custom = L.TileLayer.extend({
                                 getTileUrl: function (coords) {
                                     url = 'static/map_geo/' + coords.z + '/' + coords.x + '/' + coords.y + '.jpg';
@@ -902,7 +901,42 @@
                                 }
                             })
                             L.tileLayer.Custom = function () { return new L.TileLayer.Custom(); }
-                            L.tileLayer.Custom().addTo(map_zdz);
+                            var layer_geo = L.tileLayer.Custom()
+
+                            L.TileLayer.Custom = L.TileLayer.extend({
+                                getTileUrl: function (coords) {
+                                    url = 'static/map_street/' + coords.z + '/' + coords.x + '/' + coords.y + '.png';
+                                    return url;
+                                }
+                            })
+                            L.tileLayer.Custom = function () { return new L.TileLayer.Custom(); }
+                            var layer_street = L.tileLayer.Custom()
+
+                            //
+                            var iconLayersControl = new L.Control.IconLayers(
+                                [
+                                    {
+                                        title: '地形', // use any string
+                                        layer: layer_geo, // any ILayer
+                                        icon: 'media/img/geo.png' // 80x80 icon
+                                    },
+                                    {
+                                        title: '街道',
+                                        layer: layer_street,
+                                        icon: 'media/img/street.png'
+                                    }
+                                ], {
+                                position: 'bottomleft',
+                                maxLayersInRow: 2
+                            }
+                            );
+                            iconLayersControl.addTo(map_zdz);
+                            
+                            
+
+
+
+                            // L.tileLayer.Custom().addTo(map_zdz);
                             // 
                             
                             // 添加地图上的按钮
@@ -2861,6 +2895,7 @@
                 value_title:function(key){
                     var dict_value = {
                         "rain":"降水",
+                        "Ri":"小时雨强",
                         "wind":"风力",
                         "tmax":"高温",
                         "tmin":"低温",
@@ -2871,6 +2906,7 @@
                 value_unity:function(key){
                     var dict_value = {
                         "rain":"毫米",
+                        "Ri":"毫米",
                         "wind":"m/s",
                         "tmax":"℃",
                         "tmin":"℃",
@@ -2878,20 +2914,19 @@
                     }
                     return dict_value[key]
                 },
-                randar_index:function (key){
+                randar_index:function (head,key,space){
                     // 查找前十的
                     var title = extra_server_obj.value_title(key)
                     var unity = extra_server_obj.value_unity(key)
-                    var space = "<br>   "
                     var clean_data = []
                     extra_server_obj.recv_data.forEach(function(item){
                         if(item[key]>0){
-                            console.log("",item)
+                            // console.log("",item)
                             clean_data.push(item)
                         }
                     })
                     clean_data.sort((a,b)=>{return a[key]-b[key]}).reverse();
-                    var text = space + title + "较大的有：";
+                    var text = space + head + title + "较大的有：";
                     for (var i=0;i<10;i++){
                         if (i<9){
                             var single = clean_data[i]['County']+ clean_data[i]['StationName'] + clean_data[i][key].toString() + unity + "、"
@@ -3085,24 +3120,338 @@
                     }                
                     return single
                 },
-                text_msg:function(){
-                    // var key = "rain"
-                    // var text = "[雨量前十]" + extra_server_obj.randar_index(key)
-                    // ==================================================================
-                    // var key = "County"
-                    // var text = "[面雨量]" + extra_server_obj.rander_average(key)
-                    // ==================================================================
-                    var key = "wind"
+                text_rain:function(){
+                    var text = "【雨情通报】" + "<br>" + "    "
+                    var key = "County"
+                    var space = "<br>   "
+                    var text_average = "[面雨量]:" + extra_server_obj.rander_average(key) 
+                    text = text + text_average
+                    key = "rain"
+                    var head = "[累计雨量]"
+                    var text_index =  extra_server_obj.randar_index(head,key,space)      
+                    text = text + text_index 
+                    key = "Ri"
+                    head = "[小时雨强]"
+                    var text_index = extra_server_obj.randar_index(head,key,space)      
+                    text = text + text_index
+                    return text 
+                },
+                text_wind:function(){
+                    var text = ""
+                    key = "wind"
+                    var head = "【风力通报】<br>    "
+                    var space = "<br>"
+                    text = text + extra_server_obj.randar_index(head,key,space) 
+                    //
                     var value = "County"
                     var wind_linear = [
                         [90,9990],
                         [50,70],
                         [10,50]
                     ]
-                    var text = extra_server_obj.group_count_linear(key,wind_linear,value)
+                    var text_group = extra_server_obj.group_count_linear(key,wind_linear,value)
+                    text = text + text_group 
+                    return text 
+                },
+                text_temp:function(head){ 
+                    var unity = "℃"
+                    if (head.index_temp==1){
+                        //diwen 
+                        var clean_data = []
+                        extra_server_obj.recv_data.forEach(function (item) {
+                            if (item["tmin"] > -2000) {
+                                // console.log("",item)
+                                clean_data.push(item)
+                            }
+                        })
+                        clean_data.sort((a,b)=>{return a["tmin"]-b["tmin"]})
+                        var sigtext = ""
+                        for (var i = 0; i < 10; i++) {
+                            if (i < 9) {
+                                var single = clean_data[i]['County'] + clean_data[i]['StationName'] + clean_data[i]["tmin"].toString() + unity + "、"
+                            }
+                            else {
+                                var single = clean_data[i]['County'] + clean_data[i]['StationName'] + clean_data[i]["tmin"].toString() + unity + ";"
+                            }
+                            sigtext = sigtext + single
 
+                        }
+
+                        var text = "【温度通报】主城区低温" + head.temp_main[1].toString() + ";"
+                        var text_main = "温度较低的有："  + sigtext
+                        text = text + text_main
+                        // 
+                        var key = "tmin"
+                        var value = "County"
+                        var temp_linear = [
+                            [0, 30],
+                            [-30, 0],
+                            [-50, -30]
+                        ]
+                        var text_group = extra_server_obj.group_count_linear(key, temp_linear, value)
+                        text = text + text_group
+
+
+                    }
+                    else {
+                        //gaowen
+                        var clean_data = []
+                        extra_server_obj.recv_data.forEach(function (item) {
+                            if (item["tmax"] > 0) {
+                                // console.log("",item)
+                                clean_data.push(item)
+                            }
+                        })
+                        clean_data.sort((a,b)=>{return a["tmax"]-b["tmax"]}).reverse();
+                        var sigtext = ""
+                        for (var i = 0; i < 10; i++) {
+                            if (i < 9) {
+                                var single = clean_data[i]['County'] + clean_data[i]['StationName'] + clean_data[i]["tmax"].toString() + unity + "、"
+                            }
+                            else {
+                                var single = clean_data[i]['County'] + clean_data[i]['StationName'] + clean_data[i]["tmax"].toString() + unity + ";"
+                            }
+                            sigtext = sigtext + single
+
+                        }
+                        var text = "【温度通报】主城区高温" + head.temp_main[0].toString() + ";"
+                        var text_main = "温度较高的有：" + sigtext
+                        
+                        text = text + text_main
+                        if (head.index_temp == 2) {
+                            var key = "tmax"
+                            var value = "County"
+                            var temp_linear = [
+                                [400, 99999],
+                                [370, 400],
+                                [350, 370]
+                            ]
+                            var text_group = extra_server_obj.group_count_linear(key, temp_linear, value)
+                            text = text + text_group
+                        }
+                        // 
+                        
+
+                    }
+                   
+                    return text 
+                },
+                text_view:function(head){
+                    if (head.index_view==0){
+                        var text = ""
+                    }
+                    else{
+                        var text = "【能见度通报】" + head.text_view + "能见度较低的有"
+                        var unity = "米"
+                        var clean_data = []
+                        extra_server_obj.recv_data.forEach(function (item) {
+                            if (item["view"] > 0) {
+                                // console.log("",item)
+                                clean_data.push(item)
+                            }
+                        })
+                        clean_data.sort((a,b)=>{return a["view"]-b["view"]});
+                        var sigtext = ""
+                        for (var i = 0; i < 10; i++) {
+                            if (i < 9) {
+                                var single = clean_data[i]['County'] + clean_data[i]['StationName'] + clean_data[i]["view"].toString() + unity + "、"
+                            }
+                            else {
+                                var single = clean_data[i]['County'] + clean_data[i]['StationName'] + clean_data[i]["view"].toString() + unity + ";"
+                            }
+                            sigtext = sigtext + single
+
+                        }
+                        text = text + sigtext
+                    }
+                    return text
+                },
+                text_head:function(){
+                    value_rank = {
+                        rain:function(value){
+                            var index = 0
+                            if ((value>0)&& (value<=0.1)){
+                                var text= "全市出现零星降水"
+                                index = 1
+                                
+                            }
+                            else if(value>0.1){
+                                var text= "全市出现      雨"
+                                index = 2
+                            }
+                            else{
+                                var text= "None"
+                                index = 0
+                            }
+                            return {
+                                text:text,
+                                index:index
+                            }                     
+                        },
+                        wind:function(value){
+                            var index = 0
+                            if (value>=139){
+                                if (value>560){
+                                    var text = "全市出现17级以上大风，"
+                                    index = 10
+                                }
+                                if ((value>510)&& (value<=560)){
+                                    var text = "全市出现16级以上大风，"
+                                    index = 9
+                                }
+                                if ((value>462)&& (value<=510)){
+                                    var text = "全市出现15级以上大风，"
+                                    index = 8
+                                }
+                                if ((value>415)&& (value<=462)){
+                                    var text = "全市出现14级以上大风，"
+                                    index = 7
+                                }
+                                if ((value>370)&& (value<=415)){
+                                    var text = "全市出现13级以上大风，"
+                                    index = 6
+                                }
+                                if ((value>327)&& (value<=370)){
+                                    var text = "全市出现12级以上大风，"
+                                    index = 5
+                                }
+                                if ((value>285)&& (value<=327)){
+                                    var text = "全市出现11级以上大风，"
+                                    index = 4
+                                }
+                                if ((value>245)&& (value<=285)){
+                                    var text = "全市出现10级以上大风，"
+                                    index = 3
+                                }
+                                if ((value>208)&& (value<=245)){
+                                    var text = "全市出现9级以上大风，"
+                                    index = 2
+                                }
+                                if ((value>172)&& (value<=208)){
+                                    var text = "全市出现6~8级大风，"
+                                    index = 1
+                                }
+                                if ((value>139)&& (value<=172)){
+                                    var text = "全市出现5~7级以上大风，"
+                                    index = 0
+                                }
+                            }
+                            else{
+                                var text = "None" 
+                            }
+                            return {
+                                text:text,
+                                index:index
+                            } 
+                            
+                        },
+                        temp:function(value){
+                            var index = 0 
+                            if (value>-200 && value<1000){
+                                if (value>350 && value<=400){
+                                    var text = "全市有单站高温超过35℃，"
+                                    index = 2 
+                                }
+                                else if (value>400){
+                                    var text = "全市有单站高温超过40℃，"
+                                    index = 2 
+                                }
+                                else if (value>-200 && value<=0){
+                                    var text = "全市有单站气温跌破0℃，"
+                                    index = 1
+                                }
+                            }
+                            else{
+                                var text = "None"
+                                index = 0 
+                            }
+                            return {
+                                text:text,
+                                index:index
+                            } 
+                        },
+                        view:function(value){
+                            var index = 0
+                            if (value>0 && value<1000){
+                                if (value>250 && value<=500){
+                                    var text = "全市出现大雾，"
+                                    index = 1
+                                }
+                                else if (value>50 && value<=250){
+                                    var text = "全市出现浓雾，"
+                                    index = 2
+                                }
+                                else if (value>0 && value<=50){
+                                    var text = "全市出现强浓雾，"
+                                    index = 3
+                                }
+                            }
+                            else{
+                                var text = "None"
+                                index = 0
+                            }
+                            return {
+                                text:text,
+                                index:index
+                            }       
+                        }
+                    }
+                    var temp_main = []
+                    var local_dit = {
+                            text_rain:"None",
+                            index_rain:0,
+                            text_wind:"None",
+                            index_wind:0,
+                            texttemp:"None",
+                            index_temp:0,
+                            text_view:"None",
+                            index_view:0,
+                            temp_main:temp_main
+
+                        }
+                    extra_server_obj.recv_data.forEach(function(item,index){
+                                    
+                        var text_rain =  value_rank.rain(item.rain)
+                        if (text_rain.index>local_dit.index_rain){
+                            local_dit.text_rain = text_rain.text
+                            local_dit.index_rain = text_rain.index
+                        }
+                        var text_wind =  value_rank.wind(item.wind)
+                        if (text_wind.index>local_dit.index_wind){
+                            local_dit.text_wind = text_wind.text
+                            local_dit.index_wind = text_wind.index
+                        }
+                        var texttmax =  value_rank.temp(item.tmax)
+                        if (texttmax.index>local_dit.index_temp){
+                            local_dit.texttemp = texttmax.text
+                            local_dit.index_temp = texttmax.index
+                        }
+                        var texttmin =  value_rank.temp(item.tmax)
+                        if (texttmin.index>local_dit.index_temp){
+                            local_dit.texttemp = texttmin.text
+                            local_dit.index_temp = texttmin.index
+                        }
+                        var text_view =  value_rank.view(item.view)
+                        if (text_view.index>local_dit.index_view){
+                            local_dit.text_view = text_view.text
+                            local_dit.index_view = text_view.index
+                        }
+                        if (item.IIiii=="58665"){
+                            local_dit.temp_main = [item.tmax,item.tmin]
+                        }
+
+                    })
+                    return local_dit
+                },
+                text_msg:function(){
+                    var head = extra_server_obj.text_head()
+                    var text = extra_server_obj.text_rain() // 降水
+                    text = text + extra_server_obj.text_wind() // 风力 
+                    //extra_server_obj.text_temp(head)
+                    text = text +"<br>"+  extra_server_obj.text_temp(head)
+                    text = text +"<br>"+  extra_server_obj.text_view(head)
                     
-                    
+                                      
                     return text 
                 }
 

@@ -1428,7 +1428,7 @@ class station_plot:
         data_list = []
         sqltall = """select ta.IIiii,max(station.lat) as lat,max(station.lon) as lon,max(station.StationName) as StationName,
         max(station.City) as City,max(station.County) as County,max(station.Town) as Town,max(station.Village) as Village,max(station.Country) as Country, 
-        max(fFy*1000+dFy) as fff ,min(VV) as view,max(T) as tmax,min(T) as tmin ,sum(RR) as rain,max(fFy) as wind
+        max(fFy*1000+dFy) as fff ,min(VV) as view,max(T) as tmax,min(T) as tmin ,sum(RR) as rain,max(RR) as Ri,max(fFy) as wind
         from {table} as ta inner join TAB_StationInfo as station on ta.IIIII=station.IIiii  
         where (tTime between '{start}' and '{end}' and station.lon>119 and station.lon<122 and station.lat>27.5 and station.lat<29.5 ) 
         group by ta.IIiii"""
