@@ -846,9 +846,10 @@ def station_zdz_data(request):
     elif model =="single":
         # print("环境测试",settings.ENV)
         station = button_value
+        plot_type = click_type
+        plot_time = request.POST.get('plot_time', '')
         worker = data_class.station_zdz()
         nowdata,history,windhis,windnow = worker.single_station(station)
-        #print("测试单站数据",value,"---",station)
         context = {
             'status': "ok",
             'now':nowdata,
