@@ -42,6 +42,8 @@ import pickle
 from astropy.convolution import convolve, Gaussian2DKernel, Tophat2DKernel
 from astropy.modeling.models import Gaussian2D
 
+# 雷达
+import cinrad
 # 自定义画图类
 class nlcmap(LinearSegmentedColormap):
     """A nonlinear colormap"""
@@ -1652,3 +1654,45 @@ class station_sql_data:
         redis_name_str = self.redis_name[tables_name] + "_view"
         self.rs.set(redis_name_str, pickle.dumps(data))
 
+# 雷达类
+class radar_data:
+    def __init__(self):
+        self.rs = redis.Redis(host='127.0.0.1', port=6379)
+    def to_redis(self,imd):
+        if self.rs.get("radar"):
+            data = pickle.loads(self.rs.get("radar"))
+            data['imglist'].append(imd)
+        else:
+            imglist = [imd]
+            data = {
+                "imglist":imglist
+            }
+        self.rs.set("radar", pickle.dumps(data))       
+    def plot_data(self):
+        path ="static/data/downfile/" 
+        f = cinrad.io.CinradReader(path+'Z_RADR_I_Z9576_20150809120400_O_DOR_SA_CAP.bin.bz2')
+        tilt_number = 0
+        data_radius = 230
+        data_dtype = 'REF' # stands for reflectivity
+        # 数据加载核心
+        ra = f.get_data(tilt_number, data_radius, data_dtype)
+        rl = list(f.iter_tilt(230, 'REF'))
+        cr = cinrad.easycalc.quick_cr(rl)
+        data = ra.data
+        m = Basemap(llcrnrlon=119.16,llcrnrlat=26.55,urcrnrlon=123.88,urcrnrlat=30.69)
+        ## 颜色 ------
+        colorslist = ['#00C800','#019000','#FFFF00','#E7C000','#FF9000','#D60000','#C00000','#FF00F0','#780084','#AD90F0','#AE0AF5']# 组合反射率
+        levels1 = [15,20,25,30,35,40,45,50,55,60,65,70]
+        cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=11)
+        plt.contourf(cr.lon, cr.lat, cr.data,cmap=cmaps,levels = levels1)
+        plt.axis('off') 
+        buffer = BytesIO()
+        plt.savefig(buffer,bbox_inches='tight',transparent=True)  
+        plot_img = buffer.getvalue()
+        imb = base64.b64encode(plot_img) 
+        ims = imb.decode()
+        imd = "data:image/png;base64,"+ims
+        self.to_redis(imd)
+    def get_radar(self):
+        data = pickle.loads(self.rs.get("radar"))
+        return data

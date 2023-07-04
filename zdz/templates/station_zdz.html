@@ -211,8 +211,15 @@
                                                 },
                                                 dataType: "json",                                             
                                                 success: function (recvdate) {
-                                                    console.log("报警成功",recvdate) 
-                                                    warring_obj.warring_status =  recvdate.warring                                                                 
+                                                    map_toolbox_object.flash_map() 
+                                                    warring_obj.warring_status =  recvdate.warring                                          
+                                                    var imgs = new Image()
+                                                    imgs.src = recvdate.radar.imglist[recvdate.radar.imglist.length - 1] 
+                                                    // imgs.style.backgroundColor = "rgba(0, 0, 0, 0.30)";
+                                                    var imageBounds = [[26.55, 119.16], [30.69, 123.88]];//图片的经纬度范围，西南角点,东北角点(纬度、经度)
+                                                    var imageLayer = L.imageOverlay(imgs, imageBounds, { opacity: 0.99 });//opacity是透明度
+                                                    map_toolbox_object.current_map.addLayer(imageLayer); 
+                                                    // console.log("报警成功",imgsrc)                                                            
                                                 }
                                             })
 
@@ -2563,7 +2570,7 @@
                                     // var imageUrl = 'url';//图片的地址
                                     var imageLayer = L.imageOverlay(imgs, imageBounds, { opacity: 0.8 });//opacity是透明度
                                     map_image.addLayer(imageLayer);
-                                    console.log(recvdate)
+                                    // console.log(recvdate)
 
                                     // 弹出界面
                                     layer.open({

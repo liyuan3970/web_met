@@ -892,8 +892,11 @@ def station_zdz_data(request):
         return JsonResponse(context)
 
 def station_zdz_warring(request):
+    worker = data_class.radar_data()
+    img = worker.get_radar()
     context = {
-            'warring': "warring"
+            'warring': "warring",
+            'radar':img
         }
     return JsonResponse(context)
 
