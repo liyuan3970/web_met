@@ -1250,12 +1250,14 @@ class station_zdz:
             self.rs.set(tables[i], pickle.dumps(data_redis))  
     def get_regin(self,boundary,table_type,tables_name,value_index,zoom):
         '''解码单站数据'''
+        ascending_list = [False,False,True,False,True]
         data = self.get_redis(tables_name)['table_data_list'][value_index]
         lat0 = boundary[0]
         lat1 = boundary[1]
         lon0 = boundary[2]
         lon1 = boundary[3]
         boundary_data =  data[(data['lat']>lat0) & (data['lat']<lat1)  &  (data['lon']<lon1) & (data['lon']>lon0)]
+        
         if table_type=="nation":
             remain = boundary_data[boundary_data['Type']=='基本站'] #boundary_data[(boundary_data[boundary_data['Type']=='基本站'])&(boundary_data['ZoomLevel']<6)]
         if table_type=="regin":
@@ -1266,9 +1268,11 @@ class station_zdz:
             remain = boundary_data[(boundary_data['ZoomLevel']<6)]
         elif table_type=="auto":
             if zoom<=9:
-                remain = boundary_data[(boundary_data['ZoomLevel']<10)]
+                remain = boundary_data[(boundary_data['ZoomLevel']<10)]       
             else:
-                remain = boundary_data
+                remain = boundary_data  
+        remain.sort_values(by="value",axis=0,ascending=ascending_list[value_index],inplace=True) # 从大到小 
+            
         output = remain.to_json(orient='records',force_ascii=False)
         return output
     def return_data(self,remain,value):

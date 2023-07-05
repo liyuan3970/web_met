@@ -135,7 +135,7 @@
                                 </div>
                             </div>
                         </dd>
-                        <dd style="height:280px">
+                        <dd style="height:340px">
                             <div style="height:100%;width:100%;" class="layui-form">
                                 <div class="layui-form-item" style="margin-top:15px;">
                                     <label class="layui-form-label">显示选项</label>
@@ -183,11 +183,20 @@
                                     </div>
                                    
                                 </div>
+                                <div id="radar_plot" class="layui-form-item">
+                                    <label class="layui-form-label">叠加雷达</label>
+                                    <div class="layui-input-block">
+                                        <input type="radio" name="radar_opt" value="plot" title="叠加" >
+                                        <input type="radio" name="radar_opt" value="none" checked="" title="隐藏">
+                                    </div>
+                                   
+                                </div>
                                 <!-- 警报的相关 -->
                                 <script>
                                     const warring_obj = {
                                         music_audio: undefined,
                                         warring_status:"silence",
+                                        radar_layer:undefined,
                                         city:undefined,
                                         town:undefined,
                                         range:undefined,
@@ -211,14 +220,16 @@
                                                 },
                                                 dataType: "json",                                             
                                                 success: function (recvdate) {
-                                                    map_toolbox_object.flash_map() 
+                                                     
                                                     warring_obj.warring_status =  recvdate.warring                                          
                                                     var imgs = new Image()
                                                     imgs.src = recvdate.radar.imglist[recvdate.radar.imglist.length - 1] 
                                                     // imgs.style.backgroundColor = "rgba(0, 0, 0, 0.30)";
                                                     var imageBounds = [[26.55, 119.16], [30.69, 123.88]];//图片的经纬度范围，西南角点,东北角点(纬度、经度)
-                                                    var imageLayer = L.imageOverlay(imgs, imageBounds, { opacity: 0.99 });//opacity是透明度
-                                                    map_toolbox_object.current_map.addLayer(imageLayer); 
+                                                    var imageLayer = L.imageOverlay(imgs, imageBounds, { opacity: 0.55 });//opacity是透明度
+                                                    warring_obj.radar_layer = imageLayer
+                                                    // map_toolbox_object.flash_map()
+                                                    //map_toolbox_object.current_map.addLayer(imageLayer); 
                                                     // console.log("报警成功",imgsrc)                                                            
                                                 }
                                             })
@@ -312,10 +323,10 @@
 
                                     // 报警请求数据
                                     var Date2 = window.setInterval(function () { 
-                                                                            
+                                        var radar_opt = $('input[name="radar_opt"]:checked').val();                                    
                                         var warring_opt = $('input[name="warring_opt"]:checked').val();
                                         var url = "http://127.0.0.1:9991/media/mp3/warring.mp3"
-                                        
+
                                         if (warring_opt == "warring") {
                                             warring_obj.request_warring()
 
@@ -325,14 +336,14 @@
                                                 if (warring_class == "warring") {
                                                     if (warring_obj.music_audio) {
                                                         warring_obj.music_audio.play();
-                                                        console.log(new Date(), "警报")
+                                                        // console.log(new Date(), "警报")
                                                     }
                                                     else {
                                                         let audio = new Audio(url);
                                                         warring_obj.music_audio = audio
                                                         warring_obj.music_audio.autoplay = true;
                                                         warring_obj.music_audio.play();
-                                                        console.log(new Date(), "警报")
+                                                        // console.log(new Date(), "警报")
                                                     }
                                                 }
                                                 else{
@@ -344,14 +355,16 @@
                                                             warring_obj.popNotice();
                                                         });
                                                     }
-                                                    console.log(new Date(), "通知")
+                                                    // console.log(new Date(), "通知")
 
                                                 }                                            
                                             }                                       
                                         }
                                         else {
-                                            console.log("刷新数据")
+                                            warring_obj.request_warring()
+                                            // console.log("刷新数据")
                                         }
+                                        
                                     }, 1000 * 5) // 间隔1秒就打印
                                 </script>
                                 
@@ -728,6 +741,12 @@
                                 return { color: 'black', fill:false,weight: 3, fillOpacity: 0.1 };
                             }
                         }).addTo(map_toolbox_object.current_map)
+                        var radar_opt = $('input[name="radar_opt"]:checked').val();  
+                        if (radar_opt=="plot"){
+                            if(warring_obj.radar_layer){
+                                warring_obj.radar_layer.addTo(map_toolbox_object.current_map)
+                            }                    
+                        }
                         if($("#village_line").val()=="wenling"){
                             var boundaries_village = map_toolbox_object.return_boundaries(wl_json.features).boundaries
                             var lines_village = L.geoJSON(boundaries_village, {
@@ -2079,6 +2098,12 @@
 
                     },
                     get_table: function (tabledata,click_type) {
+                        console.log("---",tabledata)
+                        if (click_type != "view") {
+                            tabledata.forEach(function (item) {
+                                item.value = item.value/10
+                            })
+                        }      
                         if(click_type=="rain"){var fields = "降水"}
                         else if (click_type=="wind" ||click_type=="sped" ){var fields = "风力"}
                         else if (click_type=="tmax" ||click_type=="sped" ){var fields = "气温"}
@@ -2396,7 +2421,7 @@
                             <select id="city" style="width:40%">
                                 <option value=""></option>
                                 <option value="台州" selected="">台州</option>
-                                <option value="杭州" >杭州</option>
+                                <!-- <option value="杭州" >杭州</option>
                                 <option value="湖州" >湖州</option>
                                 <option value="嘉兴" >嘉兴</option>
                                 <option value="绍兴">绍兴</option>
@@ -2404,7 +2429,7 @@
                                 <option value="金华">金华</option>
                                 <option value="丽水">丽水</option>
                                 <option value="衢州">衢州</option>
-                                <option value="宁波">宁波</option>
+                                <option value="宁波">宁波</option> -->
                             </select>
                         </div>
                         <div class="layui-input-inline" style="width:10%">
