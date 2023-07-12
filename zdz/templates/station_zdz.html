@@ -71,7 +71,7 @@
     <script src='static/js/taizhou_county.js'></script>
     <script src='static/js/taizhouxiangzhen.js'></script>
     <!-- <script src='static/js/tzonly.js'></script> -->
-    <title>实况监测</title>
+    <title>天驰</title>
     <style type="text/css">
         .scrollbar::-webkit-scrollbar {
             display: none;
@@ -94,7 +94,7 @@
         style="display: flex;align-content:flex-start;position: absolute; justify-content: center; flex-wrap: wrap; width: 100%;height: 100%;background-color: rgb(246, 247, 250);overflow-y: hidden;">
         <!-- 导航栏目 -->
         <div style="width:100%;height: 5%;" class="layui-logo layui-hide-xs layui-bg-black">
-            <h3 style="margin-top:8px;padding-left: 50px;">中尺度气象分析</h3>                    
+            <h3 style="margin-top:8px;padding-left: 50px;">天驰</h3>                    
         </div>
         <!-- 内容 -->
         <div style="display: inline-flex;width:100%;height:95%">
@@ -209,7 +209,6 @@
                                         rain_6hour:undefined,
                                         rain_12hour:undefined,
                                         request_warring: function () {
-
                                             var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                                             $.ajax({
                                                 url: "station_zdz_warring",  // 请求的地址
@@ -219,15 +218,24 @@
                                                     'csrfmiddlewaretoken': csrf
                                                 },
                                                 dataType: "json",                                             
-                                                success: function (recvdate) {
-                                                     
-                                                    warring_obj.warring_status =  recvdate.warring                                          
-                                                    var imgs = new Image()
-                                                    imgs.src = recvdate.radar.imglist[recvdate.radar.imglist.length - 1] 
-                                                    // imgs.style.backgroundColor = "rgba(0, 0, 0, 0.30)";
-                                                    var imageBounds = [[26.55, 119.16], [30.69, 123.88]];//图片的经纬度范围，西南角点,东北角点(纬度、经度)
-                                                    var imageLayer = L.imageOverlay(imgs, imageBounds, { opacity: 0.55 });//opacity是透明度
-                                                    warring_obj.radar_layer = imageLayer
+                                                success: function (recvdate) {                             
+                                                    warring_obj.warring_status =  recvdate.warring 
+                                                    var  contourf = JSON.parse(recvdate.radar['imglist'][recvdate.radar['imglist'].length-1])
+                                                    // console.log(recvdate,JSON.parse(recvdate.radar['imglist'][1])) 
+                                                    var radarlayer = L.geoJSON(contourf, {
+                                                        style: function (feature) {
+                                                            return { color: feature.properties.stroke, weight: 0.5, fill: true, fillColor: feature.properties.stroke, fillOpacity: 0.7 };
+                                                        }
+                                                    }).bindPopup(function (layer) {
+                                                        return layer.feature.properties.title;
+                                                    })
+                                                    warring_obj.radar_layer = radarlayer                                      
+                                                    // var imgs = new Image()
+                                                    // imgs.src = recvdate.radar.imglist[recvdate.radar.imglist.length - 1] 
+                                                    // var imageBounds = [[26.55, 119.16], [30.69, 123.88]];//图片的经纬度范围，西南角点,东北角点(纬度、经度)
+                                                    // var imageLayer = L.imageOverlay(imgs, imageBounds, { opacity: 0.55 });//opacity是透明度
+                                                    // warring_obj.radar_layer = imageLayer
+
                                                     // map_toolbox_object.flash_map()
                                                     //map_toolbox_object.current_map.addLayer(imageLayer); 
                                                     // console.log("报警成功",imgsrc)                                                            
@@ -267,10 +275,29 @@
 
                                                 n.onclick = function (event) {
                                                     console.log(`on click, time: ${new Date().toISOString()}`);
+                                                    // window.open("http://127.0.0.1:9991/station_zdz");
+                                                    // layer.open({
+                                                    //     type: 1,
+                                                    //     title: "报警弹窗",
+                                                    //     maxmin: true,
+                                                    //     moveOut: true,
+                                                    //     // resize:true,
+                                                    //     skin: 'layui-layer-lan', //样式类名
+                                                    //     closeBtn: 1, //不显示关闭按钮
+                                                    //     area: ['1200px', '600px'],
+                                                    //     maxHeight: 600,
+                                                    //     maxWidth: 1200,
+                                                    //     anim: 0,
+                                                    //     shade: 0,
+                                                    //     zIndex: 9999,
+                                                    //     shadeClose: false, //开启遮罩关闭
+                                                    //     content: $("#hidden_station")
+                                                    // });
                                                 };
 
                                                 n.onclose = function (event) {
                                                     console.log(`on close, time: ${new Date().toISOString()}`);
+
                                                 };
                                             }
 
@@ -415,6 +442,7 @@
                     recv_single_data: undefined, // 接收单点数据
                     single_name: undefined,// 单站的值
                     current_map: undefined, // 当前地图层
+                    current_chart:undefined,// 当前地图标
                     current_layer: undefined, // 当前绘图层
                     current_marker_list: [], // 当前散点阵列
                     current_points :undefined,// 当前绘图数据
@@ -1107,7 +1135,6 @@
                             var tooltips = item.StationName + "-" + item.IIiii + "<br>"+"    纬度:" + item.lat.toFixed(2).toString() + "  "+ "经度:" + item.lon.toFixed(2).toString()+"<br>"+"    " +item.City + "-" + item.County + "-" + item.Town 
                             // 添加散点------------
                             if (click_type == "rain" && item.value / 10.0 > 0) {
-
                                 if ($("#real_times").val() == "24hours") {
                                     if (item.value / 10 > 0 && item.value / 10 <= 1) {
                                        var colors = "white"
@@ -1551,7 +1578,7 @@
 
                     },
                     decode_line: function (plot_type, his, now,windhis,windnow) {
-                        // recv_single_data  解析
+                        map_toolbox_object.recv_single_data = []
                         var data_time = []
                         var data_his = [] // 历史数据
                         var data_now = [] // 当前数据
@@ -1566,6 +1593,7 @@
                                 //     data_time.push(timestr)
                                 // }
                                 data_time.push(item[0].substring(11, 16))
+                                map_toolbox_object.recv_single_data.push(item[2])
                                 data_now.push(item[2])
                                 data_his.push(null)
                             }
@@ -1578,6 +1606,7 @@
                                 //     data_time.push(timestr)
                                 // }
                                 values = [item[5] / 10, item[6]]
+                                map_toolbox_object.recv_single_data.push(item[5]/10)
                                 data_time.push(item[0].substring(11, 16))
                                 data_now.push(values)
                                 data_his.push([null, null])
@@ -1586,10 +1615,12 @@
                                 data_time.push(item[0].substring(11, 16))
                                 data_now.push(item[3] / 10)
                                 data_his.push(null)
+                                map_toolbox_object.recv_single_data.push(item[3] / 10)
                             }
                             else if (plot_type == "view") {
                                 data_time.push(item[0].substring(11, 16))
                                 data_now.push(item[4])
+                                map_toolbox_object.recv_single_data.push(item[4])
                                 data_his.push(null)
                             }
                         })
@@ -1607,6 +1638,7 @@
                                     data_time.push(item[0].substring(11, 16))
                                     data_now.push(null)
                                     data_his.push(item[2])
+                                    map_toolbox_object.recv_single_data.push(item[2])
                                 }
                                 else if ((plot_type == "wind") || (plot_type == "sped")) {
                                     // if ((item[0].substring(14, 16)=="00")){
@@ -1619,6 +1651,7 @@
                                     // }
                                     values = [item[5] / 10, item[6]]
                                     data_time.push(item[0].substring(11, 16))
+                                    map_toolbox_object.recv_single_data.push(item[5]/10)
                                     data_now.push([null, null])
                                     data_his.push(values)
                                 }
@@ -1626,11 +1659,13 @@
                                     data_time.push(item[0].substring(11, 16))
                                     data_now.push(null)
                                     data_his.push(item[3] / 10)
+                                    map_toolbox_object.recv_single_data.push(item[3] / 10)
                                 }
                                 else if (plot_type == "view") {
                                     data_time.push(item[0].substring(11, 16))
                                     data_now.push(null)
                                     data_his.push(item[4])
+                                    map_toolbox_object.recv_single_data.push(item[4])
                                 }
                             })
                         }
@@ -1675,7 +1710,30 @@
                             opt = {
                                 chart: {
                                     type: 'column',
-                                    zoomType: 'x'
+                                    zoomType: 'x',
+                                    events: {
+                                        selection: function (e) {
+                                            // 事件处理代码，可以通过 console.log(e) 查看更多详细信息
+                                            if (e.xAxis) {    
+                                                var min = Math.ceil(e.xAxis[0].min);
+                                                var max = Math.floor(e.xAxis[0].max);
+                                                var sum_data = 0
+                                                map_toolbox_object.recv_single_data.forEach(function (item,index) {
+                                                    if (index>min && index<max){
+                                                        sum_data = sum_data + item
+                                                    }                                                   
+                                                })
+                                                var text = {
+                                                    text: "累计降水" + sum_data.toString() + "毫米,",
+                                                    align: "left",
+                                                    x: 50,
+                                                    style: {
+                                                        color: "black"
+                                                    }
+                                                }
+                                                Highcharts.charts[Highcharts.charts.length-1].setTitle(text);
+                                            }
+                                    }}
                                 },
                                 credits: {
                                     enabled: false//不显示LOGO
@@ -1686,30 +1744,30 @@
                                 xAxis: [{
                                     categories: timeindex,
                                     // type:"linear",
-                                    tickInterval:60,
+                                    tickInterval: 60,
                                     lineColor: "black",
                                     lineWidth: 1,
-                                    labels:{
+                                    labels: {
                                         // step:12,
                                         rotation: 0,
-                                        formatter: function () { 
+                                        formatter: function () {
                                             // var index = parseInt(this.value)                                          
-                                            var labe = this.value                                        
-                                            if (this.value.substring(2,5)==":00"){
-                                                var labe = this.value.substring(0,2) + "时"
+                                            var labe = this.value
+                                            if (this.value.substring(2, 5) == ":00") {
+                                                var labe = this.value.substring(0, 2) + "时"
                                                 // console.log("---",this.value,labe) 
-                                            }   
+                                            }
                                             else {
-                                                var labe = this.value.substring(0,2) + "时"
+                                                var labe = this.value.substring(0, 2) + "时"
                                                 // console.log("---",this.value,labe,this.value.substring(2,4)) 
-                                            }                               
+                                            }
                                             return labe
                                         },
                                         // useHTML: true
                                     },
                                     offset: 0
                                 }
-                            ],
+                                ],
                                 yAxis: {
                                     min: 0,
                                     title: {
@@ -1733,16 +1791,16 @@
                                 },
                                 series: [
                                     {
-                                    name: '昨天',
-                                    color:"red",
-                                    xAxis:0,
-                                    data: his
-                                }, {
-                                    name: '今天',
-                                    color:"blue",
-                                    xAxis:0,
-                                    data: now
-                                }]
+                                        name: '昨天',
+                                        color: "red",
+                                        xAxis: 0,
+                                        data: his
+                                    }, {
+                                        name: '今天',
+                                        color: "blue",
+                                        xAxis: 0,
+                                        data: now
+                                    }]
                             }
                         }
                         else if ((plot_type == "wind") || (plot_type == "sped")) {                            
@@ -1754,7 +1812,35 @@
                                     enabled: false//不显示LOGO
                                 },
                                 chart: {
-                                    zoomType: 'x'
+                                    zoomType: 'x',
+                                    events: {
+                                        selection: function (e) {
+                                            // 事件处理代码，可以通过 console.log(e) 查看更多详细信息
+                                            if (e.xAxis) {    
+                                                var min = Math.ceil(e.xAxis[1].min);
+                                                var max = Math.floor(e.xAxis[1].max);
+                                                var max_data = 0
+                                                console.log(min,max)
+                                                map_toolbox_object.recv_single_data.forEach(function (item,index) {
+                                                    if (index>=min && index<=max){
+                                                        if (item>max_data && item>0){
+                                                            max_data = item
+                                                        }
+                                                    }                                                   
+                                                })
+                                                
+                                                var text = {
+                                                    text: "最大瞬时风力" + max_data.toString() + "米/秒",
+                                                    align: "left",
+                                                    x: 50,
+                                                    style: {
+                                                        color: "black"
+                                                    }
+                                                }
+                                                // min_data = 0
+                                                Highcharts.charts[Highcharts.charts.length-1].setTitle(text);
+                                            }
+                                    }}
                                 },
                                 yAxis: {
                                     min: 0,
@@ -1877,7 +1963,38 @@
                             opt = {
                                 chart: {
                                     type: 'spline',
-                                    zoomType: 'x'
+                                    zoomType: 'x',
+                                    events: {
+                                        selection: function (e) {
+                                            // 事件处理代码，可以通过 console.log(e) 查看更多详细信息
+                                            if (e.xAxis) {    
+                                                var min = Math.ceil(e.xAxis[0].min);
+                                                var max = Math.floor(e.xAxis[0].max);
+                                                var min_data = 99999
+                                                var max_data = -99
+                                                map_toolbox_object.recv_single_data.forEach(function (item,index) {
+                                                    if (index>min && index<max){
+                                                        if (item<min_data && item>-99){
+                                                            min_data = item
+                                                        }
+                                                        if (item>max_data && item>-99){
+                                                            max_data = item
+
+                                                        }
+                                                    }                                                   
+                                                })
+                                                var text = {
+                                                    text: "最低气温" + min_data.toString() + "度,最高气温" + max_data.toString() + "度",
+                                                    align: "left",
+                                                    x: 50,
+                                                    style: {
+                                                        color: "black"
+                                                    }
+                                                }
+                                                // min_data = 0
+                                                Highcharts.charts[Highcharts.charts.length-1].setTitle(text);
+                                            }
+                                    }}
                                 },
                                 credits: {
                                     enabled: false//不显示LOGO
@@ -1959,8 +2076,33 @@
                             opt = {
                                 chart: {
                                     type: 'spline',
-                                    zoomType: 'x'
-
+                                    zoomType: 'x',
+                                    events: {
+                                        selection: function (e) {
+                                            // 事件处理代码，可以通过 console.log(e) 查看更多详细信息
+                                            if (e.xAxis) {    
+                                                var min = Math.ceil(e.xAxis[0].min);
+                                                var max = Math.floor(e.xAxis[0].max);
+                                                var min_data = 99999
+                                                map_toolbox_object.recv_single_data.forEach(function (item,index) {
+                                                    if (index>min && index<max){
+                                                        if (item<min_data && item>0){
+                                                            min_data = item
+                                                        }
+                                                    }                                                   
+                                                })
+                                                var text = {
+                                                    text: "最小能见度" + min_data.toString() + "米",
+                                                    align: "left",
+                                                    x: 50,
+                                                    style: {
+                                                        color: "black"
+                                                    }
+                                                }
+                                                // min_data = 0
+                                                Highcharts.charts[Highcharts.charts.length-1].setTitle(text);
+                                            }
+                                    }}
                                 },
                                 credits: {
                                     enabled: false//不显示LOGO
@@ -2090,7 +2232,9 @@
                                 var windnow = JSON.parse(recvdate.windnow)
                                 var plot_data = map_toolbox_object.decode_line(plot_type, his, now,windhis,windnow)                           
                                 var option = map_toolbox_object.plot_line_opt(plot_type, plot_data)
-                                chart = Highcharts.chart('hidden_plot', option)
+                                var chart = Highcharts.chart('hidden_plot', option)
+                                map_toolbox_object.current_chart = chart
+                                
                                 closeLoad(load)
 
                             }
@@ -2098,7 +2242,7 @@
 
                     },
                     get_table: function (tabledata,click_type) {
-                        console.log("---",tabledata)
+                        // console.log("---",tabledata)
                         if (click_type != "view") {
                             tabledata.forEach(function (item) {
                                 item.value = item.value/10
