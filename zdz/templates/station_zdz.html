@@ -93,8 +93,43 @@
     <div
         style="display: flex;align-content:flex-start;position: absolute; justify-content: center; flex-wrap: wrap; width: 100%;height: 100%;background-color: rgb(246, 247, 250);overflow-y: hidden;">
         <!-- 导航栏目 -->
-        <div style="width:100%;height: 5%;" class="layui-logo layui-hide-xs layui-bg-black">
-            <h3 style="margin-top:8px;padding-left: 50px;">天驰</h3>                    
+        <div style="display: inline-block;width:100%;height: 5%;" class="layui-logo layui-hide-xs layui-bg-black">
+            <div style="display: inline-block;width:15%;height: 100%;padding:0;"> 
+                <h3 style="padding-top:10px;padding-left: 50px;width: 200px;">天驰</h3>
+            </div>
+
+            <div style="display: inline-block;width:55%;height: 100%;padding:0;float: right;"> 
+                <button id="settings" type="button" class="layui-btn" style="float: right;margin-top:0px;height: 100%;background-color: rgb(57,61,73);">
+                    <i class="layui-icon layui-icon-set"></i>
+                </button> 
+            </div>
+            <script>
+                $("#settings").click(function () {
+                        layer.open({
+                            type: 1,
+                            title: "设置",
+                            maxmin: false,
+                            scrollbar: false,
+                            fixed: false,
+                            offset: 'rt',
+                            moveOut: false,
+                            resize: false,
+                            skin: 'layui-layer-lan', //样式类名
+                            closeBtn: 1, //不显示关闭按钮
+                            area: ['340px', '650px'],
+                            // maxHeight: 600,
+                            // maxWidth: 1400,
+                            anim: 0,
+                            shade: 0,
+                            zIndex: 9999,
+                            shadeClose: false, //开启遮罩关闭
+                            content: $("#station_setting")
+                        });
+
+                    })
+
+            </script>
+            
         </div>
         <!-- 内容 -->
         <div style="display: inline-flex;width:100%;height:95%">
@@ -103,10 +138,10 @@
             <ul class="layui-nav layui-nav-tree layui-inline scrollbar" 
                 style="width:15%;height: 100%;background-color: rgb(40,43,51);overflow-y: scroll;overflow-x: hidden;">
                 <li class="layui-nav-item layui-nav-itemed">
-                    <a href="javascript:;">实况统计</a>
-                    <dl class="layui-nav-child">
-                        <dd>
-                            <div class="layui-form" style="padding-top: 10px;">
+                    <div  class="layui-btn layui-btn-fluid">实况统计</div>                                    
+                    <dl class="layui-nav-child">   
+                        <dd style="height:170px">      
+                            <div style="height:100%;width:100%;" class="layui-form">
                                 <label class="layui-form-label">数据类型</label>
                                 <div class="layui-input-inline" style="width: 38%;padding-left:28px;">
                                     <select id="real_class">
@@ -133,56 +168,6 @@
                                         <option value="15mins">15分钟</option>                                    
                                     </select>
                                 </div>
-                            </div>
-                        </dd>
-                        <dd style="height:340px">
-                            <div style="height:100%;width:100%;" class="layui-form">
-                                <div class="layui-form-item" style="margin-top:15px;">
-                                    <label class="layui-form-label">显示选项</label>
-                                    <div class="layui-input-block" style="padding-left:5%;">
-                                        <input type="radio" name="boundary_type" value="current" title="当前" checked="">
-                                        <input type="radio" name="boundary_type" value="all" title="全省">
-                                    </div>
-                                </div>
-                                <div class="layui-form-item">
-                                    <label class="layui-form-label">数据级别</label>
-                                    <div class="layui-input-block" style="background-color:rgb(28,30,36);width:50%;">
-                                        <select id="table_type">
-                                            <option value=""></option>
-                                            <option value="nation">国家站</option>
-                                            <option value="regin">区域站</option>
-                                            <option value="all">所有站</option>
-                                            <option value="main" >骨干站</option>
-                                            <option value="auto" selected="">全自动</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="layui-form-item">
-                                    <label class="layui-form-label">地图界线</label>
-                                    <div class="layui-input-block" style="background-color:rgb(28,30,36);width:50%;">
-                                        <select id="village_line">
-                                            <option value=""></option>
-                                            <option value="taizhou" selected="">台州</option>
-                                            <option value="yuhuan" >玉环</option>
-                                            <option value="wenling">温岭</option>
-                                            <option value="huangyan">黄岩</option>
-                                            <option value="luqiao">路桥</option>
-                                            <option value="jiaojiang">椒江</option>
-                                            <option value="xianju">仙居</option>
-                                            <option value="linhai">临海</option>
-                                            <option value="tiantai">天台</option>
-                                            <option value="sanmen">三门</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div id="warring_div" class="layui-form-item">
-                                    <label class="layui-form-label">短临报警</label>
-                                    <div class="layui-input-block">
-                                        <input type="radio" name="warring_opt" value="warring" title="警报" >
-                                        <input type="radio" name="warring_opt" value="silence" checked="" title="静音">
-                                    </div>
-                                   
-                                </div>
                                 <div id="radar_plot" class="layui-form-item">
                                     <label class="layui-form-label">叠加雷达</label>
                                     <div class="layui-input-block">
@@ -191,209 +176,7 @@
                                     </div>
                                    
                                 </div>
-                                <!-- 警报的相关 -->
-                                <script>
-                                    const warring_obj = {
-                                        music_audio: undefined,
-                                        warring_status:"silence",
-                                        radar_layer:undefined,
-                                        city:undefined,
-                                        town:undefined,
-                                        range:undefined,
-                                        rain_10min:undefined,
-                                        wind_10min:undefined,
-                                        windave_10min:undefined,
-                                        view_10min:undefined,
-                                        rain_1hour:undefined,
-                                        rain_3hour:undefined,
-                                        rain_6hour:undefined,
-                                        rain_12hour:undefined,
-                                        request_warring: function () {
-                                            var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                                            $.ajax({
-                                                url: "station_zdz_warring",  // 请求的地址
-                                                type: "post",  // 请求方式
-                                                timeout: 25000, //设置延迟上限
-                                                data: {
-                                                    'csrfmiddlewaretoken': csrf
-                                                },
-                                                dataType: "json",                                             
-                                                success: function (recvdate) {                             
-                                                    warring_obj.warring_status =  recvdate.warring 
-                                                    var  contourf = JSON.parse(recvdate.radar['imglist'][recvdate.radar['imglist'].length-1])
-                                                    // console.log(recvdate,JSON.parse(recvdate.radar['imglist'][1])) 
-                                                    var radarlayer = L.geoJSON(contourf, {
-                                                        style: function (feature) {
-                                                            return { color: feature.properties.stroke, weight: 0.5, fill: true, fillColor: feature.properties.stroke, fillOpacity: 0.7 };
-                                                        }
-                                                    }).bindPopup(function (layer) {
-                                                        return layer.feature.properties.title;
-                                                    })
-                                                    warring_obj.radar_layer = radarlayer                                      
-                                                    // var imgs = new Image()
-                                                    // imgs.src = recvdate.radar.imglist[recvdate.radar.imglist.length - 1] 
-                                                    // var imageBounds = [[26.55, 119.16], [30.69, 123.88]];//图片的经纬度范围，西南角点,东北角点(纬度、经度)
-                                                    // var imageLayer = L.imageOverlay(imgs, imageBounds, { opacity: 0.55 });//opacity是透明度
-                                                    // warring_obj.radar_layer = imageLayer
-
-                                                    // map_toolbox_object.flash_map()
-                                                    //map_toolbox_object.current_map.addLayer(imageLayer); 
-                                                    // console.log("报警成功",imgsrc)                                                            
-                                                }
-                                            })
-
-                                        },
-                                        warring_config: function () {
-                                            var post_data = {
-                                                // 设置蹭
-                                                "city":warring_obj.city,
-                                                "town":warring_obj.town,
-                                                "range": warring_obj.range,                                       
-                                                // 参数层
-                                                "rain_10min":warring_obj.rain_10min,
-                                                "wind_10min":warring_obj.wind_10min,
-                                                "windave_10min":warring_obj.windave_10min,
-                                                "view_10min":warring_obj.view_10min,
-                                                "rain_1hour":warring_obj.rain_1hour,
-                                                "rain_3hour":warring_obj.rain_3hour,
-                                                "rain_6hour":warring_obj.rain_6hour,
-                                                "rain_12hour":warring_obj.rain_12hour
-                                            }
-                                        },
-                                        popNotice: function () {
-                                            if (Notification.permission == "granted") {
-
-                                                var n = new Notification("实况警报:", {
-                                                    // tag: "testTag",
-                                                    icon: "http://127.0.0.1:9991/media/img/warring.png",
-                                                    body: `on body, time: ${new Date().toISOString()}`
-                                                });
-
-                                                n.onshow = function (event) {
-                                                    console.log(`on show, time: ${new Date().toISOString()}`);
-                                                };
-
-                                                n.onclick = function (event) {
-                                                    console.log(`on click, time: ${new Date().toISOString()}`);
-                                                    // window.open("http://127.0.0.1:9991/station_zdz");
-                                                    // layer.open({
-                                                    //     type: 1,
-                                                    //     title: "报警弹窗",
-                                                    //     maxmin: true,
-                                                    //     moveOut: true,
-                                                    //     // resize:true,
-                                                    //     skin: 'layui-layer-lan', //样式类名
-                                                    //     closeBtn: 1, //不显示关闭按钮
-                                                    //     area: ['1200px', '600px'],
-                                                    //     maxHeight: 600,
-                                                    //     maxWidth: 1200,
-                                                    //     anim: 0,
-                                                    //     shade: 0,
-                                                    //     zIndex: 9999,
-                                                    //     shadeClose: false, //开启遮罩关闭
-                                                    //     content: $("#hidden_station")
-                                                    // });
-                                                };
-
-                                                n.onclose = function (event) {
-                                                    console.log(`on close, time: ${new Date().toISOString()}`);
-
-                                                };
-                                            }
-
-                                        }
-                                    };
-                                    //报警设置
-                                    $("#warring_div").click(function () {
-                                        var warring_opt = $('input[name="warring_opt"]:checked').val();
-                                        if (warring_opt == "warring") {
-                                            layer.open({
-                                                type: 1,
-                                                title: "报警设置",
-                                                maxmin: false,
-                                                scrollbar: false,
-                                                fixed: false,
-                                                // offset: 'rt',
-                                                moveOut: false,
-                                                resize: false,
-                                                skin: 'layui-layer-lan', //样式类名
-                                                closeBtn: 1, //不显示关闭按钮
-                                                area: ['900px', '650px'],
-                                                // maxHeight: 600,
-                                                // maxWidth: 1400,
-                                                anim: 0,
-                                                shade: 0,
-                                                zIndex: 9999,
-                                                shadeClose: false, //开启遮罩关闭
-                                                content: $("#warring_ui")
-                                            });
-                                        }
-                                        else if (warring_opt == "silence") {
-                                            warring_obj.warring_status = "silence"
-                                            var arr = [];
-                                            $("input[name='warring_check']:checked").each(function () {
-                                                arr.push(this.value);
-                                            });
-                                            // console.log(arr)
-                                            arr.forEach(function (item) {
-                                                var index = "#" + item.toString()
-                                                warring_obj[item] = $(index).val()
-                                            }) 
-                                            // console.log(new Date(), "取消警报1")
-                                            if (warring_obj.music_audio) {
-                                                warring_obj.music_audio.pause();
-                                                warring_obj.music_audio = undefined
-                                                // console.log(new Date(), "取消警报1")
-                                            }
-                                        }
-                                    })
-
-                                    // 报警请求数据
-                                    var Date2 = window.setInterval(function () { 
-                                        var radar_opt = $('input[name="radar_opt"]:checked').val();                                    
-                                        var warring_opt = $('input[name="warring_opt"]:checked').val();
-                                        var url = "http://127.0.0.1:9991/media/mp3/warring.mp3"
-
-                                        if (warring_opt == "warring") {
-                                            warring_obj.request_warring()
-
-                                            if (warring_obj.warring_status == "warring") {
-                                                // 警报
-                                                var warring_class = $("#warring_class").val()
-                                                if (warring_class == "warring") {
-                                                    if (warring_obj.music_audio) {
-                                                        warring_obj.music_audio.play();
-                                                        // console.log(new Date(), "警报")
-                                                    }
-                                                    else {
-                                                        let audio = new Audio(url);
-                                                        warring_obj.music_audio = audio
-                                                        warring_obj.music_audio.autoplay = true;
-                                                        warring_obj.music_audio.play();
-                                                        // console.log(new Date(), "警报")
-                                                    }
-                                                }
-                                                else{
-                                                    // 通知
-                                                    if (Notification.permission == "granted") {
-                                                        warring_obj.popNotice();
-                                                    } else if (Notification.permission != "denied") {
-                                                        Notification.requestPermission(function (permission) {
-                                                            warring_obj.popNotice();
-                                                        });
-                                                    }
-                                                    // console.log(new Date(), "通知")
-
-                                                }                                            
-                                            }                                       
-                                        }
-                                        else {
-                                            warring_obj.request_warring()
-                                            // console.log("刷新数据")
-                                        }
-                                        
-                                    }, 1000 * 5) // 间隔1秒就打印
-                                </script>
+                               
                                 
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">绘图选项</label>
@@ -420,6 +203,263 @@
                         </dd>
                     </dl>
                 </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a  href="javascript:;" style="display:flex; justify-content:center; align-items:center;">短临监测</a>
+                    <dl class="layui-nav-child layui-nav-child-c">
+                        <dd style="height:140px">
+                            <div style="height:100%;width:100%;" class="layui-form">
+                                <div id="warring_div" class="layui-form-item">
+                                    <label class="layui-form-label">短临报警</label>
+                                    <div class="layui-input-block">
+                                        <input type="radio" name="warring_opt" value="warring" title="警报">
+                                        <input type="radio" name="warring_opt" value="silence" checked="" title="静音">
+                                    </div>
+                                </div>
+                            </div>
+                        </dd>
+                         <!-- 警报的相关 -->
+                         <script>
+                            const warring_obj = {
+                                music_audio: undefined,
+                                warring_status:"silence",
+                                radar_layer:undefined,
+                                city:undefined,
+                                town:undefined,
+                                range:undefined,
+                                rain_10min:undefined,
+                                wind_10min:undefined,
+                                windave_10min:undefined,
+                                view_10min:undefined,
+                                rain_1hour:undefined,
+                                rain_3hour:undefined,
+                                rain_6hour:undefined,
+                                rain_12hour:undefined,
+                                request_warring: function () {
+                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                    $.ajax({
+                                        url: "station_zdz_warring",  // 请求的地址
+                                        type: "post",  // 请求方式
+                                        timeout: 25000, //设置延迟上限
+                                        data: {
+                                            'csrfmiddlewaretoken': csrf
+                                        },
+                                        dataType: "json",                                             
+                                        success: function (recvdate) {                             
+                                            warring_obj.warring_status =  recvdate.warring 
+                                            var  contourf = JSON.parse(recvdate.radar['imglist'][recvdate.radar['imglist'].length-1])
+                                            // console.log(recvdate,JSON.parse(recvdate.radar['imglist'][1])) 
+                                            var radarlayer = L.geoJSON(contourf, {
+                                                style: function (feature) {
+                                                    return { color: feature.properties.stroke, weight: 0.5, fill: true, fillColor: feature.properties.stroke, fillOpacity: 0.7 };
+                                                }
+                                            }).bindPopup(function (layer) {
+                                                return layer.feature.properties.title;
+                                            })
+                                            warring_obj.radar_layer = radarlayer                                      
+                                            // var imgs = new Image()
+                                            // imgs.src = recvdate.radar.imglist[recvdate.radar.imglist.length - 1] 
+                                            // var imageBounds = [[26.55, 119.16], [30.69, 123.88]];//图片的经纬度范围，西南角点,东北角点(纬度、经度)
+                                            // var imageLayer = L.imageOverlay(imgs, imageBounds, { opacity: 0.55 });//opacity是透明度
+                                            // warring_obj.radar_layer = imageLayer
+
+                                            // map_toolbox_object.flash_map()
+                                            //map_toolbox_object.current_map.addLayer(imageLayer); 
+                                            // console.log("报警成功",imgsrc)                                                            
+                                        }
+                                    })
+
+                                },
+                                warring_config: function () {
+                                    var post_data = {
+                                        // 设置蹭
+                                        "city":warring_obj.city,
+                                        "town":warring_obj.town,
+                                        "range": warring_obj.range,                                       
+                                        // 参数层
+                                        "rain_10min":warring_obj.rain_10min,
+                                        "wind_10min":warring_obj.wind_10min,
+                                        "windave_10min":warring_obj.windave_10min,
+                                        "view_10min":warring_obj.view_10min,
+                                        "rain_1hour":warring_obj.rain_1hour,
+                                        "rain_3hour":warring_obj.rain_3hour,
+                                        "rain_6hour":warring_obj.rain_6hour,
+                                        "rain_12hour":warring_obj.rain_12hour
+                                    }
+                                },
+                                popNotice: function () {
+                                    if (Notification.permission == "granted") {
+
+                                        var n = new Notification("实况警报:", {
+                                            // tag: "testTag",
+                                            icon: "http://127.0.0.1:9991/media/img/warring.png",
+                                            body: `on body, time: ${new Date().toISOString()}`
+                                        });
+
+                                        n.onshow = function (event) {
+                                            console.log(`on show, time: ${new Date().toISOString()}`);
+                                        };
+
+                                        n.onclick = function (event) {
+                                            console.log(`on click, time: ${new Date().toISOString()}`);
+                                            // window.open("http://127.0.0.1:9991/station_zdz");
+                                            // layer.open({
+                                            //     type: 1,
+                                            //     title: "报警弹窗",
+                                            //     maxmin: true,
+                                            //     moveOut: true,
+                                            //     // resize:true,
+                                            //     skin: 'layui-layer-lan', //样式类名
+                                            //     closeBtn: 1, //不显示关闭按钮
+                                            //     area: ['1200px', '600px'],
+                                            //     maxHeight: 600,
+                                            //     maxWidth: 1200,
+                                            //     anim: 0,
+                                            //     shade: 0,
+                                            //     zIndex: 9999,
+                                            //     shadeClose: false, //开启遮罩关闭
+                                            //     content: $("#hidden_station")
+                                            // });
+                                        };
+
+                                        n.onclose = function (event) {
+                                            console.log(`on close, time: ${new Date().toISOString()}`);
+
+                                        };
+                                    }
+
+                                }
+                            };
+                            //报警设置
+                            $("#warring_div").click(function () {
+                                var warring_opt = $('input[name="warring_opt"]:checked').val();
+                                if (warring_opt == "warring") {
+                                    layer.open({
+                                        type: 1,
+                                        title: "报警设置",
+                                        maxmin: false,
+                                        scrollbar: false,
+                                        fixed: false,
+                                        // offset: 'rt',
+                                        moveOut: false,
+                                        resize: false,
+                                        skin: 'layui-layer-lan', //样式类名
+                                        closeBtn: 1, //不显示关闭按钮
+                                        area: ['900px', '650px'],
+                                        // maxHeight: 600,
+                                        // maxWidth: 1400,
+                                        anim: 0,
+                                        shade: 0,
+                                        zIndex: 9999,
+                                        shadeClose: false, //开启遮罩关闭
+                                        content: $("#warring_ui")
+                                    });
+                                }
+                                else if (warring_opt == "silence") {
+                                    warring_obj.warring_status = "silence"
+                                    var arr = [];
+                                    $("input[name='warring_check']:checked").each(function () {
+                                        arr.push(this.value);
+                                    });
+                                    // console.log(arr)
+                                    arr.forEach(function (item) {
+                                        var index = "#" + item.toString()
+                                        warring_obj[item] = $(index).val()
+                                    }) 
+                                    // console.log(new Date(), "取消警报1")
+                                    if (warring_obj.music_audio) {
+                                        warring_obj.music_audio.pause();
+                                        warring_obj.music_audio = undefined
+                                        // console.log(new Date(), "取消警报1")
+                                    }
+                                }
+                            })
+
+                            // 报警请求数据
+                            var Date2 = window.setInterval(function () { 
+                                var radar_opt = $('input[name="radar_opt"]:checked').val();                                    
+                                var warring_opt = $('input[name="warring_opt"]:checked').val();
+                                var url = "http://127.0.0.1:9991/media/mp3/warring.mp3"
+
+                                if (warring_opt == "warring") {
+                                    warring_obj.request_warring()
+
+                                    if (warring_obj.warring_status == "warring") {
+                                        // 警报
+                                        var warring_class = $("#warring_class").val()
+                                        if (warring_class == "warring") {
+                                            if (warring_obj.music_audio) {
+                                                warring_obj.music_audio.play();
+                                                // console.log(new Date(), "警报")
+                                            }
+                                            else {
+                                                let audio = new Audio(url);
+                                                warring_obj.music_audio = audio
+                                                warring_obj.music_audio.autoplay = true;
+                                                warring_obj.music_audio.play();
+                                                // console.log(new Date(), "警报")
+                                            }
+                                        }
+                                        else{
+                                            // 通知
+                                            if (Notification.permission == "granted") {
+                                                warring_obj.popNotice();
+                                            } else if (Notification.permission != "denied") {
+                                                Notification.requestPermission(function (permission) {
+                                                    warring_obj.popNotice();
+                                                });
+                                            }
+                                            // console.log(new Date(), "通知")
+
+                                        }                                            
+                                    }                                       
+                                }
+                                else {
+                                    warring_obj.request_warring()
+                                    // console.log("刷新数据")
+                                }
+                                
+                            }, 1000 * 5) // 间隔1秒就打印
+                        </script>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <!-- <button type="button" class="layui-btn layui-btn-fluid ">历史回放</button> -->
+                    <a  href="javascript:;" style="display:flex; justify-content:center; align-items:center;">历史回放</a>
+                    <dl class="layui-nav-child">
+                        <dd style="height:140px">
+                            <label class="layui-form-label">时间</label>
+                            <div class="layui-input-inline" >
+                                <input type="text" class="layui-input" id="historydate" placeholder="yyyy-MM-dd" style="width:80">
+                            </div>
+                        </dd>
+                        <script>
+                            layui.use('laydate', function () {
+                                var laydate = layui.laydate;
+                                laydate.render({
+                                    elem: '#historydate'
+                                    , type: 'datetime'
+                                    , value: new Date()
+                                });
+                            })
+                        </script>
+                    </dl>
+                </li>
+
+                <li class="layui-nav-item">
+                    <!-- <button type="button" class="layui-btn layui-btn-fluid ">文字快报</button> -->
+                    <a  href="javascript:;" style="display:flex; justify-content:center; align-items:center;">文字快报</a>
+                    <dl class="layui-nav-child">
+                        <dd style="height:140px"></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <!-- <button type="button" class="layui-btn layui-btn-fluid ">实况绘图</button> -->
+                    <a  href="javascript:;" style="display:flex; justify-content:center; align-items:center;">实况绘图</a>
+                    <dl class="layui-nav-child">
+                        <dd style="height:140px"></dd>
+                    </dl>
+                </li>
+                
             </ul>
             <!-- </div> -->
             <!-- 这里是地图 -->
@@ -3806,6 +3846,62 @@
         <!-- 材料用途的显示 -->
         <div id = "image_ui" style="width:100%;height:100%;overflow: hidden;background-color:white;">
 
+        </div>
+        <!-- 设置 -->
+        <div id="station_setting" style="width:100%;height:100%;">
+            <ul class="layui-nav layui-nav-tree layui-inline scrollbar" 
+                style="width:100%;height: 100%;background-color: rgb(40,43,51);overflow-y: scroll;overflow-x: hidden;">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <button type="button" class="layui-btn layui-btn-fluid ">数据设置</button>
+                    <dl class="layui-nav-child">
+                        <!-- 数据设置 -->
+                        <dd style="height:180px">
+                            <div style="height:100%;width:100%;" class="layui-form">
+                                <div class="layui-form-item" style="margin-top:15px;">
+                                    <label class="layui-form-label">显示选项</label>
+                                    <div class="layui-input-block" style="padding-left:5%;">
+                                        <input type="radio" name="boundary_type" value="current" title="当前" checked="">
+                                        <input type="radio" name="boundary_type" value="all" title="全省">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">数据级别</label>
+                                    <div class="layui-input-block" style="background-color:rgb(28,30,36);width:50%;">
+                                        <select id="table_type">
+                                            <option value=""></option>
+                                            <option value="nation">国家站</option>
+                                            <option value="regin">区域站</option>
+                                            <option value="all">所有站</option>
+                                            <option value="main">骨干站</option>
+                                            <option value="auto" selected="">全自动</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">地图界线</label>
+                                    <div class="layui-input-block" style="background-color:rgb(28,30,36);width:50%;">
+                                        <select id="village_line">
+                                            <option value=""></option>
+                                            <option value="taizhou" selected="">台州</option>
+                                            <option value="yuhuan">玉环</option>
+                                            <option value="wenling">温岭</option>
+                                            <option value="huangyan">黄岩</option>
+                                            <option value="luqiao">路桥</option>
+                                            <option value="jiaojiang">椒江</option>
+                                            <option value="xianju">仙居</option>
+                                            <option value="linhai">临海</option>
+                                            <option value="tiantai">天台</option>
+                                            <option value="sanmen">三门</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </dd>
+                    </dl>
+
+                </li>
+            </ul>
         </div>
 
     </div>
