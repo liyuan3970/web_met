@@ -1164,153 +1164,114 @@ class station_zdz:
         }
         # 解析数据成两个序列
         return nowdata,history,windhis,windnow
-    def upload2_redis_Minutes(self):
-        '''根据date_type向redis中传输数据'''
-        table = 'Tab_AM_M'
-        SHA_TZ = timezone(
-            dtt.timedelta(hours=8),
-            name='Asia/Shanghai',
-        )
-        utc_now = dtt.datetime.utcnow().replace(tzinfo=dtt.timezone.utc)
-        today = utc_now.astimezone(SHA_TZ)
-        sql = """select TTime,ta.IIIII,station.StationName,station.Province,station.City,station.County,station.Town,station.ZoomLevel,station.Type,station.lat,station.lon,Ri,T,V,fFy,dFy 
-        from {table} as ta inner join TAB_StationInfo as station on ta.IIIII=station.IIiii and station.Province ='浙江' 
-        where (TTime > '{time}') order by TTime """
-        # 数据加载
-        data_class = "table_minutes"
-        redis_data = self.get_redis(data_class)
-        if not redis_data:
-            # 当redis无数据时
-            #time = today.strftime('%Y-%m-%d %H:%M:%S')
-            offset = dtt.timedelta(days=-1)
-            time = (today + offset).strftime('%Y-%m-%d %H:%M:%S')
-            # 测试
-            time = '2019-08-08 16:53:00' 
-            # 测试
-            rsql = sql.format(time=time,table=table)
-            station_all = pd.read_sql(rsql , con=self.conn)
-            data = {
-                'time':time,
-                "data_class":"table_minutes",
-                "data":station_all
-            }
-        else:
-            # 当redis有数据时,存储数据并保留最近24小时的
-            redis_df = redis_data['data']
-            time = redis_df['TTime'].iloc[-1].strftime('%Y-%m-%d %H:%M:%S')
-            daydelay = dtt.timedelta(seconds=-60*3)
-            daystar = (today + daydelay).strftime('%Y-%m-%d %H:%M:%S')
-            redis_df['TTime'] = pd.to_datetime(redis_df['TTime'])
-            # 测试 基本数据
-            time = '2019-08-09 19:30:00'
-            daystar = '2019-08-08 19:30:00'
-            # 测试
-            remain_df = redis_df[redis_df['TTime']>=daystar]
-            rsql = sql.format(time=time,table=table)
-            station_all = pd.read_sql(rsql , con=self.conn)
-            output = pd.concat([remain_df,station_all])
-            output['TTime'] = pd.to_datetime(output['TTime'])
-            output.drop_duplicates(keep='first',inplace=True)
-            data = {
-                'time':time,
-                "data_class":"table_minutes",
-                "data":output
-            }
-        # 将保留的数据重新存储到redis中
-        self.rs.set("table_minutes", pickle.dumps(data))  
-    def sql_now(self,decode_type,area):
-        '''根据date_type向redis中获取数据'''
+    def sql_hours(self):
+        """同步小时数据表"""
+        now_times = "2023-07-18 13:27:00"
+        
+        pass 
+    def sql_range(self,boundary,value_index):
+        # 尽量两小时为主---
+        start_times = "2023-07-18 13:15:00"
+        end_times = "2023-07-18 13:27:00"
+        if value_index==3:
+            sql = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,
+            max(Station_Name) as Station_Name, max(Town) as Town, max(Alti) as Alti, max(Lat) as Lat,max(Lon) as Lon, max(WIN_S_Gust_Max*10000 + WIN_D_Gust_Max) as wind
+            from table_station_min 
+            where Datetime between '{start_times}' and '{end_times}' and WIN_S_Gust_Max<5000 and WIN_D_Gust_Max<5000 and Lat> {lat0} and Lat< {lat1} and Lon >{lon0} and Lon<{lon1}
+            group by Station_Id_C""" 
+            rsql = sql.format(start_times=start_times,end_times=end_times,lat0=boundary[0],lat1 = boundary[1],lon0 = boundary[2],lon1 = boundary[3])
+            data = pd.read_sql(rsql, con=self.conn)
+            data['WIN_S_Gust_Max'] = data.apply(lambda x: (x.wind - int(str(int(x.wind))[-3:]))/10000, axis = 1)
+            data['WIN_D_Gust_Max'] = data.apply(lambda x: int(str(int(x.wind))[-3:]), axis = 1)
+            data['value'] = data['WIN_S_Gust_Max']
+        elif value_index==0:
+            sql = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,
+            max(Station_Name) as Station_Name, max(Town) as Town, max(Alti) as Alti, max(Lat) as Lat,max(Lon) as Lon, sum(PRE) as PRE_sum
+            from table_station_min 
+            where Datetime between '{start_times}' and '{end_times}' and PRE<5000 and Lat> {lat0} and Lat< {lat1} and Lon >{lon0} and Lon<{lon1}
+            group by Station_Id_C""" 
+            rsql = sql.format(start_times=start_times,end_times=end_times,lat0=boundary[0],lat1 = boundary[1],lon0 = boundary[2],lon1 = boundary[3])
+            data = pd.read_sql(rsql, con=self.conn)
+            data['value'] = data['PRE_sum']
+        elif value_index==1:
+            sql = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,
+            max(Station_Name) as Station_Name, max(Town) as Town, max(Alti) as Alti, max(Lat) as Lat,max(Lon) as Lon, max(TEM) as tmax
+            from table_station_min 
+            where Datetime between '{start_times}' and '{end_times}' and TEM<5000 and Lat> {lat0} and Lat< {lat1} and Lon >{lon0} and Lon<{lon1}
+            group by Station_Id_C""" 
+            rsql = sql.format(start_times=start_times,end_times=end_times,lat0=boundary[0],lat1 = boundary[1],lon0 = boundary[2],lon1 = boundary[3])
+            data = pd.read_sql(rsql, con=self.conn)
+            data['value'] = data['tmax']
+        elif value_index==2:
+            sql = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,
+            max(Station_Name) as Station_Name, max(Town) as Town, max(Alti) as Alti, max(Lat) as Lat,max(Lon) as Lon, min(TEM) as tmin
+            from table_station_min 
+            where Datetime between '{start_times}' and '{end_times}' and TEM<5000 and Lat> {lat0} and Lat< {lat1} and Lon >{lon0} and Lon<{lon1}
+            group by Station_Id_C""" 
+            rsql = sql.format(start_times=start_times,end_times=end_times,lat0=boundary[0],lat1 = boundary[1],lon0 = boundary[2],lon1 = boundary[3])
+            data = pd.read_sql(rsql, con=self.conn)
+            data['value'] = data['tmin']
+        elif value_index==4:
+            sql = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,
+            max(Station_Name) as Station_Name, max(Town) as Town, max(Alti) as Alti, max(Lat) as Lat,max(Lon) as Lon, min(VIS_HOR_1MI) as view
+            from table_station_min 
+            where Datetime between '{start_times}' and '{end_times}' and VIS_HOR_1MI<30000 and Lat> {lat0} and Lat< {lat1} and Lon >{lon0} and Lon<{lon1}
+            group by Station_Id_C""" 
+            rsql = sql.format(start_times=start_times,end_times=end_times,lat0=boundary[0],lat1 = boundary[1],lon0 = boundary[2],lon1 = boundary[3])
+            data = pd.read_sql(rsql, con=self.conn)
+            data['value'] = data['view']
         return data
-    def decode_time(self):
-        date_type = "table_minutes"
-        data = self.get_redis(date_type)['data']
-        times = [60*24,60*12,60*6,60*3]
-        tables = ['24hours','12hours','6hours','3hours']
-        # today = self.time_today()
-        # 测试时间数据
-        end = '2019-08-08 16:53:00' 
-        today = dtt.datetime.strptime(end,'%Y-%m-%d %H:%M:%S')
-        value_list = ['Ri','Tx','Tn','fFy','V']
-        for i, value in enumerate(times):
-            offset = dtt.timedelta(minutes=-value)         
-            timeindex = (today + offset).strftime('%Y-%m-%d %H:%M:%S')
-            remain = data[data['TTime']>timeindex]
-            table = tables[i]
-            table_data_list = []
-            for j in value_list:
-                value_df = j
-                df = self.return_data(remain,value_df)
-                table_data_list.append(df)  
-            data_redis = {
-                "data_class":tables[i],
-                "value_list":value_list,
-                "table_data_list":table_data_list
-            }
-            # 将保留的数据重新存储到redis中
-            self.rs.set(tables[i], pickle.dumps(data_redis))  
+    def sql_now(self,boundary,value_index):
+        '''根据date_type向redis中获取数据'''
+        now_times = "2023-07-18 13:27:00"
+        value_list = ["PRE_1h","TEM","TEM","WIN_S_Gust_Max","VIS_HOR_1MI"]
+        if value_index!=3:
+            sql = """select City,Cnty,Station_Id_C,Province,Station_Name,Town,Alti,Lat,Lon, {value} 
+            from table_station_min 
+            where Datetime= '{time}' and {value}<5000 and Lat> {lat0} and Lat< {lat1} and Lon >{lon0} and Lon<{lon1}"""
+        else:
+            sql = """select City,Cnty,Station_Id_C,Province,Station_Name,Town,Alti,Lat,Lon, {value}, WIN_D_Gust_Max
+            from table_station_min 
+            where Datetime= '{time}' and {value}<5000 and Lat> {lat0} and Lat< {lat1} and Lon >{lon0} and Lon<{lon1}"""            
+        rsql = sql.format(time=now_times,value=value_list[value_index],lat0=boundary[0],lat1 = boundary[1],lon0 = boundary[2],lon1 = boundary[3])
+        data = pd.read_sql(rsql, con=self.conn)
+        data['value'] = data[value_list[value_index]]
+        return data
     def get_regin(self,boundary,table_type,tables_name,value_index,zoom):
         '''解码单站数据'''
         ascending_list = [False,False,True,False,True]
-        data = self.get_redis(tables_name)['table_data_list'][value_index]
-        lat0 = boundary[0]
-        lat1 = boundary[1]
-        lon0 = boundary[2]
-        lon1 = boundary[3]
-        boundary_data =  data[(data['lat']>lat0) & (data['lat']<lat1)  &  (data['lon']<lon1) & (data['lon']>lon0)]
-        
+        if tables_name=="now":
+            data = self.sql_now(boundary,value_index)
+            boundary_data =  data
+        else:
+            if tables_name in ["3hours","2hours","1hours","45mins","30mins"]:
+                data = self.sql_range(boundary,value_index)
+                boundary_data =  data
+            else:
+                data = self.get_redis(tables_name)['table_data_list'][value_index]
+                lat0 = boundary[0]
+                lat1 = boundary[1]
+                lon0 = boundary[2]
+                lon1 = boundary[3]
+                boundary_data =  data[(data['Lat']>lat0) & (data['Lat']<lat1)  &  (data['Lon']<lon1) & (data['Lon']>lon0)]  
         if table_type=="nation":
-            remain = boundary_data[boundary_data['Type']=='基本站'] #boundary_data[(boundary_data[boundary_data['Type']=='基本站'])&(boundary_data['ZoomLevel']<6)]
+            remain = boundary_data
         if table_type=="regin":
-            remain = boundary_data[(boundary_data['Type']=="区域站")]
+            remain = boundary_data
         elif table_type=="all":
             remain = boundary_data
         elif table_type=="main":
-            remain = boundary_data[(boundary_data['ZoomLevel']<6)]
+            remain = boundary_data
         elif table_type=="auto":
             if zoom<=9:
-                remain = boundary_data[(boundary_data['ZoomLevel']<10)]       
+                remain = boundary_data
             else:
                 remain = boundary_data  
         remain.sort_values(by="value",axis=0,ascending=ascending_list[value_index],inplace=True) # 从大到小 
             
         output = remain.to_json(orient='records',force_ascii=False)
         return output
-    def return_data(self,remain,value):
-        '''返回数据的类型
-        boundary 边界
-        table redis的表
-        value 要素 Ri fFy Tx Tn V  
-        table_type  nation regin main all 
-        '''
-        if value=="Ri":
-            re = remain[remain['Ri']>0]
-            df = re.groupby(['IIIII','StationName','Province','City','County','Town','Type','lat','lon','ZoomLevel'])['Ri'].sum().reset_index()
-            df['value'] = df['Ri']
-            output = df.to_json(orient='records',force_ascii=False)
-        elif value=="fFy":
-            re = remain[remain['fFy']>0]
-            #output = re
-            grouped_IIIII = re.groupby(['IIIII','StationName','Province','City','County','Town','Type','lat','lon','ZoomLevel'])
-            all_list = []
-            for i in grouped_IIIII.size().index:
-                single = grouped_IIIII.get_group(i)
-                value = single[ single['fFy']== single['fFy'].max()].head(1)
-                all_list.append(value)
-            df = pd.concat(all_list) 
-            df['value'] = df['fFy']          
-        elif value=="Tx":
-            re = remain[remain['T']!=-9999]
-            df = re.groupby(['IIIII','StationName','Province','City','County','Town','Type','lat','lon','ZoomLevel'])['T'].max().reset_index() 
-            df['value'] = df['T']
-        elif value=="Tn":
-            re = remain[remain['T']!=-9999]
-            df = re.groupby(['IIIII','StationName','Province','City','County','Town','Type','lat','lon','ZoomLevel'])['T'].min().reset_index()
-            df['value'] = df['T']
-        elif value=="V":
-            re = remain[remain['V']!=-9999]
-            df = re.groupby(['IIIII','StationName','Province','City','County','Town','Type','lat','lon','ZoomLevel'])['V'].min().reset_index() 
-            df['value'] = df['V']         
-        return df
+
 
 # 气象服务快报的相关
 class station_plot:

@@ -140,7 +140,7 @@
                 <li class="layui-nav-item layui-nav-itemed">
                     <div  class="layui-btn layui-btn-fluid">实况统计</div>                                    
                     <dl class="layui-nav-child">   
-                        <dd style="height:170px">      
+                        <dd style="height:300px">      
                             <div style="height:100%;width:100%;margin-top: 5%;" class="layui-form">
                                 <label class="layui-form-label" >数据类型</label>
                                 <div class="layui-input-inline" style="width: 38%;padding-left:28px;">
@@ -157,7 +157,7 @@
                                 <div class="layui-input-inline" style="width: 20%;">
                                     <select id="real_times">
                                         <option value=""></option>
-                                        <option value="24hours" selected="">24小时</option>
+                                        <option value="24hours">24小时</option>
                                         <option value="12hours">12小时</option>
                                         <option value="6hours">6小时</option>
                                         <option value="3hours">3小时</option>
@@ -165,7 +165,7 @@
                                         <option value="1hours">1小时</option>
                                         <option value="45mins">45分钟</option>
                                         <option value="30mins">30分钟</option>
-                                        <option value="15mins">15分钟</option>                                    
+                                        <option value="now" selected="">实时</option>                                    
                                     </select>
                                 </div>
                                 <div id="radar_plot" class="layui-form-item" style=";margin-top: 5%;">
@@ -1155,167 +1155,157 @@
                         var points = []
                         map_toolbox_object.recv_all_data.forEach(function (item) {
                             // 绘图
-                            var single_point = {
-                                type: "Feature",
-                                "properties": {
-                                    "value": item.value/10.0
-                                },
-                                "geometry": {
-                                    "type": "Point",
-                                    "coordinates": [parseFloat(item.lon), parseFloat(item.lat)]
-                                }
-                            }
-                            points.push(single_point)
-                            if((item.ZoomLevel<=6)){
-                                var iflabel = false
-                            }
-                            else{
-                                var iflabel = true
-                            }
-                            var tooltips = item.StationName + "-" + item.IIiii + "<br>"+"    纬度:" + item.lat.toFixed(2).toString() + "  "+ "经度:" + item.lon.toFixed(2).toString()+"<br>"+"    " +item.City + "-" + item.County + "-" + item.Town 
+                            
+                            // if((item.ZoomLevel<=6)){
+                            //     var iflabel = false
+                            // }
+                            // else{
+                            //     var iflabel = true
+                            // }
+                            var tooltips = item.Station_Name + "-" + item.Station_Id_C + "<br>"+"    纬度:" + item.Lat.toFixed(2).toString() + "  "+ "经度:" + item.Lon.toFixed(2).toString()+"<br>"+"    " +item.City + "-" + item.Cnty + "-" + item.Town 
                             // 添加散点------------
-                            if (click_type == "rain" && item.value / 10.0 > 0) {
+                            if (click_type == "rain") {
                                 if ($("#real_times").val() == "24hours") {
-                                    if (item.value / 10 > 0 && item.value / 10 <= 1) {
+                                    if (item.value  > 0 && item.value <= 1) {
                                        var colors = "white"
                                     }
-                                    else if (item.value / 10 > 1 && item.value / 10 <= 10) {
+                                    else if (item.value > 1 && item.value  <= 10) {
                                        var colors = "rgb(140,246,130)"
                                     }
-                                    else if (item.value / 10 > 10 && item.value / 10 <= 25) {
+                                    else if (item.value > 10 && item.value <= 25) {
                                        var colors = "rgb(0,191,27)"
                                        var iflabel = false
                                     }
-                                    else if (item.value / 10 > 25 && item.value / 10 <= 50) {
+                                    else if (item.value > 25 && item.value <= 50) {
                                        var colors = "rgb(62,185,255)"
                                        var iflabel = false
                                     }
-                                    else if (item.value / 10 > 50 && item.value / 10 <= 100) {
+                                    else if (item.value > 50 && item.value <= 100) {
                                        var colors = "rgb(25,0,235)"
                                        var iflabel = false
                                     }
-                                    else if (item.value / 10 > 100 && item.value / 10 <= 250) {
+                                    else if (item.value > 100 && item.value <= 250) {
                                        var colors = "rgb(255,0,255)"
                                        var iflabel = false
                                     }
-                                    else if (item.value / 10 > 250) {
+                                    else if (item.value > 250) {
                                        var colors = "rgb(140,0,65)"
                                        var iflabel = false
                                     }
 
                                 }
                                 else if($("#real_times").val() == "12hours"){
-                                    if (item.value / 10 > 0 && item.value / 10 <= 1) {
+                                    if (item.value > 0 && item.value <= 1) {
                                         var colors = "white"
                                     }
-                                    else if (item.value / 10 > 1 && item.value / 10 <= 5) {
+                                    else if (item.value > 1 && item.value <= 5) {
                                         var colors = "rgb(140,246,130)"
                                     }
-                                    else if (item.value / 10 > 5 && item.value / 10 <= 15) {
+                                    else if (item.value > 5 && item.value <= 15) {
                                         var colors = "rgb(0,191,27)"
                                     }
-                                    else if (item.value / 10 > 15 && item.value / 10 <= 30) {
+                                    else if (item.value > 15 && item.value <= 30) {
                                         var colors = "rgb(62,185,255)"
                                         var iflabel = false
                                     }
-                                    else if (item.value / 10 > 30 && item.value / 10 <= 70) {
+                                    else if (item.value > 30 && item.value <= 70) {
                                         var colors = "rgb(25,0,235)"
                                         var iflabel = false
                                     }
-                                    else if (item.value / 10 > 70 && item.value / 10 <= 140) {
+                                    else if (item.value > 70 && item.value <= 140) {
                                         var colors = "rgb(255,0,255)"
                                         var iflabel = false
                                     }
-                                    else if (item.value / 10 > 140) {
+                                    else if (item.value > 140) {
                                         var colors = "rgb(140,0,65)"
                                         var iflabel = false
                                     }
                                 }
                                 else if($("#real_times").val() == "6hours"){
-                                    if (item.value / 10 > 0 && item.value / 10 <= 1) {
+                                    if (item.value > 0 && item.value <= 1) {
                                         var colors = "white"
                                     }
-                                    else if (item.value / 10 > 1 && item.value / 10 <= 4) {
+                                    else if (item.value > 1 && item.value <= 4) {
                                         var colors = "rgb(140,246,130)"
                                     }
-                                    else if (item.value / 10 > 4 && item.value / 10 <= 13) {
+                                    else if (item.value > 4 && item.value <= 13) {
                                         var colors = "rgb(0,191,27)"
                                     }
-                                    else if (item.value / 10 > 13 && item.value / 10 <= 25) {
+                                    else if (item.value > 13 && item.value <= 25) {
                                         var colors = "rgb(62,185,255)"
                                         var iflabel = false
                                     }
-                                    else if (item.value / 10 > 25 && item.value / 10 <= 60) {
+                                    else if (item.value > 25 && item.value <= 60) {
                                         var colors = "rgb(25,0,235)"
                                         var iflabel = false
                                     }
-                                    else if (item.value / 10 > 60 && item.value / 10 <= 120) {
+                                    else if (item.value > 60 && item.value <= 120) {
                                         var colors = "rgb(255,0,255)"
                                         var iflabel = false
                                     }
-                                    else if (item.value / 10 > 120) {
+                                    else if (item.value > 120) {
                                         var colors = "rgb(140,0,65)"
                                         var iflabel = false
                                     }
 
                                 }
                                 else if($("#real_times").val() == "3hours"){
-                                    if (item.value / 10 > 0 && item.value / 10 <= 1) {
+                                    if (item.value > 0 && item.value <= 1) {
                                         var colors = "white"
                                     }
-                                    else if (item.value / 10 > 1 && item.value / 10 <= 3) {
+                                    else if (item.value > 1 && item.value <= 3) {
                                         var colors = "rgb(140,246,130)"
                                     }
-                                    else if (item.value / 10 > 3 && item.value / 10 <= 10) {
+                                    else if (item.value > 3 && item.value <= 10) {
                                         var colors = "rgb(0,191,27)"
                                         var iflabel = false
                                     }
-                                    else if (item.value / 10 > 10 && item.value / 10 <= 20) {
+                                    else if (item.value > 10 && item.value <= 20) {
                                         var colors = "rgb(62,185,255)"
                                         var iflabel = false
                                     }
-                                    else if (item.value / 10 > 20 && item.value / 10 <= 50) {
+                                    else if (item.value > 20 && item.value <= 50) {
                                         var colors = "rgb(25,0,235)"
                                         var iflabel = false
                                     }
-                                    else if (item.value / 10 > 50 && item.value / 10 <= 70) {
+                                    else if (item.value > 50 && item.value <= 70) {
                                         var colors = "rgb(255,0,255)"
                                         var iflabel = false
                                     }
-                                    else if (item.value / 10 > 70) {
+                                    else if (item.value > 70) {
                                         var colors = "rgb(140,0,65)"
                                         var iflabel = false
                                     }
                                 }
                                 else{
-                                    if (item.value / 10 > 0 && item.value / 10 <= 1) {
+                                    if (item.value > 0 && item.value <= 1) {
                                         var colors = "white"
                                     }
-                                    else if (item.value / 10 > 1 && item.value / 10 <= 1.5) {
+                                    else if (item.value > 1 && item.value <= 1.5) {
                                         var colors = "rgb(140,246,130)"
                                     }
-                                    else if (item.value / 10 > 1.5 && item.value / 10 <= 7) {
+                                    else if (item.value > 1.5 && item.value <= 7) {
                                         var colors = "rgb(0,191,27)"
                                     }
-                                    else if (item.value / 10 > 7 && item.value / 10 <= 15) {
+                                    else if (item.value > 7 && item.value <= 15) {
                                         var colors = "rgb(62,185,255)"
                                     }
-                                    else if (item.value / 10 > 15 && item.value / 10 <= 40) {
+                                    else if (item.value > 15 && item.value <= 40) {
                                         var colors = "rgb(25,0,235)"
                                     }
-                                    else if (item.value / 10 > 40 && item.value / 10 <= 50) {
+                                    else if (item.value > 40 && item.value <= 50) {
                                         var colors = "rgb(255,0,255)"
                                     }
-                                    else if (item.value / 10 > 50) {
+                                    else if (item.value > 50) {
                                         var colors = "rgb(140,0,65)"
                                     }
 
                                 }
-                                var latlng = L.latLng(item.lat, item.lon);
+                                var latlng = L.latLng(item.Lat, item.Lon);
                                 // 添加散点插件
                                 var c = L.circleMarker(latlng, {
-                                    stationname: item.StationName,
-                                    stationnum: item.IIiii,
+                                    stationname: item.Station_Name,
+                                    stationnum: item.Station_Id_C,
                                     weight: 0,
                                     radius: 8,
                                     opacity: 0,
@@ -1324,7 +1314,7 @@
                                     fillColor: colors,
                                     fillOpacity: 1,
                                     labelStyle: {
-                                        text: item.value / 10.0 ,
+                                        text: item.value ,
                                         collisionFlg: iflabel,
                                         // offsetY: -25,
                                         scale: 1.5,
@@ -1341,23 +1331,23 @@
                                 map_toolbox_object.current_marker_list.push(c)
 
                             }
-                            else if (click_type == "wind" && item.value >54) {
-                                var latlng = L.latLng(item.lat, item.lon);
-                                if ((item.value / 10 <= 20.6) && (item.value / 10 > 17.0)) {
+                            else if (click_type == "wind" && item.value >10.3) {
+                                var latlng = L.latLng(item.Lat, item.Lon);
+                                if ((item.value  <= 20.6) && (item.value  > 17.0)) {
                                     var colors = "#E71FED" // 粉色
                                     
                                 }
-                                else if (item.value / 10 > 20.6) {
+                                else if (item.value  > 20.6) {
                                     var colors = "red" // 粉色
                                     
                                 }
                                 else {
                                     var colors = "white"
                                 }
-                                var latlng = L.latLng(item.lat, item.lon);
+                                var latlng = L.latLng(item.Lat, item.Lon);
                                 var icon = L.WindBarb.icon({
                                     color: "red",
-                                    deg: item.dFy,
+                                    deg: item.WIN_D_Gust_Max,
                                     pointRadius: 8,
                                     strokeColor: colors,
                                     strokeLength:25,
@@ -1365,16 +1355,16 @@
                                     // barbSpaceing:4,
                                     // barbHeight:20,
                                     fillColor: colors,
-                                    speed: (item.fFy / 10)
+                                    speed: (item.value)
                                 });
-                                var marker = L.marker([item.lat, item.lon], {
+                                var marker = L.marker([item.Lat, item.Lon], {
                                     icon: icon,
-                                    name: item.IIiii,
-                                    stationname: item.StationName,
-                                    stationnum: item.IIiii,
-                                    deg: item.dFy,
-                                    sped: item.fFy,
-                                    station: item.StationName
+                                    name: item.Station_Id_C,
+                                    stationname: item.Station_Name,
+                                    stationnum: item.Station_Id_C,
+                                    deg: item.WIN_D_Gust_Max,
+                                    sped: item.value,
+                                    station: item.Station_Name
                                 }).bindTooltip(tooltips ,{
                                     direction:"top",
                                     offset:L.point(0, -10)
@@ -1384,56 +1374,56 @@
 
 
                             }
-                            else if (click_type == "sped" && item.value != -9999) {
-                                var wind_dir_text = map_toolbox_object.wind_dir(item.dFy)
-                                if ((item.value>=0)&&(item.value<=54)){
-                                    var texts = wind_dir_text + "/" + (item.value/10).toString()
+                            else if (click_type == "sped" ) {
+                                var wind_dir_text = map_toolbox_object.wind_dir(item.WIN_D_Gust_Max)
+                                if ((item.value>=0)&&(item.value<=5.4)){
+                                    var texts = wind_dir_text + "/" + (item.value).toString()
                                     var colors = "white"                                
                                 }
-                                else if((item.value>54)&&(item.value<=79)){
-                                    var texts = wind_dir_text + "/" + (item.value/10).toString()
+                                else if((item.value>5.4)&&(item.value<=7.9)){
+                                    var texts = wind_dir_text + "/" + (item.value).toString()
                                     var colors = "white"
                                 }
-                                else if((item.value>79)&&(item.value<=107)){
-                                    var texts = wind_dir_text + "/" + (item.value/10).toString()
+                                else if((item.value>7.9)&&(item.value<=10.7)){
+                                    var texts = wind_dir_text + "/" + (item.value).toString()
                                     var colors = "white"
                                 }
-                                else if((item.value>107)&&(item.value<=138)){
-                                    var texts = wind_dir_text + "/" + (item.value/10).toString()
+                                else if((item.value>10.7)&&(item.value<=13.8)){
+                                    var texts = wind_dir_text + "/" + (item.value).toString()
                                     var colors = "#F3EBAB"
                                 }
-                                else if((item.value>138)&&(item.value<=171)){
-                                    var texts = wind_dir_text + "/" + (item.value/10).toString()
+                                else if((item.value>13.8)&&(item.value<=17.1)){
+                                    var texts = wind_dir_text + "/" + (item.value).toString()
                                     var colors = "#ABC1F3"
                                     var iflabel = false
                                     
                                 }
-                                else if((item.value>171)&&(item.value<=207)){
-                                    var texts = wind_dir_text + "/" + (item.value/10).toString()
+                                else if((item.value>17.1)&&(item.value<=20.7)){
+                                    var texts = wind_dir_text + "/" + (item.value).toString()
                                     var colors = "#F3ABF1"
                                     var iflabel = false
                                 }
-                                else if((item.value>207)&&(item.value<=244)){
-                                    var texts = wind_dir_text + "/" + (item.value/10).toString()
+                                else if((item.value>20.7)&&(item.value<=24.4)){
+                                    var texts = wind_dir_text + "/" + (item.value).toString()
                                     var colors = "red"
                                     var iflabel = false
                                 }
-                                else if((item.value>244)&&(item.value<=284)){
-                                    var texts = wind_dir_text + "/" + (item.value/10).toString()
+                                else if((item.value>24.4)&&(item.value<=28.4)){
+                                    var texts = wind_dir_text + "/" + (item.value).toString()
                                     var colors = "red"
                                     var iflabel = false
                                 }
-                                else if((item.value>284)){
-                                    var texts = wind_dir_text + "/" + (item.value/10).toString()
+                                else if((item.value>28.4)){
+                                    var texts = wind_dir_text + "/" + (item.value).toString()
                                     var colors = "red"
                                     var iflabel = false
                                 }
 
-                                var latlng = L.latLng(item.lat, item.lon);
+                                var latlng = L.latLng(item.Lat, item.Lon);
                                 // 添加散点插件
                                 var c = L.circleMarker(latlng, {
-                                    stationname: item.StationName,
-                                    stationnum: item.IIiii,
+                                    stationname: item.Station_Name,
+                                    stationnum: item.Station_Id_C,
                                     weight: 0,
                                     radius: 7,
                                     opacity: 1,
@@ -1462,28 +1452,28 @@
                             else if (click_type == "tmax" || click_type == "tmin") {
                                 if (item.value != -9999) {
                                     if (item.value != -9999) {
-                                        if (item.value / 10 > 35) {
+                                        if (item.value  > 35) {
                                             var colors = "red"
                                             var iflabel = false
                                         }
-                                        else if (item.value / 10 < 3) {
+                                        else if (item.value  < 3) {
                                             var colors = "blue"
                                             var iflabel = false
                                         }
                                         else {
                                             var colors = "white"
                                         }
-                                        var latlng = L.latLng(item.lat, item.lon);
+                                        var latlng = L.latLng(item.Lat, item.Lon);
                                         var c = L.circleMarker(latlng, {
-                                            stationname: item.StationName,
-                                            stationnum: item.IIiii,
+                                            stationname: item.Station_Name,
+                                            stationnum: item.Station_Id_C,
                                             weight: 0,
                                             radius: 7,
                                             opacity: 1,
                                             fill: false,
                                             fillOpacity: 1,
                                             labelStyle: {
-                                                text: item.value / 10.0,
+                                                text: item.value ,
                                                 collisionFlg: iflabel,
                                                 fillStyle: colors,
                                                 scale: 1.5,
@@ -1500,7 +1490,7 @@
                                     }
                                 }
                             }
-                            else if (click_type == "view" && item.value != -9999) {
+                            else if (click_type == "view" && item.value <30000) {
                                 if ((item.value > 500) && (item.value <= 1000)) {
                                     var colors = "blue"
                                 }
@@ -1519,10 +1509,10 @@
                                 else {
                                     var colors = "white"
                                 }
-                                var latlng = L.latLng(item.lat, item.lon);
+                                var latlng = L.latLng(item.Lat, item.Lon);
                                 var c = L.circleMarker(latlng, {
-                                    stationname: item.StationName,
-                                    stationnum: item.IIiii,
+                                    stationname: item.Station_Name,
+                                    stationnum: item.Station_Id_C,
                                     weight: 0,
                                     radius: 7,
                                     opacity: 1,
@@ -2285,7 +2275,7 @@
                         // console.log("---",tabledata)
                         if (click_type != "view") {
                             tabledata.forEach(function (item) {
-                                item.value = item.value/10
+                                item.value = item.value
                             })
                         }      
                         if(click_type=="rain"){var fields = "降水"}
@@ -2301,12 +2291,13 @@
                                 , height: 360
                                 , cellMinWidth: 80
                                 , cols: [[ //标题栏
-                                    { field: 'IIiii', title: 'ID', width: 60 }
+                                    { field: 'Station_Id_C', title: 'ID', width: 60 }
                                     , { field: 'City', title: '地市',  width: 60 }
-                                    , { field: 'County', title: '县(市)', width: 80 }
+                                    , { field: 'Cnty', title: '县(市)', width: 80 }
                                     , { field: 'Town', title: '乡镇', width: 100 }
+                                    , { field: 'Station_Name', title: '站名', width: 50 }
                                     , { field: 'value', title: fields, sort: true, width: 80 }
-                                    , { field: 'Type', title: '质控码', width: 50 }
+                                   
                                     // , {
                                     //     field: 'lock', title: '可疑', width: 110, templet: function (d) {
                                     //         console.log(d); // 得到当前行数据
