@@ -1164,17 +1164,64 @@ class station_zdz:
         }
         # 解析数据成两个序列
         return nowdata,history,windhis,windnow
-    def sql_hours(self):
+    def sql_hours(self,boundary,value_index):
         """同步小时数据表"""
-        now_times = "2023-07-18 13:27:00"
-        
-        pass 
-    def sql_range(self,boundary,value_index):
-        # 尽量两小时为主---
-        start_times = "2023-07-18 13:15:00"
+        start_times = "2023-07-18 01:15:00"
         end_times = "2023-07-18 13:27:00"
         if value_index==3:
-            sql = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,
+            sql = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,max(Station_levl) as Station_levl,
+            max(Station_Name) as Station_Name, max(Town) as Town, max(Alti) as Alti, max(Lat) as Lat,max(Lon) as Lon, max(wind) as wind
+            from table_station_hour 
+            where Datetime between '{start_times}' and '{end_times}' and wind>0 and Lat> {lat0} and Lat< {lat1} and Lon >{lon0} and Lon<{lon1}
+            group by Station_Id_C""" 
+            rsql = sql.format(start_times=start_times,end_times=end_times,lat0=boundary[0],lat1 = boundary[1],lon0 = boundary[2],lon1 = boundary[3])
+            data = pd.read_sql(rsql, con=self.conn)
+            data['WIN_S_Gust_Max'] = data.apply(lambda x: (x.wind - int(str(int(x.wind))[-3:]))/10000, axis = 1)
+            data['WIN_D_Gust_Max'] = data.apply(lambda x: int(str(int(x.wind))[-3:]), axis = 1)
+            data['value'] = data['WIN_S_Gust_Max']
+        elif value_index==0:
+            sql = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,max(Station_levl) as Station_levl,
+            max(Station_Name) as Station_Name, max(Town) as Town, max(Alti) as Alti, max(Lat) as Lat,max(Lon) as Lon, sum(rain) as PRE_sum
+            from table_station_hour 
+            where Datetime between '{start_times}' and '{end_times}' and rain<5000 and Lat> {lat0} and Lat< {lat1} and Lon >{lon0} and Lon<{lon1}
+            group by Station_Id_C""" 
+            rsql = sql.format(start_times=start_times,end_times=end_times,lat0=boundary[0],lat1 = boundary[1],lon0 = boundary[2],lon1 = boundary[3])
+            data = pd.read_sql(rsql, con=self.conn)
+            data['value'] = data['PRE_sum']
+        elif value_index==1:
+            sql = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,max(Station_levl) as Station_levl,
+            max(Station_Name) as Station_Name, max(Town) as Town, max(Alti) as Alti, max(Lat) as Lat,max(Lon) as Lon, max(tmax) as tmax
+            from table_station_hour 
+            where Datetime between '{start_times}' and '{end_times}' and tmax<5000 and Lat> {lat0} and Lat< {lat1} and Lon >{lon0} and Lon<{lon1}
+            group by Station_Id_C""" 
+            rsql = sql.format(start_times=start_times,end_times=end_times,lat0=boundary[0],lat1 = boundary[1],lon0 = boundary[2],lon1 = boundary[3])
+            data = pd.read_sql(rsql, con=self.conn)
+            data['value'] = data['tmax']
+        elif value_index==2:
+            sql = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,max(Station_levl) as Station_levl,
+            max(Station_Name) as Station_Name, max(Town) as Town, max(Alti) as Alti, max(Lat) as Lat,max(Lon) as Lon, min(tmin) as tmin
+            from table_station_hour 
+            where Datetime between '{start_times}' and '{end_times}' and tmin<5000 and Lat> {lat0} and Lat< {lat1} and Lon >{lon0} and Lon<{lon1}
+            group by Station_Id_C""" 
+            rsql = sql.format(start_times=start_times,end_times=end_times,lat0=boundary[0],lat1 = boundary[1],lon0 = boundary[2],lon1 = boundary[3])
+            data = pd.read_sql(rsql, con=self.conn)
+            data['value'] = data['tmin']
+        elif value_index==4:
+            sql = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,max(Station_levl) as Station_levl,
+            max(Station_Name) as Station_Name, max(Town) as Town, max(Alti) as Alti, max(Lat) as Lat,max(Lon) as Lon, min(view) as view
+            from table_station_hour 
+            where Datetime between '{start_times}' and '{end_times}' and view<30000 and Lat> {lat0} and Lat< {lat1} and Lon >{lon0} and Lon<{lon1}
+            group by Station_Id_C""" 
+            rsql = sql.format(start_times=start_times,end_times=end_times,lat0=boundary[0],lat1 = boundary[1],lon0 = boundary[2],lon1 = boundary[3])
+            data = pd.read_sql(rsql, con=self.conn)
+            data['value'] = data['view']
+        return data 
+    def sql_range(self,boundary,value_index):
+        # 尽量两小时为主---
+        start_times = "2023-07-18 11:15:00"
+        end_times = "2023-07-18 13:27:00"
+        if value_index==3:
+            sql = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,max(Station_levl) as Station_levl,
             max(Station_Name) as Station_Name, max(Town) as Town, max(Alti) as Alti, max(Lat) as Lat,max(Lon) as Lon, max(WIN_S_Gust_Max*10000 + WIN_D_Gust_Max) as wind
             from table_station_min 
             where Datetime between '{start_times}' and '{end_times}' and WIN_S_Gust_Max<5000 and WIN_D_Gust_Max<5000 and Lat> {lat0} and Lat< {lat1} and Lon >{lon0} and Lon<{lon1}
@@ -1185,7 +1232,7 @@ class station_zdz:
             data['WIN_D_Gust_Max'] = data.apply(lambda x: int(str(int(x.wind))[-3:]), axis = 1)
             data['value'] = data['WIN_S_Gust_Max']
         elif value_index==0:
-            sql = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,
+            sql = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,max(Station_levl) as Station_levl,
             max(Station_Name) as Station_Name, max(Town) as Town, max(Alti) as Alti, max(Lat) as Lat,max(Lon) as Lon, sum(PRE) as PRE_sum
             from table_station_min 
             where Datetime between '{start_times}' and '{end_times}' and PRE<5000 and Lat> {lat0} and Lat< {lat1} and Lon >{lon0} and Lon<{lon1}
@@ -1194,7 +1241,7 @@ class station_zdz:
             data = pd.read_sql(rsql, con=self.conn)
             data['value'] = data['PRE_sum']
         elif value_index==1:
-            sql = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,
+            sql = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,max(Station_levl) as Station_levl,
             max(Station_Name) as Station_Name, max(Town) as Town, max(Alti) as Alti, max(Lat) as Lat,max(Lon) as Lon, max(TEM) as tmax
             from table_station_min 
             where Datetime between '{start_times}' and '{end_times}' and TEM<5000 and Lat> {lat0} and Lat< {lat1} and Lon >{lon0} and Lon<{lon1}
@@ -1203,7 +1250,7 @@ class station_zdz:
             data = pd.read_sql(rsql, con=self.conn)
             data['value'] = data['tmax']
         elif value_index==2:
-            sql = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,
+            sql = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,max(Station_levl) as Station_levl,
             max(Station_Name) as Station_Name, max(Town) as Town, max(Alti) as Alti, max(Lat) as Lat,max(Lon) as Lon, min(TEM) as tmin
             from table_station_min 
             where Datetime between '{start_times}' and '{end_times}' and TEM<5000 and Lat> {lat0} and Lat< {lat1} and Lon >{lon0} and Lon<{lon1}
@@ -1212,7 +1259,7 @@ class station_zdz:
             data = pd.read_sql(rsql, con=self.conn)
             data['value'] = data['tmin']
         elif value_index==4:
-            sql = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,
+            sql = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,max(Station_levl) as Station_levl,
             max(Station_Name) as Station_Name, max(Town) as Town, max(Alti) as Alti, max(Lat) as Lat,max(Lon) as Lon, min(VIS_HOR_1MI) as view
             from table_station_min 
             where Datetime between '{start_times}' and '{end_times}' and VIS_HOR_1MI<30000 and Lat> {lat0} and Lat< {lat1} and Lon >{lon0} and Lon<{lon1}
@@ -1224,13 +1271,13 @@ class station_zdz:
     def sql_now(self,boundary,value_index):
         '''根据date_type向redis中获取数据'''
         now_times = "2023-07-18 13:27:00"
-        value_list = ["PRE_1h","TEM","TEM","WIN_S_Gust_Max","VIS_HOR_1MI"]
+        value_list = ["PRE","TEM","TEM","WIN_S_Gust_Max","VIS_HOR_1MI"]
         if value_index!=3:
-            sql = """select City,Cnty,Station_Id_C,Province,Station_Name,Town,Alti,Lat,Lon, {value} 
+            sql = """select City,Cnty,Station_Id_C,Station_levl,Province,Station_Name,Town,Alti,Lat,Lon, {value} 
             from table_station_min 
             where Datetime= '{time}' and {value}<5000 and Lat> {lat0} and Lat< {lat1} and Lon >{lon0} and Lon<{lon1}"""
         else:
-            sql = """select City,Cnty,Station_Id_C,Province,Station_Name,Town,Alti,Lat,Lon, {value}, WIN_D_Gust_Max
+            sql = """select City,Cnty,Station_Id_C,Station_levl,Province,Station_Name,Town,Alti,Lat,Lon, {value}, WIN_D_Gust_Max
             from table_station_min 
             where Datetime= '{time}' and {value}<5000 and Lat> {lat0} and Lat< {lat1} and Lon >{lon0} and Lon<{lon1}"""            
         rsql = sql.format(time=now_times,value=value_list[value_index],lat0=boundary[0],lat1 = boundary[1],lon0 = boundary[2],lon1 = boundary[3])
@@ -1248,25 +1295,32 @@ class station_zdz:
                 data = self.sql_range(boundary,value_index)
                 boundary_data =  data
             else:
-                data = self.get_redis(tables_name)['table_data_list'][value_index]
+                data = self.sql_hours(boundary,value_index)
                 lat0 = boundary[0]
                 lat1 = boundary[1]
                 lon0 = boundary[2]
                 lon1 = boundary[3]
                 boundary_data =  data[(data['Lat']>lat0) & (data['Lat']<lat1)  &  (data['Lon']<lon1) & (data['Lon']>lon0)]  
         if table_type=="nation":
-            remain = boundary_data
+            remain = boundary_data[(boundary_data['Station_levl']==11)| (boundary_data['Station_levl']==12)| (boundary_data['Station_levl']==13)| (boundary_data['Station_levl']==16)]
         if table_type=="regin":
-            remain = boundary_data
+            remain = boundary_data[boundary_data['Station_levl']==14]
         elif table_type=="all":
             remain = boundary_data
         elif table_type=="main":
-            remain = boundary_data
-        elif table_type=="auto":
-            if zoom<=9:
-                remain = boundary_data
+            remain = boundary_data[(boundary_data['Station_levl']==11)| (boundary_data['Station_levl']==12)| (boundary_data['Station_levl']==15)| (boundary_data['Station_levl']==13)| (boundary_data['Station_levl']==16)]
+        elif table_type=="auto":   
+            if value_index!=0:        
+                if (boundary[3]-boundary[2])<2.9:
+                    remain = boundary_data
+                elif (boundary[3]-boundary[2])<6:
+                    remain = boundary_data[(boundary_data['Station_levl']==11)| (boundary_data['Station_levl']==15)| (boundary_data['Station_levl']==12)| (boundary_data['Station_levl']==13)| (boundary_data['Station_levl']==16)]
+                else:
+                    remain = boundary_data[(boundary_data['Station_levl']==11)| (boundary_data['Station_levl']==12)| (boundary_data['Station_levl']==13)| (boundary_data['Station_levl']==16)]
             else:
-                remain = boundary_data  
+                remain = boundary_data
+
+
         remain.sort_values(by="value",axis=0,ascending=ascending_list[value_index],inplace=True) # 从大到小 
             
         output = remain.to_json(orient='records',force_ascii=False)

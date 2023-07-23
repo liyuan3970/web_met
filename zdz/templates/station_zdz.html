@@ -1164,7 +1164,7 @@
                             // }
                             var tooltips = item.Station_Name + "-" + item.Station_Id_C + "<br>"+"    纬度:" + item.Lat.toFixed(2).toString() + "  "+ "经度:" + item.Lon.toFixed(2).toString()+"<br>"+"    " +item.City + "-" + item.Cnty + "-" + item.Town 
                             // 添加散点------------
-                            if (click_type == "rain") {
+                            if (click_type == "rain" && item.value >0) {
                                 if ($("#real_times").val() == "24hours") {
                                     if (item.value  > 0 && item.value <= 1) {
                                        var colors = "white"
@@ -1277,7 +1277,7 @@
                                         var iflabel = false
                                     }
                                 }
-                                else{
+                                else if($("#real_times").val() != "now"){
                                     if (item.value > 0 && item.value <= 1) {
                                         var colors = "white"
                                     }
@@ -1297,6 +1297,30 @@
                                         var colors = "rgb(255,0,255)"
                                     }
                                     else if (item.value > 50) {
+                                        var colors = "rgb(140,0,65)"
+                                    }
+
+                                }
+                                else{
+                                    if (item.value > 0 && item.value <= 0.1) {
+                                        var colors = "white"
+                                    }
+                                    else if (item.value > 0.1 && item.value <= 0.3) {
+                                        var colors = "rgb(140,246,130)"
+                                    }
+                                    else if (item.value > 0.3 && item.value <= 0.5) {
+                                        var colors = "rgb(0,191,27)"
+                                    }
+                                    else if (item.value > 0.5 && item.value <= 0.7) {
+                                        var colors = "rgb(62,185,255)"
+                                    }
+                                    else if (item.value > 0.7 && item.value <= 1.0) {
+                                        var colors = "rgb(25,0,235)"
+                                    }
+                                    else if (item.value > 1.0 && item.value <= 2) {
+                                        var colors = "rgb(255,0,255)"
+                                    }
+                                    else if (item.value > 2) {
                                         var colors = "rgb(140,0,65)"
                                     }
 
@@ -2394,6 +2418,12 @@
                         else {
                             var boundary = [mapdata['_southWest'].lat, mapdata['_northEast'].lat, mapdata['_southWest'].lng, mapdata['_northEast'].lng]
                         }
+                        // if ($("#real_class").val()=="rain"){
+                        //     var table_type = "all"
+                        // }
+                        // else{
+                        //     var table_type = $("#table_type").val()
+                        // }
                         var table_type = $("#table_type").val()
                         // console.log("接收的数据",boundary,boundary_type,table_type)
                         // console.log(boundary_type, boundary, table_type)
