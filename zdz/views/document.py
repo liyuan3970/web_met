@@ -864,7 +864,7 @@ def station_zdz_data(request):
         city = click_type
         country = button_value
         # 测试
-        # print("测试",city,country)
+        print("测试",city,country)
         start = '2019-08-08 08:00:00'  
         end = '2019-08-08 09:00:00'
         worker = data_class.station_plot()

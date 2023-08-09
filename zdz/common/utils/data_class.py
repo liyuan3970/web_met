@@ -1445,32 +1445,26 @@ class station_plot:
     # 内部函数
     def get_sql_data(self,start,end):      
         '''sql 获取数据'''
-        tables = ['TAB_Aws2019','TAB_Mws2019']
-        data_list = []
-        sqltall = """select ta.IIiii,max(station.lat) as lat,max(station.lon) as lon,max(station.StationName) as StationName,
-        max(station.City) as City,max(station.County) as County,max(station.Town) as Town,max(station.Village) as Village,max(station.Country) as Country, 
-        max(fFy*1000+dFy) as fff ,min(VV) as view,max(T) as tmax,min(T) as tmin ,sum(RR) as rain,max(RR) as Ri,max(fFy) as wind
-        from {table} as ta inner join TAB_StationInfo as station on ta.IIIII=station.IIiii  
-        where (tTime between '{start}' and '{end}' and station.lon>119 and station.lon<122 and station.lat>27.5 and station.lat<29.5 ) 
-        group by ta.IIiii"""
-        for table in tables: 
-            rsql = sqltall.format(start=start,end=end,table=table)
-            data = pd.read_sql(rsql , con=self.conn)
-            data_list.append(data)
-        station_all = pd.concat(data_list)
-        station_all['fff'] = station_all['fff'].values.astype(str)
-        station_all['dFy'] = station_all['fff'].str.slice(-3)
-        station_all["dFy"] = pd.to_numeric(station_all["dFy"])
-        return station_all
+        start = '2023-07-17 13:00:00'
+        end = '2023-07-18 12:00:00'
+        sqltall = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,max(Station_levl) as Station_levl,
+            max(Station_Name) as Station_Name, max(Town) as Town, max(Alti) as Alti, max(Lat) as Lat,max(Lon) as Lon, sum(rain) as rain,max(tmax) as tmax,min(tmin) as tmin ,max(wind)as wind 
+            from table_station_hour 
+            where Datetime between '{start_times}' and '{end_times}'
+            group by Station_Id_C""" 
+        rsql = sqltall.format(start_times=start,end_times=end)     
+        data = pd.read_sql(rsql , con=self.conn)
+        # print("测试数据",data)
+        return data
     def extra_download(self,start,end,city,country):
         station_all = self.get_sql_data(start,end)
-        station_all['lock'] = "true"
+        # station_all['lock'] = "true"
         if country=="all":
             country = city
             data = station_all[station_all['City']==city]
         else:
             country = country
-            data = station_all[station_all['County']==country]
+            data = station_all[station_all['Cnty']==country]
         output = data.to_json(orient='records',force_ascii=False)
         return output
     def get_plot_data(self,city,country,plot_data,plot_value):
@@ -1480,8 +1474,8 @@ class station_plot:
         z = []
         for i in range(len(plot_data)):
             if plot_data[i][plot_value]!=-9999.0:
-                x.append(plot_data[i]['lon'])
-                y.append(plot_data[i]['lat'])
+                x.append(plot_data[i]['Lon'])
+                y.append(plot_data[i]['Lat'])
                 z.append(plot_data[i][plot_value]/10)
         lat = np.array(y)
         lon = np.array(x)

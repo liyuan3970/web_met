@@ -552,16 +552,43 @@
                         </dd>
                     </dl>
                 </li>
-                
-                <li class="layui-nav-item">
-                    <!-- <button type="button" class="layui-btn layui-btn-fluid ">历史回放</button> -->
-                    <a  href="javascript:;" style="display:flex; justify-content:center; align-items:center;">历史回放</a>
+                <!-- 历史实况的统计信息 -->
+                <li class="layui-nav-item layui-nav-itemed">
+                    <button type="button" class="layui-btn layui-btn-fluid ">整点回放</button>
                     <dl class="layui-nav-child">
-                        <dd style="height:140px">
+                        <dd style="height:120px;padding-top: 5%;">
                             <label class="layui-form-label">时间</label>
                             <div class="layui-input-inline" >
                                 <input type="text" class="layui-input" id="historydate" placeholder="yyyy-MM-dd" style="width:80">
                             </div>
+                            <div style="height:100%;width:100%;margin-top: 5%;" class="layui-form">
+                                <label class="layui-form-label" >数据</label>
+                                <div class="layui-input-inline" style="width: 30%;padding-left:1px;">
+                                    <select name="history_class" lay-filter="history_class">
+                                        <option value=""></option>
+                                        <option value="rain" selected="">降水</option>
+                                        <option value="sped">风级</option>
+                                        <option value="wind">风力</option>
+                                        <option value="tmax">高温</option>
+                                        <option value="tmin">低温</option>
+                                        <option value="view">能见度</option>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline" style="width: 31%;">
+                                    <select name="history_hours" lay-filter="history_hours" id = "history_hours">
+                                        <!-- <option value=""></option>                            
+                                        <option value="45mins">45分钟</option>
+                                        <option value="30mins">30分钟</option>
+                                        <option value="now" selected="">实时</option>                                     -->
+                                    </select>
+                                </div>                                                    
+                            </div>
+
+                        </dd>
+                        <!-- 历史数据的按钮 -->
+                        <dd style="height:50px;padding-right:25px;">
+                            <button type="button" class="layui-btn layui-btn-sm" style="float:right;margin-left: 10px;">查询</button> 
+                            <button type="button" class="layui-btn layui-btn-sm" style="float:right;">刷新</button>
                         </dd>
                         <script>
                             layui.use('laydate', function () {
@@ -572,24 +599,60 @@
                                     , value: new Date()
                                 });
                             })
+                            layui.use(['form'], function () {
+                                    // layui引入需要的组件
+                                    var $ = layui.jquery;
+                                    var layer = layui.layer;
+                                    var form = layui.form;
+                                    form.render('select');
+                                    // 第二步 监听父级，每当父级发生变化时，渲染子级的值
+                                    form.on('select(history_class)', function (data) {
+                                        var opt = {
+                                            "rain":["6hours","3hours"],
+                                            "sped":["6hours","3hours","1hours"],
+                                            "wind":["6hours","3hours","1hours"],
+                                            "tmax":["12hours","24hours"],
+                                            "tmin":["12hours","24hours"],
+                                            "view":["24hours"]
+                                        }
+                                        var select_names = {
+                                            "rain":["近6小时","近3小时"],
+                                            "sped":["近6小时","近3小时","近1小时"],
+                                            "wind":["近6小时","近3小时","近1小时"],
+                                            "tmax":["12小时","24小时"],
+                                            "tmin":["12小时","24小时"],
+                                            "view":["24小时"]
+                                        }
+                                        var select_class = data.value; // 选择的数据类型   
+                                        // 清空数据
+                                        $('#history_hours').empty();
+                                        var html_all = ""
+                                        opt[select_class].forEach(function(item,index){
+                                            var html_str = "<option value='"+ opt[select_class][index]+"'>" + select_names[select_class][index]+ "</option>";
+                                            html_all = html_all + html_str
+                                        })  
+                                        $('#history_hours').html(html_all)                                            
+                                        form.render('select');
+
+                                });
+
+                                });
                         </script>
                     </dl>
                 </li>
 
-                <li class="layui-nav-item">
-                    <!-- <button type="button" class="layui-btn layui-btn-fluid ">文字快报</button> -->
+                <!-- <li class="layui-nav-item">      
                     <a  href="javascript:;" style="display:flex; justify-content:center; align-items:center;">文字快报</a>
                     <dl class="layui-nav-child">
                         <dd style="height:140px"></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
-                    <!-- <button type="button" class="layui-btn layui-btn-fluid ">实况绘图</button> -->
                     <a  href="javascript:;" style="display:flex; justify-content:center; align-items:center;">实况绘图</a>
                     <dl class="layui-nav-child">
                         <dd style="height:140px"></dd>
                     </dl>
-                </li>
+                </li> -->
                 
             </ul>
             <!-- </div> -->
@@ -2630,8 +2693,8 @@
                         <div class="layui-input-inline" style="width:10%">
                             <select id="city" style="width:40%">
                                 <option value=""></option>
-                                <option value="台州" selected="">台州</option>
-                                <option value="全省">浙江</option>
+                                <option value="台州市" selected="">台州</option>
+                                <option value="浙江">浙江</option>
                                 <!-- <option value="杭州" >杭州</option>
                                 <option value="湖州" >湖州</option>
                                 <option value="嘉兴" >嘉兴</option>
@@ -2809,27 +2872,7 @@
                                             map_image.addLayer(imageLayer);
                                             // console.log(recvdate)
         
-                                            // 弹出界面
-                                            layer.open({
-                                                type: 1,
-                                                title: "绘图",
-                                                maxmin: false,
-                                                scrollbar: false,
-                                                fixed: false,
-                                                // offset: 'rt',
-                                                moveOut: false,
-                                                resize: false,
-                                                skin: 'layui-layer-lan', //样式类名
-                                                closeBtn: 1, //不显示关闭按钮
-                                                area: ['800px', '800px'],
-                                                // maxHeight: 600,
-                                                // maxWidth: 1400,
-                                                anim: 0,
-                                                shade: 0,
-                                                zIndex: 9999,
-                                                shadeClose: false, //开启遮罩关闭
-                                                content: $("#image_ui")
-                                            });
+                                        
         
                                             closeLoad(load)
                                         }
@@ -2851,7 +2894,7 @@
                     </div>
                 </div>
                 <!-- 存放地图 -->
-                <div style="width:50%;height: 100%;border: 3px solid black;">
+                <div id="image_ui" style="width:50%;height: 100%;;background-color: white;">
 
                 </div>
 
@@ -2868,6 +2911,42 @@
         <script>
             const extra_server_obj = {
                 recv_data:undefined,
+                upload_data:undefined,
+                plot_layer:function(){},
+                flash_map:function(){},
+                init: function () {
+                    var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries
+                    var canvasLabel = new L.CanvasLabel({
+                        defaultLabelStyle: {
+                            collisionFlg: true,
+                            scale: 1,
+                            // strokeStyle: "#000",
+                            fillStyle: "white",
+                            lineWidth: 3
+                        }
+                    });
+                    var lines = L.geoJSON(boundaries, {
+                        style: function (feature) {
+                            return { color: 'black', weight: 1,fill:false ,fillOpacity: 0.1 };
+                        }
+                    })
+                    var map_image = new L.Map('image_ui', {
+                        center: new L.LatLng(28.6, 121.35),//110.763, 41.376   39.62353145, 121.9937485
+                        renderer: canvasLabel,
+                        zoom: 9, //4
+                        maxZoom: 10,
+                        minZoom: 8,
+                        zoomControl: false,
+                        // dragging: false,
+                        // scrollWheelZoom: false,
+                        doubleClickZoom: false,
+                        attributionControl: false, //是否去除右下角标志
+                        bounds: turf.bbox(boundaries),
+                        // maxBounds: bound,
+                        maxBoundsViscosity: 1.0,
+                        layers: [lines]
+                    });
+                },
                 get_data:function(){
                     var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                     $.ajax({
@@ -2890,45 +2969,27 @@
                             // 获取数据
                             var data_table = JSON.parse(recvdate.extra_data) 
                             extra_server_obj.recv_data = data_table
-                            extra_server_obj.extra_average()
-                            // console.log(extra_server_obj.rander_group("County"))
                             layui.use('table', function () {
                                 var table = layui.table;
                                 //展示已知数据
                                 table.render({
                                     elem: '#extra_table'
-                                    , width: 1200
-                                    , height: 360
+                                    , width: 800
+                                    , height: 370
                                     ,totalRow: true
                                     , cellMinWidth: 80
                                     , cols: [[ //标题栏
-                                        { field: 'IIiii', title: 'ID', width: 50, sort: true }
+                                        { field: 'Station_Id_C', title: 'ID', width: 50, sort: true }
                                         , { field: 'City', title: '地市', width: 50 }
-                                        , { field: 'StationName', title: '站名', width: 50 }
+                                        , { field: 'Station_Name', title: '站名', width: 50 }
                                         , { field: 'rain', title: '雨量', width: 50, sort: true }
                                         , { field: 'wind', title: '风力', width: 50, sort: true }
                                         , { field: 'tmax', title: '高温', width: 50, sort: true }
                                         , { field: 'tmin', title: '低温', width: 50, sort: true }
                                         , { field: 'view', title: '能见度', sort: true, width: 50 }
-                                        , {
-                                            field: 'lock', title: '质控', width: 50, templet: function (d) {
-
-                                                if (d.lock == "true") {
-                                                    var checkboxhtml = '<input type="checkbox" name="lock" checked = "checked">'
-                                                    return '<input type="checkbox" value="true" name="lock" checked = "checked">'
-                                                }
-                                                else {
-                                                    d.lock = "false"
-                                                    var checkboxhtml = '<input type="checkbox" name="lock" >'
-                                                    return '<input type="checkbox" value="false" name="lock" >'
-
-                                                }
-                                            }
-                                        }
-                                        
-                                        , { field: 'County', title: '县', width: 50 }
+                                        , { field: 'Cnty', title: '县', width: 50 }
                                         , { field: 'Town', title: '乡镇', width: 150 }
-                                        , { field: 'Village', title: '街道', width: 150 }
+                                        , { field: 'Province', title: '省', width: 150 }
                                     ]]
                                     , data: data_table
                                     , skin: 'line' //表格风格
@@ -2941,12 +3002,12 @@
                                 var $ = layui.$, active = {
                                     reload: function () {
                                         var SearchReload = $('#SearchReload');
-                                        console.log("测试", SearchReload.val())
+                                        // console.log("测试", SearchReload.val())
 
                                         var returndata = data_table
                                         var search_data = []
                                         returndata.forEach(function(item){
-                                            if ((item.IIiii==SearchReload.val())||(item.StationName==SearchReload.val())||(item.City==SearchReload.val())||(item.County==SearchReload.val())||(item.Town==SearchReload.val())  ){
+                                            if ((item.Station_Id_C==SearchReload.val())||(item.Station_Name==SearchReload.val())||(item.City==SearchReload.val())||(item.Cnty==SearchReload.val())||(item.Town==SearchReload.val())  ){
                                                 search_data.push(item)
                                             }
                                         })
@@ -2962,32 +3023,17 @@
                                             //     }
                                             // },
                                             cols: [[ //标题栏
-                                                { field: 'IIiii', title: 'ID', width: 50, sort: true }
+                                                { field: 'Station_Id_C', title: 'ID', width: 50, sort: true }
                                                 , { field: 'City', title: '地市', width: 50 }
-                                                , { field: 'StationName', title: '站名', width: 50 }
+                                                , { field: 'Station_Name', title: '站名', width: 50 }
                                                 , { field: 'rain', title: '雨量', width: 50, sort: true }
                                                 , { field: 'wind', title: '风力', width: 50, sort: true }
                                                 , { field: 'tmax', title: '高温', width: 50, sort: true }
                                                 , { field: 'tmin', title: '低温', width: 50, sort: true }
-                                                , { field: 'view', title: '能见度', sort: true, width: 50 }
-                                                , {
-                                                    field: 'lock', title: '质控', width: 50, templet: function (d) {
-
-                                                        if (d.lock == "true") {
-                                                            var checkboxhtml = '<input type="checkbox" name="lock" checked = "checked">'
-                                                            return '<input type="checkbox" name="lock" checked = "checked">'
-                                                        }
-                                                        else {
-                                                            var checkboxhtml = '<input type="checkbox" name="lock" >'
-                                                            return '<input type="checkbox" name="lock" >'
-
-                                                        }
-                                                    }
-                                                }
-
-                                                , { field: 'County', title: '县', width: 50 }
+                                                , { field: 'view', title: '能见度', sort: true, width: 50 }                                        
+                                                , { field: 'Cnty', title: '县', width: 50 }
                                                 , { field: 'Town', title: '乡镇', width: 150 }
-                                                , { field: 'Village', title: '街道', width: 150 }
+                                                , { field: 'Province', title: '街道', width: 150 }
                                             ]]
                                             , data: search_data
                                             , skin: 'line'
@@ -3004,32 +3050,17 @@
                                 $('#TableReload').on('click', function () {
                                     table.reload('tabledata', {
                                         cols: [[ //标题栏
-                                            { field: 'IIiii', title: 'ID', width: 50, sort: true }
+                                            { field: 'Station_Id_C', title: 'ID', width: 50, sort: true }
                                             , { field: 'City', title: '地市', width: 50 }
-                                            , { field: 'StationName', title: '站名', width: 50 }
+                                            , { field: 'Station_Name', title: '站名', width: 50 }
                                             , { field: 'rain', title: '雨量', width: 50, sort: true }
                                             , { field: 'wind', title: '风力', width: 50, sort: true }
                                             , { field: 'tmax', title: '高温', width: 50, sort: true }
                                             , { field: 'tmin', title: '低温', width: 50, sort: true }
-                                            , { field: 'view', title: '能见度', sort: true, width: 50 }
-                                            , {
-                                                field: 'lock', title: '质控', width: 50, templet: function (d) {
-
-                                                    if (d.lock == "true") {
-                                                        var checkboxhtml = '<input type="checkbox" name="lock" checked = "checked">'
-                                                        return '<input type="checkbox" name="lock" checked = "checked">'
-                                                    }
-                                                    else {
-                                                        var checkboxhtml = '<input type="checkbox" name="lock" >'
-                                                        return '<input type="checkbox" name="lock" >'
-
-                                                    }
-                                                }
-                                            }
-
-                                            , { field: 'County', title: '县', width: 50 }
+                                            , { field: 'view', title: '能见度', sort: true, width: 50 }                                        
+                                            , { field: 'Cnty', title: '县', width: 50 }
                                             , { field: 'Town', title: '乡镇', width: 150 }
-                                            , { field: 'Village', title: '街道', width: 150 }
+                                            , { field: 'Province', title: '街道', width: 150 }
                                         ]]
                                         , data: data_table
                                         , skin: 'line'
@@ -3038,9 +3069,9 @@
                                     });
                                 });
                                 
-                                
-                                var text = extra_server_obj.text_msg()
-                                $("#text_msg").html(text)
+                                // 文字
+                                // var text = extra_server_obj.text_msg()
+                                // $("#text_msg").html(text)
 
                             
                             });
@@ -3049,631 +3080,11 @@
                     })
 
 
-                },
-                extra_average: function () {
-                    if ($("#country").val()=="all"){
-                        var key = "County"
-
-                    }
-                    else{
-                        var key = "Town"
-                    }
-                    var group_data = extra_server_obj.rander_group(key)
-                    var cols_list = [[
-                        { field: 'name', title: '名字', width: 80 }
-                        , { field: 'average', title: '面雨量', width: 100, sort: true  }
-                        , { field: 'index1', title: '第一', width: 80 }
-                        , { field: 'index2', title: '第二', width: 80 }
-                        , { field: 'index3', title: '第三', width: 80 }
-                        , { field: 'index4', title: '第四', width: 80 }
-                        , { field: 'index5', title: '第五', width: 80 }
-                        , { field: 'index6', title: '第六', width: 80 }
-                        , { field: 'index7', title: '第七', width: 80 }
-                        , { field: 'index8', title: '第八', width: 80 }
-                        , { field: 'index9', title: '第九', width: 80 }
-                        , { field: 'index10', title: '第十', width: 80 }
-                    ]]
-                    var data_list = []
-                    var ave_list = []
-                    group_data.forEach(function(item){
-                        var inde = extra_server_obj.randar_rain_index(item)
-
-                        data_list.push(inde)              
-                    })
-
-                    layui.use('table', function () {
-                        var table = layui.table;
-                        //展示已知数据
-                        table.render({
-                            elem: '#extra_average'
-                            , width: 600
-                            , height: 260
-                            , cellMinWidth: 80
-                            , cols:cols_list
-                            , data:data_list
-                            , skin: 'line' //表格风格
-                            , even: true
-                            //,page: true //是否显示分页
-                            //,limits: [5, 7, 10]
-                            ,limit: 50 //每页默认显示的数量
-                        });
-                    });
-                
-                },
-                // 文字统计
-                value_title:function(key){
-                    var dict_value = {
-                        "rain":"降水",
-                        "Ri":"小时雨强",
-                        "wind":"风力",
-                        "tmax":"高温",
-                        "tmin":"低温",
-                        "view":"能见度"
-                    }
-                    return dict_value[key]
-                },
-                value_unity:function(key){
-                    var dict_value = {
-                        "rain":"毫米",
-                        "Ri":"毫米",
-                        "wind":"m/s",
-                        "tmax":"℃",
-                        "tmin":"℃",
-                        "view":"米"
-                    }
-                    return dict_value[key]
-                },
-                randar_index:function (head,key,space){
-                    // 查找前十的
-                    var title = extra_server_obj.value_title(key)
-                    var unity = extra_server_obj.value_unity(key)
-                    var clean_data = []
-                    extra_server_obj.recv_data.forEach(function(item){
-                        if(item[key]>0){
-                            // console.log("",item)
-                            clean_data.push(item)
-                        }
-                    })
-                    clean_data.sort((a,b)=>{return a[key]-b[key]}).reverse();
-                    var text = space + head + title + "较大的有：";
-                    for (var i=0;i<10;i++){
-                        if (i<9){
-                            var single = clean_data[i]['County']+ clean_data[i]['StationName'] + clean_data[i][key].toString() + unity + "、"
-                        }
-                        else{
-                            var single = clean_data[i]['County']+ clean_data[i]['StationName'] + clean_data[i][key].toString() + unity + ";"
-                        }
-                        text = text + single
-                        
-                    }
-                    return text
-                },
-                rander_average:function(key){
-                    // 面雨量计算
-                    var value = "rain"
-                    var title = extra_server_obj.value_title(value)
-                    var unity = extra_server_obj.value_unity(value)
-                    var group = extra_server_obj.rander_group(key)
-                    var text = "面雨量分别为："
-                    group.forEach(function(item,index){
-                        var single = {
-                            "group":item.id,
-                            "average":undefined
-                        }
-                        var sum = 0
-                        var num = 0
-                        item.data.forEach(function(ite){
-                            if(ite['rain']>0){
-                                sum = sum + ite['rain']
-                                num = num + 1
-                            }
-                        })
-                        single['average'] = (sum/num).toFixed(1)
-                        if (index!=group.length-1){
-                            text =  text + single['group'] + single['average'].toString() + unity + "、"
-                        }
-                        else{
-                            text =  text + single['group'] + single['average'].toString()  + unity + ";"
-                        }                    
-                    })
-                    return text
-                },
-                group_count_linear:function(key,linear,value){
-                    var title = extra_server_obj.value_title(key)
-                    var unity = extra_server_obj.value_unity(key)
-                    var text = "其中："
-                    var text_list = []
-                    var value_list = []
-                    linear.forEach(function(item){
-                        // 个数
-                        var count = 0
-                        text_list.push(count)
-                        // 分组个数
-                        var single = []
-                        value_list.push(single)
-                    })
-                    // 统计阈值内的数据个数
-                    extra_server_obj.recv_data.forEach(function(item){
-                        if (item[key]>0){
-                            linear.forEach(function (ite,index) {
-                                // 进图层级判断循环
-                                if ((item[key]>linear[index][0]) && (item[key]<=linear[index][1])){
-                                    //统计linear的个数
-                                    text_list[index] = text_list[index] + 1 
-                                    //统计value 的个数
-                                    value_list[index].push(item[value])
-                                }
-                            })
-                        }
-                    })  
-                    // 文字统计
-                    text_list.forEach(function(item,index){
-                        if(index!=text_list.length-1){
-                            text = text + "大于" + linear[index][0].toString()+ unity + "的有" + text_list[index].toString() + "站"
-                            var arr = extra_server_obj.group_count_key(value_list[index])
-                            var msg = "("
-                            arr.forEach(function(ite,ind){
-                                if(ind!=arr.length-1){
-                                    msg = msg + ite.name + "，"
-                                    
-                                }
-                                else{
-                                    msg = msg + ite.name + ");"
-                                    
-                                }                             
-                            })
-                            text = text + msg
-                        }
-                        else{
-                            text = text + "大于" + linear[index][0].toString() + unity  + "的有" + text_list[index].toString() + "站"
-                            var arr = extra_server_obj.group_count_key(value_list[index])
-                            var msg = "("
-                            arr.forEach(function(ite,ind){
-                                if(ind!=arr.length-1){
-                                    msg = msg + ite.name + "，"                                
-                                }
-                                else{
-                                    msg = msg + ite.name + ")。"                                
-                                }                             
-                            })
-                            text = text + msg
-                        }                
-                    })  
-                    return text     
-                },
-                group_count_key: function (grouplist) {
-                    // 统计数组中相同元素的个数
-                    let obj = {};
-                    for (let i = 0; i < grouplist.length; i++) {
-                        if (obj[grouplist[i]]) {
-                            obj[grouplist[i]]++;
-                        } else {
-                            obj[grouplist[i]] = 1;
-                        }
-                    }
-                    // console.log("分组",obj);
-
-                    // 将相同元素的个数转换为数组
-                    let arr = []; // 结果保存为数组
-                    for (let key in obj) {
-                        arr.push({
-                            id: key,
-                            name: `${key}${obj[key]}站`,
-                        });
-                    }
-                    // console.log("分组后的结果",arr);
-                    return arr
-
-                },
-                rander_group: function (key) {
-                    // key 是需要分组的键 data是json数据，功能是用来分组聚合
-                    var recvdata = extra_server_obj.recv_data
-                    var id = key
-                    var map = {},
-                        dest = [];
-                    for (var i = 0; i < recvdata.length; i++) {
-                        var ai = recvdata[i];
-                        if (!map[ai[id]]) {
-                            dest.push({
-                                id: ai[id],
-                                data: [ai]
-                            });
-                            map[ai[id]] = ai;
-                        } else {
-                            for (var j = 0; j < dest.length; j++) {
-                                var dj = dest[j];
-                                if (dj.id == ai[key]) {
-                                    dest[j].data.push(ai)
-                                    dj.data.push(ai);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    // console.log(dest);
-                    return dest
-                },
-                randar_rain_index: function (recvdata) {
-                    // 过滤数据
-                    var redata = []
-                    var sum_data = 0
-                    recvdata.data.forEach(function(item){
-                        if(item.rain>0){
-                            redata.push(item)
-                            sum_data = sum_data + item.rain
-                        }
-                    })
-                    const return_data = redata.sort((a,b)=>{return a.rain-b.rain}).reverse();
-                    
-                    var average = (sum_data / redata.length).toFixed(1)
-                    if (average==NaN){
-                        average = 0
-                    }
-                    var single = {
-                        "name":recvdata.id,
-                        "average":average,
-                        "index1":"",
-                        "index2":"",
-                        "index3":"",
-                        "index4":"",
-                        "index5":"",
-                        "index6":"",
-                        "index7":"",
-                        "index8":"",
-                        "index9":"",
-                        "index10":"",
-                    }
-                    for (var i=0;i<return_data.length;i++){
-                        var index = "index" + (i+1).toString()
-
-                        single[index] = return_data[i].rain
-                    }                
-                    return single
-                },
-                text_rain:function(){
-                    var text = "【雨情通报】" + "<br>" + "    "
-                    var key = "County"
-                    var space = "<br>   "
-                    var text_average = "[面雨量]:" + extra_server_obj.rander_average(key) 
-                    text = text + text_average
-                    key = "rain"
-                    var head = "[累计雨量]"
-                    var text_index =  extra_server_obj.randar_index(head,key,space)      
-                    text = text + text_index 
-                    key = "Ri"
-                    head = "[小时雨强]"
-                    var text_index = extra_server_obj.randar_index(head,key,space)      
-                    text = text + text_index
-                    return text 
-                },
-                text_wind:function(){
-                    var text = ""
-                    key = "wind"
-                    var head = "【风力通报】"
-                    var space = "<br>"
-                    text = text + extra_server_obj.randar_index(head,key,space) 
-                    //
-                    var value = "County"
-                    var wind_linear = [
-                        [90,9990],
-                        [50,70],
-                        [10,50]
-                    ]
-                    var text_group = extra_server_obj.group_count_linear(key,wind_linear,value)
-                    text = text + text_group 
-                    return text 
-                },
-                text_temp:function(head){ 
-                    var unity = "℃"
-                    if (head.index_temp==1){
-                        //diwen 
-                        var clean_data = []
-                        extra_server_obj.recv_data.forEach(function (item) {
-                            if (item["tmin"] > -2000) {
-                                // console.log("",item)
-                                clean_data.push(item)
-                            }
-                        })
-                        clean_data.sort((a,b)=>{return a["tmin"]-b["tmin"]})
-                        var sigtext = ""
-                        for (var i = 0; i < 10; i++) {
-                            if (i < 9) {
-                                var single = clean_data[i]['County'] + clean_data[i]['StationName'] + clean_data[i]["tmin"].toString() + unity + "、"
-                            }
-                            else {
-                                var single = clean_data[i]['County'] + clean_data[i]['StationName'] + clean_data[i]["tmin"].toString() + unity + ";"
-                            }
-                            sigtext = sigtext + single
-
-                        }
-
-                        var text = "【温度通报】主城区低温" + head.temp_main[1].toString() + ";"
-                        var text_main = "温度较低的有："  + sigtext
-                        text = text + text_main
-                        // 
-                        var key = "tmin"
-                        var value = "County"
-                        var temp_linear = [
-                            [0, 30],
-                            [-30, 0],
-                            [-50, -30]
-                        ]
-                        var text_group = extra_server_obj.group_count_linear(key, temp_linear, value)
-                        text = text + text_group
-
-
-                    }
-                    else {
-                        //gaowen
-                        var clean_data = []
-                        extra_server_obj.recv_data.forEach(function (item) {
-                            if (item["tmax"] > 0) {
-                                // console.log("",item)
-                                clean_data.push(item)
-                            }
-                        })
-                        clean_data.sort((a,b)=>{return a["tmax"]-b["tmax"]}).reverse();
-                        var sigtext = ""
-                        for (var i = 0; i < 10; i++) {
-                            if (i < 9) {
-                                var single = clean_data[i]['County'] + clean_data[i]['StationName'] + clean_data[i]["tmax"].toString() + unity + "、"
-                            }
-                            else {
-                                var single = clean_data[i]['County'] + clean_data[i]['StationName'] + clean_data[i]["tmax"].toString() + unity + ";"
-                            }
-                            sigtext = sigtext + single
-
-                        }
-                        var text = "【温度通报】主城区高温" + head.temp_main[0].toString() + ";"
-                        var text_main = "温度较高的有：" + sigtext
-                        
-                        text = text + text_main
-                        if (head.index_temp == 2) {
-                            var key = "tmax"
-                            var value = "County"
-                            var temp_linear = [
-                                [400, 99999],
-                                [370, 400],
-                                [350, 370]
-                            ]
-                            var text_group = extra_server_obj.group_count_linear(key, temp_linear, value)
-                            text = text + text_group
-                        }
-                        // 
-                        
-
-                    }
-                   
-                    return text 
-                },
-                text_view:function(head){
-                    if (head.index_view==0){
-                        var text = ""
-                    }
-                    else{
-                        var text = "【能见度通报】" + head.text_view + "能见度较低的有"
-                        var unity = "米"
-                        var clean_data = []
-                        extra_server_obj.recv_data.forEach(function (item) {
-                            if (item["view"] > 0) {
-                                // console.log("",item)
-                                clean_data.push(item)
-                            }
-                        })
-                        clean_data.sort((a,b)=>{return a["view"]-b["view"]});
-                        var text_list = []
-                        clean_data.forEach(function(item){
-                            if (item.view<500){
-                                text_list.push(item)
-                            }
-                        })
-                        var sigtext = ""
-                        console.log(text_list)
-                        text_list.forEach(function(item,index){
-                            if(index!=text_list.length-1){
-                                var single = item['County'] + item['StationName'] + item["view"].toString() + unity + "、"
-                                
-                            }
-                            else{
-                                var single = item['County'] + item['StationName'] + item["view"].toString() + unity + ";"
-                                
-                            }
-                            sigtext = sigtext + single
-                        })
-                        text = text + sigtext
-                    }
-                    return text
-                },
-                text_head:function(){
-                    value_rank = {
-                        rain:function(value){
-                            var index = 0
-                            if ((value>0)&& (value<=0.1)){
-                                var text= "全市出现零星降水"
-                                index = 1
-                                
-                            }
-                            else if(value>0.1){
-                                var text= "全市出现      雨"
-                                index = 2
-                            }
-                            else{
-                                var text= "None"
-                                index = 0
-                            }
-                            return {
-                                text:text,
-                                index:index
-                            }                     
-                        },
-                        wind:function(value){
-                            var index = 0
-                            if (value>=139){
-                                if (value>560){
-                                    var text = "全市出现17级以上大风，"
-                                    index = 10
-                                }
-                                if ((value>510)&& (value<=560)){
-                                    var text = "全市出现16级以上大风，"
-                                    index = 9
-                                }
-                                if ((value>462)&& (value<=510)){
-                                    var text = "全市出现15级以上大风，"
-                                    index = 8
-                                }
-                                if ((value>415)&& (value<=462)){
-                                    var text = "全市出现14级以上大风，"
-                                    index = 7
-                                }
-                                if ((value>370)&& (value<=415)){
-                                    var text = "全市出现13级以上大风，"
-                                    index = 6
-                                }
-                                if ((value>327)&& (value<=370)){
-                                    var text = "全市出现12级以上大风，"
-                                    index = 5
-                                }
-                                if ((value>285)&& (value<=327)){
-                                    var text = "全市出现11级以上大风，"
-                                    index = 4
-                                }
-                                if ((value>245)&& (value<=285)){
-                                    var text = "全市出现10级以上大风，"
-                                    index = 3
-                                }
-                                if ((value>208)&& (value<=245)){
-                                    var text = "全市出现9级以上大风，"
-                                    index = 2
-                                }
-                                if ((value>172)&& (value<=208)){
-                                    var text = "全市出现6~8级大风，"
-                                    index = 1
-                                }
-                                if ((value>139)&& (value<=172)){
-                                    var text = "全市出现5~7级以上大风，"
-                                    index = 0
-                                }
-                            }
-                            else{
-                                var text = "None" 
-                            }
-                            return {
-                                text:text,
-                                index:index
-                            } 
-                            
-                        },
-                        temp:function(value){
-                            var index = 0 
-                            if (value>-200 && value<1000){
-                                if (value>350 && value<=400){
-                                    var text = "全市有单站高温超过35℃，"
-                                    index = 2 
-                                }
-                                else if (value>400){
-                                    var text = "全市有单站高温超过40℃，"
-                                    index = 2 
-                                }
-                                else if (value>-200 && value<=0){
-                                    var text = "全市有单站气温跌破0℃，"
-                                    index = 1
-                                }
-                            }
-                            else{
-                                var text = "None"
-                                index = 0 
-                            }
-                            return {
-                                text:text,
-                                index:index
-                            } 
-                        },
-                        view:function(value){
-                            var index = 0
-                            if (value>0 && value<1000){
-                                if (value>250 && value<=500){
-                                    var text = "全市出现大雾，"
-                                    index = 1
-                                }
-                                else if (value>50 && value<=250){
-                                    var text = "全市出现浓雾，"
-                                    index = 2
-                                }
-                                else if (value>0 && value<=50){
-                                    var text = "全市出现强浓雾，"
-                                    index = 3
-                                }
-                            }
-                            else{
-                                var text = "None"
-                                index = 0
-                            }
-                            return {
-                                text:text,
-                                index:index
-                            }       
-                        }
-                    }
-                    var temp_main = []
-                    var local_dit = {
-                            text_rain:"None",
-                            index_rain:0,
-                            text_wind:"None",
-                            index_wind:0,
-                            texttemp:"None",
-                            index_temp:0,
-                            text_view:"None",
-                            index_view:0,
-                            temp_main:temp_main
-
-                        }
-                    extra_server_obj.recv_data.forEach(function(item,index){
-                                    
-                        var text_rain =  value_rank.rain(item.rain)
-                        if (text_rain.index>local_dit.index_rain){
-                            local_dit.text_rain = text_rain.text
-                            local_dit.index_rain = text_rain.index
-                        }
-                        var text_wind =  value_rank.wind(item.wind)
-                        if (text_wind.index>local_dit.index_wind){
-                            local_dit.text_wind = text_wind.text
-                            local_dit.index_wind = text_wind.index
-                        }
-                        var texttmax =  value_rank.temp(item.tmax)
-                        if (texttmax.index>local_dit.index_temp){
-                            local_dit.texttemp = texttmax.text
-                            local_dit.index_temp = texttmax.index
-                        }
-                        var texttmin =  value_rank.temp(item.tmax)
-                        if (texttmin.index>local_dit.index_temp){
-                            local_dit.texttemp = texttmin.text
-                            local_dit.index_temp = texttmin.index
-                        }
-                        var text_view =  value_rank.view(item.view)
-                        if (text_view.index>local_dit.index_view){
-                            local_dit.text_view = text_view.text
-                            local_dit.index_view = text_view.index
-                        }
-                        if (item.IIiii=="58665"){
-                            local_dit.temp_main = [item.tmax,item.tmin]
-                        }
-
-                    })
-                    return local_dit
-                },
-                text_msg:function(){
-                    var head = extra_server_obj.text_head()
-                    var text = extra_server_obj.text_rain() // 降水
-                    text = text + extra_server_obj.text_wind() // 风力 
-                    //extra_server_obj.text_temp(head)
-                    text = text +"<br>"+  extra_server_obj.text_temp(head)
-                    text = text +"<br>"+  extra_server_obj.text_view(head)
-                    
-                                      
-                    return text 
                 }
             }
-            $("#get_extra_data").click(function(){
+            // 快报以及绘图
+            extra_server_obj.init()
+            $("#get_extra_data").click(function(){           
                 extra_server_obj.get_data()
             })
 
@@ -3868,10 +3279,6 @@
             </div>
         
         
-        </div>
-        <!-- 材料用途的显示 -->
-        <div id = "image_ui" style="width:100%;height:100%;overflow: hidden;background-color:white;">
-
         </div>
         <!-- 设置 -->
         <div id="station_setting" style="width:100%;height:100%;">
