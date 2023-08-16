@@ -429,6 +429,7 @@
 
                                 if ((warring_opt == "warring") || (real_flash_opt=="update")) {
                                     warring_obj.request_warring()  
+                                    console.log("报警",warring_obj.warring_status)
                                     if (warring_obj.warring_status == "warring") {
                                         // 警报
                                         var warring_class = $("#warring_class").val()
@@ -2098,38 +2099,7 @@
                             opt = {
                                 chart: {
                                     type: 'spline',
-                                    zoomType: 'x',
-                                    events: {
-                                        selection: function (e) {
-                                            // 事件处理代码，可以通过 console.log(e) 查看更多详细信息
-                                            if (e.xAxis) {    
-                                                var min = Math.ceil(e.xAxis[0].min);
-                                                var max = Math.floor(e.xAxis[0].max);
-                                                var min_data = 99999
-                                                var max_data = -99
-                                                map_toolbox_object.recv_single_data.forEach(function (item,index) {
-                                                    if (index>min && index<max){
-                                                        if (item<min_data && item>-99){
-                                                            min_data = item
-                                                        }
-                                                        if (item>max_data && item>-99){
-                                                            max_data = item
-
-                                                        }
-                                                    }                                                   
-                                                })
-                                                var text = {
-                                                    text: "最低气温" + min_data.toString() + "度,最高气温" + max_data.toString() + "度",
-                                                    align: "left",
-                                                    x: 50,
-                                                    style: {
-                                                        color: "black"
-                                                    }
-                                                }
-                                                // min_data = 0
-                                                Highcharts.charts[Highcharts.charts.length-1].setTitle(text);
-                                            }
-                                    }}
+                                    zoomType: 'x'
                                 },
                                 credits: {
                                     enabled: false//不显示LOGO
@@ -2211,33 +2181,7 @@
                             opt = {
                                 chart: {
                                     type: 'spline',
-                                    zoomType: 'x',
-                                    events: {
-                                        selection: function (e) {
-                                            // 事件处理代码，可以通过 console.log(e) 查看更多详细信息
-                                            if (e.xAxis) {    
-                                                var min = Math.ceil(e.xAxis[0].min);
-                                                var max = Math.floor(e.xAxis[0].max);
-                                                var min_data = 99999
-                                                map_toolbox_object.recv_single_data.forEach(function (item,index) {
-                                                    if (index>min && index<max){
-                                                        if (item<min_data && item>0){
-                                                            min_data = item
-                                                        }
-                                                    }                                                   
-                                                })
-                                                var text = {
-                                                    text: "最小能见度" + min_data.toString() + "米",
-                                                    align: "left",
-                                                    x: 50,
-                                                    style: {
-                                                        color: "black"
-                                                    }
-                                                }
-                                                // min_data = 0
-                                                Highcharts.charts[Highcharts.charts.length-1].setTitle(text);
-                                            }
-                                    }}
+                                    zoomType: 'x'
                                 },
                                 credits: {
                                     enabled: false//不显示LOGO
@@ -2369,6 +2313,59 @@
                                 var option = map_toolbox_object.plot_line_opt(plot_type, plot_data)
                                 var chart = Highcharts.chart('hidden_plot', option)
                                 map_toolbox_object.current_chart = chart
+                                if (plot_type == "wind") {
+                                    var nowlist = []
+                                    now.forEach(function(item, index){
+                                        nowlist.push(item[2])
+                                    })
+                                    var nowmax = nowlist.reduce((a, b) => Math.max(a, b))
+                                    var text = {
+                                        text: "最大风力--" + nowmax.toString() + "15米/秒",
+                                        align: "left",
+                                        x: 50,
+                                        style: {
+                                            color: "black"
+                                        }
+                                    }
+                                    Highcharts.charts[Highcharts.charts.length - 1].setTitle(text);
+
+                                }
+                                else if (plot_type == "tmax" || plot_type == "tmin"|| plot_type == "temp") {
+                                    var nowlist = []
+                                    now.forEach(function(item, index){
+                                        nowlist.push(item[2])
+                                    })
+                                    var nowmax = nowlist.reduce((a, b) => Math.max(a, b))
+                                    var nowmin = nowlist.reduce((a, b) => Math.min(a, b))
+                                    var text = {
+                                        text: "最高温度" + nowmax.toString() + "度" + ";" + "最低温度" + nowmin.toString() + "度",
+                                        align: "left",
+                                        x: 50,
+                                        style: {
+                                            color: "black"
+                                        }
+                                    }
+                                    Highcharts.charts[Highcharts.charts.length - 1].setTitle(text);
+
+                                }
+                                else if (plot_type == "view") {
+                                    var nowlist = []
+                                    now.forEach(function(item, index){
+                                        nowlist.push(item[2])
+                                    })
+                                    var nowmax = nowlist.reduce((a, b) => Math.max(a, b))
+                                    var nowmin = nowlist.reduce((a, b) => Math.min(a, b))
+                                    var text = {
+                                        text: "最低能见度" + nowmin.toString() + "米" + ";",
+                                        align: "left",
+                                        x: 50,
+                                        style: {
+                                            color: "black"
+                                        }
+                                    }
+                                    Highcharts.charts[Highcharts.charts.length - 1].setTitle(text);
+
+                                }
                                 
                                 closeLoad(load)
 
@@ -2402,29 +2399,74 @@
                                     , { field: 'Town', title: '乡镇', width: 100 }
                                     , { field: 'Station_Name', title: '站名', width: 50 }
                                     , { field: 'value', title: fields, sort: true, width: 80 }
-                                   
-                                    // , {
-                                    //     field: 'lock', title: '可疑', width: 110, templet: function (d) {
-                                    //         console.log(d); // 得到当前行数据
-                                    //         if (d.lock) {
-                                    //             var checkboxhtml = '<input type="checkbox" name="lock" checked = "checked">'
-                                    //             return '<input type="checkbox" name="lock" checked = "checked">'
-                                    //         }
-                                    //         else {
-                                    //             var checkboxhtml = '<input type="checkbox" name="lock" >'
-                                    //             return '<input type="checkbox" name="lock" >'
-
-                                    //         }
-                                        // }
-                                    // }
                                 ]]
                                 , data: tabledata
                                 , skin: 'line' //表格风格
                                 , even: true
+                                , id: 'tabledata_real'
                                 //,page: true //是否显示分页
                                 //,limits: [5, 7, 10]
                                 ,limit: 300 //每页默认显示的数量
                             });
+                            var $ = layui.$, active = {
+                                    reload: function () {
+                                        var SearchReload = $('#SearchReload_real');
+                                        // console.log("测试", SearchReload.val())
+
+                                        var returndata = tabledata
+                                        var search_data = []
+                                        returndata.forEach(function(item){
+                                            if ((item.Station_Id_C==SearchReload.val())||(item.Station_Name==SearchReload.val())||(item.City==SearchReload.val())||(item.Cnty==SearchReload.val())||(item.Town==SearchReload.val())){
+                                                search_data.push(item)
+                                            }
+                                        })
+                                        //执行重载
+                                        table.reload('tabledata_real', {
+                                            // page: {
+                                            //     curr: 1 //重新从第 1 页开始
+                                            // },
+                                            // where: {
+                                            //     // id : demoReload.val(),
+                                            //     key: {
+                                            //         id: demoReload.val()
+                                            //     }
+                                            // },
+                                            cols: [[ //标题栏
+                                                { field: 'Station_Id_C', title: 'ID', width: 60 }
+                                                , { field: 'City', title: '地市', width: 60 }
+                                                , { field: 'Cnty', title: '县(市)', width: 80 }
+                                                , { field: 'Town', title: '乡镇', width: 100 }
+                                                , { field: 'Station_Name', title: '站名', width: 50 }
+                                                , { field: 'value', title: fields, sort: true, width: 80 }
+                                            ]]
+                                            , data: search_data
+                                            , skin: 'line'
+                                            , id: 'tabledata_real'
+                                            ,limit: 800 
+                                        });
+                                    }
+                                };
+                                 
+                                $('#TableSearch_real').on('click', function () {
+                                    var type = $(this).data('type');
+                                    active[type] ? active[type].call(this) : '';
+                                });
+                                $('#TableReload_real').on('click', function () {
+                                    table.reload('tabledata_real', {
+                                        cols: [[ //标题栏
+                                                { field: 'Station_Id_C', title: 'ID', width: 60 }
+                                                , { field: 'City', title: '地市', width: 60 }
+                                                , { field: 'Cnty', title: '县(市)', width: 80 }
+                                                , { field: 'Town', title: '乡镇', width: 100 }
+                                                , { field: 'Station_Name', title: '站名', width: 50 }
+                                                , { field: 'value', title: fields, sort: true, width: 80 }
+                                            ]]
+                                        , data: tabledata
+                                        , skin: 'line'
+                                        , id: 'tabledata_real'
+                                        ,limit: 800 
+                                    });
+                                });
                         });
                         layer.open({
                             type: 1,
@@ -2437,7 +2479,7 @@
                             resize:false,
                             skin: 'layui-layer-lan', //样式类名
                             closeBtn: 1, //不显示关闭按钮
-                            area: ['505px', '300px'],
+                            area: ['505px', '400px'],
                             // maxHeight: 600,
                             // maxWidth: 1400,
                             anim: 0,
@@ -2669,7 +2711,7 @@
                 var button_value = $("#single_station").val()
                 var plot_time = $("#single_zdz_time").val()
                 var click_type = $("#single_class").val()    
-                console.log(map_toolbox_object.get_today())           
+                // console.log(map_toolbox_object.get_today())           
                 map_toolbox_object.plot_line(click_type, button_value,plot_time)
             })
         </script>
@@ -2905,6 +2947,16 @@
         </div>
         <!-- 请求数据的表格 -->
         <div id = "get_data_table" style="width:100%;height:100%;overflow: hidden;">
+            <div class="layui-inline" style="width: 500px;">
+                <div class="layui-inline" style="width: 330px;">
+                    <input class="layui-input" name="id" id="SearchReload_real" autocomplete="off" >
+                </div>
+                <button id="TableSearch_real" class="layui-btn" data-type="reload" style="float: right;margin-left: 10px;">搜索</button>
+                <button id="TableReload_real" class="layui-btn" data-type="reload" style="float: right;">重置</button>
+            
+            </div>
+            
+
             <table class="layui-hide" id="get_data_table_content" style="width: 500px;"></table>
         </div>
         <!-- 快报设置的相关 -->
