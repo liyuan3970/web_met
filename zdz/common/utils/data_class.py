@@ -44,6 +44,7 @@ from astropy.modeling.models import Gaussian2D
 
 # 雷达
 import cinrad
+from cinrad.visualize import Section
 # 自定义画图类
 class nlcmap(LinearSegmentedColormap):
     """A nonlinear colormap"""
@@ -1706,6 +1707,29 @@ class radar_data:
         ims = imb.decode()
         imd = "data:image/png;base64,"+ims
         self.to_redis(imd)
+        self.to_vcs(rl)
     def get_radar(self):
         data = pickle.loads(self.rs.get("radar"))
         return data
+    def to_vcs(self,rl):
+        vcs = cinrad.calc.VCS(rl)
+        data = {
+            "vcs":vcs
+        }
+        self.rs.set("radar_vsc", pickle.dumps(data))
+    def get_vcs(self):
+        data = pickle.loads(self.rs.get("radar_vsc"))
+        return data['vcs']
+    def plot_sec(self,start,end):
+        #fig = plt.figure(figsize=(16, 8))
+        vcs = self.get_vcs()
+        sec = vcs.get_section(start_cart=(start[0], start[1]), end_cart=(end[0], end[1])) 
+        Section(sec)
+        buffer = BytesIO()
+        plt.savefig(buffer,bbox_inches='tight')  
+        plot_img = buffer.getvalue()
+        imb = base64.b64encode(plot_img) 
+        ims = imb.decode()
+        imd = "data:image/png;base64,"+ims
+        plt.close()
+        return imd

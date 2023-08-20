@@ -875,6 +875,21 @@ def station_zdz_data(request):
             'extra_data':data
         }
         return JsonResponse(context)
+    elif model =="radar_sec":
+        start = click_type.split(',')
+        end = button_value.split(',')
+        start_cor = [round(float(start[0]),2),round(float(start[1]),2)]
+        end_cor = [round(float(end[0]),2),round(float(end[1]),2)]
+        # 测试
+        worker = data_class.radar_data()
+        img = worker.plot_sec(start_cor,end_cor)
+        print("测试",start_cor)
+        # 以上为测试      
+        context = {
+            'status': "ok",
+            'img':img
+        }
+        return JsonResponse(context)
     elif model =="image_plot":
         start = request.POST.get('start', '')
         end = request.POST.get('end', '')

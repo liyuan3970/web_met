@@ -2683,7 +2683,7 @@
 
 
 
-                radar_sec_obj = {
+                const radar_sec_obj = {
                     p1: undefined,
                     p2: undefined,
                     line: undefined,
@@ -2692,10 +2692,63 @@
                         map_toolbox_object.current_map.off('click', radar_sec_obj.sclick);//关闭slick：第二次鼠标点击事件触发函数
                         map_toolbox_object.current_map.on('mousemove', radar_sec_obj.mmove); //开始监听鼠标移动事件
                     },
+                    get_sec:function(){
+                        $("#radar_sec_img").html("")
+                        var start = radar_sec_obj.p1.lng.toString() + "," + radar_sec_obj.p1.lat.toString()
+                        var end = radar_sec_obj.p2.lng.toString() + "," + radar_sec_obj.p2.lat.toString()
+                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                        $.ajax({
+                            url: "station_zdz_data",  // 请求的地址
+                            type: "post",  // 请求方式
+                            timeout: 25000, //设置延迟上限
+                            data: {
+                                'csrfmiddlewaretoken': csrf,
+                                'model': "radar_sec",
+                                'click_type': start,
+                                'button_value': end
+                            },
+                            dataType: "json",
+                            beforeSend: function (XMLHttpRequest) {
+                                load = showLoad();
+                            },
+                            success: function (recvdate) {
+                                // 获取数据
+                                // console.log("雷达切面数据",recvdate.img)
+                                var img = new Image()
+                                img.src = recvdate.img
+                                img.style = "max-width: 100%;max-height: 100%;"                             
+                                $("#radar_sec_img").html(img)
+                                closeLoad(load)
+                            }
+                        })
+                        layer.open({
+                            type: 1,
+                            title: "雷达剖面",
+                            maxmin: true,
+                            scrollbar: false,
+                            fixed: false,
+                            anim: 0,
+                            offset: 'auto',
+                            moveOut: false,
+                            resize: true,
+                            skin: 'layui-layer-lan', //样式类名
+                            closeBtn: 1, //不显示关闭按钮
+                            area: ['879px', '600px'],
+                            // maxHeight: 600,
+                            // maxWidth: 1400,
+                            anim: 0,
+                            shade: 0,
+                            zIndex: 9999,
+                            shadeClose: false, //开启遮罩关闭
+                            content: $("#radar_sec_div")
+                        });
+
+                    },
                     sclick: function (e) {
                         map_toolbox_object.current_map.off('mousemove', radar_sec_obj.mmove); //关闭鼠标移动监听事件
                         map_toolbox_object.current_map.off('click', radar_sec_obj.sclick); //关闭第二次点击事件监听
                         map_toolbox_object.current_map.on("click", radar_sec_obj.fclick); //再次开始第一次点击事件监听，准备下次画线
+                        radar_sec_obj.get_sec()
                     },
                     mmove: function (e) {
                         if (radar_sec_obj.line) {
@@ -3463,6 +3516,11 @@
 
                 </li>
             </ul>
+        </div>
+
+        <!-- 雷达剖面 -->
+        <div id="radar_sec_div" style="width:100%;height:100%;">
+            <div id="radar_sec_img" style="width:100%;height:100%;"></div>
         </div>
 
     </div>
