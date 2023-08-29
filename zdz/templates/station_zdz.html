@@ -26,6 +26,8 @@
     <script src="static/js/leaflet-beautify-marker-icon.js"></script>
     <!-- 使用turf -->
     <script src="static/js/turf.min.js"></script>
+    <!-- 地理坐标转换 -->
+    <script src="https://unpkg.com/gcoord/dist/gcoord.global.prod.js"></script>
     <!-- 使用插值算法 -->
     <!-- <script src="static/js/kriging.js"></script> -->
     <!-- echart -->
@@ -180,6 +182,31 @@
                                 rain_3hour: undefined,
                                 rain_6hour: undefined,
                                 rain_12hour: undefined,
+                                layer_status:undefined,
+                                notice_alert: function () {
+                                    var status = layer.open({
+                                        type: 1,
+                                        title: "警报",
+                                        maxmin: true,
+                                        scrollbar: false,
+                                        fixed: false,
+                                        anim: 0,
+                                        offset: 'rb',
+                                        moveOut: false,
+                                        resize: true,
+                                        skin: 'layui-layer-lan', //样式类名
+                                        closeBtn: 1, //不显示关闭按钮
+                                        area: ['400px', '300px'],
+                                        // maxHeight: 600,
+                                        // maxWidth: 1400,
+                                        anim: 0,
+                                        shade: 0,
+                                        zIndex: 9999,
+                                        shadeClose: false, //开启遮罩关闭
+                                        content: $("#notice_alert")
+                                    });
+                                    warring_obj.layer_status  = status
+                                },
                                 request_warring: function () {
                                     var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                                     $.ajax({
@@ -193,6 +220,9 @@
                                         success: function (recvdate) {
                                             warring_obj.warring_status = recvdate.warring
                                             var contourf = JSON.parse(recvdate.radar['imglist'][recvdate.radar['imglist'].length - 1])
+                                            // const gcoord = require('gcoord');
+                                            // var result = gcoord.transform(contourf, gcoord.WGS84, gcoord.GCJ02);
+                                            // console.log("坐标转换",result) 
                                             var radarlayer = L.geoJSON(contourf, {
                                                 style: function (feature) {
                                                     return { color: feature.properties.stroke, weight: 0.5, fill: true, fillColor: feature.properties.stroke, fillOpacity: 0.7 };
@@ -426,53 +456,49 @@
                             // 报警请求数据
                             var Date2 = window.setInterval(function () {
                                 var radar_opt = $('input[name="radar_opt"]:checked').val();
-                                var real_flash_opt = $('input[name="real_flash_opt"]:checked').val();
-                                var warring_opt = $('input[name="warring_opt"]:checked').val();
+                                var real_flash_opt = $('input[name="real_flash_opt"]:checked').val(); // 是否叠加同步
+                                var warring_opt = $('input[name="warring_opt"]:checked').val();// 是否叠加报警
                                 var url = "http://127.0.0.1:9991/media/mp3/warring.mp3"
                                 // var url = "http://127.0.0.1:9991/media/mp3/ddd.wav"
-
                                 if ((warring_opt == "warring") || (real_flash_opt == "update")) {
+                                    // 警报和同步任意触发
                                     warring_obj.request_warring()
-                                    console.log("报警", warring_obj.warring_status)
-                                    if (warring_obj.warring_status == "warring") {
-                                        // 警报
-                                        var warring_class = $("#warring_class").val()
+                                    var warring_class = $("#warring_class").val() // 弹出框的数据
+                                    if (warring_opt == "warring") {
+                                        // 需要报警
                                         if (warring_class == "warring") {
-                                            if (warring_obj.music_audio) {
-                                                warring_obj.music_audio.play();
-                                                // console.log(new Date(), "警报")
-                                            }
-                                            else {
-                                                let audio = new Audio(url);
-                                                warring_obj.music_audio = audio
-                                                warring_obj.music_audio.autoplay = true;
-                                                warring_obj.music_audio.play();
-                                                // console.log(new Date(), "警报")
+                                            // 报警
+                                            if (warring_obj.warring_status = "warring") {
+                                                if (warring_obj.music_audio) {
+                                                    warring_obj.music_audio.play();
+                                                }
+                                                else {
+                                                    let audio = new Audio(url);
+                                                    warring_obj.music_audio = audio
+                                                    warring_obj.music_audio.autoplay = true;
+                                                    warring_obj.music_audio.play();
+                                                }
                                             }
                                         }
-                                        else if ((warring_opt == "warring") && (warring_class == "notification")) {
-                                            // 通知
-                                            if (Notification.permission == "granted") {
-                                                warring_obj.popNotice();
-                                            } else if (Notification.permission != "denied") {
-                                                Notification.requestPermission(function (permission) {
-                                                    warring_obj.popNotice();
-                                                });
-                                            }
-                                            // console.log(new Date(), "通知")
-
+                                        else if (warring_class == "notification") {
+                                            // 弹出框
+                                            if (warring_obj.warring_status = "warring") {
+                                                if (warring_obj.layer_status) {
+                                                    warring_obj.notice_alert();
+                                                }
+                                                else {
+                                                    warring_obj.notice_alert();
+                                                }
+                                            }                                          
                                         }
-                                        else {
-                                            // none
-                                        }
+                                    }                                    
+                                }
+                                else if(warring_opt == "silence") {
+                                    warring_obj.warring_status = "silence"
+                                    if (warring_obj.layer_status){
+                                        layer.close(warring_obj.layer_status); 
                                     }
                                 }
-                                else {
-                                    // warring_obj.request_warring()
-                                    warring_obj.warring_status = "silence"
-                                    // console.log("刷新数据")
-                                }
-
                             }, 1000 * 5) // 间隔1秒就打印
                         </script>
                     </dl>
@@ -1030,6 +1056,7 @@
 
                             var map_zdz = new L.Map('map', {
                                 center: new L.LatLng(28.6, 120.9),//110.763, 41.376   39.62353145, 121.9937485
+                                crs: L.CRS.EPSG3857,
                                 renderer: canvasLabel,
                                 zoom: 9, //4
                                 maxZoom: 12,
@@ -1074,6 +1101,7 @@
 
                             var map_zdz = new L.Map('map', {
                                 center: new L.LatLng(28.6, 120.9),//110.763, 41.376   39.62353145, 121.9937485
+                                crs: L.CRS.EPSG3857,
                                 renderer: canvasLabel,
                                 zoom: 9, //4
                                 maxZoom: 12,
@@ -2692,10 +2720,24 @@
                         map_toolbox_object.current_map.off('click', radar_sec_obj.sclick);//关闭slick：第二次鼠标点击事件触发函数
                         map_toolbox_object.current_map.on('mousemove', radar_sec_obj.mmove); //开始监听鼠标移动事件
                     },
+                    convert: function (lon, lat) {
+                        x = lon * 20037508.34 / 180
+                        y = Math.log(Math.tan((90 + lat) * Math.PI / 360)) / (Math.PI/ 180)
+                        y = y * 20037508.34 / 180
+                        return [x, y]
+                    },
                     get_sec:function(){
                         $("#radar_sec_img").html("")
                         var start = radar_sec_obj.p1.lng.toString() + "," + radar_sec_obj.p1.lat.toString()
                         var end = radar_sec_obj.p2.lng.toString() + "," + radar_sec_obj.p2.lat.toString()
+                        
+                        var result = gcoord.transform(
+                            radar_sec_obj.convert(radar_sec_obj.p1.lng, radar_sec_obj.p1.lat),    // 经纬度坐标
+                            gcoord.EPSG3857,               // 当前坐标系
+                            gcoord.WGS84                 // 目标坐标系
+                        );
+                         
+                        console.log("原始",[radar_sec_obj.p1.lng, radar_sec_obj.p1.lat],"转换后",result);
                         var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                         $.ajax({
                             url: "station_zdz_data",  // 请求的地址
@@ -3521,6 +3563,11 @@
         <!-- 雷达剖面 -->
         <div id="radar_sec_div" style="width:100%;height:100%;">
             <div id="radar_sec_img" style="width:100%;height:100%;"></div>
+        </div>
+
+        <!-- 雷达剖面 -->
+        <div id="notice_alert" style="width:100%;height:100%;">
+            
         </div>
 
     </div>
