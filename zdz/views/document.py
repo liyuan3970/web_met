@@ -864,15 +864,22 @@ def station_zdz_data(request):
         city = click_type
         country = button_value
         # 测试
-        print("测试",city,country)
+        # print("测试",city,country)
         start = '2019-08-08 08:00:00'  
         end = '2019-08-08 09:00:00'
-        worker = data_class.station_plot()
-        data = worker.extra_download(start,end,city,country)
+        city_code = "331000"
+        start = '2023-07-01 20:52:00'
+        end = '2023-07-02 20:52:00'
+        worker = data_class.station_text(city_code,start,end)
+        text,rain_json,wind_json,tmax_json,view_json = worker.main()
         # 以上为测试      
         context = {
             'status': "ok",
-            'extra_data':data
+            'extra_text':text,
+            'extra_rain':rain_json,
+            'extra_wind':wind_json,
+            'extra_tmax':tmax_json,
+            'extra_view':view_json
         }
         return JsonResponse(context)
     elif model =="radar_sec":

@@ -79,14 +79,28 @@
         .scrollbar::-webkit-scrollbar {
             display: none;
         }
-
+    
         .layui-layer-lan .layui-layer-title {
             /* background: #393D49; */
             color: #fff;
             font-size: 20px;
             border: none;
         }
-
+    
+        .layui-code {
+            position: relative;
+            margin: 0px 0;
+            padding: 0px;
+            line-height: 20px;
+            border: 1px solid #eee;
+            border-left-width: 0px;
+            background-color: #fafafa;
+            color: #333;
+            font-family: Courier New;
+            font-size: 15px;
+            text-align: left;
+        }
+    
         /* .layui-layer-lan .layui-layer-btn{border-top:1px solid #E9E7E7} */
         /* .demo-class .layui-layer-btn a{background:#333;} */
         /* .demo-class .layui-layer-btn .layui-layer-btn1{background:#999;} */
@@ -2834,7 +2848,7 @@
             </script>
             <!-- 隐藏栏目的设置 -->
         </div>
-        <!-- 弹出栏的设置 -->
+        <!-- 单站的设置 -->
         <div id="hidden_station" style="width:100%;height:100%;">
             <div style="width:100%;height:50px;">
                 <div class="layui-form" style="padding-top:10px;">
@@ -2932,6 +2946,13 @@
                                 <option value="玉环">玉环</option>
                             </select>
                         </div>
+                        <div class="layui-input-inline" style="width:10%">
+                            <select id="data_type" style="width:40%">
+                                <option value=""></option>
+                                <option value="all" selected="">风雨统计</option>
+                                <option value="路桥">全要素</option>
+                            </select>
+                        </div>
                         <div class="layui-inline">
                             <input class="layui-input" name="id" id="SearchReload" autocomplete="off">
                         </div>
@@ -2981,137 +3002,81 @@
                     </script>
                 </div>
             </div>
-            <div style="display: inline-flex;width:100%;height: 91%;">
-                <!-- 存放表格和文字稿 -->
+            <div style="display: inline-flex;width:100%;height: 93%;;">
+                <!-- 存放选项卡嵌套网格 -->
                 <div style="width:50%;height: 100%;">
-                    <!-- 表格 -->
-                    <div style="width:100%;height: 50%;;">
-                        <table class="layui-hide" id="extra_table" style="width: 600px"></table>
+                    <div class="layui-tab" lay-filter="extra_tab">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this" lay-id="rain">降水</li>
+                            <li lay-id="wind">风力</li>
+                            <li lay-id="tmax">温度</li>
+                            <li lay-id="view">能见度</li>
+                        </ul>
+                        <div class="layui-tab-content" style="padding: 0;">
+                            <div class="layui-tab-item layui-show">
+                                <div style="width:100%;height: 100%;;">
+                                    <table class="layui-hide" id="extra_table" style="width: 600px"></table>
+                                </div>
+                            </div>
+                            <div class="layui-tab-item">
+                                表格内容2             
+                            </div>
+                            <div class="layui-tab-item">
+                                表格内容3 
+                            </div>
+                            <div class="layui-tab-item">
+                                表格内容4 
+                            </div>
+                
+                        </div>
                     </div>
-                    <!-- 按钮组 -->
-                    <div style="width:100%;height:8%;padding-left: 20%;">
-                        <div class="layui-form" style="padding-top:3px;">
-                            <div class="layui-input-inline" style="width:15%;">
-                                <select id="plot_value" style="width:40%">
-                                    <option value=""></option>
-                                    <option value="rain" selected="">降水</option>
-                                    <option value="temp">温度</option>
-                                    <option value="wind">风力</option>
-                                </select>
+                    <script>
+                        layui.use('element', function () {
+                            var element = layui.element;
+
+                            //获取hash来切换选项卡，假设当前地址的hash为lay-id对应的值
+                            var layid = location.hash.replace(/^#extra_tab=/, '');
+                            element.tabChange('extra_tab', layid); //假设当前地址为：http://a.com#test1=222，那么选项卡会自动切换到“发送消息”这一项
+
+                            // Tab 切换，以改变地址 hash 值
+                            element.on('tab(extra_tab)', function () {
+                                location.hash = 'extra_tab=' + this.getAttribute('lay-id');
+                                console.log(location.hash,"当前id",this.getAttribute('lay-id'))
+                            });
+                        });
+                    </script>
+                </div>
+                <!-- 存放文字 -->
+                <div id="text_div" style="display: inline-block;width:50%;height: 100%;;background-color: white;">
+                    <div class="layui-tab">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">绘图</li>
+                            <li>文字</li>
+                            <li>短信</li>
+                        </ul>
+                        <div class="layui-tab-content" style="padding: 0;">
+                            <div class="layui-tab-item layui-show">
+                                <div id="text_msg" class="layui-code" style="width:100%;height: 660px;">
+                                    
+                                </div> 
                             </div>
-                            <div class="layui-input-inline" style="width:15%;">
-                                <select id="color_label" style="width:40%">
-                                    <option value=""></option>
-                                    <option value="rain_01hours" selected="">降水-1小时</option>
-                                    <option value="rain_03hours">降水-3小时</option>
-                                    <option value="rain_06hours">降水-6小时</option>
-                                    <option value="rain_12hours">降水-12小时</option>
-                                    <option value="rain_24hours">降水-24小时</option>
-                                    <option value="wind_normal">风力</option>
-                                    <option value="tmax_high">热浪</option>
-                                    <option value="tmin_low">寒潮</option>
-                                </select>
+                            <div class="layui-tab-item" style="width:100%;height: 660px;">
+                                            
                             </div>
-                            <button id="get_current_table_data" type="button" class="layui-btn layui-btn-normal"
-                                style="">再统计</button>
-                            <button id="image_layer" type="button" class="layui-btn layui-btn-normal"
-                                style="">绘图</button>
-                            <script>
-                                $("#get_current_table_data").click(function () {
-                                    var table = layui.table;
-                                    var opt = $('input[name="lock"]');
-                                })
-                                // 绘图的核心代码
-                                $("#image_layer").click(function () {
-                                    var table = layui.table;
-                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                                    $.ajax({
-                                        url: "station_zdz_data",  // 请求的地址
-                                        type: "post",  // 请求方式
-                                        timeout: 25000, //设置延迟上限
-                                        data: {
-                                            'csrfmiddlewaretoken': csrf,
-                                            'model': "image_plot",
-                                            'start': $("#extra_download-startDate-1").val(),
-                                            'end': $("#extra_download-endDate-1").val(),
-                                            'plot_data': JSON.stringify(table.getData("tabledata")),
-                                            'plot_value': $("#plot_value").val(),
-                                            'color_label': $("#color_label").val(),
-                                            'click_type': $("#city").val(), // 城市
-                                            'button_value': $("#country").val() // 乡镇
-                                        },
-                                        dataType: "json",
-                                        beforeSend: function (XMLHttpRequest) {
-                                            load = showLoad();
-                                        },
-                                        success: function (recvdate) {
-                                            // 获取数据
-
-                                            // 绘制地图
-                                            var boundaries = map_toolbox_object.return_boundaries(zhejianglist[0].features).boundaries
-                                            var canvasLabel = new L.CanvasLabel({
-                                                defaultLabelStyle: {
-                                                    collisionFlg: true,
-                                                    scale: 1,
-                                                    // strokeStyle: "#000",
-                                                    fillStyle: "white",
-                                                    lineWidth: 3
-                                                }
-                                            });
-                                            var lines = L.geoJSON(boundaries, {
-                                                style: function (feature) {
-                                                    return { color: 'white', weight: 0.1, fillOpacity: 0.1 };
-                                                }
-                                            })
-                                            var map_image = new L.Map('image_ui', {
-                                                center: new L.LatLng(28.4, 122.6),//110.763, 41.376   39.62353145, 121.9937485
-                                                renderer: canvasLabel,
-                                                zoom: 9, //4
-                                                maxZoom: 12,
-                                                minZoom: 8,
-                                                zoomControl: false,
-                                                dragging: false,
-                                                scrollWheelZoom: false,
-                                                doubleClickZoom: false,
-                                                attributionControl: false, //是否去除右下角标志
-                                                bounds: turf.bbox(boundaries),
-                                                // maxBounds: bound,
-                                                maxBoundsViscosity: 1.0,
-                                                layers: [lines]
-                                            });
-                                            var imgs = new Image()
-                                            imgs.src = recvdate.image_data
-                                            var imageBounds = [[27.8, 120.2], [29.5, 122]];//图片的经纬度范围，西南角点,东北角点(纬度、经度)
-                                            // var imageUrl = 'url';//图片的地址
-                                            var imageLayer = L.imageOverlay(imgs, imageBounds, { opacity: 0.8 });//opacity是透明度
-                                            map_image.addLayer(imageLayer);
-                                            // console.log(recvdate)
-
-
-
-                                            closeLoad(load)
-                                        }
-                                    })
-
-
-
-
-                                })
-                            </script>
-
+                            <div class="layui-tab-item" style="width:100%;height: 660px;">
+                                短信内容
+                            </div>     
                         </div>
                     </div>
                     <!-- 文字 -->
-                    <div style="width:100%;height:40%;;padding: 0;;">
-                        <pre id="text_msg" class="layui-code"
-                            style="width:100%;height: 99%;margin: 0;padding: 0;border:0">
-
-                        </pre>
+                    
+                    <!-- 绘制按钮 -->
+                    <div style="width:100%;height: 8%;">
+                        <button type="button" class="layui-btn layui-btn-lg" style="float: right;margin-right: 10px;">发布</button>
+                        <button type="button" class="layui-btn layui-btn-lg" style="float: right;margin-right: 10px;">统计</button>
+                        <button type="button" class="layui-btn layui-btn-lg" style="float: right;margin-right: 10px;">绘图</button>
+                        <!-- <button type="button" class="layui-btn layui-btn-lg" style="float: right;"></button>                     -->
                     </div>
-                </div>
-                <!-- 存放地图 -->
-                <div id="image_ui" style="width:50%;height: 100%;;background-color: white;">
-
                 </div>
 
             </div>
@@ -3130,8 +3095,6 @@
                 <button id="TableReload_real" class="layui-btn" data-type="reload" style="float: right;">重置</button>
 
             </div>
-
-
             <table class="layui-hide" id="get_data_table_content" style="width: 500px;"></table>
         </div>
         <!-- 快报设置的相关 -->
@@ -3139,40 +3102,106 @@
             const extra_server_obj = {
                 recv_data: undefined,
                 upload_data: undefined,
-                plot_layer: function () { },
-                flash_map: function () { },
-                init: function () {
-                    var boundaries = map_toolbox_object.return_boundaries(taizhoulist).boundaries
-                    var canvasLabel = new L.CanvasLabel({
-                        defaultLabelStyle: {
-                            collisionFlg: true,
-                            scale: 1,
-                            // strokeStyle: "#000",
-                            fillStyle: "white",
-                            lineWidth: 3
-                        }
+                rander_table: function (data_table) {
+                    layui.use('table', function () {
+                        var table = layui.table;
+                        //展示已知数据
+                        table.render({
+                            elem: '#extra_table'
+                            , width: 790
+                            , height: 740
+                            , totalRow: true
+                            , cellMinWidth: 80
+                            , cols: [[ //标题栏
+                                { field: 'Station_Id_C', title: 'ID', width: 50, sort: true }
+                                , { field: 'City', title: '地市', width: 50 }
+                                , { field: 'Station_Name', title: '站名', width: 50 }
+                                , { field: 'rain', title: '雨量', width: 50, sort: true }
+                                // , { field: 'wind', title: '风力', width: 50, sort: true }
+                                // , { field: 'tmax', title: '高温', width: 50, sort: true }
+                                // , { field: 'tmin', title: '低温', width: 50, sort: true }
+                                // , { field: 'view', title: '能见度', sort: true, width: 50 }
+                                , { field: 'Cnty', title: '县', width: 50 }
+                                , { field: 'Town', title: '乡镇', width: 150 }
+                                , { field: 'Province', title: '省', width: 150 }
+                            ]]
+                            , data: data_table
+                            , skin: 'line' //表格风格
+                            , even: true
+                            , id: 'tabledata'
+                            //,page: true //是否显示分页
+                            //,limits: [5, 7, 10]
+                            , limit: 800  //每页默认显示的数量
+                        });
+                        var $ = layui.$, active = {
+                            reload: function () {
+                                var SearchReload = $('#SearchReload');
+                                // console.log("测试", SearchReload.val())
+                                var returndata = data_table
+                                var search_data = []
+                                returndata.forEach(function (item) {
+                                    if ((item.Station_Id_C == SearchReload.val()) || (item.Station_Name == SearchReload.val()) || (item.City == SearchReload.val()) || (item.Cnty == SearchReload.val()) || (item.Town == SearchReload.val())) {
+                                        search_data.push(item)
+                                    }
+                                })
+                                //执行重载
+                                table.reload('tabledata', {
+                                    // page: {
+                                    //     curr: 1 //重新从第 1 页开始
+                                    // },
+                                    // where: {
+                                    //     // id : demoReload.val(),
+                                    //     key: {
+                                    //         id: demoReload.val()
+                                    //     }
+                                    // },
+                                    cols: [[ //标题栏
+                                        { field: 'Station_Id_C', title: 'ID', width: 50, sort: true }
+                                        , { field: 'City', title: '地市', width: 50 }
+                                        , { field: 'Station_Name', title: '站名', width: 50 }
+                                        , { field: 'rain', title: '雨量', width: 50, sort: true }
+                                        , { field: 'wind', title: '风力', width: 50, sort: true }
+                                        , { field: 'tmax', title: '高温', width: 50, sort: true }
+                                        , { field: 'tmin', title: '低温', width: 50, sort: true }
+                                        , { field: 'view', title: '能见度', sort: true, width: 50 }
+                                        , { field: 'Cnty', title: '县', width: 50 }
+                                        , { field: 'Town', title: '乡镇', width: 150 }
+                                        , { field: 'Province', title: '街道', width: 150 }
+                                    ]]
+                                    , data: search_data
+                                    , skin: 'line'
+                                    , id: 'tabledata'
+                                    , limit: 800
+                                });
+                            }
+                        };
+                        $('#TableSearch').on('click', function () {
+                            var type = $(this).data('type');
+                            active[type] ? active[type].call(this) : '';
+                        });
+                        $('#TableReload').on('click', function () {
+                            table.reload('tabledata', {
+                                cols: [[ //标题栏
+                                    { field: 'Station_Id_C', title: 'ID', width: 50, sort: true }
+                                    , { field: 'City', title: '地市', width: 50 }
+                                    , { field: 'Station_Name', title: '站名', width: 50 }
+                                    , { field: 'rain', title: '雨量', width: 50, sort: true }
+                                    , { field: 'wind', title: '风力', width: 50, sort: true }
+                                    , { field: 'tmax', title: '高温', width: 50, sort: true }
+                                    , { field: 'tmin', title: '低温', width: 50, sort: true }
+                                    , { field: 'view', title: '能见度', sort: true, width: 50 }
+                                    , { field: 'Cnty', title: '县', width: 50 }
+                                    , { field: 'Town', title: '乡镇', width: 150 }
+                                    , { field: 'Province', title: '街道', width: 150 }
+                                ]]
+                                , data: data_table
+                                , skin: 'line'
+                                , id: 'tabledata'
+                                , limit: 800
+                            });
+                        });
                     });
-                    var lines = L.geoJSON(boundaries, {
-                        style: function (feature) {
-                            return { color: 'black', weight: 1, fill: false, fillOpacity: 0.1 };
-                        }
-                    })
-                    var map_image = new L.Map('image_ui', {
-                        center: new L.LatLng(28.6, 121.35),//110.763, 41.376   39.62353145, 121.9937485
-                        renderer: canvasLabel,
-                        zoom: 9, //4
-                        maxZoom: 10,
-                        minZoom: 8,
-                        zoomControl: false,
-                        // dragging: false,
-                        // scrollWheelZoom: false,
-                        doubleClickZoom: false,
-                        attributionControl: false, //是否去除右下角标志
-                        bounds: turf.bbox(boundaries),
-                        // maxBounds: bound,
-                        maxBoundsViscosity: 1.0,
-                        layers: [lines]
-                    });
+
                 },
                 get_data: function () {
                     var csrf = $('input[name="csrfmiddlewaretoken"]').val();
@@ -3194,114 +3223,111 @@
                         },
                         success: function (recvdate) {
                             // 获取数据
-                            var data_table = JSON.parse(recvdate.extra_data)
+                            var data_table = JSON.parse(recvdate.extra_rain)
+                            var data_text = recvdate.extra_text
+                            $("#text_msg").html(data_text)
+                            extra_server_obj.rander_table(data_table)
+
                             extra_server_obj.recv_data = data_table
-                            layui.use('table', function () {
-                                var table = layui.table;
-                                //展示已知数据
-                                table.render({
-                                    elem: '#extra_table'
-                                    , width: 800
-                                    , height: 370
-                                    , totalRow: true
-                                    , cellMinWidth: 80
-                                    , cols: [[ //标题栏
-                                        { field: 'Station_Id_C', title: 'ID', width: 50, sort: true }
-                                        , { field: 'City', title: '地市', width: 50 }
-                                        , { field: 'Station_Name', title: '站名', width: 50 }
-                                        , { field: 'rain', title: '雨量', width: 50, sort: true }
-                                        , { field: 'wind', title: '风力', width: 50, sort: true }
-                                        , { field: 'tmax', title: '高温', width: 50, sort: true }
-                                        , { field: 'tmin', title: '低温', width: 50, sort: true }
-                                        , { field: 'view', title: '能见度', sort: true, width: 50 }
-                                        , { field: 'Cnty', title: '县', width: 50 }
-                                        , { field: 'Town', title: '乡镇', width: 150 }
-                                        , { field: 'Province', title: '省', width: 150 }
-                                    ]]
-                                    , data: data_table
-                                    , skin: 'line' //表格风格
-                                    , even: true
-                                    , id: 'tabledata'
-                                    //,page: true //是否显示分页
-                                    //,limits: [5, 7, 10]
-                                    , limit: 800  //每页默认显示的数量
-                                });
-                                var $ = layui.$, active = {
-                                    reload: function () {
-                                        var SearchReload = $('#SearchReload');
-                                        // console.log("测试", SearchReload.val())
-
-                                        var returndata = data_table
-                                        var search_data = []
-                                        returndata.forEach(function (item) {
-                                            if ((item.Station_Id_C == SearchReload.val()) || (item.Station_Name == SearchReload.val()) || (item.City == SearchReload.val()) || (item.Cnty == SearchReload.val()) || (item.Town == SearchReload.val())) {
-                                                search_data.push(item)
-                                            }
-                                        })
-                                        //执行重载
-                                        table.reload('tabledata', {
-                                            // page: {
-                                            //     curr: 1 //重新从第 1 页开始
-                                            // },
-                                            // where: {
-                                            //     // id : demoReload.val(),
-                                            //     key: {
-                                            //         id: demoReload.val()
-                                            //     }
-                                            // },
-                                            cols: [[ //标题栏
-                                                { field: 'Station_Id_C', title: 'ID', width: 50, sort: true }
-                                                , { field: 'City', title: '地市', width: 50 }
-                                                , { field: 'Station_Name', title: '站名', width: 50 }
-                                                , { field: 'rain', title: '雨量', width: 50, sort: true }
-                                                , { field: 'wind', title: '风力', width: 50, sort: true }
-                                                , { field: 'tmax', title: '高温', width: 50, sort: true }
-                                                , { field: 'tmin', title: '低温', width: 50, sort: true }
-                                                , { field: 'view', title: '能见度', sort: true, width: 50 }
-                                                , { field: 'Cnty', title: '县', width: 50 }
-                                                , { field: 'Town', title: '乡镇', width: 150 }
-                                                , { field: 'Province', title: '街道', width: 150 }
-                                            ]]
-                                            , data: search_data
-                                            , skin: 'line'
-                                            , id: 'tabledata'
-                                            , limit: 800
-                                        });
-                                    }
-                                };
-
-                                $('#TableSearch').on('click', function () {
-                                    var type = $(this).data('type');
-                                    active[type] ? active[type].call(this) : '';
-                                });
-                                $('#TableReload').on('click', function () {
-                                    table.reload('tabledata', {
-                                        cols: [[ //标题栏
-                                            { field: 'Station_Id_C', title: 'ID', width: 50, sort: true }
-                                            , { field: 'City', title: '地市', width: 50 }
-                                            , { field: 'Station_Name', title: '站名', width: 50 }
-                                            , { field: 'rain', title: '雨量', width: 50, sort: true }
-                                            , { field: 'wind', title: '风力', width: 50, sort: true }
-                                            , { field: 'tmax', title: '高温', width: 50, sort: true }
-                                            , { field: 'tmin', title: '低温', width: 50, sort: true }
-                                            , { field: 'view', title: '能见度', sort: true, width: 50 }
-                                            , { field: 'Cnty', title: '县', width: 50 }
-                                            , { field: 'Town', title: '乡镇', width: 150 }
-                                            , { field: 'Province', title: '街道', width: 150 }
-                                        ]]
-                                        , data: data_table
-                                        , skin: 'line'
-                                        , id: 'tabledata'
-                                        , limit: 800
-                                    });
-                                });
-
-                                // 文字
-                                // var text = extra_server_obj.text_msg()
-                                // $("#text_msg").html(text)
-
-
-                            });
+                            // layui.use('table', function () {
+                            //     var table = layui.table;
+                            //     //展示已知数据
+                            //     table.render({
+                            //         elem: '#extra_table'
+                            //         , width: 790
+                            //         , height: 740
+                            //         , totalRow: true
+                            //         , cellMinWidth: 80
+                            //         , cols: [[ //标题栏
+                            //             { field: 'Station_Id_C', title: 'ID', width: 50, sort: true }
+                            //             , { field: 'City', title: '地市', width: 50 }
+                            //             , { field: 'Station_Name', title: '站名', width: 50 }
+                            //             , { field: 'rain', title: '雨量', width: 50, sort: true }
+                            //             // , { field: 'wind', title: '风力', width: 50, sort: true }
+                            //             // , { field: 'tmax', title: '高温', width: 50, sort: true }
+                            //             // , { field: 'tmin', title: '低温', width: 50, sort: true }
+                            //             // , { field: 'view', title: '能见度', sort: true, width: 50 }
+                            //             , { field: 'Cnty', title: '县', width: 50 }
+                            //             , { field: 'Town', title: '乡镇', width: 150 }
+                            //             , { field: 'Province', title: '省', width: 150 }
+                            //         ]]
+                            //         , data: data_table
+                            //         , skin: 'line' //表格风格
+                            //         , even: true
+                            //         , id: 'tabledata'
+                            //         //,page: true //是否显示分页
+                            //         //,limits: [5, 7, 10]
+                            //         , limit: 800  //每页默认显示的数量
+                            //     });
+                            //     var $ = layui.$, active = {
+                            //         reload: function () {
+                            //             var SearchReload = $('#SearchReload');
+                            //             // console.log("测试", SearchReload.val())
+                            //             var returndata = data_table
+                            //             var search_data = []
+                            //             returndata.forEach(function (item) {
+                            //                 if ((item.Station_Id_C == SearchReload.val()) || (item.Station_Name == SearchReload.val()) || (item.City == SearchReload.val()) || (item.Cnty == SearchReload.val()) || (item.Town == SearchReload.val())) {
+                            //                     search_data.push(item)
+                            //                 }
+                            //             })
+                            //             //执行重载
+                            //             table.reload('tabledata', {
+                            //                 // page: {
+                            //                 //     curr: 1 //重新从第 1 页开始
+                            //                 // },
+                            //                 // where: {
+                            //                 //     // id : demoReload.val(),
+                            //                 //     key: {
+                            //                 //         id: demoReload.val()
+                            //                 //     }
+                            //                 // },
+                            //                 cols: [[ //标题栏
+                            //                     { field: 'Station_Id_C', title: 'ID', width: 50, sort: true }
+                            //                     , { field: 'City', title: '地市', width: 50 }
+                            //                     , { field: 'Station_Name', title: '站名', width: 50 }
+                            //                     , { field: 'rain', title: '雨量', width: 50, sort: true }
+                            //                     , { field: 'wind', title: '风力', width: 50, sort: true }
+                            //                     , { field: 'tmax', title: '高温', width: 50, sort: true }
+                            //                     , { field: 'tmin', title: '低温', width: 50, sort: true }
+                            //                     , { field: 'view', title: '能见度', sort: true, width: 50 }
+                            //                     , { field: 'Cnty', title: '县', width: 50 }
+                            //                     , { field: 'Town', title: '乡镇', width: 150 }
+                            //                     , { field: 'Province', title: '街道', width: 150 }
+                            //                 ]]
+                            //                 , data: search_data
+                            //                 , skin: 'line'
+                            //                 , id: 'tabledata'
+                            //                 , limit: 800
+                            //             });
+                            //         }
+                            //     };
+                            //     $('#TableSearch').on('click', function () {
+                            //         var type = $(this).data('type');
+                            //         active[type] ? active[type].call(this) : '';
+                            //     });
+                            //     $('#TableReload').on('click', function () {
+                            //         table.reload('tabledata', {
+                            //             cols: [[ //标题栏
+                            //                 { field: 'Station_Id_C', title: 'ID', width: 50, sort: true }
+                            //                 , { field: 'City', title: '地市', width: 50 }
+                            //                 , { field: 'Station_Name', title: '站名', width: 50 }
+                            //                 , { field: 'rain', title: '雨量', width: 50, sort: true }
+                            //                 , { field: 'wind', title: '风力', width: 50, sort: true }
+                            //                 , { field: 'tmax', title: '高温', width: 50, sort: true }
+                            //                 , { field: 'tmin', title: '低温', width: 50, sort: true }
+                            //                 , { field: 'view', title: '能见度', sort: true, width: 50 }
+                            //                 , { field: 'Cnty', title: '县', width: 50 }
+                            //                 , { field: 'Town', title: '乡镇', width: 150 }
+                            //                 , { field: 'Province', title: '街道', width: 150 }
+                            //             ]]
+                            //             , data: data_table
+                            //             , skin: 'line'
+                            //             , id: 'tabledata'
+                            //             , limit: 800
+                            //         });
+                            //     });
+                            // });
+                            
                             closeLoad(load)
                         }
                     })
@@ -3310,7 +3336,6 @@
                 }
             }
             // 快报以及绘图
-            extra_server_obj.init()
             $("#get_extra_data").click(function () {
                 extra_server_obj.get_data()
             })
@@ -3328,29 +3353,23 @@
                                 <div class="layui-panel" style="height:100px">
                                     <div class="layui-form" style="padding: 30px 10px;">
                                         <div class="layui-form-item">
-                                            <label class="layui-form-label">范围</label>
+                                            <label class="layui-form-label">同步</label>
                                             <div class="layui-input-inline">
                                                 <select>
-                                                    <option value="">请选择城市</option>
-                                                    <option value="taizhou" selected="">台州市</option>
+                                                    <option value="">降水时效</option>
+                                                    <option value="taizhou" selected="">10分钟</option>
                                                 </select>
                                             </div>
                                             <div class="layui-input-inline">
                                                 <select>
-                                                    <option value="">请选择县(市)</option>
-                                                    <option value="椒江">椒江</option>
-                                                    <option value="路桥">路桥</option>
-                                                    <option value="全市" selected="">全市</option>
-                                                    <option value="黄岩">黄岩</option>
-                                                    <option value="温岭">温岭</option>
+                                                    <option value="">风力类型</option>
+                                                    <option value="全市" selected="">瞬时风力</option>
                                                 </select>
                                             </div>
                                             <div class="layui-input-inline">
                                                 <select>
-                                                    <option value="">距离</option>
-                                                    <option value="10">10公里</option>
-                                                    <option value="20">20公里</option>
-                                                    <option value="30">30公里</option>
+                                                    <option value="">温度和雾</option>
+                                                    <option value="10">黄色标点</option>
                                                 </select>
                                             </div>
                                             <div class="layui-input-inline" style="width:80px;">
@@ -3360,32 +3379,11 @@
                                                     <option value="warring">警报</option>
                                                 </select>
                                             </div>
-
-                                            <!-- 保存按钮 -->
-                                            <!-- <button id = "warring_config" type="button" class="layui-btn ">保存</button>
-                                            <script>
-                                                $("#warring_config").click(function (){
-                                                    var arr = [];
-                                                    $("input[name='warring_check']:checked").each(function () {
-                                                        arr.push(this.value);
-                                                    });
-                                                    console.log(arr)
-                                                    arr.forEach(function(item){
-                                                        var index = "#" + item.toString()
-                                                        warring_obj[item] = $(index).val()
-                                                    }) 
-                                                    layer.closeAll()
-                                                })
-                                            </script> -->
-
-
-
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
-                            <!-- 15分钟级报警 -->
+                            <!-- 报警参数 -->
                             <div class="layui-col-md6">
                                 <div class="layui-panel" style="height:400px">
                                     <div class="layui-form" style="padding: 50px 10px;">
@@ -3399,7 +3397,7 @@
                                                 </select>
                                             </div>
                                             <input type="checkbox" name="warring_check" value="rain_10min"
-                                                lay-skin="primary" checked="" title="十分钟降水">
+                                                lay-skin="primary" checked="" title="降水报警">
                                         </div>
 
                                         <div class="layui-input-inline" style="margin-bottom:20px">
@@ -3412,7 +3410,7 @@
                                                 </select>
                                             </div>
                                             <input type="checkbox" name="warring_check" value="wind_10min"
-                                                lay-skin="primary" checked="" title="十分钟阵风">
+                                                lay-skin="primary" checked="" title="风力报警">
                                         </div>
 
                                         <div class="layui-input-inline" style="margin-bottom:20px">
@@ -3425,7 +3423,7 @@
                                                 </select>
                                             </div>
                                             <input type="checkbox" name="warring_check" value="windave_10min"
-                                                lay-skin="primary" title="十分钟平均风">
+                                                lay-skin="primary" title="浓雾报警">
                                         </div>
 
                                         <div class="layui-input-inline" style="margin-bottom:20px">
@@ -3438,68 +3436,18 @@
                                                 </select>
                                             </div>
                                             <input type="checkbox" name="warring_check" value="view_10min"
-                                                lay-skin="primary" title="十分钟能见度">
+                                                lay-skin="primary" title="温度报警">
                                         </div>
 
 
                                     </div>
                                 </div>
                             </div>
-                            <!-- 小时级警报 -->
+                            <!-- 报警地图 -->
                             <div class="layui-col-md6">
                                 <div class="layui-panel" style="height:400px">
                                     <div class="layui-form" style="padding: 50px 10px;">
-                                        <div class="layui-input-inline" style="margin-bottom:20px">
-                                            <div class="layui-input-inline" style="margin-left:15px">
-                                                <select id="rain_1hours" style="width:50px">
-
-                                                    <option value="2" select="">20毫米</option>
-                                                    <option value="20">20公里</option>
-                                                    <option value="30">30公里</option>
-                                                </select>
-                                            </div>
-                                            <input type="checkbox" name="warring_check" value="rain_1hours"
-                                                lay-skin="primary" checked="" title="小时雨量">
-                                        </div>
-
-                                        <div class="layui-input-inline" style="margin-bottom:20px">
-                                            <div class="layui-input-inline" style="margin-left:15px">
-                                                <select id="rain_3hours" style="width:50px">
-                                                    <option value="9" select="">30毫米</option>
-                                                    <option value="10">2mm</option>
-                                                    <option value="20">20公里</option>
-                                                    <option value="30">30公里</option>
-                                                </select>
-                                            </div>
-                                            <input type="checkbox" name="warring_check" value="rain_3hours"
-                                                lay-skin="primary" checked="" title="3小时雨量">
-                                        </div>
-
-                                        <div class="layui-input-inline" style="margin-bottom:20px">
-                                            <div class="layui-input-inline" style="margin-left:15px">
-                                                <select id="rain_6hours" style="width:50px">
-                                                    <option value="">50毫米</option>
-                                                    <option value="10">2mm</option>
-                                                    <option value="20">20公里</option>
-                                                    <option value="30">30公里</option>
-                                                </select>
-                                            </div>
-                                            <input type="checkbox" name="warring_check" value="rain_6hours"
-                                                lay-skin="primary" title="6小时雨量">
-                                        </div>
-
-                                        <div class="layui-input-inline" style="margin-bottom:20px">
-                                            <div class="layui-input-inline" style="margin-left:15px">
-                                                <select id="rain_12hours" style="width:50px">
-                                                    <option value="">80毫米</option>
-                                                    <option value="10">2mm</option>
-                                                    <option value="20">20公里</option>
-                                                    <option value="30">30公里</option>
-                                                </select>
-                                            </div>
-                                            <input type="checkbox" name="warring_check" value="rain_12hours"
-                                                lay-skin="primary" title="12小时雨量">
-                                        </div>
+                                        
 
                                     </div>
                                 </div>
@@ -3565,7 +3513,7 @@
             <div id="radar_sec_img" style="width:100%;height:100%;"></div>
         </div>
 
-        <!-- 雷达剖面 -->
+        <!-- 提醒文字 -->
         <div id="notice_alert" style="width:100%;height:100%;">
             
         </div>

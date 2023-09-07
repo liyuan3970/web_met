@@ -1329,215 +1329,391 @@ class station_zdz:
 
 
 # 气象服务快报的相关
-class station_plot:
-    def __init__(self):
-        self.conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="ZJSZDZDB")
-        self.shp_path = "static/data/shpfile/country/"
-    # 外部函数
-    def colormap(self,plot_value,color_label):
-        '''色标的自定义'''
-        plt.rcParams['axes.facecolor']='snow'
-        # 降水
-        if plot_value=="rain":
-            if color_label =="rain_24hours":
-                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 24降水
-                levels = [0,1,10,25,50,100,250,1000]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-                cmap_nonlin = nlcmap(cmaps, levels)
-            elif color_label =="rain_12hours":
-                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 12降水
-                levels = [0,1,5,15,30,70,140,250]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-                cmap_nonlin = nlcmap(cmaps, levels)
-            elif color_label =="rain_06hours":
-                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 06降水
-                levels = [0,1,4,13,25,60,120,250]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-                cmap_nonlin = nlcmap(cmaps, levels)
-            elif color_label =="rain_03hours":
-                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 03降水
-                levels = [0,1,3,10,20,50,70,150]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-                cmap_nonlin = nlcmap(cmaps, levels)
-            elif color_label =="rain_01hours":
-                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 01降水
-                levels = [0,1,2,7,15,40,50,100]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-                cmap_nonlin = nlcmap(cmaps, levels)
-        elif plot_value=="tmax" or plot_value=="tmin":
-            if color_label =="temp_normal":
-                #colorslist = ['#1F1FFF',"#3B3BFF","#5757FF","#7272FF","#8F8FFF","#ABABFF","#C7C7FF","#E3E3FF","#FDFC8B","#F8E08B","#F3C36F","#EFA76E","#EC8A51","#F31717"]# 气温
-                #colornum = len(colorslist)
-                level = list(np.linspace(self.min-1, self.max+1, num=14, endpoint=True, retstep=False, dtype=None))
-                levels = [round(i,1) for i in level]
-                cmap_nonlin = 'seismic'#'coolwarm'#
-            elif color_label =="temp_high":
-                level = list(np.linspace(self.min-1, self.max+1, num=14, endpoint=True, retstep=False, dtype=None))
-                levels = [round(i,1) for i in level]
-                cmap_nonlin = 'Reds'
-            elif color_label =="temp_low":
-                level = list(np.linspace(self.min-1, self.max+1, num=14, endpoint=True, retstep=False, dtype=None))
-                levels = [round(i,1) for i in level]
-                cmap_nonlin = 'Blues_r'
-        elif plot_value=="wind":
-            if color_label =="wind_normal":
-                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 风力
-                levels = [0,1,10,15,25,50,100,250]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-                cmap_nonlin = nlcmap(cmaps, levels) 
-            elif color_label =="wind_other":
-                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 风力其他
-                levels = [0,1,10,15,25,50,100,250]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-                cmap_nonlin = nlcmap(cmaps, levels)
-        elif plot_value=="view":
-            if color_label =="view_normal":
-                colorslist = ['#A93434','#FF9600','#FFFD37',"#55FF37","#ABF3D3","#5EC6EB","#B1F1EF"]# 能见度
-                levels = [0,50,200,500,1000,1500,3000,20000]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-                cmap_nonlin = nlcmap(cmaps, levels) 
-            elif color_label =="view_other":
-                colorslist = ['#FFFFFF','#FF9600','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 能见度
-                levels = [0,1,10,15,25,50,100,250]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-                cmap_nonlin = nlcmap(cmaps, levels)             
-        return cmap_nonlin ,levels
-    def city_shp(self,data_xr):
-        shp_da = self.add_shape_coord_from_data_array(data_xr,self.shp_path+"taizhou.shp", "country")
-        awash_da = shp_da.where(shp_da.country<7, other=np.nan)
-        return awash_da
-    def transform_from_latlon(self,lat, lon):
-        lat = np.asarray(lat)
-        lon = np.asarray(lon)
-        trans = Affine.translation(lon[0], lat[0])
-        scale = Affine.scale(lon[1] - lon[0], lat[1] - lat[0])
-        return trans * scale    
-    def rasterize(self,shapes, coords, latitude='lat', longitude='lon',fill=np.nan, **kwargs):
-        transform = self.transform_from_latlon(coords[latitude], coords[longitude])
-        out_shape = (len(coords[latitude]), len(coords[longitude]))
-        raster = features.rasterize(shapes, out_shape=out_shape,
-                                fill=fill, transform=transform,
-                                dtype=float, **kwargs)
-        spatial_coords = {latitude: coords[latitude], longitude: coords[longitude]}
-        return xr.DataArray(raster, coords=spatial_coords, dims=(latitude, longitude))
-    def add_shape_coord_from_data_array(self,xr_da, shp_path, coord_name):   
-        shp_gpd = gpd.read_file(shp_path)
-        shapes = [(shape, n) for n, shape in enumerate(shp_gpd.geometry)]
-        xr_da[coord_name] = self.rasterize(shapes, xr_da.coords, longitude='lon', latitude='lat')
-        return xr_da
-    def basemask(self,cs, ax, map, shpfile):
-        sf = shapefile.Reader(shpfile)
-        vertices = []
-        codes = []
-        for shape_rec in sf.shapeRecords():
-            if shape_rec.record[0]:  
-                pts = shape_rec.shape.points
-                prt = list(shape_rec.shape.parts) + [len(pts)]
-                for i in range(len(prt) - 1):
-                    for j in range(prt[i], prt[i+1]):
-                        vertices.append(map(pts[j][0], pts[j][1]))
-                    codes += [Path.MOVETO]
-                    codes += [Path.LINETO] * (prt[i+1] - prt[i] -2)
-                    codes += [Path.CLOSEPOLY]
-                clip = Path(vertices, codes)
-                clip = PathPatch(clip, transform = ax.transData)    
-        for contour in cs.collections:
-            contour.set_clip_path(clip)    
-    # 内部函数
-    def get_sql_data(self,start,end):      
-        '''sql 获取数据'''
-        start = '2023-07-17 13:00:00'
-        end = '2023-07-18 12:00:00'
-        sqltall = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,max(Station_levl) as Station_levl,
-            max(Station_Name) as Station_Name, max(Town) as Town, max(Alti) as Alti, max(Lat) as Lat,max(Lon) as Lon, sum(rain) as rain,max(tmax) as tmax,min(tmin) as tmin ,max(wind)as wind 
-            from table_station_hour 
-            where Datetime between '{start_times}' and '{end_times}'
-            group by Station_Id_C""" 
-        rsql = sqltall.format(start_times=start,end_times=end)     
-        data = pd.read_sql(rsql , con=self.conn)
-        # print("测试数据",data)
+class station_text:
+    def __init__(self,city_code,start,end):
+        #self.rs = redis.Redis(host='127.0.0.1', port=6379)
+#         self.conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="tzqxj58660",db="ZJSZDZDB")
+        self.userId = "BEHZ_TZSJ_TZSERVICE" 
+        self.pwd = "Liyuan3970!@" 
+        self.dataFormat = "json"
+        self.city_code = city_code
+        self.start = start
+        self.end = end
+        self.data = self.comupt_city_csv(city_code,start,end)
+        self.city_codes = ["331000"]
+    def comput_city(self,city_code,start,end):
+        """快报或者统计数据的接口"""
+        # getSurfEleInRegionByTime
+        date_start = dtt.datetime.strptime(start,'%Y-%m-%d %H:%M:%S') 
+        date_end = dtt.datetime.strptime(end,'%Y-%m-%d %H:%M:%S') 
+        offset = dtt.timedelta(minutes=-60*8)
+        label_start = (date_start + offset).strftime('%Y%m%d%H%M') + "00"
+        label_end = (date_end + offset).strftime('%Y%m%d%H%M') + "00"   
+        labels = "[" + label_start + "," + label_end + "]"
+        #timelabel = self.decode_time_str(timesdelay)
+        client = DataQueryClient()
+        interfaceId = "statSurfEleInRegion"  
+        params = {
+            'dataCode':"SURF_CHN_MUL_MIN",  #SURF_CHN_MUL_HOR
+            'adminCodes':"331000",
+            'elements':"Province,City,Cnty,Town,Lat,Lon,Alti,Station_levl,Station_Name,Station_Id_C,",
+            'timeRange':labels,
+            'statEles':'MAX_TEM,MIN_TEM,SUM_PRE,MAX_PRE_1h,MIN_VIS_HOR_1MI,MAX_WIN_S_Gust_Max,MAX_WIN_S_Avg_2mi',
+            #'orderBy':"MAX_WIN_S_Inst_Max:desc",
+            'staLevels':"011,012,013,014,015,016", # 12国家站 14区域站
+            'limitCnt':"100000000"
+        }
+        result = client.callAPI_to_serializedStr(self.userId, self.pwd, interfaceId, params, self.dataFormat)
+        #rint(result)
+        result_json = json.loads(result)
+        clomns = "Province,City,Cnty,Town,Lat,Lon,Alti,Station_levl,Station_Name,Station_Id_C,MAX_TEM,MIN_TEM,SUM_PRE,MAX_PRE_1h,MIN_VIS_HOR_1MI,MAX_WIN_S_Gust_Max,MAX_WIN_S_Avg_2mi".split(",")
+        data = pd.DataFrame(result_json['DS'],columns=clomns)
+        data.columns = "Province,City,Cnty,Town,Lat,Lon,Height,Stationlevl,StationName,IIIII,tmax,tmin,rain,rainhour,view,wind,windave".split(",")
         return data
-    def extra_download(self,start,end,city,country):
-        station_all = self.get_sql_data(start,end)
-        # station_all['lock'] = "true"
-        if country=="all":
-            country = city
-            data = station_all[station_all['City']==city]
+    def comupt_city_csv(self,city_code,start,end):
+        data = pd.read_csv("static/data/downfile/comput.csv")
+        return data
+    def text_rain(self):
+        bins=[0,30,40,50,80,100,150,200,300,500,2000]
+        labels=['≥0毫米','≥30毫米','≥40毫米','≥50毫米','≥80毫米','≥100毫米','≥150毫米','≥200毫米','≥300毫米','≥500毫米']
+        rain = data[(data['rain']>0) & (data['rain']<5009)]
+        rain['rank']=pd.cut(rain['rain'],bins,right=False,labels=labels)
+        del rain['Unnamed: 0'] # 天擎不需要
+        rain.reset_index(drop=True)
+        if city_code in self.citys:
+            cnty = rain.groupby(['Cnty'])['rain'].mean().to_dict()
         else:
-            country = country
-            data = station_all[station_all['Cnty']==country]
-        output = data.to_json(orient='records',force_ascii=False)
-        return output
-    def get_plot_data(self,city,country,plot_data,plot_value):
-        '''解析前段获取的数据'''
-        x = []
-        y = []
-        z = []
-        for i in range(len(plot_data)):
-            if plot_data[i][plot_value]!=-9999.0:
-                x.append(plot_data[i]['Lon'])
-                y.append(plot_data[i]['Lat'])
-                z.append(plot_data[i][plot_value]/10)
-        lat = np.array(y)
-        lon = np.array(x)
-        Zi = np.array(z)
-        data_max = max(Zi)
-        data_min = min(Zi)
-        np.set_printoptions(precision = 2)
-        x = np.arange(120.0,122.0,0.05)
-        y = np.arange(27.8,29.5,0.05)
-        nx0 =len(x)
-        ny0 =len(y)
-        X, Y = np.meshgrid(x, y)#100*100
-        P = np.array([X.flatten(), Y.flatten() ]).transpose()    
-        Pi =  np.array([lon, lat ]).transpose()
-        Z_linear = griddata(Pi, Zi, P, method = "nearest").reshape([ny0,nx0])
-        data_xr = xr.DataArray(Z_linear, coords=[ y,x], dims=["lat", "lon"])
-        return data_xr
-    def plot(self,start,end,city,country,plot_data,plot_value,color_label):
-        data_xr = self.get_plot_data(city,country,plot_data,plot_value)
-        # 平滑
-        #data_xr = scipy.ndimage.zoom(data_xr, 3)
-        # ##########色标和大小#############################
-        cmaps ,levels = self.colormap(plot_value,color_label)
-        fig = plt.figure(figsize=[10,10]) 
-        ax = fig.add_subplot(111)
-        awash_da = self.city_shp(data_xr)
-        lat = data_xr.lat
-        lon = data_xr.lon
-        m = Basemap(llcrnrlon=120.2,
-            llcrnrlat=27.8,
-            urcrnrlon=122,
-            urcrnrlat=29.5,
-            resolution = None, 
-            projection = 'cyl')
-        lons, lats = np.meshgrid(lon, lat)
-        cs =m.contourf(lons,lats,data_xr,ax=ax, cmap=cmaps,levels =levels,add_labels=True)
-        ##########标题#############################
-        font = FontProperties(fname="static/data/simkai.ttf", size=14)
-        label  = start + " 至 " + end + "   "  + "累积雨量"
-        plt.text(120.2,29.4, label,fontsize=15, fontproperties=font)
-        ##########标题#############################
-        m.readshapefile(self.shp_path + 'taizhou','taizhou',color='k',linewidth=1.2)
-        plt.axis('off')
-        # 在图上绘制色标
-        rect1 = [0.35, 0.25, 0.03, 0.12]         
-        ax2 = plt.axes(rect1,frameon='False')
-        ax2.set_xticks([])
-        ax2.set_yticks([])
-        ax2.spines['top'].set_visible(False)
-        ax2.spines['bottom'].set_visible(False)
-        ax2.spines['left'].set_visible(False)
-        ax2.spines['right'].set_visible(False)
-        m.colorbar(cs, location='right', size='30%', pad="-100%",ax = ax2)
-        self.basemask(cs, ax, m, self.shp_path+'taizhou') 
-        buffer = BytesIO()
-        plt.savefig(buffer,bbox_inches='tight',transparent=True)  
-        plot_img = buffer.getvalue()
-        imb = base64.b64encode(plot_img) 
-        ims = imb.decode()
-        imd = "data:image/png;base64,"+ims
-        return imd   
+            cnty = rain.groupby(['Town'])['rain'].mean().to_dict()
+        rain_max = rain.sort_values(by="rain",ascending=False).head(10).to_dict()
+        rain_hour = rain.sort_values(by="rainhour",ascending=False).head(5).to_dict()
+        town_max = rain.groupby(['Town','Cnty'])['rain'].max().sort_values(ascending=False).head(10)
+        town_max_str = []
+        for i in town_max.index.to_list():
+            single = (i[0] +"-" +  i[1]+ ":" +str(town_max[i]) + "毫米")
+            town_max_str.append(single)
+        rank_station = {
+            '≥0毫米':len(rain[(rain['rain']>0) & (rain['rain']<30)].value_counts()),
+            '≥30毫米':len(rain[(rain['rain']>=30) & (rain['rain']<40)].value_counts()),
+            '≥40毫米':len(rain[(rain['rain']>=40) & (rain['rain']<50)].value_counts()),
+            '≥50毫米':len(rain[(rain['rain']>=50) & (rain['rain']<80)].value_counts()),
+            '≥80毫米':len(rain[(rain['rain']>=80) & (rain['rain']<100)].value_counts()),
+            '≥100毫米':len(rain[(rain['rain']>=100) & (rain['rain']<150)].value_counts()),
+            '≥150毫米':len(rain[(rain['rain']>=150) & (rain['rain']<200)].value_counts()),
+            '≥200毫米':len(rain[(rain['rain']>=200) & (rain['rain']<300)].value_counts()),
+            '≥300毫米':len(rain[(rain['rain']>=300) & (rain['rain']<500)].value_counts()),
+            '≥500毫米':len(rain[(rain['rain']>=500) & (rain['rain']<2000)].value_counts())
+        }
+        # 乡镇个数统计
+        town_group = rain.groupby(['Town'])['rain'].max()  
+        dict_town = {'Town':town_group.index,'rain':town_group.values}
+        town_range = pd.DataFrame(data =dict_town)
+        town_range['rank']=pd.cut(town_range['rain'],bins,right=False,labels=labels) 
+        rank_town = {
+            '≥0毫米':len(town_range[(town_range['rain']>0) & (town_range['rain']<30)].value_counts()),
+            '≥30毫米':len(town_range[(town_range['rain']>=30) & (town_range['rain']<40)].value_counts()),
+            '≥40毫米':len(town_range[(town_range['rain']>=40) & (town_range['rain']<50)].value_counts()),
+            '≥50毫米':len(town_range[(town_range['rain']>=50) & (town_range['rain']<80)].value_counts()),
+            '≥80毫米':len(town_range[(town_range['rain']>=80) & (town_range['rain']<100)].value_counts()),
+            '≥100毫米':len(town_range[(town_range['rain']>=100) & (town_range['rain']<150)].value_counts()),
+            '≥150毫米':len(town_range[(town_range['rain']>=150) & (town_range['rain']<200)].value_counts()),
+            '≥200毫米':len(town_range[(town_range['rain']>=200) & (town_range['rain']<300)].value_counts()),
+            '≥300毫米':len(town_range[(town_range['rain']>=300) & (town_range['rain']<500)].value_counts()),
+            '≥500毫米':len(town_range[(town_range['rain']>=500) & (town_range['rain']<2000)].value_counts())
+        }
+        rain_dir = {
+            "average_city":cnty,
+            "station_index":rain_max,
+            "hour_max":rain_hour,
+            "town_max":town_max_str,
+            "station_count":rank_station,
+            "town_count":rank_town        
+        }
+        return rain_dir
+    def text_wind(self):
+        orig = self.data
+        data = orig.sort_values(by="wind",ascending=False)#.head(5).to_dict()
+        ## 数据分级
+        bins=[0,10.7,13.8,17.1,20.7,24.4,28.4,32.6,36.9,41.4,46.1,50.9,56,80]
+        labels=['6级风以下','6级风','7级风','8级风','9级风','10级风','11级风','12级风','13级风','14级风','15级风','16级风','17级风']
+        wind = data[(data['wind']>10.7) & (data['wind']<5009)]
+        wind['rank']=pd.cut(wind['wind'],bins,right=False,labels=labels)
+        del wind['Unnamed: 0'] # 天擎不需要
+        wind.reset_index(drop=True)# 天擎不需要
+        # 获取单站较大的有
+        testframe = wind.head(5)
+        wind_json = wind.sort_values(by="wind",ascending=False).to_json(orient='records',force_ascii=False) 
+        indextext = ""
+        for index,row in testframe.iterrows():
+            if self.city_code in self.city_codes:
+                indextext = indextext + row['Cnty'] + row['StationName'] + str(row['wind']) + "米/秒，"
+                #print(index,row['City'],row['Cnty'],row['Town'],row['wind'])
+            else:
+                indextext = indextext + row['Town'] + row['StationName'] + str(row['wind']) + "米/秒，"
+                #print(index,row['City'],row['Cnty'],row['Town'],row['wind'])
+        indextext = indextext[:-1] + "。"
+        rank_station = {
+            '17级及以上风':len(wind[(wind['wind']>=56.4) & (wind['wind']<80)].value_counts()),
+            '16级风':len(wind[(wind['wind']>=50.9) & (wind['wind']<56.4)].value_counts()),
+            '15级风':len(wind[(wind['wind']>=46.1) & (wind['wind']<50.9)].value_counts()),
+            '14级风':len(wind[(wind['wind']>=41.4) & (wind['wind']<46.1)].value_counts()),
+            '13级风':len(wind[(wind['wind']>=36.9) & (wind['wind']<41.4)].value_counts()),
+            '12级风':len(wind[(wind['wind']>=32.6) & (wind['wind']<36.9)].value_counts()),
+            '11级风':len(wind[(wind['wind']>=28.4) & (wind['wind']<32.6)].value_counts()),
+            '10级风':len(wind[(wind['wind']>=24.4) & (wind['wind']<28.4)].value_counts()),
+            '9级风':len(wind[(wind['wind']>=20.7) & (wind['wind']<24.4)].value_counts()),
+            '8级风':len(wind[(wind['wind']>=17.1) & (wind['wind']<20.7)].value_counts()),
+            '7级风':len(wind[(wind['wind']>=13.8) & (wind['wind']<17.1)].value_counts()),
+            '6级风':len(wind[(wind['wind']>=10.7) & (wind['wind']<13.8)].value_counts()),
+            '6级风以下':len(wind[(wind['wind']>0) & (wind['wind']<10.7)].to_dict())
+        }
+        #  统计各等级风力的个数
+        numbertext = ""
+        for key, value in rank_station.items():
+            if value>0:
+                numbertext = numbertext + key +"有" + str(value) + "站,"
+        numbertext = numbertext[:-1] + "。"
+        if rank_station['17级及以上风'] >0 :
+            text = "【风力通报】 全市出现17级及以上大风，风力较大的有："
+            text = text + indextext + "其中，"  + numbertext
+        elif rank_station['16级风'] >0 :
+            text = "【风力通报】 全市出现16级大风，风力较大的有："
+            text = text + indextext + "其中，"  + numbertext  
+        elif rank_station['15级风'] >0 :
+            text = "【风力通报】 全市出现15级大风，风力较大的有："
+            text = text + indextext + "其中，"  + numbertext
+        elif rank_station['14级风'] >0 :
+            text = "【风力通报】 全市出现14级大风，风力较大的有："
+            text = text + indextext + "其中，"  + numbertext
+        elif rank_station['13级风'] >0 :
+            text = "【风力通报】 全市出现13级大风，风力较大的有："
+            text = text + indextext + "其中，"  + numbertext
+        elif rank_station['12级风'] >0 :
+            text = "【风力通报】 全市出现12级大风，风力较大的有："
+            text = text + indextext + "其中，"  + numbertext
+        elif rank_station['11级风'] >0 :
+            text = "【风力通报】 全市出现11级大风，风力较大的有："
+            text = text + indextext + "其中，"  + numbertext
+        elif rank_station['10级风'] >0 :
+            text = "【风力通报】 全市出现10级大风，风力较大的有："
+            text = text + indextext + "其中，"  + numbertext
+        elif rank_station['9级风'] >0 :
+            text = "【风力通报】 全市出现7～9级大风，风力较大的有："
+            text = text + indextext + "其中，"  + numbertext
+        elif rank_station['8级风'] >0 :
+            text = "【风力通报】 全市出现6～8级大风，风力较大的有："
+            text = text + indextext + "其中，"  + numbertext
+        else:
+            text = ""
+        return text,wind_json
+    def text_view(self):
+        orig = self.data
+        data = orig.sort_values(by="view",ascending=True)#.head(5).to_dict()
+        bins=[0,50,200,500,99999]
+        labels=['强浓雾','浓雾','大雾','正常']
+        view = data[(data['view']>0) & (data['view']<1000)]
+        view['rank']=pd.cut(view['view'],bins,right=False,labels=labels)
+        del view['Unnamed: 0'] # 天擎不需要
+        view.reset_index(drop=True)# 天擎不需要
+        rank_station = {
+           '强浓雾':len(view[(view['view']>0) & (view['view']<50)].to_dict()),
+            '浓雾':len(view[(view['view']>=50) & (view['view']<200)].value_counts()),
+            '大雾':len(view[(view['view']>=200) & (view['view']<500)].value_counts()),
+            '正常':len(view[(view['view']>=500) & (view['view']<99990)].value_counts()) 
+        }
+        # 获取单站较大的有
+        testframe = view.head(5) 
+        view_json = view.sort_values(by="view",ascending=True).to_json(orient='records',force_ascii=False)
+        indextext = ""
+        for index,row in testframe.iterrows():
+            if self.city_code in self.city_codes:
+                indextext = indextext + row['Cnty'] + row['StationName'] + str(row['view']) + "米，"
+            else:
+                indextext = indextext + row['Town'] + row['StationName'] + str(row['view']) + "米，"
+        indextext = indextext[:-1] + "。"
+        #  统计各等级风力的个数
+        numbertext = ""
+        for key, value in rank_station.items():
+            if value>0 and key!="正常":
+                numbertext = numbertext + key +"的有" + str(value) + "站,"
+        numbertext = numbertext[:-1] + "。"
+        if rank_station['强浓雾'] >0 :
+            text = "【能见度】 全市出现低于50米的强浓雾，能见度较低的有："
+            text = text + indextext + "其中，"  + numbertext
+        elif rank_station['浓雾'] >0 :
+            text = "【能见度】 全市出现低于200米的浓雾，能见度较低的有："
+            text = text + indextext + "其中，"  + numbertext  
+        elif rank_station['大雾'] >0 :
+            text = "【能见度】 全市出现低于500米的大雾，能见度较低的有："
+            text = text + indextext + "其中，"  + numbertext
+        else:
+            text =""
+        return text,view_json
+    def text_tmax(self):
+        orig = self.data
+        data = orig.sort_values(by="tmax",ascending=False)#.head(5).to_dict()
+        bins=[-40,35,37,40,80]
+        labels=['正常','35度以上','37度以上','40度以上']
+        tmax = data[(data['tmax']>-40) & (data['tmax']<100)]
+        tmax['rank']=pd.cut(tmax['tmax'],bins,right=True,labels=labels)
+        del tmax['Unnamed: 0'] # 天擎不需要
+        tmax.reset_index(drop=True)# 天擎不需要
+        rank_station = {
+            '40度以上':len(tmax[(tmax['tmax']>=40) & (tmax['tmax']<80)].value_counts()),
+            '37度以上':len(tmax[(tmax['tmax']>=37) & (tmax['tmax']<40)].value_counts()),
+            '35度以上':len(tmax[(tmax['tmax']>=35) & (tmax['tmax']<37)].value_counts()),
+           '正常':len(tmax[(tmax['tmax']>-40) & (tmax['tmax']<35)].to_dict())      
+        }
+        # 获取单站较大的有
+        testframe = tmax.head(5) 
+        tmax_json = tmax.sort_values(by="tmax",ascending=False).to_json(orient='records',force_ascii=False)
+        indextext = ""
+        for index,row in testframe.iterrows():
+            if self.city_code in self.city_codes:
+                indextext = indextext + row['Cnty'] + row['StationName'] + str(row['tmax']) + "℃，"
+            else:
+                indextext = indextext + row['Town'] + row['StationName'] + str(row['tmin']) + "℃，"
+        indextext = indextext[:-1] + "。"
+        #  统计各等级风力的个数
+        numbertext = ""
+        for key, value in rank_station.items():
+            if value>0 and key not in ["正常","35度以上"]:
+                numbertext = numbertext + key +"的有" + str(value) + "站,"
+        numbertext = numbertext[:-1] + "。"
+        if rank_station['40度以上'] >0 :
+            text = "【高温通报】 全市出现40℃以上的高温，温度较高的有："
+            text = text + indextext + "其中，"  + numbertext
+        elif rank_station['37度以上'] >0 :
+            text = "【高温通报】 全市出现40℃以上的高温，温度较高的有："
+            text = text + indextext + "其中，"  + numbertext  
+        elif rank_station['35度以上'] >0 :
+            text = "【高温通报】 全市出现40℃以上的高温，温度较高的有："
+            text = text + indextext 
+        else:
+            text = ""
+        return text,tmax_json
+    def text_rain(self):
+        # 面雨量
+        orig = self.data
+        data = orig.sort_values(by="rain",ascending=False)
+        bins=[0,30,50,80,100,150,200,250,300,400,500,800,1000,2000]
+        labels=['≥0毫米','≥30毫米','≥50毫米','≥80毫米','≥100毫米','≥150毫米','≥200毫米','≥250毫米','≥300毫米','≥400毫米','≥500毫米','≥800毫米','≥1000毫米']
+        bins_text = [0,5,16.9,37.9,74.5,5000]
+        labels_text = ['小雨','小到中雨','中到大雨','大到暴雨','大暴雨']
+        rain = data[(data['rain']>0) & (data['rain']<5009)]
+        rain['rank']=pd.cut(rain['rain'],bins,right=False,labels=labels)
+        rain['rank_label']=pd.cut(rain['rain'],bins_text,right=False,labels=labels_text)
+        del rain['Unnamed: 0'] # 天擎不需要
+        rain.reset_index(drop=True)
+        # 面雨量
+        if self.city_code in self.city_codes:
+            cnty = rain.groupby(['Cnty'])['rain'].mean().to_dict()
+            
+            text_average_city = "面雨量：" + str(round(rain['rain'].mean(),2)) + "毫米，" +"各市（县）面雨量如下:"
+        else:
+            cnty = rain.groupby(['Town'])['rain'].mean().to_dict()
+            text_average_city = "各乡镇面雨量如下:"
+        items = sorted(cnty.items())
+        sorted_cnty = {k: v for k, v in sorted(cnty.items(), key=lambda x: x[1], reverse=True)}
+        for key, value in sorted_cnty.items():
+            text_average_city = text_average_city + key + ":" + str(round(value,2)) + "毫米,"
+        text_average_city = text_average_city[:-1] + "。"    
+        # 单站前十
+        rain_max = rain.sort_values(by="rain",ascending=False).head(10)
+        rain_json = rain.sort_values(by="rain",ascending=False).to_json(orient='records',force_ascii=False)
+        indextext = "单站雨量较大的有："
+        for index,row in rain_max.iterrows():
+            if self.city_code in self.city_codes:
+                indextext = indextext + row['Cnty'] + row['StationName'] + str(row['rain']) + "毫米，"
+            else:
+                indextext = indextext + row['Town'] + row['StationName'] + str(row['rain']) + "毫米，"
+        indextext = indextext[:-1] + "。"
+        # 乡镇前十
+        town_max = rain.groupby(['Town','Cnty'])['rain'].max().sort_values(ascending=False).head(10)
+        indextext_town = "乡镇雨量较大的有："
+        for index,row in rain_max.iterrows():
+            if self.city_code in self.city_codes:
+                indextext_town = indextext_town + row['Cnty'] + row['StationName'] + str(row['rain']) + "毫米，"
+            else:
+                indextext_town = indextext_town + row['Town'] + row['StationName'] + str(row['rain']) + "毫米，"
+        indextext_town = indextext_town[:-1] + "。"
+        # 雨量个数统计
+        rank_station = {
+            '≥1000毫米':len(rain[(rain['rain']>=1000) & (rain['rain']<2000)].value_counts()),
+            '≥800毫米':len(rain[(rain['rain']>=800) & (rain['rain']<1000)].value_counts()),
+            '≥500毫米':len(rain[(rain['rain']>=500) & (rain['rain']<800)].value_counts()),
+            '≥400毫米':len(rain[(rain['rain']>=400) & (rain['rain']<500)].value_counts()),
+            '≥300毫米':len(rain[(rain['rain']>=300) & (rain['rain']<400)].value_counts()),
+            '≥250毫米':len(rain[(rain['rain']>=250) & (rain['rain']<300)].value_counts()),
+            '≥200毫米':len(rain[(rain['rain']>=200) & (rain['rain']<250)].value_counts()),
+            '≥150毫米':len(rain[(rain['rain']>=150) & (rain['rain']<200)].value_counts()),
+            '≥100毫米':len(rain[(rain['rain']>=100) & (rain['rain']<150)].value_counts()),
+            '≥80毫米':len(rain[(rain['rain']>=80) & (rain['rain']<100)].value_counts()),
+            '≥50毫米':len(rain[(rain['rain']>=50) & (rain['rain']<80)].value_counts()),
+            '≥30毫米':len(rain[(rain['rain']>=30) & (rain['rain']<50)].value_counts()),
+            '≥10毫米':len(rain[(rain['rain']>=10) & (rain['rain']<30)].value_counts()),
+            '≥0毫米':len(rain[(rain['rain']>0) & (rain['rain']<10)].value_counts()),
+        }
+        numbertext = "其中，"
+        for key, value in rank_station.items():
+            if value>0 and key not in ["≥0毫米"]:
+                numbertext = numbertext + key +"的有" + str(value) + "站,"
+        numbertext = numbertext[:-1] + "。"
+        # 雨量乡镇数统计
+        town_group = rain.groupby(['Town'])['rain'].max()  
+        dict_town = {'Town':town_group.index,'rain':town_group.values}
+        town_range = pd.DataFrame(data =dict_town)
+        town_range['rank']=pd.cut(town_range['rain'],bins,right=False,labels=labels)
+        rank_station_town = {
+            '≥1000毫米':len(town_range[(town_range['rain']>=1000) & (town_range['rain']<2000)].value_counts()),
+            '≥800毫米':len(town_range[(town_range['rain']>=800) & (town_range['rain']<1000)].value_counts()),
+            '≥500毫米':len(town_range[(town_range['rain']>=500) & (town_range['rain']<800)].value_counts()),
+            '≥400毫米':len(town_range[(town_range['rain']>=400) & (town_range['rain']<500)].value_counts()),
+            '≥300毫米':len(town_range[(town_range['rain']>=300) & (town_range['rain']<400)].value_counts()),
+            '≥250毫米':len(town_range[(town_range['rain']>=250) & (town_range['rain']<300)].value_counts()),
+            '≥200毫米':len(town_range[(town_range['rain']>=200) & (town_range['rain']<250)].value_counts()),
+            '≥150毫米':len(town_range[(town_range['rain']>=150) & (town_range['rain']<200)].value_counts()),
+            '≥100毫米':len(town_range[(town_range['rain']>=100) & (town_range['rain']<150)].value_counts()),
+            '≥80毫米':len(town_range[(town_range['rain']>=80) & (town_range['rain']<100)].value_counts()),
+            '≥50毫米':len(town_range[(town_range['rain']>=50) & (town_range['rain']<80)].value_counts()),
+            '≥30毫米':len(town_range[(town_range['rain']>=30) & (town_range['rain']<50)].value_counts()),
+            '≥10毫米':len(town_range[(town_range['rain']>=10) & (town_range['rain']<30)].value_counts()),
+            '≥0毫米':len(town_range[(town_range['rain']>0) & (town_range['rain']<10)].value_counts()),
+        }
+        numbertext_town = "其中，"
+        for key, value in rank_station_town.items():
+            if value>0 and key not in ["≥0毫米"]:
+                numbertext_town = numbertext_town + key +"的有" + str(value) + "站,"
+        numbertext_town = numbertext_town[:-1] + "。"
+        # 统计全市雨情
+        rank_text = {
+            '大暴雨':sum(rain[rain['rank_label']=='大暴雨']['rain']),
+            '大到暴雨':sum(rain[rain['rank_label']=='大到暴雨']['rain']),
+            '中到大雨':sum(rain[rain['rank_label']=='中到大雨']['rain']),
+            '小到中雨':sum(rain[rain['rank_label']=='小到中雨']['rain']),
+            '小雨':sum(rain[rain['rank_label']=='小雨']['rain'])
+        }
+        res = max(rank_text, key=lambda x: rank_text[x])
+        if max(rank_text, key=lambda x: rank_text[x])=="大暴雨":
+            text = "【雨情通报】 ：全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town
+        elif max(rank_text, key=lambda x: rank_text[x])=="大到暴雨":
+            text = "【雨情通报】 ：全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town
+        elif max(rank_text, key=lambda x: rank_text[x])=="中到大雨":
+            text = "【雨情通报】 ：全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town
+        elif max(rank_text, key=lambda x: rank_text[x])=="小到中雨":
+            text = "【雨情通报】 ：全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town
+        elif max(rank_text, key=lambda x: rank_text[x])=="小雨":
+            text = "【雨情通报】 ：全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town
+        return text,rain_json
+    def main(self):
+        text = ""
+        text_rain,rain_json = self.text_rain()
+        text_wind,wind_json = self.text_wind()
+        text_tmax,tmax_json = self.text_tmax()
+        text_view,view_json = self.text_view()
+        text = text + text_rain + "<br>" + text_wind + "<br>" + text_tmax + "<br>" + text_view
+        # text = text + text_rain + "\n" + text_wind + "/n" + text_tmax + "/n" + text_view
+        return text,rain_json,wind_json,tmax_json,view_json
+   
 
 class station_sql_data:
     def __init__(self):
