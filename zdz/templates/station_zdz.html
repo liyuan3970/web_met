@@ -3006,7 +3006,7 @@
             <div style="display: inline-flex;width:100%;height: 93%;;">
                 <!-- 存放选项卡嵌套网格 -->
                 <div style="width:50%;height: 100%;">
-                    <div class="layui-tab" lay-filter="extra_tab">
+                    <div class="layui-tab" lay-filter="extra_tab" style = "height: 50%;">
                         <ul class="layui-tab-title">
                             <li class="layui-this" lay-id="rain">降水</li>
                             <li lay-id="wind">风力</li>
@@ -3040,6 +3040,19 @@
                 
                         </div>
                     </div>
+                    <div style="height: 45%;" class="layui-tab">              
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">文字</li>
+                        </ul>
+                        <div class="layui-tab-content" style="padding: 0;">
+                            <div id="text_msg" class="layui-tab-item layui-show" style="width:100%;height: 300px;overflow-y:scroll">
+                                
+                                <!-- <div  class="layui-code" style="width:100%;height: 100%;overflow-y: auto;">
+                    
+                                </div> -->
+                            </div>
+                        </div>               
+                    </div>
                     <script>
                         layui.use('element', function () {
                             var element = layui.element;
@@ -3065,6 +3078,11 @@
                                 var tab_type = this.getAttribute('lay-id')
                                 // console.log(location.hash,"当前id",this.getAttribute('lay-id'),tab_obj[tab_type])
                                 extra_server_obj.rander_table(tab_obj[tab_type],tab_type,tab_id[tab_type])
+                                extra_server_obj.flush_map()
+                                if(tab_type=="rain"){extra_server_obj.plot_rain()}
+                                else if(tab_type=="wind"){extra_server_obj.plot_wind()}
+                                else if(tab_type=="tmax"){extra_server_obj.plot_tmax()}
+                                else if(tab_type=="view"){extra_server_obj.plot_view()}
                             });
                         });
                     </script>
@@ -3073,17 +3091,18 @@
                 <div id="text_div" style="display: inline-block;width:50%;height: 100%;;background-color: white;">
                     <div class="layui-tab">
                         <ul class="layui-tab-title">
-                            <li class="layui-this">文字</li>
-                            <li>绘图</li>
+                            <!-- <li>文字</li> -->
+                            <li class="layui-this" id="extra_tab_map_plot">绘图</li>
                             <!-- <li>短信</li> -->
                         </ul>
                         <div class="layui-tab-content" style="padding: 0;">
-                            <div class="layui-tab-item layui-show">
+                            <!-- <div class="layui-tab-item">
                                 <div id="text_msg" class="layui-code" style="width:100%;height: 660px;">
                                     
                                 </div> 
-                            </div>
-                            <div class="layui-tab-item" style="width:100%;height: 660px;">
+                            </div> -->
+                            <div class="layui-tab-item layui-show" style="width:100%;height: 660px;">
+                                <div id="extra_server_obj_map" style="width:100%;height: 100%"></div>
                                             
                             </div>
                             <!-- <div class="layui-tab-item" style="width:100%;height: 660px;">
@@ -3095,7 +3114,7 @@
                     
                     <!-- 绘制按钮 -->
                     <div style="width:100%;height: 8%;">
-                        <button type="button" class="layui-btn layui-btn-lg" style="float: right;margin-right: 10px;">发布</button>
+                        <!-- <button type="button" class="layui-btn layui-btn-lg" style="float: right;margin-right: 10px;">发布</button> -->
                         <button type="button" class="layui-btn layui-btn-lg" style="float: right;margin-right: 10px;">统计</button>
                         <button type="button" class="layui-btn layui-btn-lg" style="float: right;margin-right: 10px;">绘图</button>
                         <!-- <button type="button" class="layui-btn layui-btn-lg" style="float: right;"></button>                     -->
@@ -3127,7 +3146,359 @@
                 recv_wind: undefined,
                 recv_tmax: undefined,
                 recv_view: undefined,
+                plot_rain:function(){ 
+                    extra_server_obj.recv_rain.forEach(function(item){
+                        var tooltips = item.StationName + "-" + item.IIIII + "<br>" + "    纬度:" + item.Lat.toFixed(2).toString() + "  " + "经度:" + item.Lon.toFixed(2).toString() + "<br>" + "    " + item.City + "-" + item.Cnty + "-" + item.Town
+                        if (item.rain > 0 && item.rain <= 5) {
+                            var colors = "white"
+                            var iflabel = false
+                        }
+                        else if (item.rain > 5 && item.rain <= 17) {
+                            var colors = "green"
+                            var iflabel = false
+                        }
+                        else if (item.rain > 17 && item.rain <= 38) {
+                            var colors = "blue"
+                            var iflabel = false
+                        }
+                        else if (item.rain > 38 && item.rain <= 74) {
+                            var colors = "red"
+                            var iflabel = false
+                        }
+                        else if (item.rain > 74) {
+                            var colors = "rgb(140,0,65)"
+                            var iflabel = false
+                        }
+                        var latlng = L.latLng(item.Lat, item.Lon);
+                        // 添加散点插件
+                        var c = L.circleMarker(latlng, {
+                            stationname: item.StationName,
+                            stationnum: item.IIIII,
+                            weight: 0,
+                            radius: 8,
+                            opacity: 0,
+                            fill: false,
+                            color: colors,
+                            fillColor: colors,
+                            fillOpacity: 1,
+                            labelStyle: {
+                                text: item.rain,
+                                collisionFlg: false,
+                                // offsetY: -25,
+                                scale: 1.5,
+                                weight: 3,
+                                rotation: 0,
+                                fillStyle: colors,
+                                zIndex: 60
+                            }
+                        }).bindTooltip(tooltips, {
+                            direction: "top",
+                            offset: L.point(0, -10)
+                        }).openTooltip();
+                        c.addTo(extra_server_obj.current_map)
+                    })
+                
+                },
+                plot_wind:function(){
+                    extra_server_obj.recv_wind.forEach(function (item) {
+                        var tooltips = item.StationName + "-" + item.IIIII + "<br>" + "    纬度:" + item.Lat.toFixed(2).toString() + "  " + "经度:" + item.Lon.toFixed(2).toString() + "<br>" + "    " + item.City + "-" + item.Cnty + "-" + item.Town
+                        if (item.wind > 17.3) {
+                            var colors = "red"
+                            var latlng = L.latLng(item.Lat, item.Lon);
+                            // 添加散点插件
+                            var c = L.circleMarker(latlng, {
+                                stationname: item.StationName,
+                                stationnum: item.IIIII,
+                                weight: 0,
+                                radius: 8,
+                                opacity: 0,
+                                fill: false,
+                                color: colors,
+                                fillColor: colors,
+                                fillOpacity: 1,
+                                labelStyle: {
+                                    text: item.wind,
+                                    collisionFlg: false,
+                                    // offsetY: -25,
+                                    scale: 1.5,
+                                    weight: 3,
+                                    rotation: 0,
+                                    fillStyle: colors,
+                                    zIndex: 60
+                                }
+                            }).bindTooltip(tooltips, {
+                                direction: "top",
+                                offset: L.point(0, -10)
+                            }).openTooltip();
+                            c.addTo(extra_server_obj.current_map)
+                        }
+
+                    })
+                    
+                },
+                plot_tmax:function(){
+                    extra_server_obj.recv_tmax.forEach(function(item){
+                        var latlng = L.latLng(item.Lat, item.Lon);
+                        var tooltips = item.StationName + "-" + item.IIIII + "<br>" + "    纬度:" + item.Lat.toFixed(2).toString() + "  " + "经度:" + item.Lon.toFixed(2).toString() + "<br>" + "    " + item.City + "-" + item.Cnty + "-" + item.Town
+                        
+                        if (item.tmax > 37 && item.tmax < 40) {
+                            var colors = "pink"
+                            var iflabel = false
+                            // 添加散点插件
+                            var c = L.circleMarker(latlng, {
+                                stationname: item.StationName,
+                                stationnum: item.IIIII,
+                                weight: 0,
+                                radius: 8,
+                                opacity: 0,
+                                fill: false,
+                                color: colors,
+                                fillColor: colors,
+                                fillOpacity: 1,
+                                labelStyle: {
+                                    text: item.tmax,
+                                    collisionFlg: false,
+                                    // offsetY: -25,
+                                    scale: 1.5,
+                                    weight: 3,
+                                    rotation: 0,
+                                    fillStyle: colors,
+                                    zIndex: 60
+                                }
+                            }).bindTooltip(tooltips, {
+                                direction: "top",
+                                offset: L.point(0, -10)
+                            }).openTooltip();
+                            c.addTo(extra_server_obj.current_map)
+                        }
+                        else if (item.tmax >=40) {
+                            var colors = "red"
+                            var iflabel = false
+                            // 添加散点插件
+                            var c = L.circleMarker(latlng, {
+                                stationname: item.StationName,
+                                stationnum: item.IIIII,
+                                weight: 0,
+                                radius: 8,
+                                opacity: 0,
+                                fill: false,
+                                color: colors,
+                                fillColor: colors,
+                                fillOpacity: 1,
+                                labelStyle: {
+                                    text: item.tmax,
+                                    collisionFlg: false,
+                                    // offsetY: -25,
+                                    scale: 1.5,
+                                    weight: 3,
+                                    rotation: 0,
+                                    fillStyle: colors,
+                                    zIndex: 60
+                                }
+                            }).bindTooltip(tooltips, {
+                                direction: "top",
+                                offset: L.point(0, -10)
+                            }).openTooltip();
+                            c.addTo(extra_server_obj.current_map)
+                        }         
+                    })
+                    
+                },
+                plot_view:function(){
+                    extra_server_obj.recv_view.forEach(function(item){
+                        var latlng = L.latLng(item.Lat, item.Lon);
+                        var tooltips = item.StationName + "-" + item.IIIII + "<br>" + "    纬度:" + item.Lat.toFixed(2).toString() + "  " + "经度:" + item.Lon.toFixed(2).toString() + "<br>" + "    " + item.City + "-" + item.Cnty + "-" + item.Town
+                        if (item.view > 500 && item.view <= 1000) {
+                            var colors = "blue"
+                            // 添加散点插件
+                            var c = L.circleMarker(latlng, {
+                                stationname: item.StationName,
+                                stationnum: item.IIIII,
+                                weight: 0,
+                                radius: 8,
+                                opacity: 0,
+                                fill: false,
+                                color: colors,
+                                fillColor: colors,
+                                fillOpacity: 1,
+                                labelStyle: {
+                                    text: item.view,
+                                    collisionFlg: true,
+                                    // offsetY: -25,
+                                    scale: 1.5,
+                                    weight: 3,
+                                    rotation: 0,
+                                    fillStyle: colors,
+                                    zIndex: 60
+                                }
+                            }).bindTooltip(tooltips, {
+                                direction: "top",
+                                offset: L.point(0, -10)
+                            }).openTooltip();
+                            c.addTo(extra_server_obj.current_map)
+                        }
+                        else if (item.view > 200 && item.view < 500) {
+                            var colors = "orange"
+                            var iflabel = false
+                            // 添加散点插件
+                            var c = L.circleMarker(latlng, {
+                                stationname: item.StationName,
+                                stationnum: item.IIIII,
+                                weight: 0,
+                                radius: 8,
+                                opacity: 0,
+                                fill: false,
+                                color: colors,
+                                fillColor: colors,
+                                fillOpacity: 1,
+                                labelStyle: {
+                                    text: item.view,
+                                    collisionFlg: true,
+                                    // offsetY: -25,
+                                    scale: 1.5,
+                                    weight: 3,
+                                    rotation: 0,
+                                    fillStyle: colors,
+                                    zIndex: 60
+                                }
+                            }).bindTooltip(tooltips, {
+                                direction: "top",
+                                offset: L.point(0, -10)
+                            }).openTooltip();
+                            c.addTo(extra_server_obj.current_map)
+                        }
+                        else if (item.view <50 && item.view > 0) {
+                            var colors = "red"
+                            var iflabel = false
+                            // 添加散点插件
+                            var c = L.circleMarker(latlng, {
+                                stationname: item.StationName,
+                                stationnum: item.IIIII,
+                                weight: 0,
+                                radius: 8,
+                                opacity: 0,
+                                fill: false,
+                                color: colors,
+                                fillColor: colors,
+                                fillOpacity: 1,
+                                labelStyle: {
+                                    text: item.view,
+                                    collisionFlg: true,
+                                    // offsetY: -25,
+                                    scale: 1.5,
+                                    weight: 3,
+                                    rotation: 0,
+                                    fillStyle: colors,
+                                    zIndex: 60
+                                }
+                            }).bindTooltip(tooltips, {
+                                direction: "top",
+                                offset: L.point(0, -10)
+                            }).openTooltip();
+                            c.addTo(extra_server_obj.current_map)
+                        }         
+                    })
+                    
+                },
+                current_data:undefined,
+                current_map:undefined,
                 upload_data: undefined,
+                flush_map: function () {
+                    if (extra_server_obj.current_map) {
+                        extra_server_obj.current_map.eachLayer(function (layer) {
+                            if (!layer._container || ('' + jQuery(layer._container).attr('class')).replace(/\s/g, '') != 'leaflet-layer') {
+                                layer.remove();
+                            }
+                        });
+                    }
+                    var boundaries = map_toolbox_object.return_boundaries(zhejianglist[0].features).boundaries
+                    var canvasLabel = new L.CanvasLabel({
+                        defaultLabelStyle: {
+                            collisionFlg: true,
+                            scale: 1,
+                            strokeStyle: "#000",
+                            fillStyle: "#fff",
+                            lineWidth: 3
+                        }
+                    });
+                    var lines = L.geoJSON(boundaries, {
+                        style: function (feature) {
+                            return { color: 'black', fill: false, weight: 3, fillOpacity: 0.1 };
+                        }
+                    }).addTo(extra_server_obj.current_map)
+
+                },
+                init_map: function () {
+                    //地图初始化
+                    if (extra_server_obj.current_map) {
+                        
+                        extra_server_obj.current_map.eachLayer(function (layer) {
+                            if (!layer._container || ('' + jQuery(layer._container).attr('class')).replace(/\s/g, '') != 'leaflet-layer') {
+                                layer.remove();
+                            }
+                        });
+                        // console.log("flush",extra_server_obj.current_map)
+                        var boundaries = map_toolbox_object.return_boundaries(zhejianglist[0].features).boundaries
+                        // map_toolbox_object.boundaries = boundaries
+                        var canvasLabel = new L.CanvasLabel({
+                            defaultLabelStyle: {
+                                collisionFlg: true,
+                                scale: 1,
+                                strokeStyle: "#000",
+                                fillStyle: "#fff",
+                                lineWidth: 3
+                            }
+                        });
+                        var lines = L.geoJSON(boundaries, {
+                            style: function (feature) {
+                                return { color: 'black', fill: false, weight: 3, fillOpacity: 0.1 };
+                            }
+                        }).addTo(extra_server_obj.current_map)
+                        var corner1 = L.latLng(26, 115),
+                            corner2 = L.latLng(34, 125),
+                            bound = L.latLngBounds(corner1, corner2);
+
+                    }
+                    else {
+                        var boundaries = map_toolbox_object.return_boundaries(zhejianglist[0].features).boundaries
+                        // map_toolbox_object.boundaries = boundaries
+                        var canvasLabel = new L.CanvasLabel({
+                            defaultLabelStyle: {
+                                collisionFlg: true,
+                                scale: 1,
+                                // strokeStyle: "#000",
+                                fillStyle: "white",
+                                lineWidth: 3
+                            }
+                        });
+                        var lines = L.geoJSON(boundaries, {
+                            style: function (feature) {
+                                return { color: 'black', fill: false, weight: 3, fillOpacity: 0.1 };
+                            }
+                        })
+                        var corner1 = L.latLng(26, 115),
+                            corner2 = L.latLng(34, 125),
+                            bound = L.latLngBounds(corner1, corner2);
+                        var map_extra = new L.Map('extra_server_obj_map', {
+                            center: new L.LatLng(28.6, 121.3),//110.763, 41.376   39.62353145, 121.9937485
+                            crs: L.CRS.EPSG3857,
+                            renderer: canvasLabel,
+                            zoom: 9, //4
+                            maxZoom: 12,
+                            minZoom: 8,
+                            zoomControl: false,
+                            dragging: true,
+                            scrollWheelZoom: true,
+                            doubleClickZoom: false,
+                            attributionControl: false, //是否去除右下角标志
+                            bounds: turf.bbox(boundaries),
+                            maxBounds: bound,
+                            maxBoundsViscosity: 1.0,
+                            layers: [lines]
+                        });
+                        extra_server_obj.current_map = map_extra
+                    }
+                },
                 rander_table: function (data_table,tab_type,tabid) {
                     if(tab_type=="rain"){
                         var cols_arr =  [[ //标题栏
@@ -3198,7 +3569,7 @@
                         table.render({
                             elem: '#'+tabid
                             , width: 790
-                            , height: 740
+                            , height: 350
                             , totalRow: true
                             , cellMinWidth: 80
                             , cols:cols_arr
@@ -3257,6 +3628,7 @@
 
                 },
                 get_data: function () {
+                    
                     var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                     $.ajax({
                         url: "station_zdz_data",  // 请求的地址
@@ -3287,6 +3659,11 @@
                             extra_server_obj.recv_wind = JSON.parse(recvdate.extra_wind)
                             extra_server_obj.recv_tmax = JSON.parse(recvdate.extra_tmax)
                             extra_server_obj.recv_view = JSON.parse(recvdate.extra_view)
+                            // console.log(data_table)
+                            extra_server_obj.flush_map()
+                            extra_server_obj.plot_rain()
+
+                            
 
                             closeLoad(load)
                         }
@@ -3296,8 +3673,11 @@
                 }
             }
             // 快报以及绘图
+            extra_server_obj.init_map()
+
+            
             $("#get_extra_data").click(function () {
-                extra_server_obj.get_data()
+                extra_server_obj.get_data()      
             })
 
         </script>
