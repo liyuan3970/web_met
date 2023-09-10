@@ -45,6 +45,7 @@ from astropy.modeling.models import Gaussian2D
 # 雷达
 import cinrad
 from cinrad.visualize import Section
+import geojsoncontour
 # 自定义画图类
 class nlcmap(LinearSegmentedColormap):
     """A nonlinear colormap"""
@@ -1372,63 +1373,8 @@ class station_text:
         return data
     def comupt_city_csv(self,city_code,start,end):
         data = pd.read_csv("static/data/downfile/comput.csv")
+        # data = pd.read_csv("downfile/comput.csv")
         return data
-    def text_rain(self):
-        bins=[0,30,40,50,80,100,150,200,300,500,2000]
-        labels=['≥0毫米','≥30毫米','≥40毫米','≥50毫米','≥80毫米','≥100毫米','≥150毫米','≥200毫米','≥300毫米','≥500毫米']
-        rain = data[(data['rain']>0) & (data['rain']<5009)]
-        rain['rank']=pd.cut(rain['rain'],bins,right=False,labels=labels)
-        del rain['Unnamed: 0'] # 天擎不需要
-        rain.reset_index(drop=True)
-        if city_code in self.citys:
-            cnty = rain.groupby(['Cnty'])['rain'].mean().to_dict()
-        else:
-            cnty = rain.groupby(['Town'])['rain'].mean().to_dict()
-        rain_max = rain.sort_values(by="rain",ascending=False).head(10).to_dict()
-        rain_hour = rain.sort_values(by="rainhour",ascending=False).head(5).to_dict()
-        town_max = rain.groupby(['Town','Cnty'])['rain'].max().sort_values(ascending=False).head(10)
-        town_max_str = []
-        for i in town_max.index.to_list():
-            single = (i[0] +"-" +  i[1]+ ":" +str(town_max[i]) + "毫米")
-            town_max_str.append(single)
-        rank_station = {
-            '≥0毫米':len(rain[(rain['rain']>0) & (rain['rain']<30)].value_counts()),
-            '≥30毫米':len(rain[(rain['rain']>=30) & (rain['rain']<40)].value_counts()),
-            '≥40毫米':len(rain[(rain['rain']>=40) & (rain['rain']<50)].value_counts()),
-            '≥50毫米':len(rain[(rain['rain']>=50) & (rain['rain']<80)].value_counts()),
-            '≥80毫米':len(rain[(rain['rain']>=80) & (rain['rain']<100)].value_counts()),
-            '≥100毫米':len(rain[(rain['rain']>=100) & (rain['rain']<150)].value_counts()),
-            '≥150毫米':len(rain[(rain['rain']>=150) & (rain['rain']<200)].value_counts()),
-            '≥200毫米':len(rain[(rain['rain']>=200) & (rain['rain']<300)].value_counts()),
-            '≥300毫米':len(rain[(rain['rain']>=300) & (rain['rain']<500)].value_counts()),
-            '≥500毫米':len(rain[(rain['rain']>=500) & (rain['rain']<2000)].value_counts())
-        }
-        # 乡镇个数统计
-        town_group = rain.groupby(['Town'])['rain'].max()  
-        dict_town = {'Town':town_group.index,'rain':town_group.values}
-        town_range = pd.DataFrame(data =dict_town)
-        town_range['rank']=pd.cut(town_range['rain'],bins,right=False,labels=labels) 
-        rank_town = {
-            '≥0毫米':len(town_range[(town_range['rain']>0) & (town_range['rain']<30)].value_counts()),
-            '≥30毫米':len(town_range[(town_range['rain']>=30) & (town_range['rain']<40)].value_counts()),
-            '≥40毫米':len(town_range[(town_range['rain']>=40) & (town_range['rain']<50)].value_counts()),
-            '≥50毫米':len(town_range[(town_range['rain']>=50) & (town_range['rain']<80)].value_counts()),
-            '≥80毫米':len(town_range[(town_range['rain']>=80) & (town_range['rain']<100)].value_counts()),
-            '≥100毫米':len(town_range[(town_range['rain']>=100) & (town_range['rain']<150)].value_counts()),
-            '≥150毫米':len(town_range[(town_range['rain']>=150) & (town_range['rain']<200)].value_counts()),
-            '≥200毫米':len(town_range[(town_range['rain']>=200) & (town_range['rain']<300)].value_counts()),
-            '≥300毫米':len(town_range[(town_range['rain']>=300) & (town_range['rain']<500)].value_counts()),
-            '≥500毫米':len(town_range[(town_range['rain']>=500) & (town_range['rain']<2000)].value_counts())
-        }
-        rain_dir = {
-            "average_city":cnty,
-            "station_index":rain_max,
-            "hour_max":rain_hour,
-            "town_max":town_max_str,
-            "station_count":rank_station,
-            "town_count":rank_town        
-        }
-        return rain_dir
     def text_wind(self):
         orig = self.data
         data = orig.sort_values(by="wind",ascending=False)#.head(5).to_dict()
@@ -1604,6 +1550,30 @@ class station_text:
         rain['rank_label']=pd.cut(rain['rain'],bins_text,right=False,labels=labels_text)
         del rain['Unnamed: 0'] # 天擎不需要
         rain.reset_index(drop=True)
+        # 数据校验
+        def vaild_rain(col):
+            lat = col['Lat']
+            lon = col['Lon']
+            pre = col['rain']
+            IIIII = col['IIIII']
+            s = lat - 0.07
+            n = lat + 0.07
+            w = lon - 0.07
+            e = lon + 0.07
+            stdf = rain[(rain['Lat']>s)&(rain['Lat']<n)&(rain['Lon']<e)&(rain['Lon']>w)]
+            stdq = stdf[(True^stdf['IIIII'].isin([IIIII]))]
+            stdmean = stdq['rain'].mean()
+            stds = stdq['rain'].std()
+            stdabs = abs(pre - stdmean)
+            if stdabs > stds*3:
+                #value = stdabs - stds
+                value = 1
+            else:
+                #value = stdabs - stds
+                value = 0
+            del stdf,stdq
+            return value
+        rain['std'] = rain.apply(vaild_rain,axis=1) 
         # 面雨量
         if self.city_code in self.city_codes:
             cnty = rain.groupby(['Cnty'])['rain'].mean().to_dict()
@@ -1713,7 +1683,44 @@ class station_text:
         text = text + text_rain + "<br>" + text_wind + "<br>" + text_tmax + "<br>" + text_view
         # text = text + text_rain + "\n" + text_wind + "/n" + text_tmax + "/n" + text_view
         return text,rain_json,wind_json,tmax_json,view_json
-   
+    def plot_rain(self):
+        orig = self.data
+        data = orig.sort_values(by="rain",ascending=False)
+        rain = data[(data['rain']>0) & (data['rain']<5009)]
+        lat = np.array(rain['Lat'].to_list())
+        lon = np.array(rain['Lon'].to_list())
+        Zi = np.array(rain['rain'].to_list())
+        data_max = max(Zi)
+        data_min = min(Zi)
+        np.set_printoptions(precision = 2)
+        x = np.arange(120.0,122.0,0.015)
+        y = np.arange(27.8,29.5,0.015)
+        nx0 =len(x)
+        ny0 =len(y)
+        X, Y = np.meshgrid(x, y)#100*100
+        P = np.array([X.flatten(), Y.flatten() ]).transpose()    
+        Pi =  np.array([lon, lat ]).transpose()
+        Z_linear = griddata(Pi, Zi, P, method = "nearest").reshape([ny0,nx0])
+        gauss_kernel = Gaussian2DKernel(0.1)
+        smoothed_data_gauss = convolve(Z_linear, gauss_kernel)
+        data_xr = xr.DataArray(Z_linear, coords=[ y,x], dims=["lat", "lon"])
+        lat = data_xr.lat
+        lon = data_xr.lon
+        lons, lats = np.meshgrid(lon, lat)
+        colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 24降水
+        levels = [0,1,10,25,50,100,250,1000]
+        cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+        cmap_nonlin = nlcmap(cmaps, levels)
+        contour = plt.contourf(lons,lats,data_xr,cmap=cmap_nonlin,levels =levels)
+        geojson = geojsoncontour.contourf_to_geojson(
+            contourf=contour,
+            ndigits=3,
+            unit='mm'
+        )
+        plt.close()
+        with open("static/data/shpfile/country/shp/tiantai.json", "r", encoding="utf-8") as f:
+            shpjson = json.load(f)
+        return geojson,shpjson
 
 class station_sql_data:
     def __init__(self):

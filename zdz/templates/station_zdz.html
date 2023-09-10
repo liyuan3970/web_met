@@ -19,7 +19,7 @@
     <script src="static/js/Leaflet.canvasmarker.js"></script>
     <script type="text/javascript" src="static/js/iconLayers.js"></script>
     <link rel="stylesheet" href="static/css/iconLayers.css">
-
+    <script src='static/js/leaflet.mask.js'></script> 
     <!-- <script src="https://unpkg.com/leaflet-canvas-marker@0.2.0"></script> -->
     <!-- 散点 -->
     <link rel="stylesheet" href="static/css/leaflet-beautify-marker-icon.css">
@@ -55,6 +55,8 @@
     <!-- 弹窗 -->
     <script src="static/layui/layer.js"></script>
     <!-- 数据 -->
+    
+    
     <script src='static/js/taizhou.js'></script>
     <script src='static/js/county.js'></script>
     <!-- 市县地图 -->
@@ -3116,7 +3118,7 @@
                     <div style="width:100%;height: 8%;">
                         <!-- <button type="button" class="layui-btn layui-btn-lg" style="float: right;margin-right: 10px;">发布</button> -->
                         <button type="button" class="layui-btn layui-btn-lg" style="float: right;margin-right: 10px;">统计</button>
-                        <button type="button" class="layui-btn layui-btn-lg" style="float: right;margin-right: 10px;">绘图</button>
+                        <button id = "extra_geojson_plot" type="button" class="layui-btn layui-btn-lg" style="float: right;margin-right: 10px;">绘图</button>
                         <!-- <button type="button" class="layui-btn layui-btn-lg" style="float: right;"></button>                     -->
                     </div>
                 </div>
@@ -3148,6 +3150,7 @@
                 recv_view: undefined,
                 plot_rain:function(){ 
                     extra_server_obj.recv_rain.forEach(function(item){
+                        var latlng = L.latLng(item.Lat, item.Lon);
                         var tooltips = item.StationName + "-" + item.IIIII + "<br>" + "    纬度:" + item.Lat.toFixed(2).toString() + "  " + "经度:" + item.Lon.toFixed(2).toString() + "<br>" + "    " + item.City + "-" + item.Cnty + "-" + item.Town
                         if (item.rain > 0 && item.rain <= 5) {
                             var colors = "white"
@@ -3163,13 +3166,23 @@
                         }
                         else if (item.rain > 38 && item.rain <= 74) {
                             var colors = "red"
+                            // var colors = "blue"
                             var iflabel = false
                         }
                         else if (item.rain > 74) {
-                            var colors = "rgb(140,0,65)"
+                            var colors = "rgb(210,5,234)"
                             var iflabel = false
                         }
-                        var latlng = L.latLng(item.Lat, item.Lon);
+                        if (item.std > 0) {
+                            var circle = L.circleMarker(latlng, {
+                                stationname: item.StationName,
+                                stationnum: item.IIIII,
+                                radius: 16,
+                                fill: false,
+                                color: "red"
+                            }).addTo(extra_server_obj.current_map)
+                        }
+                        
                         // 添加散点插件
                         var c = L.circleMarker(latlng, {
                             stationname: item.StationName,
@@ -3403,6 +3416,50 @@
                 current_data:undefined,
                 current_map:undefined,
                 upload_data: undefined,
+                geojson_plot:function(){
+                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                    $.ajax({
+                        url: "station_zdz_data",  // 请求的地址
+                        type: "post",  // 请求方式
+                        timeout: 25000, //设置延迟上限
+                        data: {
+                            'csrfmiddlewaretoken': csrf,
+                            'model': "extra_geojosn_plot",
+                            'start': $("#extra_download-startDate-1").val(),
+                            'end': $("#extra_download-endDate-1").val(),
+                            'click_type': $("#city").val(), // 城市
+                            'button_value': $("#country").val() // 乡镇
+                        },
+                        dataType: "json",
+                        beforeSend: function (XMLHttpRequest) {
+                            load = showLoad();
+                        },
+                        success: function (recvdate) {
+                            // 获取数据
+                            contourf = JSON.parse(recvdate.contour)
+                            extra_server_obj.flush_map()
+                            var reallayer = L.geoJSON(contourf, {
+                                style: function (feature) {
+                                    return { color: feature.properties.stroke, weight: 1, fill: true, fillColor: feature.properties.stroke, fillOpacity: 0.9 };
+                                }
+                            }).addTo(extra_server_obj.current_map)
+                            //  掩码 
+                            var shplayer = L.geoJSON(recvdate.shp).addTo(extra_server_obj.current_map)
+                            console.log(typeof(recvdate.shp))
+                            // L.mask(recvdate.shp, {
+                            //     // fitBounds:true,
+                            //     fillColor: "white",// 边框颜色
+                            //     fillOpacity: 1,
+                            // })
+                            // .addTo(extra_server_obj.current_map);
+
+                            
+
+                            closeLoad(load)
+                        }
+                    })
+
+                },
                 flush_map: function () {
                     if (extra_server_obj.current_map) {
                         extra_server_obj.current_map.eachLayer(function (layer) {
@@ -3674,7 +3731,11 @@
             }
             // 快报以及绘图
             extra_server_obj.init_map()
+             
+            $("#extra_geojson_plot").click(function(){
+                extra_server_obj.geojson_plot()
 
+            })
             
             $("#get_extra_data").click(function () {
                 extra_server_obj.get_data()      

@@ -882,6 +882,27 @@ def station_zdz_data(request):
             'extra_view':view_json
         }
         return JsonResponse(context)
+    elif model =="extra_geojosn_plot":
+        start = request.POST.get('start', '')
+        end = request.POST.get('end', '')
+        city = click_type
+        country = button_value
+        # 测试
+        # print("测试",city,country)
+        start = '2019-08-08 08:00:00'  
+        end = '2019-08-08 09:00:00'
+        city_code = "331000"
+        start = '2023-07-01 20:52:00'
+        end = '2023-07-02 20:52:00'
+        worker = data_class.station_text(city_code,start,end)
+        geojson,shpjson = worker.plot_rain()
+        # 以上为测试      
+        context = {
+            'status': "ok",
+            'contour':geojson,
+            'shp':shpjson
+        }
+        return JsonResponse(context)
     elif model =="radar_sec":
         start = click_type.split(',')
         end = button_value.split(',')
@@ -890,7 +911,7 @@ def station_zdz_data(request):
         # 测试
         worker = data_class.radar_data()
         img = worker.plot_sec(start_cor,end_cor)
-        print("测试",start_cor)
+        # print("测试",start_cor)
         # 以上为测试      
         context = {
             'status': "ok",
