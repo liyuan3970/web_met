@@ -19,7 +19,7 @@
     <script src="static/js/Leaflet.canvasmarker.js"></script>
     <script type="text/javascript" src="static/js/iconLayers.js"></script>
     <link rel="stylesheet" href="static/css/iconLayers.css">
-    <script src='static/js/leaflet.mask.js'></script> 
+    <script src='static/js/leaflet.mask.js'></script>
     <!-- <script src="https://unpkg.com/leaflet-canvas-marker@0.2.0"></script> -->
     <!-- 散点 -->
     <link rel="stylesheet" href="static/css/leaflet-beautify-marker-icon.css">
@@ -55,8 +55,8 @@
     <!-- 弹窗 -->
     <script src="static/layui/layer.js"></script>
     <!-- 数据 -->
-    
-    
+
+
     <script src='static/js/taizhou.js'></script>
     <script src='static/js/county.js'></script>
     <!-- 市县地图 -->
@@ -81,14 +81,14 @@
         .scrollbar::-webkit-scrollbar {
             display: none;
         }
-    
+
         .layui-layer-lan .layui-layer-title {
             /* background: #393D49; */
             color: #fff;
             font-size: 20px;
             border: none;
         }
-    
+
         .layui-code {
             position: relative;
             margin: 0px 0;
@@ -103,7 +103,7 @@
             /* font-family: "STKaiti"; */
             text-align: left;
         }
-    
+
         /* .layui-layer-lan .layui-layer-btn{border-top:1px solid #E9E7E7} */
         /* .demo-class .layui-layer-btn a{background:#333;} */
         /* .demo-class .layui-layer-btn .layui-layer-btn1{background:#999;} */
@@ -199,7 +199,7 @@
                                 rain_3hour: undefined,
                                 rain_6hour: undefined,
                                 rain_12hour: undefined,
-                                layer_status:undefined,
+                                layer_status: undefined,
                                 notice_alert: function () {
                                     var status = layer.open({
                                         type: 1,
@@ -222,7 +222,7 @@
                                         shadeClose: false, //开启遮罩关闭
                                         content: $("#notice_alert")
                                     });
-                                    warring_obj.layer_status  = status
+                                    warring_obj.layer_status = status
                                 },
                                 request_warring: function () {
                                     var csrf = $('input[name="csrfmiddlewaretoken"]').val();
@@ -506,14 +506,14 @@
                                                 else {
                                                     warring_obj.notice_alert();
                                                 }
-                                            }                                          
+                                            }
                                         }
-                                    }                                    
+                                    }
                                 }
-                                else if(warring_opt == "silence") {
+                                else if (warring_opt == "silence") {
                                     warring_obj.warring_status = "silence"
-                                    if (warring_obj.layer_status){
-                                        layer.close(warring_obj.layer_status); 
+                                    if (warring_obj.layer_status) {
+                                        layer.close(warring_obj.layer_status);
                                     }
                                 }
                             }, 1000 * 5) // 间隔1秒就打印
@@ -2739,22 +2739,22 @@
                     },
                     convert: function (lon, lat) {
                         x = lon * 20037508.34 / 180
-                        y = Math.log(Math.tan((90 + lat) * Math.PI / 360)) / (Math.PI/ 180)
+                        y = Math.log(Math.tan((90 + lat) * Math.PI / 360)) / (Math.PI / 180)
                         y = y * 20037508.34 / 180
                         return [x, y]
                     },
-                    get_sec:function(){
+                    get_sec: function () {
                         $("#radar_sec_img").html("")
                         var start = radar_sec_obj.p1.lng.toString() + "," + radar_sec_obj.p1.lat.toString()
                         var end = radar_sec_obj.p2.lng.toString() + "," + radar_sec_obj.p2.lat.toString()
-                        
+
                         var result = gcoord.transform(
                             radar_sec_obj.convert(radar_sec_obj.p1.lng, radar_sec_obj.p1.lat),    // 经纬度坐标
                             gcoord.EPSG3857,               // 当前坐标系
                             gcoord.WGS84                 // 目标坐标系
                         );
-                         
-                        console.log("原始",[radar_sec_obj.p1.lng, radar_sec_obj.p1.lat],"转换后",result);
+
+                        console.log("原始", [radar_sec_obj.p1.lng, radar_sec_obj.p1.lat], "转换后", result);
                         var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                         $.ajax({
                             url: "station_zdz_data",  // 请求的地址
@@ -2775,7 +2775,7 @@
                                 // console.log("雷达切面数据",recvdate.img)
                                 var img = new Image()
                                 img.src = recvdate.img
-                                img.style = "max-width: 100%;max-height: 100%;"                             
+                                img.style = "max-width: 100%;max-height: 100%;"
                                 $("#radar_sec_img").html(img)
                                 closeLoad(load)
                             }
@@ -3008,7 +3008,7 @@
             <div style="display: inline-flex;width:100%;height: 93%;;">
                 <!-- 存放选项卡嵌套网格 -->
                 <div style="width:50%;height: 100%;">
-                    <div class="layui-tab" lay-filter="extra_tab" style = "height: 50%;">
+                    <div class="layui-tab" lay-filter="extra_tab" style="height: 50%;">
                         <ul class="layui-tab-title">
                             <li class="layui-this" lay-id="rain">降水</li>
                             <li lay-id="wind">风力</li>
@@ -3025,35 +3025,36 @@
                                 <div style="width:100%;height: 100%;;">
                                     <table class="layui-hide" id="extra_wind" style="width: 600px"></table>
                                 </div>
-                                          
+
                             </div>
                             <div class="layui-tab-item">
                                 <div style="width:100%;height: 100%;;">
                                     <table class="layui-hide" id="extra_tmax" style="width: 600px"></table>
                                 </div>
-                                
+
                             </div>
                             <div class="layui-tab-item">
                                 <div style="width:100%;height: 100%;;">
                                     <table class="layui-hide" id="extra_view" style="width: 600px"></table>
                                 </div>
-                                
+
                             </div>
-                
+
                         </div>
                     </div>
-                    <div style="height: 45%;" class="layui-tab">              
+                    <div style="height: 45%;" class="layui-tab">
                         <ul class="layui-tab-title">
                             <li class="layui-this">文字</li>
                         </ul>
                         <div class="layui-tab-content" style="padding: 0;">
-                            <div id="text_msg" class="layui-tab-item layui-show" style="width:100%;height: 300px;overflow-y:scroll">
-                                
+                            <div id="text_msg" class="layui-tab-item layui-show"
+                                style="width:100%;height: 300px;overflow-y:scroll">
+
                                 <!-- <div  class="layui-code" style="width:100%;height: 100%;overflow-y: auto;">
                     
                                 </div> -->
                             </div>
-                        </div>               
+                        </div>
                     </div>
                     <script>
                         layui.use('element', function () {
@@ -3064,27 +3065,27 @@
                             element.tabChange('extra_tab', layid); //假设当前地址为：http://a.com#test1=222，那么选项卡会自动切换到“发送消息”这一项
                             // Tab 切换，以改变地址 hash 值
                             element.on('tab(extra_tab)', function () {
-                                location.hash = 'extra_tab=' + this.getAttribute('lay-id');          
+                                location.hash = 'extra_tab=' + this.getAttribute('lay-id');
                                 var tab_obj = {
-                                    "rain":extra_server_obj.recv_rain,
-                                    "wind":extra_server_obj.recv_wind,
-                                    "tmax":extra_server_obj.recv_tmax,
-                                    "view":extra_server_obj.recv_view,
+                                    "rain": extra_server_obj.recv_rain,
+                                    "wind": extra_server_obj.recv_wind,
+                                    "tmax": extra_server_obj.recv_tmax,
+                                    "view": extra_server_obj.recv_view,
                                 }
                                 var tab_id = {
-                                    "rain":"extra_rain",
-                                    "wind":"extra_wind",
-                                    "tmax":"extra_tmax",
-                                    "view":"extra_view",
+                                    "rain": "extra_rain",
+                                    "wind": "extra_wind",
+                                    "tmax": "extra_tmax",
+                                    "view": "extra_view",
                                 }
                                 var tab_type = this.getAttribute('lay-id')
                                 // console.log(location.hash,"当前id",this.getAttribute('lay-id'),tab_obj[tab_type])
-                                extra_server_obj.rander_table(tab_obj[tab_type],tab_type,tab_id[tab_type])
+                                extra_server_obj.rander_table(tab_obj[tab_type], tab_type, tab_id[tab_type])
                                 extra_server_obj.flush_map()
-                                if(tab_type=="rain"){extra_server_obj.plot_rain()}
-                                else if(tab_type=="wind"){extra_server_obj.plot_wind()}
-                                else if(tab_type=="tmax"){extra_server_obj.plot_tmax()}
-                                else if(tab_type=="view"){extra_server_obj.plot_view()}
+                                if (tab_type == "rain") { extra_server_obj.plot_rain() }
+                                else if (tab_type == "wind") { extra_server_obj.plot_wind() }
+                                else if (tab_type == "tmax") { extra_server_obj.plot_tmax() }
+                                else if (tab_type == "view") { extra_server_obj.plot_view() }
                             });
                         });
                     </script>
@@ -3105,7 +3106,7 @@
                             </div> -->
                             <div class="layui-tab-item layui-show" style="width:100%;height: 660px;">
                                 <div id="extra_server_obj_map" style="width:100%;height: 100%"></div>
-                                            
+
                             </div>
                             <!-- <div class="layui-tab-item" style="width:100%;height: 660px;">
                                 短信内容
@@ -3113,12 +3114,14 @@
                         </div>
                     </div>
                     <!-- 文字 -->
-                    
+
                     <!-- 绘制按钮 -->
                     <div style="width:100%;height: 8%;">
                         <!-- <button type="button" class="layui-btn layui-btn-lg" style="float: right;margin-right: 10px;">发布</button> -->
-                        <button type="button" class="layui-btn layui-btn-lg" style="float: right;margin-right: 10px;">统计</button>
-                        <button id = "extra_geojson_plot" type="button" class="layui-btn layui-btn-lg" style="float: right;margin-right: 10px;">绘图</button>
+                        <button id="extra_geojson_remain" type="button" class="layui-btn layui-btn-lg"
+                            style="float: right;margin-right: 10px;">复核</button>
+                        <button id="extra_geojson_plot" type="button" class="layui-btn layui-btn-lg"
+                            style="float: right;margin-right: 10px;">绘图</button>
                         <!-- <button type="button" class="layui-btn layui-btn-lg" style="float: right;"></button>                     -->
                     </div>
                 </div>
@@ -3148,8 +3151,15 @@
                 recv_wind: undefined,
                 recv_tmax: undefined,
                 recv_view: undefined,
-                plot_rain:function(){ 
-                    extra_server_obj.recv_rain.forEach(function(item){
+                del_rain: function (station_id) {
+                    newArray = extra_server_obj.recv_rain.filter(function (item) {
+                        return item.IIIII !== station_id
+                    });
+                    extra_server_obj.recv_rain = undefined
+                    extra_server_obj.recv_rain = newArray
+                },
+                plot_rain: function () {
+                    extra_server_obj.recv_rain.forEach(function (item) {
                         var latlng = L.latLng(item.Lat, item.Lon);
                         var tooltips = item.StationName + "-" + item.IIIII + "<br>" + "    纬度:" + item.Lat.toFixed(2).toString() + "  " + "经度:" + item.Lon.toFixed(2).toString() + "<br>" + "    " + item.City + "-" + item.Cnty + "-" + item.Town
                         if (item.rain > 0 && item.rain <= 5) {
@@ -3165,6 +3175,7 @@
                             var iflabel = false
                         }
                         else if (item.rain > 38 && item.rain <= 74) {
+                            
                             var colors = "red"
                             // var colors = "blue"
                             var iflabel = false
@@ -3177,12 +3188,12 @@
                             var circle = L.circleMarker(latlng, {
                                 stationname: item.StationName,
                                 stationnum: item.IIIII,
-                                radius: 16,
+                                radius: 20,
                                 fill: false,
                                 color: "red"
                             }).addTo(extra_server_obj.current_map)
                         }
-                        
+
                         // 添加散点插件
                         var c = L.circleMarker(latlng, {
                             stationname: item.StationName,
@@ -3208,11 +3219,15 @@
                             direction: "top",
                             offset: L.point(0, -10)
                         }).openTooltip();
-                        c.addTo(extra_server_obj.current_map)
+                        c.addTo(extra_server_obj.current_map).on("click", function (e) {
+                            extra_server_obj.del_rain(e.sourceTarget.options.stationnum)
+                            extra_server_obj.flush_map()
+                            extra_server_obj.plot_rain()
+                        })
                     })
-                
+
                 },
-                plot_wind:function(){
+                plot_wind: function () {
                     extra_server_obj.recv_wind.forEach(function (item) {
                         var tooltips = item.StationName + "-" + item.IIIII + "<br>" + "    纬度:" + item.Lat.toFixed(2).toString() + "  " + "经度:" + item.Lon.toFixed(2).toString() + "<br>" + "    " + item.City + "-" + item.Cnty + "-" + item.Town
                         if (item.wind > 17.3) {
@@ -3247,13 +3262,13 @@
                         }
 
                     })
-                    
+
                 },
-                plot_tmax:function(){
-                    extra_server_obj.recv_tmax.forEach(function(item){
+                plot_tmax: function () {
+                    extra_server_obj.recv_tmax.forEach(function (item) {
                         var latlng = L.latLng(item.Lat, item.Lon);
                         var tooltips = item.StationName + "-" + item.IIIII + "<br>" + "    纬度:" + item.Lat.toFixed(2).toString() + "  " + "经度:" + item.Lon.toFixed(2).toString() + "<br>" + "    " + item.City + "-" + item.Cnty + "-" + item.Town
-                        
+
                         if (item.tmax > 37 && item.tmax < 40) {
                             var colors = "pink"
                             var iflabel = false
@@ -3284,7 +3299,7 @@
                             }).openTooltip();
                             c.addTo(extra_server_obj.current_map)
                         }
-                        else if (item.tmax >=40) {
+                        else if (item.tmax >= 40) {
                             var colors = "red"
                             var iflabel = false
                             // 添加散点插件
@@ -3313,12 +3328,12 @@
                                 offset: L.point(0, -10)
                             }).openTooltip();
                             c.addTo(extra_server_obj.current_map)
-                        }         
+                        }
                     })
-                    
+
                 },
-                plot_view:function(){
-                    extra_server_obj.recv_view.forEach(function(item){
+                plot_view: function () {
+                    extra_server_obj.recv_view.forEach(function (item) {
                         var latlng = L.latLng(item.Lat, item.Lon);
                         var tooltips = item.StationName + "-" + item.IIIII + "<br>" + "    纬度:" + item.Lat.toFixed(2).toString() + "  " + "经度:" + item.Lon.toFixed(2).toString() + "<br>" + "    " + item.City + "-" + item.Cnty + "-" + item.Town
                         if (item.view > 500 && item.view <= 1000) {
@@ -3380,7 +3395,7 @@
                             }).openTooltip();
                             c.addTo(extra_server_obj.current_map)
                         }
-                        else if (item.view <50 && item.view > 0) {
+                        else if (item.view < 50 && item.view > 0) {
                             var colors = "red"
                             var iflabel = false
                             // 添加散点插件
@@ -3409,55 +3424,106 @@
                                 offset: L.point(0, -10)
                             }).openTooltip();
                             c.addTo(extra_server_obj.current_map)
-                        }         
-                    })
-                    
-                },
-                current_data:undefined,
-                current_map:undefined,
-                upload_data: undefined,
-                geojson_plot:function(){
-                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                    $.ajax({
-                        url: "station_zdz_data",  // 请求的地址
-                        type: "post",  // 请求方式
-                        timeout: 25000, //设置延迟上限
-                        data: {
-                            'csrfmiddlewaretoken': csrf,
-                            'model': "extra_geojosn_plot",
-                            'start': $("#extra_download-startDate-1").val(),
-                            'end': $("#extra_download-endDate-1").val(),
-                            'click_type': $("#city").val(), // 城市
-                            'button_value': $("#country").val() // 乡镇
-                        },
-                        dataType: "json",
-                        beforeSend: function (XMLHttpRequest) {
-                            load = showLoad();
-                        },
-                        success: function (recvdate) {
-                            // 获取数据
-                            contourf = JSON.parse(recvdate.contour)
-                            extra_server_obj.flush_map()
-                            var reallayer = L.geoJSON(contourf, {
-                                style: function (feature) {
-                                    return { color: feature.properties.stroke, weight: 1, fill: true, fillColor: feature.properties.stroke, fillOpacity: 0.9 };
-                                }
-                            }).addTo(extra_server_obj.current_map)
-                            //  掩码 
-                            var shplayer = L.geoJSON(recvdate.shp).addTo(extra_server_obj.current_map)
-                            console.log(typeof(recvdate.shp))
-                            // L.mask(recvdate.shp, {
-                            //     // fitBounds:true,
-                            //     fillColor: "white",// 边框颜色
-                            //     fillOpacity: 1,
-                            // })
-                            // .addTo(extra_server_obj.current_map);
-
-                            
-
-                            closeLoad(load)
                         }
                     })
+
+                },
+                current_data: undefined,
+                current_map: undefined,
+                upload_data: undefined,
+                remain:function(){
+                    if (extra_server_obj.recv_rain) {
+                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                        var send_rain = JSON.stringify(extra_server_obj.recv_rain)
+                        var send_wind = JSON.stringify(extra_server_obj.recv_wind)
+                        var send_tmax = JSON.stringify(extra_server_obj.recv_tmax)
+                        var send_view = JSON.stringify(extra_server_obj.recv_view)
+                        $.ajax({
+                            url: "station_zdz_data",  // 请求的地址
+                            type: "post",  // 请求方式
+                            timeout: 25000, //设置延迟上限
+                            data: {
+                                'csrfmiddlewaretoken': csrf,
+                                'model': "extra_geojosn_remain",
+                                'rain': send_rain, // 降水
+                                'wind': send_wind, // 风力
+                                'city_code': "331000",
+                                'tmax': send_tmax, // 高温
+                                'view': send_view // 能见度
+                            },
+                            dataType: "json",
+                            beforeSend: function (XMLHttpRequest) {
+                                load = showLoad();
+                            },
+                            success: function (recvdate) {
+                                // 获取数据
+                                // console.log(recvdate)
+                                var data_text = recvdate.extra_text
+                                $("#text_msg").html("")
+                                $("#text_msg").html(data_text)
+                                var tab_type = "rain"
+                                var tab_id = "extra_rain"
+                                extra_server_obj.rander_table(JSON.parse(recvdate.extra_rain), tab_type, tab_id)
+                                extra_server_obj.recv_rain = JSON.parse(recvdate.extra_rain)
+                                extra_server_obj.recv_wind = JSON.parse(recvdate.extra_wind)
+                                extra_server_obj.recv_tmax = JSON.parse(recvdate.extra_tmax)
+                                extra_server_obj.recv_view = JSON.parse(recvdate.extra_view)
+                                extra_server_obj.flush_map()
+                                extra_server_obj.plot_rain()
+                                closeLoad(load)
+                            }
+                        })
+
+                    }
+
+                },
+                geojson_plot: function () {
+                    if (extra_server_obj.recv_rain) {
+                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                        var send_data = JSON.stringify(extra_server_obj.recv_rain)
+                        var send_type = "rain"
+                        $.ajax({
+                            url: "station_zdz_data",  // 请求的地址
+                            type: "post",  // 请求方式
+                            timeout: 25000, //设置延迟上限
+                            data: {
+                                'csrfmiddlewaretoken': csrf,
+                                'model': "extra_geojosn_plot",
+                                'start': $("#extra_download-startDate-1").val(),
+                                'end': $("#extra_download-endDate-1").val(),
+                                'city_code': "331000",
+                                'click_type': send_type, // 绘图类型
+                                'button_value': send_data // 绘图数据
+                            },
+                            dataType: "json",
+                            beforeSend: function (XMLHttpRequest) {
+                                load = showLoad();
+                            },
+                            success: function (recvdate) {
+                                // 获取数据
+                                contourf = JSON.parse(recvdate.contour)
+                                extra_server_obj.flush_map()
+                                var reallayer = L.geoJSON(contourf, {
+                                    style: function (feature) {
+                                        return { color: feature.properties.stroke, weight: 1, fill: true, fillColor: feature.properties.stroke, fillOpacity: 1 };
+                                    }
+                                }).addTo(extra_server_obj.current_map)
+                                L.mask(tz_json_county, {
+                                    // fitBounds:true,
+                                    fitBounds: false,
+                                    restrictBounds: false,
+                                    color: "black",
+                                    fillColor: "white",// 边框颜色
+                                    fillOpacity: 1,
+                                }).addTo(extra_server_obj.current_map);
+                                closeLoad(load)
+                            }
+                        })
+                    }
+                    else {
+                        var send_data = "none"
+                        var send_type = "rain"
+                    }
 
                 },
                 flush_map: function () {
@@ -3488,7 +3554,7 @@
                 init_map: function () {
                     //地图初始化
                     if (extra_server_obj.current_map) {
-                        
+
                         extra_server_obj.current_map.eachLayer(function (layer) {
                             if (!layer._container || ('' + jQuery(layer._container).attr('class')).replace(/\s/g, '') != 'leaflet-layer') {
                                 layer.remove();
@@ -3556,80 +3622,80 @@
                         extra_server_obj.current_map = map_extra
                     }
                 },
-                rander_table: function (data_table,tab_type,tabid) {
-                    if(tab_type=="rain"){
-                        var cols_arr =  [[ //标题栏
-                                { field: 'IIIII', title: 'ID', width: 100, sort: true }    
-                                , { field: 'Province', title: '省', width: 100 }
-                                , { field: 'City', title: '地市', width: 100 }
-                                , { field: 'Cnty', title: '县', width: 100 }
-                                , { field: 'Town', title: '乡镇', width: 100 }
-                                , { field: 'StationName', title: '站名', width: 100 }
-                                , { field: 'rain', title: '雨量', width: 150, sort: true }
-                                // , { field: 'wind', title: '风力', width: 50, sort: true }
-                                // , { field: 'tmax', title: '高温', width: 50, sort: true }
-                                // , { field: 'tmin', title: '低温', width: 50, sort: true }
-                                // , { field: 'view', title: '能见度', sort: true, width: 50 }                    
-                            ]]
+                rander_table: function (data_table, tab_type, tabid) {
+                    if (tab_type == "rain") {
+                        var cols_arr = [[ //标题栏
+                            { field: 'IIIII', title: 'ID', width: 100, sort: true }
+                            , { field: 'Province', title: '省', width: 100 }
+                            , { field: 'City', title: '地市', width: 100 }
+                            , { field: 'Cnty', title: '县', width: 100 }
+                            , { field: 'Town', title: '乡镇', width: 100 }
+                            , { field: 'StationName', title: '站名', width: 100 }
+                            , { field: 'rain', title: '雨量', width: 150, sort: true }
+                            // , { field: 'wind', title: '风力', width: 50, sort: true }
+                            // , { field: 'tmax', title: '高温', width: 50, sort: true }
+                            // , { field: 'tmin', title: '低温', width: 50, sort: true }
+                            // , { field: 'view', title: '能见度', sort: true, width: 50 }                    
+                        ]]
                     }
-                    else if (tab_type=="wind"){
-                        var cols_arr =  [[ //标题栏
-                                { field: 'IIIII', title: 'ID', width: 100, sort: true }    
-                                , { field: 'Province', title: '省', width: 100 }
-                                , { field: 'City', title: '地市', width: 100 }
-                                , { field: 'Cnty', title: '县', width: 100 }
-                                , { field: 'Town', title: '乡镇', width: 100 }
-                                , { field: 'StationName', title: '站名', width: 100 }
-                                // , { field: 'rain', title: '雨量', width: 100, sort: true }
-                                , { field: 'wind', title: '风力', width: 150, sort: true }
-                                // , { field: 'tmax', title: '高温', width: 50, sort: true }
-                                // , { field: 'tmin', title: '低温', width: 50, sort: true }
-                                // , { field: 'view', title: '能见度', sort: true, width: 50 }                    
-                            ]]
+                    else if (tab_type == "wind") {
+                        var cols_arr = [[ //标题栏
+                            { field: 'IIIII', title: 'ID', width: 100, sort: true }
+                            , { field: 'Province', title: '省', width: 100 }
+                            , { field: 'City', title: '地市', width: 100 }
+                            , { field: 'Cnty', title: '县', width: 100 }
+                            , { field: 'Town', title: '乡镇', width: 100 }
+                            , { field: 'StationName', title: '站名', width: 100 }
+                            // , { field: 'rain', title: '雨量', width: 100, sort: true }
+                            , { field: 'wind', title: '风力', width: 150, sort: true }
+                            // , { field: 'tmax', title: '高温', width: 50, sort: true }
+                            // , { field: 'tmin', title: '低温', width: 50, sort: true }
+                            // , { field: 'view', title: '能见度', sort: true, width: 50 }                    
+                        ]]
 
                     }
-                    else if (tab_type=="tmax"){
-                        var cols_arr =  [[ //标题栏
-                                { field: 'IIIII', title: 'ID', width: 100, sort: true }    
-                                , { field: 'Province', title: '省', width: 100 }
-                                , { field: 'City', title: '地市', width: 100 }
-                                , { field: 'Cnty', title: '县', width: 100 }
-                                , { field: 'Town', title: '乡镇', width: 100 }
-                                , { field: 'StationName', title: '站名', width: 100 }
-                                // , { field: 'rain', title: '雨量', width: 100, sort: true }
-                                // , { field: 'wind', title: '风力', width: 50, sort: true }
-                                , { field: 'tmax', title: '高温', width: 150, sort: true }
-                                // , { field: 'tmin', title: '低温', width: 50, sort: true }
-                                // , { field: 'view', title: '能见度', sort: true, width: 50 }                    
-                            ]]
+                    else if (tab_type == "tmax") {
+                        var cols_arr = [[ //标题栏
+                            { field: 'IIIII', title: 'ID', width: 100, sort: true }
+                            , { field: 'Province', title: '省', width: 100 }
+                            , { field: 'City', title: '地市', width: 100 }
+                            , { field: 'Cnty', title: '县', width: 100 }
+                            , { field: 'Town', title: '乡镇', width: 100 }
+                            , { field: 'StationName', title: '站名', width: 100 }
+                            // , { field: 'rain', title: '雨量', width: 100, sort: true }
+                            // , { field: 'wind', title: '风力', width: 50, sort: true }
+                            , { field: 'tmax', title: '高温', width: 150, sort: true }
+                            // , { field: 'tmin', title: '低温', width: 50, sort: true }
+                            // , { field: 'view', title: '能见度', sort: true, width: 50 }                    
+                        ]]
 
                     }
-                    else if (tab_type=="view"){
-                        var cols_arr =  [[ //标题栏
-                                { field: 'IIIII', title: 'ID', width: 100, sort: true }    
-                                , { field: 'Province', title: '省', width: 100 }
-                                , { field: 'City', title: '地市', width: 100 }
-                                , { field: 'Cnty', title: '县', width: 100 }
-                                , { field: 'Town', title: '乡镇', width: 100 }
-                                , { field: 'StationName', title: '站名', width: 100 }
-                                // , { field: 'rain', title: '雨量', width: 100, sort: true }
-                                // , { field: 'wind', title: '风力', width: 50, sort: true }
-                                // , { field: 'tmax', title: '高温', width: 50, sort: true }
-                                // , { field: 'tmin', title: '低温', width: 50, sort: true }
-                                , { field: 'view', title: '能见度', sort: true, width: 150 }                    
-                            ]]
+                    else if (tab_type == "view") {
+                        var cols_arr = [[ //标题栏
+                            { field: 'IIIII', title: 'ID', width: 100, sort: true }
+                            , { field: 'Province', title: '省', width: 100 }
+                            , { field: 'City', title: '地市', width: 100 }
+                            , { field: 'Cnty', title: '县', width: 100 }
+                            , { field: 'Town', title: '乡镇', width: 100 }
+                            , { field: 'StationName', title: '站名', width: 100 }
+                            // , { field: 'rain', title: '雨量', width: 100, sort: true }
+                            // , { field: 'wind', title: '风力', width: 50, sort: true }
+                            // , { field: 'tmax', title: '高温', width: 50, sort: true }
+                            // , { field: 'tmin', title: '低温', width: 50, sort: true }
+                            , { field: 'view', title: '能见度', sort: true, width: 150 }
+                        ]]
 
                     }
                     layui.use('table', function () {
                         var table = layui.table;
                         //展示已知数据
                         table.render({
-                            elem: '#'+tabid
+                            elem: '#' + tabid
                             , width: 790
                             , height: 350
                             , totalRow: true
                             , cellMinWidth: 80
-                            , cols:cols_arr
+                            , cols: cols_arr
                             , data: data_table
                             , skin: 'line' //表格风格
                             , even: true
@@ -3685,7 +3751,7 @@
 
                 },
                 get_data: function () {
-                    
+
                     var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                     $.ajax({
                         url: "station_zdz_data",  // 请求的地址
@@ -3707,10 +3773,11 @@
                             // 获取数据
                             var data_table = JSON.parse(recvdate.extra_rain)
                             var data_text = recvdate.extra_text
+                            $("#text_msg").html("")
                             $("#text_msg").html(data_text)
                             var tab_type = "rain"
                             var tab_id = "extra_rain"
-                            extra_server_obj.rander_table(data_table,tab_type,tab_id)
+                            extra_server_obj.rander_table(data_table, tab_type, tab_id)
 
                             extra_server_obj.recv_rain = data_table
                             extra_server_obj.recv_wind = JSON.parse(recvdate.extra_wind)
@@ -3720,7 +3787,7 @@
                             extra_server_obj.flush_map()
                             extra_server_obj.plot_rain()
 
-                            
+
 
                             closeLoad(load)
                         }
@@ -3731,14 +3798,19 @@
             }
             // 快报以及绘图
             extra_server_obj.init_map()
-             
-            $("#extra_geojson_plot").click(function(){
+
+            $("#extra_geojson_plot").click(function () {
                 extra_server_obj.geojson_plot()
 
             })
-            
+
+            $("#extra_geojson_remain").click(function () {
+                extra_server_obj.remain()
+
+            })
+
             $("#get_extra_data").click(function () {
-                extra_server_obj.get_data()      
+                extra_server_obj.get_data()
             })
 
         </script>
@@ -3848,7 +3920,7 @@
                             <div class="layui-col-md6">
                                 <div class="layui-panel" style="height:400px">
                                     <div class="layui-form" style="padding: 50px 10px;">
-                                        
+
 
                                     </div>
                                 </div>
@@ -3916,7 +3988,7 @@
 
         <!-- 提醒文字 -->
         <div id="notice_alert" style="width:100%;height:100%;">
-            
+
         </div>
 
     </div>

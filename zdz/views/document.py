@@ -885,22 +885,37 @@ def station_zdz_data(request):
     elif model =="extra_geojosn_plot":
         start = request.POST.get('start', '')
         end = request.POST.get('end', '')
-        city = click_type
-        country = button_value
-        # 测试
-        # print("测试",city,country)
-        start = '2019-08-08 08:00:00'  
-        end = '2019-08-08 09:00:00'
-        city_code = "331000"
-        start = '2023-07-01 20:52:00'
-        end = '2023-07-02 20:52:00'
+        # city = click_type # 绘图类型
+        # country = button_value # 绘图数据
+        city_code = request.POST.get('city_code', '')
         worker = data_class.station_text(city_code,start,end)
-        geojson,shpjson = worker.plot_rain()
+        plot_type = click_type
+        plot_data =json.loads(button_value)
+        geojson = worker.plot_rain(plot_type,plot_data)
         # 以上为测试      
         context = {
             'status': "ok",
-            'contour':geojson,
-            'shp':shpjson
+            'contour':geojson
+        }
+        return JsonResponse(context)
+    elif model =="extra_geojosn_remain":
+        rain_data = json.loads(request.POST.get('rain', ''))
+        wind_data = json.loads(request.POST.get('wind', ''))
+        tmax_data = json.loads(request.POST.get('tmax', ''))
+        view_data = json.loads(request.POST.get('view', ''))
+        city_code = request.POST.get('city_code', '')
+        start = '2019-08-08 08:00:00'  
+        end = '2019-08-08 09:00:00'
+        worker = data_class.station_text(city_code,start,end)
+        text,rain_json,wind_json,tmax_json,view_json = worker.remain(rain_data,wind_data,tmax_data,view_data)
+        # 以上为测试      
+        context = {
+            'status': "ok",
+            'extra_text':text,
+            'extra_rain':rain_json,
+            'extra_wind':wind_json,
+            'extra_tmax':tmax_json,
+            'extra_view':view_json
         }
         return JsonResponse(context)
     elif model =="radar_sec":

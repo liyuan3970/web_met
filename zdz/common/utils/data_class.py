@@ -1375,16 +1375,19 @@ class station_text:
         data = pd.read_csv("static/data/downfile/comput.csv")
         # data = pd.read_csv("downfile/comput.csv")
         return data
-    def text_wind(self):
-        orig = self.data
-        data = orig.sort_values(by="wind",ascending=False)#.head(5).to_dict()
+    def text_wind(self,plot_data):
+        if plot_data=="none":
+            orig = self.data
+            data = orig.sort_values(by="wind",ascending=False)#.head(5).to_dict()
+            wind = data[(data['wind']>10.7) & (data['wind']<5009)]   
+            del wind['Unnamed: 0'] # 天擎不需要
+            wind.reset_index(drop=True)# 天擎不需要
+        else:
+            wind = pd.read_json(json.dumps(plot_data), orient='records')
         ## 数据分级
         bins=[0,10.7,13.8,17.1,20.7,24.4,28.4,32.6,36.9,41.4,46.1,50.9,56,80]
         labels=['6级风以下','6级风','7级风','8级风','9级风','10级风','11级风','12级风','13级风','14级风','15级风','16级风','17级风']
-        wind = data[(data['wind']>10.7) & (data['wind']<5009)]
         wind['rank']=pd.cut(wind['wind'],bins,right=False,labels=labels)
-        del wind['Unnamed: 0'] # 天擎不需要
-        wind.reset_index(drop=True)# 天擎不需要
         # 获取单站较大的有
         testframe = wind.head(5)
         wind_json = wind.sort_values(by="wind",ascending=False).to_json(orient='records',force_ascii=False) 
@@ -1451,15 +1454,18 @@ class station_text:
         else:
             text = ""
         return text,wind_json
-    def text_view(self):
-        orig = self.data
-        data = orig.sort_values(by="view",ascending=True)#.head(5).to_dict()
+    def text_view(self,plot_data):
+        if plot_data=="none":
+            orig = self.data
+            data = orig.sort_values(by="view",ascending=True)#.head(5).to_dict()
+            view = data[(data['view']>0) & (data['view']<1000)]
+            del view['Unnamed: 0'] # 天擎不需要
+            view.reset_index(drop=True)# 天擎不需要
+        else:
+            view = pd.read_json(json.dumps(plot_data), orient='records')
         bins=[0,50,200,500,99999]
         labels=['强浓雾','浓雾','大雾','正常']
-        view = data[(data['view']>0) & (data['view']<1000)]
         view['rank']=pd.cut(view['view'],bins,right=False,labels=labels)
-        del view['Unnamed: 0'] # 天擎不需要
-        view.reset_index(drop=True)# 天擎不需要
         rank_station = {
            '强浓雾':len(view[(view['view']>0) & (view['view']<50)].to_dict()),
             '浓雾':len(view[(view['view']>=50) & (view['view']<200)].value_counts()),
@@ -1494,15 +1500,18 @@ class station_text:
         else:
             text =""
         return text,view_json
-    def text_tmax(self):
-        orig = self.data
-        data = orig.sort_values(by="tmax",ascending=False)#.head(5).to_dict()
+    def text_tmax(self,plot_data):
+        if plot_data=="none":
+            orig = self.data
+            data = orig.sort_values(by="tmax",ascending=False)#.head(5).to_dict()
+            tmax = data[(data['tmax']>-40) & (data['tmax']<100)]
+            del tmax['Unnamed: 0'] # 天擎不需要
+            tmax.reset_index(drop=True)# 天擎不需要
+        else:
+            tmax = pd.read_json(json.dumps(plot_data), orient='records')
         bins=[-40,35,37,40,80]
         labels=['正常','35度以上','37度以上','40度以上']
-        tmax = data[(data['tmax']>-40) & (data['tmax']<100)]
         tmax['rank']=pd.cut(tmax['tmax'],bins,right=True,labels=labels)
-        del tmax['Unnamed: 0'] # 天擎不需要
-        tmax.reset_index(drop=True)# 天擎不需要
         rank_station = {
             '40度以上':len(tmax[(tmax['tmax']>=40) & (tmax['tmax']<80)].value_counts()),
             '37度以上':len(tmax[(tmax['tmax']>=37) & (tmax['tmax']<40)].value_counts()),
@@ -1537,19 +1546,22 @@ class station_text:
         else:
             text = ""
         return text,tmax_json
-    def text_rain(self):
-        # 面雨量
-        orig = self.data
-        data = orig.sort_values(by="rain",ascending=False)
+    def text_rain(self,plot_data):
+            # 面雨量
+        if plot_data=="none":
+            orig = self.data
+            data = orig.sort_values(by="rain",ascending=False)
+            rain = data[(data['rain']>0) & (data['rain']<5009)]
+            del rain['Unnamed: 0'] # 天擎不需要
+            rain.reset_index(drop=True)
+        else:
+            rain = pd.read_json(json.dumps(plot_data), orient='records')
         bins=[0,30,50,80,100,150,200,250,300,400,500,800,1000,2000]
         labels=['≥0毫米','≥30毫米','≥50毫米','≥80毫米','≥100毫米','≥150毫米','≥200毫米','≥250毫米','≥300毫米','≥400毫米','≥500毫米','≥800毫米','≥1000毫米']
         bins_text = [0,5,16.9,37.9,74.5,5000]
         labels_text = ['小雨','小到中雨','中到大雨','大到暴雨','大暴雨']
-        rain = data[(data['rain']>0) & (data['rain']<5009)]
         rain['rank']=pd.cut(rain['rain'],bins,right=False,labels=labels)
         rain['rank_label']=pd.cut(rain['rain'],bins_text,right=False,labels=labels_text)
-        del rain['Unnamed: 0'] # 天擎不需要
-        rain.reset_index(drop=True)
         # 数据校验
         def vaild_rain(col):
             lat = col['Lat']
@@ -1664,29 +1676,40 @@ class station_text:
         }
         res = max(rank_text, key=lambda x: rank_text[x])
         if max(rank_text, key=lambda x: rank_text[x])=="大暴雨":
-            text = "【雨情通报】 ：全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town
+            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town
         elif max(rank_text, key=lambda x: rank_text[x])=="大到暴雨":
-            text = "【雨情通报】 ：全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town
+            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town
         elif max(rank_text, key=lambda x: rank_text[x])=="中到大雨":
-            text = "【雨情通报】 ：全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town
+            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town
         elif max(rank_text, key=lambda x: rank_text[x])=="小到中雨":
-            text = "【雨情通报】 ：全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town
+            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town
         elif max(rank_text, key=lambda x: rank_text[x])=="小雨":
-            text = "【雨情通报】 ：全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town
+            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town
         return text,rain_json
     def main(self):
         text = ""
-        text_rain,rain_json = self.text_rain()
-        text_wind,wind_json = self.text_wind()
-        text_tmax,tmax_json = self.text_tmax()
-        text_view,view_json = self.text_view()
+        plot_data = "none"
+        text_rain,rain_json = self.text_rain(plot_data)
+        text_wind,wind_json = self.text_wind(plot_data)
+        text_tmax,tmax_json = self.text_tmax(plot_data)
+        text_view,view_json = self.text_view(plot_data)
         text = text + text_rain + "<br>" + text_wind + "<br>" + text_tmax + "<br>" + text_view
-        # text = text + text_rain + "\n" + text_wind + "/n" + text_tmax + "/n" + text_view
         return text,rain_json,wind_json,tmax_json,view_json
-    def plot_rain(self):
-        orig = self.data
-        data = orig.sort_values(by="rain",ascending=False)
-        rain = data[(data['rain']>0) & (data['rain']<5009)]
+    def remain(self,plot_rain,plot_wind,plot_tmax,plot_view):
+        text = ""
+        text_rain,rain_json = self.text_rain(plot_rain)
+        text_wind,wind_json = self.text_wind(plot_wind)
+        text_tmax,tmax_json = self.text_tmax(plot_tmax)
+        text_view,view_json = self.text_view(plot_view)
+        text = text + text_rain + "<br>" + text_wind + "<br>" + text_tmax + "<br>" + text_view
+        return text,rain_json,wind_json,tmax_json,view_json
+    def plot_rain(self,plot_type,plot_data):
+        if plot_type =="none":
+            orig = self.data
+            data = orig.sort_values(by="rain",ascending=False)
+            rain = data[(data['rain']>0) & (data['rain']<5009)]
+        else:  
+            rain = pd.read_json(json.dumps(plot_data), orient='records')
         lat = np.array(rain['Lat'].to_list())
         lon = np.array(rain['Lon'].to_list())
         Zi = np.array(rain['rain'].to_list())
@@ -1718,9 +1741,7 @@ class station_text:
             unit='mm'
         )
         plt.close()
-        with open("static/data/shpfile/country/shp/tiantai.json", "r", encoding="utf-8") as f:
-            shpjson = json.load(f)
-        return geojson,shpjson
+        return geojson
 
 class station_sql_data:
     def __init__(self):
