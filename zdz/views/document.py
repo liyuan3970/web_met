@@ -933,19 +933,27 @@ def station_zdz_data(request):
             'img':img
         }
         return JsonResponse(context)
-    elif model =="image_plot":
+    elif model =="plot_image":
         start = request.POST.get('start', '')
         end = request.POST.get('end', '')
-        plot_value = request.POST.get('plot_value', '')
-        plot_data = json.loads(request.POST.get('plot_data', ''))
-        city = click_type
-        country = button_value
-        worker = data_class.station_plot()
-        color_label = request.POST.get('color_label', '')
-        imgs = worker.plot(start,end,city,country,plot_data,plot_value,color_label)      
+        plot_type = click_type
+        city = button_value
+        js_status = request.POST.get('js_status', '')
+        current_data = request.POST.get('current_data', '')
+        if js_status =="False":
+            js_status = False
+            recv_data = "none"
+        else:
+            js_status = True
+            recv_data = json.loads(current_data)
+        worker = data_class.server_plot(start,end,city,plot_type,js_status,recv_data)
+        contour = worker.return_geojson() 
+        mark = worker.return_mark()     
         context = {
             'status': "ok",
-            'image_data':imgs
+            'plot_type':plot_type,
+            'contour':contour,
+            'mark':mark
         }
         return JsonResponse(context)
 import numpy as np

@@ -1937,3 +1937,137 @@ class radar_data:
         imd = "data:image/png;base64,"+ims
         plt.close()
         return imd
+
+# 数据加载    
+class server_plot():
+    def __init__(self,start,end,city,plot_type,js_status,recv_data):
+        self.start = start 
+        self.end = end
+        self.city = city
+        self.plot_type = plot_type
+        self.js_status = js_status
+        self.recv_data = recv_data
+        self.max = None
+        self.min = None
+    def data_from_js(self):
+        data = pd.read_json(json.dumps(self.recv_data), orient='records')
+        self.recv_data = data
+        return data
+    def wind_from_sql(self):
+        pass
+    def temp_from_sql(self):
+        pass
+    def rain_from_cloud(self):
+        pass
+    def return_mark(self):
+        '''主要返回风场位置'''
+        pass
+    def color_map(self):
+        if self.plot_type=="rain":
+            start_time = dtt.datetime.strptime(self.start, "%Y-%m-%d %H:%M:%S")
+            end_time = dtt.datetime.strptime(self.end, "%Y-%m-%d %H:%M:%S")
+            hours = (end_time-start_time).total_seconds()//3600
+            if hours >12:
+                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 24降水
+                levels = [0,1,10,25,50,100,250,1000]
+                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+                cmap_nonlin = nlcmap(cmaps, levels)
+            elif hours <=12 and hours >6:
+                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 12降水
+                levels = [0,1,5,15,30,70,140,250]
+                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+                cmap_nonlin = nlcmap(cmaps, levels)
+            elif hours <=6 and hours >3:
+                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 06降水
+                levels = [0,1,4,13,25,60,120,250]
+                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+                cmap_nonlin = nlcmap(cmaps, levels)
+            elif hours <=3 and hours >1:
+                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 03降水
+                levels = [0,1,3,10,20,50,70,150]
+                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+                cmap_nonlin = nlcmap(cmaps, levels)
+            elif hours <=1:
+                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 01降水
+                levels = [0,1,2,7,15,40,50,100]
+                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+                cmap_nonlin = nlcmap(cmaps, levels) 
+        elif self.plot_type=="wind":
+            colorslist = ['#FFFFFF','#CED9FF','#9CFFFF','#FFFF9C','#FFCF9C','#FF9E63','#FF6131','#FF3031','#CE0000']
+            levels = [0,0.3,1.6,3.4,5.5,8,10.8,13.9,17.2,28]
+            #colorslist = ['#FFFFFF','#CED9FF','#9CFFFF',"#42F217","#FF9E63","#DF16EE","red"]# 风力
+            #levels = [0,1.6,3.4,5.5,13.9,17.3,32.6,56]
+            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=9)
+            cmap_nonlin = nlcmap(cmaps, levels) 
+        elif self.plot_type=="tmax":
+            level = list(np.linspace(self.min-1, self.max+1, num=14, endpoint=True, retstep=False, dtype=None))
+            levels = [round(i,1) for i in level]
+            cmap_nonlin = 'Reds'
+        elif self.plot_type=="tmin":
+            level = list(np.linspace(self.min-1, self.max+1, num=14, endpoint=True, retstep=False, dtype=None))
+            levels = [round(i,1) for i in level]
+            cmap_nonlin = 'Blues_r'
+        return cmap_nonlin ,levels
+    def decode_xarray(self):
+        if self.plot_type=="rain":
+            if self.js_status:      
+                data = self.data_from_js()
+            else:
+                data = self.rain_from_cloud()
+                self.recv_data = data
+        elif self.plot_type=="wind":
+            if self.js_status:
+                data = self.data_from_js()
+            else:
+                data = self.wind_from_sql()
+                self.recv_data = data
+        elif self.plot_type=="tmax" or self.plot_type=="tmin":
+            if self.js_status:
+                data = self.data_from_js()
+            else:
+                data = self.temp_from_sql() 
+                self.recv_data = data
+        lat = np.array(data['Lat'].to_list())
+        lon = np.array(data['Lon'].to_list())
+        Zi = np.array(data['value'].to_list())
+        data_max = max(Zi)
+        data_min = min(Zi)
+        self.max = data_max
+        self.min = data_min
+        np.set_printoptions(precision = 2)
+        x = np.arange(120.0,122.0,0.01)
+        y = np.arange(27.8,29.5,0.01)
+        nx0 =len(x)
+        ny0 =len(y)
+        X, Y = np.meshgrid(x, y)#100*100
+        P = np.array([X.flatten(), Y.flatten() ]).transpose()    
+        Pi =  np.array([lon, lat ]).transpose()
+        Z_linear = griddata(Pi, Zi, P, method = "nearest").reshape([ny0,nx0])
+        gauss_kernel = Gaussian2DKernel(0.8)
+        smoothed_data_gauss = convolve(Z_linear, gauss_kernel)
+        data_xr = xr.DataArray(smoothed_data_gauss, coords=[ y,x], dims=["lat", "lon"])
+        return data_xr
+    def return_mark(self):
+        '''主要返回风场位置'''
+        if self.plot_type=="wind":
+            mark = self.recv_data
+            mark_data = mark[(mark['value']>0)&(mark['City']=="台州市")]
+            mark_json = mark_data.to_json(orient='records',force_ascii=False)
+        else:
+            mark_json = self.recv_data.to_json(orient='records',force_ascii=False)
+        return mark_json
+    def return_geojson(self):
+        data_xr = self.decode_xarray()
+        # ##########色标和大小#############################
+        cmaps ,levels = self.color_map()
+        lat = data_xr.lat
+        lon = data_xr.lon
+        lons, lats = np.meshgrid(lon, lat)
+        contour = plt.contourf(lons,lats,data_xr,cmap=cmaps,levels =levels)
+        geojson = geojsoncontour.contourf_to_geojson(
+            contourf=contour,
+            ndigits=3,
+            unit='mm'
+        )
+        plt.close()
+        return geojson
