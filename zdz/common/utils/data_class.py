@@ -1949,16 +1949,94 @@ class server_plot():
         self.recv_data = recv_data
         self.max = None
         self.min = None
+        #self.rs = redis.Redis(host='127.0.0.1', port=6379,password="tzqxj58660")
+        #self.conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="tzqxj58660",db="ZJSZDZDB")
+        self.userId = "BEHZ_TZSJ_TZSERVICE" 
+        self.pwd = "Liyuan3970!@" 
+        self.dataFormat = "json"
     def data_from_js(self):
         data = pd.read_json(json.dumps(self.recv_data), orient='records')
         self.recv_data = data
         return data
     def wind_from_sql(self):
-        pass
+        start_time = dtt.datetime.strptime(self.start, "%Y-%m-%d %H:%M:%S")
+        end_time = dtt.datetime.strptime(self.end, "%Y-%m-%d %H:%M:%S")
+        offset = dtt.timedelta(minutes=(-60*8))
+        now = (end_time+offset).strftime('%Y-%m-%d %H:%M:%S')
+        old = (start_time+offset).strftime('%Y-%m-%d %H:%M:%S')
+        sql = """select max(City) as City,max(Cnty) as Cnty, Station_Id_C , max(Province) as Province,max(Station_levl) as Station_levl,
+            max(Station_Name) as Station_Name, max(Town) as Town, max(Alti) as Alti, max(Lat) as Lat,max(Lon) as Lon, max(wind) as wind
+            from table_station_hour 
+            where Datetime between '{start_times}' and '{end_times}' and wind>0 and City='台州市'
+            group by Station_Id_C""" 
+        rsql = sql.format(start_times=old,end_times=now)
+        data = pd.read_sql(rsql, con=self.conn)
+        data['WIN_S_Gust_Max'] = data.apply(lambda x: (x.wind - int(str(int(x.wind))[-3:]))/10000, axis = 1)
+        data['WIN_D_Gust_Max'] = data.apply(lambda x: int(str(int(x.wind))[-3:]), axis = 1)
+        data['value'] = data['WIN_S_Gust_Max']
+        self.city_info[self.city]['data']['平均'] = round(data['WIN_S_Gust_Max'].mean(),1)
+        self.city_info[self.city]['data']['最大'] = str(round(max(data['WIN_S_Gust_Max']),1))      
+        return data
     def temp_from_sql(self):
-        pass
+        start_time = dtt.datetime.strptime(self.start, "%Y-%m-%d %H:%M:%S")
+        end_time = dtt.datetime.strptime(self.end, "%Y-%m-%d %H:%M:%S")
+        offset = dtt.timedelta(minutes=(-60*8))
+        now = (end_time+offset).strftime('%Y%m%d%H%M')+"00"
+        old = (start_time+offset).strftime('%Y%m%d%H%M')+"00"
+        label = "["+old+","+now+"]"
+        client = DataQueryClient(configFile=r"/home/workspace/Data/My_Git/web_met/zdz/common/utils/client.config")
+        interfaceId = "statSurfEleInRegion"
+        params = {
+            'dataCode':"SURF_CHN_MUL_MIN",  #SURF_CHN_MUL_HOR
+            'elements':"Cnty,Province,Town,Station_levl,Station_Name,City,Station_Id_C,Lat,Lon,Alti",
+            'statEles':'MAX_TEM,MIN_TEM',
+            'timeRange':label,
+            'adminCodes':"331000",#330000 浙江省
+            'eleValueRanges':"TEM:(0,10000)",
+            
+            'limitCnt':"100000000"
+        }
+        result = client.callAPI_to_serializedStr(self.userId, self.pwd, interfaceId, params, self.dataFormat)
+        result_json = json.loads(result)
+        clomns =['Cnty','Province','Town','Station_levl','Station_Name','City','Station_Id_C','Lat','Lon','Alti','tmax','tmin']
+        data = pd.DataFrame(result_json['DS'])
+        data.columns = clomns
+        data = data.astype({'Lat': 'float', 'Lon': 'float','Station_levl':'int','Alti':'float','tmax':'float','tmin':'float'})
+        if self.plot_type=="tmax":
+            data['value'] = data['tmax']
+            self.min = data['value'].min()
+            self.max = data['value'].max()
+        else:
+            data['value'] = data['tmin']
+            self.min = data['value'].min()
+            self.max = data['value'].max()
+        return data
     def rain_from_cloud(self):
-        pass
+        start_time = dtt.datetime.strptime(self.start, "%Y-%m-%d %H:%M:%S")
+        end_time = dtt.datetime.strptime(self.end, "%Y-%m-%d %H:%M:%S")
+        offset = dtt.timedelta(minutes=(-60*8))
+        now = (end_time+offset).strftime('%Y%m%d%H%M')+"00"
+        old = (start_time+offset).strftime('%Y%m%d%H%M')+"00"
+        label = "["+old+","+now+"]"
+        client = DataQueryClient(configFile=r"/home/workspace/Data/My_Git/web_met/zdz/common/utils/client.config")
+        interfaceId = "statSurfEleInRegion"
+        params = {
+            'dataCode':"SURF_CHN_MUL_MIN",  #SURF_CHN_MUL_HOR
+            'elements':"Cnty,Province,Town,Station_levl,Station_Name,City,Station_Id_C,Lat,Lon,Alti",
+            'statEles':'SUM_PRE',
+            'timeRange':label,
+            'adminCodes':"331000",#330000 浙江省
+            "statEleValueRanges":"SUM_PRE:(0,10000)",
+            'limitCnt':"100000000"
+        }
+        result = client.callAPI_to_serializedStr(self.userId, self.pwd, interfaceId, params, self.dataFormat)
+        result_json = json.loads(result)
+        clomns =['Cnty','Province','Town','Station_levl','Station_Name','City','Station_Id_C','Lat','Lon','Alti','PRE']
+        data = pd.DataFrame(result_json['DS'])
+        data.columns = clomns
+        data = data.astype({'Lat': 'float', 'Lon': 'float','Station_levl':'int','PRE': 'float','Alti':'float'})
+        data['value'] = data['PRE']
+        return data
     def return_mark(self):
         '''主要返回风场位置'''
         pass
