@@ -187,19 +187,9 @@
                             const warring_obj = {
                                 music_audio: undefined,
                                 warring_status: "silence",
-                                radar_layer: undefined,
-                                city: undefined,
-                                town: undefined,
-                                range: undefined,
-                                rain_10min: undefined,
-                                wind_10min: undefined,
-                                windave_10min: undefined,
-                                view_10min: undefined,
-                                rain_1hour: undefined,
-                                rain_3hour: undefined,
-                                rain_6hour: undefined,
-                                rain_12hour: undefined,
+                                radar_layer: undefined,                        
                                 layer_status: undefined,
+                                warring_list :[],
                                 notice_alert: function () {
                                     layui.use('table', function () {
                                         var table = layui.table;
@@ -210,20 +200,26 @@
                                             , height: 240
                                             , cellMinWidth: 80
                                             , cols: [[ //标题栏
-                                                { field: 'time', title: '时间' }
-                                                , { field: 'IIIII', title: '站号' }
-                                                , { field: 'Station_Name', title: '站名'}
+                                                { field: 'City', title: '城市' }
+                                                , { field: 'Station_Id_C', title: '站号' }
+                                                , { field: 'Station_Name', title: '站名' }
                                                 , { field: 'type', title: '类型' }
                                                 , { field: 'value', title: '数据' }
-                                                
+
                                             ]]
-                                            , data: [{
-                                                'time':"09-13 22:27",
-                                                'IIIII':"K8501",
-                                                'Station_Name':"大麦屿",
-                                                'type':"降水",
-                                                'value':"10毫米"
-                                            }]
+                                            , data: warring_obj.warring_list
+                                            , done: function (res, curr, count) {
+                                                var that = this.elem.next();
+                                                res.data.forEach(function (item, index) {
+                                                    // 所需的条件
+                                                    if (item.type=="降水") {
+                                                        // 添加颜色--#1E9FFF ；'threeMonth'根据需要填充背景色的field进行更改
+                                                        that.find(".layui-table-box tbody tr[data-index='" + index + "'] td[data-field='value']").css("color", "red");
+                                                    }
+                                                });
+                                            }
+
+
                                             , skin: 'line' //表格风格
                                             // , even: true
                                             , id: 'tabledata_warring'
@@ -256,6 +252,7 @@
                                     warring_obj.layer_status = status
                                 },
                                 request_warring: function () {
+                                    // warring_obj.warring_list = []
                                     var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                                     $.ajax({
                                         url: "station_zdz_warring",  // 请求的地址
@@ -266,7 +263,7 @@
                                         },
                                         dataType: "json",
                                         success: function (recvdate) {
-                                            warring_obj.warring_status = recvdate.warring
+                                            // warring_obj.warring_status = recvdate.warring
                                             var contourf = JSON.parse(recvdate.radar['imglist'][recvdate.radar['imglist'].length - 1])
                                             // const gcoord = require('gcoord');
                                             // var result = gcoord.transform(contourf, gcoord.WGS84, gcoord.GCJ02);
@@ -292,7 +289,14 @@
                                                 //wind
                                                 warring_obj.wind_update(JSON.parse(recvdate.wind))
                                             }
-                                            var warring_opt = $('input[name="warring_opt"]:checked').val();
+                                            else{
+                                                // rain
+                                                warring_obj.rain_update(JSON.parse(recvdate.rain))
+                                                //wind
+                                                warring_obj.wind_update(JSON.parse(recvdate.wind))
+
+                                            }
+                                            // var warring_opt = $('input[name="warring_opt"]:checked').val();
 
 
 
@@ -301,66 +305,10 @@
                                     })
 
                                 },
-                                warring_config: function () {
-                                    var post_data = {
-                                        // 设置蹭
-                                        "city": warring_obj.city,
-                                        "town": warring_obj.town,
-                                        "range": warring_obj.range,
-                                        // 参数层
-                                        "rain_10min": warring_obj.rain_10min,
-                                        "wind_10min": warring_obj.wind_10min,
-                                        "windave_10min": warring_obj.windave_10min,
-                                        "view_10min": warring_obj.view_10min,
-                                        "rain_1hour": warring_obj.rain_1hour,
-                                        "rain_3hour": warring_obj.rain_3hour,
-                                        "rain_6hour": warring_obj.rain_6hour,
-                                        "rain_12hour": warring_obj.rain_12hour
-                                    }
-                                },
-                                popNotice: function () {
-                                    if (Notification.permission == "granted") {
-
-                                        var n = new Notification("实况警报:", {
-                                            // tag: "testTag",
-                                            icon: "http://127.0.0.1:9991/media/img/warring.png",
-                                            body: `on body, time: ${new Date().toISOString()}`
-                                        });
-
-                                        n.onshow = function (event) {
-                                            console.log(`on show, time: ${new Date().toISOString()}`);
-                                        };
-
-                                        n.onclick = function (event) {
-                                            console.log(`on click, time: ${new Date().toISOString()}`);
-                                            // window.open("http://127.0.0.1:9991/station_zdz");
-                                            // layer.open({
-                                            //     type: 1,
-                                            //     title: "报警弹窗",
-                                            //     maxmin: true,
-                                            //     moveOut: true,
-                                            //     // resize:true,
-                                            //     skin: 'layui-layer-lan', //样式类名
-                                            //     closeBtn: 1, //不显示关闭按钮
-                                            //     area: ['1200px', '600px'],
-                                            //     maxHeight: 600,
-                                            //     maxWidth: 1200,
-                                            //     anim: 0,
-                                            //     shade: 0,
-                                            //     zIndex: 9999,
-                                            //     shadeClose: false, //开启遮罩关闭
-                                            //     content: $("#hidden_station")
-                                            // });
-                                        };
-
-                                        n.onclose = function (event) {
-                                            console.log(`on close, time: ${new Date().toISOString()}`);
-
-                                        };
-                                    }
-                                },
                                 rain_update: function (data) {
-
+                                    warring_obj.warring_list = []
+                                    var rainval =  $("#rain_10min").val()
+                                    var real_flash_opt = $('input[name="real_flash_opt"]:checked').val();                                                              
                                     data.forEach(function (item) {
                                         var tooltips = item.Station_Name + "-" + item.Station_Id_C + "<br>" + "    纬度:" + item.Lat.toFixed(2).toString() + "  " + "经度:" + item.Lon.toFixed(2).toString() + "<br>" + "    " + item.City + "-" + item.Cnty + "-" + item.Town
                                         if (item.PRE > 0 && item.PRE <= 1) {
@@ -409,13 +357,29 @@
                                         }).bindTooltip(tooltips, {
                                             direction: "top",
                                             offset: L.point(0, -10)
-                                        }).openTooltip()
-                                        c.addTo(map_toolbox_object.current_map)
+                                        }).openTooltip()    
+                                        if (real_flash_opt == "update"){
+                                            c.addTo(map_toolbox_object.current_map)
+                                        }      
+                                        // 信息表格内容添加
+                                        if (item.PRE>Number(rainval)){ 
+                                            warring_obj.warring_status = "warring"                               
+                                            var single = {
+                                                'City':item.City,
+                                                'Station_Id_C':item.Station_Id_C,
+                                                'Station_Name':item.Station_Name,
+                                                'type':"降水",
+                                                'value':item.PRE.toString()
+                                            }
+                                            warring_obj.warring_list.push(single)                                   
+                                        }
 
                                     })
 
                                 },
                                 wind_update: function (data) {
+                                    var windval =  $("#wind_10min").val()
+                                    var real_flash_opt = $('input[name="real_flash_opt"]:checked').val(); 
                                     data.forEach(function (item) {
                                         var tooltips = item.Station_Name + "-" + item.Station_Id_C + "<br>" + "    纬度:" + item.Lat.toFixed(2).toString() + "  " + "经度:" + item.Lon.toFixed(2).toString() + "<br>" + "    " + item.City + "-" + item.Cnty + "-" + item.Town
                                         // var latlng = L.latLng(item.Lat, item.Lon);
@@ -449,7 +413,22 @@
                                         }).bindTooltip(tooltips, {
                                             direction: "top",
                                             offset: L.point(0, -10)
-                                        }).openTooltip().addTo(map_toolbox_object.current_map)
+                                        }).openTooltip()
+                                        if (real_flash_opt == "update"){
+                                            marker.addTo(map_toolbox_object.current_map)
+                                        }        
+                                        // 信息表格内容添加
+                                        if (item.WIN_S_Gust_Max>Number(windval)){ 
+                                            warring_obj.warring_status = "warring"                           
+                                            var single = {
+                                                'City':item.City,
+                                                'Station_Id_C':item.Station_Id_C,
+                                                'Station_Name':item.Station_Name,
+                                                'type':"阵风",
+                                                'value':item.WIN_S_Gust_Max.toString()
+                                            }
+                                            warring_obj.warring_list.push(single)                                   
+                                        }
 
                                     })
 
@@ -510,8 +489,12 @@
                                 // var url = "http://127.0.0.1:9991/media/mp3/ddd.wav"
                                 if ((warring_opt == "warring") || (real_flash_opt == "update")) {
                                     // 警报和同步任意触发
+                                    
                                     warring_obj.request_warring()
                                     var warring_class = $("#warring_class").val() // 弹出框的数据
+                                    if(real_flash_opt == "update"){
+                                        warring_obj.notice_alert();
+                                    }
                                     if (warring_opt == "warring") {
                                         // 需要报警
                                         if (warring_class == "warring") {
@@ -530,14 +513,11 @@
                                         }
                                         else if (warring_class == "notification") {
                                             // 弹出框
+                                            
                                             if (warring_obj.warring_status = "warring") {
-                                                if (warring_obj.layer_status) {
-                                                    warring_obj.notice_alert();
-                                                }
-                                                else {
-                                                    warring_obj.notice_alert();
-                                                }
+                                                warring_obj.notice_alert();
                                             }
+                                           
                                         }
                                     }
                                 }
@@ -3884,24 +3864,24 @@
                                             <label class="layui-form-label">报警</label>
                                             <div class="layui-input-inline">
                                                 <select>
-                                                    <option value="taizhou" selected="">10分钟降水</option>
-                                                    <option value="">1小时分钟降水</option>
+                                                    <option value="10min" selected="">10分钟降水</option>
+                                                    <!-- <option value="60min">1小时分钟降水</option>
                                                     <option value="">3小时分钟降水</option>
                                                     <option value="">6小时分钟降水</option>
                                                     <option value="">12小时分钟降水</option>
-                                                    <option value="">24小时分钟降水</option>
+                                                    <option value="">24小时分钟降水</option> -->
                                                 </select>
                                             </div>
                                             <div class="layui-input-inline">
                                                 <select>
                                                     
-                                                    <option value="全市" selected="">台州市</option>
+                                                    <option value="taizhou" selected="">台州市</option>
                                                 </select>
                                             </div>
                                             <div class="layui-input-inline">
                                                 <select>
-                                                    <option value="">全市</option>
-                                                    <option value="10">玉环</option>
+                                                    <option value="all">全市</option>
+                                                    <!-- <option value="10">玉环</option> -->
                                                 </select>
                                             </div>
                                             <div class="layui-input-inline" style="width:80px;">
@@ -3922,14 +3902,13 @@
                                         <div class="layui-input-inline" style="margin-bottom:20px">
                                             <div class="layui-input-inline" style="margin-left:15px">
                                                 <select id="rain_10min" style="width:50px">
-
-                                                    <option value="2" select="">5毫米</option>
-                                                    <option value="20">10毫米</option>
+                                                    <option value="4" select="">3毫米</option>
+                                                    <option value="10">10毫米</option>
                                                     <option value="30">30毫米</option>
-                                                    <option value="30">40毫米</option>
-                                                    <option value="30">50毫米</option>
-                                                    <option value="30">80毫米</option>
-                                                    <option value="30">90毫米</option>
+                                                    <option value="40">40毫米</option>
+                                                    <option value="50">50毫米</option>
+                                                    <option value="80">80毫米</option>
+                                                    <option value="90">90毫米</option>
                                                 </select>
                                             </div>
                                             <input type="checkbox" name="warring_check" value="rain_10min"
@@ -3939,23 +3918,23 @@
                                         <div class="layui-input-inline" style="margin-bottom:20px">
                                             <div class="layui-input-inline" style="margin-left:15px">
                                                 <select id="wind_10min" style="width:50px">
-                                                    <option value="9" select="">9级风</option>
-                                                    <option value="10">10级风</option>
-                                                    <option value="20">11级风</option>
-                                                    <option value="30">12级风</option>
+                                                    <option value="17.3" select="">8级风</option>
+                                                    <option value="20">9级风</option>
+                                                    <option value="21">10级风</option>
+                                                    <option value="22">12级以上</option>
                                                 </select>
                                             </div>
                                             <input type="checkbox" name="warring_check" value="wind_10min"
                                                 lay-skin="primary" checked="" title="风力报警">
                                         </div>
 
-                                        <div class="layui-input-inline" style="margin-bottom:20px">
+                                        <!-- <div class="layui-input-inline" style="margin-bottom:20px">
                                             <div class="layui-input-inline" style="margin-left:15px">
                                                 <select id="windave_10min" style="width:50px">
-                                                    <option value="" select="">1000米</option>
-                                                    <option value="10">500米</option>
-                                                    <option value="20">200米</option>
-                                                    <option value="30">50米</option>
+                                                    <option value="1000" select="">1000米</option>
+                                                    <option value="500">500米</option>
+                                                    <option value="200">200米</option>
+                                                    <option value="50">50米</option>
                                                 </select>
                                             </div>
                                             <input type="checkbox" name="warring_check" value="windave_10min"
@@ -3965,15 +3944,14 @@
                                         <div class="layui-input-inline" style="margin-bottom:20px">
                                             <div class="layui-input-inline" style="margin-left:15px">
                                                 <select id="view_10min" style="width:50px">
-                                                    <option value="">37度</option>
-                                                    <option value="10">40度</option>
-                                                    <option value="20">0度</option>
-                                                    <option value="30">30公里</option>
+                                                    <option value="37">37度</option>
+                                                    <option value="40">40度</option>
+                                                    <option value="0">0度</option>
                                                 </select>
                                             </div>
                                             <input type="checkbox" name="warring_check" value="view_10min"
                                                 lay-skin="primary" title="温度报警">
-                                        </div>
+                                        </div> -->
 
 
                                     </div>
@@ -4050,7 +4028,7 @@
 
         <!-- 提醒文字 -->
         <div id="notice_alert" style="width:100%;height:100%;">
-            <table class="layui-hide" id="notice_alert_table" style="width: 280px;"></table>
+            <table class="layui-hide" id="notice_alert_table" style="width: 280px;color: rgb(243, 13, 13);"></table>
             <!-- <div id="notice_alert_table" style="width:100%;height:100%;">          
             </div> -->
         </div>
