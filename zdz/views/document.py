@@ -934,19 +934,18 @@ def station_zdz_data(request):
         }
         return JsonResponse(context)
     elif model =="plot_image":
-        start = request.POST.get('start', '')
-        end = request.POST.get('end', '')
         plot_type = click_type
         city = button_value
         js_status = request.POST.get('js_status', '')
         current_data = request.POST.get('current_data', '')
+        time_hours = request.POST.get('time_hours', '')
         if js_status =="False":
             js_status = False
             recv_data = "none"
         else:
             js_status = True
             recv_data = json.loads(current_data)
-        worker = data_class.server_plot(start,end,city,plot_type,js_status,recv_data)
+        worker = data_class.server_plot(time_hours,city,plot_type,js_status,recv_data)
         contour = worker.return_geojson() 
         mark = worker.return_mark()     
         context = {

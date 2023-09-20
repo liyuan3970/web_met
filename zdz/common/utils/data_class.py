@@ -1940,9 +1940,10 @@ class radar_data:
 
 # 数据加载    
 class server_plot():
-    def __init__(self,start,end,city,plot_type,js_status,recv_data):
-        self.start = start 
-        self.end = end
+    def __init__(self,time_hours,city,plot_type,js_status,recv_data):
+        self.start = "2023-09-18 19:30:25"
+        self.end = "2023-09-20 19:30:25"
+        self.time_hours = float(time_hours)
         self.city = city
         self.plot_type = plot_type
         self.js_status = js_status
@@ -2042,9 +2043,7 @@ class server_plot():
         pass
     def color_map(self):
         if self.plot_type=="rain":
-            start_time = dtt.datetime.strptime(self.start, "%Y-%m-%d %H:%M:%S")
-            end_time = dtt.datetime.strptime(self.end, "%Y-%m-%d %H:%M:%S")
-            hours = (end_time-start_time).total_seconds()//3600
+            hours = self.time_hours
             if hours >12:
                 colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 24降水
                 levels = [0,1,10,25,50,100,250,1000]
