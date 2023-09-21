@@ -1598,7 +1598,32 @@ class station_text:
         sorted_cnty = {k: v for k, v in sorted(cnty.items(), key=lambda x: x[1], reverse=True)}
         for key, value in sorted_cnty.items():
             text_average_city = text_average_city + key + ":" + str(round(value,2)) + "毫米,"
-        text_average_city = text_average_city[:-1] + "。"    
+        text_average_city = text_average_city[:-1] + "。"  
+        # 流域面雨量
+        river =  pd.read_csv("static/data/river_tz.csv")
+        river_average = {
+            "永宁江流域":pd.merge(rain,river.query('Property.str.contains("YN")'),on='IIIII',how='inner'),
+            "始丰溪流域":pd.merge(rain,river.query('Property.str.contains("SF")'),on='IIIII',how='inner'),
+            "永安溪流域":pd.merge(rain,river.query('Property.str.contains("YA")'),on='IIIII',how='inner'),
+            "牛头山流域":pd.merge(rain,river.query('Property.str.contains("NTS")'),on='IIIII',how='inner'),
+            "大田流域":pd.merge(rain,river.query('Property.str.contains("DT")'),on='IIIII',how='inner'),
+            "金清港流域":pd.merge(rain,river.query('Property.str.contains("JQG")'),on='IIIII',how='inner'),
+            "长潭水库流域":pd.merge(rain,river.query('Property.str.contains("CT")'),on='IIIII',how='inner')
+        }
+        text_river = ""
+        sort_river = {}
+        for key, value in river_average.items():
+            river_data = value
+            river_ave = round(river_data['rain'].mean(),2)
+            if river_ave>0:
+                sort_river[key] = river_ave
+        river_list = sorted(sort_river.items(),key = lambda x:x[1],reverse = True)
+        for item in river_list:
+            text_river = text_river + item[0] + ":" + str(item[1]) + "毫米,"  
+        if len(text_river)>1:
+            text_river = "【流域面雨量】雨量较大的有"+text_river[:-1] + "。"
+        else:
+            text_river =""    
         # 单站前十
         rain_max = rain.sort_values(by="rain",ascending=False).head(10)
         rain_json = rain.sort_values(by="rain",ascending=False).to_json(orient='records',force_ascii=False)
@@ -1676,15 +1701,15 @@ class station_text:
         }
         res = max(rank_text, key=lambda x: rank_text[x])
         if max(rank_text, key=lambda x: rank_text[x])=="大暴雨":
-            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town
+            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town + "<br>"+text_river
         elif max(rank_text, key=lambda x: rank_text[x])=="大到暴雨":
-            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town
+            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town + "<br>"+text_river
         elif max(rank_text, key=lambda x: rank_text[x])=="中到大雨":
-            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town
+            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town + "<br>"+text_river
         elif max(rank_text, key=lambda x: rank_text[x])=="小到中雨":
-            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town
+            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town + "<br>"+text_river
         elif max(rank_text, key=lambda x: rank_text[x])=="小雨":
-            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town
+            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town + "<br>"+text_river
         return text,rain_json
     def main(self):
         text = ""
@@ -1730,10 +1755,24 @@ class station_text:
         lat = data_xr.lat
         lon = data_xr.lon
         lons, lats = np.meshgrid(lon, lat)
-        colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 24降水
-        levels = [0,1,10,25,50,100,250,1000]
-        cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-        cmap_nonlin = nlcmap(cmaps, levels)
+        start_time = dtt.datetime.strptime(self.start, "%Y-%m-%d %H:%M:%S")
+        end_time = dtt.datetime.strptime(self.end, "%Y-%m-%d %H:%M:%S")
+        hours = (end_time-start_time).total_seconds()//3600
+        if hours >12:
+            colorslist = ['#A3FAFD', '#29D3FD', '#29AAFF', '#2983FF', '#4EAB37', '#46FA35', '#F1F837', '#F1D139', '#F2A932', '#F13237', '#C4343A', '#A43237', '#A632B4', '#D032E1', '#E431FF']# 24降水
+            levels = [0, 5, 10, 15, 20, 25, 35, 50, 75, 100, 150, 200, 250, 350, 500]
+            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=15)
+            cmap_nonlin = nlcmap(cmaps, levels)
+        elif hours <12 and hours >=1:
+            colorslist =['#A3FAFD', '#29D3FD', '#29AAFF', '#2983FF', '#4EAB37', '#46FA35', '#F1F837', '#F1D139', '#F2A932', '#F13237', '#C4343A', '#A43237', '#A632B4', '#D032E1', '#E431FF']# 06降水
+            levels = [0, 2, 5, 10, 15, 20, 25, 35, 50, 60, 70, 80, 90, 100, 110]
+            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=15)
+            cmap_nonlin = nlcmap(cmaps, levels)
+        elif hours <1:
+            colorslist =['#A3FAFD', '#29D3FD', '#29AAFF', '#2983FF', '#4EAB37', '#46FA35', '#F1F837', '#F1D139', '#F2A932', '#F13237', '#C4343A', '#A43237', '#A632B4', '#D032E1', '#E431FF']# 01降水
+            levels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 15, 17, 20]
+            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=15)
+            cmap_nonlin = nlcmap(cmaps, levels) 
         contour = plt.contourf(lons,lats,data_xr,cmap=cmap_nonlin,levels =levels)
         geojson = geojsoncontour.contourf_to_geojson(
             contourf=contour,
@@ -1741,7 +1780,7 @@ class station_text:
             unit='mm'
         )
         plt.close()
-        return geojson
+        return geojson,hours
 
 class station_sql_data:
     def __init__(self):
@@ -2045,29 +2084,19 @@ class server_plot():
         if self.plot_type=="rain":
             hours = self.time_hours
             if hours >12:
-                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 24降水
-                levels = [0,1,10,25,50,100,250,1000]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+                colorslist = ['#A3FAFD', '#29D3FD', '#29AAFF', '#2983FF', '#4EAB37', '#46FA35', '#F1F837', '#F1D139', '#F2A932', '#F13237', '#C4343A', '#A43237', '#A632B4', '#D032E1', '#E431FF']# 24降水
+                levels = [0, 5, 10, 15, 20, 25, 35, 50, 75, 100, 150, 200, 250, 350, 500]
+                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=15)
                 cmap_nonlin = nlcmap(cmaps, levels)
-            elif hours <=12 and hours >6:
-                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 12降水
-                levels = [0,1,5,15,30,70,140,250]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+            elif hours <12 and hours >=1:
+                colorslist =['#A3FAFD', '#29D3FD', '#29AAFF', '#2983FF', '#4EAB37', '#46FA35', '#F1F837', '#F1D139', '#F2A932', '#F13237', '#C4343A', '#A43237', '#A632B4', '#D032E1', '#E431FF']# 06降水
+                levels = [0, 2, 5, 10, 15, 20, 25, 35, 50, 60, 70, 80, 90, 100, 110]
+                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=15)
                 cmap_nonlin = nlcmap(cmaps, levels)
-            elif hours <=6 and hours >3:
-                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 06降水
-                levels = [0,1,4,13,25,60,120,250]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-                cmap_nonlin = nlcmap(cmaps, levels)
-            elif hours <=3 and hours >1:
-                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 03降水
-                levels = [0,1,3,10,20,50,70,150]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
-                cmap_nonlin = nlcmap(cmaps, levels)
-            elif hours <=1:
-                colorslist = ['#FFFFFF','#A6F28f','#3DBA3D',"#61B8FF","#0000E1","#FA00FA","#800040"]# 01降水
-                levels = [0,1,2,7,15,40,50,100]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=7)
+            elif hours <1:
+                colorslist =['#A3FAFD', '#29D3FD', '#29AAFF', '#2983FF', '#4EAB37', '#46FA35', '#F1F837', '#F1D139', '#F2A932', '#F13237', '#C4343A', '#A43237', '#A632B4', '#D032E1', '#E431FF']# 01降水
+                levels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 15, 17, 20]
+                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=15)
                 cmap_nonlin = nlcmap(cmaps, levels) 
         elif self.plot_type=="wind":
             colorslist = ['#FFFFFF','#CED9FF','#9CFFFF','#FFFF9C','#FFCF9C','#FF9E63','#FF6131','#FF3031','#CE0000']

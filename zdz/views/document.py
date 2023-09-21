@@ -891,11 +891,12 @@ def station_zdz_data(request):
         worker = data_class.station_text(city_code,start,end)
         plot_type = click_type
         plot_data =json.loads(button_value)
-        geojson = worker.plot_rain(plot_type,plot_data)
+        geojson,hours = worker.plot_rain(plot_type,plot_data)
         # 以上为测试      
         context = {
             'status': "ok",
-            'contour':geojson
+            'contour':geojson,
+            'hours':hours
         }
         return JsonResponse(context)
     elif model =="extra_geojosn_remain":

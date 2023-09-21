@@ -3487,6 +3487,89 @@
                 current_data: undefined,
                 current_map: undefined,
                 upload_data: undefined,
+                current_control :undefined,
+                add_colorbar: function (hours,plot_type) { 
+                    if (plot_type == "rain") {
+                        if (hours >= 12) {
+                            var rain_list = [0, 5, 10, 15, 20, 25, 35, 50, 75, 100, 150, 200, 250, 350, 500].reverse()
+                        }
+                        else if (hours >= 1) {
+                            var rain_list = [0, 2, 5, 10, 15, 20, 25, 35, 50, 60, 70, 80, 90, 100, 110].reverse()
+                        }
+                        else {
+                            var rain_list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 15, 17, 20].reverse()
+                        }
+                        if (extra_server_obj.current_control == "true") {
+                            var docm = $('.leaflet-control-colotlabel')
+                            docm.remove()
+                            L.Control.Logo = L.Control.extend({
+                                options: {
+                                    position: 'bottomright' //初始位置
+
+                                },
+                                initialize: function (options) {
+                                    L.Util.extend(this.options, options);
+                                },
+                                onAdd: function (map) {
+                                    //创建一个class为 leaflet-control-colotlabel的div
+                                    this._container = L.DomUtil.create('div', 'leaflet-control-colotlabel');
+                                    // 开始逻辑编写
+                                    console.log("打印数据", this.options)
+                                    var insertDom = document.createElement('ul');
+                                    let str = ``;
+
+                                    var separatedColors = ['#A3FAFD', '#29D3FD', '#29AAFF', '#2983FF', '#4EAB37', '#46FA35', '#F1F837', '#F1D139', '#F2A932', '#F13237', '#C4343A', '#A43237', '#A632B4', '#D032E1', '#E431FF'];
+                                    separatedColors.reverse().forEach(function (item, index) {
+                                        str += `<li><i style="background: ${separatedColors[index]}"></i>${rain_list[index]}</li>`;
+                                    })
+                                    insertDom.innerHTML = str;
+                                    this._container.appendChild(insertDom);
+                                    return this._container;
+                                }
+                            });
+                            L.control.logo = function (options) {
+                                return new L.Control.Logo(options)
+                            };
+                            // L.control.logo({position: 'topright'}).addTo(extra_server_obj.current_map); 传参数的测试
+                            L.control.logo({ position: 'bottomright', data: "ok" }).addTo(extra_server_obj.current_map);
+                            extra_server_obj.current_control = "true"
+                        }
+                        else {
+                            L.Control.Logo = L.Control.extend({
+                                options: {
+                                    position: 'bottomright' //初始位置
+
+                                },
+                                initialize: function (options) {
+                                    L.Util.extend(this.options, options);
+                                },
+                                onAdd: function (map) {
+                                    //创建一个class为 leaflet-control-colotlabel的div
+                                    this._container = L.DomUtil.create('div', 'leaflet-control-colotlabel');
+                                    // 开始逻辑编写
+                                    console.log("打印数据", this.options)
+                                    var insertDom = document.createElement('ul');
+                                    let str = ``;
+
+                                    var separatedColors = ['#A3FAFD', '#29D3FD', '#29AAFF', '#2983FF', '#4EAB37', '#46FA35', '#F1F837', '#F1D139', '#F2A932', '#F13237', '#C4343A', '#A43237', '#A632B4', '#D032E1', '#E431FF'];
+                                    separatedColors.reverse().forEach(function (item, index) {
+                                        str += `<li><i style="background: ${separatedColors[index]}"></i>${rain_list[index]}</li>`;
+                                    })
+                                    insertDom.innerHTML = str;
+                                    this._container.appendChild(insertDom);
+                                    return this._container;
+                                }
+                            });
+                            L.control.logo = function (options) {
+                                return new L.Control.Logo(options)
+                            };
+                            // L.control.logo({position: 'topright'}).addTo(extra_server_obj.current_map); 传参数的测试
+                            L.control.logo({ position: 'bottomright', data: "ok" }).addTo(extra_server_obj.current_map);
+                            extra_server_obj.current_control = "true"
+                        }
+
+                    }
+                },
                 plot_mark:function(plot_type,plot_data){
                     if(plot_type=="wind"){
                             plot_data.forEach(function (item) {
@@ -3519,7 +3602,7 @@
                             })
                         }
                 },
-                get_plot_from_real_coutour:function(js_status,current_data){
+                get_plot_from_real_coutour:function(js_status,current_data){  
                     
                     var today = new Date()
                     var y = today.getFullYear();
@@ -3527,8 +3610,7 @@
                     var d = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
                     var h = today.getHours() < 10 ? "0" + today.getHours() : today.getHours();
                     var min = today.getMinutes() < 10 ? "0" + today.getMinutes() + ":00" : today.getMinutes() + ":00"
-                    var today_str = y + "-" + m + "-" + d + " " + h + ":" + min;
-                        
+                    var today_str = y + "-" + m + "-" + d + " " + h + ":" + min;                   
                     var real_times_class = $("#real_times").val()
                     var values_times = {
                         "24hours": "近24小时",
@@ -3605,7 +3687,8 @@
                                     color: "black",
                                     fillColor: "white",// 边框颜色
                                     fillOpacity: 1,
-                                }).addTo(extra_server_obj.current_map);                         
+                                }).addTo(extra_server_obj.current_map); 
+                                extra_server_obj.add_colorbar(values_times_int[real_times_class],map_toolbox_object.current_data_type)                          
                                 closeLoad(load)
                             }
                         })
@@ -3695,6 +3778,7 @@
                                     fillColor: "white",// 边框颜色
                                     fillOpacity: 1,
                                 }).addTo(extra_server_obj.current_map);
+                                extra_server_obj.add_colorbar(recvdate.hours,"rain") 
                                 closeLoad(load)
                             }
                         })
@@ -3801,37 +3885,7 @@
                         extra_server_obj.current_map = map_extra
                         // 自定义控件
                         // 添加地图上的按钮
-                            L.Control.Logo = L.Control.extend({
-                                options: {
-                                    position: 'bottomright' //初始位置
-
-                                },
-
-                                initialize: function (options) {
-                                    L.Util.extend(this.options, options);
-
-                                },
-                                onAdd: function (map) {
-                                    //创建一个class为 leaflet-control-colotlabel的div
-                                    this._container = L.DomUtil.create('div', 'leaflet-control-colotlabel');
-                                    // 开始逻辑编写
-                                    console.log("打印数据",this.options)
-                                    var insertDom = document.createElement('ul');
-                                    let str = ``;
-                                    var separatedColors = ['#DAF7A6', '#FFC300', '#FF5733', '#C70039', '#900C3F', '#581845'];
-                                    separatedColors.forEach(function(item,index){
-                                        str += `<li><i style="background: ${separatedColors[index]}"></i>50</li>`;
-                                    })
-                                    insertDom.innerHTML = str;                                   
-                                    this._container.appendChild(insertDom);
-                                    return this._container;
-                                }
-                            });
-                            L.control.logo = function (options) {
-                                return new L.Control.Logo(options)
-                            };
-                            // L.control.logo({position: 'topright'}).addTo(extra_server_obj.current_map); 传参数的测试
-                            L.control.logo({position: 'bottomright',data:"ok"}).addTo(extra_server_obj.current_map);
+                            
 
                     }
                 },
@@ -4265,7 +4319,7 @@
                 style="width: 100%;height: 5%;color: white;background-color: blue;text-align: center;padding-top:10px;font-family:STKaiti,KaiTi;font-size: medium;">
             </div>
             <div id="extra_map" style="width:100%;height:70%;background-color: white;"></div>
-            <div id="extra_text_single" style="width:100%;height: 12%;background-color: white;border-top: 2px solid black;font-size: 15px;"> 
+            <div id="extra_text_single" style="width:100%;height: 12%;background-color: white;font-size: 15px;"> 
                 【风雨快报】 
             </div>
 
