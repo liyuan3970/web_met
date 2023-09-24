@@ -676,7 +676,7 @@
                                 style="float:right;margin-left: 10px;">查询</button>
                             <button type="button" class="layui-btn layui-btn-sm" style="float:right;">刷新</button>
                             <button type="button" class="layui-btn layui-btn-sm" style="float:right;">日历</button>
-                            <button type="button" class="layui-btn layui-btn-sm" style="float:right;">数据</button>
+                            <button id="data_download" type="button" class="layui-btn layui-btn-sm" style="float:right;">数据</button>
                         </dd>
                         <script>
                             layui.use('laydate', function () {
@@ -725,6 +725,7 @@
                                 });
 
                             });
+                            
                         </script>
                     </dl>
                 </li>
@@ -2514,15 +2515,6 @@
                                     })
                                     //执行重载
                                     table.reload('tabledata_real', {
-                                        // page: {
-                                        //     curr: 1 //重新从第 1 页开始
-                                        // },
-                                        // where: {
-                                        //     // id : demoReload.val(),
-                                        //     key: {
-                                        //         id: demoReload.val()
-                                        //     }
-                                        // },
                                         cols: [[ //标题栏
                                             { field: 'Station_Id_C', title: 'ID', width: 60 }
                                             , { field: 'City', title: '地市', width: 60 }
@@ -4515,6 +4507,120 @@
                 })               
             </script>
         </div>
+
+         <!-- 数据下载 -->
+        <div id="data_download_div">
+            <div class="layui-tab" lay-filter="test-hash">
+
+                <ul class="layui-tab-title">
+              
+                  <li class="layui-this" lay-id="data_download_sea">航线舒适度</li>
+              
+                  <li lay-id="data_download_sea">雷达回波</li>
+              
+                  <li lay-id="data_download_sea">实况数据</li>
+              
+              
+                </ul>
+              
+                <div class="layui-tab-content">
+              
+                  <div class="layui-tab-item layui-show">
+                    <table class="layui-hide" id="data_download_sea_table"></table>
+                    <button id="data_download_sea_table_comput" class="layui-btn layui-btn-sm" style="float: right;margin-right: 5%;">计算</button>
+                    <button id="data_download_sea_table_ajax" class="layui-btn layui-btn-sm" style="float: right;margin-right: 2%;">下载</button>
+                    
+
+                  </div>
+              
+                  <div class="layui-tab-item">敬请期待</div>
+              
+                  <div class="layui-tab-item">敬请期待</div>
+              
+              
+                </div>
+              
+              </div>
+
+            <script>
+                $("#data_download").click(function () {
+                        layui.use('table', function () {
+                            var table_data =  [
+                                {"time":"9月8日","temp":"32.5","rh":"80","wind":"15","sun":"12","fy":"120","result":"1"},
+                                {"time":"9月9日","temp":"32.5","rh":"80","wind":"15","sun":"12","fy":"120","result":"2"},
+                            ]
+                            var table = layui.table;
+                            //展示已知数据
+                            table.render({
+                                elem: '#data_download_sea_table'
+                                , width: 600
+                                , height: 200
+                                , id: "table_sea"
+                                , cols: [[ //标题栏
+                                    { field: 'time', title: '时间'}
+                                    , { field: 'temp', title: '气温' ,edit: 'text'}
+                                    , { field: 'rh', title: '湿度',edit: 'text' }
+                                    , { field: 'wind', title: '风力',edit: 'text'}
+                                    , { field: 'sun', title: '日照',edit: 'text'}
+                                    , { field: 'fy', title: '阵风' ,edit: 'text'}
+                                    , { field: 'result', title: '结果' ,edit: 'text'}
+                                ]]
+                                , data: table_data
+                                , skin: 'line' //表格风格
+                                , even: true
+                                //,page: true //是否显示分页
+                                //,limits: [5, 7, 10]
+                                , limit: 300 //每页默认显示的数量
+                            });
+                            $('#data_download_sea_table_ajax').on('click', function () {
+                                var getdata = [
+                                    { "time": "9月8日", "temp": "32.5", "rh": "80", "wind": "15", "sun": "12", "fy": "120", "result": "5" },
+                                    { "time": "9月10日", "temp": "32.5", "rh": "80", "wind": "15", "sun": "12", "fy": "120", "result": "2" },
+                                ]
+                                table.reload('table_sea', {
+                                    data: getdata
+                                    , skin: 'line'
+                                    , id: 'table_sea'
+                                    , limit: 10
+                                });
+                            })
+                            $('#data_download_sea_table_comput').on('click', function () {
+                                var getdata = table.getData('table_sea')
+                                table.reload('table_sea', {
+                                    data: getdata
+                                    , skin: 'line'
+                                    , id: 'table_sea'
+                                    , limit: 10
+                                });
+                            })
+                        })
+
+                        layer.open({
+                            type: 1,
+                            title: "数据查询",
+                            maxmin: false,
+                            scrollbar: false,
+                            fixed: false,
+                            // offset: 'rt',
+                            moveOut: false,
+                            resize: false,
+                            skin: 'layui-layer-lan', //样式类名
+                            closeBtn: 1, //不显示关闭按钮
+                            area: ['600px', '700px'],
+                            // maxHeight: 600,
+                            // maxWidth: 1400,
+                            anim: 0,
+                            shade: 0,
+                            zIndex: 9999,
+                            shadeClose: false, //开启遮罩关闭
+                            content: $("#data_download_div")
+                        });
+                    })
+            </script>
+            
+        </div>
+
+
 
     </div>
 
