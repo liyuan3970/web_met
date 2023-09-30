@@ -18,7 +18,7 @@ from matplotlib.path import Path
 from mpl_toolkits.basemap import Basemap
 from ncmaps import Cmaps
 from rasterio import features
-
+import matplotlib as mpl
 from . import func
 
 import xesmf as xe
@@ -1990,10 +1990,12 @@ class server_plot():
         self.max = None
         self.min = None
         #self.rs = redis.Redis(host='127.0.0.1', port=6379,password="tzqxj58660")
-        #self.conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="tzqxj58660",db="ZJSZDZDB")
+        self.conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="051219",db="ZJSZDZDB")
         self.userId = "BEHZ_TZSJ_TZSERVICE" 
         self.pwd = "Liyuan3970!@" 
         self.dataFormat = "json"
+        self.rain = None
+        self.wind = None
     def data_from_js(self):
         data = pd.read_json(json.dumps(self.recv_data), orient='records')
         self.recv_data = data
@@ -2052,68 +2054,48 @@ class server_plot():
             self.max = data['value'].max()
         return data
     def rain_from_cloud(self):
-        start_time = dtt.datetime.strptime(self.start, "%Y-%m-%d %H:%M:%S")
-        end_time = dtt.datetime.strptime(self.end, "%Y-%m-%d %H:%M:%S")
-        offset = dtt.timedelta(minutes=(-60*8))
-        now = (end_time+offset).strftime('%Y%m%d%H%M')+"00"
-        old = (start_time+offset).strftime('%Y%m%d%H%M')+"00"
-        label = "["+old+","+now+"]"
-        client = DataQueryClient(configFile=r"/home/workspace/Data/My_Git/web_met/zdz/common/utils/client.config")
-        interfaceId = "statSurfEleInRegion"
-        params = {
-            'dataCode':"SURF_CHN_MUL_MIN",  #SURF_CHN_MUL_HOR
-            'elements':"Cnty,Province,Town,Station_levl,Station_Name,City,Station_Id_C,Lat,Lon,Alti",
-            'statEles':'SUM_PRE',
-            'timeRange':label,
-            'adminCodes':"331000",#330000 浙江省
-            "statEleValueRanges":"SUM_PRE:(0,10000)",
-            'limitCnt':"100000000"
-        }
-        result = client.callAPI_to_serializedStr(self.userId, self.pwd, interfaceId, params, self.dataFormat)
-        result_json = json.loads(result)
-        clomns =['Cnty','Province','Town','Station_levl','Station_Name','City','Station_Id_C','Lat','Lon','Alti','PRE']
-        data = pd.DataFrame(result_json['DS'])
-        data.columns = clomns
-        data = data.astype({'Lat': 'float', 'Lon': 'float','Station_levl':'int','PRE': 'float','Alti':'float'})
+        data = pd.read_csv("static/data/downfile/rain.csv")
         data['value'] = data['PRE']
+        self.rain = data
         return data
-    def return_mark(self):
-        '''主要返回风场位置'''
-        pass
     def color_map(self):
         if self.plot_type=="rain":
             hours = self.time_hours
             if hours >12:
-                colorslist = ['#A3FAFD', '#29D3FD', '#29AAFF', '#2983FF', '#4EAB37', '#46FA35', '#F1F837', '#F1D139', '#F2A932', '#F13237', '#C4343A', '#A43237', '#A632B4', '#D032E1', '#E431FF']# 24降水
-                levels = [0, 5, 10, 15, 20, 25, 35, 50, 75, 100, 150, 200, 250, 350, 500]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=15)
-                cmap_nonlin = nlcmap(cmaps, levels)
-            elif hours <12 and hours >=1:
-                colorslist =['#A3FAFD', '#29D3FD', '#29AAFF', '#2983FF', '#4EAB37', '#46FA35', '#F1F837', '#F1D139', '#F2A932', '#F13237', '#C4343A', '#A43237', '#A632B4', '#D032E1', '#E431FF']# 06降水
-                levels = [0, 2, 5, 10, 15, 20, 25, 35, 50, 60, 70, 80, 90, 100, 110]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=15)
-                cmap_nonlin = nlcmap(cmaps, levels)
+                colorslist = ['#FFFFFF','#A3FAFD', '#29D3FD', '#29AAFF', '#2983FF', '#4EAB37', '#46FA35', '#F1F837', '#F1D139', '#F2A932', '#F13237', '#C4343A', '#A43237', '#A632B4', '#D032E1', '#E431FF']# 24降水
+                levels = [-1,0.01, 5, 10, 15, 20, 25, 35, 50, 75, 100, 150, 200, 250, 350, 500]
+                cmap_nonlin = mpl.colors.ListedColormap(colorslist)  # 自定义颜色映射 color-map
+                norm = mpl.colors.BoundaryNorm(levels, cmap_nonlin.N)  # 基于离散区间生成颜色映射索引
+            elif hours <=12 and hours >=1:
+                colorslist =['#FFFFFF','#A3FAFD', '#29D3FD', '#29AAFF', '#2983FF', '#4EAB37', '#46FA35', '#F1F837', '#F1D139', '#F2A932', '#F13237', '#C4343A', '#A43237', '#A632B4', '#D032E1', '#E431FF']# 06降水
+                levels = [-1,3, 4, 5, 10, 15, 20, 25, 35, 50, 60, 70, 80, 90, 100, 110]
+                cmap_nonlin = mpl.colors.ListedColormap(colorslist)  # 自定义颜色映射 color-map
+                norm = mpl.colors.BoundaryNorm(levels, cmap_nonlin.N)  # 基于离散区间生成颜色映射索引       
             elif hours <1:
-                colorslist =['#A3FAFD', '#29D3FD', '#29AAFF', '#2983FF', '#4EAB37', '#46FA35', '#F1F837', '#F1D139', '#F2A932', '#F13237', '#C4343A', '#A43237', '#A632B4', '#D032E1', '#E431FF']# 01降水
-                levels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 15, 17, 20]
-                cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=15)
-                cmap_nonlin = nlcmap(cmaps, levels) 
+                colorslist =['#FFFFFF','#A3FAFD', '#29D3FD', '#29AAFF', '#2983FF', '#4EAB37', '#46FA35', '#F1F837', '#F1D139', '#F2A932', '#F13237', '#C4343A', '#A43237', '#A632B4', '#D032E1', '#E431FF']# 01降水
+                levels = [-1,0.01, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 15, 17, 20]
+                cmap_nonlin = mpl.colors.ListedColormap(colorslist)  # 自定义颜色映射 color-map
+                norm = mpl.colors.BoundaryNorm(levels, cmap_nonlin.N)  # 基于离散区间生成颜色映射索引 
         elif self.plot_type=="wind":
             colorslist = ['#FFFFFF','#CED9FF','#9CFFFF','#FFFF9C','#FFCF9C','#FF9E63','#FF6131','#FF3031','#CE0000']
             levels = [0,0.3,1.6,3.4,5.5,8,10.8,13.9,17.2,28]
             #colorslist = ['#FFFFFF','#CED9FF','#9CFFFF',"#42F217","#FF9E63","#DF16EE","red"]# 风力
             #levels = [0,1.6,3.4,5.5,13.9,17.3,32.6,56]
-            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=9)
-            cmap_nonlin = nlcmap(cmaps, levels) 
+            cmap_nonlin = mpl.colors.ListedColormap(colorslist)  # 自定义颜色映射 color-map
+            norm = mpl.colors.BoundaryNorm(levels, cmap_nonlin.N)  # 基于离散区间生成颜色映射索引 
         elif self.plot_type=="tmax":
+            colorslist = ['#0524B7','#092CD2','#0B34F4','#3859F7','#7187F0','#AAB6F3','#C9D1F8','#F8C9CB','#F19599','#F7797D','#F3464D','#F20710','#92080D','#650307']
             level = list(np.linspace(self.min-1, self.max+1, num=14, endpoint=True, retstep=False, dtype=None))
             levels = [round(i,1) for i in level]
-            cmap_nonlin = 'Reds'
+            cmap_nonlin = mpl.colors.ListedColormap(colorslist)  # 自定义颜色映射 color-map
+            norm = mpl.colors.BoundaryNorm(levels, cmap_nonlin.N)  # 基于离散区间生成颜色映射索引
         elif self.plot_type=="tmin":
+            colorslist = ['#FFFFFF','#CED9FF','#9CFFFF','#FFFF9C','#FFCF9C','#FF9E63','#FF6131','#FF3031','#CE0000']
             level = list(np.linspace(self.min-1, self.max+1, num=14, endpoint=True, retstep=False, dtype=None))
             levels = [round(i,1) for i in level]
-            cmap_nonlin = 'Blues_r'
-        return cmap_nonlin ,levels
+            cmap_nonlin = mpl.colors.ListedColormap(colorslist)  # 自定义颜色映射 color-map
+            norm = mpl.colors.BoundaryNorm(levels, cmap_nonlin.N)  # 基于离散区间生成颜色映射索引  
+        return cmap_nonlin ,norm
     def decode_xarray(self):
         if self.plot_type=="rain":
             if self.js_status:      
@@ -2162,6 +2144,31 @@ class server_plot():
         else:
             mark_json = self.recv_data.to_json(orient='records',force_ascii=False)
         return mark_json
+    def wind_to_json(self):
+        data = pd.read_csv("static/data/downfile/min.csv")
+        data = data.astype({'Lat': 'float', 'Lon': 'float','PRE': 'float','WIN_S_Gust_Max': 'float', 'WIN_D_Gust_Max': 'float'})
+        # data['WIN_S_Gust_Max'] = data['WIN_S_Inst_Max']
+        # data['WIN_D_Gust_Max'] = data['WIN_D_INST_Max']
+        data['value'] = data['WIN_S_Gust_Max']
+        wind = data[(data['value']>15)&(data['value']<100)&(data['City']=="台州市")]
+        self.wind = wind
+        return wind
+    def plot_rain(self):
+        wind = self.wind_to_json()
+        wind_json = wind.to_json(orient = "records", force_ascii=False)
+        data_xr = self.decode_xarray()
+        cmaps ,norm = self.color_map()
+        lat = data_xr.lat
+        lon = data_xr.lon
+        lons, lats = np.meshgrid(lon, lat)
+        contour = plt.contourf(lons,lats,data_xr,cmap=cmaps,norm = norm)
+        geojson = geojsoncontour.contourf_to_geojson(
+            contourf=contour,
+            ndigits=3,
+            unit='mm'
+        )
+        plt.close()
+        return geojson,wind_json    
     def return_geojson(self):
         data_xr = self.decode_xarray()
         # ##########色标和大小#############################
@@ -2169,7 +2176,8 @@ class server_plot():
         lat = data_xr.lat
         lon = data_xr.lon
         lons, lats = np.meshgrid(lon, lat)
-        contour = plt.contourf(lons,lats,data_xr,cmap=cmaps,levels =levels)
+        # contour = plt.contourf(lons,lats,data_xr,cmap=cmaps,levels =levels)
+        contour = plt.contourf(lons,lats,data_xr,cmap=cmaps,norm =levels)
         geojson = geojsoncontour.contourf_to_geojson(
             contourf=contour,
             ndigits=3,
@@ -2177,6 +2185,118 @@ class server_plot():
         )
         plt.close()
         return geojson
+    def text_wind_rain(self):
+        wind = self.wind
+        rain = self.rain
+        text = ""
+        # rain = pd.read_csv("rian1.csv")
+        # wind = pd.read_csv("wind1.csv")
+        if self.time_hours ==0.1:   
+            text_rain = "目前:"
+            rain_tz = rain[rain['City']=="台州市"]
+            bins = [0,5,10,100]
+            labels = [0,1,2]
+            rain_tz['rank']=pd.cut(rain_tz['PRE'],bins,right=False,labels=labels)
+            rain_max = rain_tz.sort_values(by="PRE",ascending=False).head(3)
+            raintop = rain_max.head(1)
+            if raintop['PRE'].values[0]>0: 
+                text_rain = text_rain + raintop['Cnty'].values[0] + raintop['Town'].values[0] + "十分钟降水为" + str(raintop['PRE'].values[0]) +"毫米。"
+                if len(rain_tz[rain_tz['rank']==1])>0:
+                    indextext = "单站雨量较大的有："
+                    for index,row in rain_max.iterrows():
+                        if row['PRE']>0:
+                            indextext = indextext + row['Cnty'] + row['Station_Name'] + str(row['PRE']) + "毫米，"
+                    indextext = indextext[:-1] + "。"
+                    text_rain = text_rain + indextext
+                    if len(rain_tz[rain_tz['rank']==2])>0:
+                        text_rain = text_rain + "其中超过10毫米的站有" + str(len(rain_tz[rain_tz['rank']==2])) + "个；"          
+            else:
+                text_rain = ""
+        elif self.time_hours ==1:
+            text_rain = "目前:"
+            rain_tz = rain[rain['City']=="台州市"]
+            bins = [0,10,20,50,80,100,5000]
+            labels = [0,1,2,3,4,5]
+            rain_tz['rank']=pd.cut(rain_tz['PRE'],bins,right=False,labels=labels)
+            rain_max = rain_tz.sort_values(by="PRE",ascending=False).head(3)
+            raintop = rain_max.head(1)
+            town_max = rain_tz.groupby(['Town','Cnty'])['PRE'].max().sort_values(ascending=False).head(3).to_frame() 
+            if raintop['PRE'].values[0]>0: 
+                text_rain = text_rain + raintop['Cnty'].values[0] + raintop['Town'].values[0] + "近一小时降水为" + str(raintop['PRE'].values[0]) +"毫米。"
+                if len(rain_tz[rain_tz['rank']>=0])>0:
+                    indextext = "单站雨量较大的有："
+                    for index,row in rain_max.iterrows():
+                        if row['PRE']>0:
+                            indextext = indextext + row['Cnty'] + row['Station_Name'] + str(row['PRE']) + "毫米，"    
+                    indextext = indextext[:-1] + "。"
+                    text_rain = text_rain + indextext
+                    if len(rain_tz[rain_tz['rank']>1])>0:
+                        indextext_town = "单站雨量较大的乡镇有：" 
+                        for index,row in town_max.iterrows():
+                            if row['PRE']>0:
+                                indextext_town = indextext_town + index[1] + index[0] + str(row['PRE']) + "毫米," 
+                        indextext_town = indextext_town[:-1] + "。"
+                        text_rain = text_rain + indextext_town                            
+        elif self.time_hours ==3:
+            text_rain = "目前:"
+            rain_tz = rain[rain['City']=="台州市"]
+            bins = [0,30,50,80,100,5000]
+            labels = [0,1,2,3,4]
+            rain_tz['rank']=pd.cut(rain_tz['PRE'],bins,right=False,labels=labels)
+            rain_max = rain_tz.sort_values(by="PRE",ascending=False).head(3)
+            raintop = rain_max.head(1)
+            town = rain_tz.groupby(['Town','Cnty'])['PRE'].mean().head(5).sort_values(ascending=False).to_frame() 
+            if raintop['PRE'].values[0]>0: 
+                text_rain = text_rain + raintop['Cnty'].values[0] + raintop['Town'].values[0] + "近三小时降水为" + str(raintop['PRE'].values[0]) +"毫米。"
+                if raintop['PRE'].values[0]>20:
+                    indextext_town = "乡镇面雨量较大的有：" 
+                    for index,row in town.iterrows():
+                        if row['PRE']>0:
+                            indextext_town = indextext_town + index[1] + index[0] + str(round(row['PRE'],1)) + "毫米," 
+                    indextext_town = indextext_town[:-1] + "。"
+                    text_rain = text_rain + indextext_town 
+                    if raintop['PRE'].values[0]>50:
+                        town_max_text = "其中，出现暴雨及以上的乡镇有："
+                        town_max = rain_tz.groupby(['Town','Cnty'])['PRE'].max().sort_values(ascending=False).to_frame()
+                        town_nums = town_max[town_max['PRE']>=50]
+                        for index,row in town_nums.iterrows():
+                            town_max_text = town_max_text + index[1] + index[0] + ","
+                        town_max_text = town_max_text[:-1] + "。" 
+                        text_rain = text_rain + town_max_text 
+        else: 
+            rain_tz = rain[rain['City']=="台州市"]
+            city_mean = round(rain_tz[rain_tz['PRE']>0]['PRE'].mean(),2)
+            bins = [0,30,50,80,100,5000]
+            labels = [0,1,2,3,4]
+            rain_tz['rank']=pd.cut(rain_tz['PRE'],bins,right=False,labels=labels)
+            rain_max = rain_tz.sort_values(by="PRE",ascending=False).head(3)
+            raintop = rain_max.head(1)
+            average = rain_tz.groupby(['Cnty'])['PRE'].mean().to_frame().sort_values(by="PRE",ascending=False)
+            text_rain = "目前:全市面雨量为" + str(city_mean) + "毫米。"
+            text_cnty_average = "雨量较大的有："
+            for index,row in average.iterrows():
+                if row['PRE']>0:
+                    text_cnty_average = text_cnty_average + index + str(round(row['PRE'],2)) + "毫米,"  
+            text_cnty_average = text_cnty_average[:-1] + "。"
+            text_rain = text_rain + text_cnty_average
+            if raintop['PRE'].values[0]>0: 
+                text_rain = text_rain +"其中，单站累计最大"+ raintop['Cnty'].values[0] + raintop['Town'].values[0] + str(raintop['PRE'].values[0]) +"毫米。"        
+        # 风力的统计
+        wind = wind[wind['value']>10].sort_values(by="value",ascending=False)
+        wind_text = ""
+        if len(wind)>0:
+            wind_text = wind_text + "全市出现8级以上大风，风力较大的有"
+            text_maxwind = ""
+            if len(wind)>3:
+                wind = wind.head(3)
+            else:
+                wind = wind
+            for index,row in wind.iterrows():
+                text_maxwind = text_maxwind + row['Cnty'] + row['Town'] + "-"+ row['Station_Name'] + str(row['value']) +"m/s,"
+            text_maxwind = text_maxwind[:-1] + "。"
+            wind_text =  wind_text + text_maxwind  
+        text = text + text_rain + wind_text
+        return text
 
 class warring_alert():
     def __init__(self,center,rain_status,wind_status,temp_status,view_status):

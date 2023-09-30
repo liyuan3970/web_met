@@ -943,18 +943,28 @@ def station_zdz_data(request):
         if js_status =="False":
             js_status = False
             recv_data = "none"
+            worker = data_class.server_plot(time_hours,city,plot_type,js_status,recv_data)
+            contour,mark = worker.plot_rain()
+            text = worker.text_wind_rain()
+            context = {
+                'status': "ok",
+                'plot_type':plot_type,
+                'contour':contour,
+                'mark':mark,
+                'text':text
+            }
         else:
             js_status = True
             recv_data = json.loads(current_data)
-        worker = data_class.server_plot(time_hours,city,plot_type,js_status,recv_data)
-        contour = worker.return_geojson() 
-        mark = worker.return_mark()     
-        context = {
-            'status': "ok",
-            'plot_type':plot_type,
-            'contour':contour,
-            'mark':mark
-        }
+            worker = data_class.server_plot(time_hours,city,plot_type,js_status,recv_data)
+            contour = worker.return_geojson() 
+            mark = worker.return_mark()            
+            context = {
+                'status': "ok",
+                'plot_type':plot_type,
+                'contour':contour,
+                'mark':mark
+            }
         return JsonResponse(context)
         
 import numpy as np
