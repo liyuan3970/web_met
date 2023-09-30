@@ -514,7 +514,7 @@
                                         // 需要报警
                                         if (warring_class == "warring") {
                                             // 报警
-                                            if (warring_obj.warring_status = "warring") {
+                                            if (warring_obj.warring_status == "warring") {
                                                 if (warring_obj.music_audio) {
                                                     warring_obj.music_audio.play();
                                                 }
@@ -528,7 +528,7 @@
                                         }
                                         else if (warring_class == "notification") {
                                             // 弹出框
-                                            
+                                            warring_obj.warring_status = "silence"
                                             if (warring_obj.warring_status = "warring") {
                                                 warring_obj.notice_alert();
                                             }
@@ -542,6 +542,7 @@
                                         layer.close(warring_obj.layer_status);
                                     }
                                 }
+                                
                             }, 1000 * 5) // 间隔1秒就打印
                         </script>
                     </dl>
@@ -4289,7 +4290,7 @@
                             <select id="color_label" style="width:40%">
                                 <option value=""></option>
                                 <option value="rain" selected="">风雨快报</option>
-                                <!-- <option value="radar">强对流提醒</option> -->
+                                <option value="province">全省通报</option>
                             </select>
                         </div>
                         <div class="layui-input-inline" style="width:10%">
@@ -4313,7 +4314,7 @@
             </div>
             <div id="extra_map" style="width:100%;height:70%;background-color: white;"></div>
             <div id="extra_text_single" style="width:100%;height: 12%;background-color: white;font-size: 15px;line-height: 2em;padding:2%;"> 
-                【风雨快报】 
+                 
             </div>
 
             <script>
@@ -4430,7 +4431,7 @@
                             renderer: canvasLabel,
                             zoom: 9, //4
                             maxZoom: 12,
-                            minZoom: 8,
+                            minZoom: 7,
                             zoomControl: false,
                             // dragging: false,
                             // scrollWheelZoom: false,
@@ -4469,7 +4470,7 @@
                                         deg: item.WIN_D_Gust_Max,
                                         pointRadius: 8,
                                         strokeColor: colors,
-                                        strokeLength: 25,
+                                        strokeLength: 10,
                                         forceDir: true,
                                         // barbSpaceing:4,
                                         // barbHeight:20,
@@ -4532,56 +4533,111 @@
                         $("#extra_label").html("")
                         $("#extra_label").html(label)
                         var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                        var senddata = "none"
-                        var ajaxdata = {
-                            'csrfmiddlewaretoken': csrf,
-                            'model': 'plot_image',
-                            'click_type': $("#color_label").val(),// plot_type 风雨温
-                            'button_value': $("#extra_real_plot_city").val(),// 城市
-                            'time_hours': values_times_int[real_times_class],
-                            'current_data': senddata,
-                            'js_status': js_status
-                        }                                 
-                        $.ajax({
-                            url: "station_zdz_data",  // 请求的地址
-                            type: "post",  // 请求方式
-                            timeout: 25000, //设置延迟上限
-                            data: ajaxdata,
-                            dataType: "json",
-                            beforeSend: function (XMLHttpRequest) {
-                                load = showLoad();
-                            },
-                            success: function (recvdate) {
-                                // console.log(JSON.parse(recvdate.mark));  
-                                // 直接加载图片的方法                      
-                                // var imags = new Image()
-                                // imags.src = recvdate.imgs
-                                // var imageBounds = [[27.8, 120.2], [29.5, 122]];//图片的经纬度范围，西南角点,东北角点(纬度、经度)
-                                // var imageLayer = L.imageOverlay(imags, imageBounds, { opacity: 1 });//opacity是透明度
-                                // extra_plot_obj.current_map.addLayer(imageLayer);                           
-                                contourf = JSON.parse(recvdate.contour)
-                                extra_plot_obj.flash_map()
-                                var reallayer = L.geoJSON(contourf, {
-                                    style: function (feature) {
-                                        return { color: feature.properties.stroke, weight: 1, fill: true, fillColor: feature.properties.stroke, fillOpacity: 1 };
-                                    }
-                                }).addTo(extra_plot_obj.current_map)
-                                extra_plot_obj.plot_mark(recvdate.plot_type, JSON.parse(recvdate.mark))
-                                L.mask(taizhou_map, {
-                                    // fitBounds:true,
-                                    fitBounds: false,
-                                    restrictBounds: false,
-                                    color: "black",
-                                    fillColor: "white",// 边框颜色
-                                    fillOpacity: 1,
-                                }).addTo(extra_plot_obj.current_map);
-                                extra_plot_obj.add_colorbar(values_times_int[real_times_class], "rain")
-                                // 文字
-                                $("#extra_text_single").html("")
-                                $("#extra_text_single").html("【风雨快报】" + recvdate.text)
-                                closeLoad(load)
+                        var senddata = current_data
+                        if (senddata == "none") {
+                            var ajaxdata = {
+                                'csrfmiddlewaretoken': csrf,
+                                'model': 'plot_image',
+                                'click_type': $("#color_label").val(),// plot_type 风雨温
+                                'button_value': $("#extra_real_plot_city").val(),// 城市
+                                'time_hours': values_times_int[real_times_class],
+                                'current_data': senddata,
+                                'js_status': js_status
                             }
-                        })
+                            $.ajax({
+                                url: "station_zdz_data",  // 请求的地址
+                                type: "post",  // 请求方式
+                                timeout: 25000, //设置延迟上限
+                                data: ajaxdata,
+                                dataType: "json",
+                                beforeSend: function (XMLHttpRequest) {
+                                    load = showLoad();
+                                },
+                                success: function (recvdate) {
+                                    // console.log(JSON.parse(recvdate.mark));  
+                                    // 直接加载图片的方法                      
+                                    // var imags = new Image()
+                                    // imags.src = recvdate.imgs
+                                    // var imageBounds = [[27.8, 120.2], [29.5, 122]];//图片的经纬度范围，西南角点,东北角点(纬度、经度)
+                                    // var imageLayer = L.imageOverlay(imags, imageBounds, { opacity: 1 });//opacity是透明度
+                                    // extra_plot_obj.current_map.addLayer(imageLayer);                           
+                                    contourf = JSON.parse(recvdate.contour)
+                                    extra_plot_obj.flash_map()
+                                    var reallayer = L.geoJSON(contourf, {
+                                        style: function (feature) {
+                                            return { color: feature.properties.stroke, weight: 1, fill: true, fillColor: feature.properties.stroke, fillOpacity: 1 };
+                                        }
+                                    }).addTo(extra_plot_obj.current_map)
+                                    extra_plot_obj.plot_mark(recvdate.plot_type, JSON.parse(recvdate.mark))
+                                    L.mask(taizhou_map, {
+                                        // fitBounds:true,
+                                        fitBounds: false,
+                                        restrictBounds: false,
+                                        color: "black",
+                                        fillColor: "white",// 边框颜色
+                                        fillOpacity: 1,
+                                    }).addTo(extra_plot_obj.current_map);
+                                    extra_plot_obj.add_colorbar(values_times_int[real_times_class], "rain")
+                                    // 文字
+                                    $("#extra_text_single").html("")
+                                    $("#extra_text_single").html("【风雨快报】" + recvdate.text)
+                                    closeLoad(load)
+                                }
+                            })
+                        }
+                        else if(senddata == "province"){
+                            var ajaxdata = {
+                                'csrfmiddlewaretoken': csrf,
+                                'model': 'plot_image',
+                                'click_type': $("#color_label").val(),// plot_type 风雨温
+                                'button_value': $("#extra_real_plot_city").val(),// 城市
+                                'time_hours': values_times_int[real_times_class],
+                                'current_data': senddata,
+                                'js_status': js_status
+                            }
+                            $.ajax({
+                                url: "station_zdz_data",  // 请求的地址
+                                type: "post",  // 请求方式
+                                timeout: 25000, //设置延迟上限
+                                data: ajaxdata,
+                                dataType: "json",
+                                beforeSend: function (XMLHttpRequest) {
+                                    load = showLoad();
+                                },
+                                success: function (recvdate) {
+                                    // console.log(JSON.parse(recvdate.mark));  
+                                    // 直接加载图片的方法                      
+                                    // var imags = new Image()
+                                    // imags.src = recvdate.imgs
+                                    // var imageBounds = [[27.8, 120.2], [29.5, 122]];//图片的经纬度范围，西南角点,东北角点(纬度、经度)
+                                    // var imageLayer = L.imageOverlay(imags, imageBounds, { opacity: 1 });//opacity是透明度
+                                    // extra_plot_obj.current_map.addLayer(imageLayer);                           
+                                    contourf = JSON.parse(recvdate.contour)
+                                    extra_plot_obj.flash_map()
+                                    var reallayer = L.geoJSON(contourf, {
+                                        style: function (feature) {
+                                            return { color: feature.properties.stroke, weight: 1, fill: true, fillColor: feature.properties.stroke, fillOpacity: 1 };
+                                        }
+                                    }).addTo(extra_plot_obj.current_map)
+                                    extra_plot_obj.plot_mark("rain", JSON.parse(recvdate.mark))
+                                    L.mask(zhejianglist, {
+                                        // fitBounds:true,
+                                        fitBounds: false,
+                                        restrictBounds: false,
+                                        color: "black",
+                                        fillColor: "white",// 边框颜色
+                                        fillOpacity: 1,
+                                    }).addTo(extra_plot_obj.current_map);
+                                    extra_plot_obj.add_colorbar(values_times_int[real_times_class], "rain")
+                                    // 文字
+                                    $("#extra_text_single").html("")
+                                    $("#extra_text_single").html("【风雨快报】" + recvdate.text)
+                                    closeLoad(load)
+                                }
+                            })
+
+                        }
+                        
                     }
                 }
                 extra_plot_obj.init()
@@ -4616,9 +4672,18 @@
                 })
                 // 风雨快报的绘制
                 $("#plot_image").click(function () {
-                    var js_status = "False"
-                    var current_data = "none"
-                    extra_plot_obj.get_image(js_status, current_data)
+                    var clicktype = $("#color_label").val()
+                    if (clicktype == "rain") {
+                        var js_status = "False"
+                        var current_data = "none"
+                        extra_plot_obj.get_image(js_status, current_data)
+                    } 
+                    else if (clicktype == "province"){
+                        var js_status = "False"
+                        var current_data = "province"
+                        extra_plot_obj.get_image(js_status, current_data)
+
+                    }   
                 })               
             </script>
         </div>

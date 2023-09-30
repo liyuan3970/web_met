@@ -2095,7 +2095,7 @@ class server_plot():
             levels = [round(i,1) for i in level]
             cmap_nonlin = mpl.colors.ListedColormap(colorslist)  # 自定义颜色映射 color-map
             norm = mpl.colors.BoundaryNorm(levels, cmap_nonlin.N)  # 基于离散区间生成颜色映射索引  
-        return cmap_nonlin ,norm
+        return cmap_nonlin,levels
     def decode_xarray(self):
         if self.plot_type=="rain":
             if self.js_status:      
@@ -2150,7 +2150,8 @@ class server_plot():
         # data['WIN_S_Gust_Max'] = data['WIN_S_Inst_Max']
         # data['WIN_D_Gust_Max'] = data['WIN_D_INST_Max']
         data['value'] = data['WIN_S_Gust_Max']
-        wind = data[(data['value']>15)&(data['value']<100)&(data['City']=="台州市")]
+        # wind = data[(data['value']>15)&(data['value']<100)&(data['City']=="台州市")]
+        wind = data[(data['value']>15)&(data['value']<100)]
         self.wind = wind
         return wind
     def plot_rain(self):
@@ -2161,7 +2162,7 @@ class server_plot():
         lat = data_xr.lat
         lon = data_xr.lon
         lons, lats = np.meshgrid(lon, lat)
-        contour = plt.contourf(lons,lats,data_xr,cmap=cmaps,norm = norm)
+        contour = plt.contourf(lons,lats,data_xr,cmap=cmaps,levels = norm)
         geojson = geojsoncontour.contourf_to_geojson(
             contourf=contour,
             ndigits=3,
@@ -2177,7 +2178,7 @@ class server_plot():
         lon = data_xr.lon
         lons, lats = np.meshgrid(lon, lat)
         # contour = plt.contourf(lons,lats,data_xr,cmap=cmaps,levels =levels)
-        contour = plt.contourf(lons,lats,data_xr,cmap=cmaps,norm =levels)
+        contour = plt.contourf(lons,lats,data_xr,cmap=cmaps,levels = levels)
         geojson = geojsoncontour.contourf_to_geojson(
             contourf=contour,
             ndigits=3,
@@ -2297,6 +2298,67 @@ class server_plot():
             wind_text =  wind_text + text_maxwind  
         text = text + text_rain + wind_text
         return text
+    def return_province(self):
+        data = self.rain_from_cloud()
+        lat = np.array(data['Lat'].to_list())
+        lon = np.array(data['Lon'].to_list())
+        Zi = np.array(data['value'].to_list())
+        np.set_printoptions(precision = 2)
+        x = np.arange(118.0,123.0,0.01)
+        y = np.arange(26,31,0.01)
+        nx0 =len(x)
+        ny0 =len(y)
+        X, Y = np.meshgrid(x, y)#100*100
+        P = np.array([X.flatten(), Y.flatten() ]).transpose()    
+        Pi =  np.array([lon, lat ]).transpose()
+        Z_linear = griddata(Pi, Zi, P, method = "nearest").reshape([ny0,nx0])
+        gauss_kernel = Gaussian2DKernel(0.8)
+        smoothed_data_gauss = convolve(Z_linear, gauss_kernel)
+        data_xr = xr.DataArray(smoothed_data_gauss, coords=[ y,x], dims=["lat", "lon"])
+        cmaps ,norm = self.color_map()
+        lat = data_xr.lat
+        lon = data_xr.lon
+        lons, lats = np.meshgrid(lon, lat)
+        contour = plt.contourf(lons,lats,data_xr,cmap=cmaps,levels = norm)
+        geojson = geojsoncontour.contourf_to_geojson(
+            contourf=contour,
+            ndigits=3,
+            unit='mm'
+        )
+        plt.close()
+        # 风力
+        wind = self.wind_to_json()
+        wind_json = wind.to_json(orient = "records", force_ascii=False)
+        # 文字
+        rain = data[data['Province']=="浙江省"]
+        rain_max = rain.sort_values(by="PRE",ascending=False).head(3)
+        raintop = rain_max.head(1)
+        text_rain = ""
+        if raintop['PRE'].values[0]>0: 
+            text_rain = text_rain +"目前" + raintop['City'].values[0] + raintop['Cnty'].values[0] + raintop['Town'].values[0] +raintop['Station_Name'].values[0] +"出现"+ str(raintop['PRE'].values[0]) +"毫米的降水。"
+        average = rain.groupby(['City'])['PRE'].mean().to_frame().sort_values(by="PRE",ascending=False)
+        text_cnty_average = "各市面雨量较大的有："
+        for index,row in average.iterrows():
+            if row['PRE']>0:
+                text_cnty_average = text_cnty_average + index + str(round(row['PRE'],2)) + "毫米,"  
+        text_cnty_average = text_cnty_average[:-1] + "。"
+        text_rain = text_rain + text_cnty_average
+        wind = wind[wind['value']>10].sort_values(by="value",ascending=False)
+        text = ""
+        wind_text = ""
+        if len(wind)>0:
+            wind_text = wind_text + "全省出现8级以上大风，风力较大的有"
+            text_maxwind = ""
+            if len(wind)>3:
+                wind = wind.head(3)
+            else:
+                wind = wind
+            for index,row in wind.iterrows():
+                text_maxwind = text_maxwind + row['Cnty'] + row['Town'] + "-"+ row['Station_Name'] + str(row['value']) +"m/s,"
+            text_maxwind = text_maxwind[:-1] + "。"
+            wind_text =  wind_text + text_maxwind  
+        text = text + text_rain + wind_text
+        return geojson,text,wind_json
 
 class warring_alert():
     def __init__(self,center,rain_status,wind_status,temp_status,view_status):

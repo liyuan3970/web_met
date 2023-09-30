@@ -942,17 +942,29 @@ def station_zdz_data(request):
         time_hours = request.POST.get('time_hours', '')
         if js_status =="False":
             js_status = False
-            recv_data = "none"
-            worker = data_class.server_plot(time_hours,city,plot_type,js_status,recv_data)
-            contour,mark = worker.plot_rain()
-            text = worker.text_wind_rain()
-            context = {
-                'status': "ok",
-                'plot_type':plot_type,
-                'contour':contour,
-                'mark':mark,
-                'text':text
-            }
+            if current_data =="none":
+                # 此处为台州市的画图
+                recv_data = "none"
+                worker = data_class.server_plot(time_hours,city,plot_type,js_status,recv_data)
+                contour,mark = worker.plot_rain()
+                text = worker.text_wind_rain()
+                context = {
+                    'status': "ok",
+                    'plot_type':plot_type,
+                    'contour':contour,
+                    'mark':mark,
+                    'text':text
+                }
+            elif current_data =="province":
+                worker = data_class.server_plot(time_hours,city,"rain",js_status,current_data)
+                geojson,text,wind_json = worker.return_province()
+                context = {
+                    'status': "ok",
+                    'plot_type':"rain",
+                    'contour':geojson,
+                    'mark':wind_json,
+                    'text':text
+                }
         else:
             js_status = True
             recv_data = json.loads(current_data)
