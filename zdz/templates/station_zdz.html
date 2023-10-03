@@ -4825,8 +4825,8 @@
             <div style="display: inline-flex;width:100%;height: 90%;">
                 <!-- 日历和文字 -->
                 <div style="width:50%;height: 100%;">
-                    <div id="daily_chart" style="width:650px;height: 70%;"></div>
-                    <div style="width:100%;height: 30%;"></div>
+                    <div id="daily_chart" style="width:650px;height: 450px;"></div>
+                    <div style="width:100%;height: 30%;border: 1px solid black;"></div>
                 </div>
                 <!-- 地图 -->
                 <div id="daily_map" style="width:50%;height: 100%;"></div>
@@ -4837,9 +4837,11 @@
                         current_map: undefined,
                         recvdate: undefined,
                         current_control: undefined,
+                        current_chart:undefined,
                         render_chart: function () {
                             var chartDom = document.getElementById('daily_chart');
                             var myChart = echarts.init(chartDom);
+                            daily_obj.current_chart = myChart
                             var option;
                             const dateList = [
                                 ['2017-1-1', '初四'],
@@ -5211,7 +5213,7 @@
                             const heatmapData = [];
                             const lunarData = [];
                             for (let i = 0; i < dateList.length; i++) {
-                                heatmapData.push([dateList[i][0], Math.random() * 300]);
+                                heatmapData.push([dateList[i][0], Math.random() * 150]);
                                 lunarData.push([dateList[i][0], 1, dateList[i][1], dateList[i][2]]);
                             }
                             option = {
@@ -5221,17 +5223,27 @@
                                     }
                                 },
                                 visualMap: {
-                                    show: false,
+                                    show: true,
+                                    type : 'piecewise',
                                     min: 0,
                                     max: 300,
                                     calculable: true,
                                     seriesIndex: [2],
                                     orient: 'horizontal',
                                     left: 'center',
-                                    bottom: 20,
+                                    right:0,
+                                    bottom: 10,
+                                    pieces: [
+                                        { min: 150, color: 'rgb(140,0,65)' },//,label:""
+                                        { min: 100, max: 150, color: 'rgb(255,0,255)' },
+                                        { min: 50, max: 100, color: 'rgb(25,0,235)' },
+                                        { min: 25, max: 50, color: 'rgb(62,185,255)' },
+                                        { min: 10, max: 25, color: 'rgb(0,191,27)' },
+                                        { max: 10, color: 'white' }
+                                    ],
                                     inRange: {
-                                        color: ['#e0ffff', '#006edd'],
-                                        opacity: 0.3
+                                        // color: ['#e0ffff', '#006edd'],
+                                        opacity: 0.8
                                     },
                                     controller: {
                                         inRange: {
@@ -5243,7 +5255,7 @@
                                     {
                                         left: 'center',
                                         top: 'middle',
-                                        cellSize: [70, 70],
+                                        cellSize: [70, 50],
                                         yearLabel: { show: false },
                                         orient: 'vertical',
                                         dayLabel: {
@@ -5253,7 +5265,7 @@
                                         monthLabel: {
                                             show: false
                                         },
-                                        range: '2017-03'
+                                        range: ['2017-03-05','2017-04-04']
                                     }
                                 ],
                                 series: [
@@ -5265,7 +5277,7 @@
                                             show: true,
                                             formatter: function (params) {
                                                 var d = echarts.number.parseDate(params.value[0]);
-                                                return d.getDate() + '\n\n' + params.value[2] + '\n\n';
+                                                return d.getDate() + '\n\n'
                                             },
                                             color: '#000'
                                         },
@@ -5279,7 +5291,7 @@
                                         label: {
                                             show: true,
                                             formatter: function (params) {
-                                                return '\n\n\n' + (params.value[3] || '');
+                                                return (params.value[3] || '');
                                             },
                                             fontSize: 14,
                                             fontWeight: 700,
@@ -5296,7 +5308,6 @@
                                     }
                                 ]
                             };
-
                             option && myChart.setOption(option);
 
                         },
@@ -5354,6 +5365,10 @@
                     }
                 daily_obj.render_chart()
                 daily_obj.init()
+                daily_obj.current_chart.on('click',function(e){
+                    console.log(e,e.value)
+
+                })
                 $("#daily_status").click(function(){
                     layer.open({
                         type: 1,
