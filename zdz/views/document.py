@@ -934,6 +934,30 @@ def station_zdz_data(request):
             'img':img
         }
         return JsonResponse(context)
+    elif model =="daily_clander":
+        city = click_type 
+        click_type = button_value
+        worker = data_class.clander(city,click_type)
+        data = worker.get_clander()      
+        context = {
+            'status': "ok",
+            'data':data
+        }
+        return JsonResponse(context)
+    elif model =="daily_single":
+        city = click_type 
+        click_type = button_value
+        times = request.POST.get('times', '')
+        worker = data_class.clander(city,click_type)
+        geojson,wind_json = worker.plot_rain()
+        text = worker.return_text()      
+        context = {
+            'status': "ok",
+            'contour':geojson,
+            'wind_json':wind_json,
+            'text':text
+        }
+        return JsonResponse(context)
     elif model =="plot_image":
         plot_type = click_type
         city = button_value

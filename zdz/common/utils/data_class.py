@@ -2447,3 +2447,90 @@ class warring_alert():
             'radar':img
         }
         return context
+
+# 日历
+class clander:
+    def __init__(self,city,click_type):
+        self.city = city
+        self.type = click_type
+    def get_clander(self):
+        data = pd.read_csv("static/data/downfile/clander.csv")
+        data_json = data.to_json(orient = "values")
+        return data_json
+    def get_daily(self):
+        data = pd.read_csv("static/data/downfile/daily.csv")
+        data = data[(data['rain']<5000)&(data['Datetime']=='2023-10-01 23:00:00')]
+        return data
+    def plot_rain(self):
+        data = self.get_daily()
+        data['value'] = data['rain']
+        lat = np.array(data['Lat'].to_list())
+        lon = np.array(data['Lon'].to_list())
+        Zi = np.array(data['value'].to_list())
+        np.set_printoptions(precision = 2)
+        x = np.arange(118.0,123.0,0.01)
+        y = np.arange(26,31,0.01)
+        nx0 =len(x)
+        ny0 =len(y)
+        X, Y = np.meshgrid(x, y)#100*100
+        P = np.array([X.flatten(), Y.flatten() ]).transpose()    
+        Pi =  np.array([lon, lat ]).transpose()
+        Z_linear = griddata(Pi, Zi, P, method = "nearest").reshape([ny0,nx0])
+        gauss_kernel = Gaussian2DKernel(0.8)
+        smoothed_data_gauss = convolve(Z_linear, gauss_kernel)
+        data_xr = xr.DataArray(smoothed_data_gauss, coords=[ y,x], dims=["lat", "lon"])
+        colorslist = ['#FFFFFF','#A3FAFD', '#29D3FD', '#29AAFF', '#2983FF', '#4EAB37', '#46FA35', '#F1F837', '#F1D139', '#F2A932', '#F13237', '#C4343A', '#A43237', '#A632B4', '#D032E1', '#E431FF']# 24降水
+        levels = [-1,0.01, 5, 10, 15, 20, 25, 35, 50, 75, 100, 150, 200, 250, 350, 500]
+        cmaps = mpl.colors.ListedColormap(colorslist)  # 自定义颜色映射 color-map
+        norm = mpl.colors.BoundaryNorm(levels, cmaps.N)  # 基于离散区间生成颜色映射索引
+        lat = data_xr.lat
+        lon = data_xr.lon
+        lons, lats = np.meshgrid(lon, lat)
+        contour = plt.contourf(lons,lats,data_xr,cmap = cmaps,norm = norm ,levels = levels)
+        geojson = geojsoncontour.contourf_to_geojson(
+            contourf=contour,
+            ndigits=3,
+            unit='mm'
+        )
+        plt.close()
+        # 风力
+        # wind = data
+        wind = data[data['wind']>0]
+        wind['WIN_S_Gust_Max'] = wind.apply(lambda x: (x.wind - int(str(int(x.wind))[-3:]))/10000, axis = 1)
+        wind['WIN_D_Gust_Max'] = wind.apply(lambda x: int(str(int(x.wind))[-3:]), axis = 1)
+        wind_json = wind.to_json(orient = "records", force_ascii=False)
+        return geojson,wind_json
+    def return_text(self):
+        data = self.get_daily()
+        rain_max = data.sort_values(by="rain",ascending=False).head(3)
+        raintop = rain_max.head(1)
+        text_rain = ""
+        if raintop['rain'].values[0]>0: 
+            text_rain = text_rain +"近24小时内" + raintop['City'].values[0] + raintop['Cnty'].values[0] + raintop['Town'].values[0] +raintop['Station_Name'].values[0] +"出现"+ str(raintop['rain'].values[0]) +"毫米的降水。"
+        average = data.groupby(['Cnty'])['rain'].mean().to_frame().sort_values(by="rain",ascending=False)
+        text_cnty_average = "各市面雨量较大的有："
+        for index,row in average.iterrows():
+            if row['rain']>0:
+                text_cnty_average = text_cnty_average + index + str(round(row['rain'],2)) + "毫米,"  
+        text_cnty_average = text_cnty_average[:-1] + "。"
+        text_rain = text_rain + text_cnty_average
+        wind = data[data['wind']>0]
+        wind['WIN_S_Gust_Max'] = wind.apply(lambda x: (x.wind - int(str(int(x.wind))[-3:]))/10000, axis = 1)
+        wind['WIN_D_Gust_Max'] = wind.apply(lambda x: int(str(int(x.wind))[-3:]), axis = 1)
+        wind['value'] = wind['WIN_S_Gust_Max'] 
+        wind = wind[wind['value']>10].sort_values(by="value",ascending=False)
+        text = ""
+        wind_text = ""
+        if len(wind)>0:
+            wind_text = wind_text + "全市出现8级以上大风，风力较大的有"
+            text_maxwind = ""
+            if len(wind)>3:
+                wind = wind.head(3)
+            else:
+                wind = wind
+            for index,row in wind.iterrows():
+                text_maxwind = text_maxwind + row['Cnty'] + row['Town'] + "-"+ row['Station_Name'] + str(row['value']) +"m/s,"
+            text_maxwind = text_maxwind[:-1] + "。"
+            wind_text =  wind_text + text_maxwind  
+        text = text + text_rain + wind_text
+        return text
