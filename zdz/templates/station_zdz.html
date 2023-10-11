@@ -1063,6 +1063,8 @@
                             }).addTo(map_toolbox_object.current_map)
                         }
                         else if ($("#village_line").val() == "xianju") {
+                            var bbox = turf.bbox(xj_json);
+                            console.log("所属经纬度",bbox)
                             var boundaries_village = map_toolbox_object.return_boundaries(xj_json.features).boundaries
                             var lines_village = L.geoJSON(boundaries_village, {
                                 style: function (feature) {
@@ -3120,7 +3122,7 @@
                         </ul>
                         <div class="layui-tab-content" style="padding: 0;">
                             <div id="text_msg" class="layui-tab-item layui-show"
-                                style="width:100%;height: 300px;overflow-y:scroll">
+                                style="width:100%;height: 300px;overflow-y:scroll;font-size: 15px;line-height: 2em;padding:2%;">
 
                                 <!-- <div  class="layui-code" style="width:100%;height: 100%;overflow-y: auto;">
                     
@@ -4138,16 +4140,15 @@
                                                     <option value="">24小时分钟降水</option> -->
                                                 </select>
                                             </div>
+                                            <label class="layui-form-label">同步</label>
                                             <div class="layui-input-inline">
                                                 <select>
-                                                    
-                                                    <option value="taizhou" selected="">台州市</option>
-                                                </select>
-                                            </div>
-                                            <div class="layui-input-inline">
-                                                <select>
-                                                    <option value="all">全市</option>
-                                                    <!-- <option value="10">玉环</option> -->
+                                                    <option value="10min" selected="">10分钟降水</option>
+                                                    <!-- <option value="60min">1小时分钟降水</option>
+                                                    <option value="">3小时分钟降水</option>
+                                                    <option value="">6小时分钟降水</option>
+                                                    <option value="">12小时分钟降水</option>
+                                                    <option value="">24小时分钟降水</option> -->
                                                 </select>
                                             </div>
                                             <div class="layui-input-inline" style="width:80px;">
@@ -4194,7 +4195,7 @@
                                                 lay-skin="primary" checked="" title="风力报警">
                                         </div>
 
-                                        <!-- <div class="layui-input-inline" style="margin-bottom:20px">
+                                        <div class="layui-input-inline" style="margin-bottom:20px">
                                             <div class="layui-input-inline" style="margin-left:15px">
                                                 <select id="windave_10min" style="width:50px">
                                                     <option value="1000" select="">1000米</option>
@@ -4217,21 +4218,12 @@
                                             </div>
                                             <input type="checkbox" name="warring_check" value="view_10min"
                                                 lay-skin="primary" title="温度报警">
-                                        </div> -->
+                                        </div>
 
 
                                     </div>
                                 </div>
                             </div>
-                            <!-- 报警地图 -->
-                            <!-- <div class="layui-col-md6">
-                                <div class="layui-panel" style="height:400px">
-                                    <div class="layui-form" style="padding: 50px 10px;">
-                                        
-                                    </div>
-                                </div>
-                            </div> -->
-
                         </div>
                     </div>
 
@@ -4256,24 +4248,53 @@
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">账号</label>
                                     <div class="layui-input-block" style="background-color:rgb(28,30,36);width:49%;">
-                                        <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                                        <input id="user" type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">密码</label>
                                     <div class="layui-input-block" style="background-color:rgb(28,30,36);width:49%;">
-                                        <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                                        <input  id="passwd" type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
-                                <div class="layui-form-item" style="height:5%"></div>
-                               
-                                <button type="button" class="layui-btn" style="float:right;margin-right: 20%;">登录</button>
+                                <div class="layui-form-item" style="height:5%"></div>                          
+                                <button id="login" type="button" class="layui-btn" style="float:right;margin-right: 20%;">登录</button>
                             </div>
                         </dd>
                     </dl>
 
                 </li>
             </ul>
+            <script>
+                 $("#login").click(function () {
+                    $.post(
+                         "user/login",
+                         {
+                             // 'csrfmiddlewaretoken': csrf,
+                             'username': $('#user').val(),
+                             'password': $('#passwd').val()
+                         },
+                         function (result) {
+                             // {#登录成功#}
+                             if (result.code === 200) {
+                                 // {#存储人物信息到本地#}
+                                 console.log("登录成功", result)
+                                 let data = result.data;
+                                 localStorage.setItem("token", data.access);
+                                 localStorage.setItem("companyName", data.company_name);
+                                 localStorage.setItem("companyType", data.company_type);
+                                 localStorage.setItem("name", data.name);
+                                 localStorage.setItem("roleType", data.role_type);
+                                 localStorage.setItem("userId", data.user_id);
+                                 layer.closeAll();
+                                //  layer.close(layer.index);
+
+                             } else {
+                                 alert(result.err_msg)
+                             }
+                         });
+                    })
+            </script>
 
         </div>
         <!-- 设置 -->

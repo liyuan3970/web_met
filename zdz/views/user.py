@@ -15,6 +15,7 @@ class LoginView(TokenObtainPairView):
 
 
 class LoginRefreshView(TokenRefreshView):
+    
     serializer_class = LoginRefreshSerializer
 
 

@@ -19,6 +19,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         return attrs
 
 class LoginSerializer(TokenObtainPairSerializer):
+    
     default_error_messages = {
         "no_active_account": _("No active account found with the given credentials")
     }

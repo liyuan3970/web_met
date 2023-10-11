@@ -1621,22 +1621,31 @@ class station_text:
         for item in river_list:
             text_river = text_river + item[0] + ":" + str(item[1]) + "毫米,"  
         if len(text_river)>1:
-            text_river = "【流域面雨量】雨量较大的有"+text_river[:-1] + "。"
+            text_river = "【流域雨量】面雨量较大的有"+text_river[:-1] + "。"
         else:
             text_river =""    
         # 单站前十
         rain_max = rain.sort_values(by="rain",ascending=False).head(10)
         rain_json = rain.sort_values(by="rain",ascending=False).to_json(orient='records',force_ascii=False)
-        indextext = "单站雨量较大的有："
+        indextext = "【单站雨量】雨量较大的有："
         for index,row in rain_max.iterrows():
             if self.city_code in self.city_codes:
                 indextext = indextext + row['Cnty'] + row['StationName'] + str(row['rain']) + "毫米，"
             else:
                 indextext = indextext + row['Town'] + row['StationName'] + str(row['rain']) + "毫米，"
         indextext = indextext[:-1] + "。"
+        # 小时雨强较大的有 ------------------------------
+        rain_hours_max = pd.read_csv("static/data/downfile/rain_max.csv").sort_values(by="PRE",ascending=False).head(5)
+        if max(rain_hours_max['PRE'])>0.1:
+            rain_hours_max_text = ""
+            for index,row in rain_hours_max.iterrows():
+                rain_hours_max_text = rain_hours_max_text + row['Cnty'] + row['Station_Name'] + str(row['PRE']) + "毫米，"
+            rain_hours_max_text = "【小时雨强】雨强较大的有" +  rain_hours_max_text[:-1] + "。" 
+        else:
+            rain_hours_max_text = ""
         # 乡镇前十
         town_max = rain.groupby(['Town','Cnty'])['rain'].max().sort_values(ascending=False).head(10)
-        indextext_town = "乡镇雨量较大的有："
+        indextext_town = "【乡镇雨量】雨量较大的有："
         for index,row in rain_max.iterrows():
             if self.city_code in self.city_codes:
                 indextext_town = indextext_town + row['Cnty'] + row['StationName'] + str(row['rain']) + "毫米，"
@@ -1701,15 +1710,15 @@ class station_text:
         }
         res = max(rank_text, key=lambda x: rank_text[x])
         if max(rank_text, key=lambda x: rank_text[x])=="大暴雨":
-            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town + "<br>"+text_river
+            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + "<br>" + indextext + numbertext + "<br>" + rain_hours_max_text + "<br>" + indextext_town + numbertext_town + "<br>" + text_river
         elif max(rank_text, key=lambda x: rank_text[x])=="大到暴雨":
-            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town + "<br>"+text_river
+            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + "<br>" + indextext + numbertext + "<br>" + rain_hours_max_text + "<br>" + indextext_town + numbertext_town + "<br>" + text_river
         elif max(rank_text, key=lambda x: rank_text[x])=="中到大雨":
-            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town + "<br>"+text_river
+            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + "<br>" + indextext + numbertext + "<br>" + rain_hours_max_text + "<br>" + indextext_town + numbertext_town + "<br>" + text_river
         elif max(rank_text, key=lambda x: rank_text[x])=="小到中雨":
-            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town + "<br>"+text_river
+            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + "<br>" + indextext + numbertext + "<br>" + rain_hours_max_text + "<br>" + indextext_town + numbertext_town + "<br>" + text_river
         elif max(rank_text, key=lambda x: rank_text[x])=="小雨":
-            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + indextext + numbertext + indextext_town + numbertext_town + "<br>"+text_river
+            text = "【雨情通报】 全市出现" + res +"。" + text_average_city + "<br>" + indextext + numbertext + "<br>" + rain_hours_max_text + "<br>" + indextext_town + numbertext_town + "<br>" + text_river
         return text,rain_json
     def main(self):
         text = ""
