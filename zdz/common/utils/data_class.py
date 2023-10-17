@@ -2369,93 +2369,7 @@ class server_plot():
         text = text + text_rain + wind_text
         return geojson,text,wind_json
 
-class warring_alert():
-    def __init__(self,center,rain_status,wind_status,temp_status,view_status):
-        # self.rs = redis.Redis(host='127.0.0.1', port=6379,password="tzqxj58660")
-        # self.conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="tzqxj58660",db="ZJSZDZDB")
-        # self.con = pymssql.connect("172.21.158.201","down","downx","ZJSZDZDB")
-        self.userId = "BEHZ_TZSJ_TZSERVICE" 
-        self.pwd = "Liyuan3970!@" 
-        self.dataFormat = "json"
-        # 参数
-        self.center = center    
-    def regin(self,data):
-        regin = data[(data['Lon']>self.center[0])&(data['Lon']<self.center[1])&(data['Lat']<self.center[2])&(data['Lat']>self.center[3])]
-        return data 
-    def get_radar(self):
-        '''获取雷达数据'''
-        img = pickle.loads(self.rs.get("radar"))
-        return img
-    def rain_waring(self,data):
-        '''判断降水'''
-        data = self.regin(data)
-        if len(data)!=0:
-            if max(data['PRE'])>5:
-                status = "warring"
-            else:
-                status = "silence"
-        else:
-            status = "silence"
-        return status
-    def wind_waring(self,data):
-        '''判断风力'''
-        data = self.regin(data)
-        if len(data)!=0:
-            if max(data['WIN_S_Inst_Max'])>17.3:
-                status = "warring"
-            else:
-                status = "silence"
-        else:
-            status = "silence"
-        return status
-    def temp_waring(self,data):
-        '''判断气温'''
-        data = self.regin(data)
-        if len(data)!=0:
-            if max(data['TEM'])>38 or min(data['TEM'])<0:
-                status = "warring"
-            else:
-                status = "silence"
-        else:
-            status = "silence"
-        return status
-    def view_waring(self,data):
-        '''判断能见度'''
-        data = self.regin(data)
-        if len(data)!=0: 
-            if min(data['VIS_HOR_1MI'])<500:
-                status = "warring"
-            else:
-                status = "silence"
-        else:
-            status = "silence"
-        return status
-    def warring_data(self):
-        # 开始编写风雨数据模型
-        data = pd.read_csv("static/data/dwonfile/server.csv") 
-        # 普通模式
-        # data = pickle.loads(self.rs.get("warring_zdz"))
-        data = data.astype({'Lat': 'float', 'Lon': 'float','PRE': 'float','WIN_S_Inst_Max': 'float', 'WIN_D_INST_Max': 'float','TEM':'float','VIS_HOR_1MI':'float'})
-        data = data.replace(999999.0, np.nan)
-        wind = data[(data['WIN_S_Inst_Max']>17)&(data['WIN_S_Inst_Max']<5000)][['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti','WIN_S_Inst_Max','WIN_D_INST_Max']]
-        rain = data[(data['PRE']>0)&(data['PRE']<5000)][['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti','PRE']]
-        wind_data = wind.groupby(['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti','WIN_D_INST_Max'])['WIN_S_Inst_Max'].max().reset_index().sort_values('WIN_S_Inst_Max', ascending=False).drop_duplicates(subset=['Station_Id_C'], keep='first')
-        rain_data = rain.groupby(['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti'])['PRE'].sum().reset_index()
-        # 参数列表
-        #warring_list = [self.rain_waring(rain_data),self.wind_waring(wind_data),self.temp_waring(data),self.view_waring(data)]
-        warring_list = [self.rain_waring(rain_data),self.wind_waring(wind_data)]
-        img = self.get_radar()
-        if "warring" in warring_list:
-            status = "warring"
-        else:
-            status = "silence"
-        context = {
-            'warring': status,
-            'rain':rain_data.to_json(orient = "records", force_ascii=False),
-            'wind':wind_data.to_json(orient = "records", force_ascii=False),
-            'radar':img
-        }
-        return context
+
 
 # 日历
 class clander:
@@ -2543,3 +2457,68 @@ class clander:
             wind_text =  wind_text + text_maxwind  
         text = text + text_rain + wind_text
         return text
+
+
+# 报警程序的模块
+class warring_alert():
+    def __init__(self,rain_type):
+        self.rs = redis.Redis(host='127.0.0.1', port=6379)
+#         self.rs = redis.Redis(host='127.0.0.1', port=6379,password="tzqxj58660")
+#         self.conn = pymysql.connect(host="127.0.0.1",port=3306,user="root",passwd="tzqxj58660",db="ZJSZDZDB")
+#         self.con = pymssql.connect("172.21.158.201","down","downx","ZJSZDZDB")
+        self.userId = "BEHZ_TZSJ_TZSERVICE" 
+        self.pwd = "Liyuan3970!@" 
+        self.dataFormat = "json"   
+        self.rain_type = rain_type
+        self.now = self.get_latest()
+    def get_rain(self):
+        rain_dir = {
+            "10min":"warring_zdz",
+            "rain01":"rain01",
+            "rain03":"rain03",
+            "rain12":"rain12",
+            "rain24":"rain24"        
+        }
+        if self.rain_type =="10min":
+            data = self.now
+            rain = data[(data['PRE']>0)&(data['PRE']<5000)][['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti','PRE']]
+            rain_data = rain.groupby(['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti'])['PRE'].sum().reset_index()
+        else:
+            data = pd.read_csv("/workspace/liyuan3970/Data/My_Git/web_met/static/data/downfile/rain01.csv")
+            rain_data = data
+        return rain_data
+    def get_latest(self):
+        data = pd.read_csv("/workspace/liyuan3970/Data/My_Git/web_met/static/data/downfile/server.csv")
+        data = data.astype({'Lat': 'float', 'Lon': 'float','PRE': 'float','WIN_S_Inst_Max': 'float', 'WIN_D_INST_Max': 'float','TEM':'float','VIS_HOR_1MI':'float'})
+        return data         
+    def get_wind(self):
+        data = self.now
+        wind = data[(data['WIN_S_Inst_Max']>17)&(data['WIN_S_Inst_Max']<5000)][['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti','WIN_S_Inst_Max','WIN_D_INST_Max']]
+        wind_data = wind.groupby(['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti','WIN_D_INST_Max'])['WIN_S_Inst_Max'].max().reset_index().sort_values('WIN_S_Inst_Max', ascending=False).drop_duplicates(subset=['Station_Id_C'], keep='first')
+        return wind_data
+    def get_temp(self):
+        data = self.now
+        tmin = data[(data['TEM']<0)&(data['TEM']<5000)][['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti','TEM']]
+        tmax = data[(data['TEM']>10)&(data['TEM']<5000)][['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti','TEM']]
+        tmax_data = tmax.groupby(['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti'])['TEM'].max().reset_index().to_json(orient = "records", force_ascii=False)
+        tmin_data = tmin.groupby(['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti'])['TEM'].min().reset_index().to_json(orient = "records", force_ascii=False)
+        return tmax_data,tmin_data
+    def get_view(self):
+        data = self.now
+        view = data[(data['VIS_HOR_1MI']<1000)&(data['VIS_HOR_1MI']<30000)][['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti','VIS_HOR_1MI']]
+        view_data = view.groupby(['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti'])['VIS_HOR_1MI'].min().reset_index().to_json(orient = "records", force_ascii=False)
+        return view_data
+    def get_radar(self):
+        '''获取雷达数据'''
+        img = pickle.loads(self.rs.get("radar"))
+        return img
+    def warring_data(self):
+        # 开始编写风雨数据模型
+#         radar = self.get_radar()
+        rain = self.get_rain()
+        wind = self.get_wind()
+        tmax_data,tmin_data = self.get_temp()
+        view_data = self.get_view()
+        rain_data = rain.to_json(orient = "records", force_ascii=False)
+        wind_data = wind.to_json(orient = "records", force_ascii=False)
+        return rain_data,wind_data,tmax_data,tmin_data,view_data

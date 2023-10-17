@@ -1003,23 +1003,27 @@ def station_zdz_data(request):
             }
         return JsonResponse(context)
         
-import numpy as np
-import pandas as pd
-import json
+
 def station_zdz_warring(request):
-    worker = data_class.radar_data()
+    name = request.POST.get('name', '')
+    print("测试----",name)
+    rain_type = request.POST.get('rain_type', '')
+    worker = data_class.warring_alert(rain_type)
     img = worker.get_radar()
     # 开始编写风雨数据模型
-    data = pd.read_csv("static/data/downfile/min.csv")
-    data = data.replace(999999.0, np.nan)
-    wind = data[(data['WIN_S_Gust_Max']>17)&(data['WIN_S_Gust_Max']<5000)][['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti','WIN_S_Gust_Max','WIN_D_Gust_Max']]
-    rain = data[(data['PRE']>0)&(data['PRE']<5000)][['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti','PRE']]
-    wind_data = wind.groupby(['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti','WIN_D_Gust_Max'])['WIN_S_Gust_Max'].max().reset_index().sort_values('WIN_S_Gust_Max', ascending=False).drop_duplicates(subset=['Station_Id_C'], keep='first').to_json(orient = "records", force_ascii=False)
-    rain_data = rain.groupby(['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti'])['PRE'].sum().reset_index().to_json(orient = "records", force_ascii=False)
+    rain_data,wind_data,tmax_data,tmin_data,view_data = worker.warring_data()
+    # 数据
+    # filename = "static/data/shpfile/country/shp/yuhuan.json"
+    # with open(filename, "r") as file:
+    #     shp = json.load(file)
     context = {
             'warring': "warring",
             'rain':rain_data,
             'wind':wind_data,
+            'tmax':tmax_data,
+            'tmin':tmin_data,
+            'view':view_data,
+            # 'shp':shp,
             'radar':img
         }
     return JsonResponse(context)

@@ -11,6 +11,7 @@ from ..serializers import RegisterSerializer, LoginSerializer, LoginRefreshSeria
 
 # 登录view
 class LoginView(TokenObtainPairView):
+    # print("a")
     serializer_class = LoginSerializer
 
 
@@ -21,7 +22,7 @@ class LoginRefreshView(TokenRefreshView):
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
-
+    
     @transaction.atomic()
     @action(methods=["post"], url_path="register", detail=False, permission_classes=[permissions.AllowAny])
     def register(self, request):

@@ -234,6 +234,17 @@
                                 radar_layer: undefined,                        
                                 layer_status: undefined,
                                 warring_list :[],
+                                warring_range:[119,27.8,122.5,29.8],
+                                alert_worker: function (recvdate) {               
+                                    $('input[name="warring_check"]:checked').each(function () {
+                                        var target = $(this).val()
+                                        if(target=="rain_10min"){warring_obj.rain_update(JSON.parse(recvdate.rain))}
+                                        else if(target=="wind_10min"){warring_obj.wind_update(JSON.parse(recvdate.wind))}
+                                        else if(target=="tmax_10min"){warring_obj.tmax_update(JSON.parse(recvdate.tmax))}
+                                        else if(target=="tmin_10min"){warring_obj.tmin_update(JSON.parse(recvdate.tmin))}
+                                        else if(target=="view_10min"){warring_obj.view_update(JSON.parse(recvdate.view))}
+                                    })
+                                },
                                 notice_alert: function () {
                                     layui.use('table', function () {
                                         var table = layui.table;
@@ -303,7 +314,9 @@
                                         type: "post",  // 请求方式
                                         timeout: 25000, //设置延迟上限
                                         data: {
-                                            'csrfmiddlewaretoken': csrf
+                                            'csrfmiddlewaretoken': csrf,
+                                            'rain_type':$("#warring_alert_rain_type").val(),
+                                            'name':localStorage.getItem("name")
                                         },
                                         dataType: "json",
                                         success: function (recvdate) {
@@ -311,16 +324,18 @@
                                             var contourf = JSON.parse(recvdate.radar['imglist'][recvdate.radar['imglist'].length - 1])
                                             // const gcoord = require('gcoord');
                                             // var result = gcoord.transform(contourf, gcoord.WGS84, gcoord.GCJ02);
-                                            // console.log("坐标转换",result) 
+                                            
                                             var radarlayer = L.geoJSON(contourf, {
                                                 style: function (feature) {
                                                     return { color: feature.properties.stroke, weight: 0.5, fill: true, fillColor: feature.properties.stroke, fillOpacity: 0.7 };
                                                 }
                                             }).bindPopup(function (layer) {
                                                 return layer.feature.properties.title;
-                                            })
+                                            }) 
                                             warring_obj.radar_layer = radarlayer
                                             var real_flash_opt = $('input[name="real_flash_opt"]:checked').val();
+
+
                                             if (real_flash_opt == "update") {
                                                 //填充实时的图层 -- leida -- rain -- wind
                                                 map_toolbox_object.flash_map()
@@ -328,28 +343,42 @@
                                                 if (warring_obj.radar_layer) {
                                                     warring_obj.radar_layer.addTo(map_toolbox_object.current_map)
                                                 }
-                                                // rain
-                                                warring_obj.rain_update(JSON.parse(recvdate.rain))
-                                                //wind
-                                                warring_obj.wind_update(JSON.parse(recvdate.wind))
+                                                warring_obj.alert_worker(recvdate)
                                             }
                                             else{
-                                                // rain
-                                                warring_obj.rain_update(JSON.parse(recvdate.rain))
-                                                //wind
-                                                warring_obj.wind_update(JSON.parse(recvdate.wind))
-
+                                                warring_obj.alert_worker(recvdate)
                                             }
-                                            // var warring_opt = $('input[name="warring_opt"]:checked').val();
 
-
-
-
+                                            var shpopt = $("#warring_shp_layer").val()
+                                            var shplayer = JSON.parse(localStorage.getItem('userShp'))
+                                            if (shpopt == "yes") {
+                                                
+                                                if (shplayer) {
+                                                    var lines_village = L.geoJSON(shplayer, {
+                                                        style: function (feature) {
+                                                            return { color: 'red', weight: 1.5, fillOpacity: 0.01 };
+                                                        }
+                                                    }).addTo(map_toolbox_object.current_map)
+                                                    var bbox = turf.bbox(shplayer);
+                                                    warring_obj.warring_range = [bbox[0]-0.3,bbox[1]-0.3,bbox[2]+0.3,bbox[3]+0.3]
+                                                }
+                                                else {
+                                                    var lines_village = L.geoJSON(taizhou_map, {
+                                                        style: function (feature) {
+                                                            return { color: 'blue', weight: 1.5, fillOpacity: 0.01 };
+                                                        }
+                                                    }).addTo(map_toolbox_object.current_map)
+                                                    var bbox = turf.bbox(taizhou_map);
+                                                    warring_obj.warring_range = [bbox[0]-0.3,bbox[1]-0.3,bbox[2]+0.3,bbox[3]+0.3]
+                                                }
+                                            }
+                                            
                                         }
                                     })
 
                                 },
                                 rain_update: function (data) {
+                                    
                                     warring_obj.warring_list = []
                                     var rainval =  $("#rain_10min").val()
                                     var real_flash_opt = $('input[name="real_flash_opt"]:checked').val();                                                              
@@ -406,7 +435,7 @@
                                             c.addTo(map_toolbox_object.current_map)
                                         }      
                                         // 信息表格内容添加
-                                        if (item.PRE>Number(rainval)){ 
+                                        if ((item.PRE>Number(rainval))&&(item.Lat>warring_obj.warring_range[1])&&(item.Lat<warring_obj.warring_range[3])&&(item.Lon>warring_obj.warring_range[0])&&(item.Lon<warring_obj.warring_range[2])){ 
                                             warring_obj.warring_status = "warring"                               
                                             var single = {
                                                 'City':item.City,
@@ -422,6 +451,7 @@
 
                                 },
                                 wind_update: function (data) {
+                                    
                                     var windval =  $("#wind_10min").val()
                                     var real_flash_opt = $('input[name="real_flash_opt"]:checked').val(); 
                                     data.forEach(function (item) {
@@ -462,7 +492,7 @@
                                             marker.addTo(map_toolbox_object.current_map)
                                         }        
                                         // 信息表格内容添加
-                                        if (item.WIN_S_Gust_Max>Number(windval)){ 
+                                        if ((item.PRE>Number(windval))&&(item.Lat>warring_obj.warring_range[1])&&(item.Lat<warring_obj.warring_range[3])&&(item.Lon>warring_obj.warring_range[0])&&(item.Lon<warring_obj.warring_range[2])){ 
                                             warring_obj.warring_status = "warring"                           
                                             var single = {
                                                 'City':item.City,
@@ -477,6 +507,60 @@
                                     })
 
                                 },
+                                tmin_update: function (data){
+                                    
+                                    var tminval = $("#tmin_10min").val()    
+                                    data.forEach(function (item) {
+                                        if ((item.TEM <= Number(tminval)) && (item.Lat > warring_obj.warring_range[1]) && (item.Lat < warring_obj.warring_range[3]) && (item.Lon > warring_obj.warring_range[0]) && (item.Lon < warring_obj.warring_range[2])) {
+                                            warring_obj.warring_status = "warring"
+                                            var single = {
+                                                'City': item.City,
+                                                'Station_Id_C': item.Station_Id_C,
+                                                'Station_Name': item.Station_Name,
+                                                'type': "低温",
+                                                'value': item.TEM.toString()
+                                            }
+                                            warring_obj.warring_list.push(single)
+                                        }
+                                    })
+                                },
+                                tmax_update: function (data) {
+                                    var tmaxval = $("#tmax_10min").val()       
+                                    data.forEach(function (item) {
+                                        if ((item.TEM >= Number(tmaxval)) && (item.Lat > warring_obj.warring_range[1]) && (item.Lat < warring_obj.warring_range[3]) && (item.Lon > warring_obj.warring_range[0]) && (item.Lon < warring_obj.warring_range[2])) {
+                                            warring_obj.warring_status = "warring"
+                                            var single = {
+                                                'City': item.City,
+                                                'Station_Id_C': item.Station_Id_C,
+                                                'Station_Name': item.Station_Name,
+                                                'type': "高温",
+                                                'value': item.TEM.toString()
+                                            }
+                                            warring_obj.warring_list.push(single)
+                                        }
+                                    })
+
+
+                                },
+                                view_update: function (data){
+                                    var viewval = $("#view_10min").val()    
+                                    data.forEach(function (item) {
+                                        if ((item.VIS_HOR_1MI <= Number(viewval)) && (item.Lat > warring_obj.warring_range[1]) && (item.Lat < warring_obj.warring_range[3]) && (item.Lon > warring_obj.warring_range[0]) && (item.Lon < warring_obj.warring_range[2])) {
+                                            warring_obj.warring_status = "warring"
+                                            var single = {
+                                                'City': item.City,
+                                                'Station_Id_C': item.Station_Id_C,
+                                                'Station_Name': item.Station_Name,
+                                                'type': "能见度",
+                                                'value': item.VIS_HOR_1MI.toString()
+                                            }
+                                            warring_obj.warring_list.push(single)
+                                        }
+
+                                    })
+                                   
+                                    
+                                }
                             };
                             //报警设置
                             $("#warring_div").click(function () {
@@ -579,8 +663,8 @@
                 <li class="layui-nav-item layui-nav-itemed">
                     <div class="layui-btn layui-btn-fluid">实况统计</div>
                     <dl class="layui-nav-child">
-                        <dd style="height:300px">
-                            <div style="height:100%;width:100%;margin-top: 5%;" class="layui-form">
+                        <dd style="height:180px">
+                            <div style="height:100%;width:100%;margin-top: 8%;" class="layui-form">
                                 <label class="layui-form-label">数据类型</label>
                                 <div class="layui-input-inline" style="width: 38%;padding-left:28px;">
                                     <select id="real_class">
@@ -606,30 +690,7 @@
                                         <option value="30mins">30分钟</option>
                                         <option value="now" selected="">实时</option>
                                     </select>
-                                </div>
-
-                                <div class="layui-form-item">
-                                    <label class="layui-form-label">数据级别</label>
-                                    <div class="layui-input-block"
-                                        style="background-color:rgb(28,30,36);width:49%;margin-top: 6%;">
-                                        <select id="table_type">
-                                            <option value=""></option>
-                                            <option value="nation">国家站</option>
-                                            <option value="regin">区域站</option>
-                                            <option value="all">所有站</option>
-                                            <option value="main">骨干站</option>
-                                            <option value="auto" selected="">全自动</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="layui-form-item" style="margin-top:15px;">
-                                    <label class="layui-form-label">显示选项</label>
-                                    <div class="layui-input-block" style="">
-                                        <input type="radio" name="boundary_type" value="current" title="当前" checked="">
-                                        <input type="radio" name="boundary_type" value="all" title="全省">
-                                    </div>
-                                </div>
+                                </div>              
                                 <div id="radar_plot" class="layui-form-item" style=";margin-top: 5%;">
                                     <label class="layui-form-label">叠加回波</label>
                                     <div class="layui-input-block">
@@ -1063,8 +1124,7 @@
                             }).addTo(map_toolbox_object.current_map)
                         }
                         else if ($("#village_line").val() == "xianju") {
-                            var bbox = turf.bbox(xj_json);
-                            console.log("所属经纬度",bbox)
+                            
                             var boundaries_village = map_toolbox_object.return_boundaries(xj_json.features).boundaries
                             var lines_village = L.geoJSON(boundaries_village, {
                                 style: function (feature) {
@@ -4131,26 +4191,23 @@
                                         <div class="layui-form-item">
                                             <label class="layui-form-label">报警</label>
                                             <div class="layui-input-inline">
-                                                <select>
+                                                <select id="warring_alert_rain_type">
                                                     <option value="10min" selected="">10分钟降水</option>
-                                                    <!-- <option value="60min">1小时分钟降水</option>
-                                                    <option value="">3小时分钟降水</option>
-                                                    <option value="">6小时分钟降水</option>
-                                                    <option value="">12小时分钟降水</option>
-                                                    <option value="">24小时分钟降水</option> -->
+                                                    
+                                                    <option value="rain03">3小时分钟降水</option>
+                                                    <option value="rain06">6小时分钟降水</option>
+                                                    <option value="rain12">12小时分钟降水</option>
+                                                    <option value="rain24">24小时分钟降水</option>
                                                 </select>
                                             </div>
-                                            <label class="layui-form-label">同步</label>
-                                            <div class="layui-input-inline">
-                                                <select>
-                                                    <option value="10min" selected="">10分钟降水</option>
-                                                    <!-- <option value="60min">1小时分钟降水</option>
-                                                    <option value="">3小时分钟降水</option>
-                                                    <option value="">6小时分钟降水</option>
-                                                    <option value="">12小时分钟降水</option>
-                                                    <option value="">24小时分钟降水</option> -->
+                                            <label class="layui-form-label">边界</label>
+                                            <div class="layui-input-inline" style="width:80px;">
+                                                <select id="warring_shp_layer">
+                                                    <option value="yes" selected="">叠加</option>
+                                                    <option value="no" selected="">隐藏</option>
                                                 </select>
                                             </div>
+                                            <label class="layui-form-label">显示</label>
                                             <div class="layui-input-inline" style="width:80px;">
                                                 <select id="warring_class" style="width:50px;">
                                                     <!-- <option value="none" >静音</option> -->
@@ -4186,9 +4243,9 @@
                                             <div class="layui-input-inline" style="margin-left:15px">
                                                 <select id="wind_10min" style="width:50px">
                                                     <option value="17.3" select="">8级风</option>
-                                                    <option value="20">9级风</option>
-                                                    <option value="21">10级风</option>
-                                                    <option value="22">12级以上</option>
+                                                    <option value="20.9">9级风</option>
+                                                    <option value="22.3">10级风</option>
+                                                    <option value="25">12级以上</option>
                                                 </select>
                                             </div>
                                             <input type="checkbox" name="warring_check" value="wind_10min"
@@ -4204,20 +4261,29 @@
                                                     <option value="50">50米</option>
                                                 </select>
                                             </div>
-                                            <input type="checkbox" name="warring_check" value="windave_10min"
+                                            <input type="checkbox" name="warring_check" value="view_10min"
                                                 lay-skin="primary" title="浓雾报警">
                                         </div>
 
                                         <div class="layui-input-inline" style="margin-bottom:20px">
                                             <div class="layui-input-inline" style="margin-left:15px">
-                                                <select id="view_10min" style="width:50px">
+                                                <select id="tmax_10min" style="width:50px">
                                                     <option value="37">37度</option>
                                                     <option value="40">40度</option>
+                                                </select>
+                                            </div>
+                                            <input type="checkbox" name="warring_check" value="tmax_10min"
+                                                lay-skin="primary" title="高温报警">
+                                        </div>
+
+                                        <div class="layui-input-inline" style="margin-bottom:20px">
+                                            <div class="layui-input-inline" style="margin-left:15px">
+                                                <select id="tmin_10min" style="width:50px">
                                                     <option value="0">0度</option>
                                                 </select>
                                             </div>
-                                            <input type="checkbox" name="warring_check" value="view_10min"
-                                                lay-skin="primary" title="温度报警">
+                                            <input type="checkbox" name="warring_check" value="tmin_10min"
+                                                lay-skin="primary" title="低温报警">
                                         </div>
 
 
@@ -4267,25 +4333,29 @@
             </ul>
             <script>
                  $("#login").click(function () {
+
                     $.post(
                          "user/login",
                          {
                              // 'csrfmiddlewaretoken': csrf,
                              'username': $('#user').val(),
-                             'password': $('#passwd').val()
+                             'password': $('#passwd').val(),
                          },
                          function (result) {
                              // {#登录成功#}
                              if (result.code === 200) {
                                  // {#存储人物信息到本地#}
-                                 console.log("登录成功", result)
+                                //  console.log("登录成功", JSON.parse(localStorage.getItem('userShp')))
                                  let data = result.data;
                                  localStorage.setItem("token", data.access);
-                                 localStorage.setItem("companyName", data.company_name);
+                                 localStorage.setItem("userName", data.company_name);
                                  localStorage.setItem("companyType", data.company_type);
                                  localStorage.setItem("name", data.name);
                                  localStorage.setItem("roleType", data.role_type);
                                  localStorage.setItem("userId", data.user_id);
+                                 localStorage.setItem("userShp", JSON.stringify(data.shp));
+                                 $("#user_login_label").html(" ")
+                                 $("#user_login_label").html(data.company_name)
                                  layer.closeAll();
                                 //  layer.close(layer.index);
 
@@ -4305,7 +4375,7 @@
                     <button type="button" class="layui-btn layui-btn-fluid ">数据设置</button>
                     <dl class="layui-nav-child">
                         <!-- 数据设置 -->
-                        <dd style="height:180px">
+                        <dd style="height:250px">
                             <div style="height:100%;width:100%;" class="layui-form">
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">绘图选项</label>
@@ -4329,6 +4399,27 @@
                                             <option value="linhai">临海</option>
                                             <option value="tiantai">天台</option>
                                             <option value="sanmen">三门</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="margin-top:15px;">
+                                    <label class="layui-form-label">显示选项</label>
+                                    <div class="layui-input-block" style="">
+                                        <input type="radio" name="boundary_type" value="current" title="当前" checked="">
+                                        <input type="radio" name="boundary_type" value="all" title="全省">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">数据级别</label>
+                                    <div class="layui-input-block"
+                                        style="background-color:rgb(28,30,36);width:49%;margin-top: 6%;">
+                                        <select id="table_type">
+                                            <option value=""></option>
+                                            <option value="nation">国家站</option>
+                                            <option value="regin">区域站</option>
+                                            <option value="all">所有站</option>
+                                            <option value="main">骨干站</option>
+                                            <option value="auto" selected="">全自动</option>
                                         </select>
                                     </div>
                                 </div>
@@ -4515,7 +4606,9 @@
                             renderer: canvasLabel,
                             zoom: 9, //4
                             maxZoom: 12,
-                            minZoom: 7,
+                            minZoom: 6,
+                            // zoomDelta: 0.25,
+                            zoomSnap: 0.01,
                             zoomControl: false,
                             // dragging: false,
                             // scrollWheelZoom: false,
