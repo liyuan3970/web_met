@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'django_apscheduler',
     'zdz',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -34,9 +35,22 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+# 跨域
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:9991",
+#     "http://127.0.0.1:9991",
+#     "http://127.0.0.1:9001",
+#     "http://127.0.0.1:9991/station_zdz_warring",
+#     "http://172.21.158.40:9991"
+# ]
 
+CORS_ALLOW_ALL_ORIGINS = True
+
+###
 ROOT_URLCONF = 'tzdemo.urls'
 
 TEMPLATES = [

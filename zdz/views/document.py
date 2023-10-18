@@ -22,7 +22,8 @@ from weasyprint import HTML
 from django.http import HttpResponse, Http404, StreamingHttpResponse
 import datetime
 from django.contrib.auth import authenticate
-
+# 解决跨域问题
+from django.views.decorators.csrf import csrf_exempt 
 
 class NpEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -823,7 +824,7 @@ def home(request):
 # 气象数据分析系统
 import pymysql
 from django.conf import settings
-
+@csrf_exempt
 def station_zdz_data(request):
     model = request.POST.get('model', '')
     click_type = request.POST.get('click_type', '')
@@ -1002,8 +1003,9 @@ def station_zdz_data(request):
                 'mark':mark
             }
         return JsonResponse(context)
-        
 
+
+@csrf_exempt
 def station_zdz_warring(request):
     name = request.POST.get('name', '')
     print("测试----",name)
@@ -1012,10 +1014,6 @@ def station_zdz_warring(request):
     img = worker.get_radar()
     # 开始编写风雨数据模型
     rain_data,wind_data,tmax_data,tmin_data,view_data = worker.warring_data()
-    # 数据
-    # filename = "static/data/shpfile/country/shp/yuhuan.json"
-    # with open(filename, "r") as file:
-    #     shp = json.load(file)
     context = {
             'warring': "warring",
             'rain':rain_data,
@@ -1023,7 +1021,6 @@ def station_zdz_warring(request):
             'tmax':tmax_data,
             'tmin':tmin_data,
             'view':view_data,
-            # 'shp':shp,
             'radar':img
         }
     return JsonResponse(context)

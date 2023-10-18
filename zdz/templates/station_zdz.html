@@ -81,14 +81,14 @@
         .scrollbar::-webkit-scrollbar {
             display: none;
         }
-
+    
         .layui-layer-lan .layui-layer-title {
             /* background: #393D49; */
             color: #fff;
             font-size: 20px;
             border: none;
         }
-
+    
         .layui-code {
             position: relative;
             margin: 0px 0;
@@ -103,22 +103,28 @@
             /* font-family: "STKaiti"; */
             text-align: left;
         }
-        .leaflet-control-colotlabel ul li{
-      padding:0;
-      margin:0;
-      list-style:square;
-      display: flex;
-      align-items: center;
-      /* margin-bottom: 5px; */
-    }
-    .leaflet-control-colotlabel ul li i{
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      /* border-radius: 50%; */
-      margin-right: 5px;
-    }
-
+    
+        .leaflet-control-colotlabel ul li {
+            padding: 0;
+            margin: 0;
+            list-style: square;
+            display: flex;
+            align-items: center;
+            /* margin-bottom: 5px; */
+        }
+    
+        .leaflet-control-colotlabel ul li i {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            /* border-radius: 50%; */
+            margin-right: 5px;
+        }
+    
+        .layui-form-select dl {
+            max-height: 120px;
+        }
+    
         /* .layui-layer-lan .layui-layer-btn{border-top:1px solid #E9E7E7} */
         /* .demo-class .layui-layer-btn a{background:#333;} */
         /* .demo-class .layui-layer-btn .layui-layer-btn1{background:#999;} */
@@ -126,7 +132,7 @@
 </head>
 
 <body>
-    {% csrf_token %}
+    
     <div
         style="display: flex;align-content:flex-start;position: absolute; justify-content: center; flex-wrap: wrap; width: 100%;height: 100%;background-color: rgb(246, 247, 250);overflow-y: hidden;">
         <!-- 导航栏目 -->
@@ -308,13 +314,13 @@
                                 },
                                 request_warring: function () {
                                     // warring_obj.warring_list = []
-                                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                                    // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                                     $.ajax({
                                         url: "station_zdz_warring",  // 请求的地址
                                         type: "post",  // 请求方式
                                         timeout: 25000, //设置延迟上限
                                         data: {
-                                            'csrfmiddlewaretoken': csrf,
+                                            // 'csrfmiddlewaretoken': csrf,
                                             'rain_type':$("#warring_alert_rain_type").val(),
                                             'name':localStorage.getItem("name")
                                         },
@@ -662,8 +668,8 @@
                 </li>
                 <li class="layui-nav-item layui-nav-itemed">
                     <div class="layui-btn layui-btn-fluid">实况统计</div>
-                    <dl class="layui-nav-child">
-                        <dd style="height:180px">
+                    <dl class="layui-nav-child" >
+                        <dd style="height:180px;">
                             <div style="height:100%;width:100%;margin-top: 8%;" class="layui-form">
                                 <label class="layui-form-label">数据类型</label>
                                 <div class="layui-input-inline" style="width: 38%;padding-left:28px;">
@@ -678,7 +684,7 @@
                                     </select>
                                 </div>
                                 <div class="layui-input-inline" style="width: 20%;">
-                                    <select id="real_times">
+                                    <select id="real_times" size="4" style="overflow-y: scroll;">
                                         <option value=""></option>
                                         <option value="24hours">24小时</option>
                                         <option value="12hours">12小时</option>
@@ -2472,13 +2478,13 @@
                         //绘制站点  
                         map_toolbox_object.single_name = plot_name
                         $("#single_station").val(plot_name)
-                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                        // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                         $.ajax({
                             url: "station_zdz_data",  // 请求的地址
                             type: "post",  // 请求方式
                             timeout: 25000, //设置延迟上限
                             data: {
-                                'csrfmiddlewaretoken': csrf,
+                                // 'csrfmiddlewaretoken': csrf,
                                 'model': 'single',
                                 'click_type': plot_type,
                                 'plot_time': plot_time,
@@ -2670,13 +2676,13 @@
                         var current_zoom = map_toolbox_object.current_map.getZoom()
                         // 8 为全省  9 为 骨干站  10 为所有站
                         //向服务器要数据model,type,button 对应导航栏目、垂直导航类型、具体按钮
-                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                        // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                         $.ajax({
                             url: "station_zdz_data",  // 请求的地址
                             type: "post",  // 请求方式
                             timeout: 25000, //设置延迟上限
                             data: {
-                                'csrfmiddlewaretoken': csrf,
+                                // 'csrfmiddlewaretoken': csrf,
                                 'model': model,
                                 'table_type': decode_select[1],
                                 'table_index': tables_index,
@@ -2889,13 +2895,13 @@
                         );
 
                         console.log("原始", [radar_sec_obj.p1.lng, radar_sec_obj.p1.lat], "转换后", result);
-                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                        // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                         $.ajax({
                             url: "station_zdz_data",  // 请求的地址
                             type: "post",  // 请求方式
                             timeout: 25000, //设置延迟上限
                             data: {
-                                'csrfmiddlewaretoken': csrf,
+                                // 'csrfmiddlewaretoken': csrf,
                                 'model': "radar_sec",
                                 'click_type': start,
                                 'button_value': end
@@ -3726,10 +3732,10 @@
                         "tmin": " 最低气温",
                     }
                     var label = today_str + " " + values_times[real_times_class] + values_class[map_toolbox_object.current_data_type]
-                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                    // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                     var senddata = current_data
                     var ajaxdata = {
-                        'csrfmiddlewaretoken': csrf,
+                        // 'csrfmiddlewaretoken': csrf,
                         'model': 'plot_image',
                         'click_type': map_toolbox_object.current_data_type,// plot_type 风雨温
                         'button_value': $("#extra_real_plot_city").val(),// 城市
@@ -3779,7 +3785,7 @@
                 },
                 remain:function(){
                     if (extra_server_obj.recv_rain) {
-                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                        // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                         var send_rain = JSON.stringify(extra_server_obj.recv_rain)
                         var send_wind = JSON.stringify(extra_server_obj.recv_wind)
                         var send_tmax = JSON.stringify(extra_server_obj.recv_tmax)
@@ -3789,7 +3795,7 @@
                             type: "post",  // 请求方式
                             timeout: 25000, //设置延迟上限
                             data: {
-                                'csrfmiddlewaretoken': csrf,
+                                // 'csrfmiddlewaretoken': csrf,
                                 'model': "extra_geojosn_remain",
                                 'rain': send_rain, // 降水
                                 'wind': send_wind, // 风力
@@ -3825,7 +3831,7 @@
                 },
                 geojson_plot: function () {
                     if (extra_server_obj.recv_rain) {
-                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                        // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                         var send_data = JSON.stringify(extra_server_obj.recv_rain)
                         var send_type = "rain"
                         $.ajax({
@@ -3833,7 +3839,7 @@
                             type: "post",  // 请求方式
                             timeout: 25000, //设置延迟上限
                             data: {
-                                'csrfmiddlewaretoken': csrf,
+                                // 'csrfmiddlewaretoken': csrf,
                                 'model': "extra_geojosn_plot",
                                 'start': $("#extra_download-startDate-1").val(),
                                 'end': $("#extra_download-endDate-1").val(),
@@ -4103,13 +4109,13 @@
                 },
                 get_data: function () {
 
-                    var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                    // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                     $.ajax({
                         url: "station_zdz_data",  // 请求的地址
                         type: "post",  // 请求方式
                         timeout: 25000, //设置延迟上限
                         data: {
-                            'csrfmiddlewaretoken': csrf,
+                            // 'csrfmiddlewaretoken': csrf,
                             'model': "extra_download",
                             'start': $("#extra_download-startDate-1").val(),
                             'end': $("#extra_download-endDate-1").val(),
@@ -4709,11 +4715,11 @@
                         var label = today_str + " " + values_times[real_times_class] + "风雨快报"
                         $("#extra_label").html("")
                         $("#extra_label").html(label)
-                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                        // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                         var senddata = current_data
                         if (senddata == "none") {
                             var ajaxdata = {
-                                'csrfmiddlewaretoken': csrf,
+                                // 'csrfmiddlewaretoken': csrf,
                                 'model': 'plot_image',
                                 'click_type': $("#color_label").val(),// plot_type 风雨温
                                 'button_value': $("#extra_real_plot_city").val(),// 城市
@@ -5512,9 +5518,9 @@
                         }
                     },
                     get_clander: function () {
-                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                        // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                         var ajaxdata = {
-                            'csrfmiddlewaretoken': csrf,
+                            // 'csrfmiddlewaretoken': csrf,
                             'model': 'daily_clander',
                             'click_type': "taihzou",// 城市
                             'button_value': "rain"// 请求类型
@@ -5570,9 +5576,9 @@
 
                     },
                     get_daily: function (times) {
-                        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                        // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                         var ajaxdata = {
-                            'csrfmiddlewaretoken': csrf,
+                            // 'csrfmiddlewaretoken': csrf,
                             'model': 'daily_single',
                             'click_type': "taihzou",// 城市
                             'button_value': "rain",// 请求类型
@@ -5652,7 +5658,7 @@
             </script>
         </div>
     </div>
-    {% csrf_token %}
+    
 </body>
 
 </html>
