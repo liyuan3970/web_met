@@ -1478,11 +1478,11 @@ class warring_alert():
             rain = data[(data['PRE']>0)&(data['PRE']<5000)][['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti','PRE']]
             rain_data = rain.groupby(['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti'])['PRE'].sum().reset_index()
         else:
-            data = pd.read_csv("/workspace/liyuan3970/Data/My_Git/web_met/static/data/downfile/rain01.csv")
+            data = pd.read_csv("/workspace/liyuan3970/Data/My_Git/web_met/server_met/static/data/downfile/rain01.csv")
             rain_data = data
         return rain_data
     def get_latest(self):
-        data = pd.read_csv("/workspace/liyuan3970/Data/My_Git/web_met/static/data/downfile/server.csv")
+        data = pd.read_csv("/workspace/liyuan3970/Data/My_Git/web_met/server_met/static/data/downfile/server.csv")
         data = data.astype({'Lat': 'float', 'Lon': 'float','PRE': 'float','WIN_S_Inst_Max': 'float', 'WIN_D_INST_Max': 'float','TEM':'float','VIS_HOR_1MI':'float'})
         return data         
     def get_wind(self):

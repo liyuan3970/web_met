@@ -2906,14 +2906,12 @@
                         $("#radar_sec_img").html("")
                         var start = radar_sec_obj.p1.lng.toString() + "," + radar_sec_obj.p1.lat.toString()
                         var end = radar_sec_obj.p2.lng.toString() + "," + radar_sec_obj.p2.lat.toString()
-
-                        var result = gcoord.transform(
-                            radar_sec_obj.convert(radar_sec_obj.p1.lng, radar_sec_obj.p1.lat),    // 经纬度坐标
-                            gcoord.EPSG3857,               // 当前坐标系
-                            gcoord.WGS84                 // 目标坐标系
-                        );
-
-                        console.log("原始", [radar_sec_obj.p1.lng, radar_sec_obj.p1.lat], "转换后", result);
+                        // var result = gcoord.transform(
+                        //     radar_sec_obj.convert(radar_sec_obj.p1.lng, radar_sec_obj.p1.lat),    // 经纬度坐标
+                        //     gcoord.EPSG3857,               // 当前坐标系
+                        //     gcoord.WGS84                 // 目标坐标系
+                        // );
+                        // console.log("原始", [radar_sec_obj.p1.lng, radar_sec_obj.p1.lat], "转换后", result);
                         // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                         $.ajax({
                             url: "http://127.0.0.1:9991/station_zdz_data",  // 请求的地址
@@ -4771,14 +4769,32 @@
                                         }
                                     }).addTo(extra_plot_obj.current_map)
                                     extra_plot_obj.plot_mark(recvdate.plot_type, JSON.parse(recvdate.mark))
-                                    L.mask(taizhou_map, {
-                                        // fitBounds:true,
-                                        fitBounds: false,
-                                        restrictBounds: false,
-                                        color: "black",
-                                        fillColor: "white",// 边框颜色
-                                        fillOpacity: 1,
-                                    }).addTo(extra_plot_obj.current_map);
+                                    var shplayer = JSON.parse(localStorage.getItem('userShp'))
+                                    if (shplayer) {
+                                        // var lines_village = L.geoJSON(shplayer, {
+                                        //     style: function (feature) {
+                                        //         return { color: 'red', weight: 1.5, fillOpacity: 0.01 };
+                                        //     }
+                                        // }).addTo(extra_plot_obj.current_map)
+                                        L.mask(shplayer, {
+                                            // fitBounds:true,
+                                            fitBounds: false,
+                                            restrictBounds: false,
+                                            color: "black",
+                                            fillColor: "white",// 边框颜色
+                                            fillOpacity: 1,
+                                        }).addTo(extra_plot_obj.current_map);                                      
+                                    }
+                                    else {
+                                        L.mask(taizhou_map, {
+                                            // fitBounds:true,
+                                            fitBounds: false,
+                                            restrictBounds: false,
+                                            color: "black",
+                                            fillColor: "white",// 边框颜色
+                                            fillOpacity: 1,
+                                        }).addTo(extra_plot_obj.current_map);                 
+                                    }                                  
                                     extra_plot_obj.add_colorbar(values_times_int[real_times_class], "rain")
                                     // 文字
                                     $("#extra_text_single").html("")
@@ -4789,7 +4805,7 @@
                         }
                         else if(senddata == "province"){
                             var ajaxdata = {
-                                'csrfmiddlewaretoken': csrf,
+                                // 'csrfmiddlewaretoken': csrf,
                                 'model': 'plot_image',
                                 'click_type': $("#color_label").val(),// plot_type 风雨温
                                 'button_value': $("#extra_real_plot_city").val(),// 城市
