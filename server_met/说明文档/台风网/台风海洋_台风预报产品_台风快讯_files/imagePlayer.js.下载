@@ -1,0 +1,691 @@
+var ImagePlayer = {
+    index: 0, // 当前播放索引
+    imgTotalNum: 2, // 图片总数
+    timer: null, // 定时器
+    slider: null, // 滑动条
+    initFlag: false, // 是否已经初始化
+    option: {
+        callback: function (time, idx) {
+
+        },
+        dateList: [], // 日期列表
+        dataList: [], // 时间列表
+        step:1, // 步长
+        filterDataList:[],
+        module: '',
+        orderBy: 'desc', // 播放顺序：asc=正序播放，desc=倒序播放
+        speed: 200, // 播放速度，单位毫秒
+        index: 0 // 当前显示索引序号
+    },
+    init: function (options) {
+    	this.stop();
+        this.option = $.extend(this.option, options);
+
+        this.option.filterDataList = [];
+        if(this.option.module == 'N'){
+            $('#stepList ul li[data-value="'+this.option.step+'"]').addClass('actived').siblings().removeClass('actived');
+            for(var i = 0; i < this.option.dataList.length; i++){
+                if(parseInt(this.option.dataList[i].fffmm) % this.option.step == 0) {
+                    this.option.filterDataList.push(this.option.dataList[i]);
+                }
+            }
+        } else {
+            this.option.filterDataList = this.option.dataList;
+        }
+
+        Nmc.updateProductDateList(this.option.dateList);
+        Nmc.updateDataList(this.option.filterDataList);
+
+        this.imgTotalNum = this.option.filterDataList.length;
+
+        this.index = 0;
+
+        $('.dropdown-toggle').dropdownHover();
+
+
+        if (!this.initFlag) {
+            this.bindEvent();
+            this.initFlag = true;
+        } else {
+            this.initSlider();
+            this.bindMoreEvent();
+        }
+        this.updateHeight(); // 设置时间列表、降水量排行列表的高度，当高度超过容器高度时间，显示纵向滚动条
+    },
+    imageLoad: function(src){
+        var self = this;
+        var image = new Image();
+        $(image).bind('load error', function (e) {
+            if (e.type == 'error') {
+                console.log('图片加载失败:'+src);
+            }
+            $(this).unbind('load error');
+            Nmc.updateHeight(self.index);
+        });
+        image.src = src;
+    },
+    updateXmlHeight: function () {
+        var self = this;
+        $('#xml img').each(function(){
+            var $img = $(this);
+            self.imageLoad($img.attr('src'));
+        });
+    },
+    bindEvent: function () {
+        var self = this;
+
+        $(document).on('click', '#first', function () {
+            self.stop();
+            self.index = self.option.orderBy == 'desc' ? (self.imgTotalNum - 1) : 0;
+            self.show(self.index);
+        });
+        $(document).on('click', '#prev, #left-arrow, #timeBtnWrap .dataPrevBtn', function () {
+            self.stop();
+            self.prev();
+        });
+
+        $(document).on('click', '#last', function () {
+            self.stop();
+            self.index = self.option.orderBy == 'desc' ? 0 : (self.imgTotalNum - 1);
+            self.show(self.index);
+        });
+        $(document).on('click', '#next, #right-arrow,#timeBtnWrap .dataNextBtn', function () {
+            self.stop();
+            self.next();
+        });
+
+        $(document).on('click', '#play', function () {
+            if (self.timer == null) {
+                self.player();
+            } else {
+                self.stop();
+            }
+        });
+
+        $(document).on('click', '#timeList li.time', function () {
+            self.stop();
+            self.show($(this).index());
+        });
+
+        $(document).on('click', '#expand', function () {
+            if ($('#leftMain').hasClass('col-xs-12')) { // 最大化状态
+                $('#leftMain').addClass($('#leftMain').data('expand')).removeClass('col-xs-12');
+                $('#rightMain').show();
+                $(this).removeClass('expandClose');
+            } else {
+                $('#rightMain').hide();
+                $('#leftMain').addClass('col-xs-12').removeClass($('#leftMain').data('expand'));
+                $(this).addClass('expandClose');
+            }
+        });
+
+        // 时间向前
+        $(document).on('click','#pageLeft .filter .prev',function(){
+            $('#productDate .timeList > li > a.actived').parent().prev().find('a').trigger('click');
+        });
+        // 时间向后
+        $(document).on('click','#pageLeft .filter .next',function(){
+            $('#productDate .timeList > li > a.actived').parent().next().find('a').trigger('click');
+        });
+
+        // 产品导航更多功能控制
+        this.bindMoreEvent();
+
+        this.bindStepListEvent();
+
+        this.initSlider();
+    },
+    updateHeight: function () {
+        if(this.option.module == 'T') {
+            this.updateXmlHeight();
+        } else {
+            this.imageLoad($('#imgpath').attr('src'));
+        }
+    },
+    bindMoreEvent: function () {
+        // 产品导航更多功能控制
+        $('.p-nav').each(function (k, v) {
+            var width = 0;
+            var $this = $(this);
+            var ulWidth = $this.find('>ul').width();
+            $this.find(' > ul > li').each(function (key, value) {
+                var $this = $(this);
+                width += $this.width();
+                if (width > ulWidth) {
+                    $this.parent().next().show();
+                    return false;
+                }
+            })
+        });
+        $('.morelist').unbind().click(function () {
+            var $this = $(this);
+            if ($this.hasClass('up')) {
+                $this.text('更多');
+            } else {
+                $this.text('隐藏');
+            }
+            $this.toggleClass('up').prev().toggleClass('show');
+        });
+    },
+    initSlider: function () {
+        if (this.imgTotalNum > 1) {
+            var self = this;
+            this.slider = $('#ex1').bootstrapSlider({
+                tooltip: 'always',
+                min: 0,
+                max: (self.imgTotalNum - 1),
+                step: 1,
+                formatter: function (value) {
+                    var idx = (self.option.orderBy == 'desc' ? (self.imgTotalNum - value - 1) : value);
+                    var curdata = self.option.filterDataList[idx];
+                    var $time = $('#timeList li.time:eq(' + (self.option.orderBy == 'desc' ? (self.imgTotalNum - value - 1) : value) + ')');
+                    return curdata.time;
+                },
+                value: (self.option.orderBy == 'desc' ? (self.imgTotalNum - 1) : 0)
+            }).on('change', function (e) {
+                self.stop();
+                if (self.option.orderBy == 'desc') {
+                    self.show(self.imgTotalNum - e.value.newValue - 1);
+                } else {
+                    self.show(e.value.newValue);
+                }
+            });
+
+            $('#left-arrow').unbind().hover(function () {
+                $(this).addClass('leftarrow');
+            }, function () {
+                $(this).removeClass('leftarrow');
+            });
+
+            $('#right-arrow').unbind().hover(function () {
+                $(this).addClass('rightarrow');
+            }, function () {
+                $(this).removeClass('rightarrow');
+            });
+        } else {
+            $('#ex1').hide();
+        }
+    },
+    show: function (idx) {
+        var self = this;
+        var curdata = this.option.filterDataList[idx];
+
+        var $time = $('#timeList li.time:eq(' + idx + ')');
+        $time.addClass('actived').siblings().removeClass('actived');
+
+        if(this.option.module == 'T') {
+            $('#xml').load('/npt/api/xml?dataId=' + curdata.dataid, function () {
+                window.scrollTo(0, 0);
+                self.updateHeight();
+            });
+        } else {
+            var image = new Image();
+            $(image).bind('load error', function (e) {
+                if (e.type == 'error') {
+                    $('#imgpath').attr('src', imageDomain + '/assets/img/nodata.jpg');
+                    Nmc.updateHeight(idx);
+                    return;
+                }
+                Nmc.updateHeight(idx);
+            });
+            image.src = curdata.img;
+            $('#imgpath').attr('src', curdata.img).data('index', idx);
+        }
+
+        this.option.callback(curdata.time, idx);
+
+        if (this.slider != null) {
+            if (this.option.orderBy == 'desc') {
+                this.slider.bootstrapSlider('setValue', (this.imgTotalNum - idx - 1));
+            } else {
+                this.slider.bootstrapSlider('setValue', (idx));
+            }
+        }
+
+        this.index = idx;
+    },
+    prev: function () {
+        if (this.option.orderBy == 'asc') {
+            var idx = (this.index - 1) >= 0 ? (this.index - 1) : (this.imgTotalNum - 1);
+            this.show(idx);
+        } else {
+            var idx = (this.index + 1) >= this.imgTotalNum ? 0 : (this.index + 1);
+            this.show(idx);
+        }
+    },
+    next: function () {
+        if (this.option.orderBy == 'asc') {
+            var idx = (this.index + 1) >= this.imgTotalNum ? 0 : (this.index + 1);
+            this.show(idx);
+        } else {
+            var idx = (this.index - 1) >= 0 ? (this.index - 1) : (this.imgTotalNum - 1);
+            this.show(idx);
+        }
+    },
+    player: function () {
+        var self = this;
+        $('#play').removeClass('icon-play').addClass('icon-stop');
+        this.timer = setInterval(function () {
+            self.next();
+//            if (self.index == 0) {
+//                self.stop();
+//            }
+        }, self.option.speed);
+    },
+    stop: function () {
+        $('#play').removeClass('icon-stop').addClass('icon-play');
+        if (this.timer != null) {
+            clearInterval(this.timer);
+            this.timer = null;
+        }
+    },
+    bindStepListEvent:function(){
+        var self = this;
+        $(document).on('click','#stepList ul li',function(){
+            $(this).addClass('actived').siblings().removeClass('actived');
+            var value = $(this).data('value');
+            ImagePlayer.init({dateList: self.option.dateList, dataList: self.option.dataList, step: value});
+            self.show(0);
+        });
+    }
+}
+
+
+
+
+
+
+
+var view = new ShowImgView();
+
+/**
+ * 图片显示
+ */
+function ShowImgView() {
+    this.top = 0;
+    this.left = 0;
+    this.zoom = 100;
+    this.time = 1000;// 播放频率,默认1秒
+    this.viewer = null;
+    this.preLoadIndex = 0;// 预加载到的索引位置
+    this.preLoadSize = 3;// 预加载图片数量
+    this.root = '';
+    this.currentIndex = 0; // 当前播放索引位置
+    this.timer = null; // 自动播放定时对象
+    this.data = new Array(); // 数据集合对象
+}
+
+ShowImgView.prototype.setRange = function(values){
+    this.range = values;
+}
+
+ShowImgView.prototype.iv_remove = function(){
+    if(this.timer != null){
+        window.clearInterval(this.timer);
+        this.timer = null;
+    }
+    this.zoom = 100;
+    this.currentIndex = 0;
+    // 移除图像展示层
+    $('#IV_box').remove();
+    // 移除遮挡层
+    $('#IV_overlay').remove();
+}
+/**
+ * 设置数据
+ *
+ * @param {}
+ *            data
+ */
+ShowImgView.prototype.setData = function(datas) {
+    if(datas.length == 1){
+        $("#IV_playBtn").hide();
+        $("#IV_preBtn").hide();
+        $("#IV_nextBtn").hide();
+        $("#select").hide();
+        $("#playCurrent").hide();
+        $("#beginTime").hide();
+        $("#endTime").hide();
+    }
+    this.data = datas;
+
+    if(view.getDataLength() <= 1){
+        $("#IV_playBtn,#IV_preBtn,#IV_nextBtn,#select,#playCurrent,#beginTime,#endTime").hide();
+    }
+}
+/**
+ * 通过下标获取数据项
+ *
+ * @param {}
+ *            index
+ * @return {}
+ */
+ShowImgView.prototype.getData = function(index) {
+    if(index >= 0 && index < ImagePlayer.option.dataList.length){
+        return ImagePlayer.option.dataList[index];
+    } else {
+        return null;
+    }
+}
+
+ShowImgView.prototype.getDataLength = function() {
+    return ImagePlayer.option.dataList.length;
+}
+
+ShowImgView.prototype.show = function(index) {
+    var data = this.getData(index);
+    // 预加载图片
+    this.preLoad();
+    // 如果图片已经加载过,则不显示正在加载中的动画效果
+    if (data.preImgLargePath != null && data.loadLargeFlag) {
+        this.viewer.iviewer('loadImage', data.preImgLargePath.src);
+    } else {
+        // 图片未加载,则显示加载动画效果,并将加载后的图片放入预加载
+        // $("#IV_iviewer").fadeIn().trigger('fadein');
+        // $("#IV_loader").show();
+        // $("#IV_viewer").hide();
+
+
+        this.preLoadImg(data,this.currentIndex);
+
+        // if(window.loadTimer) {
+        // 	window.clearTimeout(window.loadTimer);
+        // 	window.loadTimer = null;
+        // }
+        //
+        // window.loadTimer = window.setTimeout(function(){
+        // 	view.show(index);
+        // }, 500);
+
+        this.viewer.iviewer('loadImage', data.img);
+    }
+    this.setBeginAndEndTip(index);
+}
+
+ShowImgView.prototype.setBeginAndEndTip = function(index){
+    var beginTime = ImagePlayer.option.dataList[index].time;
+    $("#beginTime").text($('#breadcrumb > li.active').text() + '（' + beginTime + '）');
+
+}
+
+/**
+ * 图片预先加载
+ *
+ * @param data
+ * @param index
+ * @return
+ */
+ShowImgView.prototype.preLoadImg = function(data,index){
+    console.log('index:' + index)
+    var img = new Image();
+    $(img).load(function(){
+        if($(this).attr("index") != undefined){
+            console.log('loaded:' + $(this).attr("index"));
+            view.getData($(this).attr("index")).loadLargeFlag = true;
+        }
+    }).error(function(){
+        alert('图片加载失败!');
+    }).attr("src",data.img).attr("index",index);
+    data.preImgLargePath = img;
+}
+
+/**
+ * 预加载图片
+ */
+ShowImgView.prototype.preLoad = function(){
+    for(var i = 0; i < this.preLoadSize; i++) {
+        var idx = (this.currentIndex + i) >= ImagePlayer.option.dataList.length ? 0 : (this.currentIndex + i);
+        console.log('1>>>' + idx);
+        var data = ImagePlayer.option.dataList[i];
+        if(data.preImgLargePath == null || !data.loadLargeFlag){
+            this.preLoadImg(data, idx);
+        }
+    }
+
+    for(var i = 0; i < this.preLoadSize; i++) {
+        var idx = (this.currentIndex - i) < 0 ? (ImagePlayer.option.dataList.length - 1) : (this.currentIndex - i);
+        console.log('2>>>' + idx);
+        var data = ImagePlayer.option.dataList[i];
+        if(data.preImgLargePath == null || !data.loadLargeFlag){
+            this.preLoadImg(data, idx);
+        }
+    }
+}
+
+ShowImgView.prototype.autoPlay = function(){
+    $("#IV_playBtn").removeClass("tp_11").addClass("tp_09").attr('title','停止播放');
+    this.timer = window.setInterval(function(){
+        view.next();
+    }, this.time);
+}
+
+ShowImgView.prototype.stopPlay = function(){
+    if(this.timer != null){
+        $("#IV_playBtn").removeClass("tp_09").addClass("tp_11").attr('title','自动播放');
+        window.clearInterval(this.timer);
+        this.timer = null;
+    }
+}
+
+/**
+ * 下一张
+ */
+ShowImgView.prototype.next = function() {
+    var max = Math.max(this.range[0], this.range[1]);
+    var min = Math.min(this.range[0], this.range[1]);
+
+    if(ImagePlayer.option.orderBy == 'desc'){
+        this.currentIndex = ((this.currentIndex - 1) > -1) && ((this.currentIndex -1) >= min) ? (this.currentIndex -1) : max;
+    } else {
+        this.currentIndex = ((this.currentIndex + 1) < ImagePlayer.option.dataList.length) && ((this.currentIndex + 1) <= max) ? (this.currentIndex + 1) : min;
+    }
+
+    this.show(this.currentIndex);
+}
+/**
+ * 上一张
+ *
+ * @return
+ */
+ShowImgView.prototype.pre = function(){
+    var max = Math.max(this.range[0],this.range[1]);
+    var min = Math.min(this.range[0],this.range[1]);
+
+    if(ImagePlayer.option.orderBy == 'desc'){
+        this.currentIndex = ((this.currentIndex + 1) < ImagePlayer.option.dataList.length) && ((this.currentIndex + 1) <= max) ? (this.currentIndex + 1) : min;
+    } else {
+        this.currentIndex = ((this.currentIndex -1) > -1) && ((this.currentIndex -1) >= min) ? (this.currentIndex -1) : max;
+    }
+
+    this.show(this.currentIndex);
+}
+
+
+ShowImgView.prototype.imageBox = function(){
+    return $("body");
+}
+
+ShowImgView.prototype.setBeginTimeText = function(){
+    // 起点时间下拉框
+    for(var i=0;i<ImagePlayer.option.dataList.length;i++){
+        var text = ImagePlayer.option.dataList[i].time;
+        $("#beginSel").append("<option value=\""+i+"\">"+text+"</option>");
+    }
+    $('#beginSel')[0].selectedIndex = (ImagePlayer.option.orderBy == 'asc' ? (ImagePlayer.option.dataList.length - 1) : 0);
+    $("#beginSel").change(function(){
+        view.setRange([parseInt($(this).val()), parseInt($("#endSel option:selected").val())]);
+        view.currentIndex = parseInt($(this).val());
+        view.show(view.currentIndex);
+    });
+}
+
+ShowImgView.prototype.setEndTimeText = function(){
+    // 起点时间下拉框
+    for(var i=0;i<ImagePlayer.option.dataList.length;i++){
+        var text = ImagePlayer.option.dataList[i].time;
+        $("#endSel").append("<option value=\""+i+"\">"+text+"</option>");
+    }
+    $('#endSel')[0].selectedIndex = (ImagePlayer.option.orderBy == 'desc' ? (ImagePlayer.option.dataList.length - 1) : 0);
+    $("#endSel").change(function(){
+        view.setRange([parseInt($(this).val()), parseInt($("#beginSel option:selected").val())]);
+        view.currentIndex = parseInt($(this).val());
+        view.show(view.currentIndex);
+    });
+}
+
+ShowImgView.prototype.imgShow = function(src){
+    var target = this;
+    // 添加遮挡层
+    this.imageBox().append("<div id=\"IV_overlay\"></div>");
+    $("#IV_overlay").css({height:$(document).height()});
+    $("#IV_overlay").click(function() {
+        view.iv_remove();
+    });
+
+    var toolbar = [];
+    toolbar.push('<div id="IV_box">');
+    toolbar.push('	<div class="row IV_toolbar">');
+    toolbar.push('		<div class="col-xs-10">');
+    toolbar.push('			<div id="View_toolbar">');
+    toolbar.push('				<div id="IV_playBtn" class="tp_11" title="自动播放"></div>');
+    toolbar.push('				<div id="IV_preBtn" class="tp_13" title="上一时次"></div>');
+    toolbar.push('				<div id="IV_nextBtn" class="tp_15" title="下一时次"></div>');
+    toolbar.push('				<div id="IV_copy" class="copy" title="复制图片"></div>');
+    toolbar.push('				<div id="IV_open" class="open" title="打开图片"></div>');
+    toolbar.push('				<div id="playCurrent"></div><div id="beginTime" title="当前播放"></div>');
+    toolbar.push('				<div id="select">播放跨度：<select id="endSel"></select>至<select id="beginSel"></select></div><div id="endTime" title="结束时间"></div>');
+    toolbar.push('			</div>');
+    toolbar.push('		</div>');
+    toolbar.push('		<div class="col-xs-2 text-right">');
+    toolbar.push('			<i class="iconfont icon-del" id="last"></i>');
+    toolbar.push('		</div>');
+    toolbar.push('	</div>');
+    toolbar.push('	<div id="IV_loader"></div>');
+    toolbar.push('	<div id="IV_viewer"></div>');
+    toolbar.push('</div>');
+
+
+    this.imageBox().append(toolbar.join(''));
+    var left = ($(window).width() - $("#IV_box").width()) / 2;
+    var top = ($(window).height() - $("#IV_box").height()) / 2;
+    $("#IV_box").css({
+        left : (left > 0 ? left : 0),
+        top : (top > 0 ? top : 0)
+    });
+
+    $("#IV_close,.IV_toolbar .icon-del").click(function(event) {
+        view.iv_remove();
+        event.stopPropagation();
+    });
+
+    view.setRange([0,(view.getDataLength() - 1)]);
+    this.viewer = $("#IV_viewer").css({
+        height : $("#IV_box").height() - $(".IV_toolbar").height()
+    }).iviewer({
+        ui_disabled : false,
+        src : src,
+        //zoom : view.zoom,
+        zoom: "fit",
+        onFinishLoad : function(ev) {
+            $("#IV_loader").fadeOut();
+            $("#IV_viewer").fadeIn();
+        }
+    });
+
+    view.setBeginTimeText();
+    view.setEndTimeText();
+    view.setBeginAndEndTip(view.currentIndex);
+
+    $("#IV_nextBtn").click(function() {
+        view.stopPlay();
+        view.next();
+    });
+
+    $("#IV_preBtn").click(function() {
+        view.stopPlay();
+        view.pre();
+    });
+    var autoPlayObj = null;
+    $('#IV_playBtn').click(function(){
+        if($(this).hasClass('tp_09')) {
+            view.stopPlay();
+        } else {
+            view.autoPlay();
+        }
+    });
+
+    function play() {
+        autoPlayObj = window.setInterval(view.next, 1000);
+    }
+
+    $("#IV_zoomIn").click(function() {
+        view.viewer.iviewer('zoom_by', -1);
+    });
+
+    $("#IV_zoomOut").click(function() {
+        view.viewer.iviewer('zoom_by', 1);
+    });
+
+    $("#IV_zoomAuto").click(function() {
+        view.viewer.iviewer('set_zoom', 100);
+    });
+
+    $("#IV_zoomFix").click(function() {
+        view.viewer.iviewer('fit');
+    });
+
+    $("#IV_open").click(function(){
+        window.top.open($("#IV_viewer img:first-child").attr('src'));
+    });
+    $("#IV_copy").click(function(){
+        CopyImage($("#IV_viewer img:first-child").get(0));
+    });
+
+
+    document.onkeydown = function(e) {
+        var keycode = null;
+        if (e == null) {
+            keycode = event.keyCode;
+        } else {
+            keycode = e.which;
+        }
+        if (keycode == 27) {
+            view.iv_remove();
+        }
+    }
+}
+
+function CopyImage(img) {
+    if (img.tagName != 'IMG') {
+        return;
+    }
+    if (typeof img.contentEditable == 'undefined') {
+        alert('当前浏览器不支持图片复制!');
+        return;
+    }
+    if (!document.body.createControlRange) {
+        alert('当前浏览器不支持图片复制!');
+        return;
+    }
+    var ctrl = document.body.createControlRange();
+    img.contentEditable = true;
+    ctrl.addElement(img);
+    ctrl.execCommand('Copy');
+    img.contentEditable = false;
+    alert('图片已经复制到剪切板,使用CTRL+V粘贴即可!');
+}
+$(document).ready(function() {
+    $(document).on('click','#imgpath,.zoom',function(){
+        if(typeof _stop != 'undefined'){
+            _stop();
+        }
+        var src = $("#imgpath").attr('src');
+        view.currentIndex = $("#imgpath").data('index');
+        view.imgShow(src);
+        return false;
+    });
+
+    $(document).on('click','#zoomin',function(){
+        $('#imgpath').trigger('click');
+    });
+});

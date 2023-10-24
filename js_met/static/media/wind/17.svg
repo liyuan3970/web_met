@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created with matplotlib (https://matplotlib.org/) -->
+<svg height="345.6pt" version="1.1" viewBox="0 0 460.8 345.6" width="460.8pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+*{stroke-linecap:butt;stroke-linejoin:round;}
+  </style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 345.6 
+L 460.8 345.6 
+L 460.8 0 
+L 0 0 
+z
+" style="fill:none;"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 169.632 307.584 
+L 302.688 307.584 
+L 302.688 41.472 
+L 169.632 41.472 
+z
+" style="fill:none;"/>
+   </g>
+   <g id="Barbs_1">
+    <defs>
+     <path d="M 0 0 
+L 0 -200 
+L 80 -175 
+L 0 -150 
+L 0 -125 
+L 80 -150 
+L 0 -125 
+L 0 -100 
+L 80 -125 
+L 0 -100 
+L 0 -75 
+L 80 -100 
+L 0 -75 
+L 0 -50 
+L 40 -62.5 
+L 0 -50 
+z
+" id="m04e5ba50a6" style="stroke:#ff0000;stroke-width:8;"/>
+    </defs>
+    <g clip-path="url(#p85e360ba66)">
+     <use style="fill:#ff0000;stroke:#ff0000;stroke-width:8;" x="191.808" xlink:href="#m04e5ba50a6" y="285.408"/>
+    </g>
+   </g>
+   <g id="Barbs_2"/>
+   <g id="matplotlib.axis_1"/>
+   <g id="matplotlib.axis_2"/>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p85e360ba66">
+   <rect height="266.112" width="133.056" x="169.632" y="41.472"/>
+  </clipPath>
+ </defs>
+</svg>

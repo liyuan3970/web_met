@@ -1,0 +1,36 @@
+[2023-10-21 18:51:38,649] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 500, 'err_msg': '服务器内部错误', 'exec': FileNotFoundError(2, 'No such file or directory')}
+[2023-10-21 18:51:51,624] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 500, 'err_msg': '服务器内部错误', 'exec': FileNotFoundError(2, 'No such file or directory')}
+[2023-10-21 18:54:50,542] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/server_met/zdz/views/document.py", line 974, in station_zdz_data
+    contour,mark = worker.plot_rain()
+  File "/home/liyuan3970/Data/My_Git/server_met/zdz/common/utils/data_class.py", line 2167, in plot_rain
+    wind = self.wind_to_json()
+  File "/home/liyuan3970/Data/My_Git/server_met/zdz/common/utils/data_class.py", line 2157, in wind_to_json
+    data = pd.read_csv("static/data/downfile/min.csv")
+  File "/opt/conda/lib/python3.7/site-packages/pandas/util/_decorators.py", line 311, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/pandas/io/parsers/readers.py", line 586, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "/opt/conda/lib/python3.7/site-packages/pandas/io/parsers/readers.py", line 482, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "/opt/conda/lib/python3.7/site-packages/pandas/io/parsers/readers.py", line 811, in __init__
+    self._engine = self._make_engine(self.engine)
+  File "/opt/conda/lib/python3.7/site-packages/pandas/io/parsers/readers.py", line 1040, in _make_engine
+    return mapping[engine](self.f, **self.options)  # type: ignore[call-arg]
+  File "/opt/conda/lib/python3.7/site-packages/pandas/io/parsers/c_parser_wrapper.py", line 51, in __init__
+    self._open_handles(src, kwds)
+  File "/opt/conda/lib/python3.7/site-packages/pandas/io/parsers/base_parser.py", line 229, in _open_handles
+    errors=kwds.get("encoding_errors", "strict"),
+  File "/opt/conda/lib/python3.7/site-packages/pandas/io/common.py", line 707, in get_handle
+    newline="",
+FileNotFoundError: [Errno 2] No such file or directory: 'static/data/downfile/min.csv'
+[2023-10-21 18:54:50,553] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 148064
+[2023-10-21 18:56:23,874] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 500, 'err_msg': '服务器内部错误', 'exec': FileNotFoundError(2, 'No such file or directory')}
+[2023-10-21 18:56:37,318] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 500, 'err_msg': '服务器内部错误', 'exec': FileNotFoundError(2, 'No such file or directory')}

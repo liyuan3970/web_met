@@ -1,9 +1,0 @@
-20230511 233133.872 ERROR            PET0 ESMF_VM.F90:5074 ESMF_VMGetCurrent() Internal error: Bad condition  - Internal subroutine call returned Error
-20230511 233133.875 ERROR            PET0 ESMF_Grid.F90:29232 ESMF_GridCreateDistgridReg Internal error: Bad condition  - Internal subroutine call returned Error
-20230511 233133.876 ERROR            PET0 ESMF_Grid.F90:10715 ESMF_GridCreateNoPeriDimR Internal error: Bad condition  - Internal subroutine call returned Error
-20230511 233133.877 ERROR            PET0 ESMF_Grid_C.F90:78 f_esmf_gridcreatenoperidim Internal error: Bad condition  - Internal subroutine call returned Error
-20230511 233157.545 ERROR            PET0 ESMF_VM.F90:5074 ESMF_VMGetCurrent() Internal error: Bad condition  - Internal subroutine call returned Error
-20230511 233157.545 ERROR            PET0 ESMF_Grid.F90:29232 ESMF_GridCreateDistgridReg Internal error: Bad condition  - Internal subroutine call returned Error
-20230511 233157.546 ERROR            PET0 ESMF_Grid.F90:10715 ESMF_GridCreateNoPeriDimR Internal error: Bad condition  - Internal subroutine call returned Error
-20230511 233157.547 ERROR            PET0 ESMF_Grid_C.F90:78 f_esmf_gridcreatenoperidim Internal error: Bad condition  - Internal subroutine call returned Error
-20230511 235948.354 INFO             PET0 Finalizing ESMF

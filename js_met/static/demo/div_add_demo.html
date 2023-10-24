@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <title>demo_add_div</title>
+    
+</head>
+<body>
+    <div>
+        <input type="button" id = "add" value="添加" style="width: 50px;"> 
+        <input type="button" id = "del" value="删除" style="width: 50px;"> 
+        <input type="button" id = "mod" value="功能" style="width: 50px;"> 
+        <button type="button" id = "data"> asdfasd</button>
+        <script>
+            var da = document.getElementById("data")
+            console.log(da.value)
+        </script>
+    </div>
+
+    <div id ="view" style="height:800px;width:800px;overflow:scroll;">    
+        <!-- 这里是添加删除的数据 -->
+
+
+    </div>
+
+    <script>
+        // 这里是代码逻辑
+        var add_Btn = document.getElementById('add');
+        var del_Btn = document.getElementById('del');
+        var view_Box = document.getElementById('view');
+        var list_div = []
+        var id_div = 0
+        html_all = ""
+
+        add_Btn.onclick = function () {
+            id_div = id_div +1
+            var html = '<div style="width:800px; height:100px; background: #ccc;">测试'+id_div.toString()+'</div>';
+
+            list_div.push(html)
+            console.log(list_div)
+            show()
+
+        };
+
+        del_Btn.onclick = function () {
+            list_div.pop();
+            console.log(list_div)
+            show()
+        }
+
+        function show(){
+            // console.log(list_div[0])
+            // console.log(list_div)
+            // view_Box.innerHTML = ''
+            $('#view').html('')
+            for (var i=0 ; i < list_div.length;  i++){
+                console.log("打印数据")
+                console.log(list_div[i]);
+                html  = list_div[i]
+                $('#view').append(html)
+                // html_all = html_all + html
+                
+
+
+            }
+            // $('#view').html(html_all)
+        }
+
+
+
+
+
+    </script>
+    
+</body>
+</html>

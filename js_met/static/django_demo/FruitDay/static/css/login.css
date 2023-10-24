@@ -1,0 +1,105 @@
+/* 1. 清除默认样式 */
+body,h1,p{
+	margin:0;
+	color:#999;
+}
+a{
+	text-decoration:none;
+	color:#999;
+}
+/* 2. 外部容器样式 */
+#container{
+	width:990px;
+	margin:0 auto;
+}
+/* 3. 顶部标题 */
+h2{
+	font-weight:normal;
+	border-bottom:1px solid #ccc;
+	padding:20px 0;
+	margin-bottom:30px;
+}
+/* 4. 主体样式 */
+#main{
+	overflow:hidden;
+}
+/* 左列 */
+#main .left{
+	float:left;
+	position:relative;
+}
+.left a{
+	position:absolute;
+	bottom:20px;
+	left:175px;
+	width:145px;
+	height:45px;
+	border:1px solid #64a131;
+	text-align:center;
+	line-height:45px;
+	color:#64a131;
+	border-radius:5px;
+}
+
+#main .right{
+	float:right;
+	margin-top:70px;
+	margin-right:40px;
+}
+.right .form-line{
+	margin-bottom:30px;
+}
+.form-line>p{
+	float:left;
+	width:64px;
+	height:40px;
+	text-align:right;
+	line-height:40px;
+	margin-right:40px;
+}
+.form-line .uinput{
+	box-sizing:border-box;
+	width:300px;
+	height:40px;
+	border:1px solid #ccc;
+	outline:none;
+	padding:0 10px;
+	/*文本框默认的字体大小为13.3px*/
+	font-size:16px;
+}
+/* 第三行 */
+.form-line div>p{
+	float:right;
+}
+.form-line #isSave{
+	width:18px;
+	height:18px;
+	/*调整行内块元素的垂直对齐方式,取值top/middle/bottom*/
+	vertical-align:top;
+}
+.form-line div>p>a{
+	text-decoration:underline;
+}
+/*第四行*/
+.form-line .btn{
+	width:140px;
+	height:40px;
+	border:1px solid #64a131;
+	font-size:20px;
+	color:#fff;
+	background:#64a131;
+	border-radius:5px;
+}
+.form-line .registBtn{
+/*超链接与按钮的盒模型计算方式不同,保持高度一致*/
+	height:38px;
+	float:right;
+	text-align:center;
+	line-height:38px;
+	background:#fff;
+	color:#64a131;
+}
+
+
+
+
