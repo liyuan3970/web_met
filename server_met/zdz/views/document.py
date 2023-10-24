@@ -201,7 +201,7 @@ def station_zdz_data(request):
         return JsonResponse(context)
     elif model =="plot_image":
         plot_type = click_type
-        city = button_value
+        city = int(button_value)
         js_status = request.POST.get('js_status', '')
         current_data = request.POST.get('current_data', '')
         time_hours = request.POST.get('time_hours', '')

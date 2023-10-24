@@ -4494,7 +4494,7 @@
                         <div class="layui-input-inline" style="width:10%">
                             <select id="extra_real_plot_city" style="width:40%">
                                 <option value=""></option>
-                                <option value="taizhou" selected="">台州</option>
+                                <option value="331000" selected="">台州</option>
                             </select>
                         </div>
                         <div class="layui-input-inline" style="width:10%">
@@ -4734,12 +4734,18 @@
                         $("#extra_label").html(label)
                         // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                         var senddata = current_data
-                        if (senddata == "none") {
+                        if (senddata == "none") {                                             
+                            if (localStorage.getItem("name")){
+                                var city_code = localStorage.getItem("name")
+                            }
+                            else{
+                                var city_code = "331000"
+                            }
                             var ajaxdata = {
                                 // 'csrfmiddlewaretoken': csrf,
                                 'model': 'plot_image',
                                 'click_type': $("#color_label").val(),// plot_type 风雨温
-                                'button_value': $("#extra_real_plot_city").val(),// 城市
+                                'button_value':city_code,// 城市
                                 'time_hours': values_times_int[real_times_class],
                                 'current_data': senddata,
                                 'js_status': js_status

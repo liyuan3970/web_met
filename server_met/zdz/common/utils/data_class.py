@@ -999,6 +999,11 @@ class server_plot():
         self.dataFormat = "json"
         self.rain = None
         self.wind = None
+        self.verify = self.get_city_code()
+    def get_city_code(self):
+        data = pd.read_csv("static/data/city_code.csv")
+        target = data[data['code']==self.city]
+        return target.iloc[0].to_dict()
     def data_from_js(self):
         data = pd.read_json(json.dumps(self.recv_data), orient='records')
         self.recv_data = data
@@ -1126,8 +1131,8 @@ class server_plot():
         self.max = data_max
         self.min = data_min
         np.set_printoptions(precision = 2)
-        x = np.arange(120.0,122.0,0.01)
-        y = np.arange(27.8,29.5,0.01)
+        x = np.arange(self.verify['lon0'],self.verify['lon1'],0.01)
+        y = np.arange(self.verify['lat0'],self.verify['lat1'],0.01)
         nx0 =len(x)
         ny0 =len(y)
         X, Y = np.meshgrid(x, y)#100*100
@@ -1155,6 +1160,12 @@ class server_plot():
         data['value'] = data['WIN_S_Gust_Max']
         # wind = data[(data['value']>15)&(data['value']<100)&(data['City']=="台州市")]
         wind = data[(data['value']>15)&(data['value']<100)]
+        if self.verify['city_type']=='city':
+            wind = wind[(wind['value']>10)&(wind['City']==self.verify['name'])]
+        elif self.verify['city_type']=='cnty':
+            wind = wind[(wind['value']>10)&(wind['Cnty']==self.verify['name'])]  
+        elif self.verify['city_type']=='province':
+            wind = wind[(wind['value']>10)&(wind['Province']==self.verify['name'])]
         self.wind = wind
         return wind
     def plot_rain(self):
@@ -1197,7 +1208,12 @@ class server_plot():
         # wind = pd.read_csv("wind1.csv")
         if self.time_hours ==0.1:   
             text_rain = "目前:"
-            rain_tz = rain[rain['City']=="台州市"]
+            if self.verify['city_type']=='city':
+                rain_tz = rain[rain['City']==self.verify['name']]
+            elif self.verify['city_type']=='cnty':
+                rain_tz = rain[rain['Cnty']==self.verify['name']]
+            elif self.verify['city_type']=='province':
+                rain_tz = rain[rain['Province']==self.verify['name']]
             bins = [0,5,10,100]
             labels = [0,1,2]
             rain_tz['rank']=pd.cut(rain_tz['PRE'],bins,right=False,labels=labels)
@@ -1218,7 +1234,12 @@ class server_plot():
                 text_rain = ""
         elif self.time_hours ==1:
             text_rain = "目前:"
-            rain_tz = rain[rain['City']=="台州市"]
+            if self.verify['city_type']=='city':
+                rain_tz = rain[rain['City']==self.verify['name']]
+            elif self.verify['city_type']=='cnty':
+                rain_tz = rain[rain['Cnty']==self.verify['name']]
+            elif self.verify['city_type']=='province':
+                rain_tz = rain[rain['Province']==self.verify['name']]
             bins = [0,10,20,50,80,100,5000]
             labels = [0,1,2,3,4,5]
             rain_tz['rank']=pd.cut(rain_tz['PRE'],bins,right=False,labels=labels)
@@ -1243,7 +1264,12 @@ class server_plot():
                         text_rain = text_rain + indextext_town                            
         elif self.time_hours ==3:
             text_rain = "目前:"
-            rain_tz = rain[rain['City']=="台州市"]
+            if self.verify['city_type']=='city':
+                rain_tz = rain[rain['City']==self.verify['name']]
+            elif self.verify['city_type']=='cnty':
+                rain_tz = rain[rain['Cnty']==self.verify['name']]
+            elif self.verify['city_type']=='province':
+                rain_tz = rain[rain['Province']==self.verify['name']]
             bins = [0,30,50,80,100,5000]
             labels = [0,1,2,3,4]
             rain_tz['rank']=pd.cut(rain_tz['PRE'],bins,right=False,labels=labels)
@@ -1268,14 +1294,21 @@ class server_plot():
                         town_max_text = town_max_text[:-1] + "。" 
                         text_rain = text_rain + town_max_text 
         else: 
-            rain_tz = rain[rain['City']=="台州市"]
+            if self.verify['city_type']=='city':
+                rain_tz = rain[rain['City']==self.verify['name']]
+                average = rain_tz.groupby(['Cnty'])['PRE'].mean().to_frame().sort_values(by="PRE",ascending=False)
+            elif self.verify['city_type']=='cnty':
+                rain_tz = rain[rain['Cnty']==self.verify['name']]
+                average = rain_tz.groupby(['Town'])['PRE'].mean().to_frame().sort_values(by="PRE",ascending=False)
+            elif self.verify['city_type']=='province':
+                rain_tz = rain[rain['Province']==self.verify['name']]
+                average = rain_tz.groupby(['City'])['PRE'].mean().to_frame().sort_values(by="PRE",ascending=False)
             city_mean = round(rain_tz[rain_tz['PRE']>0]['PRE'].mean(),2)
             bins = [0,30,50,80,100,5000]
             labels = [0,1,2,3,4]
             rain_tz['rank']=pd.cut(rain_tz['PRE'],bins,right=False,labels=labels)
             rain_max = rain_tz.sort_values(by="PRE",ascending=False).head(3)
             raintop = rain_max.head(1)
-            average = rain_tz.groupby(['Cnty'])['PRE'].mean().to_frame().sort_values(by="PRE",ascending=False)
             text_rain = "目前:全市面雨量为" + str(city_mean) + "毫米。"
             text_cnty_average = "雨量较大的有："
             for index,row in average.iterrows():
@@ -1286,7 +1319,13 @@ class server_plot():
             if raintop['PRE'].values[0]>0: 
                 text_rain = text_rain +"其中，单站累计最大"+ raintop['Cnty'].values[0] + raintop['Town'].values[0] + str(raintop['PRE'].values[0]) +"毫米。"        
         # 风力的统计
-        wind = wind[wind['value']>10].sort_values(by="value",ascending=False)
+        if self.verify['city_type']=='city':
+            wind = wind[(wind['value']>10)&(wind['City']==self.verify['name'])].sort_values(by="value",ascending=False)
+        elif self.verify['city_type']=='cnty':
+            wind = wind[(wind['value']>10)&(wind['Cnty']==self.verify['name'])].sort_values(by="value",ascending=False)  
+        elif self.verify['city_type']=='province':
+            wind = wind[(wind['value']>10)&(wind['Province']==self.verify['name'])].sort_values(by="value",ascending=False)
+        #wind = wind[(wind['value']>10)&(wind['value'])].sort_values(by="value",ascending=False)
         wind_text = ""
         if len(wind)>0:
             wind_text = wind_text + "全市出现8级以上大风，风力较大的有"
