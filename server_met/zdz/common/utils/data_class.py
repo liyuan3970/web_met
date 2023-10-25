@@ -1004,10 +1004,6 @@ class server_plot():
         data = pd.read_csv("static/data/city_code.csv")
         target = data[data['code']==self.city]
         return target.iloc[0].to_dict()
-    def data_from_js(self):
-        data = pd.read_json(json.dumps(self.recv_data), orient='records')
-        self.recv_data = data
-        return data
     def wind_from_sql(self):
         start_time = dtt.datetime.strptime(self.start, "%Y-%m-%d %H:%M:%S")
         end_time = dtt.datetime.strptime(self.end, "%Y-%m-%d %H:%M:%S")
@@ -1026,40 +1022,6 @@ class server_plot():
         data['value'] = data['WIN_S_Gust_Max']
         self.city_info[self.city]['data']['平均'] = round(data['WIN_S_Gust_Max'].mean(),1)
         self.city_info[self.city]['data']['最大'] = str(round(max(data['WIN_S_Gust_Max']),1))      
-        return data
-    def temp_from_sql(self):
-        start_time = dtt.datetime.strptime(self.start, "%Y-%m-%d %H:%M:%S")
-        end_time = dtt.datetime.strptime(self.end, "%Y-%m-%d %H:%M:%S")
-        offset = dtt.timedelta(minutes=(-60*8))
-        now = (end_time+offset).strftime('%Y%m%d%H%M')+"00"
-        old = (start_time+offset).strftime('%Y%m%d%H%M')+"00"
-        label = "["+old+","+now+"]"
-        client = DataQueryClient(configFile=r"/home/workspace/Data/My_Git/web_met/zdz/common/utils/client.config")
-        interfaceId = "statSurfEleInRegion"
-        params = {
-            'dataCode':"SURF_CHN_MUL_MIN",  #SURF_CHN_MUL_HOR
-            'elements':"Cnty,Province,Town,Station_levl,Station_Name,City,Station_Id_C,Lat,Lon,Alti",
-            'statEles':'MAX_TEM,MIN_TEM',
-            'timeRange':label,
-            'adminCodes':"331000",#330000 浙江省
-            'eleValueRanges':"TEM:(0,10000)",
-            
-            'limitCnt':"100000000"
-        }
-        result = client.callAPI_to_serializedStr(self.userId, self.pwd, interfaceId, params, self.dataFormat)
-        result_json = json.loads(result)
-        clomns =['Cnty','Province','Town','Station_levl','Station_Name','City','Station_Id_C','Lat','Lon','Alti','tmax','tmin']
-        data = pd.DataFrame(result_json['DS'])
-        data.columns = clomns
-        data = data.astype({'Lat': 'float', 'Lon': 'float','Station_levl':'int','Alti':'float','tmax':'float','tmin':'float'})
-        if self.plot_type=="tmax":
-            data['value'] = data['tmax']
-            self.min = data['value'].min()
-            self.max = data['value'].max()
-        else:
-            data['value'] = data['tmin']
-            self.min = data['value'].min()
-            self.max = data['value'].max()
         return data
     def rain_from_cloud(self):
         data = pd.read_csv("static/data/downfile/rain.csv")
@@ -1084,45 +1046,11 @@ class server_plot():
                 levels = [-1,0.01, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 15, 17, 20]
                 cmap_nonlin = mpl.colors.ListedColormap(colorslist)  # 自定义颜色映射 color-map
                 norm = mpl.colors.BoundaryNorm(levels, cmap_nonlin.N)  # 基于离散区间生成颜色映射索引 
-        elif self.plot_type=="wind":
-            colorslist = ['#FFFFFF','#CED9FF','#9CFFFF','#FFFF9C','#FFCF9C','#FF9E63','#FF6131','#FF3031','#CE0000']
-            levels = [0,0.3,1.6,3.4,5.5,8,10.8,13.9,17.2,28]
-            #colorslist = ['#FFFFFF','#CED9FF','#9CFFFF',"#42F217","#FF9E63","#DF16EE","red"]# 风力
-            #levels = [0,1.6,3.4,5.5,13.9,17.3,32.6,56]
-            cmap_nonlin = mpl.colors.ListedColormap(colorslist)  # 自定义颜色映射 color-map
-            norm = mpl.colors.BoundaryNorm(levels, cmap_nonlin.N)  # 基于离散区间生成颜色映射索引 
-        elif self.plot_type=="tmax":
-            colorslist = ['#0524B7','#092CD2','#0B34F4','#3859F7','#7187F0','#AAB6F3','#C9D1F8','#F8C9CB','#F19599','#F7797D','#F3464D','#F20710','#92080D','#650307']
-            level = list(np.linspace(self.min-1, self.max+1, num=14, endpoint=True, retstep=False, dtype=None))
-            levels = [round(i,1) for i in level]
-            cmap_nonlin = mpl.colors.ListedColormap(colorslist)  # 自定义颜色映射 color-map
-            norm = mpl.colors.BoundaryNorm(levels, cmap_nonlin.N)  # 基于离散区间生成颜色映射索引
-        elif self.plot_type=="tmin":
-            colorslist = ['#FFFFFF','#CED9FF','#9CFFFF','#FFFF9C','#FFCF9C','#FF9E63','#FF6131','#FF3031','#CE0000']
-            level = list(np.linspace(self.min-1, self.max+1, num=14, endpoint=True, retstep=False, dtype=None))
-            levels = [round(i,1) for i in level]
-            cmap_nonlin = mpl.colors.ListedColormap(colorslist)  # 自定义颜色映射 color-map
-            norm = mpl.colors.BoundaryNorm(levels, cmap_nonlin.N)  # 基于离散区间生成颜色映射索引  
         return cmap_nonlin,levels
     def decode_xarray(self):
         if self.plot_type=="rain":
-            if self.js_status:      
-                data = self.data_from_js()
-            else:
-                data = self.rain_from_cloud()
-                self.recv_data = data
-        elif self.plot_type=="wind":
-            if self.js_status:
-                data = self.data_from_js()
-            else:
-                data = self.wind_from_sql()
-                self.recv_data = data
-        elif self.plot_type=="tmax" or self.plot_type=="tmin":
-            if self.js_status:
-                data = self.data_from_js()
-            else:
-                data = self.temp_from_sql() 
-                self.recv_data = data
+            data = self.rain_from_cloud()
+            self.recv_data = data
         lat = np.array(data['Lat'].to_list())
         lon = np.array(data['Lon'].to_list())
         Zi = np.array(data['value'].to_list())
@@ -1143,15 +1071,6 @@ class server_plot():
         smoothed_data_gauss = convolve(Z_linear, gauss_kernel)
         data_xr = xr.DataArray(smoothed_data_gauss, coords=[ y,x], dims=["lat", "lon"])
         return data_xr
-    def return_mark(self):
-        '''主要返回风场位置'''
-        if self.plot_type=="wind":
-            mark = self.recv_data
-            mark_data = mark[(mark['value']>0)&(mark['City']=="台州市")]
-            mark_json = mark_data.to_json(orient='records',force_ascii=False)
-        else:
-            mark_json = self.recv_data.to_json(orient='records',force_ascii=False)
-        return mark_json
     def wind_to_json(self):
         data = pd.read_csv("static/data/downfile/min.csv")
         data = data.astype({'Lat': 'float', 'Lon': 'float','PRE': 'float','WIN_S_Gust_Max': 'float', 'WIN_D_Gust_Max': 'float'})
@@ -1184,22 +1103,6 @@ class server_plot():
         )
         plt.close()
         return geojson,wind_json    
-    def return_geojson(self):
-        data_xr = self.decode_xarray()
-        # ##########色标和大小#############################
-        cmaps ,levels = self.color_map()
-        lat = data_xr.lat
-        lon = data_xr.lon
-        lons, lats = np.meshgrid(lon, lat)
-        # contour = plt.contourf(lons,lats,data_xr,cmap=cmaps,levels =levels)
-        contour = plt.contourf(lons,lats,data_xr,cmap=cmaps,levels = levels)
-        geojson = geojsoncontour.contourf_to_geojson(
-            contourf=contour,
-            ndigits=3,
-            unit='mm'
-        )
-        plt.close()
-        return geojson
     def text_wind_rain(self):
         wind = self.wind
         rain = self.rain

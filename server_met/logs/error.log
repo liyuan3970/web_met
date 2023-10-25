@@ -113,3 +113,60 @@ Traceback (most recent call last):
     raise IndexError("single positional indexer is out-of-bounds")
 IndexError: single positional indexer is out-of-bounds
 [2023-10-24 22:18:34,168] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 106519
+[2023-10-25 20:31:55,927] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-10-25 21:17:24,679] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_warring
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 242, in station_zdz_warring
+    img = worker.get_radar()
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/common/utils/data_class.py", line 1449, in get_radar
+    img = pickle.loads(self.rs.get("radar"))
+TypeError: a bytes-like object is required, not 'NoneType'
+[2023-10-25 21:17:24,685] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_warring HTTP/1.1" 500 87309
+[2023-10-25 21:17:29,660] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_warring
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 242, in station_zdz_warring
+    img = worker.get_radar()
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/common/utils/data_class.py", line 1449, in get_radar
+    img = pickle.loads(self.rs.get("radar"))
+TypeError: a bytes-like object is required, not 'NoneType'
+[2023-10-25 21:17:29,664] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_warring HTTP/1.1" 500 87309
+[2023-10-25 21:17:34,650] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_warring
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 242, in station_zdz_warring
+    img = worker.get_radar()
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/common/utils/data_class.py", line 1449, in get_radar
+    img = pickle.loads(self.rs.get("radar"))
+TypeError: a bytes-like object is required, not 'NoneType'
+[2023-10-25 21:17:34,654] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_warring HTTP/1.1" 500 87309
+[2023-10-25 21:17:39,655] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_warring
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 242, in station_zdz_warring
+    img = worker.get_radar()
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/common/utils/data_class.py", line 1449, in get_radar
+    img = pickle.loads(self.rs.get("radar"))
+TypeError: a bytes-like object is required, not 'NoneType'
+[2023-10-25 21:17:39,659] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_warring HTTP/1.1" 500 87309

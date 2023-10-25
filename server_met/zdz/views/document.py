@@ -102,13 +102,8 @@ def station_zdz_data(request):
     elif model =="extra_download":
         start = request.POST.get('start', '')
         end = request.POST.get('end', '')
-        city = click_type
-        country = button_value
-        # 测试
-        # print("测试",city,country)
-        start = '2019-08-08 08:00:00'  
-        end = '2019-08-08 09:00:00'
-        city_code = "331000"
+        city_type = button_value
+        city_code = click_type
         start = '2023-07-01 20:52:00'
         end = '2023-07-02 20:52:00'
         worker = data_class.station_text(city_code,start,end)
@@ -230,18 +225,6 @@ def station_zdz_data(request):
                     'mark':wind_json,
                     'text':text
                 }
-        else:
-            js_status = True
-            recv_data = json.loads(current_data)
-            worker = data_class.server_plot(time_hours,city,plot_type,js_status,recv_data)
-            contour = worker.return_geojson() 
-            mark = worker.return_mark()            
-            context = {
-                'status': "ok",
-                'plot_type':plot_type,
-                'contour':contour,
-                'mark':mark
-            }
         return JsonResponse(context)
 
 # 报警程序的接口

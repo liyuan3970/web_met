@@ -155,30 +155,47 @@
                     style="float: right;margin-top:0px;height: 100%;background-color: rgb(57,61,73);">
                     <i class="layui-icon layui-icon-username"></i>
                 </button>
-                <h4 id="user_login_label" style="float: right;margin-top:20px;height: 100%;background-color: rgb(57,61,73);">台州市气象台</h4>
+                <h4 id="user_login_label" style="float: right;margin-top:20px;height: 100%;background-color: rgb(57,61,73);"></h4>
             </div>
             <script>
                 $("#user_login").click(function () {
-                    layer.open({
-                        type: 1,
-                        title: "登录",
-                        maxmin: false,
-                        scrollbar: false,
-                        fixed: false,
-                        offset: 'auto',
-                        moveOut: false,
-                        resize: false,
-                        skin: 'layui-layer-lan', //样式类名
-                        closeBtn: 1, //不显示关闭按钮
-                        area: ['340px', '350px'],
-                        // maxHeight: 600,
-                        // maxWidth: 1400,
-                        anim: 0,
-                        shade: 0,
-                        zIndex: 9999,
-                        shadeClose: false, //开启遮罩关闭
-                        content: $("#user_login_div")
-                    });
+                    if (localStorage.userId) {
+                        layer.confirm('注销用户', {
+                            btn: ['是', '否'] //可以无限个按钮     
+                        }, function (index, layero) {
+                            //按钮【是】的回调
+                            // console.log(index, layero)
+                            localStorage.clear()
+                            $("#user_login_label").html("")
+                            layer.close(index)
+                        }, function (index, layero) {
+                            // console.log(index)
+                            //按钮【否】的回调
+                        });                
+                    }
+                    else {
+                        layer.open({
+                            type: 1,
+                            title: "登录",
+                            maxmin: false,
+                            scrollbar: false,
+                            fixed: false,
+                            offset: 'auto',
+                            moveOut: false,
+                            resize: false,
+                            skin: 'layui-layer-lan', //样式类名
+                            closeBtn: 1, //不显示关闭按钮
+                            area: ['340px', '350px'],
+                            // maxHeight: 600,
+                            // maxWidth: 1400,
+                            anim: 0,
+                            shade: 0,
+                            zIndex: 9999,
+                            shadeClose: false, //开启遮罩关闭
+                            content: $("#user_login_div")
+                        });
+                    }
+                    
                 })
 
                 $("#settings").click(function () {
@@ -237,6 +254,13 @@
                         </dd>
                         <!-- 警报的相关 -->
                         <script>
+                            // 登录检测
+                            $(function(){                            
+                                if (localStorage.userId){
+                                    $("#user_login_label").html("")
+                                    $("#user_login_label").html(localStorage.userName)
+                                }  
+                            })
                             const warring_obj = {
                                 music_audio: undefined,
                                 warring_status: "silence",
@@ -2668,6 +2692,57 @@
                                     , limit: 800
                                 });
                             });
+                            $("#TableSelf_real").on('click', function () {
+                                if (localStorage.userName) {
+                                    var returndata = tabledata
+                                    var search_data = []
+                                    returndata.forEach(function (item) {
+                                        if ((item.City == localStorage.userName) || (item.Cnty == localStorage.userName) || (item.Town == localStorage.userName)) {
+                                            search_data.push(item)
+                                        }
+                                    })
+                                    table.reload('tabledata_real', {
+                                        cols: [[ //标题栏
+                                            { field: 'Station_Id_C', title: 'ID', width: 60 }
+                                            , { field: 'City', title: '地市', width: 60 }
+                                            , { field: 'Cnty', title: '县(市)', width: 80 }
+                                            , { field: 'Town', title: '乡镇', width: 100 }
+                                            , { field: 'Station_Name', title: '站名', width: 50 }
+                                            , { field: 'value', title: fields, sort: true, width: 80 }
+                                        ]]
+                                        , data: search_data
+                                        , skin: 'line'
+                                        , id: 'tabledata_real'
+                                        , limit: 800
+                                    });
+                                }
+                                else{
+                                    
+                                    var returndata = tabledata
+                                    var search_data = []
+                                    returndata.forEach(function (item) {
+                                        if ((item.City == "台州市") || (item.Cnty == "台州市") || (item.Town == "台州市")) {
+                                            search_data.push(item)
+                                        }
+                                    })
+                                    table.reload('tabledata_real', {
+                                        cols: [[ //标题栏
+                                            { field: 'Station_Id_C', title: 'ID', width: 60 }
+                                            , { field: 'City', title: '地市', width: 60 }
+                                            , { field: 'Cnty', title: '县(市)', width: 80 }
+                                            , { field: 'Town', title: '乡镇', width: 100 }
+                                            , { field: 'Station_Name', title: '站名', width: 50 }
+                                            , { field: 'value', title: fields, sort: true, width: 80 }
+                                        ]]
+                                        , data: search_data
+                                        , skin: 'line'
+                                        , id: 'tabledata_real'
+                                        , limit: 800
+                                    });
+
+                                }
+
+                            })
                         });
                         layer.open({
                             type: 1,
@@ -3298,8 +3373,8 @@
                 <div class="layui-inline" style="width: 250px;">
                     <input class="layui-input" name="id" id="SearchReload_real" autocomplete="off">
                 </div>
-                <button id="real_redis_plot" class="layui-btn" data-type="reload"
-                    style="float: right;margin-left: 10px;">绘图</button>
+                <button id="TableSelf_real" class="layui-btn" data-type="reload"
+                    style="float: right;margin-left: 10px;">筛选</button>
                 <button id="TableSearch_real" class="layui-btn" data-type="reload"
                     style="float: right;margin-left: 10px;">搜索</button>
                 <button id="TableReload_real" class="layui-btn" data-type="reload" style="float: right;">重置</button>
@@ -3709,100 +3784,17 @@
                             })
                         }
                 },
-                get_plot_from_real_coutour:function(js_status,current_data){  
-                    
-                    var today = new Date()
-                    var y = today.getFullYear();
-                    var m = today.getMonth() + 1 < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1;
-                    var d = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
-                    var h = today.getHours() < 10 ? "0" + today.getHours() : today.getHours();
-                    var min = today.getMinutes() < 10 ? "0" + today.getMinutes() + ":00" : today.getMinutes() + ":00"
-                    var today_str = y + "-" + m + "-" + d + " " + h + ":" + min;                   
-                    var real_times_class = $("#real_times").val()
-                    var values_times = {
-                        "24hours": "近24小时",
-                        "12hours": "近12小时",
-                        "6hours": "近6小时",
-                        "3hours": "近3小时",
-                        "2hours": "近2小时",
-                        "1hours": "近1小时",
-                        "45mins": "近45分钟",
-                        "30mins": "近30分钟",
-                        "now": "近十分钟"
-                    }
-                    var values_times_int = {
-                        "24hours":24,
-                        "12hours": 12,
-                        "6hours": 6,
-                        "3hours": 3,
-                        "2hours": 2,
-                        "1hours": 1,
-                        "45mins": 0.45,
-                        "30mins": 0.3,
-                        "now": 0.1
-                    }
-                    var values_class = {
-                        "rain": "累积降水",
-                        "wind": " 最大风力",
-                        "sped":" 最大风力",
-                        "tmax": " 最高气温",
-                        "tmin": " 最低气温",
-                    }
-                    var label = today_str + " " + values_times[real_times_class] + values_class[map_toolbox_object.current_data_type]
-                    // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-                    var senddata = current_data
-                    var ajaxdata = {
-                        // 'csrfmiddlewaretoken': csrf,
-                        'model': 'plot_image',
-                        'click_type': map_toolbox_object.current_data_type,// plot_type 风雨温
-                        'button_value': $("#extra_real_plot_city").val(),// 城市
-                        'time_hours':values_times_int[real_times_class].toString(),
-                        'current_data': senddata,
-                        'js_status': js_status
-                    }
-                    $("#extra_server_label").html("")
-                    $("#extra_server_label").html(label)
-                    $.ajax({
-                            url: "http://127.0.0.1:9991/station_zdz_data",  // 请求的地址
-                            type: "post",  // 请求方式
-                            timeout: 25000, //设置延迟上限
-                            data: ajaxdata,
-                            dataType: "json",
-                            beforeSend: function (XMLHttpRequest) {
-                                load = showLoad();
-                            },
-                            success: function (recvdate) {
-                                // console.log(JSON.parse(recvdate.mark));  
-                                // 直接加载图片的方法                      
-                                // var imags = new Image()
-                                // imags.src = recvdate.imgs
-                                // var imageBounds = [[27.8, 120.2], [29.5, 122]];//图片的经纬度范围，西南角点,东北角点(纬度、经度)
-                                // var imageLayer = L.imageOverlay(imags, imageBounds, { opacity: 1 });//opacity是透明度
-                                // extra_plot_obj.current_map.addLayer(imageLayer);
-                                contourf = JSON.parse(recvdate.contour)
-                                extra_server_obj.flush_map()
-                                var reallayer = L.geoJSON(contourf, {
-                                    style: function (feature) {
-                                        return { color: feature.properties.stroke, weight: 1, fill: true, fillColor: feature.properties.stroke, fillOpacity: 1 };
-                                    }
-                                }).addTo(extra_server_obj.current_map)
-                                extra_server_obj.plot_mark(recvdate.plot_type,JSON.parse(recvdate.mark))
-                                L.mask(taizhou_map, {
-                                    // fitBounds:true,
-                                    fitBounds: false,
-                                    restrictBounds: false,
-                                    color: "black",
-                                    fillColor: "white",// 边框颜色
-                                    fillOpacity: 1,
-                                }).addTo(extra_server_obj.current_map); 
-                                extra_server_obj.add_colorbar(values_times_int[real_times_class],map_toolbox_object.current_data_type)                          
-                                closeLoad(load)
-                            }
-                        })
-                },
                 remain:function(){
                     if (extra_server_obj.recv_rain) {
                         // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                        if (localStorage.userId) {
+                            var city_code = localStorage.name
+                            var city_type = localStorage.companyType
+                        }
+                        else {
+                            var city_code = "331000"
+                            var city_type = "1"
+                        }
                         var send_rain = JSON.stringify(extra_server_obj.recv_rain)
                         var send_wind = JSON.stringify(extra_server_obj.recv_wind)
                         var send_tmax = JSON.stringify(extra_server_obj.recv_tmax)
@@ -3816,7 +3808,7 @@
                                 'model': "extra_geojosn_remain",
                                 'rain': send_rain, // 降水
                                 'wind': send_wind, // 风力
-                                'city_code': "331000",
+                                'city_code': city_codes,
                                 'tmax': send_tmax, // 高温
                                 'view': send_view // 能见度
                             },
@@ -3849,6 +3841,14 @@
                 geojson_plot: function () {
                     if (extra_server_obj.recv_rain) {
                         // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+                        if (localStorage.userId) {
+                            var city_code = localStorage.name
+                            var city_type = localStorage.companyType
+                        }
+                        else {
+                            var city_code = "331000"
+                            var city_type = "1"
+                        }
                         var send_data = JSON.stringify(extra_server_obj.recv_rain)
                         var send_type = "rain"
                         $.ajax({
@@ -3860,7 +3860,7 @@
                                 'model': "extra_geojosn_plot",
                                 'start': $("#extra_download-startDate-1").val(),
                                 'end': $("#extra_download-endDate-1").val(),
-                                'city_code': "331000",
+                                'city_code': city_code,
                                 'click_type': send_type, // 绘图类型
                                 'button_value': send_data // 绘图数据
                             },
@@ -3877,14 +3877,25 @@
                                         return { color: feature.properties.stroke, weight: 1, fill: true, fillColor: feature.properties.stroke, fillOpacity: 1 };
                                     }
                                 }).addTo(extra_server_obj.current_map)
-                                L.mask(taizhou_map, {
-                                    // fitBounds:true,
-                                    fitBounds: false,
-                                    restrictBounds: false,
-                                    color: "black",
-                                    fillColor: "white",// 边框颜色
-                                    fillOpacity: 1,
-                                }).addTo(extra_server_obj.current_map);
+                                var shplayer = JSON.parse(localStorage.getItem('userShp'))
+                                if (shplayer) {
+                                    L.mask(shplayer, {
+                                        fitBounds: false,
+                                        restrictBounds: false,
+                                        color: "black",
+                                        fillColor: "white",// 边框颜色
+                                        fillOpacity: 1,
+                                    }).addTo(extra_server_obj.current_map);
+                                }
+                                else {
+                                    L.mask(taizhou_map, {
+                                        fitBounds: false,
+                                        restrictBounds: false,
+                                        color: "black",
+                                        fillColor: "white",// 边框颜色
+                                        fillOpacity: 1,
+                                    }).addTo(extra_server_obj.current_map);
+                                }  
                                 extra_server_obj.add_colorbar(recvdate.hours,"rain") 
                                 closeLoad(load)
                             }
@@ -3924,7 +3935,6 @@
                 init_map: function () {
                     //地图初始化
                     if (extra_server_obj.current_map) {
-
                         extra_server_obj.current_map.eachLayer(function (layer) {
                             if (!layer._container || ('' + jQuery(layer._container).attr('class')).replace(/\s/g, '') != 'leaflet-layer') {
                                 layer.remove();
@@ -3950,7 +3960,6 @@
                         var corner1 = L.latLng(26, 115),
                             corner2 = L.latLng(34, 125),
                             bound = L.latLngBounds(corner1, corner2);
-
                     }
                     else {
                         var boundaries = map_toolbox_object.return_boundaries(zhejianglist[0].features).boundaries
@@ -3991,9 +4000,7 @@
                         });
                         extra_server_obj.current_map = map_extra
                         // 自定义控件
-                        // 添加地图上的按钮
-                            
-
+                        // 添加地图上的按钮                    
                     }
                 },
                 rander_table: function (data_table, tab_type, tabid) {
@@ -4120,12 +4127,20 @@
                                 , id: 'tabledata'
                                 , limit: 800
                             });
-                        });
+                        });   
                     });
 
                 },
                 get_data: function () {
-
+                    // 快报数据的获取 
+                    if (localStorage.userId) {
+                        var city_code = localStorage.name
+                        var city_type = localStorage.companyType
+                    }
+                    else{
+                        var city_code = "331000"
+                        var city_type = "1"
+                    }
                     // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
                     $.ajax({
                         url: "http://127.0.0.1:9991/station_zdz_data",  // 请求的地址
@@ -4136,8 +4151,8 @@
                             'model': "extra_download",
                             'start': $("#extra_download-startDate-1").val(),
                             'end': $("#extra_download-endDate-1").val(),
-                            'click_type': $("#city").val(), // 城市
-                            'button_value': $("#country").val() // 乡镇
+                            'click_type': city_code, // 城市
+                            'button_value':city_type // 乡镇
                         },
                         dataType: "json",
                         beforeSend: function (XMLHttpRequest) {
@@ -4152,17 +4167,12 @@
                             var tab_type = "rain"
                             var tab_id = "extra_rain"
                             extra_server_obj.rander_table(data_table, tab_type, tab_id)
-
                             extra_server_obj.recv_rain = data_table
                             extra_server_obj.recv_wind = JSON.parse(recvdate.extra_wind)
                             extra_server_obj.recv_tmax = JSON.parse(recvdate.extra_tmax)
                             extra_server_obj.recv_view = JSON.parse(recvdate.extra_view)
-                            // console.log(data_table)
                             extra_server_obj.flush_map()
                             extra_server_obj.plot_rain()
-
-
-
                             closeLoad(load)
                         }
                     })
@@ -4777,13 +4787,7 @@
                                     extra_plot_obj.plot_mark(recvdate.plot_type, JSON.parse(recvdate.mark))
                                     var shplayer = JSON.parse(localStorage.getItem('userShp'))
                                     if (shplayer) {
-                                        // var lines_village = L.geoJSON(shplayer, {
-                                        //     style: function (feature) {
-                                        //         return { color: 'red', weight: 1.5, fillOpacity: 0.01 };
-                                        //     }
-                                        // }).addTo(extra_plot_obj.current_map)
                                         L.mask(shplayer, {
-                                            // fitBounds:true,
                                             fitBounds: false,
                                             restrictBounds: false,
                                             color: "black",
@@ -4793,7 +4797,6 @@
                                     }
                                     else {
                                         L.mask(taizhou_map, {
-                                            // fitBounds:true,
                                             fitBounds: false,
                                             restrictBounds: false,
                                             color: "black",
@@ -4871,29 +4874,6 @@
                 map_toolbox_object.current_map.on('click', function (e) {
                     console.log(e.latlng)
                 });
-                $("#real_redis_plot").click(function () {
-                    var js_status = "True"
-                    var current_data = JSON.stringify(map_toolbox_object.recv_all_data)
-                    extra_server_obj.get_plot_from_real_coutour(js_status,current_data)
-                    layer.open({
-                        type: 1,
-                        title: "快报绘图",
-                        maxmin: true,
-                        moveOut: true,
-                        // resize:true,
-                        skin: 'layui-layer-lan', //样式类名
-                        closeBtn: 1, //不显示关闭按钮
-                        area: ['1600px', '900px'],
-                        // maxHeight: 600,
-                        // maxWidth: 1400,
-                        anim: 0,
-                        shade: 0,
-                        zIndex: 9999,
-                        shadeClose: false, //开启遮罩关闭
-                        content: $("#extra_plot")
-                    });
-
-                })
                 // 风雨快报的绘制
                 $("#plot_image").click(function () {
                     var clicktype = $("#color_label").val()
