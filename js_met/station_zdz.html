@@ -703,7 +703,7 @@
                                     <select id="real_class">
                                         <option value=""></option>
                                         <option value="rain" selected="">降水</option>
-                                        <option value="sped">风级</option>
+                                        <!-- <option value="sped">风级</option> -->
                                         <option value="wind">风力</option>
                                         <option value="tmax">高温</option>
                                         <option value="tmin">低温</option>
@@ -2853,7 +2853,14 @@
                         var tables_index = 2
                         map_toolbox_object.current_data_type = "tmin"
                     }
-                    else if (value_index == "wind" || value_index == "sped") {
+                    else if (value_index == "wind") {
+                        var wind_sur_opt = $('input[name="wind_suf_opt"]:checked').val()
+                        if (wind_sur_opt=="barb"){
+                            value_index = "wind"
+                        }
+                        else{
+                            value_index = "sped"
+                        }
                         var tables_index = 3
                         map_toolbox_object.current_data_type = "wind"
                     }
@@ -4237,7 +4244,7 @@
                                             <div class="layui-input-inline" style="width:80px;">
                                                 <select id="warring_shp_layer">
                                                     <option value="yes" selected="">叠加</option>
-                                                    <option value="no" selected="">隐藏</option>
+                                                    <option value="no" >隐藏</option>
                                                 </select>
                                             </div>
                                             <label class="layui-form-label">显示</label>
@@ -4408,13 +4415,28 @@
                     <button type="button" class="layui-btn layui-btn-fluid ">数据设置</button>
                     <dl class="layui-nav-child">
                         <!-- 数据设置 -->
-                        <dd style="height:250px">
+                        <dd style="height:290px">
                             <div style="height:100%;width:100%;" class="layui-form">
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">绘图选项</label>
                                     <div class="layui-input-block">
                                         <input type="radio" name="plot_opt" value="local" title="地图">
                                         <input type="radio" name="plot_opt" value="extra" checked="" title="窗口">
+                                    </div>
+                                </div>
+                                
+                                <div class="layui-form-item" style="margin-top:15px;">
+                                    <label class="layui-form-label">显示选项</label>
+                                    <div class="layui-input-block" style="">
+                                        <input type="radio" name="boundary_type" value="current" title="当前" checked="">
+                                        <input type="radio" name="boundary_type" value="all" title="全省">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">风场选项</label>
+                                    <div class="layui-input-block">
+                                        <input type="radio" name="wind_suf_opt" value="barb" checked="" title="风羽">
+                                        <input type="radio" name="wind_suf_opt" value="label" title="文字">
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
@@ -4435,13 +4457,6 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="layui-form-item" style="margin-top:15px;">
-                                    <label class="layui-form-label">显示选项</label>
-                                    <div class="layui-input-block" style="">
-                                        <input type="radio" name="boundary_type" value="current" title="当前" checked="">
-                                        <input type="radio" name="boundary_type" value="all" title="全省">
-                                    </div>
-                                </div>
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">数据级别</label>
                                     <div class="layui-input-block"
@@ -4456,6 +4471,7 @@
                                         </select>
                                     </div>
                                 </div>
+                                
                             </div>
 
 

@@ -54,6 +54,9 @@ class nlcmap(LinearSegmentedColormap):
     def __call__(self, xi, alpha=1.0, **kw):
         yi = np.interp(xi, self._x, self._y)
         return self.cmap(yi/self.levmax, alpha)
+
+
+
 # 实况数据class
 class station_zdz:
     def __init__(self):
