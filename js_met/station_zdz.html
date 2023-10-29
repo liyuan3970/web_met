@@ -273,8 +273,6 @@
                                         var target = $(this).val()
                                         if(target=="rain_10min"){warring_obj.rain_update(JSON.parse(recvdate.rain))}
                                         else if(target=="wind_10min"){warring_obj.wind_update(JSON.parse(recvdate.wind))}
-                                        else if(target=="tmax_10min"){warring_obj.tmax_update(JSON.parse(recvdate.tmax))}
-                                        else if(target=="tmin_10min"){warring_obj.tmin_update(JSON.parse(recvdate.tmin))}
                                         else if(target=="view_10min"){warring_obj.view_update(JSON.parse(recvdate.view))}
                                     })
                                 },
@@ -354,10 +352,7 @@
                                         dataType: "json",
                                         success: function (recvdate) {
                                             // warring_obj.warring_status = recvdate.warring
-                                            var contourf = JSON.parse(recvdate.radar['imglist'][recvdate.radar['imglist'].length - 1])
-                                            // const gcoord = require('gcoord');
-                                            // var result = gcoord.transform(contourf, gcoord.WGS84, gcoord.GCJ02);
-                                            
+                                            var contourf = JSON.parse(recvdate.radar['imglist'][recvdate.radar['imglist'].length - 1])                                        
                                             var radarlayer = L.geoJSON(contourf, {
                                                 style: function (feature) {
                                                     return { color: feature.properties.stroke, weight: 0.5, fill: true, fillColor: feature.properties.stroke, fillOpacity: 0.7 };
@@ -483,8 +478,7 @@
                                     })
 
                                 },
-                                wind_update: function (data) {
-                                    
+                                wind_update: function (data) {                   
                                     var windval =  $("#wind_10min").val()
                                     var real_flash_opt = $('input[name="real_flash_opt"]:checked').val(); 
                                     data.forEach(function (item) {
@@ -538,41 +532,6 @@
                                         }
 
                                     })
-
-                                },
-                                tmin_update: function (data){
-                                    
-                                    var tminval = $("#tmin_10min").val()    
-                                    data.forEach(function (item) {
-                                        if ((item.TEM <= Number(tminval)) && (item.Lat > warring_obj.warring_range[1]) && (item.Lat < warring_obj.warring_range[3]) && (item.Lon > warring_obj.warring_range[0]) && (item.Lon < warring_obj.warring_range[2])) {
-                                            warring_obj.warring_status = "warring"
-                                            var single = {
-                                                'City': item.City,
-                                                'Station_Id_C': item.Station_Id_C,
-                                                'Station_Name': item.Station_Name,
-                                                'type': "低温",
-                                                'value': item.TEM.toString()
-                                            }
-                                            warring_obj.warring_list.push(single)
-                                        }
-                                    })
-                                },
-                                tmax_update: function (data) {
-                                    var tmaxval = $("#tmax_10min").val()       
-                                    data.forEach(function (item) {
-                                        if ((item.TEM >= Number(tmaxval)) && (item.Lat > warring_obj.warring_range[1]) && (item.Lat < warring_obj.warring_range[3]) && (item.Lon > warring_obj.warring_range[0]) && (item.Lon < warring_obj.warring_range[2])) {
-                                            warring_obj.warring_status = "warring"
-                                            var single = {
-                                                'City': item.City,
-                                                'Station_Id_C': item.Station_Id_C,
-                                                'Station_Name': item.Station_Name,
-                                                'type': "高温",
-                                                'value': item.TEM.toString()
-                                            }
-                                            warring_obj.warring_list.push(single)
-                                        }
-                                    })
-
 
                                 },
                                 view_update: function (data){
@@ -3878,6 +3837,7 @@
                             success: function (recvdate) {
                                 // 获取数据
                                 contourf = JSON.parse(recvdate.contour)
+                                console.log("等值先",contourf)
                                 extra_server_obj.flush_map()
                                 var reallayer = L.geoJSON(contourf, {
                                     style: function (feature) {
@@ -4145,7 +4105,7 @@
                         var city_type = localStorage.companyType
                     }
                     else{
-                        var city_code = "331000"
+                        var city_code = 331000
                         var city_type = "1"
                     }
                     // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
@@ -4305,26 +4265,7 @@
                                                 lay-skin="primary" title="浓雾报警">
                                         </div>
 
-                                        <div class="layui-input-inline" style="margin-bottom:20px">
-                                            <div class="layui-input-inline" style="margin-left:15px">
-                                                <select id="tmax_10min" style="width:50px">
-                                                    <option value="37">37度</option>
-                                                    <option value="40">40度</option>
-                                                </select>
-                                            </div>
-                                            <input type="checkbox" name="warring_check" value="tmax_10min"
-                                                lay-skin="primary" title="高温报警">
-                                        </div>
-
-                                        <div class="layui-input-inline" style="margin-bottom:20px">
-                                            <div class="layui-input-inline" style="margin-left:15px">
-                                                <select id="tmin_10min" style="width:50px">
-                                                    <option value="0">0度</option>
-                                                </select>
-                                            </div>
-                                            <input type="checkbox" name="warring_check" value="tmin_10min"
-                                                lay-skin="primary" title="低温报警">
-                                        </div>
+                                        
 
 
                                     </div>

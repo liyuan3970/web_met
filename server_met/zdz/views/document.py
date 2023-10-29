@@ -103,9 +103,9 @@ def station_zdz_data(request):
         start = request.POST.get('start', '')
         end = request.POST.get('end', '')
         city_type = button_value
-        city_code = click_type
+        city_code = int(click_type)
         start = '2023-07-01 20:52:00'
-        end = '2023-07-02 20:52:00'
+        end = '2023-07-02 20:52:00' 
         worker = data_class.station_text(city_code,start,end)
         text,rain_json,wind_json,tmax_json,view_json = worker.main()
         # 以上为测试      
@@ -123,7 +123,7 @@ def station_zdz_data(request):
         end = request.POST.get('end', '')
         # city = click_type # 绘图类型
         # country = button_value # 绘图数据
-        city_code = request.POST.get('city_code', '')
+        city_code = int(request.POST.get('city_code', ''))
         worker = data_class.station_text(city_code,start,end)
         plot_type = click_type
         plot_data =json.loads(button_value)
@@ -231,18 +231,15 @@ def station_zdz_data(request):
 @csrf_exempt
 def station_zdz_warring(request):
     name = request.POST.get('name', '')
-    print("测试----",name)
     rain_type = request.POST.get('rain_type', '')
     worker = data_class.warring_alert(rain_type)
     img = worker.get_radar()
     # 开始编写风雨数据模型
-    rain_data,wind_data,tmax_data,tmin_data,view_data = worker.warring_data()
+    rain_data,wind_data,view_data = worker.warring_data()
     context = {
             'warring': "warring",
             'rain':rain_data,
             'wind':wind_data,
-            'tmax':tmax_data,
-            'tmin':tmin_data,
             'view':view_data,
             'radar':img
         }

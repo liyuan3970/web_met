@@ -238,3 +238,201 @@ Traceback (most recent call last):
     raise TemplateDoesNotExist(template_name, chain=chain)
 django.template.exceptions.TemplateDoesNotExist: station_zdz.html
 [2023-10-27 20:08:15,763] [basehttp.py:161] [basehttp:log_message] [ERROR]- "GET /index HTTP/1.1" 500 94847
+[2023-10-29 10:36:59,617] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 130, in station_zdz_data
+    geojson,hours = worker.plot_rain(plot_type,plot_data)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/common/utils/data_class.py", line 764, in plot_rain
+    contour = plt.contourf(lons,lats,data_xr,cmap=cmaps,levels = norm)
+NameError: name 'cmaps' is not defined
+[2023-10-29 10:36:59,625] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 270998
+[2023-10-29 10:38:02,290] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 130, in station_zdz_data
+    geojson,hours = worker.plot_rain(plot_type,plot_data)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/common/utils/data_class.py", line 764, in plot_rain
+    contour = plt.contourf(lons,lats,data_xr,cmap=cmap_nonlin,levels = norm)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/pyplot.py", line 2530, in contourf
+    **kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/__init__.py", line 1601, in inner
+    return func(ax, *map(sanitize_sequence, args), **kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/axes/_axes.py", line 6422, in contourf
+    contours = mcontour.QuadContourSet(self, *args, **kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/contour.py", line 855, in __init__
+    kwargs = self._process_args(*args, **kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/contour.py", line 1456, in _process_args
+    x, y, z = self._contour_args(args, kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/contour.py", line 1527, in _contour_args
+    self._contour_level_args(z, args)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/contour.py", line 1197, in _contour_level_args
+    self.levels = np.asarray(levels_arg).astype(np.float64)
+TypeError: float() argument must be a string or a number, not 'BoundaryNorm'
+[2023-10-29 10:38:02,297] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 313854
+[2023-10-29 10:41:29,452] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 130, in station_zdz_data
+    geojson,hours = worker.plot_rain(plot_type,plot_data)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/common/utils/data_class.py", line 764, in plot_rain
+    contour = plt.contourf(lons,lats,data_xr,cmap=cmap_nonlin,levels = norm)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/pyplot.py", line 2530, in contourf
+    **kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/__init__.py", line 1601, in inner
+    return func(ax, *map(sanitize_sequence, args), **kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/axes/_axes.py", line 6422, in contourf
+    contours = mcontour.QuadContourSet(self, *args, **kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/contour.py", line 855, in __init__
+    kwargs = self._process_args(*args, **kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/contour.py", line 1456, in _process_args
+    x, y, z = self._contour_args(args, kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/contour.py", line 1527, in _contour_args
+    self._contour_level_args(z, args)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/contour.py", line 1197, in _contour_level_args
+    self.levels = np.asarray(levels_arg).astype(np.float64)
+TypeError: float() argument must be a string or a number, not 'BoundaryNorm'
+[2023-10-29 10:41:29,458] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 313854
+[2023-10-29 15:55:12,336] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 130, in station_zdz_data
+    geojson,hours = worker.plot_rain(plot_type,plot_data)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/common/utils/data_class.py", line 780, in plot_rain
+    contour = plt.contourf(lons,lats,data_xr,cmap=cmap_nonlin,levels =levels,norm =norm)
+NameError: name 'no' is not defined
+[2023-10-29 15:55:12,345] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 511444
+[2023-10-29 16:48:59,169] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_warring
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 239, in station_zdz_warring
+    rain_data,wind_data,tmax_data,tmin_data,view_data = worker.warring_data()
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/common/utils/data_class.py", line 1461, in warring_data
+    return rain_data,wind_data,view_data
+NameError: name 'tmax_data' is not defined
+[2023-10-29 16:48:59,180] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_warring HTTP/1.1" 500 104922
+[2023-10-29 16:49:04,322] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_warring
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 239, in station_zdz_warring
+    rain_data,wind_data,tmax_data,tmin_data,view_data = worker.warring_data()
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/common/utils/data_class.py", line 1461, in warring_data
+    return rain_data,wind_data,view_data
+NameError: name 'tmax_data' is not defined
+[2023-10-29 16:49:04,345] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_warring HTTP/1.1" 500 104922
+[2023-10-29 16:49:19,361] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_warring
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 239, in station_zdz_warring
+    rain_data,wind_data,tmax_data,tmin_data,view_data = worker.warring_data()
+ValueError: not enough values to unpack (expected 5, got 3)
+[2023-10-29 16:49:19,396] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_warring HTTP/1.1" 500 87411
+[2023-10-29 16:49:24,307] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_warring
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 239, in station_zdz_warring
+    rain_data,wind_data,tmax_data,tmin_data,view_data = worker.warring_data()
+ValueError: not enough values to unpack (expected 5, got 3)
+[2023-10-29 16:49:24,319] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_warring HTTP/1.1" 500 87411
+[2023-10-29 17:25:28,602] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2001, 'err_msg': '密码错误', 'exec': BusinessException(<ResponseCodeEnum.PASSWORD_ERROR: (2001, '密码错误', 'password error')>)}
+[2023-10-29 20:58:00,299] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 80, in station_zdz_data
+    data = worker.get_regin(boundary,table_type,tables_name,value_index,zoom)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/common/utils/data_class.py", line 296, in get_regin
+    boundary_data =  boundary_data[(boundary_data['Station_Id_C'] in ['K8218','K8301'] )|(boundary_data['Station_levl']==11)| (boundary_data['Station_levl']==15)| (boundary_data['Station_levl']==12)| (boundary_data['Station_levl']==13)| (boundary_data['Station_levl']==16)]
+  File "/opt/conda/lib/python3.7/site-packages/pandas/core/generic.py", line 1538, in __nonzero__
+    f"The truth value of a {type(self).__name__} is ambiguous. "
+ValueError: The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+[2023-10-29 20:58:00,311] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 98701
+[2023-10-29 20:58:25,769] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 80, in station_zdz_data
+    data = worker.get_regin(boundary,table_type,tables_name,value_index,zoom)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/common/utils/data_class.py", line 296, in get_regin
+    boundary_data =  boundary_data[(boundary_data['Station_Id_C'] in ['K8218','K8301'] )|(boundary_data['Station_levl']==11)| (boundary_data['Station_levl']==15)| (boundary_data['Station_levl']==12)| (boundary_data['Station_levl']==13)| (boundary_data['Station_levl']==16)]
+  File "/opt/conda/lib/python3.7/site-packages/pandas/core/generic.py", line 1538, in __nonzero__
+    f"The truth value of a {type(self).__name__} is ambiguous. "
+ValueError: The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+[2023-10-29 20:58:25,803] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 98701
+[2023-10-29 21:13:32,314] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/pandas/core/indexes/base.py", line 3361, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "pandas/_libs/index.pyx", line 76, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 108, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 5198, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 5206, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'VIS_HOR_1MI'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 80, in station_zdz_data
+    data = worker.get_regin(boundary,table_type,tables_name,value_index,zoom)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/common/utils/data_class.py", line 315, in get_regin
+    remain = boundary_data[(boundary_data['VIS_HOR_1MI']<=500)|(boundary_data['Station_levl']==11)| (boundary_data['Station_levl']==15)| (boundary_data['Station_levl']==12)| (boundary_data['Station_levl']==13)| (boundary_data['Station_levl']==16)]
+  File "/opt/conda/lib/python3.7/site-packages/pandas/core/frame.py", line 3458, in __getitem__
+    indexer = self.columns.get_loc(key)
+  File "/opt/conda/lib/python3.7/site-packages/pandas/core/indexes/base.py", line 3363, in get_loc
+    raise KeyError(key) from err
+KeyError: 'VIS_HOR_1MI'
+[2023-10-29 21:13:32,327] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 164691

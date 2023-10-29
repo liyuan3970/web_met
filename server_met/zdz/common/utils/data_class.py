@@ -36,24 +36,6 @@ from astropy.modeling.models import Gaussian2D
 import cinrad
 from cinrad.visualize import Section
 import geojsoncontour
-# 自定义画图类
-class nlcmap(LinearSegmentedColormap):
-    """A nonlinear colormap"""
-
-    name = 'nlcmap'
-
-    def __init__(self, cmap, levels):
-        self.cmap = cmap
-        self.monochrome = self.cmap.monochrome
-        self.levels = np.asarray(levels, dtype='float64')
-        self._x = self.levels/ self.levels.max()
-        self.levmax = self.levels.max()
-        self.levmin = self.levels.min()
-        self._y = np.linspace(self.levmin, self.levmax, len(self.levels))
-
-    def __call__(self, xi, alpha=1.0, **kw):
-        yi = np.interp(xi, self._x, self._y)
-        return self.cmap(yi/self.levmax, alpha)
 
 
 
@@ -308,13 +290,31 @@ class station_zdz:
         elif table_type=="main":
             remain = boundary_data[(boundary_data['Station_levl']==11)| (boundary_data['Station_levl']==12)| (boundary_data['Station_levl']==15)| (boundary_data['Station_levl']==13)| (boundary_data['Station_levl']==16)]
         elif table_type=="auto":   
-            if value_index!=0:        
-                if (boundary[3]-boundary[2])<2.9:
-                    remain = boundary_data
-                elif (boundary[3]-boundary[2])<6:
-                    remain = boundary_data[(boundary_data['Station_levl']==11)| (boundary_data['Station_levl']==15)| (boundary_data['Station_levl']==12)| (boundary_data['Station_levl']==13)| (boundary_data['Station_levl']==16)]
-                else:
-                    remain = boundary_data[(boundary_data['Station_levl']==11)| (boundary_data['Station_levl']==12)| (boundary_data['Station_levl']==13)| (boundary_data['Station_levl']==16)]
+            if value_index!=0: 
+                # 温度 --- 全自动模式添加额外站点
+                if  value_index ==1 or value_index ==2:     
+                    if (boundary[3]-boundary[2])<2.9:
+                        remain = boundary_data
+                    elif (boundary[3]-boundary[2])<6:
+                        remain = boundary_data[(boundary_data['Station_Id_C'].isin(['K8218','K8301']))|(boundary_data['Station_levl']==11)| (boundary_data['Station_levl']==15)| (boundary_data['Station_levl']==12)| (boundary_data['Station_levl']==13)| (boundary_data['Station_levl']==16)]
+                    else:
+                        remain = boundary_data[(boundary_data['Station_Id_C'].isin(['K8218','K8301']))|(boundary_data['Station_levl']==11)| (boundary_data['Station_levl']==12)| (boundary_data['Station_levl']==13)| (boundary_data['Station_levl']==16)]
+                # 风力 --- 显示8及以上大风
+                elif value_index ==3:
+                    if (boundary[3]-boundary[2])<2.9:
+                        remain = boundary_data
+                    elif (boundary[3]-boundary[2])<6:
+                        remain = boundary_data[(boundary_data['WIN_S_Gust_Max']>17)|(boundary_data['Station_levl']==11)| (boundary_data['Station_levl']==15)| (boundary_data['Station_levl']==12)| (boundary_data['Station_levl']==13)| (boundary_data['Station_levl']==16)]
+                    else:
+                        remain = boundary_data[(boundary_data['WIN_S_Gust_Max']>17)|(boundary_data['Station_levl']==11)| (boundary_data['Station_levl']==12)| (boundary_data['Station_levl']==13)| (boundary_data['Station_levl']==16)]
+                # 能见度 --- 显示500米以下站
+                elif value_index ==4:  
+                    if (boundary[3]-boundary[2])<2.9:
+                        remain = boundary_data
+                    elif (boundary[3]-boundary[2])<6:
+                        remain = boundary_data[(boundary_data['value']<=500)|(boundary_data['Station_levl']==11)| (boundary_data['Station_levl']==15)| (boundary_data['Station_levl']==12)| (boundary_data['Station_levl']==13)| (boundary_data['Station_levl']==16)]
+                    else:
+                        remain = boundary_data[(boundary_data['value']<=500)|(boundary_data['Station_levl']==11)| (boundary_data['Station_levl']==12)| (boundary_data['Station_levl']==13)| (boundary_data['Station_levl']==16)]
             else:
                 remain = boundary_data
 
@@ -337,7 +337,7 @@ class station_text:
         self.start = start
         self.end = end
         self.data = self.comupt_city_csv(city_code,start,end)
-        self.city_codes = ["331000"]
+        self.city_codes = [331000]
     def comput_city(self,city_code,start,end):
         """快报或者统计数据的接口"""
         # getSurfEleInRegionByTime
@@ -547,7 +547,7 @@ class station_text:
         if plot_data=="none":
             orig = self.data
             data = orig.sort_values(by="rain",ascending=False)
-            rain = data[(data['rain']>0) & (data['rain']<5009)]
+            rain = data[(data['rain']>=0) & (data['rain']<5009)]
             del rain['Unnamed: 0'] # 天擎不需要
             rain.reset_index(drop=True)
         else:
@@ -737,7 +737,7 @@ class station_text:
         if plot_type =="none":
             orig = self.data
             data = orig.sort_values(by="rain",ascending=False)
-            rain = data[(data['rain']>0) & (data['rain']<5009)]
+            rain = data[(data['rain']>=0) & (data['rain']<5009)]
         else:  
             rain = pd.read_json(json.dumps(plot_data), orient='records')
         lat = np.array(rain['Lat'].to_list())
@@ -746,8 +746,8 @@ class station_text:
         data_max = max(Zi)
         data_min = min(Zi)
         np.set_printoptions(precision = 2)
-        x = np.arange(120.0,122.0,0.015)
-        y = np.arange(27.8,29.5,0.015)
+        x = np.arange(120.0,122.0,0.01)
+        y = np.arange(27.8,29.5,0.01)
         nx0 =len(x)
         ny0 =len(y)
         X, Y = np.meshgrid(x, y)#100*100
@@ -764,21 +764,21 @@ class station_text:
         end_time = dtt.datetime.strptime(self.end, "%Y-%m-%d %H:%M:%S")
         hours = (end_time-start_time).total_seconds()//3600
         if hours >12:
-            colorslist = ['#A3FAFD', '#29D3FD', '#29AAFF', '#2983FF', '#4EAB37', '#46FA35', '#F1F837', '#F1D139', '#F2A932', '#F13237', '#C4343A', '#A43237', '#A632B4', '#D032E1', '#E431FF']# 24降水
-            levels = [0, 5, 10, 15, 20, 25, 35, 50, 75, 100, 150, 200, 250, 350, 500]
-            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=15)
-            cmap_nonlin = nlcmap(cmaps, levels)
-        elif hours <12 and hours >=1:
-            colorslist =['#A3FAFD', '#29D3FD', '#29AAFF', '#2983FF', '#4EAB37', '#46FA35', '#F1F837', '#F1D139', '#F2A932', '#F13237', '#C4343A', '#A43237', '#A632B4', '#D032E1', '#E431FF']# 06降水
-            levels = [0, 2, 5, 10, 15, 20, 25, 35, 50, 60, 70, 80, 90, 100, 110]
-            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=15)
-            cmap_nonlin = nlcmap(cmaps, levels)
+            colorslist = ['#FFFFFF','#A3FAFD', '#29D3FD', '#29AAFF', '#2983FF', '#4EAB37', '#46FA35', '#F1F837', '#F1D139', '#F2A932', '#F13237', '#C4343A', '#A43237', '#A632B4', '#D032E1', '#E431FF']# 24降水
+            levels = [-1,0.01, 5, 10, 15, 20, 25, 35, 50, 75, 100, 150, 200, 250, 350, 500]
+            cmap_nonlin = mpl.colors.ListedColormap(colorslist)  # 自定义颜色映射 color-map
+            norm = mpl.colors.BoundaryNorm(levels, cmap_nonlin.N) 
+        elif hours <=12 and hours >=1:
+                colorslist =['#FFFFFF','#A3FAFD', '#29D3FD', '#29AAFF', '#2983FF', '#4EAB37', '#46FA35', '#F1F837', '#F1D139', '#F2A932', '#F13237', '#C4343A', '#A43237', '#A632B4', '#D032E1', '#E431FF']# 06降水
+                levels = [-1,3, 4, 5, 10, 15, 20, 25, 35, 50, 60, 70, 80, 90, 100, 110]
+                cmap_nonlin = mpl.colors.ListedColormap(colorslist)  # 自定义颜色映射 color-map
+                norm = mpl.colors.BoundaryNorm(levels, cmap_nonlin.N)  # 基于离散区间生成颜色映射索引       
         elif hours <1:
-            colorslist =['#A3FAFD', '#29D3FD', '#29AAFF', '#2983FF', '#4EAB37', '#46FA35', '#F1F837', '#F1D139', '#F2A932', '#F13237', '#C4343A', '#A43237', '#A632B4', '#D032E1', '#E431FF']# 01降水
-            levels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 15, 17, 20]
-            cmaps = LinearSegmentedColormap.from_list('mylist',colorslist,N=15)
-            cmap_nonlin = nlcmap(cmaps, levels) 
-        contour = plt.contourf(lons,lats,data_xr,cmap=cmap_nonlin,levels =levels)
+            colorslist =['#FFFFFF','#A3FAFD', '#29D3FD', '#29AAFF', '#2983FF', '#4EAB37', '#46FA35', '#F1F837', '#F1D139', '#F2A932', '#F13237', '#C4343A', '#A43237', '#A632B4', '#D032E1', '#E431FF']# 01降水
+            levels = [-1,0.01, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 15, 17, 20]
+            cmap_nonlin = mpl.colors.ListedColormap(colorslist)  # 自定义颜色映射 color-map
+            norm = mpl.colors.BoundaryNorm(levels, cmap_nonlin.N)
+        contour = plt.contourf(lons,lats,data_xr,cmap=cmap_nonlin,levels =levels,norm = norm )
         geojson = geojsoncontour.contourf_to_geojson(
             contourf=contour,
             ndigits=3,
@@ -1435,13 +1435,6 @@ class warring_alert():
         wind = data[(data['WIN_S_Inst_Max']>17)&(data['WIN_S_Inst_Max']<5000)][['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti','WIN_S_Inst_Max','WIN_D_INST_Max']]
         wind_data = wind.groupby(['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti','WIN_D_INST_Max'])['WIN_S_Inst_Max'].max().reset_index().sort_values('WIN_S_Inst_Max', ascending=False).drop_duplicates(subset=['Station_Id_C'], keep='first')
         return wind_data
-    def get_temp(self):
-        data = self.now
-        tmin = data[(data['TEM']<0)&(data['TEM']<5000)][['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti','TEM']]
-        tmax = data[(data['TEM']>10)&(data['TEM']<5000)][['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti','TEM']]
-        tmax_data = tmax.groupby(['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti'])['TEM'].max().reset_index().to_json(orient = "records", force_ascii=False)
-        tmin_data = tmin.groupby(['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti'])['TEM'].min().reset_index().to_json(orient = "records", force_ascii=False)
-        return tmax_data,tmin_data
     def get_view(self):
         data = self.now
         view = data[(data['VIS_HOR_1MI']<1000)&(data['VIS_HOR_1MI']<30000)][['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti','VIS_HOR_1MI']]
@@ -1456,8 +1449,7 @@ class warring_alert():
 #         radar = self.get_radar()
         rain = self.get_rain()
         wind = self.get_wind()
-        tmax_data,tmin_data = self.get_temp()
         view_data = self.get_view()
         rain_data = rain.to_json(orient = "records", force_ascii=False)
         wind_data = wind.to_json(orient = "records", force_ascii=False)
-        return rain_data,wind_data,tmax_data,tmin_data,view_data
+        return rain_data,wind_data,view_data
