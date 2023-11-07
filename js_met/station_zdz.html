@@ -812,6 +812,25 @@
                         </script>
                     </dl>
                 </li>
+                <!-- 常用网址 -->
+                <li class="layui-nav-item layui-nav-itemed">
+                    <button type="button" class="layui-btn layui-btn-fluid " >常用网址</button>
+                    <dl class="layui-nav-child">
+                        
+                        <dd style="height:60px;padding-right:25px;padding-top: 15px;">
+                            <button type="button" class="layui-btn layui-btn-sm webother" value="https://www.baidu.com/" style="float:right;margin-left: 10px;">省网</button>
+                            <button type="button" class="layui-btn layui-btn-sm webother" value="https://www.baidu.com/" style="float:right;">雷达</button>
+                            <button type="button" class="layui-btn layui-btn-sm webother" value="https://www.baidu.com/" style="float:right;">模式</button>
+                            <button type="button" class="layui-btn layui-btn-sm webother" value="https://www.baidu.com/" style="float:right;">观测</button>
+                        </dd>
+                        <script>
+                            $(".webother").click(function(){
+                                window.open(this.value);
+                            })
+                        </script>
+                        
+                    </dl>
+                </li>
 
                 <!-- <li class="layui-nav-item">      
                     <a  href="javascript:;" style="display:flex; justify-content:center; align-items:center;">文字快报</a>
