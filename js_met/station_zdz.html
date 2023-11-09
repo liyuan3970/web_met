@@ -141,7 +141,7 @@
         <!-- 导航栏目 -->
         <div style="display: inline-block;width:100%;height: 5%;" class="layui-logo layui-hide-xs layui-bg-black">
             <div style="display: inline-block;width:15%;height: 100%;padding:0;">
-                <h3 style="padding-top:10px;padding-left: 50px;width: 200px;">天驰</h3>
+                <h3 style="padding-top:10px;padding-left: 50px;width: 200px;">台州风驰</h3>
             </div>
 
             <div style="display: inline-block;width:55%;height: 100%;padding:0;float: right;">
@@ -257,9 +257,17 @@
                             // 登录检测
                             $(function(){                            
                                 if (localStorage.userId){
+
                                     $("#user_login_label").html("")
                                     $("#user_login_label").html(localStorage.userName)
-                                }  
+                                    var shplayer = JSON.parse(localStorage.getItem('userShp'))
+                                    var bbox = turf.bbox(shplayer);
+                                    warring_obj.warring_range = [bbox[0]-0.3,bbox[1]-0.3,bbox[2]+0.3,bbox[3]+0.3]
+                                } 
+                                else{
+                                    var bbox = turf.bbox(taizhou_map);
+                                    warring_obj.warring_range = [bbox[0]-0.3,bbox[1]-0.3,bbox[2]+0.3,bbox[3]+0.3]
+                                } 
                             })
                             const warring_obj = {
                                 music_audio: undefined,
@@ -721,7 +729,7 @@
                 </li>
                 <!-- 历史实况的统计信息 -->
                 <li class="layui-nav-item layui-nav-itemed">
-                    <button type="button" class="layui-btn layui-btn-fluid ">整点回放</button>
+                    <button type="button" class="layui-btn layui-btn-fluid ">历史回放</button>
                     <dl class="layui-nav-child">
                         <dd style="height:120px;padding-top: 5%;">
                             <label class="layui-form-label">时间</label>
