@@ -226,6 +226,16 @@ def station_zdz_data(request):
                     'text':text
                 }
         return JsonResponse(context)
+    elif model =="igrad":
+        plot_type = click_type 
+        click = button_value
+        start = request.POST.get('start', '')
+        end = request.POST.get('end', '')     
+        context = {
+            'status': "ok"
+        }
+        return JsonResponse(context)
+    
 
 # 报警程序的接口
 @csrf_exempt

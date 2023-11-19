@@ -1,0 +1,8 @@
+1556:C 18 Nov 11:26:44.588 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1556:C 18 Nov 11:26:44.588 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=1556, just started
+1556:C 18 Nov 11:26:44.588 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+1556:M 18 Nov 11:26:44.589 # Creating Server TCP listening socket *:6379: bind: Address already in use
+2653:C 18 Nov 11:27:18.972 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+2653:C 18 Nov 11:27:18.974 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=2653, just started
+2653:C 18 Nov 11:27:18.975 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+2653:M 18 Nov 11:27:18.980 # Creating Server TCP listening socket *:6379: bind: Address already in use
