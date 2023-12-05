@@ -6,6 +6,7 @@ from django.views.static import serve
 from . import views
 from .middleware import StandardRouter
 
+
 urlpatterns = [ 
     path('login', views.login_main),
     # 可以直接预览媒体文件
@@ -20,8 +21,10 @@ urlpatterns = [
 ]
 
 router = StandardRouter()
+router.register(r"api", views.ZdzViewSet, basename="api")
 router.register(r"user", views.UserViewSet)
 router.register(r"file", views.FileViewSet, basename="file")
+
 urlpatterns += [
     path("", include(router.urls))
 ]

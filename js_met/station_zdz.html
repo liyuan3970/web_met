@@ -106,7 +106,7 @@
             /* font-family: "STKaiti"; */
             text-align: left;
         }
-    
+        /* 色标 */
         .leaflet-control-colotlabel ul li {
             padding: 0;
             margin: 0;
@@ -471,7 +471,7 @@
                                             c.addTo(map_toolbox_object.current_map)
                                         }      
                                         // 信息表格内容添加
-                                        if ((item.PRE>Number(rainval))&&(item.Lat>warring_obj.warring_range[1])&&(item.Lat<warring_obj.warring_range[3])&&(item.Lon>warring_obj.warring_range[0])&&(item.Lon<warring_obj.warring_range[2])){ 
+                                        if ((item.PRE>Number(rainval))&&(item.Lat>war0ing_obj.warring_range[1])&&(item.Lat<warring_obj.warring_range[3])&&(item.Lon>warring_obj.warring_range[0])&&(item.Lon<warring_obj.warring_range[2])){ 
                                             warring_obj.warring_status = "warring"                               
                                             var single = {
                                                 'City':item.City,
@@ -2754,6 +2754,7 @@
                     get_data: function (model, value_index, tables_name, tables_index) {
                         var decode_select = map_toolbox_object.decode_selection()
                         var current_zoom = map_toolbox_object.current_map.getZoom()
+                        console.log("类型---",model,decode_select[1],tables_index,JSON.stringify(decode_select[0]),value_index,current_zoom,tables_name)
                         // 8 为全省  9 为 骨干站  10 为所有站
                         //向服务器要数据model,type,button 对应导航栏目、垂直导航类型、具体按钮
                         // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
@@ -3689,7 +3690,6 @@
                                     //创建一个class为 leaflet-control-colotlabel的div
                                     this._container = L.DomUtil.create('div', 'leaflet-control-colotlabel');
                                     // 开始逻辑编写
-                                    console.log("打印数据", this.options)
                                     var insertDom = document.createElement('ul');
                                     let str = ``;
 

@@ -1432,8 +1432,10 @@ class warring_alert():
         return data         
     def get_wind(self):
         data = self.now
-        wind = data[(data['WIN_S_Inst_Max']>17)&(data['WIN_S_Inst_Max']<5000)][['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti','WIN_S_Inst_Max','WIN_D_INST_Max']]
+        wind = data[(data['WIN_S_Inst_Max']>10)&(data['WIN_S_Inst_Max']<5000)][['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti','WIN_S_Inst_Max','WIN_D_INST_Max']]
         wind_data = wind.groupby(['Cnty','Province','Town','Station_Name','City','Station_Id_C','Lat','Lon','Alti','WIN_D_INST_Max'])['WIN_S_Inst_Max'].max().reset_index().sort_values('WIN_S_Inst_Max', ascending=False).drop_duplicates(subset=['Station_Id_C'], keep='first')
+        wind_data['WIN_S_Gust_Max'] = wind_data['WIN_S_Inst_Max']
+        wind_data['WIN_D_Gust_Max'] = wind_data['WIN_D_INST_Max']
         return wind_data
     def get_view(self):
         data = self.now

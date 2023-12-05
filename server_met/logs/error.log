@@ -492,3 +492,582 @@ Traceback (most recent call last):
     "instead." % name
 ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
 [2023-11-19 20:33:49,902] [basehttp.py:161] [basehttp:log_message] [ERROR]- "GET /station_zdz_data HTTP/1.1" 500 81763
+[2023-11-29 23:56:26,503] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-11-30 00:00:21,710] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-11-30 00:04:35,104] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-11-30 00:09:38,498] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-11-30 00:13:54,512] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-11-30 00:14:52,859] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-11-30 00:16:27,018] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-11-30 00:16:59,736] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-11-30 00:19:20,883] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-11-30 00:19:21,979] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-11-30 00:19:22,360] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-11-30 00:19:22,559] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-11-30 00:19:22,752] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-11-30 00:19:22,950] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-11-30 00:19:23,157] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-11-30 00:19:49,480] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-11-30 00:23:33,386] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-11-30 00:24:28,954] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-11-30 20:20:11,525] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 405, 'err_msg': '{"detail": "方法 “GET” 不被允许。"}', 'exec': MethodNotAllowed('GET')}
+[2023-12-02 17:19:42,867] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_warring
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/pandas/core/indexes/base.py", line 3361, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "pandas/_libs/index.pyx", line 76, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 108, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 5198, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 5206, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: ''
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 248, in station_zdz_warring
+    rain_data,wind_data,view_data = worker.warring_data()
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/common/utils/data_class.py", line 1452, in warring_data
+    wind = self.get_wind()
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/common/utils/data_class.py", line 1436, in get_wind
+    wind[''] = wind['']
+  File "/opt/conda/lib/python3.7/site-packages/pandas/core/frame.py", line 3458, in __getitem__
+    indexer = self.columns.get_loc(key)
+  File "/opt/conda/lib/python3.7/site-packages/pandas/core/indexes/base.py", line 3363, in get_loc
+    raise KeyError(key) from err
+KeyError: ''
+[2023-12-02 17:19:42,881] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_warring HTTP/1.1" 500 172349
+[2023-12-02 21:16:05,001] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-02 21:21:50,144] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-02 21:22:15,169] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-02 21:27:17,669] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-02 21:28:03,472] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-02 21:28:45,395] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-02 21:30:03,985] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-02 21:30:32,135] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-02 21:31:11,115] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-02 21:31:16,745] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-02 21:31:42,678] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-02 21:33:29,694] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-02 22:55:10,730] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 405, 'err_msg': '{"detail": "方法 “GET” 不被允许。"}', 'exec': MethodNotAllowed('GET')}
+[2023-12-02 22:55:30,407] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:55:49,064] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:56:55,556] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 405, 'err_msg': '{"detail": "方法 “GET” 不被允许。"}', 'exec': MethodNotAllowed('GET')}
+[2023-12-02 22:57:14,731] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:57:18,554] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:57:44,832] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:57:46,707] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:57:51,452] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:58:25,950] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:58:27,883] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:58:29,227] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:58:29,864] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:58:32,275] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:58:32,816] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:58:33,033] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:58:33,258] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:59:02,136] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:59:04,031] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:59:04,766] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:59:06,310] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:59:06,975] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:59:07,215] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:59:07,404] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:59:07,624] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:59:11,248] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 22:59:12,016] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:00:05,737] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:00:14,406] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:01:37,835] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 405, 'err_msg': '{"detail": "方法 “GET” 不被允许。"}', 'exec': MethodNotAllowed('GET')}
+[2023-12-02 23:01:42,556] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 405, 'err_msg': '{"detail": "方法 “GET” 不被允许。"}', 'exec': MethodNotAllowed('GET')}
+[2023-12-02 23:01:42,557] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /user/register
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    response = response.render()
+  File "/opt/conda/lib/python3.7/site-packages/django/template/response.py", line 105, in render
+    self.content = self.rendered_content
+  File "/opt/conda/lib/python3.7/site-packages/rest_framework/response.py", line 70, in rendered_content
+    ret = renderer.render(self.data, accepted_media_type, context)
+  File "/opt/conda/lib/python3.7/site-packages/rest_framework/renderers.py", line 724, in render
+    context = self.get_context(data, accepted_media_type, renderer_context)
+  File "/opt/conda/lib/python3.7/site-packages/rest_framework/renderers.py", line 655, in get_context
+    raw_data_post_form = self.get_raw_data_form(data, view, 'POST', request)
+  File "/opt/conda/lib/python3.7/site-packages/rest_framework/renderers.py", line 554, in get_raw_data_form
+    serializer = view.get_serializer()
+  File "/opt/conda/lib/python3.7/site-packages/rest_framework/generics.py", line 108, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "/opt/conda/lib/python3.7/site-packages/rest_framework/generics.py", line 125, in get_serializer_class
+    % self.__class__.__name__
+AssertionError: 'UserViewSet' should either include a `serializer_class` attribute, or override the `get_serializer_class()` method.
+[2023-12-02 23:01:42,558] [basehttp.py:161] [basehttp:log_message] [ERROR]- "GET /user/register HTTP/1.1" 500 145
+[2023-12-02 23:02:04,900] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 405, 'err_msg': '{"detail": "方法 “GET” 不被允许。"}', 'exec': MethodNotAllowed('GET')}
+[2023-12-02 23:02:21,383] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:02:21,902] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:02:22,154] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:02:22,373] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:02:22,582] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:02:22,815] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:02:23,056] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:02:23,268] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:02:23,476] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:02:23,699] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:02:23,932] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:02:56,375] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:02:57,072] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:02:57,299] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:02:57,497] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:02:57,694] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:03:49,239] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:03:50,786] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:03:51,300] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:03:51,533] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:03:51,744] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:03:51,956] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:03:52,176] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:04:36,629] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:04:37,029] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:04:38,957] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:05:45,714] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:05:47,693] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:05:47,916] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:05:48,126] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:05:48,345] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:08:34,229] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:09:35,586] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:09:37,195] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:09:37,759] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:12:46,772] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:12:47,958] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:13:50,971] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:13:52,064] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:13:53,540] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:13:53,966] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:14:02,494] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:15:33,081] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:21:58,471] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:27:38,039] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-02 23:27:38,040] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:27:46,452] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:27:47,542] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:27:47,764] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:27:47,962] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:27:48,171] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:27:48,385] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:27:48,579] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:27:48,762] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:27:48,944] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:27:49,150] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:27:49,369] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:29:28,540] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-02 23:29:28,541] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:30:01,941] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:34:56,078] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-02 23:34:56,079] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:38:19,634] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-02 23:38:19,635] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 401, 'err_msg': '{"detail": "身份认证信息未提供。"}', 'exec': NotAuthenticated()}
+[2023-12-02 23:49:03,644] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-02 23:53:48,918] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:54:01,998] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:54:03,184] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:54:05,545] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:54:06,285] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:54:06,524] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:54:06,717] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:54:10,177] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:54:11,165] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:54:11,378] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:54:11,596] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:54:42,247] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:54:45,000] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:55:03,374] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:55:05,637] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:55:05,858] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:55:06,085] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:55:10,374] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:55:11,271] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:55:11,490] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:55:11,679] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:55:11,887] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:55:12,100] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:55:12,316] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:55:12,522] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:55:12,701] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-02 23:55:16,003] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-02 23:56:13,708] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting property name enclosed in double quotes: line 2 column 9 (char 10)"}', 'exec': ParseError('JSON parse error - Expecting property name enclosed in double quotes: line 2 column 9 (char 10)')}
+[2023-12-02 23:56:18,159] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting property name enclosed in double quotes: line 2 column 9 (char 10)"}', 'exec': ParseError('JSON parse error - Expecting property name enclosed in double quotes: line 2 column 9 (char 10)')}
+[2023-12-02 23:58:41,438] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 405, 'err_msg': '{"detail": "方法 “GET” 不被允许。"}', 'exec': MethodNotAllowed('GET')}
+[2023-12-02 23:58:42,582] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 405, 'err_msg': '{"detail": "方法 “GET” 不被允许。"}', 'exec': MethodNotAllowed('GET')}
+[2023-12-02 23:58:43,045] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 405, 'err_msg': '{"detail": "方法 “GET” 不被允许。"}', 'exec': MethodNotAllowed('GET')}
+[2023-12-02 23:58:43,511] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 405, 'err_msg': '{"detail": "方法 “GET” 不被允许。"}', 'exec': MethodNotAllowed('GET')}
+[2023-12-02 23:58:43,756] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 405, 'err_msg': '{"detail": "方法 “GET” 不被允许。"}', 'exec': MethodNotAllowed('GET')}
+[2023-12-02 23:58:43,961] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 405, 'err_msg': '{"detail": "方法 “GET” 不被允许。"}', 'exec': MethodNotAllowed('GET')}
+[2023-12-02 23:58:44,161] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 405, 'err_msg': '{"detail": "方法 “GET” 不被允许。"}', 'exec': MethodNotAllowed('GET')}
+[2023-12-03 00:09:03,312] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-03 00:09:43,789] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-03 00:10:01,379] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-03 00:10:20,820] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-03 00:10:28,405] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 405, 'err_msg': '{"detail": "方法 “GET” 不被允许。"}', 'exec': MethodNotAllowed('GET')}
+[2023-12-03 00:12:22,318] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-03 00:13:25,483] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-03 00:14:30,560] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 405, 'err_msg': '{"detail": "方法 “GET” 不被允许。"}', 'exec': MethodNotAllowed('GET')}
+[2023-12-03 00:14:49,234] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-03 00:16:03,834] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-03 00:16:28,379] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-03 00:16:35,318] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-03 00:18:01,443] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-03 00:18:20,508] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-03 00:20:42,623] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-03 00:21:06,898] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-03 00:21:25,646] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-03 00:22:24,468] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-03 00:23:30,015] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-03 00:23:30,940] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-03 00:23:39,826] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 405, 'err_msg': '{"detail": "方法 “GET” 不被允许。"}', 'exec': MethodNotAllowed('GET')}
+[2023-12-03 00:23:51,199] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-03 00:23:52,434] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-03 00:23:52,843] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-03 00:23:53,119] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-03 00:24:16,462] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-03 00:25:27,650] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"}', 'exec': ParseError('JSON parse error - Expecting property name enclosed in double quotes: line 1 column 2 (char 1)')}
+[2023-12-03 00:25:40,922] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"}', 'exec': ParseError('JSON parse error - Expecting property name enclosed in double quotes: line 1 column 2 (char 1)')}
+[2023-12-03 00:25:46,059] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-03 00:25:53,523] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-03 00:26:44,330] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"}', 'exec': ParseError('JSON parse error - Expecting property name enclosed in double quotes: line 1 column 2 (char 1)')}
+[2023-12-03 00:27:33,433] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"}', 'exec': ParseError('JSON parse error - Expecting property name enclosed in double quotes: line 1 column 2 (char 1)')}
+[2023-12-03 00:28:40,306] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"}', 'exec': ParseError('JSON parse error - Expecting value: line 1 column 1 (char 0)')}
+[2023-12-03 00:51:07,902] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 405, 'err_msg': '{"detail": "方法 “GET” 不被允许。"}', 'exec': MethodNotAllowed('GET')}
+[2023-12-03 00:54:42,756] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 405, 'err_msg': '{"detail": "方法 “GET” 不被允许。"}', 'exec': MethodNotAllowed('GET')}
+[2023-12-04 18:42:04,273] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-04 18:43:49,316] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-04 18:45:05,693] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-04 19:22:34,780] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-04 19:23:03,832] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-04 19:24:41,576] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-04 19:27:34,611] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-05 19:59:37,263] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 19:59:37,265] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 20:01:10,601] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 20:01:10,602] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 20:04:33,044] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 20:04:33,045] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 20:07:34,718] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 20:07:34,719] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 20:07:49,251] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 20:07:49,252] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 20:08:05,320] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 20:08:05,321] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 20:09:54,918] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 20:09:54,919] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 20:10:19,598] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 20:10:19,599] [basehttp.py:161] [basehttp:log_message] [ERROR]- "GET /station_zdz_data HTTP/1.1" 500 81763
+[2023-12-05 20:11:23,540] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 20:11:23,541] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 145
+[2023-12-05 20:13:29,065] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 20:13:29,066] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 20:15:13,176] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 20:15:13,177] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 20:15:50,657] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 20:15:50,660] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 20:15:58,339] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 20:15:58,340] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 20:17:11,704] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 20:17:11,705] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 20:17:43,379] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 20:17:43,380] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 20:20:57,971] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 20:20:57,972] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 20:36:57,384] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 20:36:57,385] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 20:58:26,334] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 20:58:26,335] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 20:58:59,678] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 20:58:59,679] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 21:23:10,656] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 21:23:10,657] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 21:23:36,244] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 21:23:36,245] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 21:27:09,143] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 21:27:09,144] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 21:31:11,524] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 21:31:11,525] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 78658
+[2023-12-05 21:31:24,673] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 21:31:24,673] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 78658
+[2023-12-05 21:31:52,932] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 21:31:52,933] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 78658
+[2023-12-05 21:32:16,815] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 21:32:16,816] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 78658
+[2023-12-05 21:32:27,131] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 21:32:27,132] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 78664
+[2023-12-05 21:32:43,948] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 21:32:43,949] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 78664
+[2023-12-05 21:34:56,546] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 21:34:56,547] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 21:35:55,879] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 21:35:55,881] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-05 21:37:19,553] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 21:37:19,554] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 78664
+[2023-12-05 21:37:24,352] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-05 21:37:24,353] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 78664

@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers, status
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from ..models import User
+import geopandas as gpd
 import json
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -28,9 +29,13 @@ class LoginSerializer(TokenObtainPairSerializer):
         refresh = self.get_token(self.user)
         # print("---------------返回对应的地形数据:---------",self.user.name)
         geofile = self.user.name + ".json"
+        warfile = self.user.name + "_warring.json"
         filename = "static/shps/" + geofile
-        with open(filename, "r") as file:
-            shp = json.load(file)
+        warname = "static/shps/" + warfile
+        with open(filename, "r") as fshp:
+            shp = json.load(fshp)
+        with open(warname, "r") as fwar:
+            war = json.load(fwar)
         data["refresh"] = str(refresh)
         data["access"] = str(refresh.access_token)
         data["user_id"] = self.user.id
@@ -38,7 +43,9 @@ class LoginSerializer(TokenObtainPairSerializer):
         data["role_type"] = self.user.role_type
         data["company_type"] = self.user.company_type
         data["company_name"] = self.user.company_name 
-        data["shp"] = shp       
+        data["shp"] = shp
+        data['war'] = war  
+        del shp,war   
         ret = {
             "code": status.HTTP_200_OK,
             "msg": "success",

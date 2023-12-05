@@ -81,6 +81,7 @@ def station_zdz_data(request):
         context = {
             'status': "ok",
             'click_type':click_type,
+            'tables_name':tables_name,
             'data':data 
         }
         return JsonResponse(context)
