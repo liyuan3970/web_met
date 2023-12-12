@@ -3062,10 +3062,7 @@
                                 if (map_toolbox_object.current_map.hasLayer(radar_sec_obj.line)) { //清除当前折线
                                     map_toolbox_object.current_map.removeLayer(radar_sec_obj.line);
                                 }
-
                             }
-
-
                         }
                     }
                 }
@@ -3801,7 +3798,7 @@
                                 'model': "extra_geojosn_remain",
                                 'rain': send_rain, // 降水
                                 'wind': send_wind, // 风力
-                                'city_code': city_codes,
+                                'city_code': city_code,
                                 'tmax': send_tmax, // 高温
                                 'view': send_view // 能见度
                             },
@@ -4006,11 +4003,7 @@
                             , { field: 'Cnty', title: '县', width: 100 }
                             , { field: 'Town', title: '乡镇', width: 100 }
                             , { field: 'StationName', title: '站名', width: 100 }
-                            , { field: 'rain', title: '雨量', width: 150, sort: true }
-                            // , { field: 'wind', title: '风力', width: 50, sort: true }
-                            // , { field: 'tmax', title: '高温', width: 50, sort: true }
-                            // , { field: 'tmin', title: '低温', width: 50, sort: true }
-                            // , { field: 'view', title: '能见度', sort: true, width: 50 }                    
+                            , { field: 'rain', title: '雨量', width: 150, sort: true }                   
                         ]]
                     }
                     else if (tab_type == "wind") {
@@ -4881,7 +4874,7 @@
                 <ul class="layui-tab-title">
                     <li class="layui-this" lay-id="data_download_sea">智能网格</li>
                     <li lay-id="data_download_sea">航线舒适度</li>
-                    <!-- <li lay-id="data_download_sea">实况数据</li>     -->
+                    <li lay-id="data_download_sea">历史同期</li>    
                 </ul>
                 <div class="layui-tab-content">
                     <div class="layui-tab-item layui-show">
@@ -4917,7 +4910,42 @@
                         <button id="data_download_sea_table_ajax" class="layui-btn layui-btn-sm"
                             style="float: right;margin-right: 2%;">下载</button>
                     </div>
-                    <!-- <div class="layui-tab-item">敬请期待</div>            -->
+                    <div class="layui-tab-item">
+                        <div style="width:100%;height:450px;border: 1px solid black;">
+                            <div style="width:100%;height:60px;border: 1px solid black;">
+                                <div class="layui-form" style="padding-top:10px;">
+                                    <div class="layui-inline">
+                
+                                        <!-- <label class="layui-form-label">范围</label> -->
+                                        <div class="layui-inline" id="history_download">
+                                            <div class="layui-input-inline">
+                                                <input type="text" autocomplete="off" id="history_download-startDate-1"
+                                                    class="layui-input" placeholder="开始日期">
+                                            </div>
+                                            <!-- <div class="layui-form-mid">-</div> -->
+                                            <div class="layui-input-inline">
+                                                <input type="text" autocomplete="off" id="history_download-endDate-1" class="layui-input"
+                                                    placeholder="结束日期">
+                                            </div>
+                                            <div class="layui-input-inline" style="width: 18%;padding-left:5px;">
+                                                <select >
+                                                    <option value=""></option>
+                                                    <option value="rain" selected="">降水</option>
+                                                    <option value="temp">气温</option>
+                                                    <option value="sun">日照</option>
+                                                </select>
+                                            </div>
+                                            <button type="button" class="layui-btn">查询</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="width:100%;height:390px;border: 1px solid black;">
+                                <!-- 这里是历史同期对比的table -->
+                            </div>
+                        </div>
+
+                    </div>           
                 </div>
             </div>
             <script>

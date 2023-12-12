@@ -1071,3 +1071,101 @@ Traceback (most recent call last):
     "instead." % name
 ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
 [2023-12-05 21:37:24,353] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 78664
+[2023-12-06 17:33:26,754] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-06 17:33:26,756] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-06 17:33:40,757] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 311, in check_response
+    "instead." % name
+ValueError: The view zdz.views.document.station_zdz_data didn't return an HttpResponse object. It returned None instead.
+[2023-12-06 17:33:40,758] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 80022
+[2023-12-09 21:22:00,254] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 209, in station_zdz_data
+    worker = data_class.server_plot(time_hours,city,plot_type,js_status,recv_data)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/common/utils/data_class.py", line 991, in __init__
+    self.time_hours = float(time_hours)
+ValueError: could not convert string to float: '近十分钟'
+[2023-12-09 21:22:00,267] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 89938
+[2023-12-09 21:24:27,226] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 221, in station_zdz_data
+    geojson,text,wind_json = worker.return_province()
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/common/utils/data_class.py", line 1270, in return_province
+    contour = plt.contourf(lons,lats,data_xr,cmap=cmaps,levels = norm)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/pyplot.py", line 2528, in contourf
+    __ret = gca().contourf(
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/pyplot.py", line 926, in gca
+    return gcf().gca(**kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/figure.py", line 1932, in gca
+    return self.add_subplot(1, 1, 1, **kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/figure.py", line 1416, in add_subplot
+    return self._add_axes_internal(key, a)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/figure.py", line 1420, in _add_axes_internal
+    self._axstack.add(key, ax)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/figure.py", line 135, in add
+    super().remove((key, a_existing))
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/cbook/__init__.py", line 743, in remove
+    raise ValueError('Unknown element o')
+ValueError: Unknown element o
+[2023-12-09 21:24:27,260] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 143013
+[2023-12-09 21:24:28,183] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 221, in station_zdz_data
+    geojson,text,wind_json = worker.return_province()
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/common/utils/data_class.py", line 1270, in return_province
+    contour = plt.contourf(lons,lats,data_xr,cmap=cmaps,levels = norm)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/pyplot.py", line 2531, in contourf
+    if __ret._A is not None: sci(__ret)  # noqa
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/pyplot.py", line 3055, in sci
+    return gca()._sci(im)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/pyplot.py", line 926, in gca
+    return gcf().gca(**kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/figure.py", line 1932, in gca
+    return self.add_subplot(1, 1, 1, **kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/figure.py", line 1416, in add_subplot
+    return self._add_axes_internal(key, a)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/figure.py", line 1420, in _add_axes_internal
+    self._axstack.add(key, ax)
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/figure.py", line 135, in add
+    super().remove((key, a_existing))
+  File "/opt/conda/lib/python3.7/site-packages/matplotlib/cbook/__init__.py", line 743, in remove
+    raise ValueError('Unknown element o')
+ValueError: Unknown element o
+[2023-12-09 21:24:28,195] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 146922
+[2023-12-11 22:00:36,405] [exception.py:101] [exception:response_for_exception] [ERROR]- The number of GET/POST parameters exceeded settings.DATA_UPLOAD_MAX_NUMBER_FIELDS.
+[2023-12-11 22:00:51,132] [exception.py:101] [exception:response_for_exception] [ERROR]- The number of GET/POST parameters exceeded settings.DATA_UPLOAD_MAX_NUMBER_FIELDS.
+[2023-12-11 22:00:53,043] [exception.py:101] [exception:response_for_exception] [ERROR]- The number of GET/POST parameters exceeded settings.DATA_UPLOAD_MAX_NUMBER_FIELDS.
+[2023-12-11 22:01:52,955] [exception.py:101] [exception:response_for_exception] [ERROR]- The number of GET/POST parameters exceeded settings.DATA_UPLOAD_MAX_NUMBER_FIELDS.
+[2023-12-11 22:01:56,590] [exception.py:101] [exception:response_for_exception] [ERROR]- The number of GET/POST parameters exceeded settings.DATA_UPLOAD_MAX_NUMBER_FIELDS.
+[2023-12-11 22:04:44,437] [exception.py:101] [exception:response_for_exception] [ERROR]- The number of GET/POST parameters exceeded settings.DATA_UPLOAD_MAX_NUMBER_FIELDS.
