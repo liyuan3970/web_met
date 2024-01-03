@@ -2055,7 +2055,6 @@
                     },
                     plot_line_opt: function (plot_type, plot_data) {
                         var timeindex = plot_data[0]
-
                         var now = plot_data[1]
                         var his = plot_data[2]
                         var opt = undefined
@@ -2505,6 +2504,7 @@
                     },
                     plot_line: function (plot_type, plot_name, plot_time) {
                         //绘制站点  
+                        console.log("测试-单站",plot_type, plot_name, plot_time)
                         map_toolbox_object.single_name = plot_name
                         $("#single_station").val(plot_name)
                         // var csrf = $('input[name="csrfmiddlewaretoken"]').val();
@@ -5596,6 +5596,9 @@
                                 }
                             ]
                         };
+
+
+                        
                         option && daily_obj.current_chart.setOption(option);
                     },
                     init: function () {
@@ -5942,8 +5945,6 @@
                 // 日历数据的
                 $("#daily_status").click(function () {
                     daily_obj.get_clander()
-
-
                 })
             </script>
         </div>

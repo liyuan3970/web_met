@@ -1169,3 +1169,95 @@ ValueError: Unknown element o
 [2023-12-11 22:01:52,955] [exception.py:101] [exception:response_for_exception] [ERROR]- The number of GET/POST parameters exceeded settings.DATA_UPLOAD_MAX_NUMBER_FIELDS.
 [2023-12-11 22:01:56,590] [exception.py:101] [exception:response_for_exception] [ERROR]- The number of GET/POST parameters exceeded settings.DATA_UPLOAD_MAX_NUMBER_FIELDS.
 [2023-12-11 22:04:44,437] [exception.py:101] [exception:response_for_exception] [ERROR]- The number of GET/POST parameters exceeded settings.DATA_UPLOAD_MAX_NUMBER_FIELDS.
+[2023-12-16 16:40:38,800] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 75, in station_zdz_data
+    value_index = int(request.POST.get('table_index', ''))
+ValueError: invalid literal for int() with base 10: ''
+[2023-12-16 16:40:38,805] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 84598
+[2023-12-16 16:55:12,236] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 75, in station_zdz_data
+    value_index = int(request.POST.get('table_index', ''))
+ValueError: invalid literal for int() with base 10: ''
+[2023-12-16 16:55:12,239] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 84597
+[2023-12-19 10:43:59,149] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 75, in station_zdz_data
+    value_index = int(request.POST.get('table_index', ''))
+ValueError: invalid literal for int() with base 10: ''
+[2023-12-19 10:43:59,156] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 84601
+[2023-12-19 10:44:20,249] [log.py:230] [log:log_response] [ERROR]- Internal Server Error: /station_zdz_data
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/opt/conda/lib/python3.7/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/liyuan3970/Data/My_Git/web_met/server_met/zdz/views/document.py", line 75, in station_zdz_data
+    value_index = int(request.POST.get('table_index', ''))
+ValueError: invalid literal for int() with base 10: ''
+[2023-12-19 10:44:20,251] [basehttp.py:161] [basehttp:log_message] [ERROR]- "POST /station_zdz_data HTTP/1.1" 500 84604
+[2023-12-24 22:33:52,424] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-24 22:37:37,661] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 405, 'err_msg': '{"detail": "方法 “GET” 不被允许。"}', 'exec': MethodNotAllowed('GET')}
+[2023-12-24 22:37:55,439] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 405, 'err_msg': '{"detail": "方法 “GET” 不被允许。"}', 'exec': MethodNotAllowed('GET')}
+[2023-12-24 22:55:59,098] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-24 22:59:17,540] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-24 23:12:30,212] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-24 23:14:03,375] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-24 23:15:07,265] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-24 23:18:25,179] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-24 23:21:16,634] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-24 23:22:03,714] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-24 23:22:31,003] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-24 23:23:04,415] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-24 23:32:03,307] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-24 23:32:14,704] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-24 23:32:47,836] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-24 23:39:16,085] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-24 23:39:51,515] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-24 23:41:20,791] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-24 23:43:06,874] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-24 23:45:51,986] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-24 23:47:26,926] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 400, 'err_msg': '{"username": ["该字段是必填项。"], "password": ["该字段是必填项。"]}', 'exec': ValidationError({'username': [ErrorDetail(string='该字段是必填项。', code='required')], 'password': [ErrorDetail(string='该字段是必填项。', code='required')]})}
+[2023-12-25 18:37:13,370] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-25 18:38:10,125] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-25 19:39:40,476] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-25 19:45:55,618] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-25 19:46:24,355] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-25 19:49:31,570] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-25 19:51:41,375] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-25 19:52:24,805] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 405, 'err_msg': '{"detail": "方法 “GET” 不被允许。"}', 'exec': MethodNotAllowed('GET')}
+[2023-12-25 19:54:23,934] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-25 19:55:02,100] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-25 19:57:03,914] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-25 19:57:05,790] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-25 19:57:11,406] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-25 19:57:13,596] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-25 20:04:26,574] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-25 20:04:29,045] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-25 20:04:34,951] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-25 20:05:35,109] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-25 20:08:18,584] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-25 20:08:59,896] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-25 20:09:12,802] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
+[2023-12-25 20:09:49,764] [custom_exception_handler.py:34] [custom_exception_handler:custom_exception_handler] [ERROR]- {'code': 2000, 'err_msg': '账号不存在', 'exec': BusinessException(<ResponseCodeEnum.ACCOUNT_NOT_EXISTED: (2000, '账号不存在', 'account not existed')>)}
